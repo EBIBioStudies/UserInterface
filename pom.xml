@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>uk.ac.ebi.microarray</groupId>
+    <artifactId>arrayexpress-frontend</artifactId>
+    <name>ArrayExpress Web Application</name>
+    <version>1.5-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <parent>
+        <artifactId>arrayexpress</artifactId>
+        <groupId>uk.ac.ebi.microarray</groupId>
+        <version>7.5-SNAPSHOT</version>
+    </parent>
+
+    <!-- default values for repository related properties -->
+    <properties>
+        <frontend.application.log.default.priority>INFO</frontend.application.log.default.priority>
+        <frontend.application.log.appender.ref>ROLLINGFILE</frontend.application.log.appender.ref>
+    </properties>
+    <profiles>
+        <profile>
+            <id>development</id>
+            <properties>
+            </properties>
+        </profile>
+        <profile>
+            <id>production</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>curators</id>
+            <properties>
+            </properties>
+        </profile>
+        <profile>
+            <id>local</id>
+            <properties>
+                <frontend.application.log.default.priority>DEBUG</frontend.application.log.default.priority>
+                <frontend.application.log.appender.ref>CONSOLE</frontend.application.log.appender.ref>
+            </properties>
+        </profile>
+    </profiles>
+
+    <distributionManagement>
+        <site>
+            <id>arrayexpress</id>
+            <url>scpexe://dukkha/ebi/microarray/home/maven-site/${pom.parent.artifactId}/${pom.artifactId}</url>
+        </site>
+    </distributionManagement>
+
+    <developers>
+        <developer>
+            <id>kolais</id>
+            <name>Nikolay Kolesnikov</name>
+            <email>kolais@ebi.ac.uk</email>
+            <roles>
+                <role>Software Engineer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>ugis</id>
+            <name>Ugis Sarkans</name>
+            <email>ugis@ebi.ac.uk</email>
+            <roles>
+                <role>Team Leader</role>
+            </roles>
+        </developer>
+    </developers>
+    <build>
+        <resources>
+            <resource>
+                <directory>resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+        <finalName>${pom.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.0.2</version>
+                <configuration>
+                    <webResources>
+                         <resource>
+                            <directory>${basedir}/src/main/webapp</directory>
+                            <includes>
+                                <include>*.html</include>
+                                <include>WEB-INF/web.xml</include>
+                                <include>WEB-INF/urlrewrite.xml</include>
+                            </includes>
+                            <filtering>true</filtering>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.tuckey</groupId>
+            <artifactId>urlrewritefilter</artifactId>
+        </dependency>
+    </dependencies>
+</project>
+
