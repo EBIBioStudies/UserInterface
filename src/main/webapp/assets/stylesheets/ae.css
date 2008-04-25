@@ -30,6 +30,10 @@ div.contents td.contentsarea {
 }
 
 /* ae intro area */
+#ae_intro_area {
+    margin: 10px 0 0 0;    
+}
+
 #ae_header {
     font-size: 21px;
     font-weight: bold;
@@ -67,7 +71,7 @@ div.contents td.contentsarea {
 }
 
 #ae_query_area .ae_right_box form {
-    margin: 15px 0 10px 0;
+    margin: 10px 0 10px 0;
 }
 
 #ae_query_area input,
