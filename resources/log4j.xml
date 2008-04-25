@@ -4,7 +4,7 @@
 
     <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
+            <param name="ConversionPattern" value="%d %-5p [%t] %C (%F:%L) - %m%n"/>
         </layout>
     </appender>
 
@@ -15,6 +15,15 @@
             <param name="ConversionPattern" value="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
         </layout>
     </appender>
+
+    <logger name="org.apache.tomcat" additivity="false">
+        <level value="${frontend.application.log.default.priority}"/>
+        <appender-ref ref="${frontend.application.log.appender.ref}"/>
+    </logger>
+
+    <logger name="org.apache" additivity="false">
+        <level value="INFO"/>
+    </logger>
 
     <root>
         <priority value="${frontend.application.log.default.priority}"/>

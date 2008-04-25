@@ -1,10 +1,132 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!-- hello, ie6, we still remember you -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-  <title>EBI - ArrayExpress Home</title>
-</head>
-<body>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Language" content="en-GB"/>
+    <meta http-equiv="Window-target" content="_top"/>
+    <meta name="no-email-collection" content="http://www.unspam.com/noemailcollection/"/>
+    <title>EBI ArrayExpress Home</title>
+    <link rel="stylesheet" href="http://www.ebi.ac.uk/inc/css/contents.css" type="text/css"/>
+    <link rel="stylesheet" href="http://www.ebi.ac.uk/inc/css/userstyles.css" type="text/css"/>
+    <script src="http://www.ebi.ac.uk/inc/js/contents.js" type="text/javascript"></script>
+    <link rel="SHORTCUT ICON" href="http://www.ebi.ac.uk/bookmark.ico"/>
+    <style type="text/css">
+        @media
+        print
+        {
+        body, .contents, .header, .contentsarea, .head {
+            position: relative;
+        }
 
+        }
+    </style>
+    <link rel="stylesheet" href="assets/stylesheets/ae.css" type="text/css"/>
+    <script src="assets/scripts/jquery-1.2.3.js" type="text/javascript"></script>
+    <script src="assets/scripts/jsdeferred.jquery.js" type="text/javascript"></script>
+    <script src="assets/scripts/ae_index.js" type="text/javascript"></script>
+</head>
+<body onload="if(navigator.userAgent.indexOf('MSIE') != -1) {document.getElementById('head').allowTransparency = true;}">
+<div class="headerdiv" id="headerdiv" style="position: absolute; z-index: 1">
+    <iframe src="http://www.ebi.ac.uk/inc/head.html" name="head" id="head" frameborder="0" marginwidth="0px" marginheight="0px" scrolling="no" width="100%" style="position: absolute; z-index: 1; height: 57px;">
+        Your browser does not support inline frames or is currently configured not to display inline frames. Content can be viewed at actual source page: http://www.ebi.ac.uk/inc/head.html
+    </iframe>
+</div>
+<div class="contents" id="contents">
+    <table class="contentspane" id="contentspane" summary="The main content pane of the page" style="width: 100%">
+        <tr>
+            <td class="contentsarea" id="contentsarea">
+                <div id="ae_centered_container">
+                    <noscript>
+                        <div class="ae_error_area">ArrayExpress uses JavaScript for better data representation. Please enable it if you want to proceed with browsing ArrayExpress.</div>
+                    </noscript>
+                    <div id="ae_intro_area">
+                        <div class="box_top"><div class="box_bottom"><div class="box_left"><div class="box_right"><div class="box_bottom_left"><div class="box_bottom_right"><div class="box_top_left"><div class="box_top_right"><div class="box_inner">
+                            <div id="ae_logo"><img src="assets/images/ae_logo.gif" alt="ArrayExpress Logo"/></div>
+                            <div id="ae_header">ArrayExpress</div>
+                            <div id="ae_intro_text"><p>ArrayExpress is a public repository for <strong>microarray data</strong>, which is aimed at storing MIAME-compliant data in accordance with MGED recommendations.
+                                The ArrayExpress Warehouse stores gene-indexed <strong>expression profiles</strong> from a curated subset of experiments in the repository.</p>
+                                <div class="ae_intro_more" style="display: none;">
+                                    <p>Public data in ArrayExpress are made available for browsing and querying on experiment properties, submitter, species, etc.
+                                    Queries return summaries of experiments and complete data, or subsets can be retrieved.</p>
+                                    <p>A subset of the public data are re-annotated to update the array design annotation and curated for consistency.
+                                    These data are stored in the ArrayExpress Warehouse and can be queried on gene, sample, and experiment attributes.
+                                    Results return graphed gene expression profiles, one graph per experiment.</p>
+                                    <a class="ae_intro_more_toggle" href="javascript:void(0)">&#171; Less Info</a>
+                                </div>
+                                <div class="ae_intro_more"><a class="ae_intro_more_toggle" href="javascript:void(0)">&#187; More Info</a></div>
+                            </div>
+                        </div></div></div></div></div></div></div></div></div>
+                    </div>
+                    <div class="ie_clear">&nbsp;</div>
+                    <div id="ae_query_area">
+                        <div class="ae_left_box">
+                            <div class="box_top"><div class="box_bottom"><div class="box_left"><div class="box_right"><div class="box_bottom_left"><div class="box_bottom_right"><div class="box_top_left"><div class="box_top_right"><div class="box_inner">
+                                <div id="aer_feed_link"><a href="#feed"><img src="assets/images/silk_feed.gif" alt="Subscribe to ArrayExpress Repository RSS"/></a></div>
+                                <div class="ae_box_title">Experiments</div>
+                                <div id="aer_avail_info">The information is unavailable at the moment</div>
+                                <form method="get" action="/microarray-as/ae/browse.html">
+                                    <label for="aer_query_field">Experiment, citation, sample and factor annotations:</label>
+                                    <input id="aer_query_field" name="q"></input>
+                                    <input id="aer_query_submit" type="submit" value="Query"></input>
+                                </form>
+                                <div id="aer_browse_link"><a href="/microarray-as/ae/browse.html">&#187; Browse experiments</a></div>
+                                <div id="aer_adv_query_link"><a href="/microarray-as/ae/browse.html">&#187; Advanced query interface</a></div>
+                                <div id="aer_login_link"><a href="/microarray-as/ae/browse.html">&#187; Submitter/reviewer login</a></div>
+                            </div></div></div></div></div></div></div></div></div>
+                        </div>
+                        <div class="ae_right_box">
+                            <div class="box_top"><div class="box_bottom"><div class="box_left"><div class="box_right"><div class="box_bottom_left"><div class="box_bottom_right"><div class="box_top_left"><div class="box_top_right"><div class="box_inner">
+                                <div class="ae_box_title">Expression Profiles</div>
+                                <div id="aew_avail_info">The information is unavailable at the moment</div>
+                                <form method="get" action="/microarray-as/ae/browse.html">
+                                    <label for="aew_query_field">Gene(s):</label>
+                                    <input id="aew_query_field" name="q"></input>
+                                    <label for="aew_species_field">Species:</label>
+                                    <select id="aew_species_field" name="s">
+                                        <option value="" selected="true">Any species</option>
+                                        <option value="hsapiens">Homo Sapiens</option>
+                                    </select>
+                                    <label for="aew_experiments_field">Experiment or sample annotation:</label>
+                                    <input id="aew_experiments_field" name="e"></input>
+                                    <input id="aew_query_submit" type="submit" value="Query"></input>
+                                </form>
+                                <div id="aew_browse_link"><a href="/microarray-as/ae/browse.html">&#187; Advanced query interface</a></div>                                
+                            </div></div></div></div></div></div></div></div></div>
+                        </div>
+                    </div>
+                    <div class="ie_clear">&nbsp;</div>
+                    <div id="ae_news_links_area" style="display: none;">
+                       <div class="ae_left_box">
+                            <div class="box_top"><div class="box_bottom"><div class="box_left"><div class="box_right"><div class="box_bottom_left"><div class="box_bottom_right"><div class="box_top_left"><div class="box_top_right"><div class="box_inner">
+                                <div class="ae_box_title">News</div>
+                                <div id="ae_news"></div>
+                            </div></div></div></div></div></div></div></div></div>
+                        </div>
+                        <div class="ae_right_box">
+                            <div class="box_top"><div class="box_bottom"><div class="box_left"><div class="box_right"><div class="box_bottom_left"><div class="box_bottom_right"><div class="box_top_left"><div class="box_top_right"><div class="box_inner">
+                                <div class="ae_box_title">Links</div>
+                                <div id="ae_links"></div>
+                            </div></div></div></div></div></div></div></div></div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <table class="footerpane" id="footerpane" summary="The main footer pane of the page">
+        <tr>
+            <td class="footerrow">
+                <div class="footerdiv" id="footerdiv" style="z-index:2;">
+                    <iframe src="http://www.ebi.ac.uk/inc/foot.html" name="foot" frameborder="0" marginwidth="0px" marginheight="0px" scrolling="no" height="22px" width="100%" style="z-index:2;">
+                        Your browser does not support inline frames or is currently configured not to display inline frames. Content can be viewed at actual source page:
+                        http://www.ebi.ac.uk/inc/foot.html
+                    </iframe>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <script src="http://www.ebi.ac.uk/inc/js/footer.js" type="text/javascript"></script>
+</div>
 </body>
 </html>

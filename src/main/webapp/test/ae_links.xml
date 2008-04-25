@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<div xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:b="http://www.backbase.com/b"
+     xmlns:s="http://www.backbase.com/s"
+     style="width:100%; height: 100%; overflow: auto">
+    <ul style="margin-top: 0px; margin-bottom: 0px">
+        <li>
+            <a href="http://www.ebi.ac.uk/~ewilliam/cgi-bin/ArrayExpressSurvey.pl" class="httplink"
+               target="_blank">ArrayExpress <b>User Survey</b></a>&#160;<sup style="color:red;font-weight:bold;font-style:italic">new!</sup>
+        </li>
+        <li>
+            <a href="http://www.ebi.ac.uk/microarray/doc/help/index.html" class="httplink"
+               target="_blank"><b>Documentation</b> and online help</a>
+        </li>
+        <li>
+            <a href="http://www.ebi.ac.uk/microarray/submissions_overview.html" class="httplink"
+               target="_blank"><b>How to submit</b> data to ArrayExpress</a>
+        </li>
+        <li>
+            <a href="http://www.ebi.ac.uk/microarray-srv/tutorials"
+               class="httplink" target="_blank">ArrayExpress <b>tutorials</b></a>
+        </li>
+        <li>
+            <a href="http://www.ebi.ac.uk/microarray/doc/help/programmatic_access.html"
+               class="httplink" target="_blank"><b>How to link</b> to ArrayExpress</a>
+        </li>
+        <li>
+            <a href="ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/" class="httplink"
+               target="_blank"><b>FTP server</b> for public data</a>
+        </li>
+        <li>
+            <a href="http://www.ebi.ac.uk/microarray/doc/software/index.html" class="httplink"
+               target="_blank"><b>Downloads</b></a>
+            and
+            <a href="http://www.ebi.ac.uk/microarray/doc/stats/index.html" class="httplink"
+               target="_blank"><b>statistics</b></a>
+            for ArrayExpress databases
+        </li>
+        <li><a href="http://www.microarray-quality.org/" class="httplink" target="_blank">Quality metrics for microarrays</a></li>
+        <li><a href="http://www.ebi.ac.uk/microarray/board.html" class="httplink" target="_blank">ArrayExpress Scientific Advisory Board</a></li>
+    </ul>
+</div>

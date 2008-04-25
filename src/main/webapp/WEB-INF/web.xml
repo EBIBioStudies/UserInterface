@@ -2,7 +2,6 @@
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     <display-name>${project.name} (${project.version})</display-name>
-<!-- we don't seem to need UrlRewriter yet
     <filter>
         <filter-name>UrlRewriteFilter</filter-name>
         <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
@@ -19,7 +18,14 @@
         <filter-name>UrlRewriteFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
--->
+    <listener>
+        <description>The class implementing the "ServletContextListener" interface and thus receiving the
+            "contextInitialized" and "contextDestroyed" messages indicating that the application
+            is being de/initialized.
+        </description>
+        <listener-class>uk.ac.ebi.ae15.Mamonoff</listener-class>
+    </listener>
+
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>

@@ -39,7 +39,7 @@
         <profile>
             <id>local</id>
             <properties>
-                <frontend.application.log.default.priority>DEBUG</frontend.application.log.default.priority>
+                <frontend.application.log.default.priority>ALL</frontend.application.log.default.priority>
                 <frontend.application.log.appender.ref>CONSOLE</frontend.application.log.appender.ref>
             </properties>
         </profile>
@@ -108,6 +108,14 @@
         <dependency>
             <groupId>org.tuckey</groupId>
             <artifactId>urlrewritefilter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
         </dependency>
     </dependencies>
 </project>
