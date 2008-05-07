@@ -1,10 +1,936 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!-- we still remember you, re -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
 <head>
-  <title>Now, get off my back!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Language" content="en-GB"/>
+    <meta http-equiv="Window-target" content="_top"/>
+    <meta name="no-email-collection" content="http://www.unspam.com/noemailcollection/"/>
+    <title>EBI - ArrayExpress - Browse</title>
+    <link rel="SHORTCUT ICON" href="http://www.ebi.ac.uk/bookmark.ico"/>
+    <link rel="stylesheet" href="assets/stylesheets/ae.css" type="text/css"/>
+    <script src="assets/scripts/jquery-1.2.3.js" type="text/javascript"></script>
+    <script src="assets/scripts/jsdeferred.jquery.js" type="text/javascript"></script>
+    <script src="assets/scripts/ae_browse.js" type="text/javascript"></script>
 </head>
 <body>
+<div id="ae_contents">
+    <div id="ae_ebi_header_container">
+        <iframe src="http://www.ebi.ac.uk/inc/head.html" name="head" frameborder="0" marginwidth="0px" marginheight="0px" scrolling="no" height="57px" width="100%">
+            Your browser does not support inline frames or is currently configured not to display inline frames. Content can be viewed at actual source page:
+            http://www.ebi.ac.uk/inc/head.html
+        </iframe>
+    </div>
+    <div id="ae_centered_container_100pc">
+        <div style="position: absolute; left: 0; width: 100%; height: 100%; overflow: hidden">
+            <noscript>
+                <div class="ae_error_area">ArrayExpress uses JavaScript for better data handling and enhanced representation. Please enable JavaScript if you want to continue browsing ArrayExpress.</div>
+            </noscript>
 
+
+            <div id="ae_results_area">
+                <table id="ae_results_header">
+                    <thead>
+                        <tr>
+                            <th class="ae_results_col1" id="ae_results_header_col_01">ID</th>
+                            <th class="ae_results_col2" id="ae_results_header_col_02">Title</th>
+                            <th class="ae_results_col3" id="ae_results_header_col_03">Hybs</th>
+                            <th class="ae_results_col4" id="ae_results_header_col_04">Species</th>
+                            <th class="ae_results_col5" id="ae_results_header_col_05">Date</th>
+                            <th class="ae_results_col6" id="ae_results_header_col_06">Processed</th>
+                            <th class="ae_results_col7" id="ae_results_header_col_07">Raw</th>
+                            <th class="ae_results_col8" id="ae_results_header_col_08">More</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div style="width: 100%; height: 100%; overflow: hidden;">
+                    <table id="ae_results_body" style="overflow: auto;">
+                        <thead style="visibility: collapse; height: 0px">
+                            <tr>
+                                <th class="ae_results_col1" id="ae_results_body_col_01"></th>
+                                <th class="ae_results_col2" id="ae_results_body_col_02"></th>
+                                <th class="ae_results_col3" id="ae_results_body_col_03"></th>
+                                <th class="ae_results_col4" id="ae_results_body_col_04"></th>
+                                <th class="ae_results_col5" id="ae_results_body_col_05"></th>
+                                <th class="ae_results_col6" id="ae_results_body_col_06"></th>
+                                <th class="ae_results_col7" id="ae_results_body_col_07"></th>
+                                <th class="ae_results_col8" id="ae_results_body_col_08"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="ae_results_cell">E-MEXP-54</div></td>
+                                <td><div class="ae_results_cell">Transcription profiling of the fission yeast cell cycle - elutriation 3</div></td>
+                                <td><div class="ae_results_cell">20</div></td>
+                                <td><div class="ae_results_cell">Schizosaccharomyces pombe</div></td>
+                                <td><div class="ae_results_cell">2004-03-09</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">1</div></td>
+                                <td><div class="ae_results_cell">&gt;&gt; AE</div></td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+    <div id="ae_ebi_footer_container">
+        <iframe src="http://www.ebi.ac.uk/inc/foot.html" name="foot" frameborder="0" marginwidth="0px" marginheight="0px" scrolling="no" height="22px" width="100%">
+            Your browser does not support inline frames or is currently configured not to display inline frames. Content can be viewed at actual source page:
+            http://www.ebi.ac.uk/inc/foot.html
+        </iframe>
+    </div>
+</div>
 </body>
 </html>

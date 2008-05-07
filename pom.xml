@@ -74,10 +74,12 @@
         <resources>
             <resource>
                 <directory>resources</directory>
+                <excludes>
+                    <exclude>assets/**</exclude>
+                </excludes>
                 <filtering>true</filtering>
             </resource>
         </resources>
-
         <finalName>${pom.artifactId}</finalName>
         <plugins>
             <plugin>

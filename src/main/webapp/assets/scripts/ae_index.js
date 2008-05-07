@@ -1,5 +1,5 @@
 //
-//  AE Index Page Scripting Support. Requires jQuery 1.2.3
+//  AE Index Page Scripting Support. Requires jQuery 1.2.3 and JSDefeered.jQuery 0.2.1
 //
 
 // runs on page reload after rendering is done
