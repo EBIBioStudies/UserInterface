@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.microarray</groupId>
-    <artifactId>arrayexpress-frontend</artifactId>
-    <name>ArrayExpress Web Application</name>
+    <artifactId>arrayexpress-interface</artifactId>
+    <name>ArrayExpress Interface Web Application</name>
     <version>1.5-SNAPSHOT</version>
     <packaging>war</packaging>
 
@@ -16,8 +16,8 @@
 
     <!-- default values for repository related properties -->
     <properties>
-        <frontend.application.log.default.priority>INFO</frontend.application.log.default.priority>
-        <frontend.application.log.appender.ref>ROLLINGFILE</frontend.application.log.appender.ref>
+        <interface.application.log.default.priority>INFO</interface.application.log.default.priority>
+        <interface.application.log.appender.ref>ROLLINGFILE</interface.application.log.appender.ref>
     </properties>
     <profiles>
         <profile>
@@ -39,8 +39,8 @@
         <profile>
             <id>local</id>
             <properties>
-                <frontend.application.log.default.priority>ALL</frontend.application.log.default.priority>
-                <frontend.application.log.appender.ref>CONSOLE</frontend.application.log.appender.ref>
+                <interface.application.log.default.priority>ALL</interface.application.log.default.priority>
+                <interface.application.log.appender.ref>CONSOLE</interface.application.log.appender.ref>
             </properties>
         </profile>
     </profiles>
