@@ -10,24 +10,24 @@
 
     <appender name="ROLLINGFILE" class="org.apache.log4j.DailyRollingFileAppender">
         <param name="DatePattern" value="'.'yyyy-MM-dd"/>
-        <param name="File" value="${catalina.base}/logs/ae-frontend.${tomcat.hostname}.log"/>
+        <param name="File" value="${catalina.base}/logs/ae-interface.${tomcat.hostname}.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
         </layout>
     </appender>
 
     <logger name="org.apache.tomcat" additivity="false">
-        <level value="${frontend.application.log.default.priority}"/>
-        <appender-ref ref="${frontend.application.log.appender.ref}"/>
+        <level value="${interface.application.log.default.priority}"/>
+        <appender-ref ref="${interface.application.log.appender.ref}"/>
     </logger>
 
     <logger name="org.apache" additivity="false">
         <level value="INFO"/>
     </logger>
-
+    
     <root>
-        <priority value="${frontend.application.log.default.priority}"/>
-        <appender-ref ref="${frontend.application.log.appender.ref}"/>
+        <priority value="${interface.application.log.default.priority}"/>
+        <appender-ref ref="${interface.application.log.appender.ref}"/>
     </root>
 
 </log4j:configuration>

@@ -23,10 +23,10 @@
             "contextInitialized" and "contextDestroyed" messages indicating that the application
             is being de/initialized.
         </description>
-        <listener-class>uk.ac.ebi.ae15.Mamonoff</listener-class>
+        <listener-class>uk.ac.ebi.ae15.AppContextListener</listener-class>
     </listener>
 
     <session-config>
-        <session-timeout>30</session-timeout>
+        <session-timeout>1</session-timeout>
     </session-config>
 </web-app>
