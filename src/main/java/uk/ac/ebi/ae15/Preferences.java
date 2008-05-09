@@ -30,9 +30,8 @@ public class Preferences extends Properties {
             try {
                 InputStream is = location.openStream();
                 super.load(is);
-            } catch ( Exception x ) {
-                // here we report we don't have a valid configuration and panic
-                log.error("Unable to load ArrayExpress preferences file. Original " + x.getClass().toString() + " message: " + x.getMessage());
+            } catch ( Throwable e ) {
+                log.debug( "Caught an exception:", e );
             }
         } else {
             log.error("Unable to locate ArrayExpress preferences file (/WEB-INF/classes/arrayexpress.properties)");
@@ -51,8 +50,8 @@ public class Preferences extends Properties {
                 log.debug( "Trying to find " + resource + " using context classloader " + classLoader );
                 url = classLoader.getResource(resource);
             }
-        } catch ( Throwable t ) {
-            log.debug( "Caught " + t.getClass().toString() + " with message: " + t.getMessage() );
+        } catch ( Throwable e ) {
+            log.debug( "Caught an exception:", e );
         }
 
         if ( null == url ) {
@@ -74,6 +73,7 @@ public class Preferences extends Properties {
         try {
             method = Thread.class.getMethod( "getContextClassLoader" );
         } catch ( NoSuchMethodException e ) {
+            log.debug( "Caught an exception:", e );
             return null;
         }
 

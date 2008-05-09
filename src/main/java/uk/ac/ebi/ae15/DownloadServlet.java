@@ -1,4 +1,6 @@
 package uk.ac.ebi.ae15;
 
-public class DownloadServlet {
+import javax.servlet.http.HttpServlet;
+
+public class DownloadServlet extends HttpServlet {
 }

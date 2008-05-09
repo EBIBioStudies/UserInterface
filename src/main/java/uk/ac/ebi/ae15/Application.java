@@ -37,6 +37,8 @@ public class Application {
     }
 
     public Application() {
+
+        // load application preferences
         Preferences().load();
     }
 }

@@ -14,6 +14,7 @@ public class AppContextListener implements ServletContextListener {
     {
         log.info("Starting up ArrayExpress...");
         Application.Instance();
+        Application.Experiments();
 
     }
 
