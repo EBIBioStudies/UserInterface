@@ -3,9 +3,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:func="http://exslt.org/functions"
                 xmlns:ae="http://www.ebi.ac.uk/arrayexpress"
-                xmlns:regexp="com.linkwerk.util.Regexp"
                 xmlns:helper="uk.ac.ebi.ae15.HelperXsltExtension"
-                exclude-result-prefixes="func ae regexp helper"
+                extension-element-prefixes="func ae helper"
+                exclude-result-prefixes="func ae helper"
                 version="1.0">
 
     <xsl:param name="from">1</xsl:param>
@@ -21,65 +21,14 @@
 
     <xsl:output omit-xml-declaration="yes" method="xml" indent="no"/>
 
-    <!--
-    <func:function name="ae:concat-all">
-        <xsl:param name="what"/>
-        <xsl:variable name="c">
-            <xsl:for-each select="$what/@*">
-                <xsl:value-of select="concat(string(.),' ')"/>
-            </xsl:for-each>
-            <xsl:for-each select="$what/descendant::*">
-                <xsl:for-each select="@*">
-                    <xsl:value-of select="concat(string(.),' ')"/>
-                </xsl:for-each>
-            </xsl:for-each>
-            <xsl:value-of select="text()"/>
-        </xsl:variable>
-        <func:result select="$c"/>
-    </func:function>
-    -->
-    <func:function name="ae:get-regexp">
-        <xsl:param name="string"/>
-        <xsl:variable name="first_keyword_from_string">
-            <xsl:choose>
-                <xsl:when test="contains($string,' ')">
-                    <xsl:value-of select="substring-before($string,' ')"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="$string"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="regexp">
-            <xsl:choose>
-                <xsl:when test="$whole_words">\b<xsl:value-of select="$first_keyword_from_string"/>\b</xsl:when>
-                <xsl:otherwise><xsl:value-of select="$first_keyword_from_string"/></xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <func:result select="string($regexp)"/>
-    </func:function>
-
-    <func:function name="ae:keyword-filter">
-        <xsl:param name="nodelist"/>
-        <xsl:param name="keywords"/>
-        <xsl:choose>
-            <xsl:when test="string-length($keywords)>0">
-                <func:result select="helper:testRegexp($nodelist,ae:get-regexp($keywords),'i') and ae:keyword-filter($nodelist,substring-after($keywords,' '))"/>
-            </xsl:when>
-            <xsl:otherwise><func:result select="true()"/></xsl:otherwise>
-        </xsl:choose>
-    </func:function>
-
     <func:function name="ae:filter-experiments">
-        <xsl:variable name="lcletters">abcdefghijklmnopqrstuvwxyz</xsl:variable>
-        <xsl:variable name="ucletters">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
         <xsl:choose>
             <xsl:when test="helper:testRegexp($filter_keyword,'^E-.+-\d+$','i')">
-                <xsl:variable name="queried_accnum" select="translate($filter_keyword,$lcletters,$ucletters)" />
+                <xsl:variable name="queried_accnum" select="helper:toUpperCase(string($filter_keyword))" />
                 <func:result select="experiment[$queried_accnum=@accnum or $queried_accnum=@secondaryaccession]"/>
             </xsl:when>
             <xsl:when test="$filter_array!='' and $filter_organism!='' and $filter_keyword!=''">
-                <func:result select="experiment[contains(@species,$filter_organism)][.//arraydesign/@id=$filter_array][ae:keyword-filter(.,$filter_keyword)]"/>
+                <func:result select="experiment[contains(@species,$filter_organism)][.//arraydesign/@id=$filter_array][helper:testKeywords(.,$filter_keyword,$whole_words)]"/>
             </xsl:when>
             <xsl:when test="$filter_array!='' and $filter_organism='' and $filter_keyword=''">
                 <func:result select="experiment[.//arraydesign/@id=$filter_array]"/>
@@ -94,10 +43,10 @@
                 <func:result select="experiment[contains(@species,$filter_organism)][.//arraydesign/@id=$filter_array]"/>
             </xsl:when>
             <xsl:when test="$filter_array='' and $filter_organism!='' and $filter_keyword!=''">
-                <func:result select="experiment[contains(@species,$filter_organism)][ae:keyword-filter(node(),$filter_keyword)]"/>
+                <func:result select="experiment[contains(@species,$filter_organism)][helper:testKeywords(.,$filter_keyword,$whole_words)]"/>
             </xsl:when>
             <xsl:when test="$filter_array!='' and $filter_organism='' and $filter_keyword!=''">
-                <func:result select="experiment[.//arraydesign/@id=$filter_array][ae:keyword-filter(node(),$filter_keyword)]"/>
+                <func:result select="experiment[.//arraydesign/@id=$filter_array][helper:testKeywords(.,$filter_keyword,$whole_words)]"/>
             </xsl:when>
             <xsl:otherwise>
                 <func:result select="experiment"/>
@@ -106,9 +55,8 @@
     </func:function>
 
     <xsl:template match="/experiments">
-        <xsl:message>Parameters - organism: '<xsl:value-of select="$filter_organism"/>', keywords: '<xsl:value-of select="$filter_keyword"/>' ( whole words: '<xsl:value-of select="$whole_words"/>' ), array: '<xsl:value-of select="$filter_array"/>'</xsl:message>
-        <xsl:message>Sort: <xsl:value-of select="$sort_by"/>, <xsl:value-of select="$sort_order"/></xsl:message>
-
+        <helper:logDebug select="Parameters: filter_keyword [{$filter_keyword}], whole_words [{$whole_words}], filter_array [{$filter_array}], filter_organism [{$filter_organism}]"/>
+        <helper:logDebug select="Sort by: [{$sort_by}], [{$sort_order}]"/>
         <xsl:variable name="filtered_experiments" select="ae:filter-experiments()"/>
         <xsl:variable name="TOTAL" select="count($filtered_experiments)"/>
 
@@ -120,7 +68,7 @@
             </xsl:choose>
         </xsl:variable>
 
-        <xsl:message>Experiments: <xsl:value-of select="count(experiment)"/>, filtered: <xsl:value-of select="$TOTAL"/>, will output from: <xsl:value-of select="$FROM"/> to: <xsl:value-of select="$TO"/></xsl:message>
+        <helper:logInfo select="Query for '{$filter_keyword}' filtered {$TOTAL} experiments. Will output from {$FROM} to {$TO}."/>
 
         <experiments from="{$FROM}" to="{$TO}" total="{$TOTAL}"
                      total-samples="{sum($filtered_experiments[@samples>0]/@samples)}"
@@ -158,7 +106,6 @@
                     </xsl:apply-templates>
                 </xsl:when>
                 <xsl:when test="$sort_by='type'">
-                    <xsl:message>sorting up...</xsl:message>
                     <xsl:apply-templates select="$filtered_experiments">
                         <xsl:sort order="{$sort_order}" select="experimentdesigns/experimentdesign[1]/@type"/>
                         <xsl:sort order="{$sort_order}" select="experimentdesigns/experimentdesign[2]/@type"/>
@@ -184,9 +131,6 @@
                     </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>sorting by<xsl:value-of select="$sort_by"/>,
-                        <xsl:value-of select="$sort_order"/>
-                    </xsl:message>
                     <xsl:apply-templates select="$filtered_experiments">
                         <xsl:sort select="@*[local-name()=$sort_by]" order="{$sort_order}"/>
                         <xsl:with-param name="FROM" select="$FROM"/>
@@ -201,7 +145,7 @@
         <xsl:param name="FROM"/>
         <xsl:param name="TO"/>
         <xsl:if test="position() &gt;= $FROM and position() &lt;= $TO">
-            <xsl:copy-of select="." />
+            <xsl:copy-of select="."/>
         </xsl:if>
     </xsl:template>
 

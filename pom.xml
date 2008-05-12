@@ -120,10 +120,6 @@
             <artifactId>commons-logging</artifactId>
         </dependency>
         <dependency>
-            <groupId>lw-regexp-util</groupId>
-            <artifactId>lw-regexp-util</artifactId>
-        </dependency>
-        <dependency>
             <groupId>xalan</groupId>
             <artifactId>xalan</artifactId>
         </dependency>

@@ -50,25 +50,17 @@ public class QueryServlet extends HttpServlet {
         // Output goes to the response PrintWriter.
         PrintWriter out = response.getWriter();
         try {
-            log.debug("before getServletContext().getRealPath();");
             //get the real path for xml and xsl files.
             String ctx = getServletContext().getRealPath("") + FS;
             // Get the XML input document and the stylesheet, both in the servlet
             // engine document directory.
-            log.debug("before new DOMSource();");
             Source xmlSource = new DOMSource(Application.Experiments().getExperiments());
-
-            log.debug("before new StreamSource();");
             Source xslSource = new StreamSource( new java.net.URL("file", "", ctx + "WEB-INF/server-assets/stylesheets/" + stylesheet + "-" + type + ".xsl").openStream() );
-
-            log.debug("before TransformerFactory.newInstance();");
             TransformerFactory tFactory = TransformerFactory.newInstance();
 
             // Generate the transformer.
-            log.debug("before tTemplates.newTransformer();");
             Transformer transformer = tFactory.newTransformer(xslSource);
 
-            log.debug("before transformer.setParameter();");
             // Stuff transformer with all the parameters supplied via the request
             Enumeration e = request.getParameterNames();
             while ( e.hasMoreElements() ) {
@@ -76,10 +68,10 @@ public class QueryServlet extends HttpServlet {
                 transformer.setParameter( name, request.getParameter(name) );
             }
 
-            log.debug("before transformer.transform();");
+            log.debug("about to start transformer.transform()");
             // Perform the transformation, sending the output to the response.
             transformer.transform(xmlSource, new StreamResult(out));
-            log.debug("after transformer.transform();");
+            log.debug("transformer.transform() completed");
         }
         // If an Exception occurs, return the error to the client.
         catch ( Exception e ) {
