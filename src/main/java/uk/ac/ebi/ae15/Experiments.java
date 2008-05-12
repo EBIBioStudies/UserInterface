@@ -80,6 +80,7 @@ public class Experiments {
 
                 if ( null != doc ) {
                     experimentsDoc = doc;
+                    isLoaded = true;
                 }
             } catch ( Throwable e ) {
                 log.debug( "Caught an exception:", e );

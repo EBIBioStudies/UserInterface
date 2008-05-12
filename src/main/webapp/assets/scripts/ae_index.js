@@ -11,7 +11,7 @@ $(document).ready( function() {
     });
 
     // gets aer stats and updates the page
-    $.get("/microarray-as/ae/test/aer_avail_info.xml").next(updateAerStats);
+    $.get("/microarray-as/ae/servlets/query?stylesheet=stats").next(updateAerStats);
 
     // gets aew stats and updates the page
     Deferred.parallel([
@@ -37,9 +37,9 @@ trimString( stringToTrim ) {
 
 function
 updateAerStats( xml ) {
-    var ae_repxml = $( $(xml).find("ae_repxml")[0] );
-    var etotal = ae_repxml.attr("etotal");
-    var htotal = ae_repxml.attr("htotal");
+    var ae_repxml = $( $(xml).find("experiments")[0] );
+    var etotal = ae_repxml.attr("total");
+    var htotal = ae_repxml.attr("total-hybs");
     var avail = ae_repxml.attr("avail");
     if ( "true" == avail ) {
         var aer_avail_info = htotal + " hybridizations, " + etotal + " experiments available";
