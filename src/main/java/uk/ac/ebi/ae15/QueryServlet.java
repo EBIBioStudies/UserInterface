@@ -61,16 +61,12 @@ public class QueryServlet extends HttpServlet {
             log.debug("before new StreamSource();");
             Source xslSource = new StreamSource( new java.net.URL("file", "", ctx + "WEB-INF/server-assets/stylesheets/" + stylesheet + "-" + type + ".xsl").openStream() );
 
-            if ( null == tTemplates ) {
-                log.debug("before TransformerFactory.newInstance();");
-                TransformerFactory tFactory = TransformerFactory.newInstance();
-                // Generate the transformer.
-                log.debug("before tTemplates.newTransformer();");
-                tTemplates = tFactory.newTemplates(xslSource);
-            }
+            log.debug("before TransformerFactory.newInstance();");
+            TransformerFactory tFactory = TransformerFactory.newInstance();
 
-            log.debug("before tFactory.newTemplates();");
-            Transformer transformer = tTemplates.newTransformer();
+            // Generate the transformer.
+            log.debug("before tTemplates.newTransformer();");
+            Transformer transformer = tFactory.newTransformer(xslSource);
 
             log.debug("before transformer.setParameter();");
             // Stuff transformer with all the parameters supplied via the request
@@ -93,6 +89,4 @@ public class QueryServlet extends HttpServlet {
         // Close the PrintWriter.
         out.close();
     }
-
-    private static Templates tTemplates = null;
 }
