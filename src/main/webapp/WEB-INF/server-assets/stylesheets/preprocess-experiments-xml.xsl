@@ -7,7 +7,6 @@
     <xsl:output method="xml" encoding="ISO-8859-1" indent="no"/>
 
     <xsl:key name="expt-species" match="sampleattribute[@category='Organism']" use="concat(ancestor::experiment/@accession,@value)"/>
-    <xsl:key name="expt-array" match="arraydesign" use="concat(ancestor::experiment/@accession,@name)"/>
 
     <xsl:template match="/experiments">
         <experiments total="{count(experiment)}">
@@ -20,35 +19,22 @@
     </xsl:template>
 
     <xsl:template match="experiment">
-
-        <xsl:variable name="species">
-            <xsl:for-each
-                select="sampleattribute[@category='Organism'][generate-id(key('expt-species',concat(ancestor::experiment/@accession,@value)))=generate-id()]">
-                <xsl:value-of select="@value"/>
-                <xsl:if test="position()!=last()">,</xsl:if>
-            </xsl:for-each>
-        </xsl:variable>
-
-        <xsl:variable name="arrays">
-            <xsl:for-each
-                select="arraydesign[generate-id(key('expt-array',concat(ancestor::experiment/@accession,@name)))=generate-id()]">
-                <xsl:value-of select="@name"/>
-                <xsl:if test="position()!=last()">,</xsl:if>
-            </xsl:for-each>
-        </xsl:variable>
-
         <experiment>
             <xsl:for-each select="@*">
                 <xsl:element name="{helper:toLowerCase(name())}">
                     <xsl:value-of select="." />
                 </xsl:element>
             </xsl:for-each>
-            <species><xsl:value-of select="$species"/></species>
-            <arrays><xsl:value-of select="$arrays"/></arrays>
-            <samples><xsl:value-of select="substring-before(substring-after(description[contains(.,'(Generated description)')],'using '),' samples')"/></samples>
-            <hybs><xsl:value-of select="substring-before( substring-after(description[contains(.,'(Generated description)')], 'with '),' hybridizations')"/></hybs>
+            <xsl:for-each select="sampleattribute[@category='Organism'][generate-id(key('expt-species',concat(ancestor::experiment/@accession,@value)))=generate-id()]">
+                <species><xsl:value-of select="@value"/></species>
+            </xsl:for-each>
+            <samples>
+                <xsl:value-of select="substring-before(substring-after(description[contains(.,'(Generated description)')],'using '),' samples')"/>
+            </samples>
+            <hybs>
+                <xsl:value-of select="substring-before( substring-after(description[contains(.,'(Generated description)')], 'with '),' hybridizations')"/>
+            </hybs>
             
-
             <xsl:if test="helper:isOnFtp(concat(@accnum,'.processed.zip'))">
                 <xsl:attribute name="fgem">download/mageml/<xsl:value-of select="@accnum"/>.processed.zip</xsl:attribute>
                 <xsl:attribute name="fgem-count"><xsl:value-of select="sum(.//bioassaydatagroup[@is_derived='1']/@bioassay_count)"/></xsl:attribute>

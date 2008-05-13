@@ -63,7 +63,9 @@ public class QueryServlet extends HttpServlet {
             Enumeration e = request.getParameterNames();
             while ( e.hasMoreElements() ) {
                 String name = (String)e.nextElement();
-                transformer.setParameter( name, request.getParameter(name) );
+                String value = request.getParameter(name);
+                if ( null != name && null != value )
+                    transformer.setParameter( name, value );
             }
 
             log.debug("experiments filtering: about to start transformer.transform()");
