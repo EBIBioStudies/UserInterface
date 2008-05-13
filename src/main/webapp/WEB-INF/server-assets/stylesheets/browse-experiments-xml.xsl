@@ -25,10 +25,10 @@
         <xsl:choose>
             <xsl:when test="helper:testRegexp($filter_keyword,'^E-.+-\d+$','i')">
                 <xsl:variable name="queried_accnum" select="helper:toUpperCase(string($filter_keyword))" />
-                <func:result select="experiment[$queried_accnum=@accnum or $queried_accnum=@secondaryaccession]"/>
+                <func:result select="experiment[accession/text()=$queried_accnum or secondaryaccession/text()=$queried_accnum]"/>
             </xsl:when>
             <xsl:when test="$filter_array!='' and $filter_organism!='' and $filter_keyword!=''">
-                <func:result select="experiment[contains(@species,$filter_organism)][.//arraydesign/@id=$filter_array][helper:testKeywords(.,$filter_keyword,$whole_words)]"/>
+                <func:result select="experiment[contains(species/text(),$filter_organism)][.//arraydesign/@id=$filter_array][helper:testKeywords(.,$filter_keyword,$whole_words)]"/>
             </xsl:when>
             <xsl:when test="$filter_array!='' and $filter_organism='' and $filter_keyword=''">
                 <func:result select="experiment[.//arraydesign/@id=$filter_array]"/>
@@ -71,8 +71,8 @@
         <helper:logInfo select="Query for '{$filter_keyword}' filtered {$TOTAL} experiments. Will output from {$FROM} to {$TO}."/>
 
         <experiments from="{$FROM}" to="{$TO}" total="{$TOTAL}"
-                     total-samples="{sum($filtered_experiments[@samples>0]/@samples)}"
-                     total-hybs="{sum($filtered_experiments[@hybs>0]/@hybs)}">
+                     total-samples="{sum($filtered_experiments[samples/text()>0]/samples/text())}"
+                     total-hybs="{sum($filtered_experiments[hybs/text()>0]/hybs/text())}">
             <xsl:choose>
                 <xsl:when test="$sort_by='accnum'">
                     <xsl:apply-templates select="$filtered_experiments">
@@ -93,12 +93,12 @@
                 </xsl:when>
                 <xsl:when test="$sort_by='releasedate'">
                     <xsl:apply-templates select="$filtered_experiments">
-                        <xsl:sort order="{$sort_order}" select="substring-before(@releasedate,'-')" data-type="number"/>
+                        <xsl:sort order="{$sort_order}" select="substring-before(releasedate/text(),'-')" data-type="number"/>
                         <!-- year -->
-                        <xsl:sort order="{$sort_order}" select="substring-before(substring-after(@releasedate,'-'),'-')"
+                        <xsl:sort order="{$sort_order}" select="substring-before(substring-after(releasedate/text(),'-'),'-')"
                                   data-type="number"/>
                         <!-- month -->
-                        <xsl:sort order="{$sort_order}" select="substring-after(substring-after(@releasedate,'-'),'-')"
+                        <xsl:sort order="{$sort_order}" select="substring-after(substring-after(releasedate/text(),'-'),'-')"
                                   data-type="number"/>
                         <!-- day -->
                         <xsl:with-param name="FROM" select="$FROM"/>

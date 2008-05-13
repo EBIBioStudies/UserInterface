@@ -13,7 +13,9 @@ public class AppContextListener implements ServletContextListener {
     public synchronized void contextInitialized( ServletContextEvent sce )
     {
         log.info("Starting up ArrayExpress...");
-        Application.Instance();
+
+        String contextRoot = sce.getServletContext().getRealPath("");
+        Application.Instance(contextRoot);
         Application.Experiments();
 
     }

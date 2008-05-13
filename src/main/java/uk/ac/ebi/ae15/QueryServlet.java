@@ -22,8 +22,6 @@ public class QueryServlet extends HttpServlet {
     // logging macinery
     private static final Log log = org.apache.commons.logging.LogFactory.getLog(QueryServlet.class);
 
-    public final static String FS = System.getProperty("file.separator");
-
     // Respond to HTTP GET requests from browsers.
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
@@ -45,17 +43,17 @@ public class QueryServlet extends HttpServlet {
         }
 
 
-        // Set content type for HTML.
+        // Set content type for HTML/XML
         response.setContentType("text/" + type + "; charset=ISO-8859-1");
         // Output goes to the response PrintWriter.
         PrintWriter out = response.getWriter();
         try {
             //get the real path for xml and xsl files.
-            String ctx = getServletContext().getRealPath("") + FS;
+            String ctxRoot = Application.Preferences().getProperty("ae.webapp.root");
             // Get the XML input document and the stylesheet, both in the servlet
             // engine document directory.
             Source xmlSource = new DOMSource(Application.Experiments().getExperiments());
-            Source xslSource = new StreamSource( new java.net.URL("file", "", ctx + "WEB-INF/server-assets/stylesheets/" + stylesheet + "-" + type + ".xsl").openStream() );
+            Source xslSource = new StreamSource( new java.net.URL("file", "", ctxRoot + "WEB-INF/server-assets/stylesheets/" + stylesheet + "-" + type + ".xsl").openStream() );
             TransformerFactory tFactory = TransformerFactory.newInstance();
 
             // Generate the transformer.
@@ -68,10 +66,10 @@ public class QueryServlet extends HttpServlet {
                 transformer.setParameter( name, request.getParameter(name) );
             }
 
-            log.debug("about to start transformer.transform()");
+            log.debug("experiments filtering: about to start transformer.transform()");
             // Perform the transformation, sending the output to the response.
             transformer.transform(xmlSource, new StreamResult(out));
-            log.debug("transformer.transform() completed");
+            log.debug("experiments filtering: transformer.transform() completed");
         }
         // If an Exception occurs, return the error to the client.
         catch ( Exception e ) {

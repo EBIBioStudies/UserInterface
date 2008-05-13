@@ -4,7 +4,7 @@
                 extension-element-prefixes="helper"
                 exclude-result-prefixes="helper"
                 version="1.0">
-    <xsl:output method="xml"/>
+    <xsl:output method="xml" encoding="ISO-8859-1" indent="no"/>
 
     <xsl:key name="expt-species" match="sampleattribute[@CATEGORY='Organism']"
         use="concat(ancestor::experiment/@accnum,@VALUE)"/>
@@ -26,8 +26,6 @@
     </xsl:template>
 
     <xsl:template match="experiment">
-        <xsl:if test="position() &lt; 10">
-
         <xsl:variable name="species">
             <xsl:for-each
                 select=".//sampleattribute[@CATEGORY='Organism'][generate-id(key('expt-species',concat(ancestor::experiment/@accnum,@VALUE)))=generate-id()]">
@@ -44,12 +42,15 @@
             </xsl:for-each>
         </xsl:variable>
 
-        <experiment
-            samples="{substring-before ( substring-after ( description[contains(.,'(Generated description)')], 'using '    ), ' samples' )}"
-            hybs="{substring-before ( substring-after ( description[contains(.,'(Generated description)')], 'with '    ), ' hybridizations' )}"
-            >
-            <species><xsl:value-of select="$species"/></species>
-            <arrays><xsl:value-of select="$array"/></arrays>
+        <experiment>
+            <xsl:for-each select="@*">
+                <xsl:element name="{helper:toLowerCase(name())}">
+                    <xsl:value-of select="." />
+                </xsl:element>
+            </xsl:for-each>
+            <samples><xsl:value-of select="substring-before(substring-after(description[contains(.,'(Generated description)')],'using '),' samples')"/></samples>
+            <hybs><xsl:value-of select="substring-before( substring-after(description[contains(.,'(Generated description)')], 'with '),' hybridizations')"/></hybs>
+            
             <!--
             <xsl:if test="download-monitor:doesFileExist(concat(@accnum,'.processed.zip'))">
                 <xsl:attribute name="fgem">download/mageml/<xsl:value-of select="@accnum"/>.processed.zip</xsl:attribute>
@@ -75,7 +76,19 @@
             -->
             <xsl:apply-templates mode="copy" />
         </experiment>
-        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="miamescore" mode="copy">
+        <miamescores>
+            <xsl:for-each select="score">
+                <xsl:element name="{helper:toLowerCase(@name)}">
+                    <xsl:value-of select="@value"/>
+                </xsl:element>
+            </xsl:for-each>
+            <overallscore>
+                <xsl:value-of select="sum(score/@value)"/>
+            </overallscore>
+        </miamescores>
     </xsl:template>
 
     <xsl:template match="*" mode="copy">

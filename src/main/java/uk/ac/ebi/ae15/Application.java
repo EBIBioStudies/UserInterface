@@ -7,12 +7,15 @@ public class Application {
     // logging macinery
     private static final Log log = org.apache.commons.logging.LogFactory.getLog(Application.class);
 
+    // filesysystem separator
+    private final static String slash = System.getProperty("file.separator");
+
     // auto-created singleton machinery
     private static Application instance = null;
 
-    synchronized static public Application Instance() {
+    synchronized static public Application Instance( String contextRoot ) {
         if ( null == instance ) {
-            instance = new Application();
+            instance = new Application(contextRoot);
         }
         return instance;
     }
@@ -36,9 +39,18 @@ public class Application {
         return experiments;
     }
 
-    public Application() {
+    public Application( String contextRoot ) {
 
         // load application preferences
         Preferences().load();
+
+        if ( null != contextRoot ) {
+            if ( !contextRoot.endsWith(slash) ) {
+                contextRoot = contextRoot + slash;
+            }
+            Preferences().setProperty( "ae.webapp.root", contextRoot );
+        } else {
+            log.error("Unable to determine webapp root location, expect problems down the road.");
+        }
     }
 }
