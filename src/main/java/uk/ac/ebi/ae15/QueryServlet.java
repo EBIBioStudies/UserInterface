@@ -28,7 +28,7 @@ public class QueryServlet extends HttpServlet {
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
         log.debug(
-            new StringBuffer("Processing request: ")
+            new StringBuilder("Processing request: ")
                 .append(request.getRequestURL())
                 .append("?")
                 .append(request.getQueryString())

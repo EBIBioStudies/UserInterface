@@ -4,7 +4,6 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.NamedNodeMap;
 import org.apache.commons.logging.Log;
-import org.apache.xalan.extensions.ExpressionContext;
 import org.apache.xalan.extensions.XSLProcessorContext;
 import org.apache.xalan.templates.ElemExtensionCall;
 
@@ -18,7 +17,7 @@ public abstract class HelperXsltExtension {
 
     public static String concatAll( NodeList nl )
     {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 
         try {
             for (int i = 0; i < nl.getLength(); i++) {
@@ -48,6 +47,12 @@ public abstract class HelperXsltExtension {
     {
         return str.toUpperCase();
     }
+
+    public static String toLowerCase( String str )
+    {
+        return str.toLowerCase();
+    }
+
     public static boolean testRegexp( NodeList nl, String pattern, String flags )
     {
         return testRegexp( concatAll(nl), pattern, flags );
