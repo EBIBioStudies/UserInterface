@@ -53,6 +53,11 @@ public abstract class HelperXsltExtension {
         return str.toLowerCase();
     }
 
+    public static boolean isOnFtp( String fileName )
+    {
+        return false;
+    }
+    
     public static boolean testRegexp( NodeList nl, String pattern, String flags )
     {
         return testRegexp( concatAll(nl), pattern, flags );
