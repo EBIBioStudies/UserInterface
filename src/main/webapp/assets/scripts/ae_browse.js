@@ -14,6 +14,13 @@ $(document).ready( function() {
 
     // step 2: attach event handlers on additional filter object
     $("#ae_add_filter_select").change( onAddFilterChange );
+
+    var outerWidth = $("#ae_results_table_body").width();
+    var innerWidth = $("#ae_results_table_body table").width();
+    var padding = outerWidth - innerWidth;
+    if ( padding > 0 ) {
+        $("#ae_results_table_hdr").css( "right", padding + "px" );
+    }
 });
 
 function
