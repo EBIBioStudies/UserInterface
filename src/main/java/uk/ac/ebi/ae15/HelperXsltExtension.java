@@ -3,6 +3,7 @@ package uk.ac.ebi.ae15;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Element;
 import org.apache.commons.logging.Log;
 import org.apache.xalan.extensions.XSLProcessorContext;
 import org.apache.xalan.templates.ElemExtensionCall;
@@ -82,6 +83,19 @@ public abstract class HelperXsltExtension {
         return result;
     }
 
+    public static String replaceRegexp( String input, String pattern, String flags, String replace )
+	{
+        int patternFlags = ( flags.indexOf("i") >= 0 ? Pattern.CASE_INSENSITIVE : 0 );
+
+		String inputStr = ( input == null ? "" : input );
+ 		String patternStr = ( pattern == null ? "" : pattern );
+ 		String replaceStr = ( replace == null ? "" : replace );
+
+		Pattern p = Pattern.compile(patternStr, patternFlags);
+		Matcher matcher = p.matcher(inputStr);
+		return ( flags.indexOf("g") >= 0 ? matcher.replaceAll(replaceStr) : matcher.replaceFirst(replaceStr) );
+	}
+
     public static boolean testKeywords( NodeList nl, String keywords, boolean wholeWords )
     {
         return testKeywords( concatAll(nl), keywords, wholeWords );
@@ -97,6 +111,18 @@ public abstract class HelperXsltExtension {
         }
 
         return false;
+    }
+
+    public static String markKeywords( String input, String keywords, boolean wholeWords )
+    {
+        String result = input;
+        String[] kwdArray = keywords.split("\\s");
+        for ( String keyword : kwdArray ) {
+            String pattern = ( wholeWords ? "\\b" + keyword + "\\b" : keyword );
+            result = replaceRegexp( result, "(" + pattern + ")", "ig", "|*$1*|" );
+        }
+
+        return result;
     }
 
     public static void logInfo( XSLProcessorContext c, ElemExtensionCall extElt )

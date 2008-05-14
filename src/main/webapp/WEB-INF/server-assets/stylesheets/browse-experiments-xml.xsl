@@ -18,7 +18,8 @@
     <xsl:param name="array"/>
     <xsl:param name="keywords"/>
     <xsl:param name="wholewords"/>
-
+    <xsl:param name="mark"/>
+    
     <xsl:output omit-xml-declaration="yes" method="xml" indent="no"/>
 
     <func:function name="ae:filter-experiments">
@@ -154,8 +155,43 @@
         <xsl:param name="FROM"/>
         <xsl:param name="TO"/>
         <xsl:if test="position() &gt;= $FROM and position() &lt;= $TO">
-            <xsl:copy-of select="."/>
+            <xsl:choose>
+                <xsl:when test="$mark">
+                    <experiment>
+                        <xsl:apply-templates mode="copy" />
+                    </experiment>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:copy-of select="."/>
+                </xsl:otherwise>
+            </xsl:choose>
+
         </xsl:if>
     </xsl:template>
+    <xsl:template match="*" mode="copy">
+        <xsl:variable name="markedtext" select="helper:markKeywords(text(),$keywords,$wholewords)"/>
+        <xsl:element name="{name()}">
+            <xsl:apply-templates select="child::*" mode="copy" />
+            <xsl:call-template name="add_mark_element">
+                <xsl:with-param name="text" select="$markedtext"/>
+            </xsl:call-template>
+        </xsl:element>
+    </xsl:template>
 
+
+    <xsl:template name="add_mark_element">
+        <xsl:param name="text"/>
+        <xsl:choose>
+            <xsl:when test="contains($text,'|*') and contains($text,'*|')">
+                <xsl:value-of select="substring-before($text,'|*')"/>
+                <mark><xsl:value-of select="substring-after(substring-before($text,'*|'),'|*')"/></mark>
+                <xsl:call-template name="add_mark_element">
+                    <xsl:with-param name="text" select="substring-after($text,'*|')"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$text"/>
+            </xsl:otherwise>
+       </xsl:choose>
+   </xsl:template>
 </xsl:stylesheet>
