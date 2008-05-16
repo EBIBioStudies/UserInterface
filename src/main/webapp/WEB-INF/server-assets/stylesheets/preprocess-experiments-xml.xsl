@@ -45,6 +45,7 @@
                     <raw>
                         <xsl:attribute name="url"><xsl:value-of select="helper:getFileDownloadUrl(concat(@accession,'.raw.zip'))"/></xsl:attribute>
                         <xsl:attribute name="count"><xsl:value-of select="sum(bioassaydatagroup[@isderived='0']/@bioassays)"/></xsl:attribute>
+                        <xsl:attribute name="celcount"><xsl:value-of select="sum(bioassaydatagroup[@isderived='0'][contains(@dataformat,'CEL')]/@bioassays)"/></xsl:attribute>
                     </raw>
                 </xsl:if>
                 <xsl:if test="helper:isFileAvailableForDownload(concat(@accession,'.2columns.txt'))">

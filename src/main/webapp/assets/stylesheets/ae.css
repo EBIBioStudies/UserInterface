@@ -317,6 +317,7 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    background-color: red;
 }
 
 #ae_results_table_hdr {
@@ -324,9 +325,9 @@ body {
     top: 0;
     left: 0;
     right: 15px;
-    /* width: 100%; */
     height: 22px;
     overflow: hidden;
+    background-color: white;
 }
 
 #ae_results_table_hdr_inner {
@@ -344,13 +345,22 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    background-color: white;
 }
 
 #ae_results_table_body_inner {
     width: 100%;
     height: 100%;
-    overflow-x: hidden;
+    overflow: auto; /* for opera prior to 9.5 */
     overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.ae_results_table_loading {
+    background-repeat:  no-repeat;
+    background-position: 50% 50%;
+    background-image: url(../images/ae_loading.gif);
+
 }
 
 #ae_results_table_body table {
@@ -383,11 +393,11 @@ body {
 }
 
 .ae_results_hybs {
-    width: 70px;
+    width: 50px;
 }
 
 .ae_results_species {
-    width: 150px;
+    width: 200px;
 }
 
 .ae_results_releasedate {

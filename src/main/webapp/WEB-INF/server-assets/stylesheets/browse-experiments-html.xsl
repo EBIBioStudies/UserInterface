@@ -184,6 +184,7 @@
                 <td class="ae_results_td_center">
                     <div class="ae_results_cell">
                         <xsl:choose>
+                            <xsl:when test="files/raw/@celcount>0"><img src="assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Affy data ({files/raw/@celcount})"/></xsl:when>
                             <xsl:when test="files/raw/@count>0"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Raw data ({files/raw/@count})"/></xsl:when>
                             <xsl:otherwise><img src="assets/images/silk_data_unavail.gif" width="16" height="16"/></xsl:otherwise>
                         </xsl:choose>
