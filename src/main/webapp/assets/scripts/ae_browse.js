@@ -12,6 +12,7 @@ $(document).ready( function() {
 
     // step 1: parse query string (if any) and set filters as appropriate
 
+    
     // step 2: attach event handlers on additional filter object
     $("#ae_add_filter_select").change( onAddFilterChange );
 
@@ -21,6 +22,11 @@ $(document).ready( function() {
     if ( padding > 0 ) {
         $("#ae_results_table_hdr").css( "right", padding + "px" );
     }
+
+    var keywords = $.query.get("keywords");
+    $.get("/microarray-as/ae/servlets/query", {keywords : keywords, stylesheet : "browse-experiments", type : "html"}, function(data){
+        $("#ae_results_tbody").html(data);
+    });
 });
 
 function

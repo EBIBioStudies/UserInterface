@@ -45,6 +45,13 @@ public class QueryServlet extends HttpServlet {
 
         // Set content type for HTML/XML
         response.setContentType("text/" + type + "; charset=ISO-8859-1");
+
+        // Disable cache no matter what (or we fucked on IE side)
+        response.addHeader("Pragma", "no-cache");
+        response.addHeader("Cache-Control", "no-cache");
+        response.addHeader("Cache-Control", "must-revalidate");
+        response.addHeader("Expires", "Fri, 16 May 2008 10:00:00 GMT"); // some date in the past
+
         // Output goes to the response PrintWriter.
         PrintWriter out = response.getWriter();
         try {

@@ -9,8 +9,8 @@
                 version="1.0">
 
     <xsl:param name="from">1</xsl:param>
-    <xsl:param name="to">40</xsl:param>
-    <xsl:param name="perpage">40</xsl:param>
+    <xsl:param name="to">50</xsl:param>
+    <xsl:param name="perpage">50</xsl:param>
     <xsl:param name="sortby">releasedate</xsl:param>
     <xsl:param name="sortorder">descending</xsl:param>
 

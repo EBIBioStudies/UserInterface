@@ -34,28 +34,48 @@
             <hybs>
                 <xsl:value-of select="substring-before( substring-after(description[contains(.,'(Generated description)')], 'with '),' hybridizations')"/>
             </hybs>
-            
-            <xsl:if test="helper:isOnFtp(concat(@accnum,'.processed.zip'))">
-                <xsl:attribute name="fgem">download/mageml/<xsl:value-of select="@accnum"/>.processed.zip</xsl:attribute>
-                <xsl:attribute name="fgem-count"><xsl:value-of select="sum(.//bioassaydatagroup[@is_derived='1']/@bioassay_count)"/></xsl:attribute>
-            </xsl:if>
-            <xsl:if test="helper:isOnFtp(concat(@accnum,'.raw.zip'))">
-                <xsl:attribute name="raw">download/mageml/<xsl:value-of select="@accnum"/>.raw.zip</xsl:attribute>
-                <xsl:attribute name="raw-count"><xsl:value-of select="sum(.//bioassaydatagroup[@is_derived='0']/@bioassay_count)"/></xsl:attribute>
-                <xsl:attribute name="cel-count"><xsl:value-of select="sum(bioassaydatagroups/bioassaydatagroup[@is_derived='0'][starts-with(@dataformat,'CEL')]/@bioassay_count)"/></xsl:attribute>
-            </xsl:if>
-            <xsl:if test="helper:isOnFtp(concat(@accnum,'.2columns.txt'))">
-                <xsl:attribute name="two-columns">download/mageml/<xsl:value-of select="@accnum"/>.2columns.txt</xsl:attribute>
-            </xsl:if>
-            <xsl:if test="helper:isOnFtp(concat(@accnum,'.sdrf.txt'))">
-                <xsl:attribute name="sdrf">download/mageml/<xsl:value-of select="@accnum"/>.sdrf.txt</xsl:attribute>
-            </xsl:if>
-            <xsl:if test="helper:isOnFtp(concat(@accnum,'.biosamples.png'))">
-                <xsl:attribute name="biosamples-png">download/mageml/<xsl:value-of select="@accnum"/>.biosamples.png</xsl:attribute>
-            </xsl:if>
-            <xsl:if test="helper:isOnFtp(concat(@accnum,'.biosamples.svg'))">
-                <xsl:attribute name="biosamples-svg">download/mageml/<xsl:value-of select="@accnum"/>.biosamples.svg</xsl:attribute>
-            </xsl:if>
+            <files>
+                <xsl:if test="helper:isFileAvailableForDownload(concat(@accession,'.processed.zip'))">
+                    <fgem>
+                        <xsl:attribute name="url"><xsl:value-of select="helper:getFileDownloadUrl(concat(@accession,'.processed.zip'))"/></xsl:attribute>
+                        <xsl:attribute name="count"><xsl:value-of select="sum(bioassaydatagroup[@isderived='1']/@bioassays)"/></xsl:attribute>
+                    </fgem>
+                </xsl:if>
+                <xsl:if test="helper:isFileAvailableForDownload(concat(@accession,'.raw.zip'))">
+                    <raw>
+                        <xsl:attribute name="url"><xsl:value-of select="helper:getFileDownloadUrl(concat(@accession,'.raw.zip'))"/></xsl:attribute>
+                        <xsl:attribute name="count"><xsl:value-of select="sum(bioassaydatagroup[@isderived='0']/@bioassays)"/></xsl:attribute>
+                    </raw>
+                </xsl:if>
+                <xsl:if test="helper:isFileAvailableForDownload(concat(@accession,'.2columns.txt'))">
+                    <twocolumns>
+                        <xsl:attribute name="url">
+                            <xsl:value-of select="helper:getFileDownloadUrl(concat(@accession,'.2columns.txt'))"/>
+                        </xsl:attribute>
+                    </twocolumns>
+                </xsl:if>
+                <xsl:if test="helper:isFileAvailableForDownload(concat(@accession,'.sdrf.txt'))">
+                    <sdrf>
+                        <xsl:attribute name="url">
+                            <xsl:value-of select="helper:getFileDownloadUrl(concat(@accession,'.sdrf.txt'))"/>
+                        </xsl:attribute>
+                    </sdrf>
+                </xsl:if>
+                <xsl:if test="helper:isFileAvailableForDownload(concat(@accession,'.biosamples.png')) or helper:isFileAvailableForDownload(concat(@accession,'.biosamples.svg'))">
+                    <biosamples>
+                        <xsl:if test="helper:isFileAvailableForDownload(concat(@accession,'.biosamples.png'))">
+                            <png>
+                                <xsl:attribute name="url"><xsl:value-of select="helper:getFileDownloadUrl(concat(@accession,'.biosamples.png'))"/></xsl:attribute>
+                            </png>
+                        </xsl:if>
+                        <xsl:if test="helper:isFileAvailableForDownload(concat(@accession,'.biosamples.svg'))">
+                            <svg>
+                                <xsl:attribute name="url"><xsl:value-of select="helper:getFileDownloadUrl(concat(@accession,'.biosamples.svg'))"/></xsl:attribute>
+                            </svg>
+                        </xsl:if>
+                    </biosamples>
+                </xsl:if>
+            </files>
 
             <xsl:apply-templates mode="copy" />
         </experiment>

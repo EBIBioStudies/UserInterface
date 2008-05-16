@@ -71,7 +71,6 @@ body {
     height: 100%;
     text-align: left;
     margin: 0;
-    background-color: #ffefd1;
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size: 11px;
     color: #666666;
@@ -306,7 +305,10 @@ body {
 #ae_results_area td {
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size: 11px;
-    text-align: left;
+}
+
+#ae_results_summary_info {
+    display: none;
 }
 
 #ae_results_table {
@@ -373,34 +375,43 @@ body {
     height: 0;
 }
 
-.ae_results_col1 {
+.ae_results_accession {
     width: 100px;
 }
 
-.ae_results_col2 {
+.ae_results_name {
 }
 
-.ae_results_col3 {
+.ae_results_hybs {
     width: 70px;
 }
 
-.ae_results_col4 {
+.ae_results_species {
     width: 150px;
 }
 
-.ae_results_col5 {
-    width: 80px;
-}
-.ae_results_col6 {
+.ae_results_releasedate {
     width: 80px;
 }
 
-.ae_results_col7 {
+.ae_results_fgem {
     width: 80px;
 }
 
-.ae_results_col8 {
+.ae_results_raw {
+    width: 80px;
+}
+
+.ae_results_more {
     width: 45px;
+}
+
+.ae_results_td_center {
+    text-align: center;
+}
+
+.ae_results_td_right {
+    text-align: right;
 }
 
 .ae_results_cell {
@@ -408,6 +419,11 @@ body {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+.ae_text_highlight {
+    background-color: yellow;
+}
+
 /* bb-style boxes */
 
 .box_top {

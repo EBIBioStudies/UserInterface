@@ -54,11 +54,16 @@ public abstract class HelperXsltExtension {
         return str.toLowerCase();
     }
 
-    public static boolean isOnFtp( String fileName )
+    public static boolean isFileAvailableForDownload( String fileName )
     {
-        return false;
+        return true;
     }
-    
+
+    public static String getFileDownloadUrl( String fileName )
+    {
+        return "http://www.ebi.ac.uk/microarray-as/ae/download/" + fileName;
+    }
+
     public static boolean testRegexp( NodeList nl, String pattern, String flags )
     {
         return testRegexp( concatAll(nl), pattern, flags );
