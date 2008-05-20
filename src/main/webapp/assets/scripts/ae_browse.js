@@ -47,9 +47,9 @@ $(document).ready( function() {
     else
         query.sortorder = "descending";
 
-    showSorting(query);
+    initControls(query);
 
-    $.get( "/microarray-as/ae/servlets/query/browse-experiments/html", query, onExperimentQuery );
+    $.get( "servlets/query/browse-experiments/html", query, onExperimentQuery );
 });
 
 function
@@ -69,7 +69,7 @@ onWindowResize( eventObj )
     var outerWidth = $("#ae_results_body").width();
     var innerWidth = $("#ae_results_body table").width();
     var padding = outerWidth - innerWidth;
-    if ( padding > 0 ) {
+    if ( padding > 0 && padding < 30 ) {
         $("#ae_results_hdr").css( "right", padding + "px" );
     } else if ( padding == 0 && $.browser.opera && $.browser.version < 9.5 ) {
         $("#ae_results_hdr").css( "right", "-1px" );
@@ -88,11 +88,18 @@ onExperimentQuery( tableHtml )
     // adjust header width to accomodate scroller (for Opera <9.5)
     if ($.browser.opera && $.browser.version < 9.5)
         onWindowResize();
+
+    // alternate rows
+    //$("#ae_results_body tr:odd").css("background-color", "#f8fbff");
 }
 
 function
-showSorting( query )
+initControls( query )
 {
+    // keywords
+    $("#ae_keywords").val(query.keywords);
+    $("#ae_sortby").val(query.sortby);
+    $("#ae_sortorder").val(query.sortorder);
 
     if ( "" != query.sortby ) {
         var thElt = $("#ae_results_header_" + query.sortby);

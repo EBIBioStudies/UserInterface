@@ -119,11 +119,13 @@ public abstract class HelperXsltExtension {
 
     public static boolean testKeywords( String input, String keywords, boolean wholeWords )
     {
-        String[] kwdArray = keywords.split("\\s");
-        for ( String keyword : kwdArray ) {
-            String pattern = ( wholeWords ? "\\b" + keyword + "\\b" : keyword );
-            if ( testRegexp( input, pattern, "i" ) )
-                return true;
+        if ( null != keywords && 0 < keywords.length() ) {
+            String[] kwdArray = keywords.split("\\s");
+            for ( String keyword : kwdArray ) {
+                String pattern = ( wholeWords ? "\\b" + keyword + "\\b" : keyword );
+                if ( testRegexp( input, pattern, "i" ) )
+                    return true;
+            }
         }
 
         return false;
@@ -132,12 +134,13 @@ public abstract class HelperXsltExtension {
     public static String markKeywords( String input, String keywords, boolean wholeWords )
     {
         String result = input;
-        String[] kwdArray = keywords.split("\\s");
-        for ( String keyword : kwdArray ) {
-            String pattern = ( wholeWords ? "\\b" + keyword + "\\b" : keyword );
-            result = replaceRegexp( result, "(" + pattern + ")", "ig", "|*$1*|" );
+        if ( null != keywords && 0 < keywords.length() ) {
+            String[] kwdArray = keywords.split("\\s");
+            for ( String keyword : kwdArray ) {
+                String pattern = ( wholeWords ? "\\b" + keyword + "\\b" : keyword );
+                result = replaceRegexp( result, "(" + pattern + ")", "ig", "|*$1*|" );
+            }
         }
-
         return result;
     }
 

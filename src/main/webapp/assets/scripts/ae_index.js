@@ -11,22 +11,22 @@ $(document).ready( function() {
     });
 
     // gets aer stats and updates the page
-    $.get("/microarray-as/ae/servlets/query?stylesheet=stats").next(updateAerStats);
+    $.get("servlets/query?stylesheet=stats").next(updateAerStats);
 
     // gets aew stats and updates the page
     Deferred.parallel([
-        $.get("/microarray-as/ae/test/aew_gene_avail_info.xml").next(getNumDocsFromSolrStats),
-        $.get("/microarray-as/ae/test/aew_exp_avail_info.xml").next(getNumDocsFromSolrStats)
+        $.get("test/aew_gene_avail_info.xml").next(getNumDocsFromSolrStats),
+        $.get("test/aew_exp_avail_info.xml").next(getNumDocsFromSolrStats)
     ]).next( function (values) {
         var aew_avail_info = values[0] + " genes, " + values[1] + " experiments available";
         $("#aew_avail_info").text(aew_avail_info);
     });
 
     // loads news page
-    $("#ae_news").load("/microarray-as/ae/test/ae_news.xml div ul");
+    $("#ae_news").load("test/ae_news.xml div ul");
 
     // loads links page
-    $("#ae_links").load("/microarray-as/ae/test/ae_links.xml div ul");
+    $("#ae_links").load("test/ae_links.xml div ul");
     $("#ae_news_links_area").show();
 });
 

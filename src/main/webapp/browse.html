@@ -28,7 +28,12 @@
                 <div class="ae_error_area">ArrayExpress uses JavaScript for better data handling and enhanced representation. Please enable JavaScript if you want to continue browsing ArrayExpress.</div>
             </noscript>
             <div id="ae_browse_area">
-                <div id="ae_keywords_filters_area">Hello
+                <div id="ae_keywords_filters_area">
+                    <form method="get" action="browse.html">
+                        <input id="ae_keywords" name="keywords">
+                        <input type="hidden" id="ae_sortby" name="sortby">
+                        <input type="hidden" id="ae_sortorder" name="sortorder">
+                    </form>
                 </div>
 
                 <div id="ae_results_area">
