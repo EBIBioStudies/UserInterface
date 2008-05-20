@@ -6,16 +6,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.Templates;
+import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.dom.DOMSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Enumeration;
+import java.util.regex.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class QueryServlet extends HttpServlet {
 
@@ -32,17 +32,19 @@ public class QueryServlet extends HttpServlet {
                 .append(request.getQueryString())
         );
 
-        String type = request.getParameter("type");
-        if ( null == type ) {
-            type = "xml";
+
+        String type = "xml";
+        String stylesheet = "default";
+
+        Pattern p = Pattern.compile("servlets/query/([^/]+)/?([^/]*)");
+        Matcher m = p.matcher(request.getRequestURL());
+        if ( m.find() )
+        {
+            stylesheet = m.group(1);
+            if ( 0 < m.group(2).length() )
+                type = m.group(2);
         }
-
-        String stylesheet = request.getParameter("stylesheet");
-        if ( null == stylesheet ) {
-            stylesheet = "default";
-        }
-
-
+        
         // Set content type for HTML/XML
         response.setContentType("text/" + type + "; charset=ISO-8859-1");
 
@@ -59,9 +61,15 @@ public class QueryServlet extends HttpServlet {
             String ctxRoot = Application.Preferences().getProperty("ae.webapp.root");
             // Get the XML input document and the stylesheet, both in the servlet
             // engine document directory.
+
+            //TODO: make paths configurable
             Source xmlSource = new DOMSource(Application.Experiments().getExperiments());
-            Source xslSource = new StreamSource( new java.net.URL("file", "", ctxRoot + "WEB-INF/server-assets/stylesheets/" + stylesheet + "-" + type + ".xsl").openStream() );
+            Source xslSource = new StreamSource( new URL("file", "", ctxRoot + "WEB-INF/server-assets/stylesheets/" + stylesheet + "-" + type + ".xsl").openStream() );
             TransformerFactory tFactory = TransformerFactory.newInstance();
+
+            tFactory.setURIResolver(
+                new AppURIResolver( ctxRoot + "WEB-INF/server-assets/stylesheets/" )
+            );
 
             // Generate the transformer.
             Transformer transformer = tFactory.newTransformer(xslSource);
@@ -81,11 +89,37 @@ public class QueryServlet extends HttpServlet {
             log.debug("experiments filtering: transformer.transform() completed");
         }
         // If an Exception occurs, return the error to the client.
-        catch ( Exception e ) {
-            log.debug( "Caught an exception:", e );
-            out.write(e.getMessage());
+        catch ( Exception x ) {
+            log.debug( "Caught an exception:", x );
         }
         // Close the PrintWriter.
         out.close();
     }
+}
+
+class AppURIResolver implements URIResolver {
+
+    // logging macinery
+    private static final Log log = org.apache.commons.logging.LogFactory.getLog(AppURIResolver.class);
+
+    public AppURIResolver ( String rootPath )
+    {
+        root = rootPath;
+    }
+
+    public Source resolve( String href, String base ) throws TransformerException
+    {
+        Source src = null;
+        try {
+            src = new StreamSource( new URL("file", "", root + href ).openStream() );
+        } catch ( Exception x ) {
+            log.debug( "Caught an exception:", x );
+            throw new TransformerException(x.getMessage());
+        }
+
+    return src;
+    }
+
+    private String root;
+
 }

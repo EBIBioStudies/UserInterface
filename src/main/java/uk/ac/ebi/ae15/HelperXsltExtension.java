@@ -101,6 +101,17 @@ public abstract class HelperXsltExtension {
 		return ( flags.indexOf("g") >= 0 ? matcher.replaceAll(replaceStr) : matcher.replaceFirst(replaceStr) );
 	}
 
+    public static boolean testSpecies( NodeList nl, String species )
+    {
+        return testSpecies( concatAll(nl), species );
+    }
+
+    public static boolean testSpecies( String input, String species )
+    {
+        String pattern = ( "\\b" + species + "\\b" );
+        return testRegexp( input, pattern, "i" );
+    }
+
     public static boolean testKeywords( NodeList nl, String keywords, boolean wholeWords )
     {
         return testKeywords( concatAll(nl), keywords, wholeWords );
