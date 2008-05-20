@@ -49,7 +49,7 @@ $(document).ready( function() {
 
     initControls(query);
 
-    $.get( "servlets/query/browse-experiments/html", query, onExperimentQuery );
+    $.get( "servlets/query/browse-experiments/html", query ).next(onExperimentQuery);
 });
 
 function
