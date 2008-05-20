@@ -49,7 +49,8 @@ new function(settings) {
             else if (/\[\]$/.test(key)) // array syntax
               type = Array, key = key.replace(/\[\]$/,"");
 
-            val = (!val && val !== 0) ? true : val;
+            ///kolais: this behaviour is not what we wanted :( 
+            ///val = (!val && val !== 0) ? true : val;
 
             if (!type && self.has(key))
               type = Array, self.destructiveSet(key, self.has(key, Array) ? self.keys[key] : [self.keys[key]]);

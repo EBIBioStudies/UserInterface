@@ -85,7 +85,7 @@ public class QueryServlet extends HttpServlet {
 
             log.debug("experiments filtering: about to start transformer.transform()");
             // Perform the transformation, sending the output to the response.
-            transformer.transform(xmlSource, new StreamResult(out));
+            transformXml( transformer, xmlSource, new StreamResult(out) );
             log.debug("experiments filtering: transformer.transform() completed");
         }
         // If an Exception occurs, return the error to the client.
@@ -94,6 +94,11 @@ public class QueryServlet extends HttpServlet {
         }
         // Close the PrintWriter.
         out.close();
+    }
+
+    synchronized private static void transformXml( Transformer transformer, Source in, Result out ) throws TransformerException
+    {
+        transformer.transform(in, out);
     }
 }
 
