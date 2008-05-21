@@ -51,13 +51,24 @@
                 <div id="ae_resutls_sortorder"><xsl:value-of select="$sortorder"/></div>
             </td>
         </tr>
-        <xsl:call-template name="ae-sort-experiments">
-            <xsl:with-param name="pExperiments" select="$vFilteredExperiments"/>
-            <xsl:with-param name="pFrom" select="$vFrom"/>
-            <xsl:with-param name="pTo" select="$vTo"/>
-            <xsl:with-param name="pSortBy" select="$sortby"/>
-            <xsl:with-param name="pSortOrder" select="$sortorder"/>
-        </xsl:call-template>
+        <xsl:choose>
+            <xsl:when test="$vTotal&gt;0">
+                <xsl:call-template name="ae-sort-experiments">
+                    <xsl:with-param name="pExperiments" select="$vFilteredExperiments"/>
+                    <xsl:with-param name="pFrom" select="$vFrom"/>
+                    <xsl:with-param name="pTo" select="$vTo"/>
+                    <xsl:with-param name="pSortBy" select="$sortby"/>
+                    <xsl:with-param name="pSortOrder" select="$sortorder"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <tr class="ae_results_tr_error">
+                    <td colspan="8">
+                        The query "<xsl:value-of select="$keywords"/>" has returned no matches. Please check your query and try again.    
+                    </td>
+                </tr>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="experiment">
@@ -73,7 +84,7 @@
                 </td>
                 <td><div>
                     <xsl:for-each select="species">
-                        <xsl:apply-templates select="node()" mode="highlight" />
+                        <xsl:apply-templates select="." mode="highlight" />
                         <xsl:if test="position() != last()">, </xsl:if>
                     </xsl:for-each>
                 </div></td>
@@ -114,14 +125,14 @@
                                         <xsl:when test="string-length(text())=0"/>
                                         <xsl:when test="substring(text(), 1, 3)='GSE' or substring(text(), 1, 3)='GDS'">
                                             <a href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc={text()}"
-                                               target="_blank" title="Opens in a new window">&#187; GEO <xsl:apply-templates select="node()" mode="highlight" /></a>
+                                               target="_blank" title="Opens in a new window">&#187; GEO <xsl:apply-templates select="." mode="highlight" /></a>
                                         </xsl:when>
                                         <xsl:when test="substring(text(), 1, 2)='E-' and substring(text(), 7, 1)='-'">
                                             <a href="result?queryFor=Experiment&amp;eAccession={text()}"
-                                               target="_blank" title="Opens in a new window">&#187; <xsl:apply-templates select="node()" mode="highlight" /></a>
+                                               target="_blank" title="Opens in a new window">&#187; <xsl:apply-templates select="." mode="highlight" /></a>
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <xsl:apply-templates select="node()" mode="highlight" />
+                                            <xsl:apply-templates select="." mode="highlight" />
                                         </xsl:otherwise>
                                     </xsl:choose>
                                     <xsl:if test="position()!=last() and string-length(text())&gt;0">, </xsl:if>
@@ -165,10 +176,11 @@
                         </xsl:if>
                         <dt>Downloads:</dt>
                         <dd>
-                            <a href="ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/experiment/{substring(accession,3,4)}/{accession}"
-                               target="_blank" title="Opens in a new window">&#187; FTP server direct link...</a>
+                            <p>
+                                <a href="ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/experiment/{substring(accession,3,4)}/{accession}"
+                                   target="_blank" title="Opens in a new window">&#187; FTP server direct link...</a>
+                            </p>
                             <xsl:if test="accession!='E-TABM-185'">
-                                <br/>
                                 <a href="dataselection?expid={$vExpId}"
                                    target="_blank" title="Opens in a new window">&#187; View detailed data retrieval page...</a>
                             </xsl:if>
@@ -221,14 +233,14 @@
                             <dt>Design&#160;type<xsl:if test="count(experimentdesign)&gt;1">s</xsl:if>:</dt>
                             <dd>
                                 <xsl:for-each select="experimentdesign">
-                                    <xsl:apply-templates select="node()" mode="highlight"/><xsl:if test="position()!=last()">, </xsl:if>
+                                    <xsl:apply-templates select="." mode="highlight"/><xsl:if test="position()!=last()">, </xsl:if>
                                 </xsl:for-each>
                             </dd>
                         </xsl:if>
 
                         <xsl:if test="count(description[text/text()!='' and not(contains(text/text(),'Generated description'))])&gt;0">
                             <dt>Description:</dt>
-                            <dd class="align_justify">
+                            <dd>
                                 <xsl:for-each select="description[text/text()!='' and not(contains(text/text(),'Generated description'))]">
                                     <xsl:call-template name="description">
                                         <xsl:with-param name="text" select="text/text()"/>
@@ -271,32 +283,33 @@
     </xsl:template>
 
     <xsl:template match="bibliography">
-        <xsl:variable name="publication_title">
-            <xsl:if test="authors/text()!=''"><xsl:apply-templates select="authors" mode="highlight"/>. </xsl:if>
-            <xsl:if test="title/text()!=''"><xsl:apply-templates select="title" mode="highlight"/>. </xsl:if>
-            <xsl:if test="publication/text()!=''"><em><xsl:apply-templates select="publication" mode="highlight"/></em>&#160;</xsl:if>
-            <xsl:if test="volume/text()!=''"><xsl:apply-templates select="volume" mode="highlight"/><xsl:if test="issue/text()!=''">(<xsl:apply-templates select="issue" mode="highlight"/>)</xsl:if></xsl:if>
-            <xsl:if test="pages/text()!=''">:<xsl:apply-templates select="pages" mode="highlight"/></xsl:if>
-            <xsl:if test="year/text()!=''">&#160;(<xsl:apply-templates select="year" mode="highlight"/>)</xsl:if>
-            <xsl:if test="publication/text()!=''">.</xsl:if>
-        </xsl:variable>
-        <xsl:choose>
-            <xsl:when test="uri[starts-with(., 'http')]">
-                <a href="{uri}"
-                   target="_blank" title="Opens in a new window">&#187; <xsl:copy-of select="$publication_title"/></a>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:copy-of select="$publication_title" />
-                <xsl:if test="uri/text()!=''">(<xsl:apply-templates select="uri" mode="highlight"/>)</xsl:if>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:if test="accession">
-            <xsl:if test="number(accession)>0">
-                (<a href="http://www.ncbi.nlm.nih.gov/pubmed/{accession}"
-                   target="_blank" title="Opens in a new window">&#187; PubMed <xsl:apply-templates select="accession" mode="highlight"/></a>)
+        <p>
+            <xsl:variable name="publication_title">
+                <xsl:if test="authors/text()!=''"><xsl:apply-templates select="authors" mode="highlight"/>. </xsl:if>
+                <xsl:if test="title/text()!=''"><xsl:apply-templates select="title" mode="highlight"/>. </xsl:if>
+                <xsl:if test="publication/text()!=''"><em><xsl:apply-templates select="publication" mode="highlight"/></em>&#160;</xsl:if>
+                <xsl:if test="volume/text()!=''"><xsl:apply-templates select="volume" mode="highlight"/><xsl:if test="issue/text()!=''">(<xsl:apply-templates select="issue" mode="highlight"/>)</xsl:if></xsl:if>
+                <xsl:if test="pages/text()!=''">:<xsl:apply-templates select="pages" mode="highlight"/></xsl:if>
+                <xsl:if test="year/text()!=''">&#160;(<xsl:apply-templates select="year" mode="highlight"/>)</xsl:if>
+                <xsl:if test="publication/text()!=''">.</xsl:if>
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="uri[starts-with(., 'http')]">
+                    <a href="{uri}"
+                       target="_blank" title="Opens in a new window">&#187; <xsl:copy-of select="$publication_title"/></a>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:copy-of select="$publication_title" />
+                    <xsl:if test="uri/text()!=''">(<xsl:apply-templates select="uri" mode="highlight"/>)</xsl:if>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="accession">
+                <xsl:if test="number(accession)>0">
+                    (<a href="http://www.ncbi.nlm.nih.gov/pubmed/{accession}"
+                       target="_blank" title="Opens in a new window">&#187; PubMed <xsl:apply-templates select="accession" mode="highlight"/></a>)
+                </xsl:if>
             </xsl:if>
-        </xsl:if>
-        <xsl:if test="position()!=last()"><br/><br/></xsl:if>
+        </p>
     </xsl:template>
 
     <xsl:template name="providers">
@@ -311,18 +324,21 @@
         <xsl:param name="text"/>
         <xsl:choose>
             <xsl:when test="contains($text, '&lt;br&gt;')">
-                <xsl:call-template name="add_highlight_element">
-                    <xsl:with-param name="text" select="helper:markKeywords(substring-before($text, '&lt;br&gt;'),$keywords,$wholewords)"/>
-                </xsl:call-template>
-                <br/>
+                <p>
+                    <xsl:call-template name="add_highlight_element">
+                        <xsl:with-param name="text" select="helper:markKeywords(substring-before($text, '&lt;br&gt;'),$keywords,$wholewords)"/>
+                    </xsl:call-template>
+                </p>
                 <xsl:call-template name="description">
                     <xsl:with-param name="text" select="substring-after($text,'&lt;br&gt;')"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:call-template name="add_highlight_element">
-                    <xsl:with-param name="text" select="helper:markKeywords($text,$keywords,$wholewords)"/>
-                </xsl:call-template>
+                <p>
+                    <xsl:call-template name="add_highlight_element">
+                        <xsl:with-param name="text" select="helper:markKeywords($text,$keywords,$wholewords)"/>
+                    </xsl:call-template>
+                </p>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

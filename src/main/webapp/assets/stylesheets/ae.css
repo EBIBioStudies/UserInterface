@@ -48,9 +48,6 @@ body {
     text-align: right;
 }
 
-.align_justify {
-    text-align: justify;
-}
 /* layout element styles */
 
 #ae_contents {
@@ -423,6 +420,16 @@ body {
     border-bottom: 1px solid #ebf3fd;
 }
 
+.ae_results_tr_error td {
+    background: url(../images/ae_warn.gif) 50% 50% no-repeat;
+    text-align: center;
+    color: black;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 75px 0 0 0;
+    margin: 0 0 10px 0;
+}
+
 .tr_main_expanded {
     background-color: #ebf3fd;
 }
@@ -488,6 +495,11 @@ body {
 
 .ae_results_tr_ext .attrs .title {
     font-weight: bold;
+}
+
+.ae_results_tr_ext p {
+    margin: 0 0 4px 0;
+    text-align: left;
 }
 
 .ae_text_highlight {

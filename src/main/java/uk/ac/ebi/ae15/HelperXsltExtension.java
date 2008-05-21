@@ -101,6 +101,9 @@ public abstract class HelperXsltExtension {
 		return ( flags.indexOf("g") >= 0 ? matcher.replaceAll(replaceStr) : matcher.replaceFirst(replaceStr) );
 	}
 
+    private static String keywordToPattern( String keyword, boolean wholeWord ) {
+        return ( wholeWord ? "\\b\\Q" + keyword + "\\E\\b" : "\\Q" + keyword + "\\E" );
+    }
     public static boolean testSpecies( NodeList nl, String species )
     {
         return testSpecies( concatAll(nl), species );
@@ -108,8 +111,7 @@ public abstract class HelperXsltExtension {
 
     public static boolean testSpecies( String input, String species )
     {
-        String pattern = ( "\\b" + species + "\\b" );
-        return testRegexp( input, pattern, "i" );
+        return testRegexp( input, keywordToPattern( species, true ), "i" );
     }
 
     public static boolean testKeywords( NodeList nl, String keywords, boolean wholeWords )
@@ -122,8 +124,7 @@ public abstract class HelperXsltExtension {
         if ( null != keywords && 0 < keywords.length() ) {
             String[] kwdArray = keywords.split("\\s");
             for ( String keyword : kwdArray ) {
-                String pattern = ( wholeWords ? "\\b" + keyword + "\\b" : keyword );
-                if ( testRegexp( input, pattern, "i" ) )
+                if ( testRegexp( input, keywordToPattern( keyword, wholeWords ), "i" ) )
                     return true;
             }
         }
@@ -137,8 +138,7 @@ public abstract class HelperXsltExtension {
         if ( null != keywords && 0 < keywords.length() ) {
             String[] kwdArray = keywords.split("\\s");
             for ( String keyword : kwdArray ) {
-                String pattern = ( wholeWords ? "\\b" + keyword + "\\b" : keyword );
-                result = replaceRegexp( result, "(" + pattern + ")", "ig", "|*$1*|" );
+                result = replaceRegexp( result, "(" +  keywordToPattern( keyword, wholeWords ) + ")", "ig", "|*$1*|" );
             }
         }
         return result;

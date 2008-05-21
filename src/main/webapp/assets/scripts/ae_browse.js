@@ -48,6 +48,8 @@ $(document).ready( function() {
 
     initControls(query);
 
+     $("#ae_results_body_inner").ajaxError(onQueryError);
+
     $.get( "servlets/query/browse-experiments/html", query ).next(onExperimentQuery);
 });
 
@@ -79,7 +81,7 @@ function
 onExperimentQuery( tableHtml )
 {
     // remove progress gif
-    $("#ae_results_body_inner").removeAttr("class");
+    $("#ae_results_body_inner").removeClass("ae_results_table_loading");
 
     // populate table with data
     $("#ae_results_tbody").html(tableHtml);
@@ -91,6 +93,13 @@ onExperimentQuery( tableHtml )
     // attach handlers
     $(".ae_results_tr_main").each(addExpansionHandlers);
 
+}
+
+function
+onQueryError()
+{
+    $(this).removeClass("ae_results_table_loading");
+    $("#ae_results_tbody").html("<tr class=\"ae_results_tr_error\"><td colspan=\"8\">There was an error processing the query. Please try again later.</td></tr>");
 }
 
 function

@@ -90,6 +90,7 @@ public class QueryServlet extends HttpServlet {
         }
         // If an Exception occurs, return the error to the client.
         catch ( Exception x ) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             log.debug( "Caught an exception:", x );
         }
         // Close the PrintWriter.
