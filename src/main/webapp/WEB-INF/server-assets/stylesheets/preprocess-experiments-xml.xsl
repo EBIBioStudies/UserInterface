@@ -95,6 +95,25 @@
         </miamescores>
     </xsl:template>
 
+    <xsl:template match="bibliography[@pages='' or @pages='-']" mode="copy">
+        <xsl:copy>
+            <xsl:for-each select="@*">
+                <xsl:if test="helper:toLowerCase(name())!='pages'">
+                    <xsl:element name="{helper:toLowerCase(name())}">
+                        <xsl:value-of select="." />
+                    </xsl:element>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="description" mode="copy">
+        <description>
+            <id><xsl:value-of select="@id"/></id>
+            <text><xsl:value-of select="text()"/></text>
+        </description>
+    </xsl:template>
+
     <xsl:template match="*" mode="copy">
         <xsl:copy>
             <xsl:if test="@*">

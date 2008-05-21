@@ -65,50 +65,50 @@
         <xsl:param name="pTo"/>
         <xsl:variable name="vExpId" select="id"/>
         <xsl:if test="position() &gt;= $pFrom and position() &lt;= $pTo">
-            <tr class="ae_results_main_row">
-                <td><div class="ae_results_cell"><xsl:apply-templates select="accession" mode="highlight" /></div></td>
-                <td><div class="ae_results_cell"><xsl:apply-templates select="name" mode="highlight" /></div></td>
-                <td class="ae_results_td_right">
-                    <div class="ae_results_cell"><xsl:apply-templates select="hybs" mode="highlight" /></div>
+            <tr id="{$vExpId}_main" class="ae_results_tr_main">
+                <td><div><xsl:apply-templates select="accession" mode="highlight" /></div></td>
+                <td><div><xsl:apply-templates select="name" mode="highlight" /></div></td>
+                <td class="align_right">
+                    <div><xsl:apply-templates select="hybs" mode="highlight" /></div>
                 </td>
-                <td><div class="ae_results_cell">
+                <td><div>
                     <xsl:for-each select="species">
                         <xsl:apply-templates select="node()" mode="highlight" />
                         <xsl:if test="position() != last()">, </xsl:if>
                     </xsl:for-each>
                 </div></td>
-                <td><div class="ae_results_cell"><xsl:apply-templates select="releasedate" mode="highlight" /></div></td>
-                <td class="ae_results_td_center">
-                    <div class="ae_results_cell">
+                <td><div><xsl:apply-templates select="releasedate" mode="highlight" /></div></td>
+                <td class="align_center">
+                    <div>
                         <xsl:choose>
-                            <xsl:when test="files/fgem/@count>0"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Processed data ({files/fgem/@count})"/></xsl:when>
+                            <xsl:when test="files/fgem/@count>0"><a href="{files/fgem/@url}" title="Processed data ({files/fgem/@count})"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Processed data ({files/fgem/@count})"/></a></xsl:when>
                             <xsl:otherwise><img src="assets/images/silk_data_unavail.gif" width="16" height="16"/></xsl:otherwise>
                         </xsl:choose>
                     </div>
                 </td>
-                <td class="ae_results_td_center">
-                    <div class="ae_results_cell">
+                <td class="align_center">
+                    <div>
                         <xsl:choose>
-                            <xsl:when test="files/raw/@celcount>0"><img src="assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Affy data ({files/raw/@celcount})"/></xsl:when>
-                            <xsl:when test="files/raw/@count>0"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Raw data ({files/raw/@count})"/></xsl:when>
+                            <xsl:when test="files/raw/@celcount>0"><a href="{files/raw/@url}" title="Affy data ({files/raw/@count})"><img src="assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Affy data ({files/raw/@count})"/></a></xsl:when>
+                            <xsl:when test="files/raw/@count>0"><a href="{files/raw/@url}" title="Raw data ({files/raw/@count})"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Raw data ({files/raw/@count})"/></a></xsl:when>
                             <xsl:otherwise><img src="assets/images/silk_data_unavail.gif" width="16" height="16"/></xsl:otherwise>
                         </xsl:choose>
                     </div>
                 </td>
-                <td><div class="ae_results_cell">&#187; AE</div></td>
+                <td><div><a href="result?queryFor=Experiment&amp;eAccession={$vExpId}"
+                            target="_blank" title="Opens in a new window">&#187; AE</a></div></td>
             </tr>
-            <tr id="{$vExpId}_desc" class="ae_results_ext_row" style="">
+            <tr id="{$vExpId}_ext" class="ae_results_tr_ext" style="display:none">
                 <td colspan="8">
                     <dl>
                         <dt>Title:</dt>
-                        <dd id="{$vExpId}_name">
+                        <dd>
                             <xsl:apply-templates select="name" mode="highlight" />
                         </dd>
 
                         <xsl:if test="count(secondaryaccession/text())&gt;0">
-                            <dt>Secondary&#160;accession(s):
-                            </dt>
-                            <dd id="{$vExpId}_secondary_accession">
+                            <dt>Secondary&#160;accession<xsl:if test="count(secondaryaccession/text())&gt;1">s</xsl:if>:</dt>
+                            <dd>
                                 <xsl:for-each select="secondaryaccession">
                                     <xsl:choose>
                                         <xsl:when test="string-length(text())=0"/>
@@ -151,7 +151,7 @@
                         </dd>
 
                         <xsl:if test="count(arraydesign)&gt;0">
-                            <dt>Array(s):</dt>
+                            <dt>Array<xsl:if test="count(arraydesign)&gt;1">s</xsl:if>:</dt>
                             <dd>
                                 <div id="{$vExpId}_array">
                                     <xsl:for-each select="arraydesign">
@@ -169,7 +169,7 @@
                                target="_blank" title="Opens in a new window">&#187; FTP server direct link...</a>
                             <xsl:if test="accession!='E-TABM-185'">
                                 <br/>
-                                <a href="dataselection?expid={@vExpId}"
+                                <a href="dataselection?expid={$vExpId}"
                                    target="_blank" title="Opens in a new window">&#187; View detailed data retrieval page...</a>
                             </xsl:if>
                         </dd>
@@ -188,91 +188,143 @@
                                 <xsl:if test="not (files/biosamples/png or files/biosamples/svg)">Data is not yet available</xsl:if>
                             </dd>
                         </xsl:if>
-<!--
+
                         <dt>Protocols:</dt>
                         <dd>
-                            <a href="details?class=MAGE.Experiment_protocols&amp;criteria=Experiment%3D{@id}&amp;contextClass=MAGE.Protocol&amp;templateName=Protocol.vm"
-                               class="httplink" target="_blank" title="Opens in a new window">&#187; Experimental protocols</a>
+                            <a href="details?class=MAGE.Experiment_protocols&amp;criteria=Experiment%3D{$vExpId}&amp;contextClass=MAGE.Protocol&amp;templateName=Protocol.vm"
+                               target="_blank" title="Opens in a new window">&#187; Experimental protocols</a>
                         </dd>
 
-                        <dt>Citation:</dt>
-                        <dd id="{$exp_id}-full-publication">
-                            <xsl:apply-templates select="bibliography"/>
-                        </dd>
+                        <xsl:if test="count(bibliography/*)&gt;0">
+                            <dt>Citation<xsl:if test="count(bibliography/*)&gt;1">s</xsl:if>:</dt>
+                            <dd>
+                                <xsl:apply-templates select="bibliography" />
+                            </dd>
+                        </xsl:if>
 
                         <dt>Detailed sample&#160;annotation:</dt>
-                        <dd><xsl:if test="@sdrf">
-                                <a href="{@sdrf}"
-                                    class="httplink" target="_blank" title="Opens in a new window">&#187; Tab-delimited spreadsheet</a>
+                        <dd><xsl:if test="files/sdrf">
+                                <a href="{files/sdrf/@url}"
+                                   target="_blank" title="Opens in a new window">&#187; Tab-delimited spreadsheet</a>
                             </xsl:if>
-                            <xsl:if test="not (@sdrf)">Data is not yet available</xsl:if>
+                            <xsl:if test="not (files/sdrf)">Data is not yet available</xsl:if>
                         </dd>
 
-                        <xsl:if test="count(providers/provider[@role!='data_coder'])&gt;0">
-                            <dt>Contact(s):</dt>
-                            <dd id="{$exp_id}-full-contact">
-                                <xsl:apply-templates select="providers"/>
+                        <xsl:if test="count(provider[role!='data_coder'])&gt;0">
+                            <dt>Contact<xsl:if test="count(provider[role!='data_coder'])&gt;1">s</xsl:if>:</dt>
+                            <dd>
+                                <xsl:call-template name="providers"/>
                             </dd>
                         </xsl:if>
 
-                        <xsl:if test="count(experimentdesigns/*)&gt;0">
-                            <dt>Design&#160;type(s):</dt>
-                            <dd id="{$exp_id}-full-designtypes">
-                                <xsl:for-each select="experimentdesigns/*">
-                                    <xsl:value-of select="@type"/><xsl:if test="position()!=last()">, </xsl:if>
+                        <xsl:if test="count(experimentdesign)&gt;0">
+                            <dt>Design&#160;type<xsl:if test="count(experimentdesign)&gt;1">s</xsl:if>:</dt>
+                            <dd>
+                                <xsl:for-each select="experimentdesign">
+                                    <xsl:apply-templates select="node()" mode="highlight"/><xsl:if test="position()!=last()">, </xsl:if>
                                 </xsl:for-each>
                             </dd>
                         </xsl:if>
 
-                        <xsl:if test="count(description[text()!='' and not(contains(.,'Generated description'))])&gt;0">
+                        <xsl:if test="count(description[text/text()!='' and not(contains(text/text(),'Generated description'))])&gt;0">
                             <dt>Description:</dt>
-                            <dd id="{$exp_id}-full-description">
-                                <xsl:for-each select="description[text()!='' and not(contains(.,'Generated description'))]">
-                                    <xsl:call-template name="break"/>
+                            <dd class="align_justify">
+                                <xsl:for-each select="description[text/text()!='' and not(contains(text/text(),'Generated description'))]">
+                                    <xsl:call-template name="description">
+                                        <xsl:with-param name="text" select="text/text()"/>
+                                    </xsl:call-template>
                                 </xsl:for-each>
                             </dd>
                         </xsl:if>
 
-                        <xsl:if test="count(factorvalues/factorvalue/@*)&gt;0">
-                            <dt>Factor values:</dt>
-                            <dd id="{$exp_id}-efvs" style="padding: 0em 0.2em 0.2em 0.2em">
-                                <dl class="table-display-attrs">
-                                    <dt style="font-weight:bold">Factor name</dt>
-                                    <dd style="font-weight:bold">Factor value</dd>
-                                    <xsl:for-each select="factorvalues/factorvalue">
-                                        <dt>
-                                            <xsl:value-of select="@FACTORNAME"/>
-                                        </dt>
-                                        <dd>
-                                            <xsl:value-of select="@FV_MEASUREMENT"/>
-                                            <xsl:value-of select="@FV_OE"/>
-                                        </dd>
+                        <xsl:if test="count(experimentalfactor/name)&gt;0">
+                            <dt>Experimental factor<xsl:if test="count(experimentalfactor/name)&gt;1">s</xsl:if>:</dt>
+                            <dd class="attrs">
+                                <dl>
+                                    <dt class="title">Factor name</dt>
+                                    <dd class="title">Factor value</dd>
+                                    <xsl:for-each select="experimentalfactor">
+                                        <dt><xsl:apply-templates select="name" mode="highlight"/></dt>
+                                        <dd><xsl:apply-templates select="value" mode="highlight"/></dd>
                                     </xsl:for-each>
                                 </dl>
                             </dd>
                         </xsl:if>
 
-                        <xsl:if test="count(sampleattributes/sampleattribute/@*)&gt;0">
-                            <dt>Sample attributes:</dt>
-                            <dd id="{$exp_id}-samattrs" style="padding: 0em 0.2em 0.2em 0.2em">
-                                <dl class="table-display-attrs">
-                                    <dt style="font-weight:bold">Attribute name</dt>
-                                    <dd style="font-weight:bold">Attribute value</dd>
-                                    <xsl:for-each select="sampleattributes/sampleattribute">
-                                        <dt>
-                                            <xsl:value-of select="@CATEGORY"/>
-                                        </dt>
-                                        <dd>
-                                            <xsl:value-of select="@VALUE"/>
-                                        </dd>
+                        <xsl:if test="count(sampleattribute/category)&gt;0">
+                            <dt>Sample attribute<xsl:if test="count(sampleattribute/category)&gt;1">s</xsl:if>:</dt>
+                            <dd class="attrs">
+                                <dl>
+                                    <dt class="title">Attribute name</dt>
+                                    <dd class="title">Attribute value</dd>
+                                    <xsl:for-each select="sampleattribute">
+                                        <dt><xsl:apply-templates select="category" mode="highlight"/></dt>
+                                        <dd><xsl:apply-templates select="value" mode="highlight"/></dd>
                                     </xsl:for-each>
                                 </dl>
                             </dd>
-                        </xsl:if> -->
+                        </xsl:if>
                     </dl>
                 </td>
             </tr>
         </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="bibliography">
+        <xsl:variable name="publication_title">
+            <xsl:if test="authors/text()!=''"><xsl:apply-templates select="authors" mode="highlight"/>. </xsl:if>
+            <xsl:if test="title/text()!=''"><xsl:apply-templates select="title" mode="highlight"/>. </xsl:if>
+            <xsl:if test="publication/text()!=''"><em><xsl:apply-templates select="publication" mode="highlight"/></em>&#160;</xsl:if>
+            <xsl:if test="volume/text()!=''"><xsl:apply-templates select="volume" mode="highlight"/><xsl:if test="issue/text()!=''">(<xsl:apply-templates select="issue" mode="highlight"/>)</xsl:if></xsl:if>
+            <xsl:if test="pages/text()!=''">:<xsl:apply-templates select="pages" mode="highlight"/></xsl:if>
+            <xsl:if test="year/text()!=''">&#160;(<xsl:apply-templates select="year" mode="highlight"/>)</xsl:if>
+            <xsl:if test="publication/text()!=''">.</xsl:if>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="uri[starts-with(., 'http')]">
+                <a href="{uri}"
+                   target="_blank" title="Opens in a new window">&#187; <xsl:copy-of select="$publication_title"/></a>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="$publication_title" />
+                <xsl:if test="uri/text()!=''">(<xsl:apply-templates select="uri" mode="highlight"/>)</xsl:if>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:if test="accession">
+            <xsl:if test="number(accession)>0">
+                (<a href="http://www.ncbi.nlm.nih.gov/pubmed/{accession}"
+                   target="_blank" title="Opens in a new window">&#187; PubMed <xsl:apply-templates select="accession" mode="highlight"/></a>)
+            </xsl:if>
+        </xsl:if>
+        <xsl:if test="position()!=last()"><br/><br/></xsl:if>
+    </xsl:template>
+
+    <xsl:template name="providers">
+        <xsl:for-each select="provider[not(contact=following-sibling::provider/contact) and role!='data_coder']">
+            <xsl:sort select="role='submitter'" order="descending"/>
+            <xsl:sort select="contact"/>
+            <xsl:apply-templates select="contact" mode="highlight"/><xsl:if test="position()!=last()">, </xsl:if>
+        </xsl:for-each>
+    </xsl:template>
+
+    <xsl:template name="description">
+        <xsl:param name="text"/>
+        <xsl:choose>
+            <xsl:when test="contains($text, '&lt;br&gt;')">
+                <xsl:call-template name="add_highlight_element">
+                    <xsl:with-param name="text" select="helper:markKeywords(substring-before($text, '&lt;br&gt;'),$keywords,$wholewords)"/>
+                </xsl:call-template>
+                <br/>
+                <xsl:call-template name="description">
+                    <xsl:with-param name="text" select="substring-after($text,'&lt;br&gt;')"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="add_highlight_element">
+                    <xsl:with-param name="text" select="helper:markKeywords($text,$keywords,$wholewords)"/>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="*" mode="highlight">

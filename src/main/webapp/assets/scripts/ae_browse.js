@@ -19,7 +19,6 @@ $(document).ready( function() {
     }
 
     $("#ae_results_hdr th.sortable").each(addSortableHandlers);
-
     var query = new Object();
 
     if ("" != $.query.get("keywords"))
@@ -89,8 +88,9 @@ onExperimentQuery( tableHtml )
     if ($.browser.opera && $.browser.version < 9.5)
         onWindowResize();
 
-    // alternate rows
-    //$("#ae_results_body tr:odd").css("background-color", "#f8fbff");
+    // attach handlers
+    $(".ae_results_tr_main").each(addExpansionHandlers);
+
 }
 
 function
@@ -149,7 +149,46 @@ onHeaderClick( eventObj )
     } else {
         sortorder = "ascending";
     }
-    
+
     var newQuery = $.query.set( "sortby", sortby ).set( "sortorder", sortorder ).toString()
     window.location.href = "browse.html" + newQuery;
+}
+
+function
+addExpansionHandlers( i )
+{
+    var elt = $(this);
+    elt.mouseover(onTableRowMouseOver).mouseout(onTableRowMouseOut).click(onTableRowClick);
+}
+
+function
+onTableRowMouseOver( eventObj )
+{
+    $(this).addClass("tr_main_active");
+}
+
+function
+onTableRowMouseOut( eventObj )
+{
+    $(this).removeClass("tr_main_active");
+}
+
+function
+onTableRowClick( eventObj )
+{
+    if (eventObj) {
+        var target = String(eventObj.target.tagName).toLowerCase();
+        if ( "img" == target || "a" == target )
+            return;
+    }
+    var mainElt = $(this);
+    var extElt = $("#" + mainElt.attr("id").replace("_main", "_ext"));
+    if ( mainElt.hasClass("tr_main_expanded")) {
+        // collapse now
+        mainElt.removeClass("tr_main_expanded");
+        extElt.hide();
+    } else {
+        mainElt.addClass("tr_main_expanded");
+        extElt.show();
+    }
 }

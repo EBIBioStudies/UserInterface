@@ -35,9 +35,23 @@ body {
     overflow: hidden;
 }
 
+/* specific properties setters */
 .assign_font {
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 }
+
+.align_center {
+    text-align: center;
+}
+
+.align_right {
+    text-align: right;
+}
+
+.align_justify {
+    text-align: justify;
+}
+/* layout element styles */
 
 #ae_contents {
     position: absolute;
@@ -58,6 +72,10 @@ body {
 #ae_contents a:active {
     color: #e33e3e;
     text-decoration: underline;
+}
+
+#ae_contents img {
+    border: 0 none;
 }
 
 #ae_ebi_header_container {
@@ -274,7 +292,7 @@ body {
 }
 
 #ae_keywords {
-    margin: 10px 0px;
+    margin: 10px 0;
     width: 500px;
     border: 1px solid #99bbe8;
     font-size: 11px;
@@ -351,7 +369,7 @@ body {
     overflow: hidden;
 }
 
-#ae_results_table_ftr {
+#ae_results_ftr {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -377,7 +395,7 @@ body {
 }
 
 .ae_results_species {
-    width: 200px;
+    width: 150px;
 }
 
 .ae_results_releasedate {
@@ -396,49 +414,49 @@ body {
     width: 45px;
 }
 
-#ae_results_tbody td {
-/*  border-right: 1px solid #e8e8e8;
-    border-bottom: 1px solid #e8e8e8; */
-
+.tr_main_active {
+    background-color: #ebf3fd;
+    cursor: pointer;
 }
 
-.ae_results_main_row {
+.ae_results_tr_main td {
+    border-bottom: 1px solid #ebf3fd;
+}
+
+.tr_main_expanded {
     background-color: #ebf3fd;
 }
 
-.ae_results_td_center {
-    text-align: center;
+.tr_main_expanded td {
+/*
+    border-bottom: 0 none;
+*/
 }
 
-.ae_results_td_right {
-    text-align: right;
-}
-
-.ae_results_cell {
+.ae_results_tr_main td div {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     padding: 1px 2px 1px 3px;
-    margin: 0px 1px 0px 1px;
+    margin: 0 1px 0 1px;
 }
 
-.ae_results_ext_row {
-
+.ae_results_tr_ext {
 }
 
-.ae_results_ext_row td {
+.ae_results_tr_ext td {
     background: url(../images/table_ext_row_bg.gif) 0 0 repeat;
     border-bottom: 1px solid #99bbe8;
     padding: 5px 2px 10px 2px; 
 }
 
-.ae_results_ext_row dl {
+.ae_results_tr_ext dl {
     width: 100%;
     margin: 0.5em 0;
     padding: 0;
     }
 
-.ae_results_ext_row dt {
+.ae_results_tr_ext dt {
     width: 20%;
     float: left;
     margin: 0;
@@ -446,12 +464,31 @@ body {
     font-weight: bold;
     }
 
-.ae_results_ext_row dd {
+.ae_results_tr_ext dd {
     float: left;
     width: 80%;
     margin: 0;
     padding: .2em;
     }
+
+.ae_results_tr_ext .attrs {
+    padding-top: 0;
+}
+
+.ae_results_tr_ext .attrs dl {
+    margin: 0;
+}
+
+.ae_results_tr_ext .attrs dt {
+    font-weight: normal;
+    }
+
+.ae_results_tr_ext .attrs dd {
+    }
+
+.ae_results_tr_ext .attrs .title {
+    font-weight: bold;
+}
 
 .ae_text_highlight {
     background-color: yellow;
