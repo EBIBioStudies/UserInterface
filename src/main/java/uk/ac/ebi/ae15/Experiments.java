@@ -145,9 +145,10 @@ public class Experiments {
 
                 if ( null != doc ) {
                     String docVer = doc.getDocumentElement().getAttribute("version");
-                    if ( null != docVer && XML_DOCUMENT_VERSION != docVer ) {
-                        log.error("Cache XML document version mismatch: loaded [" + docVer + "], expected [" + XML_DOCUMENT_VERSION + "]");
+                    if ( !XML_DOCUMENT_VERSION.equals(docVer) ) {
+                        log.error( "Cache XML document version mismatch: loaded [" + docVer + "], expected [" + XML_DOCUMENT_VERSION + "]" );
                     } else {
+                        log.info("Successfuly loaded experiments from XML cache, version " + docVer );
                         experimentsDoc = doc;
                         isLoaded = true;
                     }
