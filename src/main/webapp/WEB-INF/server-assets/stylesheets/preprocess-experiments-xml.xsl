@@ -9,7 +9,12 @@
     <xsl:key name="expt-species" match="sampleattribute[@category='Organism']" use="concat(ancestor::experiment/@accession,@value)"/>
 
     <xsl:template match="/experiments">
-        <experiments total="{count(experiment)}">
+        <experiments
+            version="{@version}"
+            total="{count(experiment)}"
+            total-samples="{sum(experiment[@samples>0]/@samples)}"
+            total-hybs="{sum(experiment[@hybs>0]/@hybs)}">
+
             <xsl:apply-templates select="experiment">
                 <xsl:sort order="descending" select="substring-before(@releasedate,'-')" data-type="number"/>
                 <xsl:sort order="descending" select="substring-before(substring-after(@releasedate,'-'),'-')" data-type="number"/>
