@@ -10,10 +10,7 @@
 
     <xsl:template match="/experiments">
         <experiments
-            version="{@version}"
-            total="{count(experiment)}"
-            total-samples="{sum(experiment[@samples>0]/@samples)}"
-            total-hybs="{sum(experiment[@hybs>0]/@hybs)}">
+            version="{@version}" total="{count(experiment)}">
 
             <xsl:apply-templates select="experiment">
                 <xsl:sort order="descending" select="substring-before(@releasedate,'-')" data-type="number"/>
