@@ -24,9 +24,7 @@ import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.apache.xml.serialize.OutputFormat;
-import org.apache.xml.serialize.XMLSerializer;
-import org.apache.xml.serialize.LineSeparator;
+import org.apache.xml.serialize.*;
 
 public class Experiments {
 
@@ -44,6 +42,8 @@ public class Experiments {
 
     private static int numOfParallelConnections = 25;
     private static int initialXmlStringBufferSize = 20000000;  // 20 Mb
+
+    private final static String XML_DOCUMENT_VERSION = "1.0.080521";
 
     public Experiments()
     {
@@ -144,8 +144,13 @@ public class Experiments {
                 doc = xmlDocumentBuilder.parse( experimentsXmlCacheLocation.getFile() );
 
                 if ( null != doc ) {
-                    experimentsDoc = doc;
-                    isLoaded = true;
+                    String docVer = doc.getDocumentElement().getAttribute("version");
+                    if ( null != docVer && XML_DOCUMENT_VERSION != docVer ) {
+                        log.error("Cache XML document version mismatch: loaded [" + docVer + "], expected [" + XML_DOCUMENT_VERSION + "]");
+                    } else {
+                        experimentsDoc = doc;
+                        isLoaded = true;
+                    }
                 }
             } catch ( Throwable x ) {
                 log.debug( "Caught an exception:", x );
@@ -201,7 +206,7 @@ public class Experiments {
         boolean result = false;
 
         StringBuilder xmlBuf = new StringBuilder(initialXmlStringBufferSize);
-        xmlBuf.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><experiments>");
+        xmlBuf.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><experiments version=\"" + XML_DOCUMENT_VERSION + "\">");
 
         DataSource ds = getJdbcDataSource( dataSourceName );
         if ( null != ds ) {
@@ -325,6 +330,7 @@ public class Experiments {
 
                 Element expElement = doc.createElement("experiments");
                 expElement.setAttribute( "total", "0" );
+                expElement.setAttribute( "version", XML_DOCUMENT_VERSION );
 
                 doc.appendChild(expElement);
 
