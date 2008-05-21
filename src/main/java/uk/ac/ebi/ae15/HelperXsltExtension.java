@@ -124,9 +124,10 @@ public abstract class HelperXsltExtension {
         if ( null != keywords && 0 < keywords.length() ) {
             String[] kwdArray = keywords.split("\\s");
             for ( String keyword : kwdArray ) {
-                if ( testRegexp( input, keywordToPattern( keyword, wholeWords ), "i" ) )
-                    return true;
+                if ( !testRegexp( input, keywordToPattern( keyword, wholeWords ), "i" ) )
+                    return false;
             }
+            return true;
         }
 
         return false;

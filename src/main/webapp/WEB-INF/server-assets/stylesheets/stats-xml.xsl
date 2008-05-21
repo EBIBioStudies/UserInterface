@@ -3,9 +3,10 @@
                 version="1.0">
     <xsl:output method="xml" encoding="UTF-8" indent="no"/>
 
-    <xsl:template match="/">
-        <experiments total="{experiments/@total}" total-hybs="{experiments/@total-hybs}" avail="{experiments/@total > 0}"/>
-        <xsl:apply-templates select="whatever"/>
+    <xsl:template match="/experiments">
+        <experiments total="{@total}"
+                     total-samples="{sum(experiment[samples/text()>0]/samples/text())}"
+                     total-hybs="{sum(experiment[hybs/text()>0]/hybs/text())}"/>
     </xsl:template>
 
 </xsl:stylesheet>

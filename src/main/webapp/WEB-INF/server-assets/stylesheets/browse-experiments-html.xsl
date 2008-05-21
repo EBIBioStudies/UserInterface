@@ -64,7 +64,7 @@
             <xsl:otherwise>
                 <tr class="ae_results_tr_error">
                     <td colspan="8">
-                        The query "<xsl:value-of select="$keywords"/>" has returned no matches. Please check your query and try again.    
+                        <p><strong>The query '<xsl:value-of select="$keywords"/>' returned no matches.</strong></p><p>Try shortening the query term e.g. 'embryo' will match embryo, embryoid, embryonic across all annotation fields.</p><p>Note that '*' is <strong>not</strong> supported as a wild card. More information available at <a href="http://www.ebi.ac.uk/microarray/doc/help/ae_help.html">ArrayExpress Query Help</a>.</p>    
                     </td>
                 </tr>
             </xsl:otherwise>

@@ -11,14 +11,14 @@ $(document).ready( function() {
     });
 
     // gets aer stats and updates the page
-    $.get("servlets/query?stylesheet=stats").next(updateAerStats);
+    $.get("servlets/query/stats").next(updateAerStats);
 
     // gets aew stats and updates the page
     Deferred.parallel([
         $.get("test/aew_gene_avail_info.xml").next(getNumDocsFromSolrStats),
         $.get("test/aew_exp_avail_info.xml").next(getNumDocsFromSolrStats)
     ]).next( function (values) {
-        var aew_avail_info = values[0] + " genes, " + values[1] + " experiments available";
+        var aew_avail_info = values[1] + " experiments, " + values[0] + " genes available";
         $("#aew_avail_info").text(aew_avail_info);
     });
 
@@ -40,9 +40,8 @@ updateAerStats( xml ) {
     var ae_repxml = $( $(xml).find("experiments")[0] );
     var etotal = ae_repxml.attr("total");
     var htotal = ae_repxml.attr("total-hybs");
-    var avail = ae_repxml.attr("avail");
-    if ( "true" == avail ) {
-        var aer_avail_info = htotal + " hybridizations, " + etotal + " experiments available";
+    if ( etotal != undefined && etotal > 0 ) {
+        var aer_avail_info = etotal + " experiments, " + htotal + " hybridizations available";
         $("#aer_avail_info").text(aer_avail_info);
     }
 }
