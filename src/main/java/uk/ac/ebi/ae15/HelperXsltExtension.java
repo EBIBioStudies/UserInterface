@@ -121,6 +121,13 @@ public abstract class HelperXsltExtension {
 
     public static boolean testKeywords( String input, String keywords, boolean wholeWords )
     {
+        // trim spaces on both sides
+        keywords = keywords.trim();
+
+        // empty keywords - select all experiments
+        if (keywords.equals(""))
+            return true;
+
         if ( null != keywords && 0 < keywords.length() ) {
             String[] kwdArray = keywords.split("\\s");
             for ( String keyword : kwdArray ) {

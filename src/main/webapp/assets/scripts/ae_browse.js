@@ -118,7 +118,7 @@ initControls( query )
 
 
             if ( "" != query.sortorder) {
-                var divElt = thElt.find("div div");
+                var divElt = thElt.find("div.table_header_inner");
                 if ( null != divElt ) {
                     divElt.addClass( "descending" == query.sortorder ? "table_header_sort_desc" : "table_header_sort_asc" );
                 }

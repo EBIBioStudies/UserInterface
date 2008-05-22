@@ -613,47 +613,57 @@ th {
 }
 
 .table_header_box {
-    border-right: 1px solid #d0d0d0;
-    border-bottom: 1px solid #d0d0d0;
     background: url(../images/table_header_bg.gif) 0 0 repeat-x;
-    height: 21px;
+    height: 22px;
 }
 
 .table_header_box_active {
-    border-right: 1px solid #aaccf6;
-    border-bottom: 1px solid #aaccf6;
     background: url(../images/table_header_bg_active.gif) 0 0 repeat-x;
-    height: 21px;
+    height: 22px;
     cursor: pointer;
 }
 
 .table_header_box_selected {
-    border-right: 1px solid #aaccf6;
-    border-bottom: 1px solid #aaccf6;
     background: url(../images/table_header_bg_selected.gif) 0 0 repeat-x;
-    height: 21px;
+    height: 22px;
 }
 
 .table_header_box_fake {
-    border-right: 1px solid black;
-    border-bottom: 1px solid black;
     height: 1px;
 }
 
-.table_header_inner {
+.table_header_border_left {
     background: url(../images/table_header_border_left.gif) 0 0 repeat-y;
-    height: 21px;
-    padding: 4px 0 0 4px;
-    text-align: left;
+    height: 22px;
 }
 
-.table_header_box_active .table_header_inner {
+.table_header_box_active .table_header_border_left {
     background: url(../images/table_header_border_left_active.gif) 0 0 repeat-y;
 }
 
-.table_header_box_selected .table_header_inner {
+.table_header_box_selected .table_header_border_left {
     background: url(../images/table_header_border_left_selected.gif) 0 0 repeat-y;
-    border-right: 1px solid #d0e0f6;
+}
+
+.table_header_border_right {
+    background: url(../images/table_header_border_right.gif) 100% 0 repeat-y;
+    height: 22px;
+}
+
+.table_header_box_active  .table_header_border_right {
+    background: url(../images/table_header_border_right_active.gif) 100% 0 repeat-y;
+    height: 22px;
+}
+
+.table_header_box_selected .table_header_border_right {
+    background: url(../images/table_header_border_right_selected.gif) 100% 0 repeat-y;
+    height: 22px;
+}
+
+.table_header_inner {
+    height: 22px;
+    padding: 4px 0 0 4px;
+    text-align: left;
 }
 
 .table_header_sort_asc {
@@ -661,12 +671,11 @@ th {
 }
 
 .table_header_sort_desc {
-    background: url(../images/table_header_sort_desc.gif) 100% 5px no-repeat;
+    background: url(../images/table_header_sort_desc.gif) 100% 50% no-repeat;
 }
 
 .table_status_box {
-    border-top: 1px solid #99bbe8;
-    background: url(../images/table_status_bg.gif) 0 100% repeat-x;
+    background: url(../images/table_footer_bg.gif) 0 0 repeat-x;
 }
 
 .ie_clear {
