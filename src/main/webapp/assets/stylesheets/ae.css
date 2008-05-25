@@ -400,11 +400,11 @@ body {
 }
 
 .ae_results_fgem {
-    width: 80px;
+    width: 75px;
 }
 
 .ae_results_raw {
-    width: 80px;
+    width: 45px;
 }
 
 .ae_results_more {
@@ -633,30 +633,30 @@ th {
 }
 
 .table_header_border_left {
-    background: url(../images/table_header_border_left.gif) 0 0 repeat-y;
+    background: url(../images/table_header_border_left.gif) 0 0 no-repeat;
     height: 22px;
 }
 
 .table_header_box_active .table_header_border_left {
-    background: url(../images/table_header_border_left_active.gif) 0 0 repeat-y;
+    background: url(../images/table_header_border_left_active.gif) 0 0 no-repeat;
 }
 
 .table_header_box_selected .table_header_border_left {
-    background: url(../images/table_header_border_left_selected.gif) 0 0 repeat-y;
+    background: url(../images/table_header_border_left_selected.gif) 0 0 no-repeat;
 }
 
 .table_header_border_right {
-    background: url(../images/table_header_border_right.gif) 100% 0 repeat-y;
+    background: url(../images/table_header_border_right.gif) 100% 0 no-repeat;
     height: 22px;
 }
 
 .table_header_box_active  .table_header_border_right {
-    background: url(../images/table_header_border_right_active.gif) 100% 0 repeat-y;
+    background: url(../images/table_header_border_right_active.gif) 100% 0 no-repeat;
     height: 22px;
 }
 
 .table_header_box_selected .table_header_border_right {
-    background: url(../images/table_header_border_right_selected.gif) 100% 0 repeat-y;
+    background: url(../images/table_header_border_right_selected.gif) 100% 0 no-repeat;
     height: 22px;
 }
 
@@ -674,8 +674,24 @@ th {
     background: url(../images/table_header_sort_desc.gif) 100% 50% no-repeat;
 }
 
-.table_status_box {
+.table_footer_box {
     background: url(../images/table_footer_bg.gif) 0 0 repeat-x;
+    height: 22px;
+}
+
+.table_footer_border_left {
+    background: url(../images/table_footer_border_left.gif) 0 0 no-repeat;
+    height: 22px;
+}
+
+.table_footer_border_right {
+    height: 22px;
+}
+
+.table_footer_inner {
+    height: 22px;
+    padding: 4px 4px 0 4px;
+    text-align: left;
 }
 
 .ie_clear {

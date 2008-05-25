@@ -152,12 +152,10 @@ onHeaderClick( eventObj )
 {
     var sortby = $(this).attr("id");
     sortby = sortby.substring(sortby.lastIndexOf("_") + 1, sortby.length);
-    var sortorder = $(this).find("div div").attr("class");
-    if ( undefined != sortorder && "" != sortorder ) {
-        sortorder = sortorder == "table_header_sort_desc" ? "ascending" : "descending";
-    } else {
-        sortorder = "ascending";
-    }
+    var innerElt = $(this).find("div.table_header_inner");
+    var sortorder = "ascending";
+    if ( undefined != innerElt && innerElt.hasClass("table_header_sort_asc") )
+        sortorder = "descending";
 
     var newQuery = $.query.set( "sortby", sortby ).set( "sortorder", sortorder ).toString()
     window.location.href = "browse.html" + newQuery;
