@@ -68,6 +68,7 @@ public class Experiments {
                 log.warn("Experiments XML Cache was NOT loaded, possible fresh start up?");
                 experimentsDoc = createExperimentsDocument();
             }
+            experimentSearch.buildText(experimentsDoc);
 
         }
         return experimentsDoc;
@@ -82,6 +83,7 @@ public class Experiments {
             log.warn("Experiments XML Cache was NOT loaded, possible fresh start up?");
             experimentsDoc = createExperimentsDocument();            
         }
+        experimentSearch.buildText(experimentsDoc);
     }
 
     //  returns the location of xml cache ({java.io.tmpdir}/{ae.experiments.cache.location})
@@ -238,7 +240,7 @@ public class Experiments {
 
                 // so we create a pool of threads :)
                 List<GetExperimentXmlThread> threadPool = new ArrayList<GetExperimentXmlThread>();
-                for ( int i = 0; i < poolSize; i++ ) {
+                for ( int i = 0; i < poolSize; ++i ) {
                     GetExperimentXmlThread th = new GetExperimentXmlThread( ds, i );
                     th.start();
                     threadPool.add(th);
@@ -373,6 +375,8 @@ public class Experiments {
 
     // the document that contains the basis for all experiments
     private Document experimentsDoc = null;
+
+    private ExperimentSearch experimentSearch = new ExperimentSearch();
 }
 
 class ExperimentListEntry {

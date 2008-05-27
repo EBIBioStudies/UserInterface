@@ -42,13 +42,11 @@
         <helper:logInfo select="Query for '{$keywords}' filtered {$vTotal} experiments. Will output from {$vFrom} to {$vTo}."/>
         <tr id="ae_results_summary_info">
             <td colspan="8">
-                <div id="ae_resutls_total"><xsl:value-of select="$vTotal"/></div>
-                <div id="ae_resutls_total_samples"><xsl:value-of select="$vTotalSamples"/></div>
-                <div id="ae_resutls_total_hybs"><xsl:value-of select="$vTotalHybs"/></div>
-                <div id="ae_resutls_from"><xsl:value-of select="$vFrom"/></div>
-                <div id="ae_resutls_to"><xsl:value-of select="$vTo"/></div>
-                <div id="ae_resutls_sortby"><xsl:value-of select="$sortby"/></div>
-                <div id="ae_resutls_sortorder"><xsl:value-of select="$sortorder"/></div>
+                <div id="ae_results_total"><xsl:value-of select="$vTotal"/></div>
+                <div id="ae_results_total_samples"><xsl:value-of select="$vTotalSamples"/></div>
+                <div id="ae_results_total_hybs"><xsl:value-of select="$vTotalHybs"/></div>
+                <div id="ae_results_from"><xsl:value-of select="$vFrom"/></div>
+                <div id="ae_results_to"><xsl:value-of select="$vTo"/></div>
             </td>
         </tr>
         <xsl:choose>

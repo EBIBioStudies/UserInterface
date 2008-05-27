@@ -90,6 +90,13 @@ onExperimentQuery( tableHtml )
     if ($.browser.opera && $.browser.version < 9.5)
         onWindowResize();
 
+    // get stats from the first row
+    var total = $("#ae_results_total").text();
+    var totalHybs = $("#ae_results_total_hybs").text();
+    var from = $("#ae_results_from").text();
+    var to = $("#ae_results_to").text();
+
+    $("#ae_results_status").html( "<strong><font color=\"#666666\">Found " + total + " experiments (" + totalHybs + " hybridizations). Displaying experiments " + from + " to " + to + ".</font></strong>" );
     // attach handlers
     $(".ae_results_tr_main").each(addExpansionHandlers);
 
