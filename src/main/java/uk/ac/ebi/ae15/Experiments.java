@@ -74,7 +74,7 @@ public class Experiments {
         return experimentsDoc;
     }
 
-    public ExperimentSearch getSearch()
+    public ExperimentSearch Search()
     {
         return experimentSearch;
     }

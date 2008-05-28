@@ -8,6 +8,8 @@ import org.w3c.dom.Node;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  *  Search experiments based on full-text information stored in ExperimentText class
@@ -60,4 +62,43 @@ public class ExperimentSearch {
         return ( -1 != expText.get(idx).array.indexOf( array.trim() ) );
     }
 
+    private boolean matchRegexp( String input, String pattern, String flags )
+    {
+        boolean result = false;
+        try {
+            int patternFlags = ( flags.indexOf("i") >= 0 ? Pattern.CASE_INSENSITIVE : 0 );
+
+            String inputStr = ( input == null ? "" : input );
+            String patternStr = ( pattern == null ? "" : pattern );
+
+            Pattern p = Pattern.compile(patternStr, patternFlags);
+            Matcher matcher = p.matcher(inputStr);
+            result = matcher.find();
+        } catch ( Throwable t ) {
+            log.debug("Caught an exception:", t);
+        }
+
+        return result;
+    }
+
+    private static String keywordToPattern( String keyword, boolean wholeWord ) {
+        return ( wholeWord ? "\\b\\Q" + keyword + "\\E\\b" : "\\Q" + keyword + "\\E" );
+    }
+
+    private boolean matchString( String input, String keywords, boolean wholeWords )
+    {
+        // trim spaces on both sides
+        keywords = keywords.trim();
+
+        // by default (i.e. no keywords) it'll always match
+        // otherwise any keyword fails -> no match :)
+        if ( 0 < keywords.length() ) {
+            String[] kwdArray = keywords.split("\\s");
+            for ( String keyword : kwdArray ) {
+                if ( !matchRegexp( input, keywordToPattern( keyword, wholeWords ), "i" ) )
+                    return false;
+            }
+        }
+        return true;
+    }
 }

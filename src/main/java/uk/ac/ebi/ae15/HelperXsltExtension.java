@@ -104,6 +104,7 @@ public abstract class HelperXsltExtension {
     private static String keywordToPattern( String keyword, boolean wholeWord ) {
         return ( wholeWord ? "\\b\\Q" + keyword + "\\E\\b" : "\\Q" + keyword + "\\E" );
     }
+
     public static boolean testSpecies( NodeList nl, String species )
     {
         return testSpecies( concatAll(nl), species );
@@ -116,6 +117,14 @@ public abstract class HelperXsltExtension {
 
     public static boolean testKeywords( NodeList nl, String keywords, boolean wholeWords )
     {
+        /*
+        if ( 0 < nl.getLength() ) {
+
+           String textIdx = ((Element)nl.item(0)).getAttribute("textIdx");
+           return Application.Experiments().Search().matchText( textIdx, keywords, wholeWords );
+        } else
+            return false;
+        */
         return testKeywords( concatAll(nl), keywords, wholeWords );
     }
 
