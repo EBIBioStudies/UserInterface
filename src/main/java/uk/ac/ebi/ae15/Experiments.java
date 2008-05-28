@@ -74,6 +74,10 @@ public class Experiments {
         return experimentsDoc;
     }
 
+    public ExperimentSearch getSearch()
+    {
+        return experimentSearch;
+    }
 
     public void reloadExperiments( String dsName, boolean onlyPublic )
     {

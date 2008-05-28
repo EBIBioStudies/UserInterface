@@ -124,20 +124,16 @@ public abstract class HelperXsltExtension {
         // trim spaces on both sides
         keywords = keywords.trim();
 
-        // empty keywords - select all experiments
-        if (keywords.equals(""))
-            return true;
-
-        if ( null != keywords && 0 < keywords.length() ) {
+        // by default (i.e. no keywords) it'll always match
+        // otherwise any keyword fails -> no match :)
+        if ( 0 < keywords.length() ) {
             String[] kwdArray = keywords.split("\\s");
             for ( String keyword : kwdArray ) {
                 if ( !testRegexp( input, keywordToPattern( keyword, wholeWords ), "i" ) )
                     return false;
             }
-            return true;
         }
-
-        return false;
+        return true;
     }
 
     public static String markKeywords( String input, String keywords, boolean wholeWords )

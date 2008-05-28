@@ -17,13 +17,13 @@ public class ExperimentText {
     private static final Log log = org.apache.commons.logging.LogFactory.getLog(ExperimentText.class);
 
     // all text, concatenated
-    private String text;
+    public String text;
 
     // all species, concatenated
-    private String species;
+    public String species;
 
     // all array info, concatenated
-    private String arrayId;
+    public String array;
 
 
     public static ExperimentText newTextFromDomElement( Element elt )
@@ -32,7 +32,7 @@ public class ExperimentText {
 
         expText.text = concatAll(elt);
         expText.species = concatAll(elt.getElementsByTagName("species"));
-        expText.arrayId = concatAll(elt.getElementsByTagName("arraydesign"));
+        expText.array = concatAll(elt.getElementsByTagName("arraydesign"));
 
         return expText;
     }
@@ -72,7 +72,7 @@ public class ExperimentText {
             log.debug("Caught an exception:", t);
         }
 
-        return buf.toString();
+        return buf.toString().trim();
 	}
 
 }

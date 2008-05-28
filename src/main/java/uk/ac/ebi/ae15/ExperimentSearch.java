@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -29,7 +30,9 @@ public class ExperimentSearch {
                     expText = new ArrayList<ExperimentText>(expList.getLength());
 
                     for ( int i = 0; i < expList.getLength(); ++i ) {
-                        expText.add( ExperimentText.newTextFromDomElement( (Element)expList.item(i) ) );
+                        Element expElt = (Element)expList.item(i);
+                        expText.add( ExperimentText.newTextFromDomElement( expElt ) );
+                        expElt.setAttribute( "textIdx", Integer.toString(i) );
                     }
 
                 }
@@ -37,6 +40,24 @@ public class ExperimentSearch {
                 log.debug( "Caught an exception:", x );
             }
         }
+    }
+
+    public boolean matchText( String textIdx, String keywords, boolean wholeWords )
+    {
+        int idx = Integer.parseInt(textIdx);
+        return matchString( expText.get(idx).text, keywords, wholeWords );
+    }
+
+    public boolean matchSpecies( String textIdx, String species )
+    {
+        int idx = Integer.parseInt(textIdx);
+        return ( -1 != expText.get(idx).species.indexOf( species.trim() ) );
+    }
+
+    public boolean matchArray( String textIdx, String array )
+    {
+        int idx = Integer.parseInt(textIdx);
+        return ( -1 != expText.get(idx).array.indexOf( array.trim() ) );
     }
 
 }
