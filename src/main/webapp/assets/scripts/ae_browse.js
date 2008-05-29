@@ -24,6 +24,9 @@ $(document).ready( function() {
     if ("" != $.query.get("keywords"))
         query.keywords = $.query.get("keywords");
 
+    if ("" != $.query.get("wholewords"))
+        query.wholewords = true;
+
     if ("" != $.query.get("species"))
         query.species = $.query.get("species");
 
@@ -116,6 +119,9 @@ initControls( query )
     $("#ae_keywords").val(query.keywords);
     $("#ae_sortby").val(query.sortby);
     $("#ae_sortorder").val(query.sortorder);
+
+    if (query.wholewords)
+        $("#ae_wholewords").attr("checked","true");
 
     if ( "" != query.sortby ) {
         var thElt = $("#ae_results_header_" + query.sortby);
