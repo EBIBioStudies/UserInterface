@@ -1,4 +1,4 @@
-<!-- we still remember you, re -->
+<!-- we still remember you, ie -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
 	"http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
@@ -30,13 +30,28 @@
             </noscript>
             <div id="ae_browse_area">
                 <div id="ae_keywords_filters_area">
-                    <form method="get" action="browse.html">
-                        <input id="ae_keywords" name="keywords" class="assign_font">
-                        <input type="hidden" id="ae_sortby" name="sortby">
-                        <input type="hidden" id="ae_sortorder" name="sortorder">
-                    </form>
-                </div>
+                    <div id="ae_keywords_filters_box">
+                        <div class="form_100pc form_outer"><div class="form_100pc form_top"><div class="form_100pc form_bottom"><div class="form_100pc form_left"><div class="form_100pc form_right"><div class="form_100pc form_bottom_left"><div class="form_100pc form_bottom_right"><div class="form_100pc form_top_left"><div class="form_100pc form_top_right">
+                            <div class="form_100pc form_inner">
+                                <form method="get" action="browse.html">
+                                    <fieldset id="ae_keywords_box">
+                                        <legend>Keywords</legend>
+                                        <input id="ae_keywords" name="keywords" class="assign_font">
+                                        <span style="clear:both;float:none"><input id="ae_wholewords" name="wholewords" type="checkbox"><label for="ae_wholewords">Match whole words</label></span>
+                                        <input type="hidden" id="ae_sortby" name="sortby">
+                                        <input type="hidden" id="ae_sortorder" name="sortorder">
+                                     </fieldset>
 
+                                    <fieldset id="ae_filters_box">
+                                        <legend>Filters</legend>
+                                        <select id="ae_species" name="species"><option value="">Species</option></select>
+                                        <select id="ae_array" name="array"><option value="">Array</option></select>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div></div></div></div></div></div></div></div></div>
+                    </div>
+                </div>
                 <div id="ae_results_area">
                     <div class="table_box_top"><div class="table_box_bottom"><div class="table_box_left"><div class="table_box_right"><div class="table_box_bottom_left"><div class="table_box_bottom_right"><div class="table_box_top_left"><div class="table_box_top_right">
                         <div class="table_padding_box">

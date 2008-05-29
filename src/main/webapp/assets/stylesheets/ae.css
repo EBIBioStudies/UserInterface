@@ -271,7 +271,7 @@ body {
 
 #ae_browse_area {
     position: absolute;
-    padding: 40px 5px 5px 5px;
+    padding: 100px 5px 5px 5px;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -281,17 +281,72 @@ body {
 #ae_keywords_filters_area {
     position: absolute;
     top: 0;
-    left: 5px;
-    right: 5px;
-    height: 40px;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    margin: 0;
+    padding: 5px;
     overflow: hidden;
-    background-color: white;
+}
+
+#ae_keywords_filters_box {
+    position: relative;
+    width: 800px;
+    height: 100%;
+    padding: 0;
+}
+
+#ae_keywords_filters_box form fieldset {
+    border: 0 none;
+    margin: 0;
+}
+
+#ae_keywords_filters_box form fieldset legend {
+    padding: 0 0 0 0;
+    color: #000000;
+    font-size: 14px;
+}
+
+#ae_keywords_filters_box form fieldset label {
+}
+
+#ae_keywords_box {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 50%;
+    height: 100%;
+    padding: 5px 5px;
+}
+
+#ae_filters_box {
+    position: absolute;
+    left: 50%;
+    top: 5px;
+    width: 50%;
+    height: 100%;
+    padding: 5px 5px;
 }
 
 #ae_keywords {
-    margin: 10px 0;
-    width: 500px;
+    width: 100%;
     border: 1px solid #99bbe8;
+    font-size: 11px;
+    margin: 0 0 5px 0;
+}
+
+#ae_wholewords {
+}
+
+#ae_species {
+    margin: 0 0 5px 0;
+    width: 100%;
+    font-size: 11px;
+}
+
+#ae_array {
+    margin: 0;
+    width: 100%;
     font-size: 11px;
 }
 
@@ -302,8 +357,6 @@ body {
     height: 100%;
     overflow: hidden;
 }
-
-.a { width: 100%; height: 100% }
 
 #ae_results_area th,
 #ae_results_area td {
@@ -545,8 +598,52 @@ body {
     padding: 0;
 }
 
-/* table style box */
-/* bb-style boxes */
+/* ext-form style box */
+.form_100pc {
+    width: 100%;
+    height: 100%;
+}
+
+.form_outer {
+    background-color: #dfe8f6;
+}
+
+.form_top {
+    background: url(../images/form_border_top.gif) 0 0 repeat-x;
+}
+
+.form_bottom {
+    background: url(../images/form_border_bottom.gif) 0 100% repeat-x;
+}
+
+.form_left {
+    background: url(../images/form_border_left.gif) 0 0 repeat-y;
+}
+
+.form_right {
+    background: url(../images/form_border_right.gif) 100% 0 repeat-y;
+}
+
+.form_bottom_left {
+    background: url(../images/form_corner_bottom_left.gif) 0 100% no-repeat;
+}
+
+.form_bottom_right {
+    background: url(../images/form_corner_bottom_right.gif) 100% 100% no-repeat;
+}
+
+.form_top_left {
+    background: url(../images/form_corner_top_left.gif) 0 0 no-repeat;
+}
+
+.form_top_right {
+    background: url(../images/form_corner_top_right.gif) 100% 0 no-repeat;
+}
+
+.form_inner {
+    padding: 1px;
+}
+/* ext-table style box */
 
 .table_box_top {
     background: url(../images/table_border_top.gif) 0 0 repeat-x;
