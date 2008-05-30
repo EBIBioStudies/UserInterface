@@ -279,21 +279,19 @@ body {
 
 /* ae keywords filters area */
 #ae_keywords_filters_area {
-    position: absolute;
-    top: 0;
+    position: relative;
+    top: -90px;
     left: 0;
     width: 100%;
     height: 90px;
-    margin: 0;
-    padding: 5px;
     overflow: hidden;
+    padding: 5px 0;
 }
 
 #ae_keywords_filters_box {
     position: relative;
     width: 100%;
     height: 100%;
-    padding: 0;
 }
 
 #ae_keywords_filters_box label {
@@ -303,8 +301,8 @@ body {
 #ae_keywords_box {
     position: absolute;
     left: 0;
-    top: 0px;
-    width: 40%;
+    top: 0;
+    width: 45%;
     height: 100%;
     margin: 0;
     padding: 5px 5px 5px 10px;
@@ -313,9 +311,9 @@ body {
 
 #ae_filters_box {
     position: absolute;
-    left: 40%;
+    left: 45%;
     top: 0;
-    width: 40%;
+    width: 35%;
     height: 100%;
     margin: 0;
     padding: 5px 5px 5px 5px;
@@ -335,7 +333,6 @@ body {
 
 #ae_keywords {
     margin: 3px 0 5px 0;
-    padding: 1px 0px;
     width: 100%;
     border: 1px solid #99bbe8;
     font-size: 11px;
@@ -363,14 +360,17 @@ body {
 }
 
 #ae_keyword_filters_submit {
-    float: right;    
+    float: right;
+    font-size: 11px;
 }
 /* ae resutls area */
 #ae_results_area {
     position: relative;
+    padding: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
+    top: -90px;
 }
 
 #ae_results_area th,
@@ -398,7 +398,12 @@ body {
     overflow: hidden;
 }
 
-#ae_results_hdr_inner {
+#ae_results_hdr_filler {
+	position: absolute;
+	top: 0;
+	right: -1px;
+	width: 100%;
+	height: 22px;
 }
 
 #ae_results_hdr_inner table {
@@ -435,7 +440,7 @@ body {
 }
 
 #ae_results_ftr {
-    position: absolute;
+    position: relative;
     bottom: 0;
     left: 0;
     width: 100%;
@@ -571,6 +576,16 @@ body {
 
 .ae_text_highlight {
     background-color: yellow;
+}
+
+#ae_results_status em {
+    font-style: normal;
+    border-top: 1px solid #d0d0d0;
+    border-left: 1px solid #d0d0d0;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    background-color: #eff0f2;
+    padding: 1px 3px;
 }
 
 /* bb-style box */
@@ -724,6 +739,11 @@ th {
     font-weight: normal;
 }
 
+.table_header_filler {
+    background: url(../images/table_header_bg_filler.gif) 0 0 repeat-x;
+    height: 22px;
+}
+
 .table_header_box {
     background: url(../images/table_header_bg.gif) 0 0 repeat-x;
     height: 22px;
@@ -787,7 +807,7 @@ th {
 }
 
 .table_footer_box {
-    background: url(../images/table_footer_bg.gif) 0 0 repeat-x;
+    background: url(../images/table_footer_bg_filler.gif) 0 0 repeat-x;
     height: 22px;
 }
 
@@ -802,7 +822,7 @@ th {
 
 .table_footer_inner {
     height: 100%;
-    padding: 4px 4px 0 4px;
+    padding: 5px 4px 0 4px;
     text-align: left;
 }
 

@@ -13,6 +13,7 @@ $(document).ready( function() {
     $("#ae_add_filter_select").change( onAddFilterChange );
 
     if ($.browser.opera && $.browser.version < 9.5) {
+        onWindowResize();
         $(window).resize( onWindowResize );
     } else {
         onWindowResize();
@@ -68,7 +69,7 @@ onAddFilterChange( eventObj )
 }
 
 function
-onWindowResize( eventObj )
+onWindowResize()
 {
     var outerWidth = $("#ae_results_body").width();
     var innerWidth = $("#ae_results_body table").width();
@@ -99,7 +100,7 @@ onExperimentQuery( tableHtml )
     var from = $("#ae_results_from").text();
     var to = $("#ae_results_to").text();
 
-    $("#ae_results_status").html( "<strong><font color=\"#666666\">Found " + total + " experiments (" + totalHybs + " hybridizations). Displaying experiments " + from + " to " + to + ".</font></strong>" );
+    $("#ae_results_status").html( total + " experiments, " + totalHybs + " hybridizations. Displaying experiments " + from + " to " + to + "." );
     // attach handlers
     $(".ae_results_tr_main").each(addExpansionHandlers);
 
@@ -211,4 +212,5 @@ onTableRowClick( eventObj )
         mainElt.addClass("tr_main_expanded");
         extElt.show();
     }
+    onWindowResize();
 }

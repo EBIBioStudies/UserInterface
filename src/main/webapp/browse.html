@@ -37,7 +37,7 @@
                                     <fieldset id="ae_keywords_box">
                                         <label for="ae_keywords">Experiment, citation, sample and factor annotations:</label>
                                         <input id="ae_keywords" name="keywords" class="assign_font">
-                                        <input id="ae_keyword_filters_submit" type="submit" value="Query">
+                                        <input id="ae_keyword_filters_submit" type="submit" value="Query" class="assign_font">
                                         <span><input id="ae_wholewords" name="wholewords" type="checkbox"><label for="ae_wholewords">Match whole words</label></span>
 
                                         <input type="hidden" id="ae_sortby" name="sortby">
@@ -46,12 +46,12 @@
 
                                     <fieldset id="ae_filters_box">
                                         <label for="ae_species">Filter on:</label>
-                                        <select id="ae_species" name="species"><option value="">Species</option></select>
-                                        <select id="ae_array" name="array"><option value="">Array</option></select>
+                                        <select id="ae_species" name="species" class="assign_font"><option value="">Species</option></select>
+                                        <select id="ae_array" name="array" class="assign_font"><option value="">Array</option></select>
                                     </fieldset>
                                     <fieldset id="ae_options_box">
                                         <label>Display options:</label>
-                                        <div class="select_margin"><select id="ae_pagesize" name="pagesize"><option value="25">25</option><option value="50">50</option><option value="100">100</option><option value="250">250</option><option value="500">500</option></select><label for="ae_pagesize"> experiments per page</label></div>
+                                        <div class="select_margin"><select id="ae_pagesize" name="pagesize" class="assign_font"><option value="25">25</option><option value="50">50</option><option value="100">100</option><option value="250">250</option><option value="500">500</option></select><label for="ae_pagesize"> experiments per page</label></div>
                                         <div><input id="ae_detailedview" name="detailedview" type="checkbox"><label for="ae_detailedview">Detailed view</label></div>
                                     </fieldset>
                                 </form>
@@ -65,7 +65,7 @@
                             <div class="table_inner_box">
 
                                 <div id="ae_results_table">
-
+                                    <div id="ae_results_hdr_filler" class="table_header_filler">&nbsp;</div>
                                     <div id="ae_results_hdr" style="right: 15px">
                                         <div id="ae_results_hdr_inner">
                                             <table border="0" cellpadding="0" cellspacing="0">
@@ -104,7 +104,7 @@
                                         </div>
                                     </div>
                                     <div id="ae_results_ftr" class="table_footer_box"><div class="table_footer_left"><div class="table_footer_right">
-                                        <div class="table_footer_inner"><div id="ae_results_status"></div></div>
+                                        <div class="table_footer_inner"><div id="ae_results_status"></div><div id="ae_results_pager"></div></div>
                                     </div></div></div>
                                 </div>
                             </div>
