@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class ControlServlet extends HttpServlet {
 
@@ -22,11 +24,28 @@ public class ControlServlet extends HttpServlet {
                 .append("?")
                 .append(request.getQueryString())
         );
+        String command = "";
+        String params = "";
 
-        String dsName = request.getParameter("ds");
-        if ( null == dsName ) {
-            dsName = "aepub1";
+        Pattern p = Pattern.compile("servlets/control/([^/]+)/?(.*)");
+        Matcher m = p.matcher(request.getRequestURL());
+        if ( m.find() )
+        {
+            command = m.group(1);
+            if ( 0 < m.group(2).length() )
+                params = m.group(2);
         }
-        Application.Experiments().reloadExperiments( dsName, false );
+
+        if ( command.equals("reload-xml") ) {
+            if ( 0 == params.length() ) {
+                params = "aepub1";
+            }
+            Application.Experiments().reloadExperiments( params, false );
+        } else if ( command.equals("rescan-files") ) {
+            if ( 0 < params.length() ) {
+                Application.FilesDirectory().setRootFolder(params);
+            }
+            Application.FilesDirectory().rescan();
+        }
     }
 }

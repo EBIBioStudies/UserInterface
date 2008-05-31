@@ -39,6 +39,15 @@ public class Application {
         return experiments;
     }
 
+    private static DownloadableFilesDirectory filesDirectory = null;
+
+    synchronized static public DownloadableFilesDirectory FilesDirectory() {
+        if ( null == filesDirectory ) {
+            filesDirectory = new DownloadableFilesDirectory();
+        }
+        return filesDirectory;
+    }
+
     public Application( String contextRoot ) {
 
         // load application preferences
