@@ -352,11 +352,11 @@
     <xsl:template name="add_highlight_element">
         <xsl:param name="text"/>
         <xsl:choose>
-            <xsl:when test="contains($text,'|*') and contains($text,'*|')">
-                <xsl:value-of select="substring-before($text,'|*')"/>
-                <span class="ae_text_highlight"><xsl:value-of select="substring-after(substring-before($text,'*|'),'|*')"/></span>
+            <xsl:when test="contains($text,'&#171;') and contains($text,'&#187;')">
+                <xsl:value-of select="substring-before($text,'&#171;')"/>
+                <span class="ae_text_highlight"><xsl:value-of select="substring-after(substring-before($text,'&#187;'),'&#171;')"/></span>
                 <xsl:call-template name="add_highlight_element">
-                    <xsl:with-param name="text" select="substring-after($text,'*|')"/>
+                    <xsl:with-param name="text" select="substring-after($text,'&#187;')"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>

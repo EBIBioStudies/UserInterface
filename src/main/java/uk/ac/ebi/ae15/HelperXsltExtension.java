@@ -117,15 +117,15 @@ public abstract class HelperXsltExtension {
 
     public static boolean testKeywords( NodeList nl, String keywords, boolean wholeWords )
     {
-        /*
+
         if ( 0 < nl.getLength() ) {
 
            String textIdx = ((Element)nl.item(0)).getAttribute("textIdx");
            return Application.Experiments().Search().matchText( textIdx, keywords, wholeWords );
         } else
             return false;
-        */
-        return testKeywords( concatAll(nl), keywords, wholeWords );
+
+        //return testKeywords( concatAll(nl), keywords, wholeWords );
     }
 
     public static boolean testKeywords( String input, String keywords, boolean wholeWords )
@@ -151,9 +151,24 @@ public abstract class HelperXsltExtension {
         if ( null != keywords && 0 < keywords.length() ) {
             String[] kwdArray = keywords.split("\\s");
             for ( String keyword : kwdArray ) {
-                result = replaceRegexp( result, "(" +  keywordToPattern( keyword, wholeWords ) + ")", "ig", "|*$1*|" );
+                result = replaceRegexp( result, "(" +  keywordToPattern( keyword, wholeWords ) + ")", "ig", "\u00ab$1\u00bb" );
             }
         }
+        boolean shouldRemoveExtraMarkers = true;
+        String newResult;
+
+        while ( shouldRemoveExtraMarkers ) {
+            newResult = replaceRegexp( result, "\u00ab([^\u00ab\u00bb]*)\u00ab", "ig", "\u00ab$1" );
+            shouldRemoveExtraMarkers = !newResult.equals(result);
+            result = newResult;
+        }
+        shouldRemoveExtraMarkers = true;
+        while ( shouldRemoveExtraMarkers ) {
+            newResult = replaceRegexp( result, "\u00bb([^\u00ab\u00bb]*)\u00bb", "ig", "$1\u00bb" );
+            shouldRemoveExtraMarkers = !newResult.equals(result);
+            result = newResult;
+        }
+
         return result;
     }
 
