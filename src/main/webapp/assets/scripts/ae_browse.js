@@ -34,11 +34,13 @@ $(document).ready( function() {
     if ("" != $.query.get("array"))
         query.array = $.query.get("array");
 
-    if ("" != $.query.get("from"))
-        query.from = $.query.get("from");
+    if ("" != $.query.get("page"))
+        query.page = $.query.get("page");
 
-    if ("" != $.query.get("to"))
-        query.to = $.query.get("to");
+    if ("" != $.query.get("pagesize"))
+        query.pagesize = $.query.get("pagesize");
+    else
+        query.pagesize = "25";
 
     if ("" != $.query.get("sortby"))
         query.sortby = $.query.get("sortby");
@@ -49,6 +51,9 @@ $(document).ready( function() {
         query.sortorder = $.query.get("sortorder");
     else
         query.sortorder = "descending";
+
+    if ("" != $.query.get("detailedview"))
+        query.detailedview = true;
 
     initControls(query);
 
@@ -118,11 +123,14 @@ initControls( query )
 {
     // keywords
     $("#ae_keywords").val(query.keywords);
-    $("#ae_sortby").val(query.sortby);
-    $("#ae_sortorder").val(query.sortorder);
-
     if (query.wholewords)
         $("#ae_wholewords").attr("checked","true");
+    $("#ae_sortby").val(query.sortby);
+    $("#ae_sortorder").val(query.sortorder);
+    $("#ae_pagesize").val(query.pagesize);
+    if (query.detailedview)
+        $("#ae_detailedview").attr("checked","true");
+
 
     if ( "" != query.sortby ) {
         var thElt = $("#ae_results_header_" + query.sortby);

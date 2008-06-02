@@ -92,6 +92,7 @@ public class DownloadableFilesDirectory {
 
     private void rescanFolder( File folder, Map<String,String> map )
     {
+        log.debug( "Rescan entered folder [" + folder.getAbsolutePath() + "]" );
         if ( folder.canRead() ) {
             File[] files = folder.listFiles();
 
@@ -101,12 +102,15 @@ public class DownloadableFilesDirectory {
                     String name = f.getName();
                     String location = f.getAbsolutePath();
 
+                    log.debug( "Rescan is about to process file [" + location + "]" );
+
                     if ( !f.canRead() ) {
-                        log.warn("Rescan found non-readable file [" + location + "]");
+                        log.warn( "Rescan found non-readable file [" + location + "]" );
                     } else if ( map.containsKey(name) ) {
-                        log.warn("Rescan found a duplicate file [" + location + "], registry entry is [" + name + "," + map.get(name) + "]");
+                        log.warn( "Rescan found a duplicate file [" + location + "], registry entry is [" + name + "," + map.get(name) + "]" );
                     } else if ( !name.startsWith(".") ) {
                         map.put( name, location );
+                        log.debug( "Rescan added file [" + name + "] with location [" + location + "]" );
                     }
                 }
             }

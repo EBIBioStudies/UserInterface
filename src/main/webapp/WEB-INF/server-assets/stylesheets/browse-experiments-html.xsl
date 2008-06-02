@@ -8,8 +8,8 @@
                 exclude-result-prefixes="func ae helper html"
                 version="1.0">
 
-    <xsl:param name="from">1</xsl:param>
-    <xsl:param name="to">50</xsl:param>
+    <xsl:param name="page">1</xsl:param>
+    <xsl:param name="pagesize">50</xsl:param>
     <xsl:param name="sortby">releasedate</xsl:param>
     <xsl:param name="sortorder">descending</xsl:param>
 
@@ -18,28 +18,40 @@
     <xsl:param name="keywords"/>
     <xsl:param name="wholewords"/>
 
+    <xsl:param name="detailedview"/>
+
     <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="ISO-8859-1" />
 
     <xsl:include href="ae-filter-experiments.xsl"/>
     <xsl:include href="ae-sort-experiments.xsl"/>
 
     <xsl:template match="/experiments">
-        <helper:logDebug select="Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}]"/>
+        <helper:logDebug select="Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], detailedview [{$detailedview}]"/>
         <helper:logDebug select="Sort by: [{$sortby}], [{$sortorder}]"/>
         <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
         <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments[samples/text()>0]/samples/text())"/>
         <xsl:variable name="vTotalHybs" select="sum($vFilteredExperiments[hybs/text()>0]/hybs/text())"/>
 
-        <xsl:variable name="vFrom" select="$from"/>
+        <xsl:variable name="vFrom">
+            <xsl:choose>
+                <xsl:when test="$page &gt; 0"><xsl:value-of select="1 + ( $page - 1 ) * $pagesize"/></xsl:when>
+                <xsl:otherwise>1</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:variable name="vTo">
             <xsl:choose>
-                <xsl:when test="$to &gt; $vTotal"><xsl:value-of select="$vTotal"/></xsl:when>
-                <xsl:otherwise><xsl:value-of select="$to"/></xsl:otherwise>
+                <xsl:when test="( $vFrom + $pagesize - 1 ) &gt; $vTotal"><xsl:value-of select="$vTotal"/></xsl:when>
+                <xsl:otherwise><xsl:value-of select="$vFrom + $pagesize - 1"/></xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
 
+        <xsl:variable name="vDetailedViewExtStyle"><xsl:if test="not($detailedview)">display:none</xsl:if></xsl:variable>
+        <xsl:variable name="vDetailedViewMainClass">ae_results_tr_main<xsl:if test="$detailedview"> tr_main_expanded</xsl:if></xsl:variable>
+
         <helper:logInfo select="Query for '{$keywords}' filtered {$vTotal} experiments. Will output from {$vFrom} to {$vTo}."/>
+        <helper:logDebug select="vDetailedViewExtStyle [{$vDetailedViewExtStyle}], vDetailedViewMailClass [{$vDetailedViewMainClass}]"/>
+        
         <tr id="ae_results_summary_info">
             <td colspan="8">
                 <div id="ae_results_total"><xsl:value-of select="$vTotal"/></div>
@@ -47,6 +59,8 @@
                 <div id="ae_results_total_hybs"><xsl:value-of select="$vTotalHybs"/></div>
                 <div id="ae_results_from"><xsl:value-of select="$vFrom"/></div>
                 <div id="ae_results_to"><xsl:value-of select="$vTo"/></div>
+                <div id="ae_results_page"><xsl:value-of select="$page"/></div>
+                <div id="ae_results_pagesize"><xsl:value-of select="$pagesize"/></div>
             </td>
         </tr>
         <xsl:choose>
@@ -57,6 +71,8 @@
                     <xsl:with-param name="pTo" select="$vTo"/>
                     <xsl:with-param name="pSortBy" select="$sortby"/>
                     <xsl:with-param name="pSortOrder" select="$sortorder"/>
+                    <xsl:with-param name="pDetailedViewMainClass" select="$vDetailedViewMainClass"/>
+                    <xsl:with-param name="pDetailedViewExtStyle" select="$vDetailedViewExtStyle"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
@@ -72,9 +88,13 @@
     <xsl:template match="experiment">
         <xsl:param name="pFrom"/>
         <xsl:param name="pTo"/>
+        <xsl:param name="pDetailedViewMainClass"/>
+        <xsl:param name="pDetailedViewExtStyle"/>
         <xsl:variable name="vExpId" select="id"/>
         <xsl:if test="position() &gt;= $pFrom and position() &lt;= $pTo">
-            <tr id="{$vExpId}_main" class="ae_results_tr_main">
+            <tr id="{$vExpId}_main" class="{$pDetailedViewMainClass}">
+                <td><div class="table_row_expand">&#160;<!--<a href="result?queryFor=Experiment&amp;eAccession={$vExpId}"
+                            target="_blank" title="Opens in a new window">&#187; AE</a>--></div></td>
                 <td><div><xsl:apply-templates select="accession" mode="highlight" /></div></td>
                 <td><div><xsl:apply-templates select="name" mode="highlight" /></div></td>
                 <td class="align_right">
@@ -90,7 +110,7 @@
                 <td class="align_center">
                     <div>
                         <xsl:choose>
-                            <xsl:when test="files/fgem/@count>0"><a href="{files/fgem/@url}" title="Processed data ({files/fgem/@count})"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Processed data ({files/fgem/@count})"/></a></xsl:when>
+                            <xsl:when test="files/fgem"><a href="{files/fgem/@url}" title="Processed data ({files/fgem/@count})"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Processed data ({files/fgem/@count})"/></a></xsl:when>
                             <xsl:otherwise><img src="assets/images/silk_data_unavail.gif" width="16" height="16"/></xsl:otherwise>
                         </xsl:choose>
                     </div>
@@ -99,15 +119,13 @@
                     <div>
                         <xsl:choose>
                             <xsl:when test="files/raw/@celcount>0"><a href="{files/raw/@url}" title="Affy data ({files/raw/@count})"><img src="assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Affy data ({files/raw/@count})"/></a></xsl:when>
-                            <xsl:when test="files/raw/@count>0"><a href="{files/raw/@url}" title="Raw data ({files/raw/@count})"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Raw data ({files/raw/@count})"/></a></xsl:when>
+                            <xsl:when test="files/raw"><a href="{files/raw/@url}" title="Raw data ({files/raw/@count})"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Raw data ({files/raw/@count})"/></a></xsl:when>
                             <xsl:otherwise><img src="assets/images/silk_data_unavail.gif" width="16" height="16"/></xsl:otherwise>
                         </xsl:choose>
                     </div>
                 </td>
-                <td><div><a href="result?queryFor=Experiment&amp;eAccession={$vExpId}"
-                            target="_blank" title="Opens in a new window">&#187; AE</a></div></td>
             </tr>
-            <tr id="{$vExpId}_ext" class="ae_results_tr_ext" style="display:none">
+            <tr id="{$vExpId}_ext" class="ae_results_tr_ext" style="{$pDetailedViewExtStyle}">
                 <td colspan="8">
                     <dl>
                         <dt>Title:</dt>

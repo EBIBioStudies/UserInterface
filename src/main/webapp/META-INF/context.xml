@@ -6,12 +6,17 @@
         url="jdbc:oracle:thin:@expression.ebi.ac.uk:1521:AEPUB1"
         username="aequery"
         password="aeq007tt"
-        driverClassName="oracle.jdbc.driver.OracleDriver"
+        driverClassName="oracle.jdbc.OracleDriver"
         initialSize="0"
         maxActive="30"
         maxIdle="2"
         minIdle="0"
-        maxWait="1000"
+        maxWait="15000"
+        testOnBorrow="true"
+        validationQuery="select 1 from tt_security where rownum = 1"
+        removeAbandoned="true"
+        logAbandoned="true"
+        removeAbandonedTimeout="60"
     />
 
     <Resource
@@ -20,12 +25,17 @@
         url="jdbc:oracle:thin:@expression.ebi.ac.uk:1521:AEPUB2"
         username="aequery"
         password="aeq007tt"
-        driverClassName="oracle.jdbc.driver.OracleDriver"
+        driverClassName="oracle.jdbc.OracleDriver"
         initialSize="0"
         maxActive="30"
         maxIdle="2"
         minIdle="0"
-        maxWait="1000"
+        maxWait="15000"
+        testOnBorrow="true"
+        validationQuery="select 1 from tt_security where rownum = 1"
+        removeAbandoned="true"
+        logAbandoned="true"
+        removeAbandonedTimeout="60"
     />
 
     <Resource
@@ -34,12 +44,17 @@
         url="jdbc:oracle:thin:@progression.ebi.ac.uk:1521:AEPUB3"
         username="aequery"
         password="aeq007tt"
-        driverClassName="oracle.jdbc.driver.OracleDriver"
+        driverClassName="oracle.jdbc.OracleDriver"
         initialSize="0"
         maxActive="30"
         maxIdle="2"
         minIdle="0"
-        maxWait="1000"
+        maxWait="15000"
+        testOnBorrow="true"
+        validationQuery="select 1 from tt_security where rownum = 1"
+        removeAbandoned="true"
+        logAbandoned="true"
+        removeAbandonedTimeout="60"
     />
 
     <Resource
@@ -48,12 +63,17 @@
         url="jdbc:oracle:thin:@progression.ebi.ac.uk:1521:AECUR"
         username="aequery"
         password="aeq007tt"
-        driverClassName="oracle.jdbc.driver.OracleDriver"
+        driverClassName="oracle.jdbc.OracleDriver"
         initialSize="0"
         maxActive="30"
         maxIdle="2"
         minIdle="0"
-        maxWait="1000"
+        maxWait="15000"
+        testOnBorrow="true"
+        validationQuery="select 1 from tt_security where rownum = 1"
+        removeAbandoned="true"
+        logAbandoned="true"
+        removeAbandonedTimeout="60"
     />
 
 </Context>

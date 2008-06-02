@@ -453,6 +453,9 @@ body {
     height: 0;
 }
 
+.ae_results_more {
+    width: 20px;
+}
 .ae_results_accession {
     width: 100px;
 }
@@ -477,10 +480,6 @@ body {
 }
 
 .ae_results_raw {
-    width: 45px;
-}
-
-.ae_results_more {
     width: 45px;
 }
 
@@ -824,6 +823,15 @@ th {
     height: 100%;
     padding: 4px 4px 0 4px;
     text-align: left;
+}
+
+.table_row_expand {
+    background: url(../images/table_row_expand.gif) 50% 50% no-repeat;
+    height: 100%;
+}
+
+.tr_main_expanded .table_row_expand {
+    background: url(../images/table_row_collapse.gif) 50% 50% no-repeat;
 }
 
 .ie_clear {

@@ -56,7 +56,7 @@ public abstract class HelperXsltExtension {
 
     public static boolean isFileAvailableForDownload( String fileName )
     {
-        return true;
+        return Application.FilesDirectory().doesExist(fileName);
     }
 
     public static String getFileDownloadUrl( String fileName )
