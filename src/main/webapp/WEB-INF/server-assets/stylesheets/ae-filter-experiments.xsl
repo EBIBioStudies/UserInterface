@@ -19,22 +19,22 @@
                 <func:result select="experiment[accession/text()=$queried_accnum or secondaryaccession/text()=$queried_accnum]"/>
             </xsl:when>
             <xsl:when test="$pArray!='' and $pSpecies!='' and $pKeywords!=''">
-                <func:result select="experiment[helper:testSpecies(species,$pSpecies)][arraydesign/id/text()=$pArray][helper:testKeywords(.,$pKeywords,$pWholeWords)]"/>
+                <func:result select="experiment[helper:testSpecies(.,$pSpecies)][arraydesign/id/text()=$pArray][helper:testKeywords(.,$pKeywords,$pWholeWords)]"/>
             </xsl:when>
             <xsl:when test="$pArray!='' and $pSpecies='' and $pKeywords=''">
                 <func:result select="experiment[arraydesign/id/text()=$pArray]"/>
             </xsl:when>
             <xsl:when test="$pArray='' and $pSpecies!='' and $pKeywords=''">
-                <func:result select="experiment[helper:testSpecies(species,$pSpecies)]"/>
+                <func:result select="experiment[helper:testSpecies(.,$pSpecies)]"/>
             </xsl:when>
             <xsl:when test="$pArray='' and $pSpecies='' and $pKeywords!=''">
                 <func:result select="experiment[helper:testKeywords(.,$pKeywords,$pWholeWords)]"/>
             </xsl:when>
             <xsl:when test="$pArray!='' and $pSpecies!='' and $pKeywords=''">
-                <func:result select="experiment[helper:testSpecies(species,$pSpecies)][arraydesign/id/text()=$pArray]"/>
+                <func:result select="experiment[helper:testSpecies(.,$pSpecies)][arraydesign/id/text()=$pArray]"/>
             </xsl:when>
             <xsl:when test="$pArray='' and $pSpecies!='' and $pKeywords!=''">
-                <func:result select="experiment[helper:testSpecies(species,$pSpecies)][helper:testKeywords(.,$pKeywords,$pWholeWords)]"/>
+                <func:result select="experiment[helper:testSpecies(.,$pSpecies)][helper:testKeywords(.,$pKeywords,$pWholeWords)]"/>
             </xsl:when>
             <xsl:when test="$pArray!='' and $pSpecies='' and $pKeywords!=''">
                 <func:result select="experiment[arraydesign/id/text()=$pArray][helper:testKeywords(.,$pKeywords,$pWholeWords)]"/>

@@ -54,7 +54,7 @@ $(document).ready( function() {
     if ("" != $.query.get("detailedview"))
         query.detailedview = true;
 
-    initControls(query);
+    initControls();
 
     $("#ae_results_body_inner").ajaxError(onQueryError);
     $.get( "servlets/query/browse-experiments/html", query ).next(onExperimentQuery);
@@ -102,8 +102,33 @@ onExperimentQuery( tableHtml )
     var totalHybs = $("#ae_results_total_hybs").text();
     var from = $("#ae_results_from").text();
     var to = $("#ae_results_to").text();
+    var curpage = $("#ae_results_page").text();
+    var pagesize = $("#ae_results_pagesize").text();
+
 
     $("#ae_results_status").html( total + " experiments, " + totalHybs + " hybridizations. Displaying experiments " + from + " to " + to + "." );
+
+    var totalPages = total > 0 ? Math.floor( total / pagesize ) + 1 : 0;
+    var pagesAround = 10;
+    if ( totalPages > 1 ) {
+        var pagerHtml = "Pages: ";
+        for ( var page = 1; page <= totalPages; page++ ) {
+            if ( curpage == page ) {
+                pagerHtml = pagerHtml + "" + page + "";
+            } else if ( 2 == page && curpage > pagesAround && totalPages > 20 ) {
+                pagerHtml = pagerHtml + "..";
+            } else if ( totalPages - 1 == page && totalPages - curpage > pagesAround && totalPages > 20 ) {
+                pagerHtml = pagerHtml + "..";
+            } else if ( 1 == page || ( Math.abs( curpage - page ) <= pagesAround ) || totalPages == page || totalPages <= 20 ) {
+                var newQuery = $.query.set( "page", page ).set( "pagesize", pagesize ).toString()
+                pagerHtml = pagerHtml + "<a href=\"browse.html" + newQuery + "\">" + page + "</a>";
+            }
+            if ( page < totalPages ) {
+                pagerHtml = pagerHtml + " ";
+            }
+        }
+        $("#ae_results_pager").html( pagerHtml );
+    }
     // attach handlers
     $(".ae_results_tr_main").each(addExpansionHandlers);
 
@@ -130,12 +155,12 @@ initControls()
         $("#ae_detailedview").attr("checked","true");
 
     $.get("servlets/query/species-select/html").next( function(data) {
-        $("#ae_species").html(data).val(query.species);
+        $("#ae_species").html(data).val(query.species).removeAttr("disabled");
         
     });
 
     $.get("servlets/query/arrays-select/html").next( function(data) {
-        $("#ae_array").html(data).val(query.array);
+        $("#ae_array").html(data).val(query.array).removeAttr("disabled");
     });
 
     if ( "" != query.sortby ) {

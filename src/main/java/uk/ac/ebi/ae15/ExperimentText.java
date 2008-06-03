@@ -31,8 +31,8 @@ public class ExperimentText {
         ExperimentText expText = new ExperimentText();
 
         expText.text = concatAll(elt);
-        expText.species = concatAll(elt.getElementsByTagName("species"));
-        expText.array = concatAll(elt.getElementsByTagName("arraydesign"));
+        expText.species = concatAll(elt.getElementsByTagName("species")).toLowerCase();
+        expText.array = concatAll(elt.getElementsByTagName("arraydesign")).toLowerCase();
 
         return expText;
     }

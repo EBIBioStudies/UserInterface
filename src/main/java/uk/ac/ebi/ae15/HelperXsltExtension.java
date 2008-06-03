@@ -54,6 +54,25 @@ public abstract class HelperXsltExtension {
         return str.toLowerCase();
     }
 
+    public static String capitalize( String str )
+    {
+        return str.substring( 0, 1 ).toUpperCase() + str.substring(1).toLowerCase();
+    }
+
+    public static String normalizeSpecies( String species )
+    {
+        // if more than one word: "First second", otherwise "First"
+        String[] spArray = species.trim().split("\\s");
+        if ( 0 == spArray.length ) {
+            return "";
+        } else if ( 1 == spArray.length ) {
+            return capitalize( spArray[0] );
+        } else {
+            return capitalize( spArray[0] + ' ' + spArray[1] );
+        }
+
+    }
+
     public static boolean isFileAvailableForDownload( String fileName )
     {
         return Application.FilesDirectory().doesExist(fileName);
@@ -64,10 +83,11 @@ public abstract class HelperXsltExtension {
         return "http://www.ebi.ac.uk/microarray-as/ae/download/" + fileName;
     }
 
-    public static boolean testRegexp( NodeList nl, String pattern, String flags )
-    {
-        return testRegexp( concatAll(nl), pattern, flags );
-    }
+    //TODO: refactor this
+    //public static boolean testRegexp( NodeList nl, String pattern, String flags )
+    //{
+    //    return testRegexp( concatAll(nl), pattern, flags );
+    //}
 
     public static boolean testRegexp( String input, String pattern, String flags )
     {
@@ -107,17 +127,23 @@ public abstract class HelperXsltExtension {
 
     public static boolean testSpecies( NodeList nl, String species )
     {
-        return testSpecies( concatAll(nl), species );
+        if ( 0 < nl.getLength() ) {
+
+           String textIdx = ((Element)nl.item(0)).getAttribute("textIdx");
+           return Application.Experiments().Search().matchSpecies( textIdx, species );
+        } else
+            return false;
+        //return testSpecies( concatAll(nl), species );
     }
 
-    public static boolean testSpecies( String input, String species )
-    {
-        return testRegexp( input, keywordToPattern( species, true ), "i" );
-    }
+    //TODO:refactor
+    //public static boolean testSpecies( String input, String species )
+    //{
+    //    return testRegexp( input, keywordToPattern( species, true ), "i" );
+    //}
 
     public static boolean testKeywords( NodeList nl, String keywords, boolean wholeWords )
     {
-
         if ( 0 < nl.getLength() ) {
 
            String textIdx = ((Element)nl.item(0)).getAttribute("textIdx");
@@ -128,22 +154,23 @@ public abstract class HelperXsltExtension {
         //return testKeywords( concatAll(nl), keywords, wholeWords );
     }
 
-    public static boolean testKeywords( String input, String keywords, boolean wholeWords )
-    {
-        // trim spaces on both sides
-        keywords = keywords.trim();
-
-        // by default (i.e. no keywords) it'll always match
-        // otherwise any keyword fails -> no match :)
-        if ( 0 < keywords.length() ) {
-            String[] kwdArray = keywords.split("\\s");
-            for ( String keyword : kwdArray ) {
-                if ( !testRegexp( input, keywordToPattern( keyword, wholeWords ), "i" ) )
-                    return false;
-            }
-        }
-        return true;
-    }
+    //TODO:refactor
+    //public static boolean testKeywords( String input, String keywords, boolean wholeWords )
+    //{
+    //    // trim spaces on both sides
+    //   keywords = keywords.trim();
+    //
+    //    // by default (i.e. no keywords) it'll always match
+    //    // otherwise any keyword fails -> no match :)
+    //    if ( 0 < keywords.length() ) {
+    //        String[] kwdArray = keywords.split("\\s");
+    //        for ( String keyword : kwdArray ) {
+    //            if ( !testRegexp( input, keywordToPattern( keyword, wholeWords ), "i" ) )
+    //                return false;
+    //        }
+    //    }
+    //    return true;
+    //}
 
     public static String markKeywords( String input, String keywords, boolean wholeWords )
     {

@@ -53,13 +53,13 @@ public class ExperimentSearch {
     public boolean matchSpecies( String textIdx, String species )
     {
         int idx = Integer.parseInt(textIdx);
-        return ( -1 != expText.get(idx).species.indexOf( species.trim() ) );
+        return ( -1 != expText.get(idx).species.indexOf( species.trim().toLowerCase() ) );
     }
 
     public boolean matchArray( String textIdx, String array )
     {
         int idx = Integer.parseInt(textIdx);
-        return ( -1 != expText.get(idx).array.indexOf( array.trim() ) );
+        return ( -1 != expText.get(idx).array.indexOf( array.trim().toLowerCase() ) );
     }
 
     private boolean matchRegexp( String input, String pattern, String flags )

@@ -577,16 +577,15 @@ body {
     background-color: yellow;
 }
 
-#ae_results_status em {
-    font-style: normal;
-    border-top: 1px solid #d0d0d0;
-    border-left: 1px solid #d0d0d0;
-    border-right: 1px solid #ffffff;
-    border-bottom: 1px solid #ffffff;
-    background-color: #eff0f2;
-    padding: 1px 3px;
+#ae_results_status {
+    float: right;
+   /* width: 40%; */
 }
 
+#ae_results_pager {
+    float: left;
+   /* width: 50%; */
+}
 /* bb-style box */
 
 .box_top {
