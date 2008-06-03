@@ -11,7 +11,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.util.Map;
 
-public abstract class XsltHelper {
+public class XsltHelper {
     // logging macinery
     private static final Log log = org.apache.commons.logging.LogFactory.getLog(XsltHelper.class);
 

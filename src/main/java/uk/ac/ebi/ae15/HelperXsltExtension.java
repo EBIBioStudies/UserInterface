@@ -80,7 +80,7 @@ public abstract class HelperXsltExtension {
 
     public static String getFileDownloadUrl( String fileName )
     {
-        return "/arrayexpress/download/mageml/" + fileName;
+        return "/microarray-as/aer/download/mageml/" + fileName;
     }
 
     //TODO: refactor this

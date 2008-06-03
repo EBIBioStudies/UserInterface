@@ -144,7 +144,7 @@
                                                target="_blank" title="Opens in a new window">&#187; GEO <xsl:apply-templates select="." mode="highlight" /></a>
                                         </xsl:when>
                                         <xsl:when test="substring(text(), 1, 2)='E-' and substring(text(), 7, 1)='-'">
-                                            <a href="/arrayexpress/result?queryFor=Experiment&amp;eAccession={text()}"
+                                            <a href="/microarray-as/aer/result?queryFor=Experiment&amp;eAccession={text()}"
                                                target="_blank" title="Opens in a new window">&#187; <xsl:apply-templates select="." mode="highlight" /></a>
                                         </xsl:when>
                                         <xsl:otherwise>
@@ -183,7 +183,7 @@
                                 <div id="{$vExpId}_array">
                                     <xsl:for-each select="arraydesign">
                                         <xsl:apply-templates select="name" mode="highlight" />
-                                        (<a href="/arrayexpress/result?queryFor=PhysicalArrayDesign&amp;aAccession={accession/text()}"
+                                        (<a href="/microarray-as/aer/result?queryFor=PhysicalArrayDesign&amp;aAccession={accession/text()}"
                                             target="_blank" title="Opens in a new window">&#187; <xsl:apply-templates select="accession" mode="highlight" />
                                         </a>)<xsl:if test="position()!=last()">, </xsl:if>
                                     </xsl:for-each>
@@ -197,7 +197,7 @@
                                    target="_blank" title="Opens in a new window">&#187; FTP server direct link...</a>
                             </p>
                             <xsl:if test="accession!='E-TABM-185'">
-                                <a href="/arrayexpress/dataselection?expid={$vExpId}"
+                                <a href="/microarray-as/aer/dataselection?expid={$vExpId}"
                                    target="_blank" title="Opens in a new window">&#187; View detailed data retrieval page...</a>
                             </xsl:if>
                         </dd>
@@ -219,7 +219,7 @@
 
                         <dt>Protocols:</dt>
                         <dd>
-                            <a href="/arrayexpress/details?class=MAGE.Experiment_protocols&amp;criteria=Experiment%3D{$vExpId}&amp;contextClass=MAGE.Protocol&amp;templateName=Protocol.vm"
+                            <a href="/microarray-as/aer/details?class=MAGE.Experiment_protocols&amp;criteria=Experiment%3D{$vExpId}&amp;contextClass=MAGE.Protocol&amp;templateName=Protocol.vm"
                                target="_blank" title="Opens in a new window">&#187; Experimental protocols</a>
                         </dd>
 

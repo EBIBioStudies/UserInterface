@@ -16,7 +16,7 @@
         validationQuery="select 1 from tt_security where rownum = 1"
         removeAbandoned="true"
         logAbandoned="true"
-        removeAbandonedTimeout="60"
+        removeAbandonedTimeout="300"
     />
 
     <Resource
@@ -35,7 +35,7 @@
         validationQuery="select 1 from tt_security where rownum = 1"
         removeAbandoned="true"
         logAbandoned="true"
-        removeAbandonedTimeout="60"
+        removeAbandonedTimeout="300"
     />
 
     <Resource
@@ -54,7 +54,7 @@
         validationQuery="select 1 from tt_security where rownum = 1"
         removeAbandoned="true"
         logAbandoned="true"
-        removeAbandonedTimeout="60"
+        removeAbandonedTimeout="300"
     />
 
     <Resource
@@ -73,7 +73,7 @@
         validationQuery="select 1 from tt_security where rownum = 1"
         removeAbandoned="true"
         logAbandoned="true"
-        removeAbandonedTimeout="60"
+        removeAbandonedTimeout="300"
     />
 
 </Context>

@@ -38,7 +38,7 @@
         </init-param>
         <init-param>
             <param-name>confReloadCheckInterval</param-name>
-            <param-value>60</param-value>
+            <param-value>-1</param-value>
         </init-param>
         <init-param>
             <param-name>logLevel</param-name>
