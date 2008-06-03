@@ -155,13 +155,16 @@ initControls()
         $("#ae_detailedview").attr("checked","true");
 
     $.get("servlets/query/species-select/html").next( function(data) {
-        $("#ae_species").html(data).val(query.species).removeAttr("disabled");
+        $("#ae_species").html(data).removeAttr("disabled").val(query.species);
         
     });
 
     $.get("servlets/query/arrays-select/html").next( function(data) {
-        $("#ae_array").html(data).val(query.array).removeAttr("disabled");
+        addHtmlToSelect("ae_array", data);
+        $("#ae_array").removeAttr("disabled").val(query.array);
     });
+
+    $("#ae_arrays").html("<option value=1>Any array</option><optgroup label=1><option name=2>2</option></optgroup>");
 
     if ( "" != query.sortby ) {
         var thElt = $("#ae_results_header_" + query.sortby);
@@ -252,4 +255,18 @@ onTableRowClick( eventObj )
         extElt.show();
     }
     onWindowResize();
+}
+
+function
+addHtmlToSelect( selectEltId, html )
+{
+    if ( $.browser.opera ) {
+        var htmlParsed = $.clean( new Array(html) );
+        var select = $( "#" + selectEltId ).empty();
+        for ( var i = 0; i < htmlParsed.length; i++ ) {
+            select[0].appendChild(htmlParsed[i].cloneNode(true));
+        }
+    } else {
+        $( "#" + selectEltId ).html(html);
+    }
 }
