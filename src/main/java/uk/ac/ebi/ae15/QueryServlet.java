@@ -13,8 +13,8 @@ import javax.xml.transform.dom.DOMSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.regex.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class QueryServlet extends HttpServlet {
@@ -56,76 +56,18 @@ public class QueryServlet extends HttpServlet {
 
         // Output goes to the response PrintWriter.
         PrintWriter out = response.getWriter();
-        try {
-            //get the real path for xml and xsl files.
-            String ctxRoot = Application.Preferences().getProperty("ae.webapp.root");
-            // Get the XML input document and the stylesheet, both in the servlet
-            // engine document directory.
+        if ( stylesheet.equals("arrays-select") ) {
+            out.print(Application.Experiments().getArrays());
+        } else if ( stylesheet.equals("species-select") ) {
+            out.print(Application.Experiments().getSpecies());
+        } else {
+            String stylesheetName = new StringBuilder(stylesheet).append('-').append(type).append(".xsl").toString();
 
-            //TODO: make paths configurable
-            Source xmlSource = new DOMSource(Application.Experiments().getExperiments());
-            Source xslSource = new StreamSource( new URL("file", "", ctxRoot + "WEB-INF/server-assets/stylesheets/" + stylesheet + "-" + type + ".xsl").openStream() );
-            TransformerFactory tFactory = TransformerFactory.newInstance();
-
-            tFactory.setURIResolver(
-                new AppURIResolver( ctxRoot + "WEB-INF/server-assets/stylesheets/" )
-            );
-
-            // Generate the transformer.
-            Transformer transformer = tFactory.newTransformer(xslSource);
-
-            // Stuff transformer with all the parameters supplied via the request
-            Enumeration e = request.getParameterNames();
-            while ( e.hasMoreElements() ) {
-                String name = (String)e.nextElement();
-                String value = request.getParameter(name);
-                if ( null != name && null != value )
-                    transformer.setParameter( name, value );
+            if ( !XsltHelper.transformDocumentToPrintWriter( Application.Experiments().getExperiments(), stylesheetName, request.getParameterMap(), out ) ) {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
-
-            log.debug("experiments filtering: about to start transformer.transform()");
-            // Perform the transformation, sending the output to the response.
-            transformXml( transformer, xmlSource, new StreamResult(out) );
-            log.debug("experiments filtering: transformer.transform() completed");
         }
-        // If an Exception occurs, return the error to the client.
-        catch ( Exception x ) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            log.debug( "Caught an exception:", x );
-        }
-        // Close the PrintWriter.
         out.close();
     }
-
-    synchronized private static void transformXml( Transformer transformer, Source in, Result out ) throws TransformerException
-    {
-        transformer.transform(in, out);
-    }
 }
 
-class AppURIResolver implements URIResolver {
-
-    // logging macinery
-    private static final Log log = org.apache.commons.logging.LogFactory.getLog(AppURIResolver.class);
-
-    public AppURIResolver ( String rootPath )
-    {
-        root = rootPath;
-    }
-
-    public Source resolve( String href, String base ) throws TransformerException
-    {
-        Source src = null;
-        try {
-            src = new StreamSource( new URL("file", "", root + href ).openStream() );
-        } catch ( Exception x ) {
-            log.debug( "Caught an exception:", x );
-            throw new TransformerException(x.getMessage());
-        }
-
-    return src;
-    }
-
-    private String root;
-
-}

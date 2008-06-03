@@ -3,6 +3,9 @@
 //
 
 // runs on page reload after rendering is done
+
+var query = new Object();
+
 $(document).ready( function() {
 
     // step 0: hack for IE to work with this funny EBI header/footer (to be redeveloped with jQuery)
@@ -20,7 +23,6 @@ $(document).ready( function() {
     }
 
     $("#ae_results_hdr th.sortable").each(addSortableHandlers);
-    var query = new Object();
 
     if ("" != $.query.get("keywords"))
         query.keywords = $.query.get("keywords");
@@ -28,11 +30,8 @@ $(document).ready( function() {
     if ("" != $.query.get("wholewords"))
         query.wholewords = true;
 
-    if ("" != $.query.get("species"))
-        query.species = $.query.get("species");
-
-    if ("" != $.query.get("array"))
-        query.array = $.query.get("array");
+    query.species = $.query.get("species");
+    query.array = $.query.get("array");
 
     if ("" != $.query.get("page"))
         query.page = $.query.get("page");
@@ -57,13 +56,12 @@ $(document).ready( function() {
 
     initControls(query);
 
-     $("#ae_results_body_inner").ajaxError(onQueryError);
-
+    $("#ae_results_body_inner").ajaxError(onQueryError);
     $.get( "servlets/query/browse-experiments/html", query ).next(onExperimentQuery);
 });
 
 function
-onAddFilterChange( eventObj )
+onAddFilterChange()
 {
     $("#ae_add_filter_select").hide();
     $("#ae_add_filter_select option:selected").removeAttr("selected");
@@ -119,7 +117,7 @@ onQueryError()
 }
 
 function
-initControls( query )
+initControls()
 {
     // keywords
     $("#ae_keywords").val(query.keywords);
@@ -131,6 +129,14 @@ initControls( query )
     if (query.detailedview)
         $("#ae_detailedview").attr("checked","true");
 
+    $.get("servlets/query/species-select/html").next( function(data) {
+        $("#ae_species").html(data).val(query.species);
+        
+    });
+
+    $.get("servlets/query/arrays-select/html").next( function(data) {
+        $("#ae_array").html(data).val(query.array);
+    });
 
     if ( "" != query.sortby ) {
         var thElt = $("#ae_results_header_" + query.sortby);
@@ -151,26 +157,26 @@ initControls( query )
 }
 
 function
-addSortableHandlers( i )
+addSortableHandlers()
 {
     var elt = $(this);
     elt.mouseover(onHeaderMouseOver).mouseout(onHeaderMouseOut).click(onHeaderClick);
 }
 
 function
-onHeaderMouseOver( eventObj )
+onHeaderMouseOver()
 {
     $(this).addClass("table_header_box_active");
 }
 
 function
-onHeaderMouseOut( eventObj )
+onHeaderMouseOut()
 {
     $(this).removeClass("table_header_box_active");
 }
 
 function
-onHeaderClick( eventObj )
+onHeaderClick()
 {
     var sortby = $(this).attr("id");
     sortby = sortby.substring(sortby.lastIndexOf("_") + 1, sortby.length);
@@ -184,20 +190,20 @@ onHeaderClick( eventObj )
 }
 
 function
-addExpansionHandlers( i )
+addExpansionHandlers()
 {
     var elt = $(this);
     elt.mouseover(onTableRowMouseOver).mouseout(onTableRowMouseOut).click(onTableRowClick);
 }
 
 function
-onTableRowMouseOver( eventObj )
+onTableRowMouseOver()
 {
     $(this).addClass("tr_main_active");
 }
 
 function
-onTableRowMouseOut( eventObj )
+onTableRowMouseOut()
 {
     $(this).removeClass("tr_main_active");
 }

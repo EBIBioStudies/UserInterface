@@ -68,10 +68,46 @@ public class Experiments {
                 log.warn("Experiments XML Cache was NOT loaded, possible fresh start up?");
                 experimentsDoc = createExperimentsDocument();
             }
+            //TODO: temp
+            saveSpeciesAndArraysToCache();
             experimentSearch.buildText(experimentsDoc);
 
         }
         return experimentsDoc;
+    }
+
+    //TODO: refactor!
+    public String getArrays()
+    {
+        if ( null == arraysString ) {
+            arraysString = loadStringFromCache("ae-arrays.xml");
+        }
+        return arraysString;
+    }
+
+    private static String arraysString = null;
+
+    public String getSpecies()
+    {
+        if ( null == speciesString ) {
+            speciesString = loadStringFromCache("ae-species.xml");
+        }
+        return speciesString;
+    }
+
+    private static String speciesString = null;
+
+    private static String loadStringFromCache( String name )
+    {
+        String result = "";
+        try {
+            BufferedReader r = new BufferedReader( new InputStreamReader( new FileInputStream( System.getProperty("java.io.tmpdir") + File.separator + name )));
+            result = r.readLine();
+        } catch ( Throwable x ) {
+            log.debug( "Caught an exception:", x );
+            //TODO:error loggging
+        }
+        return result;
     }
 
     public ExperimentSearch Search()
@@ -83,8 +119,9 @@ public class Experiments {
     {
         if ( loadExperimentsFromDataSource( dsName, onlyPublic ) ) {
             saveExperimentsToCache();
+            saveSpeciesAndArraysToCache();
         } else {
-            log.warn("Experiments XML Cache was NOT loaded, possible fresh start up?");
+            log.error("Unable to reload experiments from [" + dsName + "], check log for messages" );
             experimentsDoc = createExperimentsDocument();            
         }
         experimentSearch.buildText(experimentsDoc);
@@ -101,7 +138,7 @@ public class Experiments {
             String relCacheLocation = Application.Preferences().getProperty("ae.experiments.cache.location");
             if ( null != relCacheLocation ) {
                 try {
-                    url = new File( tmpDir + "/" + relCacheLocation ).toURL();
+                    url = new File( tmpDir + File.separator + relCacheLocation ).toURL();
                 } catch ( MalformedURLException x ) {
                     if (log.isDebugEnabled()) {
                         log.debug( "Caught an exception:", x );
@@ -138,6 +175,12 @@ public class Experiments {
         }
     }
 
+    private void saveSpeciesAndArraysToCache()
+    {
+        XsltHelper.transformDocumentToFile( experimentsDoc, "preprocess-species-html.xsl", null, new File(System.getProperty("java.io.tmpdir") + File.separator + "ae-species.xml") );
+        XsltHelper.transformDocumentToFile( experimentsDoc, "preprocess-arrays-html.xsl", null, new File(System.getProperty("java.io.tmpdir") + File.separator + "ae-arrays.xml") );
+    }
+
     private boolean loadExperimentsFromCache()
     {
         boolean isLoaded = false;
@@ -169,40 +212,14 @@ public class Experiments {
 
     private boolean loadExperimentsFromString( String xmlString )
     {
-        boolean isLoaded = false;
-
-        try {
-            InputStream inStream = new ByteArrayInputStream(xmlString.getBytes("ISO-8859-1"));
-            Source xmlSource = new StreamSource(inStream);
-
-            //get the real path for xml and xsl files.
-            String ctxRoot = Application.Preferences().getProperty("ae.webapp.root");
-            // Get the XML input document and the stylesheet, both in the servlet
-            // engine document directory.
-            Source xslSource = new StreamSource( new java.net.URL("file", "", ctxRoot + "WEB-INF/server-assets/stylesheets/preprocess-experiments-xml.xsl").openStream() );
-
-            // get the factory
-            TransformerFactory tFactory = TransformerFactory.newInstance();
-
-            // Generate the transformer.
-            Transformer transformer = tFactory.newTransformer(xslSource);
-
-            // Create empty DOMResult
-            DOMResult dom = new DOMResult();
-            log.debug("experiments pre-processing: about to start transformer.transform()");
-            // Perform the transformation, sending the output to the response.
-            transformer.transform(xmlSource, dom);
-            log.debug("experiments pre-processing: transformer.transform() completed");
-            if ( null != dom.getNode() ) {
-                experimentsDoc = (Document)dom.getNode();
-                isLoaded = true;
-            }
-
-        } catch ( Throwable e ) {
-            log.debug( "Caught an exception:", e );
+        Document dom = XsltHelper.transformStringToDocument( xmlString, "preprocess-experiments-xml.xsl", null );
+        if ( null == dom ) {
+            log.error("Pre-processing returned an error, will have an empty document");
+            return false;
+        } else {
+            experimentsDoc = dom;
+            return true;
         }
-
-        return isLoaded;
     }
 
 

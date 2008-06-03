@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContext;
 
 public class AppContextListener implements ServletContextListener {
 
@@ -12,16 +13,14 @@ public class AppContextListener implements ServletContextListener {
 
     public synchronized void contextInitialized( ServletContextEvent sce )
     {
-        log.info("Starting up ArrayExpress...");
+        log.info("ARRAYEXPRESS 1.1 UP -------------------------------------------------------------------------------");
 
-        String contextRoot = sce.getServletContext().getRealPath("");
-        Application.Instance(contextRoot);
-        Application.Experiments();
-
+        // creates the application (which hosts all the necessary machinery)
+        new Application(sce.getServletContext());
     }
 
     public synchronized void contextDestroyed( ServletContextEvent sce )
     {
-        log.info("Shutting down ArrayExpress...");
+        log.info("ARRAYEXPRESS GOES DOWN ----------------------------------------------------------------------------");
     }
 }
