@@ -26,6 +26,19 @@ aeResetOptions()
     $("#ae_detailedview").removeAttr("checked");
 }
 
+function
+aeSort( sortby )
+{
+    if ( -1 != String("accession name assays species releasedate fgem raw").indexOf(sortby) ) {
+        var innerElt = $( "#ae_results_header_" + sortby ).find("div.table_header_inner");
+        var sortorder = "ascending";
+        if ( undefined != innerElt && innerElt.hasClass("table_header_sort_asc") )
+            sortorder = "descending";
+
+        var newQuery = $.query.set( "sortby", sortby ).set( "sortorder", sortorder ).toString()
+        window.location.href = "browse.html" + newQuery;
+    }
+}
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 $(document).ready( function() {
@@ -35,16 +48,12 @@ $(document).ready( function() {
         document.getElementById('head').allowTransparency = true;
     }
 
-    $("#ae_add_filter_select").change( onAddFilterChange );
-
     if ($.browser.opera && $.browser.version < 9.5) {
         onWindowResize();
         $(window).resize( onWindowResize );
     } else {
         onWindowResize();
     }
-
-    $("#ae_results_hdr th.sortable").each(addSortableHandlers);
 
     if ("" != $.query.get("keywords"))
         query.keywords = $.query.get("keywords");
@@ -83,17 +92,6 @@ $(document).ready( function() {
 });
 
 function
-onAddFilterChange()
-{
-    $("#ae_add_filter_select").hide();
-    $("#ae_add_filter_select option:selected").removeAttr("selected");
-    $("#ae_add_filter_select option:first").attr( "selected", "true" );
-    $("#ae_add_filter").before("<div><label for=\"ae_filter_1\">Species</label><select class=ae_filter id=ae_filter_1><option>Select species ...</option></select>");
-    $("#ae_filter_1").focus();
-    $("#ae_add_filter_select").show();
-}
-
-function
 onWindowResize()
 {
     var outerWidth = $("#ae_results_body").width();
@@ -129,9 +127,13 @@ onExperimentQuery( tableHtml )
 
 
     if ( total > 0 ) {
-        $("#ae_results_status").html( total + " experiments, " + totalAssays + " assays. Displaying experiments " + from + " to " + to + "." );
-
         var totalPages = total > 0 ? Math.floor( total / pagesize ) + 1 : 0;
+        $("#ae_results_status").html(
+            total + " experiment" + (total != 1 ? "s" : "" ) + ", " +
+            totalAssays + " assay" + (totalAssays != 1 ? "s" : "" ) + "." +
+            ( totalPages > 1 ? (" Displaying experiments " + from + " to " + to + ".") : "" )
+            );
+
         var pagesAround = 10;
         if ( totalPages > 1 ) {
             var pagerHtml = "Pages: ";
@@ -192,9 +194,7 @@ initControls()
     if ( "" != query.sortby ) {
         var thElt = $("#ae_results_header_" + query.sortby);
         if ( null != thElt ) {
-            thElt.addClass("table_header_box_selected");
-            thElt.removeClass("table_header_box");
-
+            thElt.addClass("table_header_box_selected").removeClass("table_header_box").removeClass("sortable");
 
             if ( "" != query.sortorder) {
                 var divElt = thElt.find("div.table_header_inner");
@@ -205,39 +205,6 @@ initControls()
         }
 
     }
-}
-
-function
-addSortableHandlers()
-{
-    var elt = $(this);
-    elt.mouseover(onHeaderMouseOver).mouseout(onHeaderMouseOut).click(onHeaderClick);
-}
-
-function
-onHeaderMouseOver()
-{
-    $(this).addClass("table_header_box_active");
-}
-
-function
-onHeaderMouseOut()
-{
-    $(this).removeClass("table_header_box_active");
-}
-
-function
-onHeaderClick()
-{
-    var sortby = $(this).attr("id");
-    sortby = sortby.substring(sortby.lastIndexOf("_") + 1, sortby.length);
-    var innerElt = $(this).find("div.table_header_inner");
-    var sortorder = "ascending";
-    if ( undefined != innerElt && innerElt.hasClass("table_header_sort_asc") )
-        sortorder = "descending";
-
-    var newQuery = $.query.set( "sortby", sortby ).set( "sortorder", sortorder ).toString()
-    window.location.href = "browse.html" + newQuery;
 }
 
 function
