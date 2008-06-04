@@ -38,7 +38,7 @@
             </assays>
             <files>
                 <fgem name="{concat(@accession,'.processed.zip')}"
-                      count="sum(bioassaydatagroup[@isderived='1']/@bioassays)"/>
+                      count="{sum(bioassaydatagroup[@isderived='1']/@bioassays)}"/>
                 <raw name="{concat(@accession,'.raw.zip')}"
                      count="{sum(bioassaydatagroup[@isderived='0']/@bioassays)}"
                      celcount="{sum(bioassaydatagroup[@isderived='0'][contains(@dataformat,'CEL')]/@bioassays)}"/>
