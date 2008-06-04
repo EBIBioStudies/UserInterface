@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context allowLinking="true" cookies="false">
+<Context allowLinking="false" cookies="false" swallowOutput="true">
     <Resource
         name="jdbc/aepub1"
         type="javax.sql.DataSource"

@@ -15,18 +15,18 @@ $(document).ready( function() {
 
     // gets aew stats and updates the page
     Deferred.parallel([
-        $.get("test/aew_gene_avail_info.xml").next(getNumDocsFromSolrStats),
-        $.get("test/aew_exp_avail_info.xml").next(getNumDocsFromSolrStats)
+        $.get("/microarray-as/solr_gene/admin/stats.jsp").next(getNumDocsFromSolrStats),
+        $.get("/microarray-as/solr_exp/admin/stats.jsp").next(getNumDocsFromSolrStats)
     ]).next( function (values) {
         var aew_avail_info = values[1] + " experiments, " + values[0] + " genes available";
         $("#aew_avail_info").text(aew_avail_info);
     });
 
     // loads news page
-    $("#ae_news").load("test/ae_news.xml div ul");
+    $("#ae_news").load("/microarray-srv/ae/ae-main-news.xml div ul");
 
     // loads links page
-    $("#ae_links").load("test/ae_links.xml div ul");
+    $("#ae_links").load("/microarray-srv/ae/ae-main-links.xml div ul");
     $("#ae_news_links_area").show();
 });
 

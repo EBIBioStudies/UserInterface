@@ -2,9 +2,31 @@
 //  AE Browse Page Scripting Support. Requires jQuery 1.2.3 and JSDefeered.jQuery 0.2.1
 //
 
-// runs on page reload after rendering is done
-
+// query object is a global variable
 var query = new Object();
+
+function
+aeClearKeywords()
+{
+    $("#ae_keywords").val("");
+    $("#ae_wholewords").removeAttr("checked");
+}
+
+function
+aeResetFilters()
+{
+    $("#ae_species").val("");
+    $("#ae_array").val("");
+}
+
+function
+aeResetOptions()
+{
+    $("#ae_pagesize").val("25");
+    $("#ae_detailedview").removeAttr("checked");
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 $(document).ready( function() {
 
@@ -106,29 +128,32 @@ onExperimentQuery( tableHtml )
     var pagesize = $("#ae_results_pagesize").text();
 
 
-    $("#ae_results_status").html( total + " experiments, " + totalAssays + " assays. Displaying experiments " + from + " to " + to + "." );
+    if ( total > 0 ) {
+        $("#ae_results_status").html( total + " experiments, " + totalAssays + " assays. Displaying experiments " + from + " to " + to + "." );
 
-    var totalPages = total > 0 ? Math.floor( total / pagesize ) + 1 : 0;
-    var pagesAround = 10;
-    if ( totalPages > 1 ) {
-        var pagerHtml = "Pages: ";
-        for ( var page = 1; page <= totalPages; page++ ) {
-            if ( curpage == page ) {
-                pagerHtml = pagerHtml + "" + page + "";
-            } else if ( 2 == page && curpage > pagesAround && totalPages > 20 ) {
-                pagerHtml = pagerHtml + "..";
-            } else if ( totalPages - 1 == page && totalPages - curpage > pagesAround && totalPages > 20 ) {
-                pagerHtml = pagerHtml + "..";
-            } else if ( 1 == page || ( Math.abs( curpage - page ) <= pagesAround ) || totalPages == page || totalPages <= 20 ) {
-                var newQuery = $.query.set( "page", page ).set( "pagesize", pagesize ).toString()
-                pagerHtml = pagerHtml + "<a href=\"browse.html" + newQuery + "\">" + page + "</a>";
+        var totalPages = total > 0 ? Math.floor( total / pagesize ) + 1 : 0;
+        var pagesAround = 10;
+        if ( totalPages > 1 ) {
+            var pagerHtml = "Pages: ";
+            for ( var page = 1; page <= totalPages; page++ ) {
+                if ( curpage == page ) {
+                    pagerHtml = pagerHtml + "" + page + "";
+                } else if ( 2 == page && curpage > pagesAround && totalPages > 20 ) {
+                    pagerHtml = pagerHtml + "..";
+                } else if ( totalPages - 1 == page && totalPages - curpage > pagesAround && totalPages > 20 ) {
+                    pagerHtml = pagerHtml + "..";
+                } else if ( 1 == page || ( Math.abs( curpage - page ) <= pagesAround ) || totalPages == page || totalPages <= 20 ) {
+                    var newQuery = $.query.set( "page", page ).set( "pagesize", pagesize ).toString()
+                    pagerHtml = pagerHtml + "<a href=\"browse.html" + newQuery + "\">" + page + "</a>";
+                }
+                if ( page < totalPages ) {
+                    pagerHtml = pagerHtml + " ";
+                }
             }
-            if ( page < totalPages ) {
-                pagerHtml = pagerHtml + " ";
-            }
+            $("#ae_results_pager").html( pagerHtml );
         }
-        $("#ae_results_pager").html( pagerHtml );
     }
+
     // attach handlers
     $(".ae_results_tr_main").each(addExpansionHandlers);
 

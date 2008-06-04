@@ -78,7 +78,11 @@
             <xsl:otherwise>
                 <tr class="ae_results_tr_error">
                     <td colspan="8">
-                        <p><strong>The query '<xsl:value-of select="$keywords"/>' returned no matches.</strong></p><p>Try shortening the query term e.g. 'embryo' will match embryo, embryoid, embryonic across all annotation fields.</p><p>Note that '*' is <strong>not</strong> supported as a wild card. More information available at <a href="http://www.ebi.ac.uk/microarray/doc/help/ae_help.html">ArrayExpress Query Help</a>.</p>    
+                        <p><strong>The query '<xsl:value-of select="$keywords"/>'<xsl:if test="string-length($species)>0">&#160;<em>and</em> species '<xsl:value-of select="$species"/>'</xsl:if>
+                            <xsl:if test="string-length($array)>0">&#160;<em>and</em> array <xsl:value-of select="$array"/></xsl:if>
+                            returned no matches.</strong></p>
+                        <p>Try shortening the query term e.g. 'embryo' will match embryo, embryoid, embryonic across all annotation fields.</p>
+                        <p>Note that '*' is <strong>not</strong> supported as a wild card. More information available at <a href="http://www.ebi.ac.uk/microarray/doc/help/ae_help.html">ArrayExpress Query Help</a>.</p>    
                     </td>
                 </tr>
             </xsl:otherwise>
@@ -110,7 +114,7 @@
                 <td class="align_center">
                     <div>
                         <xsl:choose>
-                            <xsl:when test="files/fgem"><a href="{files/fgem/@url}" title="Processed data ({files/fgem/@count})"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Processed data ({files/fgem/@count})"/></a></xsl:when>
+                            <xsl:when test="helper:isFileAvailableForDownload(files/fgem/@name)"><a href="{helper:getFileDownloadUrl(files/fgem/@name)}" title="Processed data ({files/fgem/@count})"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Processed data ({files/fgem/@count})"/></a></xsl:when>
                             <xsl:otherwise><img src="assets/images/silk_data_unavail.gif" width="16" height="16"/></xsl:otherwise>
                         </xsl:choose>
                     </div>
@@ -118,8 +122,8 @@
                 <td class="align_center">
                     <div>
                         <xsl:choose>
-                            <xsl:when test="files/raw/@celcount>0"><a href="{files/raw/@url}" title="Affy data ({files/raw/@count})"><img src="assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Affy data ({files/raw/@count})"/></a></xsl:when>
-                            <xsl:when test="files/raw"><a href="{files/raw/@url}" title="Raw data ({files/raw/@count})"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Raw data ({files/raw/@count})"/></a></xsl:when>
+                            <xsl:when test="helper:isFileAvailableForDownload(files/raw/@name) and files/raw/@celcount>0"><a href="{helper:getFileDownloadUrl(files/raw/@name)}" title="Affy data ({files/raw/@count})"><img src="assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Affy data ({files/raw/@count})"/></a></xsl:when>
+                            <xsl:when test="helper:isFileAvailableForDownload(files/raw/@name) and files/raw/@celcount=0"><a href="{helper:getFileDownloadUrl(files/raw/@name)}" title="Raw data ({files/raw/@count})"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Raw data ({files/raw/@count})"/></a></xsl:when>
                             <xsl:otherwise><img src="assets/images/silk_data_unavail.gif" width="16" height="16"/></xsl:otherwise>
                         </xsl:choose>
                     </div>
@@ -170,11 +174,13 @@
 
                         <dt>Sample&#160;annotation:</dt>
                         <dd>
-                            <xsl:if test="files/twocolumns">
-                                <a href="{files/twocolumns/@url}"
-                                    target="_blank" title="Opens in a new window">&#187; Tab-delimited spreadsheet</a>
-                                </xsl:if>
-                            <xsl:if test="not (files/twocolumns)">Data is not yet available</xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="helper:isFileAvailableForDownload(files/twocolumns/@name)">
+                                    <a href="{helper:getFileDownloadUrl(files/twocolumns/@name)}"
+                                        target="_blank" title="Opens in a new window">&#187; Tab-delimited spreadsheet</a>
+                                </xsl:when>
+                                <xsl:otherwise>Data is not yet available</xsl:otherwise>
+                            </xsl:choose>
                         </dd>
 
                         <xsl:if test="count(arraydesign)&gt;0">
@@ -204,16 +210,16 @@
 
                         <xsl:if test="accession!='E-TABM-185'">
                             <dt>Experiment&#160;design:</dt>
-                            <dd><xsl:if test="files/biosamples/png">
-                                    <a href="{files/biosamples/png/@url}"
+                            <dd><xsl:if test="helper:isFileAvailableForDownload(files/biosamples/png/@name)">
+                                    <a href="{helper:getFileDownloadUrl(files/biosamples/png/@name)}"
                                        target="_blank" title="Opens in a new window">&#187; PNG</a>
-                                    <xsl:if test="files/biosamples/svg">, </xsl:if>
+                                    <xsl:if test="helper:isFileAvailableForDownload(files/biosamples/svg/@name)">, </xsl:if>
                                 </xsl:if>
-                                <xsl:if test="files/biosamples/svg">
-                                    <a href="{files/biosamples/svg/@url}"
+                                <xsl:if test="helper:isFileAvailableForDownload(files/biosamples/svg/@name)">
+                                    <a href="{helper:getFileDownloadUrl(files/biosamples/svg/@name)}"
                                        target="_blank" title="Opens in a new window">&#187; SVG</a>
                                 </xsl:if>
-                                <xsl:if test="not (files/biosamples/png or files/biosamples/svg)">Data is not yet available</xsl:if>
+                                <xsl:if test="not (helper:isFileAvailableForDownload(files/biosamples/png/@name) or helper:isFileAvailableForDownload(files/biosamples/svg/@name))">Data is not yet available</xsl:if>
                             </dd>
                         </xsl:if>
 
@@ -231,11 +237,14 @@
                         </xsl:if>
 
                         <dt>Detailed sample&#160;annotation:</dt>
-                        <dd><xsl:if test="files/sdrf">
-                                <a href="{files/sdrf/@url}"
-                                   target="_blank" title="Opens in a new window">&#187; Tab-delimited spreadsheet</a>
-                            </xsl:if>
-                            <xsl:if test="not (files/sdrf)">Data is not yet available</xsl:if>
+                        <dd>
+                            <xsl:choose>
+                                <xsl:when test="helper:isFileAvailableForDownload(files/sdrf/@name)">
+                                    <a href="{helper:getFileDownloadUrl(files/sdrf/@name)}"
+                                        target="_blank" title="Opens in a new window">&#187; Tab-delimited spreadsheet</a>
+                                </xsl:when>
+                                <xsl:otherwise>Data is not yet available</xsl:otherwise>
+                            </xsl:choose>
                         </dd>
 
                         <xsl:if test="count(provider[role!='data_coder'])&gt;0">
@@ -272,8 +281,8 @@
                                     <dt class="title">Factor name</dt>
                                     <dd class="title">Factor value</dd>
                                     <xsl:for-each select="experimentalfactor">
-                                        <dt><xsl:apply-templates select="name" mode="highlight"/></dt>
-                                        <dd><xsl:apply-templates select="value" mode="highlight"/></dd>
+                                        <dt><xsl:apply-templates select="name" mode="highlight"/>&#160;</dt>
+                                        <dd><xsl:apply-templates select="value" mode="highlight"/>&#160;</dd>
                                     </xsl:for-each>
                                 </dl>
                             </dd>
@@ -286,8 +295,8 @@
                                     <dt class="title">Attribute name</dt>
                                     <dd class="title">Attribute value</dd>
                                     <xsl:for-each select="sampleattribute">
-                                        <dt><xsl:apply-templates select="category" mode="highlight"/></dt>
-                                        <dd><xsl:apply-templates select="value" mode="highlight"/></dd>
+                                        <dt><xsl:apply-templates select="category" mode="highlight"/>&#160;</dt>
+                                        <dd><xsl:apply-templates select="value" mode="highlight"/>&#160;</dd>
                                     </xsl:for-each>
                                 </dl>
                             </dd>

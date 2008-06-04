@@ -85,7 +85,6 @@ body {
     border: 0 none;
     margin: 0;
     padding: 0;
-    z-index: 1;
     background-color: rgb(32, 122, 122);    
 }
 
@@ -271,7 +270,7 @@ body {
 
 #ae_browse_area {
     position: absolute;
-    padding: 90px 5px 5px 5px;
+    padding: 95px 5px 5px 5px;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -280,12 +279,12 @@ body {
 /* ae keywords filters area */
 #ae_keywords_filters_area {
     position: relative;
-    top: -90px;
+    top: -95px;
     left: 0;
     width: 100%;
-    height: 90px;
+    height: 95px;
     overflow: hidden;
-    padding: 5px 0;
+    padding: 5px 0 5px 0;
 }
 
 #ae_keywords_filters_box {
@@ -298,11 +297,27 @@ body {
     white-space: nowrap;
 }
 
+#ae_logo_browse {
+    float: right;
+    padding: 5px 10px;
+}
+
+#ae_beta_notice {
+    color: #004488;
+    font-style: italic;
+    position: absolute;
+    left: 0;
+    top: 68px;
+    margin: 0;
+    padding: 0 0 0 10px;
+    border: 0 none;
+}
+
 #ae_keywords_box {
     position: absolute;
     left: 0;
     top: 0;
-    width: 45%;
+    width: 40%;
     height: 100%;
     margin: 0;
     padding: 5px 5px 5px 10px;
@@ -311,7 +326,7 @@ body {
 
 #ae_filters_box {
     position: absolute;
-    left: 45%;
+    left: 40%;
     top: 0;
     width: 35%;
     height: 100%;
@@ -322,9 +337,9 @@ body {
 
 #ae_options_box {
     position: absolute;
-    left: 80%;
+    left: 75%;
     top: 0;
-    width: 20%;
+    width: 25%;
     height: 100%;
     margin: 0;
     padding: 5px 10px 5px 5px;
@@ -370,7 +385,7 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    top: -90px;
+    top: -95px;
 }
 
 #ae_results_area th,
