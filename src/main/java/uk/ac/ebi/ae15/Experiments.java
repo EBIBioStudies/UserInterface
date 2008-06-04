@@ -43,7 +43,7 @@ public class Experiments {
     private static int numOfParallelConnections = 25;
     private static int initialXmlStringBufferSize = 20000000;  // 20 Mb
 
-    private final static String XML_DOCUMENT_VERSION = "1.0.080521";
+    private final static String XML_DOCUMENT_VERSION = "1.0.080604";
 
     public Experiments()
     {

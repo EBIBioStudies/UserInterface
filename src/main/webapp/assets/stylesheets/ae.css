@@ -463,8 +463,8 @@ body {
 .ae_results_name {
 }
 
-.ae_results_hybs {
-    width: 50px;
+.ae_results_assays {
+    width: 57px;
 }
 
 .ae_results_species {
@@ -476,11 +476,11 @@ body {
 }
 
 .ae_results_fgem {
-    width: 75px;
+    width: 76px;
 }
 
 .ae_results_raw {
-    width: 45px;
+    width: 42px;
 }
 
 .tr_main_active {

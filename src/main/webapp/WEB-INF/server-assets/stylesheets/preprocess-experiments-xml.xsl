@@ -33,9 +33,9 @@
             <samples>
                 <xsl:value-of select="substring-before(substring-after(description[contains(.,'(Generated description)')],'using '),' samples')"/>
             </samples>
-            <hybs>
+            <assays>
                 <xsl:value-of select="substring-before( substring-after(description[contains(.,'(Generated description)')], 'with '),' hybridizations')"/>
-            </hybs>
+            </assays>
             <files>
                 <xsl:if test="helper:isFileAvailableForDownload(concat(@accession,'.processed.zip'))">
                     <fgem>

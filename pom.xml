@@ -17,7 +17,7 @@
     <!-- default values for repository related properties -->
     <properties>
         <interface.application.log.default.priority>INFO</interface.application.log.default.priority>
-        <interface.application.log.appender.ref>ROLLINGFILEPROD</interface.application.log.appender.ref>
+        <interface.application.log.appender.ref>ROLLINGFILE</interface.application.log.appender.ref>
     </properties>
     <profiles>
         <profile>
@@ -34,9 +34,6 @@
         </profile>
         <profile>
             <id>curators</id>
-            <properties>
-                <interface.application.log.appender.ref>ROLLINGFILECUR</interface.application.log.appender.ref>
-            </properties>
         </profile>
         <profile>
             <id>local</id>

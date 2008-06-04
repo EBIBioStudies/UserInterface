@@ -39,9 +39,9 @@ function
 updateAerStats( xml ) {
     var ae_repxml = $( $(xml).find("experiments")[0] );
     var etotal = ae_repxml.attr("total");
-    var htotal = ae_repxml.attr("total-hybs");
+    var htotal = ae_repxml.attr("total-assays");
     if ( etotal != undefined && etotal > 0 ) {
-        var aer_avail_info = etotal + " experiments, " + htotal + " hybridizations available";
+        var aer_avail_info = etotal + " experiments, " + htotal + " assays available";
         $("#aer_avail_info").text(aer_avail_info);
     }
 }

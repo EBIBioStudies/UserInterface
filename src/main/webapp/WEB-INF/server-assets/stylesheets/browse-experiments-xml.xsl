@@ -41,7 +41,7 @@
 
         <experiments from="{$vFrom}" to="{$vTo}" total="{$vTotal}"
                      total-samples="{sum($vFilteredExperiments[samples/text()>0]/samples/text())}"
-                     total-hybs="{sum($vFilteredExperiments[hybs/text()>0]/hybs/text())}">
+                     total-assays="{sum($vFilteredExperiments[assays/text()>0]/assays/text())}">
             <xsl:call-template name="ae-sort-experiments">
                 <xsl:with-param name="pExperiments" select="$vFilteredExperiments"/>
                 <xsl:with-param name="pFrom" select="$vFrom"/>

@@ -6,7 +6,7 @@
     <xsl:template match="/experiments">
         <experiments total="{@total}"
                      total-samples="{sum(experiment[samples/text()>0]/samples/text())}"
-                     total-hybs="{sum(experiment[hybs/text()>0]/hybs/text())}"/>
+                     total-assays="{sum(experiment[assays/text()>0]/assays/text())}"/>
     </xsl:template>
 
 </xsl:stylesheet>

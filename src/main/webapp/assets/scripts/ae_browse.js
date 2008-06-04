@@ -99,14 +99,14 @@ onExperimentQuery( tableHtml )
 
     // get stats from the first row
     var total = $("#ae_results_total").text();
-    var totalHybs = $("#ae_results_total_hybs").text();
+    var totalAssays = $("#ae_results_total_assays").text();
     var from = $("#ae_results_from").text();
     var to = $("#ae_results_to").text();
     var curpage = $("#ae_results_page").text();
     var pagesize = $("#ae_results_pagesize").text();
 
 
-    $("#ae_results_status").html( total + " experiments, " + totalHybs + " hybridizations. Displaying experiments " + from + " to " + to + "." );
+    $("#ae_results_status").html( total + " experiments, " + totalAssays + " assays. Displaying experiments " + from + " to " + to + "." );
 
     var totalPages = total > 0 ? Math.floor( total / pagesize ) + 1 : 0;
     var pagesAround = 10;
@@ -163,8 +163,6 @@ initControls()
         addHtmlToSelect("ae_array", data);
         $("#ae_array").removeAttr("disabled").val(query.array);
     });
-
-    $("#ae_arrays").html("<option value=1>Any array</option><optgroup label=1><option name=2>2</option></optgroup>");
 
     if ( "" != query.sortby ) {
         var thElt = $("#ae_results_header_" + query.sortby);

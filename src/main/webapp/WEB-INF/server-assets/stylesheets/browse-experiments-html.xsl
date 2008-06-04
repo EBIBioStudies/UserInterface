@@ -31,7 +31,7 @@
         <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
         <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments[samples/text()>0]/samples/text())"/>
-        <xsl:variable name="vTotalHybs" select="sum($vFilteredExperiments[hybs/text()>0]/hybs/text())"/>
+        <xsl:variable name="vTotalAssays" select="sum($vFilteredExperiments[assays/text()>0]/assays/text())"/>
 
         <xsl:variable name="vFrom">
             <xsl:choose>
@@ -56,7 +56,7 @@
             <td colspan="8">
                 <div id="ae_results_total"><xsl:value-of select="$vTotal"/></div>
                 <div id="ae_results_total_samples"><xsl:value-of select="$vTotalSamples"/></div>
-                <div id="ae_results_total_hybs"><xsl:value-of select="$vTotalHybs"/></div>
+                <div id="ae_results_total_assays"><xsl:value-of select="$vTotalAssays"/></div>
                 <div id="ae_results_from"><xsl:value-of select="$vFrom"/></div>
                 <div id="ae_results_to"><xsl:value-of select="$vTo"/></div>
                 <div id="ae_results_page"><xsl:value-of select="$page"/></div>
@@ -98,7 +98,7 @@
                 <td><div><xsl:apply-templates select="accession" mode="highlight" /></div></td>
                 <td><div><xsl:apply-templates select="name" mode="highlight" /></div></td>
                 <td class="align_right">
-                    <div><xsl:apply-templates select="hybs" mode="highlight" /></div>
+                    <div><xsl:apply-templates select="assays" mode="highlight" /></div>
                 </td>
                 <td><div>
                     <xsl:for-each select="species">

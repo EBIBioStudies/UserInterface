@@ -27,9 +27,9 @@
                     <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:when>
-            <xsl:when test="$pSortBy='hybs'">
+            <xsl:when test="$pSortBy='assays'">
                 <xsl:apply-templates select="$pExperiments">
-                    <xsl:sort select="hybs" order="{$pSortOrder}" data-type="number"/>
+                    <xsl:sort select="assays" order="{$pSortOrder}" data-type="number"/>
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
                     <xsl:with-param name="pDetailedViewMainClass" select="$pDetailedViewMainClass"/>
