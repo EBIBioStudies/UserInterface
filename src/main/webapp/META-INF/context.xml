@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context allowLinking="false" cookies="false" swallowOutput="true">
+<Context allowLinking="false" cookies="false" swallowOutput="false">
     <Resource
         name="jdbc/aepub1"
         type="javax.sql.DataSource"
-        url="jdbc:oracle:thin:@expression.ebi.ac.uk:1521:AEPUB1"
+        url="jdbc:oracle:thin:@otto.ebi.ac.uk:1521:AEPUB1"
         username="aequery"
         password="aeq007tt"
         driverClassName="oracle.jdbc.OracleDriver"

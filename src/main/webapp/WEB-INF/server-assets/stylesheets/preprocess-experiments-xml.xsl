@@ -49,8 +49,17 @@
                     <svg name="{concat(@accession,'.biosamples.svg')}"/>
                 </biosamples>
             </files>
+            <xsl:apply-templates select="sampleattribute" mode="copy">
+                <xsl:sort select="@category" order="ascending"/>
+                <xsl:sort select="normalize-space(@value)" order="ascending"/>
+            </xsl:apply-templates>
 
-            <xsl:apply-templates mode="copy" />
+            <xsl:apply-templates select="experimentalfactor" mode="copy">
+                <xsl:sort select="@name" order="ascending"/>
+                <xsl:sort select="normalize-space(@value)" order="ascending"/>
+            </xsl:apply-templates>
+
+            <xsl:apply-templates select="*[name()!='sampleattribute' and name()!='experimentalfactor']" mode="copy" />
         </experiment>
     </xsl:template>
 

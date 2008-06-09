@@ -97,8 +97,7 @@
         <xsl:variable name="vExpId" select="id"/>
         <xsl:if test="position() &gt;= $pFrom and position() &lt;= $pTo">
             <tr id="{$vExpId}_main" class="{$pDetailedViewMainClass}">
-                <td><div class="table_row_expand">&#160;<!--<a href="result?queryFor=Experiment&amp;eAccession={$vExpId}"
-                            target="_blank" title="Opens in a new window">&#187; AE</a>--></div></td>
+                <td><div class="table_row_expand">&#160;</div></td>
                 <td><div><xsl:apply-templates select="accession" mode="highlight" /></div></td>
                 <td><div><xsl:apply-templates select="name" mode="highlight" /></div></td>
                 <td class="align_right">
@@ -132,10 +131,12 @@
             <tr id="{$vExpId}_ext" class="ae_results_tr_ext" style="{$pDetailedViewExtStyle}">
                 <td colspan="8">
                     <dl>
-                        <dt>Title:</dt>
-                        <dd>
-                            <xsl:apply-templates select="name" mode="highlight" />
-                        </dd>
+                        <xsl:if test="name">
+                            <dt>Title:</dt>
+                            <dd>
+                                <xsl:apply-templates select="name" mode="highlight" />
+                            </dd>
+                        </xsl:if>
 
                         <xsl:if test="count(secondaryaccession/text())&gt;0">
                             <dt>Secondary&#160;accession<xsl:if test="count(secondaryaccession/text())&gt;1">s</xsl:if>:</dt>
@@ -281,8 +282,8 @@
                                     <dt class="title">Factor name</dt>
                                     <dd class="title">Factor value</dd>
                                     <xsl:for-each select="experimentalfactor">
-                                        <dt><xsl:apply-templates select="name" mode="highlight"/>&#160;</dt>
-                                        <dd><xsl:apply-templates select="value" mode="highlight"/>&#160;</dd>
+                                        <dt><xsl:apply-templates select="name" mode="highlight"/></dt>
+                                        <dd><xsl:apply-templates select="value" mode="highlight"/></dd>
                                     </xsl:for-each>
                                 </dl>
                             </dd>
@@ -295,8 +296,8 @@
                                     <dt class="title">Attribute name</dt>
                                     <dd class="title">Attribute value</dd>
                                     <xsl:for-each select="sampleattribute">
-                                        <dt><xsl:apply-templates select="category" mode="highlight"/>&#160;</dt>
-                                        <dd><xsl:apply-templates select="value" mode="highlight"/>&#160;</dd>
+                                        <dt><xsl:apply-templates select="category" mode="highlight"/></dt>
+                                        <dd><xsl:apply-templates select="value" mode="highlight"/></dd>
                                     </xsl:for-each>
                                 </dl>
                             </dd>
@@ -369,10 +370,16 @@
     </xsl:template>
 
     <xsl:template match="*" mode="highlight">
-        <xsl:variable name="markedtext" select="helper:markKeywords(text(),$keywords,$wholewords)"/>
-        <xsl:call-template name="add_highlight_element">
-            <xsl:with-param name="text" select="$markedtext"/>
-        </xsl:call-template>
+        <xsl:variable name="vText" select="normalize-space(text())"/>
+        <xsl:choose>
+            <xsl:when test="string-length($vText)!=0">
+                <xsl:variable name="markedtext" select="helper:markKeywords($vText,$keywords,$wholewords)"/>
+                <xsl:call-template name="add_highlight_element">
+                    <xsl:with-param name="text" select="$markedtext"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>&#160;</xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
 

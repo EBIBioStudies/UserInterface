@@ -40,7 +40,8 @@ public class ControlServlet extends HttpServlet {
             if ( 0 == params.length() ) {
                 params = "aepub1";
             }
-            Application.Experiments().reloadExperiments( params, true );
+            boolean onlyPublic = Application.Preferences().get("ae.experiments.publiconly").toString().toLowerCase().equals("true");
+            Application.Experiments().reloadExperiments( params, onlyPublic );
         } else if ( command.equals("rescan-files") ) {
             if ( 0 < params.length() ) {
                 Application.FilesDirectory().setRootFolder(params);
