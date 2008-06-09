@@ -7,11 +7,6 @@ import org.apache.commons.logging.Log;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.stream.StreamSource;
 import javax.sql.DataSource;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -48,17 +43,6 @@ public class Experiments {
     public Experiments()
     {
         experimentsXmlCacheLocation = getCachedXmlLocation();
-        
-        try {
-            xmlDocumentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-
-        } catch ( ParserConfigurationException x ) {
-            if (log.isDebugEnabled()) {
-                log.debug( "Caught an exception:", x );
-            } else {
-                log.error("Caught ParserConfigurationException while creating new Document Builder(), message: " + x.getMessage() );
-            }
-        }
     }
 
     public Document getExperiments()
@@ -190,7 +174,8 @@ public class Experiments {
 
             try {
                 //parse using builder to get DOM representation of the XML file
-                doc = xmlDocumentBuilder.parse( experimentsXmlCacheLocation.getFile() );
+                DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                doc = docBuilder.parse( experimentsXmlCacheLocation.getFile() );
 
                 if ( null != doc ) {
                     String docVer = doc.getDocumentElement().getAttribute("version");
@@ -350,7 +335,8 @@ public class Experiments {
         Document doc = null;
 
             try {
-                doc = xmlDocumentBuilder.newDocument();
+                DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                 doc = docBuilder.newDocument();
 
                 Element expElement = doc.createElement("experiments");
                 expElement.setAttribute( "total", "0" );
@@ -391,8 +377,6 @@ public class Experiments {
 
     // url that represents the location of xml file (for persistence)
     private URL experimentsXmlCacheLocation = null;
-
-    private DocumentBuilder xmlDocumentBuilder = null;
 
     // the document that contains the basis for all experiments
     private Document experimentsDoc = null;
