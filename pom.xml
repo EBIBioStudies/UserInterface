@@ -18,6 +18,16 @@
     <properties>
         <interface.application.log.default.priority>INFO</interface.application.log.default.priority>
         <interface.application.log.appender.ref>ROLLINGFILE</interface.application.log.appender.ref>
+
+        <interface.application.link.aer_old.base.url>/microarray-as/aer</interface.application.link.aer_old.base.url>
+        <interface.application.link.aew.base.url>/microarray-as/aew</interface.application.link.aew.base.url>
+        <interface.application.link.solr_gene_stats.url>/microarray-as/solr_gene/admin/stats.jsp</interface.application.link.solr_gene_stats.url>
+        <interface.application.link.solr_exp_stats.url>/microarray-as/solr_exp/admin/stats.jsp</interface.application.link.solr_exp_stats.url>
+
+        <interface.application.link.news_xml.url>/microarray-srv/ae/ae-main-news.xml</interface.application.link.news_xml.url>
+        <interface.application.link.links_xml.url>/microarray-srv/ae/ae-main-links.xml</interface.application.link.links_xml.url>
+
+        <interface.application.pref.experiments.publiconly>true</interface.application.pref.experiments.publiconly>
     </properties>
     <profiles>
         <profile>
@@ -34,6 +44,18 @@
         </profile>
         <profile>
             <id>curators</id>
+            <properties>
+                <interface.application.link.aer_old.base.url>/arrayexpress</interface.application.link.aer_old.base.url>
+                <interface.application.link.aew.base.url>/arrayexpress-aew</interface.application.link.aew.base.url>
+
+                <interface.application.link.solr_gene_stats.url>/solr_gene/admin/stats.jsp</interface.application.link.solr_gene_stats.url>
+                <interface.application.link.solr_exp_stats.url>/solr_exp/admin/stats.jsp</interface.application.link.solr_exp_stats.url>
+                <interface.application.link.news_xml.url>test/ae_news.xml</interface.application.link.news_xml.url>
+                <interface.application.link.links_xml.url>test/ae_links.xml</interface.application.link.links_xml.url>
+
+
+                <interface.application.pref.experiments.publiconly>false</interface.application.pref.experiments.publiconly>
+            </properties>
         </profile>
         <profile>
             <id>local</id>
@@ -90,8 +112,10 @@
                             <directory>${basedir}/src/main/webapp</directory>
                             <includes>
                                 <include>*.html</include>
+                                <include>assets/scripts/ae_*.js</include>
                                 <include>WEB-INF/web.xml</include>
                                 <include>WEB-INF/urlrewrite.xml</include>
+                                <include>WEB-INF/server-assets/stylesheets/*.xsl</include>
                             </includes>
                             <filtering>true</filtering>
                         </resource>

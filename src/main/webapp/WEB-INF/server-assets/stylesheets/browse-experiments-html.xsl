@@ -113,7 +113,7 @@
                 <td class="align_center">
                     <div>
                         <xsl:choose>
-                            <xsl:when test="helper:isFileAvailableForDownload(files/fgem/@name)"><a href="{helper:getFileDownloadUrl(files/fgem/@name)}" title="Processed data ({files/fgem/@count})"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Processed data ({files/fgem/@count})"/></a></xsl:when>
+                            <xsl:when test="helper:isFileAvailableForDownload(files/fgem/@name)"><a href="{concat('${interface.application.link.aer_old.base.url}/download/mageml/',files/fgem/@name)}" title="Click to download processed data"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Click to download processed data"/></a></xsl:when>
                             <xsl:otherwise><img src="assets/images/silk_data_unavail.gif" width="16" height="16"/></xsl:otherwise>
                         </xsl:choose>
                     </div>
@@ -121,8 +121,8 @@
                 <td class="align_center">
                     <div>
                         <xsl:choose>
-                            <xsl:when test="helper:isFileAvailableForDownload(files/raw/@name) and files/raw/@celcount>0"><a href="{helper:getFileDownloadUrl(files/raw/@name)}" title="Affy data ({files/raw/@count})"><img src="assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Affy data ({files/raw/@count})"/></a></xsl:when>
-                            <xsl:when test="helper:isFileAvailableForDownload(files/raw/@name) and files/raw/@celcount=0"><a href="{helper:getFileDownloadUrl(files/raw/@name)}" title="Raw data ({files/raw/@count})"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Raw data ({files/raw/@count})"/></a></xsl:when>
+                            <xsl:when test="helper:isFileAvailableForDownload(files/raw/@name) and files/raw/@celcount>0"><a href="{concat('${interface.application.link.aer_old.base.url}/download/mageml/',files/raw/@name)}" title="Click to download Affymetrix data"><img src="assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Click to download Affymetrix data"/></a></xsl:when>
+                            <xsl:when test="helper:isFileAvailableForDownload(files/raw/@name) and files/raw/@celcount=0"><a href="{concat('${interface.application.link.aer_old.base.url}/download/mageml/',files/raw/@name)}" title="Click to download raw data"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Click to download raw data"/></a></xsl:when>
                             <xsl:otherwise><img src="assets/images/silk_data_unavail.gif" width="16" height="16"/></xsl:otherwise>
                         </xsl:choose>
                     </div>
@@ -149,7 +149,7 @@
                                                target="_blank" title="Opens in a new window">&#187; GEO <xsl:apply-templates select="." mode="highlight" /></a>
                                         </xsl:when>
                                         <xsl:when test="substring(text(), 1, 2)='E-' and substring(text(), 7, 1)='-'">
-                                            <a href="/microarray-as/aer/result?queryFor=Experiment&amp;eAccession={text()}"
+                                            <a href="${interface.application.link.aer_old.base.url}/result?queryFor=Experiment&amp;eAccession={text()}"
                                                target="_blank" title="Opens in a new window">&#187; <xsl:apply-templates select="." mode="highlight" /></a>
                                         </xsl:when>
                                         <xsl:otherwise>
@@ -177,7 +177,7 @@
                         <dd>
                             <xsl:choose>
                                 <xsl:when test="helper:isFileAvailableForDownload(files/twocolumns/@name)">
-                                    <a href="{helper:getFileDownloadUrl(files/twocolumns/@name)}"
+                                    <a href="{concat('${interface.application.link.aer_old.base.url}/download/mageml/',files/twocolumns/@name)}"
                                         target="_blank" title="Opens in a new window">&#187; Tab-delimited spreadsheet</a>
                                 </xsl:when>
                                 <xsl:otherwise>Data is not yet available</xsl:otherwise>
@@ -190,7 +190,7 @@
                                 <div id="{$vExpId}_array">
                                     <xsl:for-each select="arraydesign">
                                         <xsl:apply-templates select="name" mode="highlight" />
-                                        (<a href="/microarray-as/aer/result?queryFor=PhysicalArrayDesign&amp;aAccession={accession/text()}"
+                                        (<a href="${interface.application.link.aer_old.base.url}/result?queryFor=PhysicalArrayDesign&amp;aAccession={accession/text()}"
                                             target="_blank" title="Opens in a new window">&#187; <xsl:apply-templates select="accession" mode="highlight" />
                                         </a>)<xsl:if test="position()!=last()">, </xsl:if>
                                     </xsl:for-each>
@@ -204,7 +204,7 @@
                                    target="_blank" title="Opens in a new window">&#187; FTP server direct link...</a>
                             </p>
                             <xsl:if test="accession!='E-TABM-185'">
-                                <a href="/microarray-as/aer/dataselection?expid={$vExpId}"
+                                <a href="${interface.application.link.aer_old.base.url}/dataselection?expid={$vExpId}"
                                    target="_blank" title="Opens in a new window">&#187; View detailed data retrieval page...</a>
                             </xsl:if>
                         </dd>
@@ -212,12 +212,12 @@
                         <xsl:if test="accession!='E-TABM-185'">
                             <dt>Experiment&#160;design:</dt>
                             <dd><xsl:if test="helper:isFileAvailableForDownload(files/biosamples/png/@name)">
-                                    <a href="{helper:getFileDownloadUrl(files/biosamples/png/@name)}"
+                                    <a href="{concat('${interface.application.link.aer_old.base.url}/download/mageml/',files/biosamples/png/@name)}"
                                        target="_blank" title="Opens in a new window">&#187; PNG</a>
                                     <xsl:if test="helper:isFileAvailableForDownload(files/biosamples/svg/@name)">, </xsl:if>
                                 </xsl:if>
                                 <xsl:if test="helper:isFileAvailableForDownload(files/biosamples/svg/@name)">
-                                    <a href="{helper:getFileDownloadUrl(files/biosamples/svg/@name)}"
+                                    <a href="{concat('${interface.application.link.aer_old.base.url}/download/mageml/',files/biosamples/svg/@name)}"
                                        target="_blank" title="Opens in a new window">&#187; SVG</a>
                                 </xsl:if>
                                 <xsl:if test="not (helper:isFileAvailableForDownload(files/biosamples/png/@name) or helper:isFileAvailableForDownload(files/biosamples/svg/@name))">Data is not yet available</xsl:if>
@@ -226,7 +226,7 @@
 
                         <dt>Protocols:</dt>
                         <dd>
-                            <a href="/microarray-as/aer/details?class=MAGE.Experiment_protocols&amp;criteria=Experiment%3D{$vExpId}&amp;contextClass=MAGE.Protocol&amp;templateName=Protocol.vm"
+                            <a href="${interface.application.link.aer_old.base.url}/details?class=MAGE.Experiment_protocols&amp;criteria=Experiment%3D{$vExpId}&amp;contextClass=MAGE.Protocol&amp;templateName=Protocol.vm"
                                target="_blank" title="Opens in a new window">&#187; Experimental protocols</a>
                         </dd>
 
@@ -241,7 +241,7 @@
                         <dd>
                             <xsl:choose>
                                 <xsl:when test="helper:isFileAvailableForDownload(files/sdrf/@name)">
-                                    <a href="{helper:getFileDownloadUrl(files/sdrf/@name)}"
+                                    <a href="{concat('${interface.application.link.aer_old.base.url}/download/mageml/',files/sdrf/@name)}"
                                         target="_blank" title="Opens in a new window">&#187; Tab-delimited spreadsheet</a>
                                 </xsl:when>
                                 <xsl:otherwise>Data is not yet available</xsl:otherwise>

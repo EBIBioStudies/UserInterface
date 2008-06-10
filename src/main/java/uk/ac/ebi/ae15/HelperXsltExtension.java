@@ -78,11 +78,6 @@ public abstract class HelperXsltExtension {
         return Application.FilesDirectory().doesExist(fileName);
     }
 
-    public static String getFileDownloadUrl( String fileName )
-    {
-        return "/microarray-as/aer/download/mageml/" + fileName;
-    }
-
     //TODO: refactor this
     //public static boolean testRegexp( NodeList nl, String pattern, String flags )
     //{

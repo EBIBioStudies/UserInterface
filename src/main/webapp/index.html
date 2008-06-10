@@ -72,15 +72,15 @@
                                     <input id="aer_query_submit" type="submit" value="Query">
                                 </form>
                                 <div id="aer_browse_link"><a href="browse.html">&#187; Browse experiments</a></div>
-                                <div id="aer_adv_query_link"><a href="/microarray-as/aer/entry">&#187; Advanced query interface</a></div>
-                                <div id="aer_login_link"><a href="/microarray-as/aer/login">&#187; Submitter/reviewer login</a></div>
+                                <div id="aer_adv_query_link"><a href="${interface.application.link.aer_old.base.url}/entry">&#187; Advanced query interface</a></div>
+                                <div id="aer_login_link"><a href="${interface.application.link.aer_old.base.url}/login">&#187; Submitter/reviewer login</a></div>
                             </div></div></div></div></div></div></div></div></div>
                         </div>
                         <div class="ae_right_box">
                             <div class="box_top"><div class="box_bottom"><div class="box_left"><div class="box_right"><div class="box_bottom_left"><div class="box_bottom_right"><div class="box_top_left"><div class="box_top_right"><div class="box_inner">
                                 <div class="ae_box_title">Expression Profiles</div>
                                 <div id="aew_avail_info">Retrieving data, please wait...</div>
-                                <form method="get" action="/microarray-as/aew/DW">
+                                <form method="get" action="${interface.application.link.aew.base.url}/DW">
                                     <label for="aew_query_field">Gene(s):</label>
                                     <input id="aew_query_field" name="gene_query">
                                     <label for="aew_species_field">Species:</label>
@@ -101,7 +101,7 @@
                                     <input type="hidden" name="queryFor" value="gene">
                                     <input id="aew_query_submit" type="submit" value="Query">
                                 </form>
-                                <div id="aew_browse_link"><a href="/microarray-as/aew">&#187; Advanced query interface</a></div>                                
+                                <div id="aew_browse_link"><a href="${interface.application.link.aew.base.url}">&#187; Advanced query interface</a></div>                                
                             </div></div></div></div></div></div></div></div></div>
                         </div>
                     </div>
