@@ -5,20 +5,11 @@
      style="position: relative; width:100%; height: 100%">
     <ul style="margin-top: 5px; margin-bottom: 0px">
         <li>
-            <em>21 Apr 2008</em>
+            <em>10 Jun 2008</em>
             -
-            <strong><span style="color:red;font-weight:bold;font-style:italic">New</span> Delays In Data Release</strong>
+            <strong><span style="color:red;font-weight:bold;font-style:italic">New</span> ArrayExpress 1.1 Beta</strong>
             <br/>
-            Due to essential maintenance, ArrayExpress will not release any new data during the period <strong>27 April and 4 May 2008</strong>. Accession numbers will be assigned at the point of submission, but there will be delays in loading data submissions during this period and reviewer logins will not be provided until loading is complete. Sorry for any inconvenience caused.
+            A new beta of ArrayExpress Browse interface has been deployed for ArrayExpress Production team and is available for immediate testing.
         </li>
-        <!--
-        <li>
-            <em>10 Mar 2008</em>
-            -
-            <strong>MSc Project Proposals</strong>
-            <br/>
-            Two MSc projects are available in our group. For further details, please see this <a href="/microarray/General/Positions/student.html" class="httplink">page</a>.
-        </li>
-        -->
     </ul>
 </div>

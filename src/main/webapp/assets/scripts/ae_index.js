@@ -16,7 +16,7 @@ $(document).ready( function() {
     // gets aew stats and updates the page
     Deferred.parallel([
         $.get("${interface.application.link.solr_gene_stats.url}").next(getNumDocsFromSolrStats),
-        $.get("${interface.application.link.solr_gene_stats.url}").next(getNumDocsFromSolrStats)
+        $.get("${interface.application.link.solr_exp_stats.url}").next(getNumDocsFromSolrStats)
     ]).next( function (values) {
         var aew_avail_info = values[1] + " experiments, " + values[0] + " genes available";
         $("#aew_avail_info").text(aew_avail_info);
@@ -26,7 +26,7 @@ $(document).ready( function() {
     $("#ae_news").load("${interface.application.link.news_xml.url} div ul");
 
     // loads links page
-    $("#ae_links").load("${interface.application.link.news_xml.url} div ul");
+    $("#ae_links").load("${interface.application.link.links_xml.url} div ul");
     $("#ae_news_links_area").show();
 });
 
