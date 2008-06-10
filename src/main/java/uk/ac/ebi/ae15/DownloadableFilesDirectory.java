@@ -1,6 +1,7 @@
 package uk.ac.ebi.ae15;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -13,11 +14,11 @@ import java.io.File;
 public class DownloadableFilesDirectory {
 
     // logging facility
-    private static final Log log = org.apache.commons.logging.LogFactory.getLog(DownloadableFilesDirectory.class);
+    private static final Log log = LogFactory.getLog(DownloadableFilesDirectory.class);
 
     public DownloadableFilesDirectory()
     {
-        filesMap = new HashMap<String,String>();
+        filesMap = new TextFilePersistence<PersistableFilesMap>(new PersistableFilesMap(), new File("/tmp/AbCdEfGh"));
     }
 
     public synchronized void setRootFolder( String folder )
@@ -47,7 +48,7 @@ public class DownloadableFilesDirectory {
             } else {
                 try {
                     log.info("Rescan of downloadable files from [" + rootFolder + "] requested");
-                    Map<String,String> newMap = new HashMap<String,String>();
+                    PersistableFilesMap newMap = new PersistableFilesMap();
                     rescanFolder( root, newMap );
                     setFilesMap(newMap);
                     result = true;
@@ -67,19 +68,19 @@ public class DownloadableFilesDirectory {
     // returns true is file is registered in the registry
     public synchronized boolean doesExist( String fileName )
     {
-        return filesMap.containsKey(fileName);
+        return filesMap.getObject().containsKey(fileName);
     }
 
     // returns absolute file location (if file exists, null otherwise) in local filesystem
     public synchronized String getLocation( String fileName )
     {
-        return filesMap.get(fileName);
+        return filesMap.getObject().get(fileName);
     }
 
     // returns relative file location (to the root folder) if file exists, null otherwise)
     public synchronized String getRelativeLocation( String fileName )
     {
-        String location = filesMap.get(fileName);
+        String location = filesMap.getObject().get(fileName);
         if ( null != location ) {
             int ix = location.indexOf(rootFolder);
             if ( -1 != ix ) {
@@ -126,19 +127,56 @@ public class DownloadableFilesDirectory {
         }
     }
 
-
-
-
-
-
-    private synchronized void setFilesMap( Map<String,String> newMap )
+    private synchronized void setFilesMap( PersistableFilesMap newMap )
     {
-        filesMap = newMap;
+        filesMap.setObject(newMap);
     }
 
     // root folder location (in local file system terms)
     private String rootFolder;
 
     // filename->location map
-    private Map<String,String> filesMap;
+    private TextFilePersistence<PersistableFilesMap> filesMap;
+}
+
+
+class PersistableFilesMap extends HashMap<String,String> implements StringPersistable
+{
+    public String toPersistence()
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for ( Map.Entry<String, String> entry : this.entrySet() )
+            {
+            sb.append( entry.getKey() ).append('\t').append( entry.getValue() ).append('\n');    
+            }
+
+        return sb.toString();
+    }
+
+    public void fromPersisence( String str )
+    {
+        this.clear();
+
+        int beginIndex = 0;
+        int eolIndex = str.indexOf( EOL, beginIndex );
+        while ( -1 != eolIndex && eolIndex < str.length() ) {
+            String line = str.substring( beginIndex, eolIndex );
+            int tabIndex = line.indexOf('\t');
+            if ( -1 != tabIndex ) {
+                this.put( line.substring( 0, tabIndex ), line.substring( tabIndex + 1 ) );
+            } else {
+                log.warn("No TAB found while parsing persistence string, line from [" + beginIndex + "] to [" + eolIndex + "]");
+            }
+            beginIndex = eolIndex + 1;
+            eolIndex = str.indexOf( EOL, beginIndex );
+        }
+    }
+
+    public boolean isEmpty()
+    {
+        return ( 0 == this.size() );
+    }
+
+    private final Log log = LogFactory.getLog(PersistableFilesMap.class);
 }
