@@ -1,6 +1,7 @@
 package uk.ac.ebi.ae15;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 
 import javax.xml.transform.*;
@@ -13,18 +14,31 @@ import java.util.Map;
 
 public class XsltHelper {
     // logging macinery
-    private static final Log log = org.apache.commons.logging.LogFactory.getLog(XsltHelper.class);
+    private static final Log log = LogFactory.getLog(XsltHelper.class);
 
     public synchronized static boolean transformDocumentToFile( Document srcDocument, String stylesheet, Map<String,String[]> params, File dstFile )
     {
         try {
             return transform( new DOMSource(srcDocument), stylesheet, params, new StreamResult( new FileOutputStream(dstFile) ));
         } catch ( Throwable x ) {
-            log.debug( "Caught an exceptiom:", x );
-            //TODO: error logging
+            log.error( "Caught an exceptiom:", x );
         }
 
         return false;
+    }
+
+    public synchronized static String transformDocumentToString( Document srcDocument, String stylesheet, Map<String,String[]> params )
+    {
+        try {
+            StringWriter sw = new StringWriter();
+            if ( transform( new DOMSource(srcDocument), stylesheet, params, new StreamResult( sw ) ) ) {
+                return sw.toString();
+            }
+        } catch ( Throwable x ) {
+            log.error( "Caught an exceptiom:", x );
+        }
+
+        return null;
     }
 
     public synchronized static Document transformStringToDocument( String srcXmlString, String stylesheet, Map<String,String[]> params )
@@ -38,7 +52,7 @@ public class XsltHelper {
                 }
             }
         } catch ( Throwable x ) {
-            log.debug( "Caught an exception:", x );
+            log.error( "Caught an exception:", x );
         }
         return null;
     }
@@ -81,8 +95,7 @@ public class XsltHelper {
 
             result = true;
         } catch ( Throwable x ) {
-            log.debug( "Caught an exception:", x );
-            log.error( "There was an [" + x.getClass().getName() + "] transforming with [" + stylesheet + "]: " + x.getMessage() );
+            log.error( "Caught an exception transforming [" + stylesheet + "]:", x );
         }
         return result;
     }
@@ -112,7 +125,7 @@ class AppURIResolver implements URIResolver {
                     Application.Instance().ServletContext().getResource( "/WEB-INF/server-assets/stylesheets/" + href ).openStream()
             );
         } catch ( Exception x ) {
-            log.debug( "Caught an exception:", x );
+            log.error( "Caught an exception:", x );
             throw new TransformerException(x.getMessage());
         }
 

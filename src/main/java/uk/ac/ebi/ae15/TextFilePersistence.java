@@ -5,7 +5,7 @@ import org.apache.commons.logging.LogFactory;
 
 import java.io.*;
 
-public class TextFilePersistence< Object extends PersistableInString>
+public class TextFilePersistence< Object extends PersistableInString >
 {
 
     protected TextFilePersistence()
@@ -47,6 +47,8 @@ public class TextFilePersistence< Object extends PersistableInString>
 
     private String load()
     {
+        log.debug( "Retrieving persistable object [" + object.getClass().toString() + "] from [" + persistenceFile.getName() + "]" );
+
         StringBuilder result = new StringBuilder();
         try {
             if ( persistenceFile.exists() ) {
@@ -60,6 +62,9 @@ public class TextFilePersistence< Object extends PersistableInString>
                         break;
                     }
                 }
+                log.debug("Object successfully retrieved");
+            } else {
+                log.debug("Persistence file not found");
             }
         } catch ( Throwable x ) {
             log.error( "Caught an exception:", x );
@@ -69,10 +74,13 @@ public class TextFilePersistence< Object extends PersistableInString>
 
     private void save( String objectString )
     {
+        log.debug( "Saving persistable object [" + object.getClass().toString() + "] to [" + persistenceFile.getName() + "]" );
         try {
             BufferedWriter w = new BufferedWriter( new FileWriter(persistenceFile) );
             w.write(objectString);
             w.close();
+            log.debug("Object successfully saved");
+
         } catch ( Throwable x ) {
             log.error( "Caught an exception:", x );
         }

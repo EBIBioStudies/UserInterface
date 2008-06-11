@@ -35,14 +35,25 @@ public class Experiments {
             " order by" +
             "  i.identifier asc";
 
-    private static int numOfParallelConnections = 25;
-    private static int initialXmlStringBufferSize = 20000000;  // 20 Mb
+    private final static int numOfParallelConnections = 25;
+    private final static int initialXmlStringBufferSize = 20000000;  // 20 Mb
 
     private final static String XML_DOCUMENT_VERSION = "1.0.080604.2";
 
     public Experiments()
     {
         experimentsXmlCacheLocation = getCachedXmlLocation();
+
+        species = new TextFilePersistence<PersistableString>(
+                new PersistableString()
+                , new File( System.getProperty("java.io.tmpdir") + File.separator + "ae-species.xml" )
+
+        );
+
+        arrays = new TextFilePersistence<PersistableString>(
+                new PersistableString()
+                , new File( System.getProperty("java.io.tmpdir") + File.separator + "ae-arrays.xml" )
+        );
     }
 
     public Document getExperiments()
@@ -52,47 +63,24 @@ public class Experiments {
                 log.warn("Experiments XML Cache was NOT loaded, possible fresh start up?");
                 experimentsDoc = createExperimentsDocument();
             }
-            //TODO: temp
-            saveSpeciesAndArraysToCache();
             experimentSearch.buildText(experimentsDoc);
 
         }
         return experimentsDoc;
     }
 
-    //TODO: refactor!
-    public String getArrays()
-    {
-        if ( null == arraysString ) {
-            arraysString = loadStringFromCache("ae-arrays.xml");
-        }
-        return arraysString;
-    }
-
-    private static String arraysString = null;
-
     public String getSpecies()
     {
-        if ( null == speciesString ) {
-            speciesString = loadStringFromCache("ae-species.xml");
-        }
-        return speciesString;
+        return species.getObject().get();    
     }
 
-    private static String speciesString = null;
-
-    private String loadStringFromCache( String name )
+    public String getArrays()
     {
-        String result = "";
-        try {
-            BufferedReader r = new BufferedReader( new InputStreamReader( new FileInputStream( System.getProperty("java.io.tmpdir") + File.separator + name )));
-            result = r.readLine();
-        } catch ( Throwable x ) {
-            log.debug( "Caught an exception:", x );
-            //TODO:error loggging
-        }
-        return result;
+        return arrays.getObject().get();
     }
+
+    private TextFilePersistence<PersistableString> species;
+    private TextFilePersistence<PersistableString> arrays;
 
     public ExperimentSearch Search()
     {
@@ -103,7 +91,7 @@ public class Experiments {
     {
         if ( loadExperimentsFromDataSource( dsName, onlyPublic ) ) {
             saveExperimentsToCache();
-            saveSpeciesAndArraysToCache();
+            updateSpeciesAndArrays();
         } else {
             log.error("Unable to reload experiments from [" + dsName + "], check log for messages" );
             experimentsDoc = createExperimentsDocument();            
@@ -159,10 +147,10 @@ public class Experiments {
         }
     }
 
-    private void saveSpeciesAndArraysToCache()
+    private void updateSpeciesAndArrays()
     {
-        XsltHelper.transformDocumentToFile( experimentsDoc, "preprocess-species-html.xsl", null, new File(System.getProperty("java.io.tmpdir") + File.separator + "ae-species.xml") );
-        XsltHelper.transformDocumentToFile( experimentsDoc, "preprocess-arrays-html.xsl", null, new File(System.getProperty("java.io.tmpdir") + File.separator + "ae-arrays.xml") );
+        species.setObject( new PersistableString( XsltHelper.transformDocumentToString( experimentsDoc, "preprocess-species-html.xsl", null ) ) );
+        arrays.setObject( new PersistableString( XsltHelper.transformDocumentToString( experimentsDoc, "preprocess-arrays-html.xsl", null ) ) );
     }
 
     private boolean loadExperimentsFromCache()
