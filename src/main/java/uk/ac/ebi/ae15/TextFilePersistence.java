@@ -5,7 +5,8 @@ import org.apache.commons.logging.LogFactory;
 
 import java.io.*;
 
-public class TextFilePersistence< Object extends StringPersistable > {
+public class TextFilePersistence< Object extends PersistableInString>
+{
 
     protected TextFilePersistence()
     {
@@ -41,7 +42,7 @@ public class TextFilePersistence< Object extends StringPersistable > {
 
     private void loadObject()
     {
-        object.fromPersisence(load());
+        object.fromPersistence(load());
     }
 
     private String load()
@@ -50,7 +51,6 @@ public class TextFilePersistence< Object extends StringPersistable > {
         try {
             if ( persistenceFile.exists() ) {
                 BufferedReader r = new BufferedReader( new InputStreamReader( new FileInputStream(persistenceFile) ) );
-                boolean isEndOfStream = false;
                 while ( r.ready() ) {
                     String str = r.readLine();
                     // null means stream has reached the end
@@ -80,7 +80,6 @@ public class TextFilePersistence< Object extends StringPersistable > {
 
     // logging macinery
     private final Log log = LogFactory.getLog(getClass());
-
 
     // persistence file handle
     private File persistenceFile;

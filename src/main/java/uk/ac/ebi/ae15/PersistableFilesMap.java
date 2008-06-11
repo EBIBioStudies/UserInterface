@@ -6,7 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PersistableFilesMap extends HashMap<String,String> implements StringPersistable
+public class PersistableFilesMap extends HashMap<String,String> implements PersistableInString
 {
     public String toPersistence()
     {
@@ -20,7 +20,7 @@ public class PersistableFilesMap extends HashMap<String,String> implements Strin
         return sb.toString();
     }
 
-    public void fromPersisence( String str )
+    public void fromPersistence( String str )
     {
         this.clear();
 

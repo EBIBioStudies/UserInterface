@@ -8,7 +8,7 @@ import java.sql.*;
 import java.io.IOException;
 import java.io.BufferedReader;
 
-public class ExperimentXmlRetrieverThread extends Thread implements Runnable {
+public class ExperimentXmlRetrieverThread extends Thread {
 
     private final Log log = LogFactory.getLog(getClass());
 
@@ -101,25 +101,24 @@ public class ExperimentXmlRetrieverThread extends Thread implements Runnable {
                             result = ClobToString(xmlClob);
                         }
                         rs.close();
-                    } catch ( SQLException x) {
-                        log.error( "GetExperimentXmlThread.run SQLException: " + x.getMessage() );
+                    } catch ( Throwable x ) {
+                        log.error( "Caught an exception:", x );
                         result = null;
                         isFaulty = true;
                     }
                     setDone(true);
                 }
             }
-        }
-        catch(Exception x) {
-            log.error( "GetExperimentXmlThread.run Exception: " + x.getMessage() );
+        } catch ( Throwable x ) {
+            log.error( "Caught an exception: ", x );
             isFaulty = true;
         }
 
         if ( null != conn ) {
             try {
                 conn.close();
-            } catch (SQLException x) {
-                log.error( "GetExperimentXmlThread.run (conn.close) SQLException: " + x.getMessage() );
+            } catch ( Throwable x ) {
+                log.error( "Caught an exception:", x );
                 isFaulty = true;
             }
         }
