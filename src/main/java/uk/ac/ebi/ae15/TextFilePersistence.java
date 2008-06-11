@@ -26,7 +26,7 @@ public class TextFilePersistence< Object extends StringPersistable > {
     public Object getObject()
     {
         if ( null != object ) {
-            if ( object.isEmpty() ) {
+            if ( object.shouldLoadFromPersistence() ) {
                 loadObject();
             }
         }
@@ -78,8 +78,9 @@ public class TextFilePersistence< Object extends StringPersistable > {
         }
     }
 
-    // log machinery
-    protected Log log = LogFactory.getLog(TextFilePersistence.class);
+    // logging macinery
+    private final Log log = LogFactory.getLog(getClass());
+
 
     // persistence file handle
     private File persistenceFile;

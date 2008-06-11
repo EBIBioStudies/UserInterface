@@ -1,6 +1,7 @@
 package uk.ac.ebi.ae15;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
@@ -8,19 +9,24 @@ import javax.servlet.ServletContext;
 
 public class AppContextListener implements ServletContextListener {
 
-    // logging macinery
-    private static final Log log = org.apache.commons.logging.LogFactory.getLog(AppContextListener.class);
-
     public synchronized void contextInitialized( ServletContextEvent sce )
     {
-        log.info("ARRAYEXPRESS 1.1 UP -------------------------------------------------------------------------------");
+        ServletContext sc = sce.getServletContext();
+        log.info( "************************************************************************" );
+        log.info( "*" );
+        log.info( "*  " + sc.getServletContextName() );
+        log.info( "*" );
+        log.info( "************************************************************************" );
 
         // creates the application (which hosts all the necessary machinery)
-        new Application(sce.getServletContext());
+        new Application(sc);
     }
 
     public synchronized void contextDestroyed( ServletContextEvent sce )
     {
-        log.info("ARRAYEXPRESS GOES DOWN ----------------------------------------------------------------------------");
+        log.info( "************************************************************************" );
     }
+
+    // logging macinery
+    private final Log log = LogFactory.getLog(getClass());
 }
