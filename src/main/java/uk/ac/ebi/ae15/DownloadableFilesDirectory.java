@@ -17,7 +17,10 @@ public class DownloadableFilesDirectory {
 
     public DownloadableFilesDirectory()
     {
-        filesMap = new TextFilePersistence<PersistableFilesMap>(new PersistableFilesMap(), new File("/tmp/AbCdEfGh"));
+        filesMap = new TextFilePersistence<PersistableFilesMap>(
+                new PersistableFilesMap()
+                , new File( System.getProperty("java.io.tmpdir") + File.separator + "ae-files.txt" )
+        );
     }
 
     public synchronized void setRootFolder( String folder )

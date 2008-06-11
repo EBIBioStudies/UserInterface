@@ -1,10 +1,10 @@
 package uk.ac.ebi.ae15;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -16,12 +16,11 @@ import java.util.regex.Matcher;
  */
 public class ExperimentSearch {
 
-    // logging facility
-    private static final Log log = org.apache.commons.logging.LogFactory.getLog(ExperimentSearch.class);
+    public boolean isEmpty()
+    {
+        return expText.isEmpty();
+    }
 
-    // array of ExperimentText objects in the same order they exist in the document
-    private List<ExperimentText> expText;
-    
     public void buildText( Document experiments )
     {
         if ( null != experiments ) {
@@ -38,8 +37,8 @@ public class ExperimentSearch {
                     }
 
                 }
-            } catch ( Exception x ) {
-                log.debug( "Caught an exception:", x );
+            } catch ( Throwable x ) {
+                log.error( "Caught an exception:", x );
             }
         }
     }
@@ -74,8 +73,8 @@ public class ExperimentSearch {
             Pattern p = Pattern.compile(patternStr, patternFlags);
             Matcher matcher = p.matcher(inputStr);
             result = matcher.find();
-        } catch ( Throwable t ) {
-            log.debug("Caught an exception:", t);
+        } catch ( Throwable x ) {
+            log.error("Caught an exception:", x);
         }
 
         return result;
@@ -101,4 +100,10 @@ public class ExperimentSearch {
         }
         return true;
     }
+
+    // array of ExperimentText objects in the same order they exist in the document
+    private List<ExperimentText> expText;
+
+    // logging facility
+    private final Log log = LogFactory.getLog(getClass());
 }
