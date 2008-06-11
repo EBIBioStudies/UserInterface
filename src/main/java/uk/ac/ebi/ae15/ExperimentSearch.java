@@ -28,7 +28,7 @@ public class ExperimentSearch {
                 if ( experiments.hasChildNodes() && experiments.getDocumentElement().hasChildNodes() ) {
                     NodeList expList = experiments.getDocumentElement().getChildNodes();
 
-                    expText = new ArrayList<ExperimentText>(expList.getLength());
+                    expText.clear();
 
                     for ( int i = 0; i < expList.getLength(); ++i ) {
                         Element expElt = (Element)expList.item(i);
@@ -102,7 +102,7 @@ public class ExperimentSearch {
     }
 
     // array of ExperimentText objects in the same order they exist in the document
-    private List<ExperimentText> expText;
+    private List<ExperimentText> expText = new ArrayList<ExperimentText>();
 
     // logging facility
     private final Log log = LogFactory.getLog(getClass());

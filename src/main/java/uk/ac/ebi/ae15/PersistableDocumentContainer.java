@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.StringWriter;
+import java.io.ByteArrayInputStream;
 
 
 public class PersistableDocumentContainer implements PersistableInString {
@@ -56,7 +57,7 @@ public class PersistableDocumentContainer implements PersistableInString {
         try {
             //parse using builder to get DOM representation of the XML file
             DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            document = docBuilder.parse(str);
+            document = docBuilder.parse(new ByteArrayInputStream(str.getBytes("ISO-8859-1")));
 
             if (null != document) {
                 String docVer = document.getDocumentElement().getAttribute("version");
