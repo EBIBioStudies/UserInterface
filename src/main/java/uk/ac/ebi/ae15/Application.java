@@ -1,70 +1,61 @@
 package uk.ac.ebi.ae15;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.ServletContext;
 
 public class Application {
 
-    // logging macinery
-    private static final Log log = org.apache.commons.logging.LogFactory.getLog(Application.class);
-
-    // auto-created singleton machinery
-    private static Application instance = null;
-
     public Application( ServletContext context )
     {
-        if ( null != instance ) {
-            log.error( "Wow, somebody is really trying to create a second instance of the application here. See stack trace below", new Throwable() );
-        } else {
-            instance = this;
-            servletContext = context;
+        servletContext = context;
 
-            // load application preferences
-            Preferences().load();
-        }
+        preferences = new Preferences(this);
+        experiments = new Experiments(this);
+        filesDirectory = new DownloadableFilesDirectory();
+        xsltHelper = new XsltHelper(this);
+
+        // TODO: remove this crap..
+        HelperXsltExtension.setApplication(this);
+        
+        // load application preferences
+        preferences.load();
     }
 
-    static public Application Instance()
+    public Preferences getPreferences()
     {
-        return instance;
-    }
-
-    // auto-created singleton for related objects (Preferences, Experiments, etc)
-    private static Preferences preferences = null;
-
-    synchronized static public Preferences Preferences()
-    {
-        if ( null == preferences ) {
-            preferences = new Preferences();
-        }
         return preferences;
     }
 
-    private static Experiments experiments = null;
-
-    synchronized static public Experiments Experiments()
+    public Experiments getExperiments()
     {
-        if ( null == experiments ) {
-            experiments = new Experiments();
-        }
         return experiments;
     }
 
-    private static DownloadableFilesDirectory filesDirectory = null;
 
-    synchronized static public DownloadableFilesDirectory FilesDirectory()
+    public DownloadableFilesDirectory getFilesDirectory()
     {
-        if ( null == filesDirectory ) {
-            filesDirectory = new DownloadableFilesDirectory();
-        }
         return filesDirectory;
     }
 
-    public ServletContext ServletContext()
+    public XsltHelper getXsltHelper()
+    {
+        return xsltHelper;
+    }
+
+    public ServletContext getServletContext()
     {
         return servletContext;
     }
 
-    private ServletContext servletContext = null;
+    private ServletContext servletContext;
+
+    private Preferences preferences;
+    private Experiments experiments;
+    private DownloadableFilesDirectory filesDirectory;
+    private XsltHelper xsltHelper;
+
+    // logging macinery
+    private final Log log = LogFactory.getLog(getClass());
 }

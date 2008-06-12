@@ -5,6 +5,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.NamedNodeMap;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *  A transitional class holding text that will be matched when searching for experiments.
@@ -14,7 +15,7 @@ import org.apache.commons.logging.Log;
 public class ExperimentText {
 
     // logging facility
-    private static final Log log = org.apache.commons.logging.LogFactory.getLog(ExperimentText.class);
+    private final Log log = LogFactory.getLog(getClass());
 
     // all text, concatenated
     public String text;
@@ -26,18 +27,17 @@ public class ExperimentText {
     public String array;
 
 
-    public static ExperimentText newTextFromDomElement( Element elt )
+    public ExperimentText populateFromElement( Element elt )
     {
-        ExperimentText expText = new ExperimentText();
 
-        expText.text = concatAll(elt);
-        expText.species = concatAll(elt.getElementsByTagName("species")).toLowerCase();
-        expText.array = concatAll(elt.getElementsByTagName("arraydesign")).toLowerCase();
+        text = concatAll(elt);
+        species = concatAll(elt.getElementsByTagName("species")).toLowerCase();
+        array = concatAll(elt.getElementsByTagName("arraydesign")).toLowerCase();
 
-        return expText;
+        return this;
     }
 
-    private static String concatAll( Element elt )
+    private String concatAll( Element elt )
     {
         if ( elt.hasChildNodes() ) {
             return concatAll(elt.getChildNodes());
@@ -47,7 +47,7 @@ public class ExperimentText {
 
     }
 
-    private static String concatAll( NodeList nl )
+    private String concatAll( NodeList nl )
     {
 		StringBuilder buf = new StringBuilder();
 
@@ -68,8 +68,8 @@ public class ExperimentText {
                 if ( elt.hasChildNodes() )
                     buf.append( concatAll( elt.getChildNodes() )).append(' ');
             }
-        } catch ( Throwable t ) {
-            log.debug("Caught an exception:", t);
+        } catch ( Throwable x ) {
+            log.error("Caught an exception:", x);
         }
 
         return buf.toString().trim();

@@ -22,7 +22,7 @@ public class ExperimentXmlRetrieverThread extends Thread {
     private int experimentId;
     private String result;
 
-    private final static String getExperimentXmlSql = "select XmlElement( \"experiment\"" +
+    private final String getExperimentXmlSql = "select XmlElement( \"experiment\"" +
         " , XmlAttributes( e.id as \"id\", i.identifier as \"accession\", nvt_name.value as \"name\", nvt_releasedate.value as \"releasedate\", nvt_miamegold.value as \"miamegold\" )" +
         " , ( select XmlAgg( XmlElement( \"user\", v.user_id ) ) from tt_extendable ext left outer join pl_visibility v on v.label_id = ext.label_id where ext.id = e.id )" +
         " , ( select XmlAgg( XmlElement( \"secondaryaccession\", sa.value ) ) from tt_namevaluetype sa where sa.t_extendable_id = e.id and sa.name = 'SecondaryAccession' )" +
@@ -57,7 +57,7 @@ public class ExperimentXmlRetrieverThread extends Thread {
         dataSource = ds;
     }
 
-    public static String ClobToString( Clob cl) throws IOException, SQLException
+    public String ClobToString( Clob cl ) throws IOException, SQLException
     {
         if (cl == null)
             return null;

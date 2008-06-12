@@ -1,6 +1,7 @@
 package uk.ac.ebi.ae15;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,10 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.regex.*;
 
-public class QueryServlet extends HttpServlet {
-
-    // logging macinery
-    private static final Log log = org.apache.commons.logging.LogFactory.getLog(QueryServlet.class);
+public class QueryServlet extends ApplicationServlet {
 
     // Respond to HTTP GET requests from browsers.
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
@@ -50,17 +48,20 @@ public class QueryServlet extends HttpServlet {
         // Output goes to the response PrintWriter.
         PrintWriter out = response.getWriter();
         if ( stylesheet.equals("arrays-select") ) {
-            out.print(Application.Experiments().getArrays());
+            out.print(getApplication().getExperiments().getArrays());
         } else if ( stylesheet.equals("species-select") ) {
-            out.print(Application.Experiments().getSpecies());
+            out.print(getApplication().getExperiments().getSpecies());
         } else {
             String stylesheetName = new StringBuilder(stylesheet).append('-').append(type).append(".xsl").toString();
 
-            if ( !XsltHelper.transformDocumentToPrintWriter( Application.Experiments().getExperiments(), stylesheetName, request.getParameterMap(), out ) ) {
+            if ( !getApplication().getXsltHelper().transformDocumentToPrintWriter( getApplication().getExperiments().getExperiments(), stylesheetName, request.getParameterMap(), out ) ) {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         }
         out.close();
     }
+
+    // logging macinery
+    private final Log log = LogFactory.getLog(getClass());
 }
 

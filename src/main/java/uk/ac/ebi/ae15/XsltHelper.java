@@ -13,10 +13,15 @@ import java.io.*;
 import java.util.Map;
 
 public class XsltHelper {
-    // logging macinery
-    private static final Log log = LogFactory.getLog(XsltHelper.class);
 
-    public synchronized static boolean transformDocumentToFile( Document srcDocument, String stylesheet, Map<String,String[]> params, File dstFile )
+    private XsltHelper() {
+    }
+
+    public XsltHelper( Application app ) {
+        application = app;
+    }
+
+    public synchronized boolean transformDocumentToFile( Document srcDocument, String stylesheet, Map<String,String[]> params, File dstFile )
     {
         try {
             return transform( new DOMSource(srcDocument), stylesheet, params, new StreamResult( new FileOutputStream(dstFile) ));
@@ -27,7 +32,7 @@ public class XsltHelper {
         return false;
     }
 
-    public synchronized static String transformDocumentToString( Document srcDocument, String stylesheet, Map<String,String[]> params )
+    public synchronized String transformDocumentToString( Document srcDocument, String stylesheet, Map<String,String[]> params )
     {
         try {
             StringWriter sw = new StringWriter();
@@ -41,7 +46,7 @@ public class XsltHelper {
         return null;
     }
 
-    public synchronized static Document transformStringToDocument( String srcXmlString, String stylesheet, Map<String,String[]> params )
+    public synchronized Document transformStringToDocument( String srcXmlString, String stylesheet, Map<String,String[]> params )
     {
         try {
             InputStream inStream = new ByteArrayInputStream(srcXmlString.getBytes("ISO-8859-1"));
@@ -57,25 +62,25 @@ public class XsltHelper {
         return null;
     }
 
-    public synchronized static boolean transformDocumentToPrintWriter( Document srcDocument, String stylesheet, Map<String,String[]> params, PrintWriter dstWriter )
+    public synchronized boolean transformDocumentToPrintWriter( Document srcDocument, String stylesheet, Map<String,String[]> params, PrintWriter dstWriter )
     {
         return transform( new DOMSource(srcDocument), stylesheet, params, new StreamResult(dstWriter) );
     }
 
-    private static boolean transform( Source src, String stylesheet, Map<String,String[]> params, Result dst )
+    private boolean transform( Source src, String stylesheet, Map<String,String[]> params, Result dst )
     {
         boolean result = false;
         try {
             // create a transformer factory if null
             if ( null == tFactory ) {
                 tFactory = TransformerFactory.newInstance();
-                tFactory.setURIResolver( new AppURIResolver() );
+                tFactory.setURIResolver( new AppURIResolver(application) );
 
             }
 
             // Open the stylesheet
             Source xslSource = new StreamSource(
-                    Application.Instance().ServletContext().getResource( "/WEB-INF/server-assets/stylesheets/" + stylesheet ).openStream()
+                    application.getServletContext().getResource( "/WEB-INF/server-assets/stylesheets/" + stylesheet ).openStream()
             );
 
             // Generate the transformer.
@@ -109,20 +114,24 @@ public class XsltHelper {
         return sb.toString().trim();
     }
 
-    private static TransformerFactory tFactory = null;
+    private TransformerFactory tFactory;
+    private Application application;
+
+    // logging macinery
+    private final Log log = LogFactory.getLog(getClass());
 }
 
 class AppURIResolver implements URIResolver {
 
-    // logging macinery
-    private static final Log log = org.apache.commons.logging.LogFactory.getLog(AppURIResolver.class);
-
+    public AppURIResolver( Application app ) {
+        application = app;
+    }
     public Source resolve( String href, String base ) throws TransformerException
     {
         Source src;
         try {
             src = new StreamSource(
-                    Application.Instance().ServletContext().getResource( "/WEB-INF/server-assets/stylesheets/" + href ).openStream()
+                    application.getServletContext().getResource( "/WEB-INF/server-assets/stylesheets/" + href ).openStream()
             );
         } catch ( Exception x ) {
             log.error( "Caught an exception:", x );
@@ -131,4 +140,9 @@ class AppURIResolver implements URIResolver {
 
     return src;
     }
+
+    private Application application;
+
+    // logging macinery
+    private final Log log = LogFactory.getLog(getClass());
 }

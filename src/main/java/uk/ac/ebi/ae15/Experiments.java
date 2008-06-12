@@ -14,26 +14,28 @@ import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Experiments {
+public class Experiments extends ApplicationComponent {
 
-    public Experiments()
+    public Experiments( Application app )
     {
+        super(app);
+        
         experiments = new TextFilePersistence<PersistableDocumentContainer>(
                 new PersistableDocumentContainer()
-                , new File( System.getProperty("java.io.tmpdir") + File.separator + "ae-experiments.xml" )
+                , new File( System.getProperty("java.io.tmpdir"), "ae-experiments.xml" )
         );
 
         experimentSearch = new ExperimentSearch();
         
         species = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File( System.getProperty("java.io.tmpdir") + File.separator + "ae-species.xml" )
+                , new File( System.getProperty("java.io.tmpdir"), "ae-species.xml" )
 
         );
 
         arrays = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File( System.getProperty("java.io.tmpdir") + File.separator + "ae-arrays.xml" )
+                , new File( System.getProperty("java.io.tmpdir"), "ae-arrays.xml" )
         );
     }
 
@@ -72,7 +74,7 @@ public class Experiments {
 
         species.setObject(
                 new PersistableString(
-                        XsltHelper.transformDocumentToString(
+                        getApplication().getXsltHelper().transformDocumentToString(
                                 experiments.getObject().getDocument()
                                 , "preprocess-species-html.xsl"
                                 , null
@@ -82,7 +84,7 @@ public class Experiments {
 
         arrays.setObject(
                 new PersistableString(
-                        XsltHelper.transformDocumentToString(
+                        getApplication().getXsltHelper().transformDocumentToString(
                                 experiments.getObject().getDocument()
                                 , "preprocess-arrays-html.xsl"
                                 , null
@@ -95,7 +97,7 @@ public class Experiments {
 
     private Document loadExperimentsFromString( String xmlString )
     {
-        Document doc = XsltHelper.transformStringToDocument( xmlString, "preprocess-experiments-xml.xsl", null );
+        Document doc = getApplication().getXsltHelper().transformStringToDocument( xmlString, "preprocess-experiments-xml.xsl", null );
         if ( null == doc ) {
             log.error("Pre-processing returned an error, will have an empty document");
             return null;
@@ -233,12 +235,8 @@ public class Experiments {
             Context envContext = (Context)initContext.lookup( "java:/comp/env" );
 
             dataSource = (DataSource)envContext.lookup( "jdbc/" + dataSourceName.toLowerCase() );
-        } catch ( NamingException x ) {
-            if (log.isDebugEnabled()) {
-                log.debug( "Caught an exception:", x );
-            } else {
-                log.error( "getJdbcDataSource NamingException: " + x.getMessage() );
-            }
+        } catch ( Throwable x ) {
+            log.error( "Caught an exception:", x );
         }
 
         return dataSource;
@@ -252,7 +250,7 @@ public class Experiments {
     private ExperimentSearch experimentSearch;
 
     // sql to get a list of experiments from the database
-    private static String getExperimentsSql = "select distinct e.id, i.identifier as accession, case when v.user_id = 1 then 1 else 0 end as \"public\"" +
+    private final String getExperimentsSql = "select distinct e.id, i.identifier as accession, case when v.user_id = 1 then 1 else 0 end as \"public\"" +
             " from tt_experiment e left outer join tt_identifiable i on i.id = e.id" +
             "  left outer join tt_extendable ext on ext.id = e.id" +
             "  left outer join pl_visibility v on v.label_id = ext.label_id" +
@@ -260,8 +258,8 @@ public class Experiments {
             " order by" +
             "  i.identifier asc";
 
-    private final static int numOfParallelConnections = 25;
-    private final static int initialXmlStringBufferSize = 20000000;  // 20 Mb
+    private final int numOfParallelConnections = 25;
+    private final int initialXmlStringBufferSize = 20000000;  // 20 Mb
 
     // logging macinery
     private final Log log = LogFactory.getLog(getClass());

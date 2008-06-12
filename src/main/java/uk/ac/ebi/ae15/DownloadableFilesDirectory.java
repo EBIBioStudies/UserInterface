@@ -19,7 +19,7 @@ public class DownloadableFilesDirectory {
     {
         filesMap = new TextFilePersistence<PersistableFilesMap>(
                 new PersistableFilesMap()
-                , new File( System.getProperty("java.io.tmpdir") + File.separator + "ae-files.txt" )
+                , new File( System.getProperty("java.io.tmpdir"), "ae-files.txt" )
         );
     }
 
@@ -55,9 +55,8 @@ public class DownloadableFilesDirectory {
                     setFilesMap(newMap);
                     result = true;
                     log.info("Rescan of downloadable files completed");
-                } catch ( Exception x ) {
-                    log.debug( "Caught an exception:", x );
-                    log.error( "Rescan problem: " + x.getMessage() );
+                } catch ( Throwable x ) {
+                    log.error( "Caught an exception:", x );
                 }
             }
 

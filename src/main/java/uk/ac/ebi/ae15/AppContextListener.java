@@ -19,11 +19,14 @@ public class AppContextListener implements ServletContextListener {
         log.info( "************************************************************************" );
 
         // creates the application (which hosts all the necessary machinery)
-        new Application(sc);
+        Application app = new Application(sc);
+        sc.setAttribute("aeApplication", app);
     }
 
     public synchronized void contextDestroyed( ServletContextEvent sce )
     {
+        ServletContext sc = sce.getServletContext();
+        sc.setAttribute("aeApplication", null);
         log.info( "************************************************************************" );
     }
 

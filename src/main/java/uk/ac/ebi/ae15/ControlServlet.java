@@ -1,6 +1,7 @@
 package uk.ac.ebi.ae15;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,10 +11,7 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-public class ControlServlet extends HttpServlet {
-
-    // logging macinery
-    private static final Log log = org.apache.commons.logging.LogFactory.getLog(ControlServlet.class);
+public class ControlServlet extends ApplicationServlet {
 
     // Respond to HTTP GET requests from browsers.
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
@@ -40,13 +38,16 @@ public class ControlServlet extends HttpServlet {
             if ( 0 == params.length() ) {
                 params = "aepub1";
             }
-            boolean onlyPublic = Application.Preferences().get("ae.experiments.publiconly").toString().toLowerCase().equals("true");
-            Application.Experiments().reloadExperiments( params, onlyPublic );
+            boolean onlyPublic = getApplication().getPreferences().get("ae.experiments.publiconly").toString().toLowerCase().equals("true");
+            getApplication().getExperiments().reloadExperiments( params, onlyPublic );
         } else if ( command.equals("rescan-files") ) {
             if ( 0 < params.length() ) {
-                Application.FilesDirectory().setRootFolder(params);
+                getApplication().getFilesDirectory().setRootFolder(params);
             }
-            Application.FilesDirectory().rescan();
+            getApplication().getFilesDirectory().rescan();
         }
     }
+
+    // logging macinery
+    private final Log log = LogFactory.getLog(getClass());
 }

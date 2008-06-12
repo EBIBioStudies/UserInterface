@@ -32,7 +32,7 @@ public class ExperimentSearch {
 
                     for ( int i = 0; i < expList.getLength(); ++i ) {
                         Element expElt = (Element)expList.item(i);
-                        expText.add( ExperimentText.newTextFromDomElement( expElt ) );
+                        expText.add( new ExperimentText().populateFromElement( expElt ) );
                         expElt.setAttribute( "textIdx", Integer.toString(i) );
                     }
 
@@ -80,7 +80,7 @@ public class ExperimentSearch {
         return result;
     }
 
-    private static String keywordToPattern( String keyword, boolean wholeWord ) {
+    private String keywordToPattern( String keyword, boolean wholeWord ) {
         return ( wholeWord ? "\\b\\Q" + keyword + "\\E\\b" : "\\Q" + keyword + "\\E" );
     }
 

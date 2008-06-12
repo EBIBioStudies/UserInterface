@@ -5,6 +5,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Element;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.xalan.extensions.XSLProcessorContext;
 import org.apache.xalan.templates.ElemExtensionCall;
 
@@ -13,36 +14,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class HelperXsltExtension {
-
-    private static final Log log = org.apache.commons.logging.LogFactory.getLog(HelperXsltExtension.class);
-
-    public static String concatAll( NodeList nl )
-    {
-		StringBuilder buf = new StringBuilder();
-
-        try {
-            for (int i = 0; i < nl.getLength(); i++) {
-                Node elt = nl.item(i);
-
-                if ( null != elt.getNodeValue() )
-                    buf.append( elt.getNodeValue() ).append(' ');
-
-                if ( elt.hasAttributes() ) {
-                    NamedNodeMap attrs = elt.getAttributes();
-                    for ( int j = 0; j < attrs.getLength(); j++) {
-                        buf.append( attrs.item(j).getNodeValue() ).append(' ');
-                    }
-                }
-
-                if ( elt.hasChildNodes() )
-                    buf.append( concatAll( elt.getChildNodes() )).append(' ');
-            }
-        } catch ( Throwable t ) {
-            log.debug("Caught an exception:", t);
-        }
-
-        return buf.toString();
-	}
 
     public static String toUpperCase( String str )
     {
@@ -75,14 +46,8 @@ public abstract class HelperXsltExtension {
 
     public static boolean isFileAvailableForDownload( String fileName )
     {
-        return Application.FilesDirectory().doesExist(fileName);
+        return application.getFilesDirectory().doesExist(fileName);
     }
-
-    //TODO: refactor this
-    //public static boolean testRegexp( NodeList nl, String pattern, String flags )
-    //{
-    //    return testRegexp( concatAll(nl), pattern, flags );
-    //}
 
     public static boolean testRegexp( String input, String pattern, String flags )
     {
@@ -125,47 +90,21 @@ public abstract class HelperXsltExtension {
         if ( 0 < nl.getLength() ) {
 
            String textIdx = ((Element)nl.item(0)).getAttribute("textIdx");
-           return Application.Experiments().Search().matchSpecies( textIdx, species );
+           return application.getExperiments().Search().matchSpecies( textIdx, species );
         } else
             return false;
-        //return testSpecies( concatAll(nl), species );
     }
 
-    //TODO:refactor
-    //public static boolean testSpecies( String input, String species )
-    //{
-    //    return testRegexp( input, keywordToPattern( species, true ), "i" );
-    //}
 
     public static boolean testKeywords( NodeList nl, String keywords, boolean wholeWords )
     {
         if ( 0 < nl.getLength() ) {
 
            String textIdx = ((Element)nl.item(0)).getAttribute("textIdx");
-           return Application.Experiments().Search().matchText( textIdx, keywords, wholeWords );
+           return application.getExperiments().Search().matchText( textIdx, keywords, wholeWords );
         } else
             return false;
-
-        //return testKeywords( concatAll(nl), keywords, wholeWords );
     }
-
-    //TODO:refactor
-    //public static boolean testKeywords( String input, String keywords, boolean wholeWords )
-    //{
-    //    // trim spaces on both sides
-    //   keywords = keywords.trim();
-    //
-    //    // by default (i.e. no keywords) it'll always match
-    //    // otherwise any keyword fails -> no match :)
-    //    if ( 0 < keywords.length() ) {
-    //        String[] kwdArray = keywords.split("\\s");
-    //        for ( String keyword : kwdArray ) {
-    //            if ( !testRegexp( input, keywordToPattern( keyword, wholeWords ), "i" ) )
-    //                return false;
-    //        }
-    //    }
-    //    return true;
-    //}
 
     public static String markKeywords( String input, String keywords, boolean wholeWords )
     {
@@ -211,4 +150,13 @@ public abstract class HelperXsltExtension {
             log.debug( "Caught an exception:", e );
         }
     }
+
+    public static void setApplication( Application app )
+    {
+        application = app;
+    }
+
+    private static Application application;
+
+    private static final Log log = LogFactory.getLog(HelperXsltExtension.class);
 }
