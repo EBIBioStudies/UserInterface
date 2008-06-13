@@ -22,26 +22,26 @@ public class Experiments extends ApplicationComponent
     private final int numOfParallelConnections = 25;
     private final int initialXmlStringBufferSize = 20000000;  // 20 Mb
 
-    public Experiments( Application app )
+    public Experiments(Application app)
     {
         super(app);
 
         experiments = new TextFilePersistence<PersistableDocumentContainer>(
                 new PersistableDocumentContainer()
-                , new File(System.getProperty("java.io.tmpdir"), "ae-experiments.xml")
+                , new File(System.getProperty("java.io.tmpdir"), getApplication().getPreferences().get("ae.experiments.cache.filename"))
         );
 
         experimentSearch = new ExperimentSearch();
 
         species = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File(System.getProperty("java.io.tmpdir"), "ae-species.xml")
+                , new File(System.getProperty("java.io.tmpdir"), getApplication().getPreferences().get("ae.species.cache.filename"))
 
         );
 
         arrays = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File(System.getProperty("java.io.tmpdir"), "ae-arrays.xml")
+                , new File(System.getProperty("java.io.tmpdir"), getApplication().getPreferences().get("ae.arrays.cache.filename"))
         );
     }
 
@@ -71,7 +71,7 @@ public class Experiments extends ApplicationComponent
         return experimentSearch;
     }
 
-    public void reloadExperiments( String dsName, boolean onlyPublic )
+    public void reloadExperiments(String dsName, boolean onlyPublic)
     {
         experiments.setObject(
                 new PersistableDocumentContainer(
@@ -102,7 +102,7 @@ public class Experiments extends ApplicationComponent
         experimentSearch.buildText(experiments.getObject().getDocument());
     }
 
-    private Document loadExperimentsFromString( String xmlString )
+    private Document loadExperimentsFromString(String xmlString)
     {
         Document doc = getApplication().getXsltHelper().transformStringToDocument(xmlString, "preprocess-experiments-xml.xsl", null);
         if (null == doc) {
@@ -113,7 +113,7 @@ public class Experiments extends ApplicationComponent
     }
 
 
-    public Document loadExperimentsFromDataSource( String dataSourceName, boolean onlyPublic )
+    public Document loadExperimentsFromDataSource(String dataSourceName, boolean onlyPublic)
     {
         log.info("ArrayExpress Repository XML reload started.");
 
@@ -136,7 +136,7 @@ public class Experiments extends ApplicationComponent
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(getExperimentsSql);
 
-                while ( rs.next() ) {
+                while (rs.next()) {
                     ExperimentListEntry entry = new ExperimentListEntry(
                             rs.getInt("id")
                             , rs.getString("accession")
@@ -153,7 +153,7 @@ public class Experiments extends ApplicationComponent
 
                 // so we create a pool of threads :)
                 List<ExperimentXmlRetrieverThread> threadPool = new ArrayList<ExperimentXmlRetrieverThread>();
-                for ( int i = 0; i < poolSize; ++i ) {
+                for (int i = 0; i < poolSize; ++i) {
                     ExperimentXmlRetrieverThread th = new ExperimentXmlRetrieverThread(ds, i);
                     th.start();
                     threadPool.add(th);
@@ -165,7 +165,7 @@ public class Experiments extends ApplicationComponent
 
                 isLoaded = true;
 
-                while ( expListIndex < expList.size() && isLoaded ) {
+                while (expListIndex < expList.size() && isLoaded) {
                     if (onlyPublic && !expList.get(expListIndex).isPublic) {
                         // skipping this private experiment
                         expListIndex++;
@@ -193,7 +193,7 @@ public class Experiments extends ApplicationComponent
                 }
 
                 threadPoolIndex = 0;
-                while ( threadPool.size() > 0 ) {
+                while (threadPool.size() > 0) {
                     ExperimentXmlRetrieverThread th = threadPool.get(threadPoolIndex);
                     if (th.isDone()) {
                         xmlBuf.append(th.getXml());
@@ -212,7 +212,7 @@ public class Experiments extends ApplicationComponent
                 }
                 log.info("ArrayExpress Repository XML reload completed (" + expCount + "/" + expList.size() + " experiments loaded).");
 
-            } catch ( Throwable x ) {
+            } catch (Throwable x) {
                 log.error("Caught an exception:", x);
                 isLoaded = false;
             }
@@ -233,7 +233,7 @@ public class Experiments extends ApplicationComponent
         return doc;
     }
 
-    private DataSource getJdbcDataSource( String dataSourceName )
+    private DataSource getJdbcDataSource(String dataSourceName)
     {
         DataSource dataSource = null;
 
@@ -242,7 +242,7 @@ public class Experiments extends ApplicationComponent
             Context envContext = (Context) initContext.lookup("java:/comp/env");
 
             dataSource = (DataSource) envContext.lookup("jdbc/" + dataSourceName.toLowerCase());
-        } catch ( Throwable x ) {
+        } catch (Throwable x) {
             log.error("Caught an exception:", x);
         }
 

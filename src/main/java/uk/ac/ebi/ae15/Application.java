@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
+import uk.ac.ebi.ae15.jobs.RescanFilesJob;
 
 import javax.servlet.ServletContext;
 
@@ -20,21 +21,24 @@ public class Application
     private XsltHelper xsltHelper;
     private Scheduler quartzScheduler;
 
-    public Application( ServletContext context )
+    public Application(ServletContext context)
     {
         servletContext = context;
 
         preferences = new Preferences(this);
+        preferences.load();
+
         experiments = new Experiments(this);
-        filesDirectory = new DownloadableFilesDirectory();
+
+        filesDirectory = new DownloadableFilesDirectory(this);
+        filesDirectory.setRootFolder(getPreferences().get("ae.files.root.location"));
+
         xsltHelper = new XsltHelper(this);
 
-        // load application preferences
-        preferences.load();
 
         try {
             startScheduler();
-        } catch ( Throwable x ) {
+        } catch (Throwable x) {
             log.error("Caught an exception:", x);
         }
     }
@@ -42,9 +46,9 @@ public class Application
     public void releaseComponents()
     {
         try {
-            quartzScheduler.interrupt("job","group");
+            quartzScheduler.interrupt("job", "group");
             quartzScheduler.shutdown(true);
-        } catch ( Throwable x ) {
+        } catch (Throwable x) {
             log.error("Caught an exception:", x);
         }
 
@@ -85,29 +89,28 @@ public class Application
     private void startScheduler() throws SchedulerException
     {
         // Retrieve a scheduler from schedule factory
-        quartzScheduler =new StdSchedulerFactory().getScheduler();
-
-        // current time
-        long ctime = System.currentTimeMillis();
+        quartzScheduler = new StdSchedulerFactory().getScheduler();
 
         // Initiate JobDetail with job name, job group, and executable job class
-        JobDetail jobDetail =
-        	new JobDetail("job", "group", ReloadExperimentsJob.class);
+        JobDetail jobDetail = new JobDetail("job", "group", RescanFilesJob.class);
+
+        jobDetail.getJobDataMap().put("application", this);
         // Initiate CronTrigger with its name and group name
-        CronTrigger cronTrigger = new CronTrigger("cronTrigger", "triggerGroup2");
+        CronTrigger cronTrigger = new CronTrigger("cronTrigger", "triggerGroup");
         try {
             // setup CronExpression
-            CronExpression cexp = new CronExpression("0/20 * * * * ?");
+            CronExpression cexp = new CronExpression(getPreferences().get("ae.files.rescan.schedule"));
             // Assign the CronExpression to CronTrigger
             cronTrigger.setCronExpression(cexp);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // schedule a job with JobDetail and Trigger
-        quartzScheduler.scheduleJob(jobDetail, cronTrigger);
 
-        // start the scheduler
-        quartzScheduler.start();
+            // schedule a job with JobDetail and Trigger
+            quartzScheduler.scheduleJob(jobDetail, cronTrigger);
+
+            // start the scheduler
+            quartzScheduler.start();
+        } catch (Throwable x) {
+            log.error("Caught an exception:", x);
+        }
     }
 
 }

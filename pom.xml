@@ -21,13 +21,19 @@
 
         <interface.application.link.aer_old.base.url>/microarray-as/aer</interface.application.link.aer_old.base.url>
         <interface.application.link.aew.base.url>/microarray-as/aew</interface.application.link.aew.base.url>
-        <interface.application.link.solr_gene_stats.url>/microarray-as/solr_gene/admin/stats.jsp</interface.application.link.solr_gene_stats.url>
-        <interface.application.link.solr_exp_stats.url>/microarray-as/solr_exp/admin/stats.jsp</interface.application.link.solr_exp_stats.url>
+        <interface.application.link.solr_gene_stats.url>/microarray-as/solr_gene/admin/stats.jsp
+        </interface.application.link.solr_gene_stats.url>
+        <interface.application.link.solr_exp_stats.url>/microarray-as/solr_exp/admin/stats.jsp
+        </interface.application.link.solr_exp_stats.url>
 
-        <interface.application.link.news_xml.url>/microarray-srv/ae/ae-main-news.xml</interface.application.link.news_xml.url>
-        <interface.application.link.links_xml.url>/microarray-srv/ae/ae-main-links.xml</interface.application.link.links_xml.url>
+        <interface.application.link.news_xml.url>/microarray-srv/ae/ae-main-news.xml
+        </interface.application.link.news_xml.url>
+        <interface.application.link.links_xml.url>/microarray-srv/ae/ae-main-links.xml
+        </interface.application.link.links_xml.url>
 
         <interface.application.pref.experiments.publiconly>true</interface.application.pref.experiments.publiconly>
+        <interface.application.pref.ftp.root.location>/ebi/ArrayExpress-ftp
+        </interface.application.pref.ftp.root.location>
     </properties>
     <profiles>
         <profile>
@@ -48,13 +54,16 @@
                 <interface.application.link.aer_old.base.url>/arrayexpress</interface.application.link.aer_old.base.url>
                 <interface.application.link.aew.base.url>/arrayexpress-aew</interface.application.link.aew.base.url>
 
-                <interface.application.link.solr_gene_stats.url>/solr_gene/admin/stats.jsp</interface.application.link.solr_gene_stats.url>
-                <interface.application.link.solr_exp_stats.url>/solr_exp/admin/stats.jsp</interface.application.link.solr_exp_stats.url>
+                <interface.application.link.solr_gene_stats.url>/solr_gene/admin/stats.jsp
+                </interface.application.link.solr_gene_stats.url>
+                <interface.application.link.solr_exp_stats.url>/solr_exp/admin/stats.jsp
+                </interface.application.link.solr_exp_stats.url>
                 <interface.application.link.news_xml.url>test/ae_news.xml</interface.application.link.news_xml.url>
                 <interface.application.link.links_xml.url>test/ae_links.xml</interface.application.link.links_xml.url>
 
 
-                <interface.application.pref.experiments.publiconly>false</interface.application.pref.experiments.publiconly>
+                <interface.application.pref.experiments.publiconly>false
+                </interface.application.pref.experiments.publiconly>
             </properties>
         </profile>
         <profile>
@@ -108,7 +117,7 @@
                 <version>2.0.2</version>
                 <configuration>
                     <webResources>
-                         <resource>
+                        <resource>
                             <directory>${basedir}/src/main/webapp</directory>
                             <includes>
                                 <include>*.html</include>

@@ -10,7 +10,7 @@ import java.util.Map;
  * Keeps track of all files available at specified directory
  */
 
-public class DownloadableFilesDirectory
+public class DownloadableFilesDirectory extends ApplicationComponent
 {
     // logging machinery
     private final Log log = LogFactory.getLog(getClass());
@@ -19,15 +19,16 @@ public class DownloadableFilesDirectory
     // filename->location map
     private TextFilePersistence<PersistableFilesMap> filesMap;
 
-    public DownloadableFilesDirectory()
+    public DownloadableFilesDirectory(Application app)
     {
+        super(app);
         filesMap = new TextFilePersistence<PersistableFilesMap>(
                 new PersistableFilesMap()
-                , new File(System.getProperty("java.io.tmpdir"), "ae-files.txt")
+                , new File(System.getProperty("java.io.tmpdir"), getApplication().getPreferences().get("ae.files.cache.filename"))
         );
     }
 
-    public synchronized void setRootFolder( String folder )
+    public synchronized void setRootFolder(String folder)
     {
         if (null != folder && 0 < folder.length()) {
             if (folder.endsWith(File.separator)) {
@@ -41,10 +42,8 @@ public class DownloadableFilesDirectory
     }
 
     // scans the specified root folder; returns true if no exceptions occured during the action
-    public boolean rescan()
+    public void rescan() throws InterruptedException
     {
-        boolean result = false;
-
         if (null != rootFolder) {
             File root = new File(rootFolder);
             if (!root.exists()) {
@@ -57,33 +56,32 @@ public class DownloadableFilesDirectory
                     PersistableFilesMap newMap = new PersistableFilesMap();
                     rescanFolder(root, newMap);
                     setFilesMap(newMap);
-                    result = true;
                     log.info("Rescan of downloadable files completed");
-                } catch ( Throwable x ) {
+                } catch (InterruptedException x) {
+                    throw x;
+                } catch (Throwable x) {
                     log.error("Caught an exception:", x);
                 }
             }
-
         } else {
             log.error("Rescan problem: root folder has not been set");
         }
-        return result;
     }
 
     // returns true is file is registered in the registry
-    public synchronized boolean doesExist( String fileName )
+    public synchronized boolean doesExist(String fileName)
     {
         return filesMap.getObject().containsKey(fileName);
     }
 
     // returns absolute file location (if file exists, null otherwise) in local filesystem
-    public synchronized String getLocation( String fileName )
+    public synchronized String getLocation(String fileName)
     {
         return filesMap.getObject().get(fileName);
     }
 
     // returns relative file location (to the root folder) if file exists, null otherwise)
-    public synchronized String getRelativeLocation( String fileName )
+    public synchronized String getRelativeLocation(String fileName)
     {
         String location = filesMap.getObject().get(fileName);
         if (null != location) {
@@ -96,14 +94,15 @@ public class DownloadableFilesDirectory
     }
 
 
-    private void rescanFolder( File folder, Map<String, String> map )
+    private void rescanFolder(File folder, Map<String, String> map) throws InterruptedException
     {
         log.debug("Rescan entered folder [" + folder.getAbsolutePath() + "]");
         if (folder.canRead()) {
             File[] files = folder.listFiles();
-
+            Thread.sleep(1);
             // process files first, then go over sub-folders
-            for ( File f : files ) {
+            for (File f : files) {
+                Thread.sleep(1);
                 if (f.isFile()) {
                     String name = f.getName();
                     String location = f.getAbsolutePath();
@@ -122,8 +121,9 @@ public class DownloadableFilesDirectory
             }
 
             // go over sub-folders
-            for ( File f : files ) {
-                if (f.isDirectory()) {
+            for (File f : files) {
+                Thread.sleep(1);
+                if (f.isDirectory() && !f.getName().startsWith(".")) {
                     rescanFolder(f, map);
                 }
             }
@@ -132,7 +132,7 @@ public class DownloadableFilesDirectory
         }
     }
 
-    private synchronized void setFilesMap( PersistableFilesMap newMap )
+    private synchronized void setFilesMap(PersistableFilesMap newMap)
     {
         filesMap.setObject(newMap);
     }
