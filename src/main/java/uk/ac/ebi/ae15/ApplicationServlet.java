@@ -7,17 +7,17 @@ import javax.servlet.http.HttpServlet;
 
 // application-aware servlet
 
-public class ApplicationServlet extends HttpServlet {
+public class ApplicationServlet extends HttpServlet
+{
+    // logging machinery
+    private final Log log = LogFactory.getLog(getClass());
 
     public Application getApplication()
     {
-        Application app = (Application)getServletContext().getAttribute("aeApplication");
-        if ( null == app ) {
+        Application app = (Application) getServletContext().getAttribute("aeApplication");
+        if (null == app) {
             log.error("Cannot get application instance from servlet context attributes");
         }
         return app;
     }
-
-    // logging macinery
-    private final Log log = LogFactory.getLog(getClass());
 }

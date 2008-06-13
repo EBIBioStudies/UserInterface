@@ -7,89 +7,103 @@ import org.w3c.dom.Document;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.util.Map;
 
-public class XsltHelper {
+public class XsltHelper extends ApplicationComponent implements URIResolver
+{
+    // logging machinery
+    private final Log log = LogFactory.getLog(getClass());
+    private TransformerFactory tFactory;
 
-    private XsltHelper() {
+    public XsltHelper( Application app )
+    {
+        super(app);
     }
 
-    public XsltHelper( Application app ) {
-        application = app;
+    public Source resolve( String href, String base ) throws TransformerException
+    {
+        Source src;
+        try {
+            src = new StreamSource(
+                    getApplication().getServletContext().getResource("/WEB-INF/server-assets/stylesheets/" + href).openStream()
+            );
+        } catch ( Exception x ) {
+            log.error("Caught an exception:", x);
+            throw new TransformerException(x.getMessage());
+        }
+
+        return src;
     }
 
-    public synchronized boolean transformDocumentToFile( Document srcDocument, String stylesheet, Map<String,String[]> params, File dstFile )
+    public synchronized boolean transformDocumentToFile( Document srcDocument, String stylesheet, Map<String, String[]> params, File dstFile )
     {
         try {
-            return transform( new DOMSource(srcDocument), stylesheet, params, new StreamResult( new FileOutputStream(dstFile) ));
+            return transform(new DOMSource(srcDocument), stylesheet, params, new StreamResult(new FileOutputStream(dstFile)));
         } catch ( Throwable x ) {
-            log.error( "Caught an exceptiom:", x );
+            log.error("Caught an exceptiom:", x);
         }
 
         return false;
     }
 
-    public synchronized String transformDocumentToString( Document srcDocument, String stylesheet, Map<String,String[]> params )
+    public synchronized String transformDocumentToString( Document srcDocument, String stylesheet, Map<String, String[]> params )
     {
         try {
             StringWriter sw = new StringWriter();
-            if ( transform( new DOMSource(srcDocument), stylesheet, params, new StreamResult( sw ) ) ) {
+            if (transform(new DOMSource(srcDocument), stylesheet, params, new StreamResult(sw))) {
                 return sw.toString();
             }
         } catch ( Throwable x ) {
-            log.error( "Caught an exceptiom:", x );
+            log.error("Caught an exceptiom:", x);
         }
 
         return null;
     }
 
-    public synchronized Document transformStringToDocument( String srcXmlString, String stylesheet, Map<String,String[]> params )
+    public synchronized Document transformStringToDocument( String srcXmlString, String stylesheet, Map<String, String[]> params )
     {
         try {
             InputStream inStream = new ByteArrayInputStream(srcXmlString.getBytes("ISO-8859-1"));
             DOMResult dst = new DOMResult();
-            if ( transform( new StreamSource(inStream), stylesheet, params, dst ) ) {
-                if ( null != dst.getNode() ) {
-                    return (Document)dst.getNode();
+            if (transform(new StreamSource(inStream), stylesheet, params, dst)) {
+                if (null != dst.getNode()) {
+                    return (Document) dst.getNode();
                 }
             }
         } catch ( Throwable x ) {
-            log.error( "Caught an exception:", x );
+            log.error("Caught an exception:", x);
         }
         return null;
     }
 
-    public synchronized boolean transformDocumentToPrintWriter( Document srcDocument, String stylesheet, Map<String,String[]> params, PrintWriter dstWriter )
+    public synchronized boolean transformDocumentToPrintWriter( Document srcDocument, String stylesheet, Map<String, String[]> params, PrintWriter dstWriter )
     {
-        return transform( new DOMSource(srcDocument), stylesheet, params, new StreamResult(dstWriter) );
+        return transform(new DOMSource(srcDocument), stylesheet, params, new StreamResult(dstWriter));
     }
 
-    private boolean transform( Source src, String stylesheet, Map<String,String[]> params, Result dst )
+    private boolean transform( Source src, String stylesheet, Map<String, String[]> params, Result dst )
     {
         boolean result = false;
         try {
             // create a transformer factory if null
-            if ( null == tFactory ) {
+            if (null == tFactory) {
                 tFactory = TransformerFactory.newInstance();
-                tFactory.setURIResolver( new AppURIResolver(application) );
-
+                tFactory.setURIResolver(this);
             }
 
             // Open the stylesheet
-            Source xslSource = new StreamSource(
-                    application.getServletContext().getResource( "/WEB-INF/server-assets/stylesheets/" + stylesheet ).openStream()
-            );
+            Source xslSource = resolve(stylesheet, null);
 
             // Generate the transformer.
             Transformer transformer = tFactory.newTransformer(xslSource);
 
             // assign the parameters (if not null)
-            if ( null != params ) {
+            if (null != params) {
                 for ( Map.Entry<String, String[]> param : params.entrySet() ) {
-                    transformer.setParameter( param.getKey(), arrayToString( param.getValue() ));
+                    transformer.setParameter(param.getKey(), arrayToString(param.getValue()));
                 }
             }
 
@@ -100,7 +114,7 @@ public class XsltHelper {
 
             result = true;
         } catch ( Throwable x ) {
-            log.error( "Caught an exception transforming [" + stylesheet + "]:", x );
+            log.error("Caught an exception transforming [" + stylesheet + "]:", x);
         }
         return result;
     }
@@ -113,36 +127,4 @@ public class XsltHelper {
         }
         return sb.toString().trim();
     }
-
-    private TransformerFactory tFactory;
-    private Application application;
-
-    // logging macinery
-    private final Log log = LogFactory.getLog(getClass());
-}
-
-class AppURIResolver implements URIResolver {
-
-    public AppURIResolver( Application app ) {
-        application = app;
-    }
-    public Source resolve( String href, String base ) throws TransformerException
-    {
-        Source src;
-        try {
-            src = new StreamSource(
-                    application.getServletContext().getResource( "/WEB-INF/server-assets/stylesheets/" + href ).openStream()
-            );
-        } catch ( Exception x ) {
-            log.error( "Caught an exception:", x );
-            throw new TransformerException(x.getMessage());
-        }
-
-    return src;
-    }
-
-    private Application application;
-
-    // logging macinery
-    private final Log log = LogFactory.getLog(getClass());
 }

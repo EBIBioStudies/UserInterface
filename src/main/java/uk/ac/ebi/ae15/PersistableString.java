@@ -1,10 +1,12 @@
 package uk.ac.ebi.ae15;
 
-public class PersistableString implements PersistableInString {
+public class PersistableString implements PersistableInString
+{
+    private String string;
 
     public PersistableString()
     {
-        string = new String();
+        string = "";
     }
 
     public PersistableString( String str )
@@ -21,7 +23,7 @@ public class PersistableString implements PersistableInString {
     {
         string = str;
     }
-    
+
     public String toPersistence()
     {
         return string;
@@ -34,8 +36,6 @@ public class PersistableString implements PersistableInString {
 
     public boolean shouldLoadFromPersistence()
     {
-        return ( 0 == string.length() );
+        return (0 == string.length());
     }
-
-    private String string;
 }

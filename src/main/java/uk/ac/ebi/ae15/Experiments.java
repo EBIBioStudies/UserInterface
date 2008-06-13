@@ -1,45 +1,52 @@
 package uk.ac.ebi.ae15;
 
-import org.w3c.dom.Document;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.w3c.dom.Document;
 
-import javax.sql.DataSource;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
-import java.io.*;
-import java.sql.*;
-import java.util.List;
+import javax.sql.DataSource;
+import java.io.File;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Experiments extends ApplicationComponent {
+public class Experiments extends ApplicationComponent
+{
+    // logging machinery
+    private final Log log = LogFactory.getLog(getClass());
+
+    private final int numOfParallelConnections = 25;
+    private final int initialXmlStringBufferSize = 20000000;  // 20 Mb
 
     public Experiments( Application app )
     {
         super(app);
-        
+
         experiments = new TextFilePersistence<PersistableDocumentContainer>(
                 new PersistableDocumentContainer()
-                , new File( System.getProperty("java.io.tmpdir"), "ae-experiments.xml" )
+                , new File(System.getProperty("java.io.tmpdir"), "ae-experiments.xml")
         );
 
         experimentSearch = new ExperimentSearch();
-        
+
         species = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File( System.getProperty("java.io.tmpdir"), "ae-species.xml" )
+                , new File(System.getProperty("java.io.tmpdir"), "ae-species.xml")
 
         );
 
         arrays = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File( System.getProperty("java.io.tmpdir"), "ae-arrays.xml" )
+                , new File(System.getProperty("java.io.tmpdir"), "ae-arrays.xml")
         );
     }
 
-    public Document getExperiments() {
+    public Document getExperiments()
+    {
         Document doc = experiments.getObject().getDocument();
 
         if (experimentSearch.isEmpty()) {
@@ -51,7 +58,7 @@ public class Experiments extends ApplicationComponent {
 
     public String getSpecies()
     {
-        return species.getObject().get();    
+        return species.getObject().get();
     }
 
     public String getArrays()
@@ -68,7 +75,7 @@ public class Experiments extends ApplicationComponent {
     {
         experiments.setObject(
                 new PersistableDocumentContainer(
-                        loadExperimentsFromDataSource( dsName, onlyPublic )
+                        loadExperimentsFromDataSource(dsName, onlyPublic)
                 )
         );
 
@@ -97,8 +104,8 @@ public class Experiments extends ApplicationComponent {
 
     private Document loadExperimentsFromString( String xmlString )
     {
-        Document doc = getApplication().getXsltHelper().transformStringToDocument( xmlString, "preprocess-experiments-xml.xsl", null );
-        if ( null == doc ) {
+        Document doc = getApplication().getXsltHelper().transformStringToDocument(xmlString, "preprocess-experiments-xml.xsl", null);
+        if (null == doc) {
             log.error("Pre-processing returned an error, will have an empty document");
             return null;
         }
@@ -117,8 +124,8 @@ public class Experiments extends ApplicationComponent {
         StringBuilder xmlBuf = new StringBuilder(initialXmlStringBufferSize);
         xmlBuf.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><experiments>");
 
-        DataSource ds = getJdbcDataSource( dataSourceName );
-        if ( null != ds ) {
+        DataSource ds = getJdbcDataSource(dataSourceName);
+        if (null != ds) {
 
             try {
                 // get a list of experiments populated into expList
@@ -142,12 +149,12 @@ public class Experiments extends ApplicationComponent {
                 conn.close();
 
                 //
-                int poolSize = Math.min( expList.size(), numOfParallelConnections );
+                int poolSize = Math.min(expList.size(), numOfParallelConnections);
 
                 // so we create a pool of threads :)
                 List<ExperimentXmlRetrieverThread> threadPool = new ArrayList<ExperimentXmlRetrieverThread>();
                 for ( int i = 0; i < poolSize; ++i ) {
-                    ExperimentXmlRetrieverThread th = new ExperimentXmlRetrieverThread( ds, i );
+                    ExperimentXmlRetrieverThread th = new ExperimentXmlRetrieverThread(ds, i);
                     th.start();
                     threadPool.add(th);
                 }
@@ -159,7 +166,7 @@ public class Experiments extends ApplicationComponent {
                 isLoaded = true;
 
                 while ( expListIndex < expList.size() && isLoaded ) {
-                    if ( onlyPublic && !expList.get(expListIndex).isPublic ) {
+                    if (onlyPublic && !expList.get(expListIndex).isPublic) {
                         // skipping this private experiment
                         expListIndex++;
                     } else {
@@ -200,13 +207,13 @@ public class Experiments extends ApplicationComponent {
 
                     Thread.yield();
                 }
-                if ( !isLoaded ) {
+                if (!isLoaded) {
                     log.warn("There are indications that at least one thread has failed getting experiments from the database, expect problems down the road");
                 }
                 log.info("ArrayExpress Repository XML reload completed (" + expCount + "/" + expList.size() + " experiments loaded).");
 
             } catch ( Throwable x ) {
-                log.error( "Caught an exception:", x );
+                log.error("Caught an exception:", x);
                 isLoaded = false;
             }
 
@@ -216,13 +223,13 @@ public class Experiments extends ApplicationComponent {
 
         xmlBuf.append("</experiments>");
 
-        if ( isLoaded ) {
-            String xml = xmlBuf.toString().replaceAll("[^\\p{Print}]"," ");    // replace is a nasty hack to get rid of non-printable characters altogether
+        if (isLoaded) {
+            String xml = xmlBuf.toString().replaceAll("[^\\p{Print}]", " ");    // replace is a nasty hack to get rid of non-printable characters altogether
             doc = loadExperimentsFromString(xml);
-        } else  {
+        } else {
             log.error("Experiments Document WAS NOT loaded from database, expect problems down the road");
         }
-        
+
         return doc;
     }
 
@@ -232,11 +239,11 @@ public class Experiments extends ApplicationComponent {
 
         try {
             Context initContext = new InitialContext();
-            Context envContext = (Context)initContext.lookup( "java:/comp/env" );
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
 
-            dataSource = (DataSource)envContext.lookup( "jdbc/" + dataSourceName.toLowerCase() );
+            dataSource = (DataSource) envContext.lookup("jdbc/" + dataSourceName.toLowerCase());
         } catch ( Throwable x ) {
-            log.error( "Caught an exception:", x );
+            log.error("Caught an exception:", x);
         }
 
         return dataSource;
@@ -257,10 +264,4 @@ public class Experiments extends ApplicationComponent {
 //          " where i.identifier like 'E-GEOD-20%'" +
             " order by" +
             "  i.identifier asc";
-
-    private final int numOfParallelConnections = 25;
-    private final int initialXmlStringBufferSize = 20000000;  // 20 Mb
-
-    // logging macinery
-    private final Log log = LogFactory.getLog(getClass());
 }

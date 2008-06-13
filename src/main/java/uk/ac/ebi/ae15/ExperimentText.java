@@ -1,20 +1,20 @@
 package uk.ac.ebi.ae15;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.NamedNodeMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- *  A transitional class holding text that will be matched when searching for experiments.
- *  To be replaced by Lucene engine in 1.2.
+ * A transitional class holding text that will be matched when searching for experiments.
+ * To be replaced by Lucene engine in 1.2.
  */
 
-public class ExperimentText {
-
-    // logging facility
+public class ExperimentText
+{
+    // logging machinery
     private final Log log = LogFactory.getLog(getClass());
 
     // all text, concatenated
@@ -39,7 +39,7 @@ public class ExperimentText {
 
     private String concatAll( Element elt )
     {
-        if ( elt.hasChildNodes() ) {
+        if (elt.hasChildNodes()) {
             return concatAll(elt.getChildNodes());
         } else {
             return "";
@@ -49,30 +49,29 @@ public class ExperimentText {
 
     private String concatAll( NodeList nl )
     {
-		StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder();
 
         try {
-            for (int i = 0; i < nl.getLength(); i++) {
+            for ( int i = 0; i < nl.getLength(); i++ ) {
                 Node elt = nl.item(i);
 
-                if ( null != elt.getNodeValue() )
-                    buf.append( elt.getNodeValue() ).append(' ');
+                if (null != elt.getNodeValue())
+                    buf.append(elt.getNodeValue()).append(' ');
 
-                if ( elt.hasAttributes() ) {
+                if (elt.hasAttributes()) {
                     NamedNodeMap attrs = elt.getAttributes();
-                    for ( int j = 0; j < attrs.getLength(); j++) {
-                        buf.append( attrs.item(j).getNodeValue() ).append(' ');
+                    for ( int j = 0; j < attrs.getLength(); j++ ) {
+                        buf.append(attrs.item(j).getNodeValue()).append(' ');
                     }
                 }
 
-                if ( elt.hasChildNodes() )
-                    buf.append( concatAll( elt.getChildNodes() )).append(' ');
+                if (elt.hasChildNodes())
+                    buf.append(concatAll(elt.getChildNodes())).append(' ');
             }
         } catch ( Throwable x ) {
             log.error("Caught an exception:", x);
         }
 
         return buf.toString().trim();
-	}
-
+    }
 }

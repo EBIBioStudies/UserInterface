@@ -3,24 +3,27 @@ package uk.ac.ebi.ae15;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.servlet.http.HttpServlet;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class QueryServlet extends ApplicationServlet {
+public class QueryServlet extends ApplicationServlet
+{
+    // logging machinery
+    private final Log log = LogFactory.getLog(getClass());
 
     // Respond to HTTP GET requests from browsers.
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
         log.debug(
-            new StringBuilder("Processing request: ")
-                .append(request.getRequestURL())
-                .append("?")
-                .append(request.getQueryString())
+                new StringBuilder("Processing request: ")
+                        .append(request.getRequestURL())
+                        .append("?")
+                        .append(request.getQueryString())
         );
 
 
@@ -29,13 +32,12 @@ public class QueryServlet extends ApplicationServlet {
 
         Pattern p = Pattern.compile("servlets/query/([^/]+)/?([^/]*)");
         Matcher m = p.matcher(request.getRequestURL());
-        if ( m.find() )
-        {
+        if (m.find()) {
             stylesheet = m.group(1);
-            if ( 0 < m.group(2).length() )
+            if (0 < m.group(2).length())
                 type = m.group(2);
         }
-        
+
         // Set content type for HTML/XML
         response.setContentType("text/" + type + "; charset=ISO-8859-1");
 
@@ -47,21 +49,18 @@ public class QueryServlet extends ApplicationServlet {
 
         // Output goes to the response PrintWriter.
         PrintWriter out = response.getWriter();
-        if ( stylesheet.equals("arrays-select") ) {
+        if (stylesheet.equals("arrays-select")) {
             out.print(getApplication().getExperiments().getArrays());
-        } else if ( stylesheet.equals("species-select") ) {
+        } else if (stylesheet.equals("species-select")) {
             out.print(getApplication().getExperiments().getSpecies());
         } else {
             String stylesheetName = new StringBuilder(stylesheet).append('-').append(type).append(".xsl").toString();
 
-            if ( !getApplication().getXsltHelper().transformDocumentToPrintWriter( getApplication().getExperiments().getExperiments(), stylesheetName, request.getParameterMap(), out ) ) {
+            if (!getApplication().getXsltHelper().transformDocumentToPrintWriter(getApplication().getExperiments().getExperiments(), stylesheetName, request.getParameterMap(), out)) {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         }
         out.close();
     }
-
-    // logging macinery
-    private final Log log = LogFactory.getLog(getClass());
 }
 

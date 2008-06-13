@@ -3,33 +3,44 @@ package uk.ac.ebi.ae15;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
-public class AppContextListener implements ServletContextListener {
+public class AppContextListener implements ServletContextListener
+{
+    // logging machinery
+    private final Log log = LogFactory.getLog(getClass());
+    private final String APPLICATION_ATTR_NAME = "aeApplication";
 
     public synchronized void contextInitialized( ServletContextEvent sce )
     {
         ServletContext sc = sce.getServletContext();
-        log.info( "************************************************************************" );
-        log.info( "*" );
-        log.info( "*  " + sc.getServletContextName() );
-        log.info( "*" );
-        log.info( "************************************************************************" );
+        log.info("************************************************************************");
+        log.info("*");
+        log.info("*  " + sc.getServletContextName());
+        log.info("*");
+        log.info("************************************************************************");
 
-        // creates the application (which hosts all the necessary machinery)
+        // create the application (which hosts all the necessary machinery)
         Application app = new Application(sc);
-        sc.setAttribute("aeApplication", app);
+        sc.setAttribute(APPLICATION_ATTR_NAME, app);
+
+        // initialize the extension
+        HelperXsltExtension.setApplication(app);
     }
 
     public synchronized void contextDestroyed( ServletContextEvent sce )
     {
         ServletContext sc = sce.getServletContext();
-        sc.setAttribute("aeApplication", null);
-        log.info( "************************************************************************" );
-    }
+        Application app = (Application) sc.getAttribute(APPLICATION_ATTR_NAME);
 
-    // logging macinery
-    private final Log log = LogFactory.getLog(getClass());
+        app.releaseComponents();
+
+        // remove all the references to the application to help garbage-collect it :)
+        sc.setAttribute("aeApplication", null);
+        HelperXsltExtension.setApplication(null);
+
+        log.info("************************************************************************");
+    }
 }

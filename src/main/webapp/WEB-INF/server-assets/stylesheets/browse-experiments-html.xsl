@@ -50,7 +50,6 @@
         <xsl:variable name="vDetailedViewMainClass">ae_results_tr_main<xsl:if test="$detailedview"> tr_main_expanded</xsl:if></xsl:variable>
 
         <helper:logInfo select="Query for '{$keywords}' filtered {$vTotal} experiments. Will output from {$vFrom} to {$vTo}."/>
-        <helper:logDebug select="vDetailedViewExtStyle [{$vDetailedViewExtStyle}], vDetailedViewMailClass [{$vDetailedViewMainClass}]"/>
         
         <tr id="ae_results_summary_info">
             <td colspan="8">
@@ -164,13 +163,7 @@
                         <xsl:if test="miamescores">
                             <dt>MIAME&#160;score:</dt>
                             <dd>
-                                <strong><xsl:value-of select="miamescores/overallscore"/></strong>
-                                &#160;(array:&#160;<xsl:value-of select="miamescores/reportersequencescore"/>,
-                                protocols:&#160;<xsl:value-of select="miamescores/protocolscore"/>,
-                                factors:&#160;<xsl:value-of select="miamescores/factorvaluescore"/>,
-                                raw data:&#160;<xsl:value-of select="miamescores/measuredbioassaydatascore"/>,
-                                processed data:&#160;<xsl:value-of select="miamescores/derivedbioassaydatascore"/>)
-                            </dd>
+                                <strong><xsl:value-of select="miamescores/overallscore"/></strong> ( array: <xsl:value-of select="miamescores/reportersequencescore"/>, protocols: <xsl:value-of select="miamescores/protocolscore"/>, factors: <xsl:value-of select="miamescores/factorvaluescore"/>, raw data: <xsl:value-of select="miamescores/measuredbioassaydatascore"/>, processed data: <xsl:value-of select="miamescores/derivedbioassaydatascore"/> )</dd>
                         </xsl:if>
 
                         <dt>Sample&#160;annotation:</dt>
@@ -189,10 +182,7 @@
                             <dd>
                                 <div id="{$vExpId}_array">
                                     <xsl:for-each select="arraydesign">
-                                        <xsl:apply-templates select="name" mode="highlight" />
-                                        (<a href="${interface.application.link.aer_old.base.url}/result?queryFor=PhysicalArrayDesign&amp;aAccession={accession/text()}"
-                                            target="_blank" title="Opens in a new window">&#187; <xsl:apply-templates select="accession" mode="highlight" />
-                                        </a>)<xsl:if test="position()!=last()">, </xsl:if>
+                                        <xsl:apply-templates select="name" mode="highlight" /> (<a href="${interface.application.link.aer_old.base.url}/result?queryFor=PhysicalArrayDesign&amp;aAccession={accession/text()}" target="_blank" title="Opens in a new window">&#187; <xsl:apply-templates select="accession" mode="highlight" /></a>)<xsl:if test="position()!=last()">, </xsl:if>
                                     </xsl:for-each>
                                 </div>
                             </dd>
@@ -321,8 +311,7 @@
             </xsl:variable>
             <xsl:choose>
                 <xsl:when test="uri[starts-with(., 'http')]">
-                    <a href="{uri}"
-                       target="_blank" title="Opens in a new window">&#187; <xsl:copy-of select="$publication_title"/></a>
+                    <a href="{uri}" target="_blank" title="Opens in a new window">&#187; <xsl:copy-of select="$publication_title"/></a>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:copy-of select="$publication_title" />
@@ -330,10 +319,7 @@
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:if test="accession">
-                <xsl:if test="number(accession)>0">
-                    (<a href="http://www.ncbi.nlm.nih.gov/pubmed/{accession}"
-                       target="_blank" title="Opens in a new window">&#187; PubMed <xsl:apply-templates select="accession" mode="highlight"/></a>)
-                </xsl:if>
+                <xsl:if test="number(accession)>0">(<a href="http://www.ncbi.nlm.nih.gov/pubmed/{accession}" target="_blank" title="Opens in a new window">&#187; PubMed <xsl:apply-templates select="accession" mode="highlight"/></a>)</xsl:if>
             </xsl:if>
         </p>
     </xsl:template>

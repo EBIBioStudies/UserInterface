@@ -1,5 +1,6 @@
 package uk.ac.ebi.ae15;
 
+// TODO: do we need this class???
 public class ExperimentListEntry {
 
     int id;
