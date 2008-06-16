@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<profiles>
+    <profile>
+        <id>local</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        <properties>
+            <interface.application.log.appender.ref>CONSOLE</interface.application.log.appender.ref>
+            <interface.application.pref.ftp.root.location>/users/kolais/Projects/AE/ftp</interface.application.pref.ftp.root.location>
+        </properties>
+    </profile>
+</profiles>

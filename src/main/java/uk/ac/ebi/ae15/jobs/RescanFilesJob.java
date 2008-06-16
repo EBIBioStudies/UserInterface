@@ -2,13 +2,10 @@ package uk.ac.ebi.ae15.jobs;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.quartz.InterruptableJob;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.UnableToInterruptJobException;
+import org.quartz.*;
 import uk.ac.ebi.ae15.Application;
 
-public class RescanFilesJob implements InterruptableJob
+public class RescanFilesJob implements InterruptableJob, StatefulJob
 {
     // logging facitlity
     private final Log log = LogFactory.getLog(getClass());
@@ -21,7 +18,7 @@ public class RescanFilesJob implements InterruptableJob
         try {
             Application app = (Application) jec.getJobDetail().getJobDataMap().get("application");
             if (null != app) {
-                app.getFilesDirectory().rescan();
+                app.getFilesRegistry().rescan();
             }
         } catch (InterruptedException x) {
             log.debug("Job [" + jec.getJobDetail().getFullName() + "] was interrupted");

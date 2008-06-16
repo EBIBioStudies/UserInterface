@@ -49,7 +49,7 @@ public abstract class HelperXsltExtension
 
     public static boolean isFileAvailableForDownload( String fileName )
     {
-        return application.getFilesDirectory().doesExist(fileName);
+        return application.getFilesRegistry().doesExist(fileName);
     }
 
     public static boolean testRegexp( String input, String pattern, String flags )

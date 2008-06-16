@@ -43,9 +43,10 @@ public class ControlServlet extends ApplicationServlet
             getApplication().getExperiments().reloadExperiments(params, onlyPublic);
         } else if (command.equals("rescan-files")) {
             if (0 < params.length()) {
-                getApplication().getFilesDirectory().setRootFolder(params);
+                getApplication().getFilesRegistry().setRootFolder(params);
             }
-            getApplication().getFilesDirectory().rescan();
+            // TODO: redo this that is kicks off the scheduler
+            // getApplication().getFilesDirectory().rescan();
         }
     }
 }

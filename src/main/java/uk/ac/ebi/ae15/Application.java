@@ -17,7 +17,7 @@ public class Application
 
     private Preferences preferences;
     private Experiments experiments;
-    private DownloadableFilesDirectory filesDirectory;
+    private DownloadableFilesRegistry filesRegistry;
     private XsltHelper xsltHelper;
     private Scheduler quartzScheduler;
 
@@ -30,8 +30,8 @@ public class Application
 
         experiments = new Experiments(this);
 
-        filesDirectory = new DownloadableFilesDirectory(this);
-        filesDirectory.setRootFolder(getPreferences().get("ae.files.root.location"));
+        filesRegistry = new DownloadableFilesRegistry(this);
+        filesRegistry.setRootFolder(getPreferences().get("ae.files.root.location"));
 
         xsltHelper = new XsltHelper(this);
 
@@ -55,7 +55,7 @@ public class Application
         quartzScheduler = null;
         preferences = null;
         experiments = null;
-        filesDirectory = null;
+        filesRegistry = null;
         xsltHelper = null;
         servletContext = null;
     }
@@ -71,9 +71,9 @@ public class Application
     }
 
 
-    public DownloadableFilesDirectory getFilesDirectory()
+    public DownloadableFilesRegistry getFilesRegistry()
     {
-        return filesDirectory;
+        return filesRegistry;
     }
 
     public XsltHelper getXsltHelper()
@@ -106,6 +106,14 @@ public class Application
             // schedule a job with JobDetail and Trigger
             quartzScheduler.scheduleJob(jobDetail, cronTrigger);
 
+            if (getPreferences().get("ae.files.rescan.atstart").toLowerCase().equals("true")) {
+                SimpleTrigger atStartTrigger = new SimpleTrigger("atStartTrigger", "triggerGroup");
+
+                atStartTrigger.setJobName(jobDetail.getName());
+                atStartTrigger.setJobGroup(jobDetail.getGroup());
+                
+                quartzScheduler.scheduleJob(atStartTrigger);
+            }
             // start the scheduler
             quartzScheduler.start();
         } catch (Throwable x) {

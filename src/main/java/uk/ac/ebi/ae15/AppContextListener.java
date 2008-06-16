@@ -16,11 +16,11 @@ public class AppContextListener implements ServletContextListener
     public synchronized void contextInitialized( ServletContextEvent sce )
     {
         ServletContext sc = sce.getServletContext();
-        log.info("************************************************************************");
+        log.info("************************************************************************************************************************************************");
         log.info("*");
         log.info("*  " + sc.getServletContextName());
         log.info("*");
-        log.info("************************************************************************");
+        log.info("****************************************************************************************************************************");
 
         // create the application (which hosts all the necessary machinery)
         Application app = new Application(sc);
@@ -41,6 +41,6 @@ public class AppContextListener implements ServletContextListener
         sc.setAttribute("aeApplication", null);
         HelperXsltExtension.setApplication(null);
 
-        log.info("************************************************************************");
+        log.info("****************************************************************************************************************************\n\n");
     }
 }
