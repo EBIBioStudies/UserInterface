@@ -127,7 +127,6 @@ public class ExperimentXmlRetrieverThread extends Thread
 
     public void setId( int id )
     {
-        log.debug("setId: " + Integer.toString(id));
         experimentId = id;
         isNew = false;
         setDone(false);
@@ -156,9 +155,7 @@ public class ExperimentXmlRetrieverThread extends Thread
 
     public String getXml()
     {
-        if (null != result) {
-            log.debug("getXml: " + result.substring(0, 55) + "...");
-        } else {
+        if (null == result) {
             log.debug("getXml: result is null, expect problems down the road.");
         }
         return result;
