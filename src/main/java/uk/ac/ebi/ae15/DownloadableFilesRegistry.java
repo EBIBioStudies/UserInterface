@@ -96,7 +96,6 @@ public class DownloadableFilesRegistry extends ApplicationComponent
 
     private void rescanFolder(File folder, Map<String, String> map) throws InterruptedException
     {
-        log.debug("Rescan entered folder [" + folder.getAbsolutePath() + "]");
         if (folder.canRead()) {
             File[] files = folder.listFiles();
             Thread.sleep(1);
@@ -125,7 +124,7 @@ public class DownloadableFilesRegistry extends ApplicationComponent
                 }
             }
         } else {
-            log.warn("Rescan found non-readable directory [" + folder.getAbsolutePath() + File.separator + "]");
+            log.warn("Rescan found non-readable folder [" + folder.getAbsolutePath() + File.separator + "]");
         }
     }
 
