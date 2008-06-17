@@ -16,7 +16,7 @@ public class AppContextListener implements ServletContextListener
     public synchronized void contextInitialized( ServletContextEvent sce )
     {
         ServletContext sc = sce.getServletContext();
-        log.info("************************************************************************************************************************************************");
+        log.info("****************************************************************************************************************************");
         log.info("*");
         log.info("*  " + sc.getServletContextName());
         log.info("*");
