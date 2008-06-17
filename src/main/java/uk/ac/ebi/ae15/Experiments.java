@@ -261,7 +261,6 @@ public class Experiments extends ApplicationComponent
             " from tt_experiment e left outer join tt_identifiable i on i.id = e.id" +
             "  left outer join tt_extendable ext on ext.id = e.id" +
             "  left outer join pl_visibility v on v.label_id = ext.label_id" +
-//          " where i.identifier like 'E-GEOD-20%'" +
             " order by" +
             "  i.identifier asc";
 }

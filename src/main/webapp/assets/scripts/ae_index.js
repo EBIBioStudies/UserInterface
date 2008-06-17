@@ -38,7 +38,7 @@ trimString( stringToTrim ) {
 function
 updateAerStats( xml ) {
     var aer_avail_info = "The information is unavailable at the moment";
-    if ( 0 < xml.length ) {
+    if ( undefined != xml ) {
         var ae_repxml = $( $(xml).find("experiments")[0] );
         var etotal = ae_repxml.attr("total");
         var htotal = ae_repxml.attr("total-assays");
