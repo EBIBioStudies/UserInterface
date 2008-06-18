@@ -5,7 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.quartz.*;
 import uk.ac.ebi.ae15.AEInterfaceApplication;
 
-public class RescanFilesJob implements InterruptableJob, StatefulJob
+public class ReloadExperimentsJob implements InterruptableJob, StatefulJob
 {
     // logging facitlity
     private final Log log = LogFactory.getLog(getClass());

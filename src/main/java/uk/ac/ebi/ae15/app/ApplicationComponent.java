@@ -1,9 +1,9 @@
-package uk.ac.ebi.ae15;
+package uk.ac.ebi.ae15.app;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class ApplicationComponent
+abstract public class ApplicationComponent
 {
     // logging machinery
     private final Log log = LogFactory.getLog(getClass());
@@ -22,4 +22,7 @@ public class ApplicationComponent
     {
         return application;
     }
+
+    protected abstract void initializeComponent();
+    public abstract void terminateComponent();
 }

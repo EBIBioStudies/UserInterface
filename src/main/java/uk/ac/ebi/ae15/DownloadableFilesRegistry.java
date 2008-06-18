@@ -2,6 +2,8 @@ package uk.ac.ebi.ae15;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import uk.ac.ebi.ae15.app.Application;
+import uk.ac.ebi.ae15.app.ApplicationComponent;
 
 import java.io.File;
 import java.util.Map;
@@ -19,13 +21,23 @@ public class DownloadableFilesRegistry extends ApplicationComponent
     // filename->location map
     private TextFilePersistence<PersistableFilesMap> filesMap;
 
-    public DownloadableFilesRegistry(Application app)
+    public DownloadableFilesRegistry( Application app)
     {
         super(app);
         filesMap = new TextFilePersistence<PersistableFilesMap>(
                 new PersistableFilesMap()
-                , new File(System.getProperty("java.io.tmpdir"), getApplication().getPreferences().get("ae.files.cache.filename"))
+                , new File(System.getProperty("java.io.tmpdir"), ((AEInterfaceApplication)getApplication()).getPreferences().get("ae.files.cache.filename"))
         );
+    }
+
+    protected void initializeComponent()
+    {
+
+    }
+
+    public void terminateComponent()
+    {
+
     }
 
     public synchronized void setRootFolder(String folder)

@@ -6,6 +6,7 @@ import org.apache.xalan.extensions.XSLProcessorContext;
 import org.apache.xalan.templates.ElemExtensionCall;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import uk.ac.ebi.ae15.app.Application;
 
 import javax.xml.transform.TransformerException;
 import java.util.regex.Matcher;
@@ -16,7 +17,7 @@ public abstract class HelperXsltExtension
     // logging machinery
     private static final Log log = LogFactory.getLog(HelperXsltExtension.class);
     // Application reference
-    private static Application application;
+    private static AEInterfaceApplication application;
 
     public static String toUpperCase( String str )
     {
@@ -157,6 +158,6 @@ public abstract class HelperXsltExtension
 
     public static void setApplication( Application app )
     {
-        application = app;
+        application = (AEInterfaceApplication)app;
     }
 }

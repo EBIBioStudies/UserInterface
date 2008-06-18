@@ -3,6 +3,8 @@ package uk.ac.ebi.ae15;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
+import uk.ac.ebi.ae15.app.Application;
+import uk.ac.ebi.ae15.app.ApplicationComponent;
 
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMResult;
@@ -23,6 +25,16 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         super(app);
     }
 
+    protected void initializeComponent()
+    {
+
+    }
+
+    public void terminateComponent()
+    {
+
+    }
+    
     public Source resolve( String href, String base ) throws TransformerException
     {
         Source src;

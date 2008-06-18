@@ -2,6 +2,8 @@ package uk.ac.ebi.ae15;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import uk.ac.ebi.ae15.app.Application;
+import uk.ac.ebi.ae15.app.ApplicationComponent;
 
 import java.util.Properties;
 
@@ -10,10 +12,20 @@ public class Preferences extends ApplicationComponent
     // logging machinery
     private final Log log = LogFactory.getLog(getClass());
 
-    public Preferences(Application app)
+    public Preferences( Application app)
     {
         super(app);
         properties = new Properties();
+    }
+
+    protected void initializeComponent()
+    {
+
+    }
+
+    public void terminateComponent()
+    {
+
     }
 
     public void load()

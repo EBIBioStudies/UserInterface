@@ -2,6 +2,7 @@ package uk.ac.ebi.ae15;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import uk.ac.ebi.ae15.app.ApplicationServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -39,11 +40,11 @@ public class ControlServlet extends ApplicationServlet
             if (0 == params.length()) {
                 params = "aepub1";
             }
-            boolean onlyPublic = getApplication().getPreferences().get("ae.experiments.publiconly").toString().toLowerCase().equals("true");
-            getApplication().getExperiments().reloadExperiments(params, onlyPublic);
+            boolean onlyPublic = ((AEInterfaceApplication)getApplication()).getPreferences().get("ae.experiments.publiconly").toString().toLowerCase().equals("true");
+            ((AEInterfaceApplication)getApplication()).getExperiments().reloadExperiments(params, onlyPublic);
         } else if (command.equals("rescan-files")) {
             if (0 < params.length()) {
-                getApplication().getFilesRegistry().setRootFolder(params);
+               ((AEInterfaceApplication)getApplication()).getFilesRegistry().setRootFolder(params);
             }
             // TODO: redo this that is kicks off the scheduler
             // getApplication().getFilesDirectory().rescan();

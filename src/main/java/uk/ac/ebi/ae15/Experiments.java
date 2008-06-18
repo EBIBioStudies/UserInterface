@@ -3,6 +3,8 @@ package uk.ac.ebi.ae15;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
+import uk.ac.ebi.ae15.app.Application;
+import uk.ac.ebi.ae15.app.ApplicationComponent;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -22,29 +24,39 @@ public class Experiments extends ApplicationComponent
     private final int numOfParallelConnections = 25;
     private final int initialXmlStringBufferSize = 20000000;  // 20 Mb
 
-    public Experiments(Application app)
+    public Experiments( Application app)
     {
         super(app);
 
         experiments = new TextFilePersistence<PersistableDocumentContainer>(
                 new PersistableDocumentContainer()
-                , new File(System.getProperty("java.io.tmpdir"), getApplication().getPreferences().get("ae.experiments.cache.filename"))
+                , new File(System.getProperty("java.io.tmpdir"), ((AEInterfaceApplication)getApplication()).getPreferences().get("ae.experiments.cache.filename"))
         );
 
         experimentSearch = new ExperimentSearch();
 
         species = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File(System.getProperty("java.io.tmpdir"), getApplication().getPreferences().get("ae.species.cache.filename"))
+                , new File(System.getProperty("java.io.tmpdir"), ((AEInterfaceApplication)getApplication()).getPreferences().get("ae.species.cache.filename"))
 
         );
 
         arrays = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File(System.getProperty("java.io.tmpdir"), getApplication().getPreferences().get("ae.arrays.cache.filename"))
+                , new File(System.getProperty("java.io.tmpdir"), ((AEInterfaceApplication)getApplication()).getPreferences().get("ae.arrays.cache.filename"))
         );
     }
 
+    protected void initializeComponent()
+    {
+
+    }
+
+    public void terminateComponent()
+    {
+
+    }
+    
     public Document getExperiments()
     {
         Document doc = experiments.getObject().getDocument();
@@ -81,7 +93,7 @@ public class Experiments extends ApplicationComponent
 
         species.setObject(
                 new PersistableString(
-                        getApplication().getXsltHelper().transformDocumentToString(
+                        ((AEInterfaceApplication)getApplication()).getXsltHelper().transformDocumentToString(
                                 experiments.getObject().getDocument()
                                 , "preprocess-species-html.xsl"
                                 , null
@@ -91,7 +103,7 @@ public class Experiments extends ApplicationComponent
 
         arrays.setObject(
                 new PersistableString(
-                        getApplication().getXsltHelper().transformDocumentToString(
+                        ((AEInterfaceApplication)getApplication()).getXsltHelper().transformDocumentToString(
                                 experiments.getObject().getDocument()
                                 , "preprocess-arrays-html.xsl"
                                 , null
@@ -104,7 +116,7 @@ public class Experiments extends ApplicationComponent
 
     private Document loadExperimentsFromString(String xmlString)
     {
-        Document doc = getApplication().getXsltHelper().transformStringToDocument(xmlString, "preprocess-experiments-xml.xsl", null);
+        Document doc = ((AEInterfaceApplication)getApplication()).getXsltHelper().transformStringToDocument(xmlString, "preprocess-experiments-xml.xsl", null);
         if (null == doc) {
             log.error("Pre-processing returned an error, will have an empty document");
             return null;

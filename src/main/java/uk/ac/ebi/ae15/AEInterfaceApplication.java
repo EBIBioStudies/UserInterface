@@ -4,16 +4,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
+import uk.ac.ebi.ae15.app.Application;
 import uk.ac.ebi.ae15.jobs.RescanFilesJob;
 
 import javax.servlet.ServletContext;
 
-public class Application
+public class AEInterfaceApplication extends Application
 {
     // logging machinery
     private final Log log = LogFactory.getLog(getClass());
-
-    private ServletContext servletContext;
 
     private Preferences preferences;
     private Experiments experiments;
@@ -21,9 +20,9 @@ public class Application
     private XsltHelper xsltHelper;
     private Scheduler quartzScheduler;
 
-    public Application(ServletContext context)
+    public AEInterfaceApplication(ServletContext context)
     {
-        servletContext = context;
+        super(context);
 
         preferences = new Preferences(this);
         preferences.load();
@@ -43,7 +42,12 @@ public class Application
         }
     }
 
-    public void releaseComponents()
+    public void initializeComponents()
+    {
+
+    }
+
+    public void terminateComponents()
     {
         try {
             quartzScheduler.interrupt("job", "group");
@@ -57,7 +61,6 @@ public class Application
         experiments = null;
         filesRegistry = null;
         xsltHelper = null;
-        servletContext = null;
     }
 
     public Preferences getPreferences()
@@ -79,11 +82,6 @@ public class Application
     public XsltHelper getXsltHelper()
     {
         return xsltHelper;
-    }
-
-    public ServletContext getServletContext()
-    {
-        return servletContext;
     }
 
     private void startScheduler() throws SchedulerException
@@ -111,7 +109,7 @@ public class Application
 
                 atStartTrigger.setJobName(jobDetail.getName());
                 atStartTrigger.setJobGroup(jobDetail.getGroup());
-                
+
                 quartzScheduler.scheduleJob(atStartTrigger);
             }
             // start the scheduler
@@ -120,5 +118,6 @@ public class Application
             log.error("Caught an exception:", x);
         }
     }
+
 
 }

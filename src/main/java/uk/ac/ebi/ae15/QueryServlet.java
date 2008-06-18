@@ -2,6 +2,7 @@ package uk.ac.ebi.ae15;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import uk.ac.ebi.ae15.app.ApplicationServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -50,13 +51,13 @@ public class QueryServlet extends ApplicationServlet
         // Output goes to the response PrintWriter.
         PrintWriter out = response.getWriter();
         if (stylesheet.equals("arrays-select")) {
-            out.print(getApplication().getExperiments().getArrays());
+            out.print(((AEInterfaceApplication)getApplication()).getExperiments().getArrays());
         } else if (stylesheet.equals("species-select")) {
-            out.print(getApplication().getExperiments().getSpecies());
+            out.print(((AEInterfaceApplication)getApplication()).getExperiments().getSpecies());
         } else {
             String stylesheetName = new StringBuilder(stylesheet).append('-').append(type).append(".xsl").toString();
 
-            if (!getApplication().getXsltHelper().transformDocumentToPrintWriter(getApplication().getExperiments().getExperiments(), stylesheetName, request.getParameterMap(), out)) {
+            if (!((AEInterfaceApplication)getApplication()).getXsltHelper().transformDocumentToPrintWriter(((AEInterfaceApplication)getApplication()).getExperiments().getExperiments(), stylesheetName, request.getParameterMap(), out)) {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         }
