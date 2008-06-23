@@ -14,12 +14,19 @@ public class Application implements ServletContextListener
     // logging machinery
     private final Log log = LogFactory.getLog(getClass());
 
+    private String name;
     private ServletContext servletContext;
-    private Map<String,ApplicationComponent> components;
+    private Map<String, ApplicationComponent> components;
 
-    public Application()
+    public Application(String appName)
     {
-        components = new HashMap<String,ApplicationComponent>();
+        name = appName;
+        components = new HashMap<String, ApplicationComponent>();
+    }
+
+    public String getName()
+    {
+        return name;
     }
 
     public ServletContext getServletContext()
@@ -27,9 +34,9 @@ public class Application implements ServletContextListener
         return servletContext;
     }
 
-    public void addComponent( ApplicationComponent component )
+    public void addComponent(ApplicationComponent component)
     {
-        if ( components.containsKey(component.getName()) ) {
+        if (components.containsKey(component.getName())) {
             log.error("The component [" + component.getName() + "] has already been added to the application");
         } else {
             log.debug("Adding component [" + component.getName() + "]");
@@ -37,43 +44,60 @@ public class Application implements ServletContextListener
         }
     }
 
-    public synchronized void contextInitialized( ServletContextEvent sce )
+    public ApplicationComponent getComponent(String name)
     {
-        ServletContext sc = sce.getServletContext();
+        if (components.containsKey(name))
+            return components.get(name);
+        else
+            return null;
+    }
+
+    public ApplicationPreferences getPreferences()
+    {
+        return (ApplicationPreferences) getComponent("Preferences");
+    }
+
+    public synchronized void contextInitialized(ServletContextEvent sce)
+    {
+        servletContext = sce.getServletContext();
         log.info("****************************************************************************************************************************");
         log.info("*");
-        log.info("*  " + sc.getServletContextName());
+        log.info("*  " + servletContext.getServletContextName());
         log.info("*");
         log.info("****************************************************************************************************************************");
+        servletContext.setAttribute(getClass().getName(), this);
 
-        sc.setAttribute(getClass().getName(), this);
-
+        addComponent(new ApplicationPreferences(this, getName()));
         initialize();
     }
 
-    public synchronized void contextDestroyed( ServletContextEvent sce )
+    public synchronized void contextDestroyed(ServletContextEvent sce)
     {
-        ServletContext sc = sce.getServletContext();
-        Application app = (Application) sc.getAttribute(getClass().getName());
-
         terminate();
 
-        // remove all the references to the application to help garbage-collect it :)
-        sc.setAttribute(getClass().getName(), null);
+        servletContext.setAttribute(getClass().getName(), null);
+        servletContext = null;
         log.info("****************************************************************************************************************************\n\n");
     }
 
-    //
     private void initialize()
     {
         log.debug("Initializing the application...");
-   //   for ( HashMap<String,ApplicationComponent>.Entry c : components ) {
-   //
-   //   }
+        for (ApplicationComponent c : components.values()) {
+            log.info("Initializing component [" + c.getName() + "]");
+            c.initialize();
+        }
     }
 
     private void terminate()
     {
         log.debug("Terminating the application...");
+        for (ApplicationComponent c : components.values()) {
+            log.info("Terminating component [" + c.getName() + "]");
+            c.terminate();
+        }
+        // release references to application components
+        components.clear();
+        components = null;
     }
 }

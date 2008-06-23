@@ -17,7 +17,7 @@ public class ControlServlet extends ApplicationServlet
     private final Log log = LogFactory.getLog(getClass());
 
     // Respond to HTTP GET requests from browsers.
-    public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         log.debug(
                 new StringBuilder("Processing request: ")
@@ -40,14 +40,16 @@ public class ControlServlet extends ApplicationServlet
             if (0 == params.length()) {
                 params = "aepub1";
             }
-            boolean onlyPublic = ((AEInterfaceApplication)getApplication()).getPreferences().get("ae.experiments.publiconly").toString().toLowerCase().equals("true");
-            ((AEInterfaceApplication)getApplication()).getExperiments().reloadExperiments(params, onlyPublic);
+            Experiments experiments = (Experiments) getApplication().getComponent("Experiments");
+            boolean onlyPublic = getApplication().getPreferences().get("ae.experiments.publiconly").toLowerCase().equals("true");
+            experiments.reloadExperiments(params, onlyPublic);
         } else if (command.equals("rescan-files")) {
+            DownloadableFilesRegistry filesRegistry = (DownloadableFilesRegistry) getApplication().getComponent("DownloadableFilesRegistry");
             if (0 < params.length()) {
-               ((AEInterfaceApplication)getApplication()).getFilesRegistry().setRootFolder(params);
+                filesRegistry.setRootFolder(params);
             }
             // TODO: redo this that is kicks off the scheduler
-            // getApplication().getFilesDirectory().rescan();
+            // filesRegistry.rescan();
         }
     }
 }

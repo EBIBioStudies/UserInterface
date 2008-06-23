@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.quartz.*;
 import uk.ac.ebi.ae15.AEInterfaceApplication;
+import uk.ac.ebi.ae15.DownloadableFilesRegistry;
 
 public class RescanFilesJob implements InterruptableJob, StatefulJob
 {
@@ -18,7 +19,7 @@ public class RescanFilesJob implements InterruptableJob, StatefulJob
         try {
             AEInterfaceApplication app = (AEInterfaceApplication) jec.getJobDetail().getJobDataMap().get("application");
             if (null != app) {
-                app.getFilesRegistry().rescan();
+                ((DownloadableFilesRegistry) app.getComponent("DownloadableFilesRegistry")).rescan();
             }
         } catch (InterruptedException x) {
             log.debug("Job [" + jec.getJobDetail().getFullName() + "] was interrupted");

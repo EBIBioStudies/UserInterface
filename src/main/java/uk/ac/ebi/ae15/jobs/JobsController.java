@@ -5,17 +5,17 @@ import uk.ac.ebi.ae15.app.ApplicationComponent;
 
 public class JobsController extends ApplicationComponent
 {
-    public JobsController( Application app )
+    public JobsController(Application app)
     {
-        super(app);
+        super(app, "JobController");
     }
 
-    protected void initializeComponent()
+    public void initialize()
     {
 
     }
 
-    public void terminateComponent()
+    public void terminate()
     {
 
     }

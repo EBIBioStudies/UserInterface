@@ -8,10 +8,6 @@ import uk.ac.ebi.ae15.app.ApplicationComponent;
 import java.io.File;
 import java.util.Map;
 
-/**
- * Keeps track of all files available at specified directory
- */
-
 public class DownloadableFilesRegistry extends ApplicationComponent
 {
     // logging machinery
@@ -21,21 +17,24 @@ public class DownloadableFilesRegistry extends ApplicationComponent
     // filename->location map
     private TextFilePersistence<PersistableFilesMap> filesMap;
 
-    public DownloadableFilesRegistry( Application app)
+    public DownloadableFilesRegistry(Application app)
     {
-        super(app);
+        super(app, "DownloadableFilesRegistry");
         filesMap = new TextFilePersistence<PersistableFilesMap>(
-                new PersistableFilesMap()
-                , new File(System.getProperty("java.io.tmpdir"), ((AEInterfaceApplication)getApplication()).getPreferences().get("ae.files.cache.filename"))
+                new PersistableFilesMap(),
+                new File(
+                        System.getProperty("java.io.tmpdir"),
+                        getApplication().getPreferences().get("ae.files.cache.filename")
+                )
         );
     }
 
-    protected void initializeComponent()
+    public void initialize()
     {
 
     }
 
-    public void terminateComponent()
+    public void terminate()
     {
 
     }

@@ -17,24 +17,24 @@ public abstract class HelperXsltExtension
     // logging machinery
     private static final Log log = LogFactory.getLog(HelperXsltExtension.class);
     // Application reference
-    private static AEInterfaceApplication application;
+    private static Application application;
 
-    public static String toUpperCase( String str )
+    public static String toUpperCase(String str)
     {
         return str.toUpperCase();
     }
 
-    public static String toLowerCase( String str )
+    public static String toLowerCase(String str)
     {
         return str.toLowerCase();
     }
 
-    public static String capitalize( String str )
+    public static String capitalize(String str)
     {
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
-    public static String normalizeSpecies( String species )
+    public static String normalizeSpecies(String species)
     {
         // if more than one word: "First second", otherwise "First"
         String[] spArray = species.trim().split("\\s");
@@ -48,12 +48,12 @@ public abstract class HelperXsltExtension
 
     }
 
-    public static boolean isFileAvailableForDownload( String fileName )
+    public static boolean isFileAvailableForDownload(String fileName)
     {
-        return application.getFilesRegistry().doesExist(fileName);
+        return ((DownloadableFilesRegistry) application.getComponent("DownloadableFilesRegistry")).doesExist(fileName);
     }
 
-    public static boolean testRegexp( String input, String pattern, String flags )
+    public static boolean testRegexp(String input, String pattern, String flags)
     {
         boolean result = false;
         try {
@@ -65,14 +65,14 @@ public abstract class HelperXsltExtension
             Pattern p = Pattern.compile(patternStr, patternFlags);
             Matcher matcher = p.matcher(inputStr);
             result = matcher.find();
-        } catch ( Throwable t ) {
+        } catch (Throwable t) {
             log.debug("Caught an exception:", t);
         }
 
         return result;
     }
 
-    public static String replaceRegexp( String input, String pattern, String flags, String replace )
+    public static String replaceRegexp(String input, String pattern, String flags, String replace)
     {
         int patternFlags = (flags.indexOf("i") >= 0 ? Pattern.CASE_INSENSITIVE : 0);
 
@@ -85,51 +85,51 @@ public abstract class HelperXsltExtension
         return (flags.indexOf("g") >= 0 ? matcher.replaceAll(replaceStr) : matcher.replaceFirst(replaceStr));
     }
 
-    private static String keywordToPattern( String keyword, boolean wholeWord )
+    private static String keywordToPattern(String keyword, boolean wholeWord)
     {
         return (wholeWord ? "\\b\\Q" + keyword + "\\E\\b" : "\\Q" + keyword + "\\E");
     }
 
-    public static boolean testSpecies( NodeList nl, String species )
+    public static boolean testSpecies(NodeList nl, String species)
     {
         if (0 < nl.getLength()) {
 
             String textIdx = ((Element) nl.item(0)).getAttribute("textIdx");
-            return application.getExperiments().Search().matchSpecies(textIdx, species);
+            return ((Experiments) application.getComponent("Experiments")).Search().matchSpecies(textIdx, species);
         } else
             return false;
     }
 
 
-    public static boolean testKeywords( NodeList nl, String keywords, boolean wholeWords )
+    public static boolean testKeywords(NodeList nl, String keywords, boolean wholeWords)
     {
         if (0 < nl.getLength()) {
 
             String textIdx = ((Element) nl.item(0)).getAttribute("textIdx");
-            return application.getExperiments().Search().matchText(textIdx, keywords, wholeWords);
+            return ((Experiments) application.getComponent("Experiments")).Search().matchText(textIdx, keywords, wholeWords);
         } else
             return false;
     }
 
-    public static String markKeywords( String input, String keywords, boolean wholeWords )
+    public static String markKeywords(String input, String keywords, boolean wholeWords)
     {
         String result = input;
         if (null != keywords && 0 < keywords.length()) {
             String[] kwdArray = keywords.split("\\s");
-            for ( String keyword : kwdArray ) {
+            for (String keyword : kwdArray) {
                 result = replaceRegexp(result, "(" + keywordToPattern(keyword, wholeWords) + ")", "ig", "\u00ab$1\u00bb");
             }
         }
         boolean shouldRemoveExtraMarkers = true;
         String newResult;
 
-        while ( shouldRemoveExtraMarkers ) {
+        while (shouldRemoveExtraMarkers) {
             newResult = replaceRegexp(result, "\u00ab([^\u00ab\u00bb]*)\u00ab", "ig", "\u00ab$1");
             shouldRemoveExtraMarkers = !newResult.equals(result);
             result = newResult;
         }
         shouldRemoveExtraMarkers = true;
-        while ( shouldRemoveExtraMarkers ) {
+        while (shouldRemoveExtraMarkers) {
             newResult = replaceRegexp(result, "\u00bb([^\u00ab\u00bb]*)\u00bb", "ig", "$1\u00bb");
             shouldRemoveExtraMarkers = !newResult.equals(result);
             result = newResult;
@@ -138,26 +138,26 @@ public abstract class HelperXsltExtension
         return result;
     }
 
-    public static void logInfo( XSLProcessorContext c, ElemExtensionCall extElt )
+    public static void logInfo(XSLProcessorContext c, ElemExtensionCall extElt)
     {
         try {
             log.info(extElt.getAttribute("select", c.getContextNode(), c.getTransformer()));
-        } catch ( TransformerException e ) {
+        } catch (TransformerException e) {
             log.debug("Caught an exception:", e);
         }
     }
 
-    public static void logDebug( XSLProcessorContext c, ElemExtensionCall extElt )
+    public static void logDebug(XSLProcessorContext c, ElemExtensionCall extElt)
     {
         try {
             log.debug(extElt.getAttribute("select", c.getContextNode(), c.getTransformer()));
-        } catch ( TransformerException e ) {
+        } catch (TransformerException e) {
             log.debug("Caught an exception:", e);
         }
     }
 
-    public static void setApplication( Application app )
+    public static void setApplication(Application app)
     {
-        application = (AEInterfaceApplication)app;
+        application = app;
     }
 }

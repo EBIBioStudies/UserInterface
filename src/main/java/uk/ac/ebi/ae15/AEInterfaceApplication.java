@@ -1,52 +1,20 @@
 package uk.ac.ebi.ae15;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.quartz.*;
-import org.quartz.impl.StdSchedulerFactory;
 import uk.ac.ebi.ae15.app.Application;
-import uk.ac.ebi.ae15.jobs.RescanFilesJob;
-
-import javax.servlet.ServletContext;
+import uk.ac.ebi.ae15.jobs.JobsController;
 
 public class AEInterfaceApplication extends Application
 {
-    // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
-
-    private Preferences preferences;
-    private Experiments experiments;
-    private DownloadableFilesRegistry filesRegistry;
-    private XsltHelper xsltHelper;
-    private Scheduler quartzScheduler;
-
-    public AEInterfaceApplication(ServletContext context)
+    public AEInterfaceApplication()
     {
-        super(context);
-
-        preferences = new Preferences(this);
-        preferences.load();
-
-        experiments = new Experiments(this);
-
-        filesRegistry = new DownloadableFilesRegistry(this);
-        filesRegistry.setRootFolder(getPreferences().get("ae.files.root.location"));
-
-        xsltHelper = new XsltHelper(this);
-
-
-        try {
-            startScheduler();
-        } catch (Throwable x) {
-            log.error("Caught an exception:", x);
-        }
+        super("arrayexpress");
+        addComponent(new Experiments(this));
+        addComponent(new DownloadableFilesRegistry(this));
+        //filesRegistry.setRootFolder(getPreferences().get("ae.files.root.location"));
+        addComponent(new XsltHelper(this));
+        addComponent(new JobsController(this));
     }
-
-    public void initializeComponents()
-    {
-
-    }
-
+/*
     public void terminateComponents()
     {
         try {
@@ -62,28 +30,6 @@ public class AEInterfaceApplication extends Application
         filesRegistry = null;
         xsltHelper = null;
     }
-
-    public Preferences getPreferences()
-    {
-        return preferences;
-    }
-
-    public Experiments getExperiments()
-    {
-        return experiments;
-    }
-
-
-    public DownloadableFilesRegistry getFilesRegistry()
-    {
-        return filesRegistry;
-    }
-
-    public XsltHelper getXsltHelper()
-    {
-        return xsltHelper;
-    }
-
     private void startScheduler() throws SchedulerException
     {
         // Retrieve a scheduler from schedule factory
@@ -118,6 +64,5 @@ public class AEInterfaceApplication extends Application
             log.error("Caught an exception:", x);
         }
     }
-
-
+*/
 }

@@ -5,8 +5,6 @@ import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.http.HttpServlet;
 
-// application-aware servlet
-
 public class ApplicationServlet extends HttpServlet
 {
     // logging machinery
@@ -14,7 +12,7 @@ public class ApplicationServlet extends HttpServlet
 
     public Application getApplication()
     {
-        Application app = (Application) getServletContext().getAttribute("aeApplication");
+        Application app = (Application) getServletContext().getAttribute((Application.class).getName());
         if (null == app) {
             log.error("Cannot get application instance from servlet context attributes");
         }
