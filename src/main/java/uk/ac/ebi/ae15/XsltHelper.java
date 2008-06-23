@@ -51,7 +51,7 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return src;
     }
 
-    public synchronized boolean transformDocumentToFile(Document srcDocument, String stylesheet, Map<String, String[]> params, File dstFile)
+    public synchronized boolean transformDocumentToFile(Document srcDocument, String stylesheet, Map params, File dstFile)
     {
         try {
             return transform(new DOMSource(srcDocument), stylesheet, params, new StreamResult(new FileOutputStream(dstFile)));
@@ -62,7 +62,7 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return false;
     }
 
-    public synchronized String transformDocumentToString(Document srcDocument, String stylesheet, Map<String, String[]> params)
+    public synchronized String transformDocumentToString(Document srcDocument, String stylesheet, Map params)
     {
         try {
             StringWriter sw = new StringWriter();
@@ -76,7 +76,7 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return null;
     }
 
-    public synchronized Document transformStringToDocument(String srcXmlString, String stylesheet, Map<String, String[]> params)
+    public synchronized Document transformStringToDocument(String srcXmlString, String stylesheet, Map params)
     {
         try {
             InputStream inStream = new ByteArrayInputStream(srcXmlString.getBytes("ISO-8859-1"));
@@ -97,7 +97,7 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return transform(new DOMSource(srcDocument), stylesheet, params, new StreamResult(dstWriter));
     }
 
-    private boolean transform(Source src, String stylesheet, Map<String, String[]> params, Result dst)
+    private boolean transform(Source src, String stylesheet, Map params, Result dst)
     {
         boolean result = false;
         try {
@@ -115,8 +115,9 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
 
             // assign the parameters (if not null)
             if (null != params) {
-                for (Map.Entry<String, String[]> param : params.entrySet()) {
-                    transformer.setParameter(param.getKey(), arrayToString(param.getValue()));
+                for (Object param : params.entrySet()) {
+                    Map.Entry p = (Map.Entry)param;
+                    transformer.setParameter((String)p.getKey(), arrayToString((String[])p.getValue()));
                 }
             }
 

@@ -4,6 +4,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import uk.ac.ebi.ae15.app.Application;
 import uk.ac.ebi.ae15.app.ApplicationComponent;
+import uk.ac.ebi.ae15.utils.persistence.PersistableFilesMap;
+import uk.ac.ebi.ae15.utils.persistence.TextFilePersistence;
 
 import java.io.File;
 import java.util.Map;
@@ -24,14 +26,14 @@ public class DownloadableFilesRegistry extends ApplicationComponent
                 new PersistableFilesMap(),
                 new File(
                         System.getProperty("java.io.tmpdir"),
-                        getApplication().getPreferences().get("ae.files.cache.filename")
+                        getPreferences().get("ae.files.cache.filename")
                 )
         );
     }
 
     public void initialize()
     {
-
+    setRootFolder(getPreferences().get("ae.files.root.location"));
     }
 
     public void terminate()
@@ -104,7 +106,6 @@ public class DownloadableFilesRegistry extends ApplicationComponent
         return location;
     }
 
-
     private void rescanFolder(File folder, Map<String, String> map) throws InterruptedException
     {
         if (folder.canRead()) {
@@ -139,7 +140,7 @@ public class DownloadableFilesRegistry extends ApplicationComponent
         }
     }
 
-    private synchronized void setFilesMap(PersistableFilesMap newMap)
+    private synchronized void setFilesMap( PersistableFilesMap newMap)
     {
         filesMap.setObject(newMap);
     }

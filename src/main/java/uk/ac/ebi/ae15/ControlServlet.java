@@ -40,15 +40,16 @@ public class ControlServlet extends ApplicationServlet
             if (0 == params.length()) {
                 params = "aepub1";
             }
-            Experiments experiments = (Experiments) getApplication().getComponent("Experiments");
-            boolean onlyPublic = getApplication().getPreferences().get("ae.experiments.publiconly").toLowerCase().equals("true");
-            experiments.reloadExperiments(params, onlyPublic);
+            Experiments experiments = (Experiments) getComponent("Experiments");
+            boolean onlyPublic = getPreferences().get("ae.experiments.publiconly").toLowerCase().equals("true");
+            // TODO: redo this that is kicks off job scheduler
+            // experiments.reloadExperiments(params, onlyPublic);
         } else if (command.equals("rescan-files")) {
-            DownloadableFilesRegistry filesRegistry = (DownloadableFilesRegistry) getApplication().getComponent("DownloadableFilesRegistry");
+            DownloadableFilesRegistry filesRegistry = (DownloadableFilesRegistry) getComponent("DownloadableFilesRegistry");
             if (0 < params.length()) {
                 filesRegistry.setRootFolder(params);
             }
-            // TODO: redo this that is kicks off the scheduler
+            // TODO: redo this that is kicks off job scheduler
             // filesRegistry.rescan();
         }
     }

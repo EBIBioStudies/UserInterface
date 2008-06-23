@@ -10,7 +10,6 @@ public class AEInterfaceApplication extends Application
         super("arrayexpress");
         addComponent(new Experiments(this));
         addComponent(new DownloadableFilesRegistry(this));
-        //filesRegistry.setRootFolder(getPreferences().get("ae.files.root.location"));
         addComponent(new XsltHelper(this));
         addComponent(new JobsController(this));
     }

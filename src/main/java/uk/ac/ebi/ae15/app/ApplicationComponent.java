@@ -35,6 +35,11 @@ abstract public class ApplicationComponent
         return getApplication().getComponent(name);
     }
 
+    public ApplicationPreferences getPreferences()
+    {
+        return getApplication().getPreferences();
+    }
+
     public abstract void initialize();
 
     public abstract void terminate();

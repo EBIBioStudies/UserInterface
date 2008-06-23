@@ -1,58 +1,51 @@
 package uk.ac.ebi.ae15;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
+
 import org.w3c.dom.Document;
 import uk.ac.ebi.ae15.app.Application;
 import uk.ac.ebi.ae15.app.ApplicationComponent;
+import uk.ac.ebi.ae15.utils.persistence.PersistableDocumentContainer;
+import uk.ac.ebi.ae15.utils.persistence.PersistableString;
+import uk.ac.ebi.ae15.utils.persistence.TextFilePersistence;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
 import java.io.File;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Experiments extends ApplicationComponent
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    //private final Log log = LogFactory.getLog(getClass());
 
-    private final int numOfParallelConnections = 25;
-    private final int initialXmlStringBufferSize = 20000000;  // 20 Mb
-
-    public Experiments( Application app)
+    public Experiments(Application app)
     {
-        super(app);
+        super(app, "Experiments");
 
         experiments = new TextFilePersistence<PersistableDocumentContainer>(
                 new PersistableDocumentContainer()
-                , new File(System.getProperty("java.io.tmpdir"), ((AEInterfaceApplication)getApplication()).getPreferences().get("ae.experiments.cache.filename"))
+                , new File(System.getProperty("java.io.tmpdir"), getPreferences().get("ae.experiments.cache.filename"))
         );
 
         experimentSearch = new ExperimentSearch();
 
         species = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File(System.getProperty("java.io.tmpdir"), ((AEInterfaceApplication)getApplication()).getPreferences().get("ae.species.cache.filename"))
+                , new File(System.getProperty("java.io.tmpdir"), getPreferences().get("ae.species.cache.filename"))
 
         );
 
         arrays = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File(System.getProperty("java.io.tmpdir"), ((AEInterfaceApplication)getApplication()).getPreferences().get("ae.arrays.cache.filename"))
+                , new File(System.getProperty("java.io.tmpdir"), getPreferences().get("ae.arrays.cache.filename"))
         );
     }
 
-    protected void initializeComponent()
+    public void initialize()
     {
 
     }
 
-    public void terminateComponent()
+    public void terminate()
     {
 
     }
@@ -83,6 +76,7 @@ public class Experiments extends ApplicationComponent
         return experimentSearch;
     }
 
+/*********
     public void reloadExperiments(String dsName, boolean onlyPublic)
     {
         experiments.setObject(
@@ -93,7 +87,7 @@ public class Experiments extends ApplicationComponent
 
         species.setObject(
                 new PersistableString(
-                        ((AEInterfaceApplication)getApplication()).getXsltHelper().transformDocumentToString(
+                        ((XsltHelper)getApplication().getComponent("XsltHelper")).transformDocumentToString(
                                 experiments.getObject().getDocument()
                                 , "preprocess-species-html.xsl"
                                 , null
@@ -103,7 +97,7 @@ public class Experiments extends ApplicationComponent
 
         arrays.setObject(
                 new PersistableString(
-                        ((AEInterfaceApplication)getApplication()).getXsltHelper().transformDocumentToString(
+                        ((XsltHelper)getApplication().getComponent("XsltHelper")).transformDocumentToString(
                                 experiments.getObject().getDocument()
                                 , "preprocess-arrays-html.xsl"
                                 , null
@@ -116,14 +110,13 @@ public class Experiments extends ApplicationComponent
 
     private Document loadExperimentsFromString(String xmlString)
     {
-        Document doc = ((AEInterfaceApplication)getApplication()).getXsltHelper().transformStringToDocument(xmlString, "preprocess-experiments-xml.xsl", null);
+        Document doc = ((XsltHelper)getComponent("XsltHelper")).transformStringToDocument(xmlString, "preprocess-experiments-xml.xsl", null);
         if (null == doc) {
             log.error("Pre-processing returned an error, will have an empty document");
             return null;
         }
         return doc;
     }
-
 
     public Document loadExperimentsFromDataSource(String dataSourceName, boolean onlyPublic)
     {
@@ -260,19 +253,11 @@ public class Experiments extends ApplicationComponent
 
         return dataSource;
     }
-
+****/
     private TextFilePersistence<PersistableDocumentContainer> experiments;
 
     private TextFilePersistence<PersistableString> species;
     private TextFilePersistence<PersistableString> arrays;
 
     private ExperimentSearch experimentSearch;
-
-    // sql to get a list of experiments from the database
-    private final String getExperimentsSql = "select distinct e.id, i.identifier as accession, case when v.user_id = 1 then 1 else 0 end as \"public\"" +
-            " from tt_experiment e left outer join tt_identifiable i on i.id = e.id" +
-            "  left outer join tt_extendable ext on ext.id = e.id" +
-            "  left outer join pl_visibility v on v.label_id = ext.label_id" +
-            " order by" +
-            "  i.identifier asc";
 }

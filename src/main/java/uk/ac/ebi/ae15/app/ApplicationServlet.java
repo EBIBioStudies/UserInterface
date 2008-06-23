@@ -18,4 +18,14 @@ public class ApplicationServlet extends HttpServlet
         }
         return app;
     }
+
+    public ApplicationComponent getComponent(String name)
+    {
+        return getApplication().getComponent(name);
+    }
+
+    public ApplicationPreferences getPreferences()
+    {
+        return getApplication().getPreferences();
+    }
 }

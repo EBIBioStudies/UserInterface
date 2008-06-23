@@ -51,13 +51,17 @@ public class QueryServlet extends ApplicationServlet
         // Output goes to the response PrintWriter.
         PrintWriter out = response.getWriter();
         if (stylesheet.equals("arrays-select")) {
-            out.print(((AEInterfaceApplication)getApplication()).getExperiments().getArrays());
+            out.print(((Experiments)getApplication().getComponent("Experiments")).getArrays());
         } else if (stylesheet.equals("species-select")) {
-            out.print(((AEInterfaceApplication)getApplication()).getExperiments().getSpecies());
+            out.print(((Experiments)getApplication().getComponent("Experiments")).getSpecies());
         } else {
             String stylesheetName = new StringBuilder(stylesheet).append('-').append(type).append(".xsl").toString();
 
-            if (!((AEInterfaceApplication)getApplication()).getXsltHelper().transformDocumentToPrintWriter(((AEInterfaceApplication)getApplication()).getExperiments().getExperiments(), stylesheetName, request.getParameterMap(), out)) {
+            if (!((XsltHelper)getApplication().getComponent("XsltHelper")).transformDocumentToPrintWriter(
+                    ((Experiments)getApplication().getComponent("Experiments")).getExperiments(),
+                    stylesheetName,
+                    request.getParameterMap(),
+                    out)) {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         }
