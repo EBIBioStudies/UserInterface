@@ -11,7 +11,7 @@ abstract public class ApplicationComponent
     private Application application;
     private String componentName;
 
-    public ApplicationComponent(Application app, String name)
+    public ApplicationComponent( Application app, String name )
     {
         if (null == app) {
             log.error("Null application reference just passed to the component, expect problems down the road");
@@ -30,7 +30,7 @@ abstract public class ApplicationComponent
         return application;
     }
 
-    public ApplicationComponent getComponent(String name)
+    public ApplicationComponent getComponent( String name )
     {
         return getApplication().getComponent(name);
     }
