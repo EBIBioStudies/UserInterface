@@ -76,7 +76,7 @@ public abstract class SqlStatementExecutor
         return stmt;
     }
 
-    private void closeConnection()
+    protected void closeConnection()
     {
         if (null != statement) {
             try {

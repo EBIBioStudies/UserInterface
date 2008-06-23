@@ -63,15 +63,21 @@ public class ExperimentXmlDatabaseRetriever extends SqlStatementExecutor
     public String getExperimentXml() throws InterruptedException
     {
         log.debug("Retrieving experiment data for [" + experimentList.size() + "] experiments");
-        for ( Object exp : experimentList ) {
-            experimentId = (Long) exp;
-            if (!execute(true)) {
-                experimentXml = new StringBuilder();
-                break;
+        try {
+            for ( Object exp : experimentList ) {
+                experimentId = (Long) exp;
+                if (!execute(true)) {
+                    experimentXml = new StringBuilder();
+                    break;
+                }
+                Thread.sleep(1);
             }
-            Thread.sleep(1);
+            log.debug("Retrieval completed");
+        } catch ( InterruptedException x ) {
+            log.debug("Retrieval aborted");
+        } finally {
+            closeConnection();
         }
-        log.debug("Retrieval completed (or aborted)");
         return experimentXml.toString();
     }
 
