@@ -39,7 +39,6 @@ public class Application implements ServletContextListener
         if (components.containsKey(component.getName())) {
             log.error("The component [" + component.getName() + "] has already been added to the application");
         } else {
-            log.debug("Adding component [" + component.getName() + "]");
             components.put(component.getName(), component);
         }
     }

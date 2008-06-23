@@ -3,6 +3,7 @@ package uk.ac.ebi.ae15.utils.db;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Clob;
@@ -52,9 +53,9 @@ public class ExperimentXmlDatabaseRetriever extends SqlStatementExecutor
     // current experiment id (being executed)
     private Integer experimentId;
 
-    public ExperimentXmlDatabaseRetriever( String dsName, List<Integer> expList )
+    public ExperimentXmlDatabaseRetriever( DataSource ds, List<Integer> expList )
     {
-        super(dsName, getExperimentXmlSql);
+        super(ds, getExperimentXmlSql);
         experimentList = expList;
         experimentXml = new StringBuilder(4000 * expList.size());
     }

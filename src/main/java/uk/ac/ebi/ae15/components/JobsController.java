@@ -24,7 +24,7 @@ public class JobsController extends ApplicationComponent
 
     public JobsController( Application app )
     {
-        super(app, "JobController");
+        super(app, "JobsController");
     }
 
     public void initialize()

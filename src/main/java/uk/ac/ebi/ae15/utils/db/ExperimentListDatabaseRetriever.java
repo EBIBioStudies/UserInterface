@@ -3,6 +3,7 @@ package uk.ac.ebi.ae15.utils.db;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,9 +29,9 @@ public class ExperimentListDatabaseRetriever extends SqlStatementExecutor
     // should I list experiments that are public?
     private boolean shouldListOnlyPublic;
 
-    public ExperimentListDatabaseRetriever( String dsName, boolean publicOnly )
+    public ExperimentListDatabaseRetriever( DataSource ds, boolean publicOnly )
     {
-        super(dsName, getExperimentListSql);
+        super(ds, getExperimentListSql);
         experimentList = new ArrayList<Integer>();
         shouldListOnlyPublic = publicOnly;
     }

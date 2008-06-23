@@ -5,12 +5,14 @@ import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import uk.ac.ebi.ae15.app.Application;
 import uk.ac.ebi.ae15.app.ApplicationComponent;
+import uk.ac.ebi.ae15.utils.db.DataSourceFinder;
 import uk.ac.ebi.ae15.utils.db.ExperimentListDatabaseRetriever;
 import uk.ac.ebi.ae15.utils.persistence.PersistableDocumentContainer;
 import uk.ac.ebi.ae15.utils.persistence.PersistableString;
 import uk.ac.ebi.ae15.utils.persistence.TextFilePersistence;
 import uk.ac.ebi.ae15.utils.search.ExperimentSearch;
 
+import javax.sql.DataSource;
 import java.io.File;
 import java.util.List;
 
@@ -99,7 +101,13 @@ public class Experiments extends ApplicationComponent
     public void reload() throws InterruptedException
     {
         log.info("Rescan of downloadable files from [" + getDataSource() + "] requested");
-        List<Integer> exps = new ExperimentListDatabaseRetriever(getDataSource(), getPreferences().getBoolean("ae.experiments.publiconly")).getExperimentList();
+        DataSource ds = new DataSourceFinder().findDataSource(getDataSource());
+        List<Integer> exps = new ExperimentListDatabaseRetriever(
+                ds,
+                getPreferences().getBoolean("ae.experiments.publiconly")
+        ).getExperimentList();
+
+        log.info("Got [" + String.valueOf(exps.size()) + "] experiments listed in the database, scheduling retrieval");
     }
 /*********
  public void reloadExperiments(String dsName, boolean onlyPublic)

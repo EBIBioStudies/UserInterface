@@ -41,8 +41,13 @@ public class ApplicationPreferences extends ApplicationComponent
     public Long getLong( String key )
     {
         Long value = null;
+        String strVal = null;
         try {
-            value = Long.valueOf(properties.getProperty(key));
+            strVal = properties.getProperty(key);
+            if (null != strVal)
+                value = Long.valueOf(strVal);
+        } catch ( NumberFormatException x ) {
+            log.error("Value [" + strVal + "] of preference [" + key + "] is expected to be a number");
         } catch ( Throwable x ) {
             log.error("Caught an exception while converting value [" + properties.getProperty(key) + "] of preference [" + key + "] to Long:", x);
         }

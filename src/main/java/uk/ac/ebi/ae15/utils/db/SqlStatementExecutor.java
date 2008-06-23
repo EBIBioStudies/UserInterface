@@ -3,8 +3,6 @@ package uk.ac.ebi.ae15.utils.db;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,9 +17,11 @@ public abstract class SqlStatementExecutor
     // statement
     private PreparedStatement statement;
 
-    public SqlStatementExecutor( String dsName, String sql )
+    public SqlStatementExecutor( DataSource ds, String sql )
     {
-        statement = prepareStatement(dsName, sql);
+        if (null != sql && null != ds) {
+            statement = prepareStatement(ds, sql);
+        }
     }
 
     protected boolean execute( boolean shouldRetainConnection )
@@ -42,7 +42,6 @@ public abstract class SqlStatementExecutor
                         rs.close();
                     } catch ( SQLException x ) {
                         log.error("Caught an exception:", x);
-
                     }
                 }
 
@@ -62,10 +61,9 @@ public abstract class SqlStatementExecutor
     // overridable method that would allow user to parse the result set upon successful execution
     protected abstract void processResultSet( ResultSet resultSet ) throws SQLException;
 
-    private PreparedStatement prepareStatement( String dsName, String sql )
+    private PreparedStatement prepareStatement( DataSource ds, String sql )
     {
         PreparedStatement stmt = null;
-        DataSource ds = getDataSource(dsName);
         if (null != ds) {
             try {
                 Connection conn = ds.getConnection();
@@ -90,19 +88,4 @@ public abstract class SqlStatementExecutor
         }
     }
 
-    private DataSource getDataSource( String dataSourceName )
-    {
-        DataSource ds = null;
-
-        try {
-            Context initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
-
-            ds = (DataSource) envContext.lookup("jdbc/" + dataSourceName.toLowerCase());
-        } catch ( Throwable x ) {
-            log.error("Caught an exception:", x);
-        }
-
-        return ds;
-    }
 }
