@@ -83,7 +83,7 @@ public class Experiments extends ApplicationComponent
     public String getDataSource()
     {
         if (null == dataSource) {
-            dataSource = getPreferences().getString("ae.experiments.datasource.default");
+            dataSource = getPreferences().getString("ae.experiments.datasources");
         }
 
         return dataSource;
