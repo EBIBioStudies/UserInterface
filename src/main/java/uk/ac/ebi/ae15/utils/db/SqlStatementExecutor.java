@@ -27,7 +27,7 @@ public abstract class SqlStatementExecutor
     protected boolean execute( boolean shouldRetainConnection )
     {
         boolean result = false;
-        if ( null != statement ) {
+        if (null != statement) {
             ResultSet rs = null;
             try {
                 setParameters(statement);
@@ -37,7 +37,7 @@ public abstract class SqlStatementExecutor
             } catch ( Throwable x ) {
                 log.error("Caught an exception:", x);
             } finally {
-                if ( null != rs ) {
+                if (null != rs) {
                     try {
                         rs.close();
                     } catch ( SQLException x ) {
@@ -46,7 +46,7 @@ public abstract class SqlStatementExecutor
                     }
                 }
 
-                if ( !shouldRetainConnection ) {
+                if (!shouldRetainConnection) {
                     closeConnection();
                 }
             }
@@ -58,15 +58,15 @@ public abstract class SqlStatementExecutor
 
     // overridable method that would allow user to set additional parameters (if any)
     protected abstract void setParameters( PreparedStatement stmt ) throws SQLException;
-    // overridable method that would allow user to parse the result set upon successful execution 
+
+    // overridable method that would allow user to parse the result set upon successful execution
     protected abstract void processResultSet( ResultSet resultSet ) throws SQLException;
 
     private PreparedStatement prepareStatement( String dsName, String sql )
     {
         PreparedStatement stmt = null;
         DataSource ds = getDataSource(dsName);
-        if ( null != ds )
-        {
+        if (null != ds) {
             try {
                 Connection conn = ds.getConnection();
                 stmt = conn.prepareStatement(sql);
@@ -80,7 +80,7 @@ public abstract class SqlStatementExecutor
 
     private void closeConnection()
     {
-        if ( null != statement ) {
+        if (null != statement) {
             try {
                 statement.getConnection().close();
             } catch ( SQLException x ) {
@@ -99,7 +99,7 @@ public abstract class SqlStatementExecutor
             Context envContext = (Context) initContext.lookup("java:/comp/env");
 
             ds = (DataSource) envContext.lookup("jdbc/" + dataSourceName.toLowerCase());
-        } catch (Throwable x) {
+        } catch ( Throwable x ) {
             log.error("Caught an exception:", x);
         }
 

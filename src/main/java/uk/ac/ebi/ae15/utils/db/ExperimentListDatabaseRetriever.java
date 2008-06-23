@@ -28,7 +28,7 @@ public class ExperimentListDatabaseRetriever extends SqlStatementExecutor
     // should I list experiments that are public?
     private boolean shouldListOnlyPublic;
 
-    public ExperimentListDatabaseRetriever( String dsName,  boolean publicOnly )
+    public ExperimentListDatabaseRetriever( String dsName, boolean publicOnly )
     {
         super(dsName, getExperimentListSql);
         experimentList = new ArrayList<Integer>();
@@ -37,8 +37,7 @@ public class ExperimentListDatabaseRetriever extends SqlStatementExecutor
 
     public List<Integer> getExperimentList()
     {
-        if (!execute(false))
-        {
+        if (!execute(false)) {
             log.error("There was a problem retrieving the list of experiments, check log for errors or exceptions");
         }
         return experimentList;
@@ -51,7 +50,7 @@ public class ExperimentListDatabaseRetriever extends SqlStatementExecutor
 
     protected void processResultSet( ResultSet resultSet ) throws SQLException
     {
-        while (resultSet.next()) {
+        while ( resultSet.next() ) {
             experimentList.add(resultSet.getInt(1));
         }
     }
