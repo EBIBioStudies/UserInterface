@@ -1,4 +1,4 @@
-package uk.ac.ebi.ae15;
+package uk.ac.ebi.ae15.servlets;
 
 import uk.ac.ebi.ae15.app.ApplicationServlet;
 

@@ -1,7 +1,10 @@
 package uk.ac.ebi.ae15;
 
 import uk.ac.ebi.ae15.app.Application;
-import uk.ac.ebi.ae15.jobs.JobsController;
+import uk.ac.ebi.ae15.components.DownloadableFilesRegistry;
+import uk.ac.ebi.ae15.components.Experiments;
+import uk.ac.ebi.ae15.components.JobsController;
+import uk.ac.ebi.ae15.components.XsltHelper;
 
 public class AEInterfaceApplication extends Application
 {

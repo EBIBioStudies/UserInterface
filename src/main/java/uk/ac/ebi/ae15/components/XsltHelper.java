@@ -1,10 +1,11 @@
-package uk.ac.ebi.ae15;
+package uk.ac.ebi.ae15.components;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import uk.ac.ebi.ae15.app.Application;
 import uk.ac.ebi.ae15.app.ApplicationComponent;
+import uk.ac.ebi.ae15.utils.AppXalanExtension;
 
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMResult;
@@ -28,12 +29,12 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
 
     public void initialize()
     {
-        HelperXsltExtension.setApplication(getApplication());
+        AppXalanExtension.setApplication(getApplication());
     }
 
     public void terminate()
     {
-        HelperXsltExtension.setApplication(null);
+        AppXalanExtension.setApplication(null);
     }
 
     public Source resolve(String href, String base) throws TransformerException

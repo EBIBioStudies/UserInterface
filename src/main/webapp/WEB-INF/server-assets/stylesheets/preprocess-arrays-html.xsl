@@ -3,7 +3,7 @@
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:helper="uk.ac.ebi.ae15.HelperXsltExtension"
+    xmlns:helper="uk.ac.ebi.ae15.utils.AppXalanExtension"
     extension-element-prefixes="helper html"
     exclude-result-prefixes="helper html"
     version="1.0">

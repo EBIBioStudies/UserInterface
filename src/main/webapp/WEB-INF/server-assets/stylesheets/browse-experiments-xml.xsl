@@ -3,7 +3,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:func="http://exslt.org/functions"
                 xmlns:ae="http://www.ebi.ac.uk/arrayexpress"
-                xmlns:helper="uk.ac.ebi.ae15.HelperXsltExtension"
+                xmlns:helper="uk.ac.ebi.ae15.utils.AppXalanExtension"
                 extension-element-prefixes="func ae helper"
                 exclude-result-prefixes="func ae helper"
                 version="1.0">

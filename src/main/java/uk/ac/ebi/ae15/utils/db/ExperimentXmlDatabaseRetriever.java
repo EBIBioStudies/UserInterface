@@ -1,29 +1,22 @@
-package uk.ac.ebi.ae15;
+package uk.ac.ebi.ae15.utils.db;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Clob;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
-public class ExperimentXmlRetrieverThread extends Thread
+public class ExperimentXmlDatabaseRetriever extends SqlStatementExecutor
 {
-    // logging machinery
+    // logging facility
     private final Log log = LogFactory.getLog(getClass());
-
-    private boolean isNew = true;       // is thread new to the business?
-    private boolean isReady = false;    // is thread ready to execute a statement?
-    private boolean isDone = false;     // is thread done with a statement result?
-    private boolean isRetired = false;  // is thread to be retired?
-    private boolean isFaulty = false;   // has thready thrown any exception in the past - we abort
-
-    private DataSource dataSource;
-    private int experimentId;
-    private String result;
-
-    private final String getExperimentXmlSql = "select XmlElement( \"experiment\"" +
+    // sql code
+    private final static String getExperimentXmlSql = "select XmlElement( \"experiment\"" +
             " , XmlAttributes( e.id as \"id\", i.identifier as \"accession\", nvt_name.value as \"name\", nvt_releasedate.value as \"releasedate\", nvt_miamegold.value as \"miamegold\" )" +
             " , ( select XmlAgg( XmlElement( \"user\", v.user_id ) ) from tt_extendable ext left outer join pl_visibility v on v.label_id = ext.label_id where ext.id = e.id )" +
             " , ( select XmlAgg( XmlElement( \"secondaryaccession\", sa.value ) ) from tt_namevaluetype sa where sa.t_extendable_id = e.id and sa.name = 'SecondaryAccession' )" +
@@ -52,122 +45,62 @@ public class ExperimentXmlRetrieverThread extends Thread
             "  , nvt_releasedate.value" +
             "  , nvt_miamegold.value";
 
-    public ExperimentXmlRetrieverThread( DataSource ds, int index )
+    // experiment list
+    private List<Integer> experimentList;
+    // experiment xml builder
+    private StringBuilder experimentXml;
+    // current experiment id (being executed)
+    private Integer experimentId;
+
+    public ExperimentXmlDatabaseRetriever( String dsName, List<Integer> expList )
     {
-        super("ExperimentXmlRetrieverThread[" + Integer.toString(index) + "]");
-        dataSource = ds;
+        super(dsName, getExperimentXmlSql);
+        experimentList = expList;
+        experimentXml = new StringBuilder(4000 * expList.size());
     }
 
-    public String ClobToString( Clob cl ) throws IOException, SQLException
+    public String getExperimentXml()
+    {
+        for ( Integer exp : experimentList ) {
+            experimentId = exp;
+            if (!execute(true)) {
+                experimentXml = new StringBuilder();
+                break;
+            }
+        }
+        return experimentXml.toString();
+    }
+
+    protected void setParameters( PreparedStatement stmt ) throws SQLException
+    {
+        stmt.setInt(1, experimentId);
+    }
+
+    protected void processResultSet( ResultSet resultSet ) throws SQLException
+    {
+        if (resultSet.next()) {
+            Clob xmlClob = resultSet.getClob(1);
+            experimentXml.append(ClobToString(xmlClob));
+        }
+    }
+
+    private String ClobToString( Clob cl ) throws SQLException
     {
         if (cl == null)
             return null;
 
         StringBuilder strOut = new StringBuilder();
-        String aux;
 
-        // We access to stream, as this way we don't have to use the CLOB.length() which is slower...
         BufferedReader br = new BufferedReader(cl.getCharacterStream());
-
-        while ( (aux = br.readLine()) != null )
-            strOut.append(aux);
+        try {
+            String aux;
+            while ( (aux = br.readLine()) != null )
+                strOut.append(aux);
+        } catch ( IOException x ) {
+            log.error("Caught an exception:", x);
+            strOut = new StringBuilder();
+        }
 
         return strOut.toString();
-    }
-
-    public void run()
-    {
-        // initializing the thread's internals
-        Connection conn = null;
-        try {
-            conn = dataSource.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(getExperimentXmlSql);
-
-            // loop the thread till we want it retired
-            while ( !isRetired ) {
-
-                // wait till id is set
-                while ( !isReady && !isRetired ) {
-                    Thread.sleep(250);
-                }
-
-                if (!isRetired) {
-                    try {
-                        setReady(false);
-                        stmt.setInt(1, experimentId);
-                        ResultSet rs = stmt.executeQuery();
-
-                        if (rs.next()) {
-                            Clob xmlClob = rs.getClob(1);
-                            result = ClobToString(xmlClob);
-                        }
-                        rs.close();
-                    } catch ( Throwable x ) {
-                        log.error("Caught an exception:", x);
-                        result = null;
-                        isFaulty = true;
-                    }
-                    setDone(true);
-                }
-            }
-        } catch ( Throwable x ) {
-            log.error("Caught an exception: ", x);
-            isFaulty = true;
-        }
-
-        if (null != conn) {
-            try {
-                conn.close();
-            } catch ( Throwable x ) {
-                log.error("Caught an exception:", x);
-                isFaulty = true;
-            }
-        }
-    }
-
-    public void setId( int id )
-    {
-        experimentId = id;
-        isNew = false;
-        setDone(false);
-        setReady(true);
-    }
-
-    public void retire()
-    {
-        isRetired = true;
-    }
-
-    public boolean isNew()
-    {
-        return isNew;
-    }
-
-    public boolean isDone()
-    {
-        return isDone;
-    }
-
-    public boolean isFaulty()
-    {
-        return isFaulty;
-    }
-
-    public String getXml()
-    {
-        if (null == result) {
-            log.debug("getXml: result is null, expect problems down the road.");
-        }
-        return result;
-    }
-
-    private synchronized void setReady( boolean ready )
-    {
-        isReady = ready;
-    }
-
-    private synchronized void setDone( boolean done )
-    {
-        isDone = done;
     }
 }

@@ -1,4 +1,4 @@
-package uk.ac.ebi.ae15;
+package uk.ac.ebi.ae15.components;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

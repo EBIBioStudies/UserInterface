@@ -1,4 +1,4 @@
-package uk.ac.ebi.ae15.utils;
+package uk.ac.ebi.ae15.utils.db;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

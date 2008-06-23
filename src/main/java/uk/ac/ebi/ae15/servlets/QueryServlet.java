@@ -1,8 +1,10 @@
-package uk.ac.ebi.ae15;
+package uk.ac.ebi.ae15.servlets;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import uk.ac.ebi.ae15.app.ApplicationServlet;
+import uk.ac.ebi.ae15.components.Experiments;
+import uk.ac.ebi.ae15.components.XsltHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

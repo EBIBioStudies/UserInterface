@@ -1,8 +1,7 @@
-package uk.ac.ebi.ae15;
+package uk.ac.ebi.ae15.utils.db;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import uk.ac.ebi.ae15.utils.SqlStatementExecutor;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

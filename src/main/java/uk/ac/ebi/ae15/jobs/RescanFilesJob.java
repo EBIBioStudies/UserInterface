@@ -4,7 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.quartz.*;
 import uk.ac.ebi.ae15.AEInterfaceApplication;
-import uk.ac.ebi.ae15.DownloadableFilesRegistry;
+import uk.ac.ebi.ae15.components.DownloadableFilesRegistry;
 
 public class RescanFilesJob implements InterruptableJob, StatefulJob
 {

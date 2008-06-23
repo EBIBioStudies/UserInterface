@@ -1,4 +1,4 @@
-package uk.ac.ebi.ae15;
+package uk.ac.ebi.ae15.components;
 
 //import org.apache.commons.logging.Log;
 //import org.apache.commons.logging.LogFactory;
@@ -9,6 +9,7 @@ import uk.ac.ebi.ae15.app.ApplicationComponent;
 import uk.ac.ebi.ae15.utils.persistence.PersistableDocumentContainer;
 import uk.ac.ebi.ae15.utils.persistence.PersistableString;
 import uk.ac.ebi.ae15.utils.persistence.TextFilePersistence;
+import uk.ac.ebi.ae15.utils.search.ExperimentSearch;
 
 import java.io.File;
 
