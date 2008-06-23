@@ -27,7 +27,10 @@ public class Experiments extends ApplicationComponent
     public Experiments( Application app )
     {
         super(app, "Experiments");
+    }
 
+    public void initialize()
+    {
         experiments = new TextFilePersistence<PersistableDocumentContainer>(
                 new PersistableDocumentContainer()
                 , new File(System.getProperty("java.io.tmpdir"), getPreferences().get("ae.experiments.cache.filename"))
@@ -45,10 +48,6 @@ public class Experiments extends ApplicationComponent
                 new PersistableString()
                 , new File(System.getProperty("java.io.tmpdir"), getPreferences().get("ae.arrays.cache.filename"))
         );
-    }
-
-    public void initialize()
-    {
     }
 
     public void terminate()

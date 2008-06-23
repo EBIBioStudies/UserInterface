@@ -18,7 +18,7 @@ public class Application implements ServletContextListener
     private ServletContext servletContext;
     private Map<String, ApplicationComponent> components;
 
-    public Application(String appName)
+    public Application( String appName )
     {
         name = appName;
         components = new HashMap<String, ApplicationComponent>();
@@ -34,7 +34,7 @@ public class Application implements ServletContextListener
         return servletContext;
     }
 
-    public void addComponent(ApplicationComponent component)
+    public void addComponent( ApplicationComponent component )
     {
         if (components.containsKey(component.getName())) {
             log.error("The component [" + component.getName() + "] has already been added to the application");
@@ -44,7 +44,7 @@ public class Application implements ServletContextListener
         }
     }
 
-    public ApplicationComponent getComponent(String name)
+    public ApplicationComponent getComponent( String name )
     {
         if (components.containsKey(name))
             return components.get(name);
@@ -57,7 +57,7 @@ public class Application implements ServletContextListener
         return (ApplicationPreferences) getComponent("Preferences");
     }
 
-    public synchronized void contextInitialized(ServletContextEvent sce)
+    public synchronized void contextInitialized( ServletContextEvent sce )
     {
         servletContext = sce.getServletContext();
         log.info("****************************************************************************************************************************");
@@ -65,17 +65,17 @@ public class Application implements ServletContextListener
         log.info("*  " + servletContext.getServletContextName());
         log.info("*");
         log.info("****************************************************************************************************************************");
-        servletContext.setAttribute(getClass().getName(), this);
+        servletContext.setAttribute(Application.class.getName(), this);
 
         addComponent(new ApplicationPreferences(this, getName()));
         initialize();
     }
 
-    public synchronized void contextDestroyed(ServletContextEvent sce)
+    public synchronized void contextDestroyed( ServletContextEvent sce )
     {
         terminate();
 
-        servletContext.setAttribute(getClass().getName(), null);
+        servletContext.setAttribute(Application.class.getName(), null);
         servletContext = null;
         log.info("****************************************************************************************************************************\n\n");
     }
@@ -83,18 +83,26 @@ public class Application implements ServletContextListener
     private void initialize()
     {
         log.debug("Initializing the application...");
-        for (ApplicationComponent c : components.values()) {
+        for ( ApplicationComponent c : components.values() ) {
             log.info("Initializing component [" + c.getName() + "]");
-            c.initialize();
+            try {
+                c.initialize();
+            } catch ( Throwable x ) {
+                log.error("Caught an exception while initializing[" + c.getName() + "]:", x);
+            }
         }
     }
 
     private void terminate()
     {
         log.debug("Terminating the application...");
-        for (ApplicationComponent c : components.values()) {
+        for ( ApplicationComponent c : components.values() ) {
             log.info("Terminating component [" + c.getName() + "]");
-            c.terminate();
+            try {
+                c.terminate();
+            } catch ( Throwable x ) {
+                log.error("Caught an exception while terminating [" + c.getName() + "]:", x);
+            }
         }
         // release references to application components
         components.clear();

@@ -22,6 +22,10 @@ public class DownloadableFilesRegistry extends ApplicationComponent
     public DownloadableFilesRegistry( Application app )
     {
         super(app, "DownloadableFilesRegistry");
+    }
+
+    public void initialize()
+    {
         filesMap = new TextFilePersistence<PersistableFilesMap>(
                 new PersistableFilesMap(),
                 new File(
@@ -29,10 +33,6 @@ public class DownloadableFilesRegistry extends ApplicationComponent
                         getPreferences().get("ae.files.cache.filename")
                 )
         );
-    }
-
-    public void initialize()
-    {
     }
 
     public void terminate()

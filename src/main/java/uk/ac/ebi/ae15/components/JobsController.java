@@ -11,13 +11,14 @@ import uk.ac.ebi.ae15.jobs.RescanFilesJob;
 
 import java.util.List;
 
+
 public class JobsController extends ApplicationComponent
 {
     // logging machinery
     private final Log log = LogFactory.getLog(getClass());
 
     // jobs group
-    private final String AE_JOBS_GROUP = "AE";
+    private final String AE_JOBS_GROUP = "ae-jobs";
 
     private Scheduler scheduler;
 
@@ -74,7 +75,7 @@ public class JobsController extends ApplicationComponent
 
     private void addJob( String name, Class c )
     {
-        JobDetail j = new JobDetail(name, AE_JOBS_GROUP, c);
+        JobDetail j = new JobDetail(name, AE_JOBS_GROUP, c, true /* volatilily */, true /*durability */, false /* recover */);
         j.getJobDataMap().put("application", getApplication());
 
         try {
@@ -91,7 +92,7 @@ public class JobsController extends ApplicationComponent
         String atStart = getPreferences().get(preferencePrefix + ".atstart");
 
         if (null != schedule && 0 < schedule.length()) {
-            CronTrigger cronTrigger = new CronTrigger(name + "_schedule_trigger", AE_JOBS_GROUP);
+            CronTrigger cronTrigger = new CronTrigger(name + "_schedule_trigger", null);
             try {
                 // setup CronExpression
                 CronExpression cexp = new CronExpression(schedule);
@@ -109,10 +110,7 @@ public class JobsController extends ApplicationComponent
         boolean hasScheduledInterval = false;
 
         if (null != interval && 0 < interval.length()) {
-            SimpleTrigger intervalTrigger = new SimpleTrigger(name + "_interval_trigger",
-                    AE_JOBS_GROUP,
-                    SimpleTrigger.REPEAT_INDEFINITELY,
-                    Integer.getInteger(interval));
+            SimpleTrigger intervalTrigger = new SimpleTrigger(name + "_interval_trigger", AE_JOBS_GROUP, SimpleTrigger.REPEAT_INDEFINITELY, Long.parseLong(interval));
 
             intervalTrigger.setJobName(name);
             intervalTrigger.setJobGroup(AE_JOBS_GROUP);

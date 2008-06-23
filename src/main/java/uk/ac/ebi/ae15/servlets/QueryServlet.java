@@ -52,15 +52,17 @@ public class QueryServlet extends ApplicationServlet
 
         // Output goes to the response PrintWriter.
         PrintWriter out = response.getWriter();
+        Experiments experiments = (Experiments) getComponent("Experiments");
         if (stylesheet.equals("arrays-select")) {
-            out.print(((Experiments)getApplication().getComponent("Experiments")).getArrays());
+            out.print(experiments.getArrays());
         } else if (stylesheet.equals("species-select")) {
-            out.print(((Experiments)getApplication().getComponent("Experiments")).getSpecies());
+            out.print(experiments.getSpecies());
         } else {
             String stylesheetName = new StringBuilder(stylesheet).append('-').append(type).append(".xsl").toString();
 
-            if (!((XsltHelper)getApplication().getComponent("XsltHelper")).transformDocumentToPrintWriter(
-                    ((Experiments)getApplication().getComponent("Experiments")).getExperiments(),
+            XsltHelper xsltHelper = (XsltHelper) getComponent("XsltHelper");
+            if (!xsltHelper.transformDocumentToPrintWriter(
+                    experiments.getExperiments(),
                     stylesheetName,
                     request.getParameterMap(),
                     out)) {

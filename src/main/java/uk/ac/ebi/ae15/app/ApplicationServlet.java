@@ -3,6 +3,7 @@ package uk.ac.ebi.ae15.app;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 
 public class ApplicationServlet extends HttpServlet
@@ -12,14 +13,15 @@ public class ApplicationServlet extends HttpServlet
 
     public Application getApplication()
     {
-        Application app = (Application) getServletContext().getAttribute((Application.class).getName());
+        ServletContext servletContext = getServletContext();
+        Object app = servletContext.getAttribute(Application.class.getName());
         if (null == app) {
             log.error("Cannot get application instance from servlet context attributes");
         }
-        return app;
+        return (Application) app;
     }
 
-    public ApplicationComponent getComponent(String name)
+    public ApplicationComponent getComponent( String name )
     {
         return getApplication().getComponent(name);
     }

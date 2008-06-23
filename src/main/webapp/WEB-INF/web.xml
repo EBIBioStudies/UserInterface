@@ -54,7 +54,7 @@
             "contextInitialized" and "contextDestroyed" messages indicating that the application
             is being de/initialized.
         </description>
-        <listener-class>uk.ac.ebi.ae15.app.Application</listener-class>
+        <listener-class>uk.ac.ebi.ae15.AEInterfaceApplication</listener-class>
     </listener>
 
     <session-config>
