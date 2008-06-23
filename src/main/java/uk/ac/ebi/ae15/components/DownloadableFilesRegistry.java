@@ -14,12 +14,12 @@ public class DownloadableFilesRegistry extends ApplicationComponent
 {
     // logging machinery
     private final Log log = LogFactory.getLog(getClass());
-    // root folder location (in local file system terms)
+    // rootFolder folder location (in local file system terms)
     private String rootFolder;
     // filename->location map
     private TextFilePersistence<PersistableFilesMap> filesMap;
 
-    public DownloadableFilesRegistry(Application app)
+    public DownloadableFilesRegistry( Application app )
     {
         super(app, "DownloadableFilesRegistry");
         filesMap = new TextFilePersistence<PersistableFilesMap>(
@@ -33,15 +33,13 @@ public class DownloadableFilesRegistry extends ApplicationComponent
 
     public void initialize()
     {
-    setRootFolder(getPreferences().get("ae.files.root.location"));
     }
 
     public void terminate()
     {
-
     }
 
-    public synchronized void setRootFolder(String folder)
+    public synchronized void setRootFolder( String folder )
     {
         if (null != folder && 0 < folder.length()) {
             if (folder.endsWith(File.separator)) {
@@ -54,25 +52,33 @@ public class DownloadableFilesRegistry extends ApplicationComponent
         }
     }
 
-    // scans the specified root folder; returns true if no exceptions occured during the action
+    public String getRootFolder()
+    {
+        if (null == rootFolder) {
+            rootFolder = getPreferences().get("ae.files.root.location");
+        }
+        return rootFolder;
+    }
+
+    // scans the specified rootFolder folder; returns true if no exceptions occured during the action
     public void rescan() throws InterruptedException
     {
-        if (null != rootFolder) {
-            File root = new File(rootFolder);
+        if (null != getRootFolder()) {
+            File root = new File(getRootFolder());
             if (!root.exists()) {
-                log.error("Rescan problem: root folder [" + rootFolder + "] is inaccessible");
+                log.error("Rescan problem: root folder [" + getRootFolder() + "] is inaccessible");
             } else if (!root.isDirectory()) {
-                log.error("Rescan problem: root folder [" + rootFolder + "] is not a directory");
+                log.error("Rescan problem: root folder [" + getRootFolder() + "] is not a directory");
             } else {
                 try {
-                    log.info("Rescan of downloadable files from [" + rootFolder + "] requested");
+                    log.info("Rescan of downloadable files from [" + getRootFolder() + "] requested");
                     PersistableFilesMap newMap = new PersistableFilesMap();
                     rescanFolder(root, newMap);
                     setFilesMap(newMap);
                     log.info("Rescan of downloadable files completed");
-                } catch (InterruptedException x) {
+                } catch ( InterruptedException x ) {
                     throw x;
-                } catch (Throwable x) {
+                } catch ( Throwable x ) {
                     log.error("Caught an exception:", x);
                 }
             }
@@ -82,23 +88,23 @@ public class DownloadableFilesRegistry extends ApplicationComponent
     }
 
     // returns true is file is registered in the registry
-    public synchronized boolean doesExist(String fileName)
+    public synchronized boolean doesExist( String fileName )
     {
         return filesMap.getObject().containsKey(fileName);
     }
 
     // returns absolute file location (if file exists, null otherwise) in local filesystem
-    public synchronized String getLocation(String fileName)
+    public synchronized String getLocation( String fileName )
     {
         return filesMap.getObject().get(fileName);
     }
 
-    // returns relative file location (to the root folder) if file exists, null otherwise)
-    public synchronized String getRelativeLocation(String fileName)
+    // returns relative file location (to the rootFolder folder) if file exists, null otherwise)
+    public synchronized String getRelativeLocation( String fileName )
     {
         String location = filesMap.getObject().get(fileName);
         if (null != location) {
-            int ix = location.indexOf(rootFolder);
+            int ix = location.indexOf(getRootFolder());
             if (-1 != ix) {
                 location = location.substring(ix);
             }
@@ -106,13 +112,13 @@ public class DownloadableFilesRegistry extends ApplicationComponent
         return location;
     }
 
-    private void rescanFolder(File folder, Map<String, String> map) throws InterruptedException
+    private void rescanFolder( File folder, Map<String, String> map ) throws InterruptedException
     {
         if (folder.canRead()) {
             File[] files = folder.listFiles();
             Thread.sleep(1);
             // process files first, then go over sub-folders
-            for (File f : files) {
+            for ( File f : files ) {
                 Thread.sleep(1);
                 if (f.isFile()) {
                     String name = f.getName();
@@ -129,7 +135,7 @@ public class DownloadableFilesRegistry extends ApplicationComponent
             }
 
             // go over sub-folders
-            for (File f : files) {
+            for ( File f : files ) {
                 Thread.sleep(1);
                 if (f.isDirectory() && !f.getName().startsWith(".")) {
                     rescanFolder(f, map);
@@ -140,7 +146,7 @@ public class DownloadableFilesRegistry extends ApplicationComponent
         }
     }
 
-    private synchronized void setFilesMap( PersistableFilesMap newMap)
+    private synchronized void setFilesMap( PersistableFilesMap newMap )
     {
         filesMap.setObject(newMap);
     }

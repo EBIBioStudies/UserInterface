@@ -13,26 +13,19 @@ public class ApplicationPreferences extends ApplicationComponent
     private String propertiesFileName;
     private Properties properties;
 
-    public ApplicationPreferences(Application app, String fileName)
+    public ApplicationPreferences( Application app, String fileName )
     {
         super(app, "Preferences");
 
         propertiesFileName = fileName;
         properties = new Properties();
+        // this has to be done BEFORE the initialization as other components may want to get preferences
+        // when their initialize() is called
+        load();
     }
 
     public void initialize()
     {
-        try {
-            properties.load(
-                    getApplication().getServletContext().getResource(
-                            "/WEB-INF/classes/" + propertiesFileName + ".properties"
-                    ).openStream()
-            );
-        } catch (Throwable e) {
-            log.error("Caught an exception:", e);
-        }
-
     }
 
     public void terminate()
@@ -40,8 +33,21 @@ public class ApplicationPreferences extends ApplicationComponent
         properties = null;
     }
 
-    public String get(String key)
+    public String get( String key )
     {
         return (String) properties.get(key);
+    }
+
+    private void load()
+    {
+        try {
+            properties.load(
+                    getApplication().getServletContext().getResource(
+                            "/WEB-INF/classes/" + propertiesFileName + ".properties"
+                    ).openStream()
+            );
+        } catch ( Throwable e ) {
+            log.error("Caught an exception:", e);
+        }
     }
 }

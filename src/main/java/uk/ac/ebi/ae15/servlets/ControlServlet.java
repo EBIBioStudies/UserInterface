@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import uk.ac.ebi.ae15.app.ApplicationServlet;
 import uk.ac.ebi.ae15.components.DownloadableFilesRegistry;
 import uk.ac.ebi.ae15.components.Experiments;
+import uk.ac.ebi.ae15.components.JobsController;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,9 +20,9 @@ public class ControlServlet extends ApplicationServlet
     private final Log log = LogFactory.getLog(getClass());
 
     // Respond to HTTP GET requests from browsers.
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
-        log.debug(
+        log.info(
                 new StringBuilder("Processing request: ")
                         .append(request.getRequestURL())
                         .append("?")
@@ -39,20 +40,15 @@ public class ControlServlet extends ApplicationServlet
         }
 
         if (command.equals("reload-xml")) {
-            if (0 == params.length()) {
-                params = "aepub1";
-            }
-            Experiments experiments = (Experiments) getComponent("Experiments");
-            boolean onlyPublic = getPreferences().get("ae.experiments.publiconly").toLowerCase().equals("true");
-            // TODO: redo this that is kicks off job scheduler
-            // experiments.reloadExperiments(params, onlyPublic);
-        } else if (command.equals("rescan-files")) {
-            DownloadableFilesRegistry filesRegistry = (DownloadableFilesRegistry) getComponent("DownloadableFilesRegistry");
             if (0 < params.length()) {
-                filesRegistry.setRootFolder(params);
+                ((Experiments) getComponent("Experiments")).setDataSource(params);
             }
-            // TODO: redo this that is kicks off job scheduler
-            // filesRegistry.rescan();
+            ((JobsController) getComponent("JobsController")).executeJob("reload-xml");
+        } else if (command.equals("rescan-files")) {
+            if (0 < params.length()) {
+                ((DownloadableFilesRegistry) getComponent("DownloadableFilesRegistry")).setRootFolder(params);
+            }
+            ((JobsController) getComponent("JobsController")).executeJob("rescan-files");
         }
     }
 }
