@@ -5,12 +5,14 @@ import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import uk.ac.ebi.ae15.app.Application;
 import uk.ac.ebi.ae15.app.ApplicationComponent;
+import uk.ac.ebi.ae15.utils.db.ExperimentListDatabaseRetriever;
 import uk.ac.ebi.ae15.utils.persistence.PersistableDocumentContainer;
 import uk.ac.ebi.ae15.utils.persistence.PersistableString;
 import uk.ac.ebi.ae15.utils.persistence.TextFilePersistence;
 import uk.ac.ebi.ae15.utils.search.ExperimentSearch;
 
 import java.io.File;
+import java.util.List;
 
 public class Experiments extends ApplicationComponent
 {
@@ -33,20 +35,20 @@ public class Experiments extends ApplicationComponent
     {
         experiments = new TextFilePersistence<PersistableDocumentContainer>(
                 new PersistableDocumentContainer()
-                , new File(System.getProperty("java.io.tmpdir"), getPreferences().get("ae.experiments.cache.filename"))
+                , new File(System.getProperty("java.io.tmpdir"), getPreferences().getString("ae.experiments.cache.filename"))
         );
 
         experimentSearch = new ExperimentSearch();
 
         species = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File(System.getProperty("java.io.tmpdir"), getPreferences().get("ae.species.cache.filename"))
+                , new File(System.getProperty("java.io.tmpdir"), getPreferences().getString("ae.species.cache.filename"))
 
         );
 
         arrays = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File(System.getProperty("java.io.tmpdir"), getPreferences().get("ae.arrays.cache.filename"))
+                , new File(System.getProperty("java.io.tmpdir"), getPreferences().getString("ae.arrays.cache.filename"))
         );
     }
 
@@ -83,7 +85,7 @@ public class Experiments extends ApplicationComponent
     public String getDataSource()
     {
         if (null == dataSource) {
-            dataSource = getPreferences().get("ae.experiments.datasource.default");
+            dataSource = getPreferences().getString("ae.experiments.datasource.default");
         }
 
         return dataSource;
@@ -97,6 +99,7 @@ public class Experiments extends ApplicationComponent
     public void reload() throws InterruptedException
     {
         log.info("Rescan of downloadable files from [" + getDataSource() + "] requested");
+        List<Integer> exps = new ExperimentListDatabaseRetriever(getDataSource(), getPreferences().getBoolean("ae.experiments.publiconly")).getExperimentList();
     }
 /*********
  public void reloadExperiments(String dsName, boolean onlyPublic)

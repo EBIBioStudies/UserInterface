@@ -30,7 +30,7 @@ public class DownloadableFilesRegistry extends ApplicationComponent
                 new PersistableFilesMap(),
                 new File(
                         System.getProperty("java.io.tmpdir"),
-                        getPreferences().get("ae.files.cache.filename")
+                        getPreferences().getString("ae.files.cache.filename")
                 )
         );
     }
@@ -55,7 +55,7 @@ public class DownloadableFilesRegistry extends ApplicationComponent
     public String getRootFolder()
     {
         if (null == rootFolder) {
-            rootFolder = getPreferences().get("ae.files.root.location");
+            rootFolder = getPreferences().getString("ae.files.root.location");
         }
         return rootFolder;
     }

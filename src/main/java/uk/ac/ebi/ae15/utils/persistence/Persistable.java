@@ -1,7 +1,7 @@
 package uk.ac.ebi.ae15.utils.persistence;
 
 /**
- * StringPersistable class implements two basic functions
+ * Persistable class implements two basic functions
  * <p/>
  * - toPersisence() that creates a String based upon object contents
  * - fromPersistence( String ) that initializes an Object based upon a String parameter

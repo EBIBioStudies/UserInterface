@@ -99,10 +99,8 @@ public class PersistableDocumentContainer implements Persistable
             return true;
 
         String total = document.getDocumentElement().getAttribute("total");
-        if (null == total)
-            return true;
 
-        return total.equals("0");
+        return (null == total || total.equals("0"));
     }
 
     private void createDocument()

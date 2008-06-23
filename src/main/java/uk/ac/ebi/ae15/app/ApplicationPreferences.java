@@ -33,9 +33,27 @@ public class ApplicationPreferences extends ApplicationComponent
         properties = null;
     }
 
-    public String get( String key )
+    public String getString( String key )
     {
-        return (String) properties.get(key);
+        return properties.getProperty(key);
+    }
+
+    public Long getLong( String key )
+    {
+        Long value = null;
+        try {
+            value = Long.valueOf(properties.getProperty(key));
+        } catch ( Throwable x ) {
+            log.error("Caught an exception while converting value [" + properties.getProperty(key) + "] of preference [" + key + "] to Long:", x);
+        }
+
+        return value;
+    }
+
+    public boolean getBoolean( String key )
+    {
+        String value = properties.getProperty(key);
+        return (null != value && value.toLowerCase().equals("true"));
     }
 
     private void load()

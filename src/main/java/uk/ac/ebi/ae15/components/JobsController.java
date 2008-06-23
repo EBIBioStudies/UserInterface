@@ -87,9 +87,9 @@ public class JobsController extends ApplicationComponent
 
     private void scheduleJob( String name, String preferencePrefix )
     {
-        String schedule = getPreferences().get(preferencePrefix + ".schedule");
-        String interval = getPreferences().get(preferencePrefix + ".interval");
-        String atStart = getPreferences().get(preferencePrefix + ".atstart");
+        String schedule = getPreferences().getString(preferencePrefix + ".schedule");
+        Long interval = getPreferences().getLong(preferencePrefix + ".interval");
+        boolean atStart = getPreferences().getBoolean(preferencePrefix + ".atstart");
 
         if (null != schedule && 0 < schedule.length()) {
             CronTrigger cronTrigger = new CronTrigger(name + "_schedule_trigger", null);
@@ -109,8 +109,8 @@ public class JobsController extends ApplicationComponent
 
         boolean hasScheduledInterval = false;
 
-        if (null != interval && 0 < interval.length()) {
-            SimpleTrigger intervalTrigger = new SimpleTrigger(name + "_interval_trigger", AE_JOBS_GROUP, SimpleTrigger.REPEAT_INDEFINITELY, Long.parseLong(interval));
+        if (null != interval) {
+            SimpleTrigger intervalTrigger = new SimpleTrigger(name + "_interval_trigger", AE_JOBS_GROUP, SimpleTrigger.REPEAT_INDEFINITELY, interval);
 
             intervalTrigger.setJobName(name);
             intervalTrigger.setJobGroup(AE_JOBS_GROUP);
@@ -123,7 +123,7 @@ public class JobsController extends ApplicationComponent
             }
         }
 
-        if (null != atStart && atStart.toLowerCase().equals("true") && !hasScheduledInterval) {
+        if (atStart && !hasScheduledInterval) {
             SimpleTrigger intervalTrigger = new SimpleTrigger(name + "_at_start_trigger", AE_JOBS_GROUP);
 
             intervalTrigger.setJobName(name);
