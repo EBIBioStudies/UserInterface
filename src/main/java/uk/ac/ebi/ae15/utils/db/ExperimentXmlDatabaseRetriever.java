@@ -47,34 +47,37 @@ public class ExperimentXmlDatabaseRetriever extends SqlStatementExecutor
             "  , nvt_miamegold.value";
 
     // experiment list
-    private List<Integer> experimentList;
+    private List experimentList;
     // experiment xml builder
     private StringBuilder experimentXml;
     // current experiment id (being executed)
-    private Integer experimentId;
+    private Long experimentId;
 
-    public ExperimentXmlDatabaseRetriever( DataSource ds, List<Integer> expList )
+    public ExperimentXmlDatabaseRetriever( DataSource ds, List expList )
     {
         super(ds, getExperimentXmlSql);
         experimentList = expList;
         experimentXml = new StringBuilder(4000 * expList.size());
     }
 
-    public String getExperimentXml()
+    public String getExperimentXml() throws InterruptedException
     {
-        for ( Integer exp : experimentList ) {
-            experimentId = exp;
+        log.debug("Retrieving experiment data for [" + experimentList.size() + "] experiments");
+        for ( Object exp : experimentList ) {
+            experimentId = (Long) exp;
             if (!execute(true)) {
                 experimentXml = new StringBuilder();
                 break;
             }
+            Thread.sleep(1);
         }
+        log.debug("Retrieval completed (or aborted)");
         return experimentXml.toString();
     }
 
     protected void setParameters( PreparedStatement stmt ) throws SQLException
     {
-        stmt.setInt(1, experimentId);
+        stmt.setLong(1, experimentId);
     }
 
     protected void processResultSet( ResultSet resultSet ) throws SQLException

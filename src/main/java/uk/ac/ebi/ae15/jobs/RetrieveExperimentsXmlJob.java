@@ -2,10 +2,11 @@ package uk.ac.ebi.ae15.jobs;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.quartz.InterruptableJob;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.UnableToInterruptJobException;
+import org.quartz.*;
+import uk.ac.ebi.ae15.utils.db.ExperimentXmlDatabaseRetriever;
+
+import javax.sql.DataSource;
+import java.util.List;
 
 public class RetrieveExperimentsXmlJob implements InterruptableJob
 {
@@ -18,15 +19,15 @@ public class RetrieveExperimentsXmlJob implements InterruptableJob
     {
         myThread = Thread.currentThread();
         try {
-            Thread.sleep(1000);
-            //DataSource ds = (DataSource) jec.getJobDetail().getJobDataMap().get("data-source");
-            //List exps = (List) jec.getJobDetail().getJobDataMap().get("exps");
-            //StringBuffer xmlBuffer = (StringBuffer) jec.getJobDetail().getJobDataMap().get("xml-buffer");
-            //xmlBuffer.append(
-            //        new ExperimentXmlDatabaseRetriever(
-            //                ds,
-            //                exps).getExperimentXml()
-            //);
+            JobDataMap jdm = jec.getMergedJobDataMap();
+            DataSource ds = (DataSource) jdm.get("ds");
+            List exps = (List) jdm.get("exps");
+            StringBuffer xmlBuffer = (StringBuffer) jdm.get("xmlBuffer");
+            xmlBuffer.append(
+                    new ExperimentXmlDatabaseRetriever(
+                            ds,
+                            exps).getExperimentXml()
+            );
         } catch ( InterruptedException x ) {
             log.debug("Job [" + jec.getJobDetail().getFullName() + "] was interrupted");
         }

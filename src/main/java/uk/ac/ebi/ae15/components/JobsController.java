@@ -8,6 +8,7 @@ import uk.ac.ebi.ae15.app.Application;
 import uk.ac.ebi.ae15.app.ApplicationComponent;
 import uk.ac.ebi.ae15.jobs.ReloadExperimentsJob;
 import uk.ac.ebi.ae15.jobs.RescanFilesJob;
+import uk.ac.ebi.ae15.jobs.RetrieveExperimentsXmlJob;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class JobsController extends ApplicationComponent
     {
         addJob("rescan-files", RescanFilesJob.class);
         addJob("reload-xml", ReloadExperimentsJob.class);
+        addJob("retrieve-xml", RetrieveExperimentsXmlJob.class);
         scheduleJob("rescan-files", "ae.files.rescan");
         scheduleJob("reload-xml", "ae.experiments.reload");
         startScheduler();
@@ -58,6 +60,31 @@ public class JobsController extends ApplicationComponent
             log.error("Caught an exception:", x);
         }
 
+    }
+
+    public void executeJob( String name, Integer index )
+    {
+        try {
+            JobDataMap map = new JobDataMap();
+            map.put("index", index);
+            getScheduler().triggerJob(name, AE_JOBS_GROUP, map);
+        } catch ( Throwable x ) {
+            log.error("Caught an exception:", x);
+        }
+
+    }
+
+    public void setJobListener( JobListener jl )
+    {
+        try {
+            if (null != jl) {
+                getScheduler().addGlobalJobListener(jl);
+            } else {
+                getScheduler().removeGlobalJobListener("job-listener");
+            }
+        } catch ( Throwable x ) {
+            log.error("Caught an exception:", x);
+        }
     }
 
     private Scheduler getScheduler()
