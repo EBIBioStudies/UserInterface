@@ -112,17 +112,17 @@
                 <td class="align_center">
                     <div>
                         <xsl:choose>
-                            <xsl:when test="helper:isFileAvailableForDownload(files/fgem/@name)"><a href="{concat('${interface.application.link.aer_old.base.url}/download/mageml/',files/fgem/@name)}" title="Click to download processed data"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Click to download processed data"/></a></xsl:when>
-                            <xsl:otherwise><img src="assets/images/silk_data_unavail.gif" width="16" height="16"/></xsl:otherwise>
+                            <xsl:when test="helper:isFileAvailableForDownload(files/fgem/@name)"><a href="{concat('${interface.application.base.url}/download/',files/fgem/@name)}" title="Click to download processed data"><img src="${interface.application.base.url}/assets/images/silk_data_save.gif" width="16" height="16" alt="Click to download processed data"/></a></xsl:when>
+                            <xsl:otherwise><img src="${interface.application.base.url}/assets/images/silk_data_unavail.gif" width="16" height="16"/></xsl:otherwise>
                         </xsl:choose>
                     </div>
                 </td>
                 <td class="align_center">
                     <div>
                         <xsl:choose>
-                            <xsl:when test="helper:isFileAvailableForDownload(files/raw/@name) and files/raw/@celcount>0"><a href="{concat('${interface.application.link.aer_old.base.url}/download/mageml/',files/raw/@name)}" title="Click to download Affymetrix data"><img src="assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Click to download Affymetrix data"/></a></xsl:when>
-                            <xsl:when test="helper:isFileAvailableForDownload(files/raw/@name) and files/raw/@celcount=0"><a href="{concat('${interface.application.link.aer_old.base.url}/download/mageml/',files/raw/@name)}" title="Click to download raw data"><img src="assets/images/silk_data_save.gif" width="16" height="16" alt="Click to download raw data"/></a></xsl:when>
-                            <xsl:otherwise><img src="assets/images/silk_data_unavail.gif" width="16" height="16"/></xsl:otherwise>
+                            <xsl:when test="helper:isFileAvailableForDownload(files/raw/@name) and files/raw/@celcount>0"><a href="{concat('${interface.application.base.url}/download/',files/raw/@name)}" title="Click to download Affymetrix data"><img src="${interface.application.base.url}/assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Click to download Affymetrix data"/></a></xsl:when>
+                            <xsl:when test="helper:isFileAvailableForDownload(files/raw/@name) and files/raw/@celcount=0"><a href="{concat('${interface.application.base.url}/download/',files/raw/@name)}" title="Click to download raw data"><img src="${interface.application.base.url}/assets/images/silk_data_save.gif" width="16" height="16" alt="Click to download raw data"/></a></xsl:when>
+                            <xsl:otherwise><img src="${interface.application.base.url}/assets/images/silk_data_unavail.gif" width="16" height="16"/></xsl:otherwise>
                         </xsl:choose>
                     </div>
                 </td>
@@ -170,7 +170,7 @@
                         <dd>
                             <xsl:choose>
                                 <xsl:when test="helper:isFileAvailableForDownload(files/twocolumns/@name)">
-                                    <a href="{concat('${interface.application.link.aer_old.base.url}/download/mageml/',files/twocolumns/@name)}"
+                                    <a href="{concat('${interface.application.base.url}/download/',files/twocolumns/@name)}"
                                         target="_blank" title="Opens in a new window">&#187; Tab-delimited spreadsheet</a>
                                 </xsl:when>
                                 <xsl:otherwise>Data is not yet available</xsl:otherwise>
@@ -202,12 +202,12 @@
                         <xsl:if test="accession!='E-TABM-185'">
                             <dt>Experiment&#160;design:</dt>
                             <dd><xsl:if test="helper:isFileAvailableForDownload(files/biosamples/png/@name)">
-                                    <a href="{concat('${interface.application.link.aer_old.base.url}/download/mageml/',files/biosamples/png/@name)}"
+                                    <a href="{concat('${interface.application.base.url}/download/',files/biosamples/png/@name)}"
                                        target="_blank" title="Opens in a new window">&#187; PNG</a>
                                     <xsl:if test="helper:isFileAvailableForDownload(files/biosamples/svg/@name)">, </xsl:if>
                                 </xsl:if>
                                 <xsl:if test="helper:isFileAvailableForDownload(files/biosamples/svg/@name)">
-                                    <a href="{concat('${interface.application.link.aer_old.base.url}/download/mageml/',files/biosamples/svg/@name)}"
+                                    <a href="{concat('${interface.application.base.url}/download/',files/biosamples/svg/@name)}"
                                        target="_blank" title="Opens in a new window">&#187; SVG</a>
                                 </xsl:if>
                                 <xsl:if test="not (helper:isFileAvailableForDownload(files/biosamples/png/@name) or helper:isFileAvailableForDownload(files/biosamples/svg/@name))">Data is not yet available</xsl:if>
@@ -231,7 +231,7 @@
                         <dd>
                             <xsl:choose>
                                 <xsl:when test="helper:isFileAvailableForDownload(files/sdrf/@name)">
-                                    <a href="{concat('${interface.application.link.aer_old.base.url}/download/mageml/',files/sdrf/@name)}"
+                                    <a href="{concat('${interface.application.base.url}/download/',files/sdrf/@name)}"
                                         target="_blank" title="Opens in a new window">&#187; Tab-delimited spreadsheet</a>
                                 </xsl:when>
                                 <xsl:otherwise>Data is not yet available</xsl:otherwise>

@@ -9,6 +9,10 @@
         <to type="redirect">${interface.application.base.url}/browse.html?keywords=$1&amp;detailedview=checked</to>
     </rule>
     <rule>
+        <from>^/download/(.+)$</from>
+        <to type="redirect">${interface.application.link.aer_old.base.url}/download/mageml/$1</to>
+    </rule>
+    <rule>
         <from>^/ae-experiments.xls(.*)$</from>
         <to type="forward">/servlets/query/list-experiments/xls$1</to>
     </rule>
