@@ -604,14 +604,13 @@ body {
     background-color: yellow;
 }
 
-#ae_results_status {
-    float: right;
-   /* width: 40%; */
-}
-
-#ae_results_pager {
+#ae_results_status,
+#ae_results_pager,
+#ae_results_save,
+#ae_results_save_xls
+{
     float: left;
-   /* width: 50%; */
+    padding: 0 4px 0 4px;
 }
 /* bb-style box */
 

@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE urlrewrite
-    PUBLIC "-//tuckey.org//DTD UrlRewrite 3.0//EN"
-    "http://tuckey.org/res/dtds/urlrewrite3.0.dtd">
+        PUBLIC "-//tuckey.org//DTD UrlRewrite 3.0//EN"
+        "http://tuckey.org/res/dtds/urlrewrite3.0.dtd">
 
 <urlrewrite>
+    <rule>
+        <from>^/experiments/(E-.+)$</from>
+        <to type="redirect">${interface.application.base.url}/browse.html?keywords=$1&amp;detailedview=checked</to>
+    </rule>
+    <rule>
+        <from>^/ae-experiments.xls(.*)$</from>
+        <to type="forward">/servlets/query/list-experiments/xls$1</to>
+    </rule>
+    <rule>
+        <from>^/ae-experiments.txt(.*)$</from>
+        <to type="forward">/servlets/query/list-experiments/tab$1</to>
+    </rule>
+    <rule>
+        <from>^/ae-experiments.xml(.*)$</from>
+        <to type="forward">/servlets/query/list-experiments/xml$1</to>
+    </rule>
+    <rule>
+        <from>^/ae-experiments.html(.*)$</from>
+        <to type="redirect">${interface.application.base.url}/browse.html$1</to>
+    </rule>
+
 </urlrewrite>

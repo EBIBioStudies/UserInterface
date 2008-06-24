@@ -19,6 +19,7 @@
         <interface.application.log.default.priority>INFO</interface.application.log.default.priority>
         <interface.application.log.appender.ref>ROLLINGFILE</interface.application.log.appender.ref>
 
+        <interface.application.base.url>/microarray-as/ae</interface.application.base.url>
         <interface.application.link.aer_old.base.url>/microarray-as/aer</interface.application.link.aer_old.base.url>
         <interface.application.link.aew.base.url>/microarray-as/aew</interface.application.link.aew.base.url>
         <interface.application.link.solr_gene_stats.url>/microarray-as/solr_gene/admin/stats.jsp
@@ -53,6 +54,8 @@
         <profile>
             <id>curators</id>
             <properties>
+                <interface.application.base.url>/ae11</interface.application.base.url>
+
                 <interface.application.link.aer_old.base.url>/arrayexpress</interface.application.link.aer_old.base.url>
                 <interface.application.link.aew.base.url>/arrayexpress-aew</interface.application.link.aew.base.url>
 

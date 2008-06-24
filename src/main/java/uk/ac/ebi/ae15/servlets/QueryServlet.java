@@ -38,13 +38,24 @@ public class QueryServlet extends ApplicationServlet
         if (m.find()) {
             stylesheet = m.group(1);
             if (0 < m.group(2).length())
-                type = m.group(2);
+                type = m.group(2).toLowerCase();
         }
 
-        // Set content type for HTML/XML
-        response.setContentType("text/" + type + "; charset=ISO-8859-1");
-
-        // Disable cache no matter what (or we fucked on IE side)
+        if ( type.equals("xls") ) {
+            // special case for Excel docs
+            // we actually send tab-delimited file but mimick it as XLS doc
+            response.setContentType("application/vnd.ms-excel");
+            response.setHeader("Content-disposition", "attachment; filename=\"ae-experiments.xls\"");
+            type = "plain";
+        } else if ( type.equals("tab") ) {
+                response.setContentType("text/plain; charset=ISO-8859-1");
+                response.setHeader("Content-disposition", "attachment; filename=\"ae-experiments.txt\"");
+                type = "plain";
+        } else {
+            // Set content type for HTML/XML/plain
+            response.setContentType("text/" + type + "; charset=ISO-8859-1");
+        }
+        // Disable cache no matter what (or we're fucked on IE side)
         response.addHeader("Pragma", "no-cache");
         response.addHeader("Cache-Control", "no-cache");
         response.addHeader("Cache-Control", "must-revalidate");

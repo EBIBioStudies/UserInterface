@@ -117,6 +117,10 @@ onExperimentQuery( tableHtml )
     if ($.browser.opera && $.browser.version < 9.5)
         onWindowResize();
 
+    // assign valid hrefs to save to tab/xls
+    $("#ae_results_save a").attr("href", "ae-experiments.txt" + $.query.toString());
+    $("#ae_results_save_xls a").attr("href", "ae-experiments.xls" + $.query.toString());
+
     // get stats from the first row
     var total = $("#ae_results_total").text();
     var totalAssays = $("#ae_results_total_assays").text();
