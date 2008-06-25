@@ -19,7 +19,7 @@ public class PersistableDocumentContainer implements Persistable
     private final Log log = LogFactory.getLog(getClass());
 
     // document version (for checking purposes)
-    private final String XML_DOCUMENT_VERSION = "1.1.080611";
+    private final String XML_DOCUMENT_VERSION = "1.1.080625";
 
     // document storage
     private Document document;

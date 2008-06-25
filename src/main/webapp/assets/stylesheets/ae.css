@@ -463,11 +463,6 @@ body {
     overflow: hidden;
 }
 
-#ae_results_body th {
-    font-size: 1px;
-    height: 0;
-}
-
 .ae_results_more {
     width: 20px;
 }
@@ -554,7 +549,7 @@ body {
 {
     float: left;
     margin: 0;
-    padding: .2em;
+    padding: 2px 0;
 }
 
 .ae_results_tr_ext dt {
@@ -568,31 +563,33 @@ body {
     }
 
 .ae_results_tr_ext .attrs {
-    padding-top: 0;
 }
 
-.ae_results_tr_ext .attrs dl {
+.ae_results_tr_ext .attrs table {
     margin: 0;
 }
 
-.ae_results_tr_ext .attrs dt,
-.ae_results_tr_ext .attrs dd
-{
-    white-space: nowrap;
-    text-overflow: ellipsis;
+.ae_results_tr_ext .attrs th {
+    font-weight: bold;
+    padding-bottom: 4px;
 }
 
-.ae_results_tr_ext .attrs dt {
-    width: 30%;
-    font-weight: normal;
-    }
-
-.ae_results_tr_ext .attrs dd {
-    width: 70%;    
-    }
-
-.ae_results_tr_ext .attrs .title {
+.ae_results_tr_ext td.attr_name {
     font-weight: bold;
+    vertical-align: top;
+}
+
+.ae_results_tr_ext .attr_name {
+    width: 20%;
+}
+
+.ae_results_tr_ext .attr_value {
+    width: 80%;
+}
+
+.ae_results_tr_ext .attrs td {
+    padding: 2px 0;
+    border: 0 none;
 }
 
 .ae_results_tr_ext p {
@@ -785,7 +782,8 @@ th.sortable:active {
 }
 
 .table_header_box_fake {
-    height: 1px;
+    font-size: 1px;
+    height: 0;
 }
 
 .table_header_border_left {

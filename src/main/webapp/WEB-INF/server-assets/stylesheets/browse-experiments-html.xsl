@@ -268,28 +268,58 @@
                         <xsl:if test="count(experimentalfactor/name)&gt;0">
                             <dt>Experimental factor<xsl:if test="count(experimentalfactor/name)&gt;1">s</xsl:if>:</dt>
                             <dd class="attrs">
-                                <dl>
-                                    <dt class="title">Factor name</dt>
-                                    <dd class="title">Factor value</dd>
-                                    <xsl:for-each select="experimentalfactor">
-                                        <dt><xsl:apply-templates select="name" mode="highlight"/></dt>
-                                        <dd><xsl:apply-templates select="value" mode="highlight"/></dd>
-                                    </xsl:for-each>
-                                </dl>
+                                <table cellpadding="0" cellspacing="2" border="0">
+                                    <thead>
+                                        <tr>
+                                            <th class="attr_name">Factor name</th>
+                                            <th class="attr_value">Factor value(s)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <xsl:for-each select="experimentalfactor">
+                                            <tr>
+                                                <td class="attr_name">
+                                                    <xsl:apply-templates select="name" mode="highlight"/>
+                                                </td>
+                                                <td class="attr_value">
+                                                    <xsl:for-each select="value">
+                                                        <xsl:apply-templates select="." mode="highlight"/>
+                                                        <xsl:if test="position()!=last()">, </xsl:if>
+                                                    </xsl:for-each>
+                                                </td>
+                                            </tr>
+                                        </xsl:for-each>
+                                    </tbody>
+                                </table>
                             </dd>
                         </xsl:if>
 
                         <xsl:if test="count(sampleattribute/category)&gt;0">
                             <dt>Sample attribute<xsl:if test="count(sampleattribute/category)&gt;1">s</xsl:if>:</dt>
                             <dd class="attrs">
-                                <dl>
-                                    <dt class="title">Attribute name</dt>
-                                    <dd class="title">Attribute value</dd>
-                                    <xsl:for-each select="sampleattribute">
-                                        <dt><xsl:apply-templates select="category" mode="highlight"/></dt>
-                                        <dd><xsl:apply-templates select="value" mode="highlight"/></dd>
-                                    </xsl:for-each>
-                                </dl>
+                                <table cellpadding="0" cellspacing="2" border="0">
+                                    <thead>
+                                        <tr>
+                                            <th class="attr_name">Attribute name</th>
+                                            <th class="attr_value">Attribute value(s)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <xsl:for-each select="sampleattribute">
+                                            <tr>
+                                                <td class="attr_name">
+                                                    <xsl:apply-templates select="category" mode="highlight"/>
+                                                </td>
+                                                <td class="attr_value">
+                                                    <xsl:for-each select="value">
+                                                        <xsl:apply-templates select="." mode="highlight"/>
+                                                        <xsl:if test="position()!=last()">, </xsl:if>
+                                                    </xsl:for-each>
+                                                </td>
+                                            </tr>
+                                        </xsl:for-each>
+                                    </tbody>
+                                </table>
                             </dd>
                         </xsl:if>
                     </dl>
