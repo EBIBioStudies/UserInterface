@@ -117,10 +117,6 @@ onExperimentQuery( tableHtml )
     if ($.browser.opera && $.browser.version < 9.5)
         onWindowResize();
 
-    // assign valid hrefs to save to tab/xls
-    $("#ae_results_save a").attr("href", "ae-experiments.txt" + $.query.toString());
-    $("#ae_results_save_xls a").attr("href", "ae-experiments.xls" + $.query.toString());
-
     // get stats from the first row
     var total = $("#ae_results_total").text();
     var totalAssays = $("#ae_results_total_assays").text();
@@ -131,6 +127,14 @@ onExperimentQuery( tableHtml )
 
 
     if ( total > 0 ) {
+
+        // assign valid hrefs to save to tab/xls
+        $("#ae_results_save a").attr("href", "ArrayExpress-Experiments.txt" + $.query.toString());
+        $("#ae_results_save_xls a").attr("href", "ArrayExpress-Experiments.xls" + $.query.toString());
+        // show controls
+        $("#ae_results_save").show();
+        $("#ae_results_save_xls").show();
+
         var totalPages = total > 0 ? Math.floor( total / pagesize ) + 1 : 0;
         $("#ae_results_status").html(
             total + " experiment" + (total != 1 ? "s" : "" ) + ", " +

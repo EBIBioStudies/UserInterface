@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,13 +46,17 @@ public class QueryServlet extends ApplicationServlet
         if ( type.equals("xls") ) {
             // special case for Excel docs
             // we actually send tab-delimited file but mimick it as XLS doc
+            String timestamp = new SimpleDateFormat("yyMMdd-HHmmss").format(new Date());
             response.setContentType("application/vnd.ms-excel");
-            response.setHeader("Content-disposition", "attachment; filename=\"ae-experiments.xls\"");
+            response.setHeader("Content-disposition", "attachment; filename=\"ArrayExpress-Experiments-" + timestamp + ".xls\"");
             type = "plain";
         } else if ( type.equals("tab") ) {
-                response.setContentType("text/plain; charset=ISO-8859-1");
-                response.setHeader("Content-disposition", "attachment; filename=\"ae-experiments.txt\"");
-                type = "plain";
+            // special case for tab-delimited files
+            // we send tab-delimited file as an attachment
+            String timestamp = new SimpleDateFormat("yyMMdd-HHmmss").format(new Date());
+            response.setContentType("text/plain; charset=ISO-8859-1");
+            response.setHeader("Content-disposition", "attachment; filename=\"ArrayExpress-Experiments-" + timestamp + ".txt\"");
+            type = "plain";
         } else {
             // Set content type for HTML/XML/plain
             response.setContentType("text/" + type + "; charset=ISO-8859-1");
