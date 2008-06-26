@@ -52,7 +52,7 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return src;
     }
 
-    public synchronized boolean transformDocumentToFile( Document srcDocument, String stylesheet, Map params, File dstFile )
+    public boolean transformDocumentToFile( Document srcDocument, String stylesheet, Map params, File dstFile )
     {
         try {
             return transform(new DOMSource(srcDocument), stylesheet, params, new StreamResult(new FileOutputStream(dstFile)));
@@ -63,7 +63,7 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return false;
     }
 
-    public synchronized String transformDocumentToString( Document srcDocument, String stylesheet, Map params )
+    public String transformDocumentToString( Document srcDocument, String stylesheet, Map params )
     {
         try {
             StringWriter sw = new StringWriter();
@@ -77,7 +77,7 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return null;
     }
 
-    public synchronized Document transformStringToDocument( String srcXmlString, String stylesheet, Map params )
+    public Document transformStringToDocument( String srcXmlString, String stylesheet, Map params )
     {
         try {
             InputStream inStream = new ByteArrayInputStream(srcXmlString.getBytes("ISO-8859-1"));
@@ -93,7 +93,7 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return null;
     }
 
-    public synchronized boolean transformDocumentToPrintWriter( Document srcDocument, String stylesheet, Map params, PrintWriter dstWriter )
+    public boolean transformDocumentToPrintWriter( Document srcDocument, String stylesheet, Map params, PrintWriter dstWriter )
     {
         return transform(new DOMSource(srcDocument), stylesheet, params, new StreamResult(dstWriter));
     }
