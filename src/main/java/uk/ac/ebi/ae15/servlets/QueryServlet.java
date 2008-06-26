@@ -43,14 +43,14 @@ public class QueryServlet extends ApplicationServlet
                 type = m.group(2).toLowerCase();
         }
 
-        if ( type.equals("xls") ) {
+        if (type.equals("xls")) {
             // special case for Excel docs
             // we actually send tab-delimited file but mimick it as XLS doc
             String timestamp = new SimpleDateFormat("yyMMdd-HHmmss").format(new Date());
             response.setContentType("application/vnd.ms-excel");
             response.setHeader("Content-disposition", "attachment; filename=\"ArrayExpress-Experiments-" + timestamp + ".xls\"");
             type = "plain";
-        } else if ( type.equals("tab") ) {
+        } else if (type.equals("tab")) {
             // special case for tab-delimited files
             // we send tab-delimited file as an attachment
             String timestamp = new SimpleDateFormat("yyMMdd-HHmmss").format(new Date());
