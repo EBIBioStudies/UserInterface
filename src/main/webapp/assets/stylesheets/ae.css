@@ -661,39 +661,39 @@ body {
 }
 
 .form_outer {
-    background-color: #dfe8f6;
+    background-color: #eef5f5;
 }
 
 .form_top {
-    background: url(../images/form_border_top.gif) 0 0 repeat-x;
-}
-
-.form_bottom {
-    background: url(../images/form_border_bottom.gif) 0 100% repeat-x;
-}
-
-.form_left {
-    background: url(../images/form_border_left.gif) 0 0 repeat-y;
-}
-
-.form_right {
-    background: url(../images/form_border_right.gif) 100% 0 repeat-y;
-}
-
-.form_bottom_left {
-    background: url(../images/form_corner_bottom_left.gif) 0 100% no-repeat;
-}
-
-.form_bottom_right {
-    background: url(../images/form_corner_bottom_right.gif) 100% 100% no-repeat;
+    background: url(../images/fft.gif) 0 0 repeat-x;
 }
 
 .form_top_left {
-    background: url(../images/form_corner_top_left.gif) 0 0 no-repeat;
+    background: url(../images/fftl.gif) 0 0 no-repeat;
 }
 
 .form_top_right {
-    background: url(../images/form_corner_top_right.gif) 100% 0 no-repeat;
+    background: url(../images/fftr.gif) 100% 0 no-repeat;
+}
+
+.form_left {
+    background: url(../images/ffl.gif) 0 0 repeat-y;
+}
+
+.form_right {
+    background: url(../images/ffr.gif) 100% 0 repeat-y;
+}
+
+.form_bottom {
+    background: url(../images/ffb.gif) 0 100% repeat-x;
+}
+
+.form_bottom_left {
+    background: url(../images/ffbl.gif) 0 100% no-repeat;
+}
+
+.form_bottom_right {
+    background: url(../images/ffbr.gif) 100% 100% no-repeat;
 }
 
 .form_inner {
