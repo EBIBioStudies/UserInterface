@@ -137,7 +137,13 @@
                                 <td class="value"><xsl:apply-templates select="name" mode="highlight" /></td>
                             </tr>
                         </xsl:if>
-
+                        <tr style="${interface.application.link.aer_old.experiment_link.style}">
+                            <td class="name"></td>
+                            <td class="value">
+                                <a href="${interface.application.link.aer_old.base.url}/result?queryFor=Experiment&amp;eAccession={accession/text()}"
+                                            target="_blank" title="Opens in a new window">&#187; View old ArrayExpress page for the experiment</a>
+                            </td>
+                        </tr>
                         <xsl:if test="count(secondaryaccession/text())&gt;0">
                             <tr>
                                 <td class="name">Secondary&#160;accession<xsl:if test="count(secondaryaccession/text())&gt;1">s</xsl:if>:</td>
@@ -204,13 +210,13 @@
                                 <p>
                                     <a href="ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/experiment/{substring(accession,3,4)}/{accession}"
                                        target="_blank" title="Opens in a new window">
-                                        <xsl:text>&#187; FTP server direct link...</xsl:text>
+                                        <xsl:text>&#187; FTP server direct link</xsl:text>
                                     </a>
                                 </p>
                                 <xsl:if test="accession!='E-TABM-185'">
                                     <a href="${interface.application.link.aer_old.base.url}/dataselection?expid={$vExpId}"
                                        target="_blank" title="Opens in a new window">
-                                        <xsl:text>&#187; View detailed data retrieval page...</xsl:text>
+                                        <xsl:text>&#187; View detailed data retrieval page</xsl:text>
                                     </a>
                                 </xsl:if>
                             </td>
