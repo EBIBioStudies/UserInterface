@@ -38,6 +38,8 @@
         <interface.application.pref.experiments.reload.schedule>0 0 6 * * ?</interface.application.pref.experiments.reload.schedule>
         <interface.application.pref.ftp.root.location>/ebi/ArrayExpress-ftp
         </interface.application.pref.ftp.root.location>
+        <interface.application.pref.files.rescan.interval>3600000</interface.application.pref.files.rescan.interval>
+
     </properties>
     <profiles>
         <profile>
@@ -73,6 +75,7 @@
 
                 <interface.application.pref.experiments.publiconly>false
                 </interface.application.pref.experiments.publiconly>
+                <interface.application.pref.files.rescan.interval>900000</interface.application.pref.files.rescan.interval>
             </properties>
         </profile>
         <profile>
