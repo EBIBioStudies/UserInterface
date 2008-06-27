@@ -526,7 +526,7 @@ body {
 
 .ae_results_tr_ext td {
     padding: 5px 5px 10px 5px;
-    background: url(../images/table_bg_tile.gif) repeat;
+    background: url( ../images/trbg.gif ) repeat;
     border-bottom: 1px solid #dedede;    
 }
 
