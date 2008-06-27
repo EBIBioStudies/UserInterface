@@ -141,7 +141,7 @@
                             <td class="name"></td>
                             <td class="value">
                                 <a href="${interface.application.link.aer_old.base.url}/result?queryFor=Experiment&amp;eAccession={accession/text()}"
-                                            target="_blank" title="Opens in a new window">&#187; View old ArrayExpress page for the experiment</a>
+                                            target="_blank" title="Opens in a new window">&#187; Open ArrayExpress Advanced interface page for the experiment</a>
                             </td>
                         </tr>
                         <xsl:if test="count(secondaryaccession/text())&gt;0">
