@@ -20,6 +20,7 @@
         <interface.application.log.appender.ref>ROLLINGFILE</interface.application.log.appender.ref>
 
         <interface.application.base.url>/microarray-as/ae</interface.application.base.url>
+        <interface.application.link.www_domain></interface.application.link.www_domain>
         <interface.application.link.aer_old.base.url>/microarray-as/aer</interface.application.link.aer_old.base.url>
         <interface.application.link.aew.base.url>/microarray-as/aew</interface.application.link.aew.base.url>
         <interface.application.link.aer_old.experiment_link.style></interface.application.link.aer_old.experiment_link.style>
@@ -33,9 +34,11 @@
         <interface.application.link.links_xml.url>/microarray-srv/ae/ae-main-links.xml
         </interface.application.link.links_xml.url>
 
-        <interface.application.pref.experiments.datasources>aepub3,aepub2</interface.application.pref.experiments.datasources>
+        <interface.application.pref.experiments.datasources>aepub3,aepub2
+        </interface.application.pref.experiments.datasources>
         <interface.application.pref.experiments.publiconly>true</interface.application.pref.experiments.publiconly>
-        <interface.application.pref.experiments.reload.schedule>0 0 6 * * ?</interface.application.pref.experiments.reload.schedule>
+        <interface.application.pref.experiments.reload.schedule>0 0 6 * * ?
+        </interface.application.pref.experiments.reload.schedule>
         <interface.application.pref.ftp.root.location>/ebi/ArrayExpress-ftp
         </interface.application.pref.ftp.root.location>
         <interface.application.pref.files.rescan.interval>3600000</interface.application.pref.files.rescan.interval>
@@ -59,6 +62,7 @@
             <properties>
                 <interface.application.base.url>/ae11</interface.application.base.url>
 
+                <interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
                 <interface.application.link.aer_old.base.url>/arrayexpress</interface.application.link.aer_old.base.url>
                 <interface.application.link.aer_old.experiment_link.style></interface.application.link.aer_old.experiment_link.style>
                 <interface.application.link.aew.base.url>/arrayexpress-aew</interface.application.link.aew.base.url>
@@ -70,12 +74,15 @@
                 <interface.application.link.news_xml.url>test/ae_news.xml</interface.application.link.news_xml.url>
                 <interface.application.link.links_xml.url>test/ae_links.xml</interface.application.link.links_xml.url>
 
-                <interface.application.pref.experiments.datasources>aepub1</interface.application.pref.experiments.datasources>
-                <interface.application.pref.experiments.reload.schedule>0 0 0/1 * * ?</interface.application.pref.experiments.reload.schedule>
+                <interface.application.pref.experiments.datasources>aepub1
+                </interface.application.pref.experiments.datasources>
+                <interface.application.pref.experiments.reload.schedule>0 0 0/1 * * ?
+                </interface.application.pref.experiments.reload.schedule>
 
                 <interface.application.pref.experiments.publiconly>false
                 </interface.application.pref.experiments.publiconly>
-                <interface.application.pref.files.rescan.interval>900000</interface.application.pref.files.rescan.interval>
+                <interface.application.pref.files.rescan.interval>900000
+                </interface.application.pref.files.rescan.interval>
             </properties>
         </profile>
         <profile>

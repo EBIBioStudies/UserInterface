@@ -8,10 +8,10 @@
     <meta http-equiv="Window-target" content="_top"/>
     <meta name="no-email-collection" content="http://www.unspam.com/noemailcollection/"/>
     <title>ArrayExpress Home</title>
-    <link rel="stylesheet" href="http://www.ebi.ac.uk/inc/css/contents.css" type="text/css"/>
-    <link rel="stylesheet" href="http://www.ebi.ac.uk/inc/css/userstyles.css" type="text/css"/>
-    <script src="http://www.ebi.ac.uk/inc/js/contents.js" type="text/javascript"></script>
-    <link rel="SHORTCUT ICON" href="http://www.ebi.ac.uk/bookmark.ico"/>
+    <link rel="stylesheet" href="${interface.application.link.www_domain}/inc/css/contents.css" type="text/css"/>
+    <link rel="stylesheet" href="${interface.application.link.www_domain}/inc/css/userstyles.css" type="text/css"/>
+    <script src="${interface.application.link.www_domain}/inc/js/contents.js" type="text/javascript"></script>
+    <link rel="SHORTCUT ICON" href="${interface.application.link.www_domain}/bookmark.ico"/>
     <link rel="alternate" href="${interface.application.link.aer_old.base.url}/rss/experiments"
           type="application/rss+xml" title="ArrayExpress Repository Recent Experiments"/>
     <style type="text/css">
@@ -32,7 +32,8 @@
 </head>
 <body onload="if(navigator.userAgent.indexOf('MSIE') != -1) {document.getElementById('head').allowTransparency = true;}">
 <div class="headerdiv" id="headerdiv" style="position: absolute; z-index: 1">
-    <iframe src="http://www.ebi.ac.uk/inc/head.html" name="head" id="head" frameborder="0" marginwidth="0px"
+    <iframe src="${interface.application.link.www_domain}/inc/head.html" name="head" id="head" frameborder="0"
+            marginwidth="0px"
             marginheight="0px" scrolling="no" width="100%" style="position: absolute; z-index: 1; height: 57px;">
         Your browser does not support inline frames or is currently configured not to display inline frames. Content can
         be viewed at actual source page: http://www.ebi.ac.uk/inc/head.html
@@ -40,237 +41,58 @@
 </div>
 <div class="contents" id="contents">
 <table class="contentspane" id="contentspane" summary="The main content pane of the page" style="width: 100%">
-    <tr>
-        <td class="contentsarea" id="contentsarea">
-            <div id="ae_centered_container_900px">
-                <noscript>
-                    <div class="ae_warn_area">ArrayExpress uses JavaScript for better data handling and enhanced
-                        representation. Please enable JavaScript if you want to continue browsing ArrayExpress.
-                    </div>
-                </noscript>
-                <div id="ae_intro_area">
-                    <div class="form_outer">
-                        <div class="form_top">
-                            <div class="form_bottom">
-                                <div class="form_left">
-                                    <div class="form_right">
-                                        <div class="form_bottom_left">
-                                            <div class="form_bottom_right">
-                                                <div class="form_top_left">
-                                                    <div class="form_top_right">
-                                                        <div class="form_inner">
-                                                            <div id="ae_logo"><img src="assets/images/ae_logo.gif"
-                                                                                   alt="ArrayExpress Logo"/></div>
-                                                            <div id="ae_header"><img src="assets/images/ae_header.gif"
-                                                                                     alt="ArrayExpress"/></div>
-                                                            <div id="ae_intro_text"><p>ArrayExpress is a public
-                                                                repository for <strong>transcriptomics data</strong>,
-                                                                which is aimed at storing MIAME- and MINSEQE- compliant
-                                                                data in accordance with MGED recommendations.
-                                                                The ArrayExpress Warehouse stores gene-indexed <strong>expression
-                                                                profiles</strong> from a curated subset of experiments
-                                                                in the repository.</p>
+<tr>
+<td class="contentsarea" id="contentsarea">
+<div id="ae_centered_container_900px">
+<noscript>
+    <div class="ae_warn_area">ArrayExpress uses JavaScript for better data handling and enhanced
+        representation. Please enable JavaScript if you want to continue browsing ArrayExpress.
+    </div>
+</noscript>
+<div id="ae_intro_area">
+    <div class="form_outer">
+        <div class="form_top">
+            <div class="form_bottom">
+                <div class="form_left">
+                    <div class="form_right">
+                        <div class="form_bottom_left">
+                            <div class="form_bottom_right">
+                                <div class="form_top_left">
+                                    <div class="form_top_right">
+                                        <div class="form_inner">
+                                            <div id="ae_logo"><img src="assets/images/ae_logo.gif"
+                                                                   alt="ArrayExpress Logo"/></div>
+                                            <div id="ae_header"><img src="assets/images/ae_header.gif"
+                                                                     alt="ArrayExpress"/></div>
+                                            <div id="ae_intro_text"><p>ArrayExpress is a public
+                                                repository for <strong>transcriptomics data</strong>,
+                                                which is aimed at storing MIAME- and MINSEQE- compliant
+                                                data in accordance with MGED recommendations.
+                                                The ArrayExpress Warehouse stores gene-indexed <strong>expression
+                                                profiles</strong> from a curated subset of experiments
+                                                in the repository.</p>
 
-                                                                <div class="ae_intro_more" style="display: none;">
-                                                                    <p>Public data in ArrayExpress are made available
-                                                                        for browsing and querying on experiment
-                                                                        properties, submitter, species, etc.
-                                                                        Queries return summaries of experiments and
-                                                                        complete data, or subsets can be retrieved.</p>
+                                                <div class="ae_intro_more" style="display: none;">
+                                                    <p>Public data in ArrayExpress are made available
+                                                        for browsing and querying on experiment
+                                                        properties, submitter, species, etc.
+                                                        Queries return summaries of experiments and
+                                                        complete data, or subsets can be retrieved.</p>
 
-                                                                    <p>A subset of the public data are re-annotated to
-                                                                        update the array design annotation and curated
-                                                                        for consistency.
-                                                                        These data are stored in the ArrayExpress
-                                                                        Warehouse and can be queried on gene, sample,
-                                                                        and experiment attributes.
-                                                                        Results return graphed gene expression profiles,
-                                                                        one graph per experiment.</p>
-                                                                    <a class="ae_intro_more_toggle"
-                                                                       href="javascript:void(0)">&#171; Less Info</a>
-                                                                </div>
-                                                                <div class="ae_intro_more"><a
-                                                                        class="ae_intro_more_toggle"
-                                                                        href="javascript:void(0)">&#187; More Info</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <p>A subset of the public data are re-annotated to
+                                                        update the array design annotation and curated
+                                                        for consistency.
+                                                        These data are stored in the ArrayExpress
+                                                        Warehouse and can be queried on gene, sample,
+                                                        and experiment attributes.
+                                                        Results return graphed gene expression profiles,
+                                                        one graph per experiment.</p>
+                                                    <a class="ae_intro_more_toggle"
+                                                       href="javascript:void(0)">&#171; Less Info</a>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="ie_clear">&nbsp;</div>
-                <div id="ae_query_area">
-                    <div class="ae_left_box">
-                        <div class="form_outer">
-                            <div class="form_top">
-                                <div class="form_bottom">
-                                    <div class="form_left">
-                                        <div class="form_right">
-                                            <div class="form_bottom_left">
-                                                <div class="form_bottom_right">
-                                                    <div class="form_top_left">
-                                                        <div class="form_top_right">
-                                                            <div class="form_inner">
-                                                                <div id="aer_feed_link"><a
-                                                                        href="${interface.application.link.aer_old.base.url}/rss/experiments"><img
-                                                                        src="assets/images/silk_feed.gif"
-                                                                        alt="Subscribe to ArrayExpress Repository RSS"/></a>
-                                                                </div>
-                                                                <div class="ae_box_title"><img
-                                                                        src="assets/images/ae_exps_header.gif"
-                                                                        alt="Experiments"></div>
-                                                                <div id="aer_avail_info">Retrieving data, please wait...
-                                                                </div>
-                                                                <form method="get" action="browse.html">
-                                                                    <label for="aer_query_field">Experiment, citation,
-                                                                        sample and factor annotations</label>
-                                                                    <input id="aer_query_field" name="keywords">
-                                                                    <input id="aer_query_submit" type="submit"
-                                                                           value="Query">
-                                                                </form>
-                                                                <div id="aer_browse_link"><a href="browse.html">&#187;
-                                                                    Browse experiments</a></div>
-                                                                <div id="aer_adv_query_link"><a
-                                                                        href="${interface.application.link.aer_old.base.url}/entry">
-                                                                    &#187; Advanced query interface</a></div>
-                                                                <div id="aer_login_link"><a
-                                                                        href="${interface.application.link.aer_old.base.url}/login">
-                                                                    &#187; Submitter/reviewer login</a></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ae_right_box">
-                        <div class="form_outer">
-                            <div class="form_top">
-                                <div class="form_bottom">
-                                    <div class="form_left">
-                                        <div class="form_right">
-                                            <div class="form_bottom_left">
-                                                <div class="form_bottom_right">
-                                                    <div class="form_top_left">
-                                                        <div class="form_top_right">
-                                                            <div class="form_inner">
-                                                                <div class="ae_box_title"><img
-                                                                        src="assets/images/ae_genes_header.gif"
-                                                                        alt="Expression Profiles"></div>
-                                                                <div id="aew_avail_info">Retrieving data, please wait...
-                                                                </div>
-                                                                <form method="get"
-                                                                      action="${interface.application.link.aew.base.url}/DW">
-                                                                    <label for="aew_query_field">Gene(s)</label>
-                                                                    <input id="aew_query_field" name="gene_query">
-                                                                    <label for="aew_species_field">Species</label>
-                                                                    <select id="aew_species_field" name="species">
-                                                                        <option value="" selected="true">Any species
-                                                                        </option>
-                                                                        <option value="Arabidopsis thaliana">Arabidopsis
-                                                                            thaliana
-                                                                        </option>
-                                                                        <option value="Caenorhabditis elegans">
-                                                                            Caenorhabditis elegans
-                                                                        </option>
-                                                                        <option value="Danio rerio">Danio rerio</option>
-                                                                        <option value="Drosophila melanogaster">
-                                                                            Drosophila melanogaster
-                                                                        </option>
-                                                                        <option value="Homo sapiens"
-                                                                                selected="selected">Homo sapiens
-                                                                        </option>
-                                                                        <option value="Mus musculus">Mus musculus
-                                                                        </option>
-                                                                        <option value="Rattus norvegicus">Rattus
-                                                                            norvegicus
-                                                                        </option>
-                                                                        <option value="Saccharomyces cerevisiae">
-                                                                            Saccharomyces cerevisiae
-                                                                        </option>
-                                                                        <option value="Schizosaccharomyces pombe">
-                                                                            Schizosaccharomyces pombe
-                                                                        </option>
-                                                                    </select>
-                                                                    <label for="aew_experiments_field">Experiment and
-                                                                        sample annotations</label>
-                                                                    <input id="aew_experiments_field" name="exp_query">
-                                                                    <input type="hidden" name="queryFor" value="gene">
-                                                                    <input id="aew_query_submit" type="submit"
-                                                                           value="Query">
-                                                                </form>
-                                                                <div id="aew_browse_link"><a
-                                                                        href="${interface.application.link.aew.base.url}">
-                                                                    &#187; Advanced query interface</a></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="ie_clear">&nbsp;</div>
-                <div id="ae_news_links_area" style="display: none;">
-                    <div class="ae_left_box">
-                        <div class="form_outer">
-                            <div class="form_top">
-                                <div class="form_bottom">
-                                    <div class="form_left">
-                                        <div class="form_right">
-                                            <div class="form_bottom_left">
-                                                <div class="form_bottom_right">
-                                                    <div class="form_top_left">
-                                                        <div class="form_top_right">
-                                                            <div class="form_inner">
-                                                                <div class="ae_box_title"><img
-                                                                        src="assets/images/ae_news_header.gif"
-                                                                        alt="News"></div>
-                                                                <div id="ae_news"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ae_right_box">
-                        <div class="form_outer">
-                            <div class="form_top">
-                                <div class="form_bottom">
-                                    <div class="form_left">
-                                        <div class="form_right">
-                                            <div class="form_bottom_left">
-                                                <div class="form_bottom_right">
-                                                    <div class="form_top_left">
-                                                        <div class="form_top_right">
-                                                            <div class="form_inner">
-                                                                <div class="ae_box_title"><img
-                                                                        src="assets/images/ae_links_header.gif"
-                                                                        alt="Links"></div>
-                                                                <div id="ae_links"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <div class="ae_intro_more"><a
+                                                        class="ae_intro_more_toggle"
+                                                        href="javascript:void(0)">&#187; More Info</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -281,14 +103,194 @@
                     </div>
                 </div>
             </div>
-        </td>
-    </tr>
+        </div>
+    </div>
+</div>
+<div class="ie_clear">&nbsp;</div>
+<div id="ae_query_area">
+<div class="ae_left_box">
+    <div class="form_outer">
+        <div class="form_top">
+            <div class="form_bottom">
+                <div class="form_left">
+                    <div class="form_right">
+                        <div class="form_bottom_left">
+                            <div class="form_bottom_right">
+                                <div class="form_top_left">
+                                    <div class="form_top_right">
+                                        <div class="form_inner">
+                                            <div id="aer_feed_link"><a
+                                                    href="${interface.application.link.aer_old.base.url}/rss/experiments"><img
+                                                    src="assets/images/silk_feed.gif"
+                                                    alt="Subscribe to ArrayExpress Repository RSS"/></a>
+                                            </div>
+                                            <div class="ae_box_title"><img
+                                                    src="assets/images/ae_exps_header.gif"
+                                                    alt="Experiments"></div>
+                                            <div id="aer_avail_info">Retrieving data, please wait...
+                                            </div>
+                                            <form method="get" action="browse.html">
+                                                <label for="aer_query_field">Experiment, citation,
+                                                    sample and factor annotations</label>
+                                                <input id="aer_query_field" name="keywords">
+                                                <input id="aer_query_submit" type="submit"
+                                                       value="Query">
+                                            </form>
+                                            <div id="aer_browse_link"><a href="browse.html">&#187;
+                                                Browse experiments</a></div>
+                                            <div id="aer_adv_query_link"><a
+                                                    href="${interface.application.link.aer_old.base.url}/entry">
+                                                &#187; Advanced query interface</a></div>
+                                            <div id="aer_login_link"><a
+                                                    href="${interface.application.link.aer_old.base.url}/login">
+                                                &#187; Submitter/reviewer login</a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ae_right_box">
+    <div class="form_outer">
+        <div class="form_top">
+            <div class="form_bottom">
+                <div class="form_left">
+                    <div class="form_right">
+                        <div class="form_bottom_left">
+                            <div class="form_bottom_right">
+                                <div class="form_top_left">
+                                    <div class="form_top_right">
+                                        <div class="form_inner">
+                                            <div class="ae_box_title"><img
+                                                    src="assets/images/ae_genes_header.gif"
+                                                    alt="Expression Profiles"></div>
+                                            <div id="aew_avail_info">Retrieving data, please wait...
+                                            </div>
+                                            <form method="get"
+                                                  action="${interface.application.link.aew.base.url}/DW">
+                                                <label for="aew_query_field">Gene(s)</label>
+                                                <input id="aew_query_field" name="gene_query">
+                                                <label for="aew_species_field">Species</label>
+                                                <select id="aew_species_field" name="species">
+                                                    <option value="" selected="true">Any species
+                                                    </option>
+                                                    <option value="Arabidopsis thaliana">Arabidopsis
+                                                        thaliana
+                                                    </option>
+                                                    <option value="Caenorhabditis elegans">
+                                                        Caenorhabditis elegans
+                                                    </option>
+                                                    <option value="Danio rerio">Danio rerio</option>
+                                                    <option value="Drosophila melanogaster">
+                                                        Drosophila melanogaster
+                                                    </option>
+                                                    <option value="Homo sapiens"
+                                                            selected="selected">Homo sapiens
+                                                    </option>
+                                                    <option value="Mus musculus">Mus musculus
+                                                    </option>
+                                                    <option value="Rattus norvegicus">Rattus
+                                                        norvegicus
+                                                    </option>
+                                                    <option value="Saccharomyces cerevisiae">
+                                                        Saccharomyces cerevisiae
+                                                    </option>
+                                                    <option value="Schizosaccharomyces pombe">
+                                                        Schizosaccharomyces pombe
+                                                    </option>
+                                                </select>
+                                                <label for="aew_experiments_field">Experiment and
+                                                    sample annotations</label>
+                                                <input id="aew_experiments_field" name="exp_query">
+                                                <input type="hidden" name="queryFor" value="gene">
+                                                <input id="aew_query_submit" type="submit"
+                                                       value="Query">
+                                            </form>
+                                            <div id="aew_browse_link"><a
+                                                    href="${interface.application.link.aew.base.url}">
+                                                &#187; Advanced query interface</a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="ie_clear">&nbsp;</div>
+<div id="ae_news_links_area" style="display: none;">
+    <div class="ae_left_box">
+        <div class="form_outer">
+            <div class="form_top">
+                <div class="form_bottom">
+                    <div class="form_left">
+                        <div class="form_right">
+                            <div class="form_bottom_left">
+                                <div class="form_bottom_right">
+                                    <div class="form_top_left">
+                                        <div class="form_top_right">
+                                            <div class="form_inner">
+                                                <div class="ae_box_title"><img
+                                                        src="assets/images/ae_news_header.gif"
+                                                        alt="News"></div>
+                                                <div id="ae_news"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ae_right_box">
+        <div class="form_outer">
+            <div class="form_top">
+                <div class="form_bottom">
+                    <div class="form_left">
+                        <div class="form_right">
+                            <div class="form_bottom_left">
+                                <div class="form_bottom_right">
+                                    <div class="form_top_left">
+                                        <div class="form_top_right">
+                                            <div class="form_inner">
+                                                <div class="ae_box_title"><img
+                                                        src="assets/images/ae_links_header.gif"
+                                                        alt="Links"></div>
+                                                <div id="ae_links"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</td>
+</tr>
 </table>
 <table class="footerpane" id="footerpane" summary="The main footer pane of the page">
     <tr>
         <td class="footerrow">
             <div class="footerdiv" id="footerdiv" style="z-index:2;">
-                <iframe src="http://www.ebi.ac.uk/inc/foot.html" name="foot" frameborder="0" marginwidth="0px"
+                <iframe src="${interface.application.link.www_domain}/inc/foot.html" name="foot" frameborder="0"
+                        marginwidth="0px"
                         marginheight="0px" scrolling="no" height="22px" width="100%" style="z-index:2;">
                     Your browser does not support inline frames or is currently configured not to display inline frames.
                     Content can be viewed at actual source page:
@@ -298,7 +300,7 @@
         </td>
     </tr>
 </table>
-<script src="http://www.ebi.ac.uk/inc/js/footer.js" type="text/javascript"></script>
+<script src="${interface.application.link.www_domain}/inc/js/footer.js" type="text/javascript"></script>
 </div>
 </body>
 </html>

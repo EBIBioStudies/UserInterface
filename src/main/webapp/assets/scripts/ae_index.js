@@ -3,10 +3,22 @@
 //
 
 // runs on page reload after rendering is done
-$(document).ready( function() {
+$(document).ready(function()
+{
+    // check if there is a old-fasioned request which
+    // we need to dispatch to the new browse interface
+    if ("" != window.location.hash) {
+        var hash = window.location.hash;
+        var pattern = new RegExp("ae-browse\/q=([^\[]*)", "ig");
+        var results = pattern.exec(hash);
+        if (undefined != results && undefined != results[1]) {
+            window.location.href = "browse.html?keywords=" + results[1];
+        }
+    }
 
     // adds a trigger callback for more/less intro text switching
-    $("a.ae_intro_more_toggle").click( function() {
+    $("a.ae_intro_more_toggle").click(function()
+    {
         $("div.ae_intro_more").toggle();
     });
 
@@ -17,7 +29,8 @@ $(document).ready( function() {
     Deferred.parallel([
         $.get("${interface.application.link.solr_gene_stats.url}").next(getNumDocsFromSolrStats),
         $.get("${interface.application.link.solr_exp_stats.url}").next(getNumDocsFromSolrStats)
-    ]).next( function (values) {
+    ]).next(function (values)
+    {
         var aew_avail_info = values[1] + " experiments, " + values[0] + " genes available";
         $("#aew_avail_info").text(aew_avail_info);
     });
@@ -31,18 +44,20 @@ $(document).ready( function() {
 });
 
 function
-trimString( stringToTrim ) {
-	return String( stringToTrim ).replace( /^\s+|\s+$/g, "" );
+        trimString(stringToTrim)
+{
+    return String(stringToTrim).replace(/^\s+|\s+$/g, "");
 }
 
 function
-updateAerStats( xml ) {
+        updateAerStats(xml)
+{
     var aer_avail_info = "The information is unavailable at the moment";
-    if ( undefined != xml ) {
-        var ae_repxml = $( $(xml).find("experiments")[0] );
+    if (undefined != xml) {
+        var ae_repxml = $($(xml).find("experiments")[0]);
         var etotal = ae_repxml.attr("total");
         var htotal = ae_repxml.attr("total-assays");
-        if ( etotal != undefined && etotal > 0 ) {
+        if (etotal != undefined && etotal > 0) {
             aer_avail_info = etotal + " experiments, " + htotal + " assays available";
         }
     }
@@ -50,6 +65,7 @@ updateAerStats( xml ) {
 }
 
 function
-getNumDocsFromSolrStats( xml ) {
-    return trimString($( $(xml).find("stat[name='numDocs']")[0] ).text());
+        getNumDocsFromSolrStats(xml)
+{
+    return trimString($($(xml).find("stat[name='numDocs']")[0]).text());
 }
