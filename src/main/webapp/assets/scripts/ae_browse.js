@@ -39,6 +39,24 @@ aeSort( sortby )
         window.location.href = "browse.html" + newQuery;
     }
 }
+
+function
+aeToggleExpand( id )
+{
+    id = String(id);
+    var mainElt = $("#" + id);
+    var extElt = $("#" + id.replace("_main", "_ext"));
+    if ( mainElt.hasClass("tr_main_expanded")) {
+        // collapse now
+        mainElt.removeClass("tr_main_expanded");
+        extElt.hide();
+    } else {
+        mainElt.addClass("tr_main_expanded");
+        extElt.show();
+    }
+    onWindowResize();
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 $(document).ready( function() {
@@ -218,8 +236,10 @@ initControls()
 function
 addExpansionHandlers()
 {
-    var elt = $(this);
-    elt.mouseover(onTableRowMouseOver).mouseout(onTableRowMouseOut).click(onTableRowClick);
+    $(this).mouseover(onTableRowMouseOver)
+            .mouseout(onTableRowMouseOut)
+            .find("div.table_row_expand")
+            .wrap("<a href=\"javascript:aeToggleExpand('" + this.id  + "');\" title=\"Click to reveal more information on the experiment\"></a>");
 }
 
 function
@@ -232,27 +252,6 @@ function
 onTableRowMouseOut()
 {
     $(this).removeClass("tr_main_active");
-}
-
-function
-onTableRowClick( eventObj )
-{
-    if (eventObj) {
-        var target = String(eventObj.target.tagName).toLowerCase();
-        if ( "img" == target || "a" == target )
-            return;
-    }
-    var mainElt = $(this);
-    var extElt = $("#" + mainElt.attr("id").replace("_main", "_ext"));
-    if ( mainElt.hasClass("tr_main_expanded")) {
-        // collapse now
-        mainElt.removeClass("tr_main_expanded");
-        extElt.hide();
-    } else {
-        mainElt.addClass("tr_main_expanded");
-        extElt.show();
-    }
-    onWindowResize();
 }
 
 function

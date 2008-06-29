@@ -96,7 +96,9 @@
         <xsl:variable name="vExpId" select="id"/>
         <xsl:if test="position() &gt;= $pFrom and position() &lt;= $pTo">
             <tr id="{$vExpId}_main" class="{$pDetailedViewMainClass}">
-                <td><div class="table_row_expand">&#160;</div></td>
+                <td><div class="table_row_expand">
+                    <img src="${interface.application.base.url}/assets/images/empty.gif" width="9" height="9"/>
+                </div></td>
                 <td><div><xsl:apply-templates select="accession" mode="highlight" /></div></td>
                 <td><div><xsl:apply-templates select="name" mode="highlight" />&#160;</div></td>
                 <td class="align_right">
@@ -141,7 +143,7 @@
                             <td class="name"/>
                             <td class="value">
                                 <a href="${interface.application.link.aer_old.base.url}/result?queryFor=Experiment&amp;eAccession={accession/text()}"
-                                            target="_blank" title="Opens in a new window">&#187; Open ArrayExpress Advanced interface page for the experiment</a>
+                                            target="_blank" title="Opens in a new window">&#187; Advanced interface page for <xsl:value-of select="accession"/></a>
                             </td>
                         </tr>
                         <xsl:if test="count(secondaryaccession/text())&gt;0">
