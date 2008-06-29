@@ -415,16 +415,25 @@ ae_results_body img {
 
 .ae_results_tr_main td div.table_row_expand {
     background: url( ../images/tminmax.gif ) 0 0 no-repeat;
-    margin-left: 5px;
+    margin: 0 0 0 5px;
+    padding: 0;
     width: 9px;
     height: 9px;
 }
 
 .tr_main_expanded td div.table_row_expand {
     background: url( ../images/tminmax.gif ) 0 -9px no-repeat;
-    margin-left: 5px;
+    margin: 0 0 0 5px;
     width: 9px;
     height: 9px;
+}
+
+div.table_row_expand a {
+    padding: 0;
+    margin: 0;
+    height: 9px;
+    vertical-align: top;
+    font-size: 6px;
 }
 
 .ae_results_tr_ext td {

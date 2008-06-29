@@ -239,7 +239,7 @@ addExpansionHandlers()
     $(this).mouseover(onTableRowMouseOver)
             .mouseout(onTableRowMouseOut)
             .find("div.table_row_expand")
-            .wrap("<a href=\"javascript:aeToggleExpand('" + this.id  + "');\" title=\"Click to reveal/hide more information on the experiment\"></a>");
+            .wrapInner("<a href=\"javascript:aeToggleExpand('" + this.id  + "');\" title=\"Click to reveal/hide more information on the experiment\"></a>");
 }
 
 function
