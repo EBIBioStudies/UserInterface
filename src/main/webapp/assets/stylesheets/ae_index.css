@@ -40,51 +40,70 @@
 /* ae query area */
 #ae_query_area {
     position: relative;
-    margin: 10px 0 10px 0;
-    height: 216px;
+    margin: 20px 0 20px 0;
+    height: 200px;
 }
 
 #ae_query_area .form_top_right {
     padding: 8px 0;
 }
 
-#ae_query_area .form_inner,
-    #ae_query_area .box_inner {
-    height: 200px;
+#ae_query_area .form_inner {
+    height: 184px;
     margin: 0 10px;
     padding: 0;
 }
 
 #ae_query_area .ae_left_box form {
-    margin: 35px 0 10px 0;
+    margin: 25px 0 10px 0;
 
 }
 
 #ae_query_area .ae_right_box form {
-    margin: 10px 0 10px 0;
+    margin: 25px 0 10px 0;
 }
 
 #ae_query_area input,
-    #ae_query_area select {
+#ae_query_area select {
     margin-top: 3px;
     margin-bottom: 8px;
 }
 
 #ae_query_area label {
-    width: 420px;
+    width: 100%;
     padding: 5px 0 0 0;
 }
 
+#ae_query_area fieldset {
+    border: 0 none;
+    padding: 0;
+}
+
+#aew_gene_fset {
+    width: 30%;
+    margin: 0 5px 0 0;
+    float: left;
+}
+
+#aew_exps_fset {
+    margin: 0;
+}
+
+#aew_species_fset {
+    width: 70%;
+    margin: 0;
+}
+
 #aer_query_field,
-    #aew_query_field,
-    #aew_experiments_field {
-    width: 421px;
+#aew_query_field,
+#aew_experiments_field {
+    width: 100%;
     border: 1px solid #5e9e9e;
     font-size: 11px;
 }
 
 #aew_species_field {
-    width: 421px;
+    width: 100%;
     font-size: 11px;
 }
 
@@ -93,9 +112,13 @@
 }
 
 #aer_query_submit,
-    #aew_query_submit {
+#aew_query_submit {
     float: right;
     font-size: 11px;
+}
+
+#aew_browse_link {
+    margin: 20px 0 0 0;
 }
 
 #aer_feed_link {
@@ -115,7 +138,7 @@
 }
 
 #ae_news_links_area .form_top_right {
-    padding: 8px 0;
+    padding: 5px 0;
 }
 
 #ae_news_links_area .form_inner {
@@ -128,19 +151,20 @@
 /* common two box layout classes */
 .ae_left_box {
     position: absolute;
+    width: 440px;
     left: 0;
     top: 0;
-    width: 445px;
 }
 
 .ae_right_box {
     position: absolute;
+    width: 440px;
     right: 0;
     top: 0;
-    width: 445px;
 }
 
 .ae_box_title {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
+    height: 20px;
 }
