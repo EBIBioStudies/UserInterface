@@ -8,12 +8,17 @@ $(document).ready(function()
     // check if there is a old-fasioned request which
     // we need to dispatch to the new browse interface
     if ("" != window.location.hash) {
-        var hash = window.location.hash;
-        var pattern = new RegExp("ae-browse\/q=([^\[]*)", "ig");
-        var results = pattern.exec(hash);
-        if (undefined != results && undefined != results[1]) {
-            window.location.href = "browse.html?keywords=" + results[1];
+        var hash = String(window.location.hash);
+        if ( -1 != hash.indexOf("ae-browse") ) {
+        var location = "browse.html";
+            var pattern = new RegExp("ae-browse\/q=([^\[]*)", "ig");
+            var results = pattern.exec(hash);
+            if (undefined != results && undefined != results[1]) {
+                location = location + "?keywords=" + results[1];
+            }
+            window.location.href = location;
         }
+
     }
 
     // adds a trigger callback for more/less intro text switching
