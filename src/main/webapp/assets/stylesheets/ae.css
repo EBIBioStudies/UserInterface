@@ -31,7 +31,7 @@ body {
     padding: 0;
     margin: 0;
     border: 0 none;
-    overflow: hidden;
+    overflow: auto;
 }
 
 /* specific properties setters */
