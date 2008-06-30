@@ -67,6 +67,7 @@
 #ae_query_area select {
     margin-top: 3px;
     margin-bottom: 8px;
+    font-size: 11px;
 }
 
 #ae_query_area label {
