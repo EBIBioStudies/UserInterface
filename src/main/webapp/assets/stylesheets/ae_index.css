@@ -70,11 +70,8 @@
 }
 
 #ae_query_area label {
-    width: 100%;
     padding: 5px 0 0 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;    
+    width: 100%;
 }
 
 #ae_query_area fieldset {
