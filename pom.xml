@@ -35,7 +35,7 @@
         <interface.application.pref.experiments.reload.schedule>0 0 6 * * ?</interface.application.pref.experiments.reload.schedule>
         <interface.application.pref.ftp.root.location>/ebi/ArrayExpress-ftp</interface.application.pref.ftp.root.location>
         <interface.application.pref.files.rescan.interval>3600000</interface.application.pref.files.rescan.interval>
-
+        <interface.application.google.analytics></interface.application.google.analytics>
     </properties>
     <profiles>
         <profile>
@@ -49,6 +49,21 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            <properties>
+                <interface.application.google.analytics>
+<![CDATA[
+<script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+    var pageTracker = _gat._getTracker("UA-338477-3");
+    pageTracker._initData();
+    pageTracker._trackPageview();
+</script>
+]]>
+                </interface.application.google.analytics>
+            </properties>
         </profile>
         <profile>
             <id>curators</id>
