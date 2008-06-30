@@ -97,7 +97,7 @@ body {
     position: relative;
     overflow: hidden;
     width: 100%;
-    min-width: 1000px;
+    min-width: 900px;
     height: 100%;
     text-align: left;
     margin: 0;
@@ -144,6 +144,46 @@ body {
 .form_100pc {
     width: 100%;
     height: 100%;
+}
+
+.lite_form_outer {
+    background: url( ../images/trbg.gif ) 0 0 repeat;
+}
+
+.lite_form_top {
+    background: url( ../images/lft.gif ) 0 0 repeat-x;
+}
+
+.lite_form_top_left {
+    background: url( ../images/lftl.gif ) 0 0 no-repeat;
+}
+
+.lite_form_top_right {
+    background: url( ../images/lftr.gif ) 100% 0 no-repeat;
+}
+
+.lite_form_left {
+    background: url( ../images/lfl.gif ) 0 0 repeat-y;
+}
+
+.lite_form_right {
+    background: url( ../images/lfr.gif ) 100% 0 repeat-y;
+}
+
+.lite_form_bottom {
+    background: url( ../images/lfb.gif ) 0 100% repeat-x;
+}
+
+.lite_form_bottom_left {
+    background: url( ../images/lfbl.gif ) 0 100% no-repeat;
+}
+
+.lite_form_bottom_right {
+    background: url( ../images/lfbr.gif ) 100% 100% no-repeat;
+}
+
+.lite_form_inner {
+    padding: 1px;
 }
 
 .form_outer {
