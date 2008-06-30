@@ -8,21 +8,19 @@
 div.contents td.contentsarea {
     border: 0 none;
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size: 11px; /*color: #666666;*/
+    font-size: 11px;
     text-align: center;
     padding: 0 10px 10px 10px;
 }
 
 .contents a:link,
-    .contents a:visited {
-/*color: #666666;*/
+.contents a:visited {
     text-decoration: none;
     font-size: 11px;
 }
 
 .contents a:hover,
-    .contents a:active {
-/*color: #333333;*/
+.contents a:active {
     text-decoration: underline;
     font-size: 11px;
 }
