@@ -153,7 +153,7 @@ onExperimentQuery( tableHtml )
         $("#ae_results_save").show();
         $("#ae_results_save_xls").show();
 
-        var totalPages = total > 0 ? Math.floor( total / pagesize ) + 1 : 0;
+        var totalPages = total > 0 ? Math.floor( total - 1 / pagesize ) + 1 : 0;
         $("#ae_results_status").html(
             total + " experiment" + (total != 1 ? "s" : "" ) + ", " +
             totalAssays + " assay" + (totalAssays != 1 ? "s" : "" ) + "." +
