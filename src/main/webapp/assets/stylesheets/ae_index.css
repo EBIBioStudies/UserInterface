@@ -1,6 +1,6 @@
 /* ae intro area */
 #ae_intro_area {
-    margin: 10px 0 0 0;
+    margin: 20px 0 0 0;
 }
 
 #ae_intro_area .lite_form_top_right {
@@ -35,7 +35,7 @@
 /* ae query area */
 #ae_query_area {
     position: relative;
-    margin: 20px 0 20px 0;
+    margin: 15px 0;
     height: 200px;
 }
 
@@ -129,8 +129,8 @@
 /* ae news links area */
 #ae_news_links_area {
     position: relative;
-    margin: 0;
-    height: 176px;
+    margin: 0 0 5px 0;
+    height: 175px;
 }
 
 #ae_news_links_area .lite_form_top_right {
@@ -138,7 +138,7 @@
 }
 
 #ae_news_links_area .lite_form_inner {
-    height: 160px;
+    height: 165px;
     margin: 0 10px;
     padding: 0;
 
@@ -147,14 +147,14 @@
 /* common two box layout classes */
 .ae_left_box {
     position: absolute;
-    width: 440px;
+    width: 430px;
     left: 0;
     top: 0;
 }
 
 .ae_right_box {
     position: absolute;
-    width: 440px;
+    width: 430px;
     right: 0;
     top: 0;
 }

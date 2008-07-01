@@ -1,0 +1,228 @@
+/* general page layout */
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+table.contentspane {
+	margin: 0 0 23px 0;
+	width: 100%;
+}
+
+table td.contentsarea {
+	border: 0 none;
+    padding: 0 5px;
+    margin: 0;
+    text-align: center;
+}
+
+/* hack for position:fixed for ebi footer */
+body {
+	  background:url(../images/empty.gif) fixed;
+}
+
+#ebi_footer {
+    background-color: #dedede;
+    border-top: 1px solid #bfbfbf;
+    z-index:2;
+    position:fixed;
+    _position:absolute;
+    bottom:0;
+    padding: 0 0 0 15px;
+    height: 22px;
+    width: 100%;
+    _top:expression(document.body.scrollTop+document.body.clientHeight-this.clientHeight-1);
+}
+
+/* specific properties setters */
+.assign_font {
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+.align_center {
+    text-align: center;
+}
+
+.align_right {
+    text-align: right;
+}
+
+/* layout element styles */
+
+#ae_contents a:link,
+#ae_contents a:visited {
+    color: #006666;
+    text-decoration: none;
+}
+
+#ae_contents a:hover,
+#ae_contents a:active {
+    color: #e33e3e;
+    text-decoration: underline;
+}
+
+#ae_contents img {
+    border: 0 none;
+}
+
+#ae_ebi_header_container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 57px;
+    overflow: hidden;
+    border: 0 none;
+    margin: 0;
+    padding: 0;
+    background-color: rgb( 32, 122, 122 );
+}
+
+.ae_centered_container_fixed {
+    position: relative;
+    width: 875px;
+    height: 100%;
+    top: 0;
+    margin: 0 auto;
+    text-align: left;
+    font-size: 11px;
+}
+
+.ae_centered_container_100pc {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    min-width: 950px;
+    height: 100%;
+    text-align: left;
+    margin: 0;
+    font-size: 11px;
+}
+
+#ae_ebi_footer_container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 22px;
+    padding-left: 15px;
+    background-color: #dedede;
+    overflow: hidden;
+}
+
+/* ae warn/error area */
+
+.ae_warn_area,
+.ae_error_area {
+    background-color: #ffffff;
+    background-repeat: no-repeat;
+    background-position: 10px 50%;
+    text-align: left;
+    color: #e00b00;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 25px 15px 25px 80px;
+    margin: 20px 0 0 0;
+    border-top: 2px solid #ff614d;
+    border-bottom: 2px solid #ff614d;
+}
+
+.ae_warn_area {
+    background-image: url( ../images/ae_warn.gif );
+}
+
+.ae_error_area {
+    background-image: url( ../images/ae_stop.gif );
+}
+
+/* ext-form style box */
+.form_100pc {
+    width: 100%;
+    height: 100%;
+}
+
+.lite_form_outer {
+    background: url( ../images/trbg.gif ) 0 0 repeat;
+}
+
+.lite_form_top {
+    background: url( ../images/lft.gif ) 0 0 repeat-x;
+}
+
+.lite_form_top_left {
+    background: url( ../images/lftl.gif ) 0 0 no-repeat;
+}
+
+.lite_form_top_right {
+    background: url( ../images/lftr.gif ) 100% 0 no-repeat;
+}
+
+.lite_form_left {
+    background: url( ../images/lfl.gif ) 0 0 repeat-y;
+}
+
+.lite_form_right {
+    background: url( ../images/lfr.gif ) 100% 0 repeat-y;
+}
+
+.lite_form_bottom {
+    background: url( ../images/lfb.gif ) 0 100% repeat-x;
+}
+
+.lite_form_bottom_left {
+    background: url( ../images/lfbl.gif ) 0 100% no-repeat;
+}
+
+.lite_form_bottom_right {
+    background: url( ../images/lfbr.gif ) 100% 100% no-repeat;
+}
+
+.lite_form_inner {
+    padding: 1px;
+}
+
+.form_outer {
+    background-color: #eef5f5;
+}
+
+.form_top {
+    background: url( ../images/fft.gif ) 0 0 repeat-x;
+}
+
+.form_top_left {
+    background: url( ../images/fftl.gif ) 0 0 no-repeat;
+}
+
+.form_top_right {
+    background: url( ../images/fftr.gif ) 100% 0 no-repeat;
+}
+
+.form_left {
+    background: url( ../images/ffl.gif ) 0 0 repeat-y;
+}
+
+.form_right {
+    background: url( ../images/ffr.gif ) 100% 0 repeat-y;
+}
+
+.form_bottom {
+    background: url( ../images/ffb.gif ) 0 100% repeat-x;
+}
+
+.form_bottom_left {
+    background: url( ../images/ffbl.gif ) 0 100% no-repeat;
+}
+
+.form_bottom_right {
+    background: url( ../images/ffbr.gif ) 100% 100% no-repeat;
+}
+
+.form_inner {
+    padding: 1px;
+}
+
+.ie_clear {
+    font-size: 1px;
+    height: 1px;
+}

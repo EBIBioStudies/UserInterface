@@ -1,3 +1,12 @@
+#ae_contents {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 57px 0 22px 0;
+    height: 100%;
+    width: 100%;
+}
+
 /* ext-table style box */
 .table_box_top_left {
     background: url( ../images/tftl.gif ) 0 0 no-repeat;
@@ -183,8 +192,9 @@ a:hover .table_header_label,
 }
 
 #ae_logo_browse {
-    float: right;
-    padding: 5px 10px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
 }
 
 #ae_beta_notice {
