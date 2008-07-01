@@ -5,6 +5,11 @@
 // runs on page reload after rendering is done
 $(document).ready(function()
 {
+    // step 0: hack for IE to work with this funny EBI header/footer (to be redeveloped with jQuery)
+    if (-1 != navigator.userAgent.indexOf('MSIE')) {
+        document.getElementById('head').allowTransparency = true;
+    }
+
     // check if there is a old-fasioned request which
     // we need to dispatch to the new browse interface
     if ("" != window.location.hash) {

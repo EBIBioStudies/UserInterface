@@ -19,20 +19,21 @@ table td.contentsarea {
 
 /* hack for position:fixed for ebi footer */
 body {
-	  background:url(../images/empty.gif) fixed;
+	background:url(../images/empty.gif) fixed;
+    overflow: auto;
 }
 
 #ebi_footer {
     background-color: #dedede;
     border-top: 1px solid #bfbfbf;
-    z-index:2;
-    position:fixed;
-    _position:absolute;
-    bottom:0;
+    z-index: 2;
+    position: fixed;
+    _position: absolute;
+    bottom: 0;
     padding: 0 0 0 15px;
     height: 22px;
     width: 100%;
-    _top:expression(document.body.scrollTop+document.body.clientHeight-this.clientHeight-1);
+    _top: expression(document.body.scrollTop+document.body.clientHeight-this.clientHeight-1);
 }
 
 /* specific properties setters */

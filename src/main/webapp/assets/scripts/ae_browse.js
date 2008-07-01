@@ -62,8 +62,9 @@ aeToggleExpand( id )
 $(document).ready( function() {
 
     // step 0: hack for IE to work with this funny EBI header/footer (to be redeveloped with jQuery)
-    if ( navigator.userAgent.indexOf('MSIE') != -1 ) {
+    if (-1 != navigator.userAgent.indexOf('MSIE')) {
         document.getElementById('head').allowTransparency = true;
+        document.getElementById('ae_contents').style.zIndex = 1;
     }
 
     if ($.browser.opera && $.browser.version < 9.5) {
@@ -153,7 +154,7 @@ onExperimentQuery( tableHtml )
         $("#ae_results_save").show();
         $("#ae_results_save_xls").show();
 
-        var totalPages = total > 0 ? Math.floor( total - 1 / pagesize ) + 1 : 0;
+        var totalPages = total > 0 ? Math.floor( ( total - 1 ) / pagesize ) + 1 : 0;
         $("#ae_results_status").html(
             total + " experiment" + (total != 1 ? "s" : "" ) + ", " +
             totalAssays + " assay" + (totalAssays != 1 ? "s" : "" ) + "." +
