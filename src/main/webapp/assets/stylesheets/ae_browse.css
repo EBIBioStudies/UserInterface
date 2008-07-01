@@ -87,18 +87,18 @@ th {
 }
 
 th.sortable:hover div.table_header_border_left,
-    th.sortable:active div.table_header_border_left {
+th.sortable:active div.table_header_border_left {
     background: url( ../images/thead.gif ) 0 -88px no-repeat;
 }
 
 th.sortable:hover,
-    th.sortable:active {
+th.sortable:active {
     background: url( ../images/thead.gif ) 0 -110px repeat-x;
     height: 22px;
 }
 
 th.sortable:hover .table_header_border_right,
-    th.sortable:active .table_header_border_right {
+th.sortable:active .table_header_border_right {
     background: url( ../images/thead.gif ) 100% -132px no-repeat;
     height: 22px;
 }
@@ -129,7 +129,7 @@ th.sortable:hover .table_header_border_right,
 }
 
 a:hover .table_header_label,
-    a:active .table_header_label {
+a:active .table_header_label {
     color: #e33e3e;
     text-decoration: underline;
 }
@@ -197,9 +197,7 @@ a:hover .table_header_label,
     right: 5px;
 }
 
-#ae_beta_notice {
-    color: #004488;
-    font-style: italic;
+#ae_help_link {
     position: absolute;
     left: 0;
     top: 68px;

@@ -21,6 +21,7 @@
 
         <interface.application.base.url>/microarray-as/ae</interface.application.base.url>
         <interface.application.link.www_domain></interface.application.link.www_domain>
+        <interface.application.link.ae_help>/microarray/doc/help/ae_help.html</interface.application.link.ae_help>
         <interface.application.link.aer_old.base.url>/microarray-as/aer</interface.application.link.aer_old.base.url>
         <interface.application.link.aew.base.url>/microarray-as/aew</interface.application.link.aew.base.url>
         <interface.application.link.aer_old.experiment_link.style></interface.application.link.aer_old.experiment_link.style>
@@ -71,6 +72,7 @@
                 <interface.application.base.url>/ae11</interface.application.base.url>
 
                 <interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
+                <interface.application.link.ae_help>${interface.application.link.www_domain}/microarray/doc/help/ae_help.html</interface.application.link.ae_help>
                 <interface.application.link.aer_old.base.url>/arrayexpress</interface.application.link.aer_old.base.url>
                 <interface.application.link.aer_old.experiment_link.style></interface.application.link.aer_old.experiment_link.style>
                 <interface.application.link.aew.base.url>/arrayexpress-aew</interface.application.link.aew.base.url>
