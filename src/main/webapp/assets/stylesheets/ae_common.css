@@ -67,6 +67,10 @@ body {
     border: 0 none;
 }
 
+#ae_contents p {
+    font-size: 11px;
+}
+
 #ae_ebi_header_container {
     position: absolute;
     top: 0;
