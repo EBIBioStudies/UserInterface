@@ -40,7 +40,7 @@
     </properties>
     <profiles>
         <profile>
-            <id>development</id>
+            <id>debug</id>
             <properties>
                 <interface.application.log.default.priority>ALL</interface.application.log.default.priority>
             </properties>
