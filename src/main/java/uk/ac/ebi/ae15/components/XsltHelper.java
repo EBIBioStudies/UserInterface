@@ -13,6 +13,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
+import java.net.URL;
 import java.util.Map;
 
 public class XsltHelper extends ApplicationComponent implements URIResolver
@@ -41,9 +42,17 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
     {
         Source src;
         try {
-            src = new StreamSource(
-                    getApplication().getServletContext().getResource("/WEB-INF/server-assets/stylesheets/" + href).openStream()
-            );
+            URL resource = getApplication().getServletContext().getResource("/WEB-INF/server-assets/stylesheets/" + href);
+            if ( null == resource ) {
+                throw new TransformerException("Unable to locate stylesheet resource [" + href + "]");
+            }
+            InputStream input = resource.openStream();
+            if ( null == input ) {
+                throw new TransformerException("Unable to open stream for resource [" + resource + "]");
+            }
+            src = new StreamSource(input);
+        } catch ( TransformerException x ) {
+            throw x;
         } catch ( Exception x ) {
             log.error("Caught an exception:", x);
             throw new TransformerException(x.getMessage());
