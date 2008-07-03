@@ -69,11 +69,13 @@
                         <xsl:value-of select="$array"/>
                         <xsl:text>'</xsl:text>
                     </xsl:if>
-                    <xsl:text> (first </xsl:text>
-                    <xsl:value-of select="$pagesize"/>
-                    <xsl:text> of </xsl:text>
-                    <xsl:value-of select="$vTotal"/>
-                    <xsl:text>)</xsl:text>
+                    <xsl:if test="$pagesize &lt; $vTotal">
+                        <xsl:text> (first </xsl:text>
+                        <xsl:value-of select="$pagesize"/>
+                        <xsl:text> of </xsl:text>
+                        <xsl:value-of select="$vTotal"/>
+                        <xsl:text>)</xsl:text>
+                    </xsl:if>
                 </title>
                 <link>
                     <xsl:text>http://www.ebi.ac.uk/arrayexpress</xsl:text>
