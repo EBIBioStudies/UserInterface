@@ -14,7 +14,7 @@
     </rule>
     <rule>
         <from>^/rss/experiments(.*)$</from>
-        <to type="forward">/servlets/query/experiments-rss/xml</to>
+        <to type="forward">/servlets/query/experiments-rss/xml$1</to>
     </rule>
     <rule>
         <from>^/ArrayExpress-Experiments\.xls(.*)$</from>
