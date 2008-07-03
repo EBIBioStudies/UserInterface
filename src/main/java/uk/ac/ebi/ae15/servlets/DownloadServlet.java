@@ -22,7 +22,7 @@ public class DownloadServlet extends ApplicationServlet
     private final Log log = LogFactory.getLog(getClass());
 
     // buffer size
-    private final int TRANSFER_BUFFER_SIZE = 65536;
+    private final int TRANSFER_BUFFER_SIZE = 8 * 1024 * 1024;
 
     // Respond to HTTP GET requests from browsers.
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
