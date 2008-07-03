@@ -6,7 +6,7 @@
 <urlrewrite>
     <rule>
         <from>^/experiments/(E-.+)$</from>
-        <to type="redirect">${interface.application.base.url}/browse.html?keywords=$1&amp;detailedview=checked</to>
+        <to type="redirect">${interface.application.base.url}/browse.html?keywords=$1&amp;detailedview=on</to>
     </rule>
     <rule>
         <from>^/download/(.+)$</from>

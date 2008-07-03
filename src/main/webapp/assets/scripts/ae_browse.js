@@ -150,9 +150,11 @@ onExperimentQuery( tableHtml )
         // assign valid hrefs to save to tab/xls
         $("#ae_results_save a").attr("href", "ArrayExpress-Experiments.txt" + $.query.toString());
         $("#ae_results_save_xls a").attr("href", "ArrayExpress-Experiments.xls" + $.query.toString());
+        $("#ae_results_save_feed a").attr("href", "rss/experiments" + $.query.toString());
         // show controls
         $("#ae_results_save").show();
         $("#ae_results_save_xls").show();
+        $("#ae_results_save_feed").show();
 
         var totalPages = total > 0 ? Math.floor( ( total - 1 ) / pagesize ) + 1 : 0;
         $("#ae_results_status").html(

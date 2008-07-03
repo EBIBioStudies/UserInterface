@@ -29,11 +29,68 @@
         <helper:logDebug select="Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], detailedview [{$detailedview}]"/>
         <helper:logDebug select="Sort by: [{$sortby}], [{$sortorder}]"/>
         <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array)"/>
-        <xsl:variable name="vCurrentDate" select="helper:dateToRfc822()"/>
+        <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
+
+        <helper:logInfo select="Query for '{$keywords}' filtered {$vTotal} experiments. Will output first {$pagesize} entries."/>
+
         <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
             <channel>
-                <title><xsl:text>ArrayExpress Experiments</xsl:text></title>
-                <link><xsl:text>http://www.ebi.ac.uk/arrayexpress</xsl:text></link>
+                <xsl:variable name="vCurrentDate" select="helper:dateToRfc822()"/>
+                <title>
+                    <xsl:text>ArrayExpress Experiments</xsl:text>
+                    <xsl:if test="string-length($keywords)&gt;0">
+                        <xsl:text> matching keywords '</xsl:text>
+                        <xsl:value-of select="$keywords"/>
+                        <xsl:text>'</xsl:text>
+                    </xsl:if>
+                    <xsl:if test="string-length($species)&gt;0">
+                        <xsl:choose>
+                            <xsl:when test="string-length($keywords)&gt;0">
+                                <xsl:text> and</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text> matching </xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:text> species '</xsl:text>
+                        <xsl:value-of select="$species"/>
+                        <xsl:text>'</xsl:text>
+                    </xsl:if>
+                    <xsl:if test="string-length($array)&gt;0">
+                        <xsl:choose>
+                            <xsl:when test="(string-length($keywords)&gt;0) or (string-length($species)&gt;0)">
+                                <xsl:text> and</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text> matching </xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:text> array id '</xsl:text>
+                        <xsl:value-of select="$array"/>
+                        <xsl:text>'</xsl:text>
+                    </xsl:if>
+                    <xsl:text> (first </xsl:text>
+                    <xsl:value-of select="$pagesize"/>
+                    <xsl:text> of </xsl:text>
+                    <xsl:value-of select="$vTotal"/>
+                    <xsl:text>)</xsl:text>
+                </title>
+                <link>
+                    <xsl:text>http://www.ebi.ac.uk/arrayexpress</xsl:text>
+                    <xsl:if test="(string-length($keywords)&gt;0) or (string-length($species)&gt;0) or (string-length($array)&gt;0)">
+                        <xsl:text>/browse.html?keywords=</xsl:text>
+                        <xsl:value-of select="$keywords"/>
+                        <xsl:if test="$wholewords">
+                            <xsl:text>&amp;wholewords=on</xsl:text>
+                        </xsl:if>
+                        <xsl:text>&amp;species=</xsl:text>
+                        <xsl:value-of select="$species"/>
+                        <xsl:text>&amp;array=</xsl:text>
+                        <xsl:value-of select="$array"/>
+                        <xsl:text>&amp;pagesize=</xsl:text>
+                        <xsl:value-of select="$pagesize"/>
+                    </xsl:if>
+               </link>
                 <description><xsl:text>ArrayExpress is a public repository for transcriptomics data, which is aimed at storing MIAME- and MINSEQE- compliant data in accordance with MGED recommendations.</xsl:text></description>
                 <language><xsl:text>en</xsl:text></language>
                 <pubDate><xsl:value-of select="$vCurrentDate"/></pubDate>
