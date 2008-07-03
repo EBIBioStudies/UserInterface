@@ -131,7 +131,7 @@ public class Experiments extends ApplicationComponent
     {
         boolean result = true;
 
-        Pattern p = Pattern.compile("/(E-[A-Z]+-[0-9]+)/");
+        Pattern p = Pattern.compile("/(E-[^-]+-[0-9]+)/");
         Matcher m = p.matcher(file);
         if (m.find()) {
             String accession = m.group(1);
