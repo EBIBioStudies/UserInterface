@@ -53,23 +53,22 @@ public abstract class AppXalanExtension
 
     public static String dateToRfc822()
     {
-        String dateString = "";
-        try {
-            dateString = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(new Date());
-        } catch (Throwable x) {
-            log.debug("Caught an exception:",x);
-        }
-        return dateString;
+        return new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(new Date());
     }
 
     public static String dateToRfc822( String dateString )
     {
-        try {
-            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
-            dateString = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(date);
-        } catch (Throwable x) {
-            log.debug("Caught an exception:",x);
+        if (null != dateString && 0 < dateString.length()) {
+            try {
+                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+                dateString = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(date);
+            } catch (Throwable x) {
+                log.debug("Caught an exception:",x);
+            }
+        } else {
+            dateString = "";
         }
+
         return dateString;
     }
 
