@@ -20,6 +20,8 @@ public class ExperimentText
     // all text, concatenated
     public String text;
 
+    public String accession;
+
     // all species, concatenated
     public String species;
 
@@ -31,6 +33,11 @@ public class ExperimentText
     {
 
         text = concatAll(elt);
+        try {
+            accession = elt.getElementsByTagName("accession").item(0).getFirstChild().getNodeValue().toLowerCase();
+        } catch ( Throwable x ) {
+            log.debug("Caught an exception:", x);
+        }
         species = concatAll(elt.getElementsByTagName("species")).toLowerCase();
         array = concatAll(elt.getElementsByTagName("arraydesign")).toLowerCase();
 

@@ -11,6 +11,8 @@ import uk.ac.ebi.ae15.utils.persistence.TextFilePersistence;
 import uk.ac.ebi.ae15.utils.search.ExperimentSearch;
 
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Experiments extends ApplicationComponent
 {
@@ -123,6 +125,19 @@ public class Experiments extends ApplicationComponent
 
         experimentSearch.buildText(experiments.getObject().getDocument());
 
+    }
+
+    public boolean isFilePublic( String file )
+    {
+        boolean result = true;
+
+        Pattern p = Pattern.compile("/(E-[A-Z]+-[0-9]+)/");
+        Matcher m = p.matcher(file);
+        if (m.find()) {
+            String accession = m.group(1);
+            result = getSearch().doesPresent(accession);
+        }
+        return result;
     }
 
     private Document loadExperimentsFromString( String xmlString )

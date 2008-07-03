@@ -7,7 +7,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +24,9 @@ public class ExperimentSearch
     // array of ExperimentText objects in the same order they exist in the document
     private List<ExperimentText> expText = new ArrayList<ExperimentText>();
 
+    // mapping of experiment accession numbers to experiment text indices
+    private Map<String, Integer> accessionIdx = new HashMap<String, Integer>();
+
     public boolean isEmpty()
     {
         return expText.isEmpty();
@@ -35,10 +40,13 @@ public class ExperimentSearch
                     NodeList expList = experiments.getDocumentElement().getChildNodes();
 
                     expText.clear();
+                    accessionIdx.clear();
 
                     for ( int i = 0; i < expList.getLength(); ++i ) {
                         Element expElt = (Element) expList.item(i);
-                        expText.add(new ExperimentText().populateFromElement(expElt));
+                        ExperimentText text = new ExperimentText().populateFromElement(expElt);
+                        expText.add(text);
+                        accessionIdx.put(text.accession, i);
                         expElt.setAttribute("textIdx", Integer.toString(i));
                     }
 
@@ -65,6 +73,11 @@ public class ExperimentSearch
     {
         int idx = Integer.parseInt(textIdx);
         return (-1 != expText.get(idx).array.indexOf(array.trim().toLowerCase()));
+    }
+
+    public boolean doesPresent( String accession )
+    {
+        return accessionIdx.containsKey(accession.toLowerCase());
     }
 
     private boolean matchRegexp( String input, String pattern, String flags )

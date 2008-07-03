@@ -10,7 +10,7 @@
     </rule>
     <rule>
         <from>^/download/(.+)$</from>
-        <to type="redirect">${interface.application.link.aer_old.base.url}/download/mageml/$1</to>
+        <to type="forward">/servlets/download/$1</to>
     </rule>
     <rule>
         <from>^/ArrayExpress-Experiments\.xls(.*)$</from>
