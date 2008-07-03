@@ -42,10 +42,10 @@ public class DownloadServlet extends ApplicationServlet
                 filename = m.group(1);
                 sendFile(filename, response);
             } else {
-                log.error("Unable to get a filename from [" + request.getRequestURL() + "]" );
+                log.error("Unable to get a filename from [" + request.getRequestURL() + "]");
                 throw (new Exception());
             }
-        } catch (Throwable x) {
+        } catch ( Throwable x ) {
             String name = x.getClass().getName();
             if (name.equals("org.apache.catalina.connector.ClientAbortException")) {
                 // generate log entry for client abortion
@@ -59,31 +59,30 @@ public class DownloadServlet extends ApplicationServlet
     }
 
     private void sendFile( String filename, HttpServletResponse response ) throws IOException
-	{
+    {
         log.info("Requested download of [" + filename + "]");
         DownloadableFilesRegistry filesRegistry = (DownloadableFilesRegistry) getComponent("DownloadableFilesRegistry");
         Experiments experiments = (Experiments) getComponent("Experiments");
 
-        if ( !filesRegistry.doesExist(filename) ) {
+        if (!filesRegistry.doesExist(filename)) {
             log.error("File [" + filename + "] is not in files registry");
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);    
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         } else {
             String fileLocation = filesRegistry.getLocation(filename);
             String contentType = getServletContext().getMimeType(fileLocation);
-            if ( null != contentType ) {
+            if (null != contentType) {
                 log.debug("Setting content type to [" + contentType + "]");
                 response.setContentType(contentType);
-            }
-            else {
+            } else {
                 log.warn("Download servlet was unable to determine content type for [" + fileLocation + "]");
             }
 
             log.debug("Checking file [" + fileLocation + "]");
             File file = new File(fileLocation);
-            if ( !file.exists() ) {
+            if (!file.exists()) {
                 log.error("File [" + fileLocation + "] does not exist");
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            } else if ( !experiments.isFilePublic(fileLocation) ) {
+            } else if (!experiments.isFilePublic(fileLocation)) {
                 log.error("Attempting to download file for the experiment that is not present in the index");
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             } else {
@@ -94,22 +93,22 @@ public class DownloadServlet extends ApplicationServlet
                     int size = fileInputStream.available();
                     response.setContentLength(size);
 
-	    	        servletOutStream  = response.getOutputStream();
+                    servletOutStream = response.getOutputStream();
 
-		            int bytesRead;
-		            byte[] buffer = new byte[TRANSFER_BUFFER_SIZE];
+                    int bytesRead;
+                    byte[] buffer = new byte[TRANSFER_BUFFER_SIZE];
 
-		            while (true) {
-			            bytesRead = fileInputStream.read(buffer, 0, TRANSFER_BUFFER_SIZE);
-			            if ( bytesRead == -1 ) break;
-			            servletOutStream.write( buffer, 0, bytesRead );
+                    while ( true ) {
+                        bytesRead = fileInputStream.read(buffer, 0, TRANSFER_BUFFER_SIZE);
+                        if (bytesRead == -1) break;
+                        servletOutStream.write(buffer, 0, bytesRead);
                         servletOutStream.flush();
                         log.info("Download of [" + filename + "] completed, sent [" + size + "] bytes");
                     }
                 } finally {
                     if (null != fileInputStream)
                         fileInputStream.close();
-		            if (null != servletOutStream)
+                    if (null != servletOutStream)
                         servletOutStream.close();
                 }
             }
