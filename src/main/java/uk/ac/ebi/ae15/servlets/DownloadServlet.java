@@ -103,8 +103,8 @@ public class DownloadServlet extends ApplicationServlet
                         if (bytesRead == -1) break;
                         servletOutStream.write(buffer, 0, bytesRead);
                         servletOutStream.flush();
-                        log.info("Download of [" + filename + "] completed, sent [" + size + "] bytes");
                     }
+                    log.info("Download of [" + filename + "] completed, sent [" + size + "] bytes");                    
                 } finally {
                     if (null != fileInputStream)
                         fileInputStream.close();
