@@ -11,6 +11,8 @@ import uk.ac.ebi.ae15.components.DownloadableFilesRegistry;
 import uk.ac.ebi.ae15.components.Experiments;
 
 import javax.xml.transform.TransformerException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,7 +49,28 @@ public abstract class AppXalanExtension
         } else {
             return capitalize(spArray[0] + ' ' + spArray[1]);
         }
+    }
 
+    public static String dateToRfc822()
+    {
+        String dateString = "";
+        try {
+            dateString = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(new Date());
+        } catch (Throwable x) {
+            log.debug("Caught an exception:",x);
+        }
+        return dateString;
+    }
+
+    public static String dateToRfc822( String dateString )
+    {
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+            dateString = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(date);
+        } catch (Throwable x) {
+            log.debug("Caught an exception:",x);
+        }
+        return dateString;
     }
 
     public static boolean isFileAvailableForDownload( String fileName )
