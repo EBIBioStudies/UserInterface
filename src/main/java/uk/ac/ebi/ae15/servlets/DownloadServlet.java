@@ -46,7 +46,15 @@ public class DownloadServlet extends ApplicationServlet
                 throw (new Exception());
             }
         } catch (Throwable x) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            String name = x.getClass().getName();
+            if (name.equals("org.apache.catalina.connector.ClientAbortException")) {
+                // generate log entry for client abortion
+                log.warn("Download aborted");
+            } else {
+                log.debug("Caught an exception:", x);
+                if (!response.isCommitted())
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
@@ -83,7 +91,8 @@ public class DownloadServlet extends ApplicationServlet
                 ServletOutputStream servletOutStream = null;
                 try {
                     fileInputStream = new FileInputStream(file);
-                    response.setContentLength(fileInputStream.available());
+                    int size = fileInputStream.available();
+                    response.setContentLength(size);
 
 	    	        servletOutStream  = response.getOutputStream();
 
@@ -95,7 +104,8 @@ public class DownloadServlet extends ApplicationServlet
 			            if ( bytesRead == -1 ) break;
 			            servletOutStream.write( buffer, 0, bytesRead );
                         servletOutStream.flush();
-		            }
+                        log.info("Download of [" + filename + "] completed, sent [" + size + "] bytes");
+                    }
                 } finally {
                     if (null != fileInputStream)
                         fileInputStream.close();
