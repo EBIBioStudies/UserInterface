@@ -528,9 +528,11 @@ div.table_row_expand a {
 
 #ae_results_status,
 #ae_results_pager,
-#ae_results_save,
-#ae_results_save_xls,
-#ae_results_save_feed {
+.status_icon {
     float: left;
     padding: 0 4px 0 4px;
+}
+
+.status_icon {
+    display: none;
 }

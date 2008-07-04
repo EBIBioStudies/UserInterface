@@ -78,7 +78,7 @@
                             <div id="aer_avail_info">Retrieving data, please wait...</div>
                             <form method="get" action="browse.html">
                                 <label for="aer_query_field">Experiment, citation, sample and factor annotations</label>
-                                <input id="aer_query_field" name="keywords" class="assign_font">
+                                <input id="aer_query_field" name="keywords" maxlength="200" class="assign_font">
                                 <input id="aer_query_submit" type="submit" value="Query">
                             </form>
                             <div id="aer_browse_link"><a href="browse.html">&#187; Browse experiments</a></div>
@@ -93,11 +93,11 @@
                             <form method="get" action="${interface.application.link.aew.base.url}/DW">
                                 <fieldset id="aew_gene_fset">
                                     <label for="aew_query_field">Gene(s)</label>
-                                    <input id="aew_query_field" name="gene_query" class="assign_font">
+                                    <input id="aew_query_field" name="gene_query" maxlength="60" class="assign_font">
                                 </fieldset>
                                 <fieldset id="aew_exps_fset">
                                     <label for="aew_experiments_field">Experiment and sample annotations</label>
-                                    <input id="aew_experiments_field" name="exp_query" class="assign_font">
+                                    <input id="aew_experiments_field" name="exp_query" maxlength="120" class="assign_font">
                                 </fieldset>
                                 <input id="aew_query_submit" type="submit" value="Query">
                                 <fieldset id="aew_species_fset">

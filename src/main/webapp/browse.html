@@ -45,7 +45,7 @@
                             <form method="get" action="browse.html">
                                 <fieldset id="ae_keywords_box">
                                     <label for="ae_keywords">Experiment, citation, sample and factor annotations [<a href="javascript:aeClearKeywords()">clear</a>]</label>
-                                    <input id="ae_keywords" name="keywords" class="assign_font">
+                                    <input id="ae_keywords" name="keywords" maxlength="200" class="assign_font">
                                     <span><input id="ae_wholewords" name="wholewords" type="checkbox"><label for="ae_wholewords">Match whole words</label></span>
                                 </fieldset>
                                 <fieldset id="ae_filters_box">
@@ -113,9 +113,9 @@
                                 </div>
                                 <div id="ae_results_ftr" class="table_footer_box"><div class="table_footer_left"><div class="table_footer_right">
                                     <div class="table_footer_inner">
-                                        <div id="ae_results_save" style="display:none"><a href="" title="Save results in a Tab-delimited format"><img src="assets/images/silk_save_txt.gif" alt="Save results in a Tab-delimited format"/></a></div>
-                                        <div id="ae_results_save_xls" style="display:none"><a href="" title="Open results table in Excel"><img src="assets/images/silk_save_xls.gif" alt="Open results table in Excel"/></a></div>
-                                        <div id="ae_results_save_feed" style="display:none"><a href="" title="Open results as RSS feed"><img src="assets/images/silk_save_feed.gif" alt="Open results as RSS feed"/></a></div>
+                                        <div id="ae_results_save" class="status_icon"><a href="" title="Save results in a Tab-delimited format"><img src="assets/images/silk_save_txt.gif" alt="Save results in a Tab-delimited format"/></a></div>
+                                        <div id="ae_results_save_xls" class="status_icon"><a href="" title="Open results table in Excel"><img src="assets/images/silk_save_xls.gif" alt="Open results table in Excel"/></a></div>
+                                        <div id="ae_results_save_feed" class="status_icon"><a href="" title="Get RSS feed with first page results matching selected criteria" target="_blank"><img src="assets/images/silk_save_feed.gif" alt="Open results as RSS feed"/></a></div>
                                         <div id="ae_results_status">&nbsp;</div><div id="ae_results_pager">&nbsp;</div></div>
                                 </div></div></div>
                             </div>
