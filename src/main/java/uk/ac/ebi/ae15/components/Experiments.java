@@ -56,7 +56,7 @@ public class Experiments extends ApplicationComponent
     {
     }
 
-    public Document getExperiments()
+    public synchronized Document getExperiments()
     {
         Document doc = experiments.getObject().getDocument();
 
@@ -67,6 +67,11 @@ public class Experiments extends ApplicationComponent
         return doc;
     }
 
+    public synchronized ExperimentSearch getSearch()
+    {
+        return experimentSearch;
+    }
+
     public String getSpecies()
     {
         return species.getObject().get();
@@ -75,11 +80,6 @@ public class Experiments extends ApplicationComponent
     public String getArrays()
     {
         return arrays.getObject().get();
-    }
-
-    public ExperimentSearch getSearch()
-    {
-        return experimentSearch;
     }
 
     public String getDataSource()
@@ -98,11 +98,8 @@ public class Experiments extends ApplicationComponent
 
     public void reload( String xmlString )
     {
-        experiments.setObject(
-                new PersistableDocumentContainer(
-                        loadExperimentsFromString(xmlString)
-                )
-        );
+        setExperiments(loadExperimentsFromString(xmlString));
+
         species.setObject(
                 new PersistableString(
                         ((XsltHelper) getApplication().getComponent("XsltHelper")).transformDocumentToString(
@@ -123,8 +120,6 @@ public class Experiments extends ApplicationComponent
                 )
         );
 
-        experimentSearch.buildText(experiments.getObject().getDocument());
-
     }
 
     public boolean isFilePublic( String file )
@@ -138,6 +133,12 @@ public class Experiments extends ApplicationComponent
             result = getSearch().doesPresent(accession);
         }
         return result;
+    }
+
+    private synchronized void setExperiments( Document doc )
+    {
+        experiments.setObject(new PersistableDocumentContainer(doc));
+        experimentSearch.buildText(doc);
     }
 
     private Document loadExperimentsFromString( String xmlString )
