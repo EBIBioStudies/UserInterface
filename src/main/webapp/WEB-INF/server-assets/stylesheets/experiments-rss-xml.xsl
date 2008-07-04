@@ -9,7 +9,7 @@
                 version="1.0">
 
 
-    <xsl:param name="pagesize">50</xsl:param>
+    <xsl:param name="pagesize">25</xsl:param>
     <xsl:param name="sortby">releasedate</xsl:param>
     <xsl:param name="sortorder">descending</xsl:param>
 
