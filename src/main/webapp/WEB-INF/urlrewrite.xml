@@ -13,24 +13,19 @@
         <to type="forward">/servlets/download/$1</to>
     </rule>
     <rule>
-        <from>^/rss/experiments(.*)$</from>
-        <to type="forward">/servlets/query/experiments-rss/xml$1</to>
+        <from>^/rss/experiments$</from>
+        <to type="forward">/servlets/query/experiments-rss/xml</to>
     </rule>
     <rule>
-        <from>^/ArrayExpress-Experiments\.xls(.*)$</from>
-        <to type="forward">/servlets/query/list-experiments/xls$1</to>
-    </rule>
-    <rule>
-        <from>^/ArrayExpress-Experiments\.txt(.*)$</from>
-        <to type="forward">/servlets/query/list-experiments/tab$1</to>
-    </rule>
-    <rule>
-        <from>^/ArrayExpress-Experiments\.xml(.*)$</from>
+        <from>^/query/experiments$</from>
         <to type="forward">/servlets/query/list-experiments/xml$1</to>
     </rule>
     <rule>
-        <from>^/ArrayExpress-Experiments\.html(.*)$</from>
-        <to type="redirect">${interface.application.base.url}/browse.html$1</to>
+        <from>^/ArrayExpress-Experiments\.xls$</from>
+        <to type="forward">/servlets/query/list-experiments/xls</to>
     </rule>
-
+    <rule>
+        <from>^/ArrayExpress-Experiments\.txt$</from>
+        <to type="forward">/servlets/query/list-experiments/tab</to>
+    </rule>
 </urlrewrite>
