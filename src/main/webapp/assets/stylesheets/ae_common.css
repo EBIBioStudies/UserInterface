@@ -106,17 +106,6 @@ body {
     font-size: 11px;
 }
 
-#ae_ebi_footer_container {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 22px;
-    padding-left: 15px;
-    background-color: #dedede;
-    overflow: hidden;
-}
-
 /* ae warn/error area */
 
 .ae_warn_area,

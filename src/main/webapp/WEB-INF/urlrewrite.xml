@@ -18,7 +18,11 @@
     </rule>
     <rule>
         <from>^/query/experiments$</from>
-        <to type="forward">/servlets/query/list-experiments/xml$1</to>
+        <to type="forward">/servlets/query/list-experiments/xml</to>
+    </rule>
+    <rule>
+        <from>^/browse-noajax.html$</from>
+        <to type="forward">/servlets/query/browse-experiments-noajax/html</to>
     </rule>
     <rule>
         <from>^/ArrayExpress-Experiments\.xls$</from>

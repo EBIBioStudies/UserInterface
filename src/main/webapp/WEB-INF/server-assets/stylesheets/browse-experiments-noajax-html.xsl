@@ -9,7 +9,7 @@
                 version="1.0">
 
     <xsl:param name="page">1</xsl:param>
-    <xsl:param name="pagesize">25</xsl:param>
+    <xsl:param name="pagesize">50</xsl:param>
     <xsl:param name="sortby">releasedate</xsl:param>
     <xsl:param name="sortorder">descending</xsl:param>
 
@@ -22,10 +22,25 @@
 
     <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="ISO-8859-1" />
 
+    <xsl:include href="ae-html-page.xsl"/>
     <xsl:include href="ae-filter-experiments.xsl"/>
     <xsl:include href="ae-sort-experiments.xsl"/>
 
     <xsl:template match="/experiments">
+        <html lang="en">
+            <xsl:call-template name="page-header">
+                <xsl:with-param name="pTitle">ArrayExpress Browser</xsl:with-param>
+                <xsl:with-param name="pExtraCode">
+                    <link rel="stylesheet" href="assets/stylesheets/ae_browse_noajax.css" type="text/css"/> 
+                </xsl:with-param>
+            </xsl:call-template>
+            <xsl:call-template name="page-body">
+                <xsl:with-param name="pContentsTemplateName">ae-experiments</xsl:with-param>
+            </xsl:call-template>
+        </html>
+    </xsl:template>
+
+    <xsl:template name="ae-contents">
         <helper:logInfo select="Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], detailedview [{$detailedview}]"/>
         <helper:logInfo select="Sort by: [{$sortby}], [{$sortorder}]"/>
         <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array)"/>
@@ -52,41 +67,90 @@
 
         <helper:logInfo select="Query for filtered {$vTotal} experiments. Will output from {$vFrom} to {$vTo}."/>
 
-        <tr id="ae_results_summary_info">
-            <td colspan="8">
-                <div id="ae_results_total"><xsl:value-of select="$vTotal"/></div>
-                <div id="ae_results_total_samples"><xsl:value-of select="$vTotalSamples"/></div>
-                <div id="ae_results_total_assays"><xsl:value-of select="$vTotalAssays"/></div>
-                <div id="ae_results_from"><xsl:value-of select="$vFrom"/></div>
-                <div id="ae_results_to"><xsl:value-of select="$vTo"/></div>
-                <div id="ae_results_page"><xsl:value-of select="$page"/></div>
-                <div id="ae_results_pagesize"><xsl:value-of select="$pagesize"/></div>
-            </td>
-        </tr>
-        <xsl:choose>
-            <xsl:when test="$vTotal&gt;0">
-                <xsl:call-template name="ae-sort-experiments">
-                    <xsl:with-param name="pExperiments" select="$vFilteredExperiments"/>
-                    <xsl:with-param name="pFrom" select="$vFrom"/>
-                    <xsl:with-param name="pTo" select="$vTo"/>
-                    <xsl:with-param name="pSortBy" select="$sortby"/>
-                    <xsl:with-param name="pSortOrder" select="$sortorder"/>
-                    <xsl:with-param name="pDetailedViewMainClass" select="$vDetailedViewMainClass"/>
-                    <xsl:with-param name="pDetailedViewExtStyle" select="$vDetailedViewExtStyle"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-                <tr class="ae_results_tr_error">
-                    <td colspan="8">
-                        <p><strong>The query '<xsl:value-of select="$keywords"/>'<xsl:if test="string-length($species)>0">&#160;<em>and</em> species '<xsl:value-of select="$species"/>'</xsl:if>
-                            <xsl:if test="string-length($array)>0">&#160;<em>and</em> array <xsl:value-of select="$array"/></xsl:if>
-                            returned no matches.</strong></p>
-                        <p>Try shortening the query term e.g. 'embryo' will match embryo, embryoid, embryonic across all annotation fields.</p>
-                        <p>Note that '*' is <strong>not</strong> supported as a wild card. More information available at <a href="http://www.ebi.ac.uk/microarray/doc/help/ae_help.html">ArrayExpress Query Help</a>.</p>
-                    </td>
-                </tr>
-            </xsl:otherwise>
-        </xsl:choose>
+        <div id="ae_results_area">
+            <div class="table_box_top"><div class="table_box_bottom"><div class="table_box_left"><div class="table_box_right"><div class="table_box_bottom_left"><div class="table_box_bottom_right"><div class="table_box_top_left"><div class="table_box_top_right">
+                <div class="table_padding_box">
+                    <div class="table_inner_box">
+                        <div id="ae_results_table">
+                            <div id="ae_results_hdr_filler" class="table_header_filler">&#160;</div>
+                            <div id="ae_results_hdr" style="right: 15px">
+                                <div id="ae_results_hdr_inner">
+                                    <table border="0" cellpadding="0" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th class="table_header_box ae_results_more" id="ae_results_header_more"><div class="table_header_border_left"><div class="table_header_border_right"><div class="table_header_inner"><div class="table_header_label">&#160;</div></div></div></div></th>
+                                                <th class="table_header_box sortable ae_results_accession" id="ae_results_header_accession"><a href="javascript:aeSort('accession')" title="Click to sort by accession"><div class="table_header_border_left"><div class="table_header_border_right"><div class="table_header_inner"><div class="table_header_label">ID</div></div></div></div></a></th>
+                                                <th class="table_header_box sortable ae_results_name" id="ae_results_header_name"><a href="javascript:aeSort('name')" title="Click to sort by title"><div class="table_header_border_left"><div class="table_header_border_right"><div class="table_header_inner"><div class="table_header_label">Title</div></div></div></div></a></th>
+                                                <th class="table_header_box sortable ae_results_assays" id="ae_results_header_assays"><a href="javascript:aeSort('assays')" title="Click to sort by number of assays"><div class="table_header_border_left"><div class="table_header_border_right"><div class="table_header_inner"><div class="table_header_label">Assays</div></div></div></div></a></th>
+                                                <th class="table_header_box sortable ae_results_species" id="ae_results_header_species"><a href="javascript:aeSort('species')" title="Click to sort by species"><div class="table_header_border_left"><div class="table_header_border_right"><div class="table_header_inner"><div class="table_header_label">Species</div></div></div></div></a></th>
+                                                <th class="table_header_box sortable ae_results_releasedate" id="ae_results_header_releasedate"><a href="javascript:aeSort('releasedate')" title="Click to sort by release date"><div class="table_header_border_left"><div class="table_header_border_right"><div class="table_header_inner"><div class="table_header_label">Date</div></div></div></div></a></th>
+                                                <th class="table_header_box sortable ae_results_fgem" id="ae_results_header_fgem"><a href="javascript:aeSort('fgem')" title="Click to sort by number of assays of processed data"><div class="table_header_border_left"><div class="table_header_border_right"><div class="table_header_inner"><div class="table_header_label">Processed</div></div></div></div></a></th>
+                                                <th class="table_header_box sortable ae_results_raw" id="ae_results_header_raw"><a href="javascript:aeSort('raw')" title="Click to sort by number of assays of raw data"><div class="table_header_border_left"><div class="table_header_border_right"><div class="table_header_inner"><div class="table_header_label">Raw</div></div></div></div></a></th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="ae_results_body">
+                                <div id="ae_results_body_inner" class="ae_results_table_loading">
+                                    <table border="0" cellpadding="0" cellspacing="0">
+                                        <thead style="visibility: collapse; height: 0">
+                                            <tr>
+                                                <th class="table_header_box_fake ae_results_more"/>
+                                                <th class="table_header_box_fake ae_results_accession"/>
+                                                <th class="table_header_box_fake ae_results_name"/>
+                                                <th class="table_header_box_fake ae_results_assays"/>
+                                                <th class="table_header_box_fake ae_results_species"/>
+                                                <th class="table_header_box_fake ae_results_releasedate"/>
+                                                <th class="table_header_box_fake ae_results_fgem"/>
+                                                <th class="table_header_box_fake ae_results_raw"/>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <xsl:choose>
+                                                <xsl:when test="$vTotal &gt; 0">
+                                                    <xsl:call-template name="ae-sort-experiments">
+                                                        <xsl:with-param name="pExperiments" select="$vFilteredExperiments"/>
+                                                        <xsl:with-param name="pFrom" select="$vFrom"/>
+                                                        <xsl:with-param name="pTo" select="$vTo"/>
+                                                        <xsl:with-param name="pSortBy" select="$sortby"/>
+                                                        <xsl:with-param name="pSortOrder" select="$sortorder"/>
+                                                        <xsl:with-param name="pDetailedViewMainClass" select="$vDetailedViewMainClass"/>
+                                                        <xsl:with-param name="pDetailedViewExtStyle" select="$vDetailedViewExtStyle"/>
+                                                    </xsl:call-template>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <tr class="ae_results_tr_error">
+                                                        <td colspan="8">
+                                                            <p><strong>The query '<xsl:value-of select="$keywords"/>'<xsl:if test="string-length($species)>0">&#160;<em>and</em> species '<xsl:value-of select="$species"/>'</xsl:if>
+                                                                <xsl:if test="string-length($array)>0">&#160;<em>and</em> array <xsl:value-of select="$array"/></xsl:if>
+                                                                returned no matches.</strong></p>
+                                                            <p>Try shortening the query term e.g. 'embryo' will match embryo, embryoid, embryonic across all annotation fields.</p>
+                                                            <p>Note that '*' is <strong>not</strong> supported as a wild card. More information available at <a href="http://www.ebi.ac.uk/microarray/doc/help/ae_help.html">ArrayExpress Query Help</a>.</p>
+                                                        </td>
+                                                    </tr>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="ae_results_ftr" class="table_footer_box">
+                                <div class="table_footer_left">
+                                    <div class="table_footer_right">
+                                        <div class="table_footer_inner">
+                                        <div id="ae_results_save" class="status_icon"><a href="" title="Save results in a Tab-delimited format"><img src="assets/images/silk_save_txt.gif" alt="Save results in a Tab-delimited format"/></a></div>
+                                        <div id="ae_results_save_xls" class="status_icon"><a href="" title="Open results table in Excel"><img src="assets/images/silk_save_xls.gif" alt="Open results table in Excel"/></a></div>
+                                        <div id="ae_results_save_feed" class="status_icon"><a href="" title="Get RSS feed with first page results matching selected criteria" target="_blank"><img src="assets/images/silk_save_feed.gif" alt="Open results as RSS feed"/></a></div>
+                                        <div id="ae_results_status">&#160;</div><div id="ae_results_pager">&#160;</div></div>
+                                   </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div></div></div></div></div></div></div></div>
+        </div>
     </xsl:template>
 
     <xsl:template match="experiment">
