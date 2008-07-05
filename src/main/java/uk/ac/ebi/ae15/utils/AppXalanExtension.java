@@ -63,7 +63,7 @@ public abstract class AppXalanExtension
                 Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
                 dateString = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(date);
             } catch (Throwable x) {
-                log.debug("Caught an exception:",x);
+                log.debug("Caught an exception:", x);
             }
         } else {
             dateString = "";
@@ -80,6 +80,7 @@ public abstract class AppXalanExtension
     public static boolean testRegexp( String input, String pattern, String flags )
     {
         boolean result = false;
+
         try {
             int patternFlags = (flags.indexOf("i") >= 0 ? Pattern.CASE_INSENSITIVE : 0);
 
@@ -116,47 +117,66 @@ public abstract class AppXalanExtension
 
     public static boolean testSpecies( NodeList nl, String species )
     {
-        if (0 < nl.getLength()) {
+        boolean result = false;
 
-            String textIdx = ((Element) nl.item(0)).getAttribute("textIdx");
-            return ((Experiments) application.getComponent("Experiments")).getSearch().matchSpecies(textIdx, species);
-        } else
-            return false;
+        try {
+            if (0 < nl.getLength()) {
+
+                String textIdx = ((Element) nl.item(0)).getAttribute("textIdx");
+                return ((Experiments) application.getComponent("Experiments")).getSearch().matchSpecies(textIdx, species);
+            }
+        } catch (Throwable x) {
+            log.error("Caught an exception:", x);
+        }
+
+        return result;
     }
 
 
     public static boolean testKeywords( NodeList nl, String keywords, boolean wholeWords )
     {
-        if (0 < nl.getLength()) {
+        boolean result = false;
 
-            String textIdx = ((Element) nl.item(0)).getAttribute("textIdx");
-            return ((Experiments) application.getComponent("Experiments")).getSearch().matchText(textIdx, keywords, wholeWords);
-        } else
-            return false;
+        try {
+            if (0 < nl.getLength()) {
+
+                String textIdx = ((Element) nl.item(0)).getAttribute("textIdx");
+                return ((Experiments) application.getComponent("Experiments")).getSearch().matchText(textIdx, keywords, wholeWords);
+            }
+        } catch (Throwable x) {
+            log.error("Caught an exception:", x);
+        }
+        
+        return result;
     }
 
     public static String markKeywords( String input, String keywords, boolean wholeWords )
     {
         String result = input;
-        if (null != keywords && 0 < keywords.length()) {
-            String[] kwdArray = keywords.split("\\s");
-            for ( String keyword : kwdArray ) {
-                result = replaceRegexp(result, "(" + keywordToPattern(keyword, wholeWords) + ")", "ig", "\u00ab$1\u00bb");
-            }
-        }
-        boolean shouldRemoveExtraMarkers = true;
-        String newResult;
 
-        while ( shouldRemoveExtraMarkers ) {
-            newResult = replaceRegexp(result, "\u00ab([^\u00ab\u00bb]*)\u00ab", "ig", "\u00ab$1");
-            shouldRemoveExtraMarkers = !newResult.equals(result);
-            result = newResult;
-        }
-        shouldRemoveExtraMarkers = true;
-        while ( shouldRemoveExtraMarkers ) {
-            newResult = replaceRegexp(result, "\u00bb([^\u00ab\u00bb]*)\u00bb", "ig", "$1\u00bb");
-            shouldRemoveExtraMarkers = !newResult.equals(result);
-            result = newResult;
+        try {
+            if (null != keywords && 0 < keywords.length()) {
+                String[] kwdArray = keywords.split("\\s");
+                for ( String keyword : kwdArray ) {
+                    result = replaceRegexp(result, "(" + keywordToPattern(keyword, wholeWords) + ")", "ig", "\u00ab$1\u00bb");
+                }
+            }
+            boolean shouldRemoveExtraMarkers = true;
+            String newResult;
+
+            while ( shouldRemoveExtraMarkers ) {
+                newResult = replaceRegexp(result, "\u00ab([^\u00ab\u00bb]*)\u00ab", "ig", "\u00ab$1");
+                shouldRemoveExtraMarkers = !newResult.equals(result);
+                result = newResult;
+            }
+            shouldRemoveExtraMarkers = true;
+            while ( shouldRemoveExtraMarkers ) {
+                newResult = replaceRegexp(result, "\u00bb([^\u00ab\u00bb]*)\u00bb", "ig", "$1\u00bb");
+                shouldRemoveExtraMarkers = !newResult.equals(result);
+                result = newResult;
+            }
+        } catch ( Throwable x ) {
+            log.error("Caught an exception:", x);
         }
 
         return result;

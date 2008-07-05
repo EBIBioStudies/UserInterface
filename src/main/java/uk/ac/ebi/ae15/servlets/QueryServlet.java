@@ -1,7 +1,5 @@
 package uk.ac.ebi.ae15.servlets;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import uk.ac.ebi.ae15.app.ApplicationServlet;
 import uk.ac.ebi.ae15.components.Experiments;
 import uk.ac.ebi.ae15.components.XsltHelper;
@@ -18,19 +16,10 @@ import java.util.regex.Pattern;
 
 public class QueryServlet extends ApplicationServlet
 {
-    // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
-
     // Respond to HTTP GET requests from browsers.
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
-        log.debug(
-                new StringBuilder("Processing request: ")
-                        .append(request.getRequestURL())
-                        .append("?")
-                        .append(request.getQueryString())
-        );
-
+        logRequest(request);
 
         String type = "xml";
         String stylesheet = "default";

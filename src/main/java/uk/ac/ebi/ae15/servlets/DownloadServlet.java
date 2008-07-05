@@ -27,12 +27,7 @@ public class DownloadServlet extends ApplicationServlet
     // Respond to HTTP GET requests from browsers.
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
-        log.debug(
-                new StringBuilder("Processing request: ")
-                        .append(request.getRequestURL())
-                        .append("?")
-                        .append(request.getQueryString())
-        );
+        logRequest(request);
 
         Pattern p = Pattern.compile("/([^/]+)$");
         Matcher m = p.matcher(request.getRequestURL());
