@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class AppXalanExtension
+public class AppXalanExtension
 {
     // logging machinery
     private static final Log log = LogFactory.getLog(AppXalanExtension.class);

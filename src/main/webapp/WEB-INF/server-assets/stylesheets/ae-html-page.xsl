@@ -46,7 +46,7 @@
                 <table class="contentspane" id="contentspane" summary="The main content pane of the page" cellpadding="0" cellspacing="0">
                     <tr>
                         <td class="contentsarea" id="contentsarea">
-                            <xsl:call-template name="ae-contents"/>
+                            <div id="ae_contents"><xsl:call-template name="ae-contents"/></div>
                         </td>
                     </tr>
                 </table>

@@ -67,6 +67,44 @@
 
         <helper:logInfo select="[browse-experiments-noajax-html] Query filtered {$vTotal} experiments. Will output from {$vFrom} to {$vTo}."/>
 
+        <div class="ae_centered_container_100pc assign_font">
+            <div id="ae_browse_area">
+                <div id="ae_keywords_filters_area">
+                    <div id="ae_keywords_filters_box">
+                        <div class="form_100pc form_outer"><div class="form_100pc form_top"><div class="form_100pc form_bottom"><div class="form_100pc form_left"><div class="form_100pc form_right"><div class="form_100pc form_bottom_left"><div class="form_100pc form_bottom_right"><div class="form_100pc form_top_left"><div class="form_100pc form_top_right">
+                            <div class="form_100pc form_inner">
+                                <form method="get" action="browse_noajax.html">
+                                    <fieldset id="ae_keywords_box">
+                                        <label for="ae_keywords">Experiment, citation, sample and factor annotations</label>
+                                        <input id="ae_keywords" name="keywords" maxlength="200" class="assign_font">
+                                            <xsl:if test="string-length($keywords)&gt;0">
+                                                <xsl:attribute name="value"><xsl:value-of select="$keywords"/></xsl:attribute>
+                                            </xsl:if>
+                                        </input>
+                                        <span><input id="ae_wholewords" name="wholewords" type="checkbox"/><label for="ae_wholewords">Match whole words</label></span>
+                                    </fieldset>
+                                    <fieldset id="ae_filters_box">
+                                        <label for="ae_species">Filter on</label>
+                                        <select id="ae_species" name="species" class="assign_font"><xsl:call-template name="populate-species-select"/></select>
+                                        <select id="ae_array" name="array" class="assign_font"><xsl:call-template name="populate-array-select"/></select>
+                                    </fieldset>
+                                    <fieldset id="ae_options_box">
+                                        <label>Display options</label>
+                                        <div class="select_margin"><select id="ae_pagesize" name="pagesize" class="assign_font"><option value="25">25</option><option value="50">50</option><option value="100">100</option><option value="250">250</option><option value="500">500</option></select><label for="ae_pagesize"> experiments per page</label></div>
+                                        <input id="ae_keyword_filters_submit" type="submit" value="Query" class="assign_font"/>
+                                        <input type="hidden" id="ae_sortby" name="sortby"/>
+                                        <input type="hidden" id="ae_sortorder" name="sortorder"/>
+                                        <div><input id="ae_detailedview" name="detailedview" type="checkbox"/><label for="ae_detailedview">Detailed view</label></div>
+                                    </fieldset>
+                                </form>
+                                <div id="ae_logo_browse"><a href="${interface.application.base.url}" title="ArrayExpress Home"><img src="assets/images/ae_logo_browse.gif" alt="ArrayExpress Home"/></a></div>
+                                <div id="ae_help_link"><a href="${interface.application.link.browse_help}" title="Opens in a new window" target="_blank">&#187; ArrayExpress Browse Help</a></div>
+                            </div>
+                        </div></div></div></div></div></div></div></div></div>
+                    </div>
+                </div>
+            </div>
+        <!-- later
         <div id="ae_results_area">
             <div class="table_box_top"><div class="table_box_bottom"><div class="table_box_left"><div class="table_box_right"><div class="table_box_bottom_left"><div class="table_box_bottom_right"><div class="table_box_top_left"><div class="table_box_top_right">
                 <div class="table_padding_box">
@@ -150,6 +188,7 @@
                     </div>
                 </div>
             </div></div></div></div></div></div></div></div>
+        </div> -->
         </div>
     </xsl:template>
 
