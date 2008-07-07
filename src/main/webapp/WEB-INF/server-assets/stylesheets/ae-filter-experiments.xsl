@@ -19,10 +19,10 @@
                 <func:result select="experiment[accession/text()=$queried_accnum or secondaryaccession/text()=$queried_accnum]"/>
             </xsl:when>
             <xsl:when test="$pArray!='' and $pSpecies!='' and $pKeywords!=''">
-                <func:result select="experiment[helper:testSpecies(.,$pSpecies)][arraydesign/id/text()=$pArray][helper:testKeywords(.,$pKeywords,$pWholeWords)]"/>
+                <func:result select="experiment[helper:testSpecies(.,$pSpecies)][helper:testArray(.,$pArray)][helper:testKeywords(.,$pKeywords,$pWholeWords)]"/>
             </xsl:when>
             <xsl:when test="$pArray!='' and $pSpecies='' and $pKeywords=''">
-                <func:result select="experiment[arraydesign/id/text()=$pArray]"/>
+                <func:result select="experiment[helper:testArray(.,$pArray)]"/>
             </xsl:when>
             <xsl:when test="$pArray='' and $pSpecies!='' and $pKeywords=''">
                 <func:result select="experiment[helper:testSpecies(.,$pSpecies)]"/>
@@ -31,13 +31,13 @@
                 <func:result select="experiment[helper:testKeywords(.,$pKeywords,$pWholeWords)]"/>
             </xsl:when>
             <xsl:when test="$pArray!='' and $pSpecies!='' and $pKeywords=''">
-                <func:result select="experiment[helper:testSpecies(.,$pSpecies)][arraydesign/id/text()=$pArray]"/>
+                <func:result select="experiment[helper:testSpecies(.,$pSpecies)][helper:testArray(.,$pArray)]"/>
             </xsl:when>
             <xsl:when test="$pArray='' and $pSpecies!='' and $pKeywords!=''">
                 <func:result select="experiment[helper:testSpecies(.,$pSpecies)][helper:testKeywords(.,$pKeywords,$pWholeWords)]"/>
             </xsl:when>
             <xsl:when test="$pArray!='' and $pSpecies='' and $pKeywords!=''">
-                <func:result select="experiment[arraydesign/id/text()=$pArray][helper:testKeywords(.,$pKeywords,$pWholeWords)]"/>
+                <func:result select="experiment[helper:testArray(.,$pArray)][helper:testKeywords(.,$pKeywords,$pWholeWords)]"/>
             </xsl:when>
             <xsl:otherwise>
                 <func:result select="experiment"/>

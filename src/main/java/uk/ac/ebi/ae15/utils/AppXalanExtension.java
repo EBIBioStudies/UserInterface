@@ -132,6 +132,22 @@ public abstract class AppXalanExtension
         return result;
     }
 
+    public static boolean testArray( NodeList nl, String array )
+    {
+        boolean result = false;
+
+        try {
+            if (0 < nl.getLength()) {
+
+                String textIdx = ((Element) nl.item(0)).getAttribute("textIdx");
+                return ((Experiments) application.getComponent("Experiments")).getSearch().matchArray(textIdx, array);
+            }
+        } catch (Throwable x) {
+            log.error("Caught an exception:", x);
+        }
+
+        return result;
+    }
 
     public static boolean testKeywords( NodeList nl, String keywords, boolean wholeWords )
     {

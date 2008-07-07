@@ -22,12 +22,12 @@
     <xsl:include href="ae-sort-experiments.xsl"/>
 
     <xsl:template match="/experiments">
-        <helper:logDebug select="Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}]"/>
-        <helper:logDebug select="Sort by: [{$sortby}], [{$sortorder}]"/>
+        <helper:logInfo select="[experiments-xml] Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}]"/>
+        <helper:logInfo select="[experiments-xml] Sort by: [{$sortby}], [{$sortorder}]"/>
         <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
 
-        <helper:logInfo select="XML query for '{$keywords}' filtered {$vTotal} experiments."/>
+        <helper:logInfo select="[experiments-xml] Query filtered {$vTotal} experiments."/>
 
         <experiments version="1.1"
                      total="{$vTotal}"

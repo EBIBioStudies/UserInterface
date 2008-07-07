@@ -18,6 +18,8 @@
     <xsl:include href="ae-sort-experiments.xsl"/>
 
     <xsl:template match="/experiments">
+        <helper:logInfo select="[experiments-tab] Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}]"/>
+        <helper:logInfo select="[experiments-tab] Sort by: [{$sortby}], [{$sortorder}]"/>
         <xsl:text>Accession</xsl:text>
         <xsl:text>&#9;</xsl:text>
         <xsl:text>Title</xsl:text>
