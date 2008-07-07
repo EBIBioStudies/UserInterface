@@ -17,8 +17,8 @@
         <to type="forward">/servlets/query/experiments-rss/xml</to>
     </rule>
     <rule>
-        <from>^/query/experiments$</from>
-        <to type="forward">/servlets/query/list-experiments/xml</to>
+        <from>^/xml/experiments$</from>
+        <to type="forward">/servlets/query/experiments/xml</to>
     </rule>
     <rule>
         <from>^/browse-noajax.html$</from>
@@ -26,10 +26,10 @@
     </rule>
     <rule>
         <from>^/ArrayExpress-Experiments\.xls$</from>
-        <to type="forward">/servlets/query/list-experiments/xls</to>
+        <to type="forward">/servlets/query/experiments/xls</to>
     </rule>
     <rule>
         <from>^/ArrayExpress-Experiments\.txt$</from>
-        <to type="forward">/servlets/query/list-experiments/tab</to>
+        <to type="forward">/servlets/query/experiments/tab</to>
     </rule>
 </urlrewrite>

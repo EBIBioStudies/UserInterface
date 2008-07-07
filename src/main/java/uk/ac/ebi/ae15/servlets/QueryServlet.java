@@ -38,14 +38,14 @@ public class QueryServlet extends ApplicationServlet
             String timestamp = new SimpleDateFormat("yyMMdd-HHmmss").format(new Date());
             response.setContentType("application/vnd.ms-excel");
             response.setHeader("Content-disposition", "attachment; filename=\"ArrayExpress-Experiments-" + timestamp + ".xls\"");
-            type = "plain";
+            type = "tab";
         } else if (type.equals("tab")) {
             // special case for tab-delimited files
             // we send tab-delimited file as an attachment
             String timestamp = new SimpleDateFormat("yyMMdd-HHmmss").format(new Date());
             response.setContentType("text/plain; charset=ISO-8859-1");
             response.setHeader("Content-disposition", "attachment; filename=\"ArrayExpress-Experiments-" + timestamp + ".txt\"");
-            type = "plain";
+            type = "tab";
         } else {
             // Set content type for HTML/XML/plain
             response.setContentType("text/" + type + "; charset=ISO-8859-1");

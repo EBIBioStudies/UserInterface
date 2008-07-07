@@ -122,6 +122,8 @@ public class Experiments extends ApplicationComponent
 
     }
 
+    // method attempts to extract experiment accession number from file location path and if found
+    // checks the expeirment presence in xml index
     public boolean isFilePublic( String file )
     {
         boolean result = true;
