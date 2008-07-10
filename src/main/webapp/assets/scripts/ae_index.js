@@ -2,6 +2,15 @@
 //  AE Index Page Scripting Support. Requires jQuery 1.2.3 and JSDefeered.jQuery 0.2.1
 //
 
+function
+aeSwitchToAtlas()
+{
+    $("#ae_warehouse_box").hide();
+    $("#ae_atlas_box").show();
+}
+
+
+
 // runs on page reload after rendering is done
 $(document).ready(function()
 {
@@ -54,13 +63,13 @@ $(document).ready(function()
 });
 
 function
-        trimString(stringToTrim)
+trimString(stringToTrim)
 {
     return String(stringToTrim).replace(/^\s+|\s+$/g, "");
 }
 
 function
-        updateAerStats(xml)
+updateAerStats(xml)
 {
     var aer_avail_info = "The information is unavailable at the moment";
     if (undefined != xml) {
@@ -75,7 +84,7 @@ function
 }
 
 function
-        getNumDocsFromSolrStats(xml)
+getNumDocsFromSolrStats(xml)
 {
     return trimString($($(xml).find("stat[name='numDocs']")[0]).text());
 }

@@ -42,6 +42,16 @@
 #ae_query_area .form_top_right {
     padding: 8px 0;
 }
+#ae_warehouse_box .form_top_right {
+    background: url( ../images/try_atlas.gif ) 100% 0 no-repeat;    
+}
+
+#ae_switch_to_atlas_box {
+    position: absolute;
+    right: 1;
+    top: 1;
+    font-size: 1px;
+}
 
 #ae_query_area .form_inner {
     height: 184px;
@@ -73,6 +83,13 @@
 #ae_query_area fieldset {
     border: 0 none;
     padding: 0;
+}
+
+#ae_warehouse_box {
+}
+
+#ae_atlas_box {
+    display: none;
 }
 
 #aew_gene_fset {
