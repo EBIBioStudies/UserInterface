@@ -17,7 +17,8 @@
     <link rel="stylesheet" href="assets/stylesheets/ae_index.css" type="text/css"/>
     <script src="assets/scripts/jquery-1.2.3.js" type="text/javascript"></script>
     <script src="assets/scripts/jsdeferred.jquery.js" type="text/javascript"></script>
-    <script type="assets/scripts/jquery.cookie-1.0.js" type="text/javascript"></script>
+    <script src="assets/scripts/jquery.cookie-1.0.js" type="text/javascript"></script>
+    <script src="assets/scripts/jquery.autocomplete.js" type="text/javascript"></script>
     <script src="assets/scripts/ae_index.js" type="text/javascript"></script>
     <link rel="alternate" href="rss/experiments"
               type="application/rss+xml" title="ArrayExpress Experiments Feed"/>    
@@ -93,7 +94,7 @@
                             <div id="aew_avail_info">Retrieving data, please wait...</div>
                             <form method="get" action="${interface.application.link.aew.base.url}/DW">
                                 <fieldset id="aew_gene_fset">
-                                    <label for="aew_query_field">Gene(s)</label>
+                                    <label for="aew_query_field">Genes</label>
                                     <input id="aew_query_field" name="gene_query" maxlength="60" class="assign_font">
                                 </fieldset>
                                 <fieldset id="aew_exps_fset">
@@ -123,20 +124,29 @@
                     <div id="ae_switch_to_atlas_box"><a href="javascript:aeSwitchToAtlas()" title="Click here to try ArrayExpress Atlas &#151; new meta-analytical tool for searching gene expression profiles in ArrayExpress"><img src="assets/images/empty.gif" width="48" height="48"></a></div>
                     <div id="ae_atlas_box" class="ae_right_box">
                         <div class="form_outer"><div class="form_top"><div class="form_bottom"><div class="form_left"><div class="form_right"><div class="form_bottom_left"><div class="form_bottom_right"><div class="form_top_left"><div class="form_top_right"><div class="form_inner">
-                            <div class="ae_box_title"><img src="assets/images/ae_genes_header.gif" alt="Expression Profiles"></div>
+                            <div id="atlas_beta_notice"><img src="assets/images/atlas_beta.gif" alt="ArrayExpress Atlas Beta"></div>
+                            <div class="ae_box_title"><img src="assets/images/ae_atlas_header.gif" alt="Altas of Gene Expression"></div>
                             <div id="atlas_avail_info">Retrieving data, please wait...</div>
-                            <form method="get" action="${interface.application.link.aew.base.url}/DW">
+                            <form method="get" action="${interface.application.link.www_domain}/microarray-as/atlas/qr">
                                 <fieldset id="atlas_gene_fset">
-                                    <label for="atlas_query_field">Gene(s)</label>
-                                    <input id="atlas_query_field" name="gene_query" maxlength="60" class="assign_font">
+                                    <label for="atlas_query_field">Genes</label>
+                                    <input id="atlas_query_field" name="q_gene" maxlength="60" class="assign_font">
+                                </fieldset>
+                                <fieldset id="atlas_updn_fset">
+                                    <label for="atlas_updn_field">&#160;</label>
+                                    <select id="atlas_updn_field" name="q_updn" class="assign_font">
+                                        <option value="updn">up/down in</option>
+                                        <option value="up">up in</option>
+                                        <option value="dn">down in</option>
+                                    </select>
                                 </fieldset>
                                 <fieldset id="atlas_exps_fset">
-                                    <label for="atlas_experiments_field">Experiment and sample annotations</label>
-                                    <input id="atlas_experiments_field" name="exp_query" maxlength="120" class="assign_font">
+                                    <label for="atlas_experiments_field">Conditions</label>
+                                    <input id="atlas_experiments_field" name="q_expt" maxlength="120" class="assign_font">
                                 </fieldset>
                                 <input id="atlas_query_submit" type="submit" value="Query">
                                 <fieldset id="atlas_species_fset">
-                                    <select id="atlas_species_field" name="species" class="assign_font">
+                                    <select id="atlas_species_field" name="q_orgn" class="assign_font">
                                         <option value="" selected>Any species</option>
                                         <option value="Arabidopsis thaliana">Arabidopsis thaliana</option>
                                         <option value="Caenorhabditis elegans">Caenorhabditis elegans</option>
@@ -149,9 +159,11 @@
                                         <option value="Schizosaccharomyces pombe">Schizosaccharomyces pombe</option>
                                     </select>
                                 </fieldset>
-                                <input type="hidden" name="queryFor" value="gene">
+                                <input type="hidden" name="view" value="table">
+                                <input type="hidden" name="expand_efo" value="on">
                             </form>
-                            <div id="atlas_browse_link"><a href="${interface.application.link.aew.base.url}">&#187; Advanced query interface</a></div>
+                            <div id="atlas_browse_link"><a href="${interface.application.link.www_domain}/microarray-as/atlas">&#187; ArrayExpress Atlas home</a></div>
+                            <div id="atlas_switch_to_aew"><a href="javascript:aeSwitchToAew()">&#187; Switch back to ArrayExpress Warehouse</a></div>
                         </div></div></div></div></div></div></div></div></div></div>
                     </div>
                 </div>

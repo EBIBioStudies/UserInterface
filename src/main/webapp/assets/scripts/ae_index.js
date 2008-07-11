@@ -7,9 +7,16 @@ aeSwitchToAtlas()
 {
     $("#ae_warehouse_box").hide();
     $("#ae_atlas_box").show();
+    $.cookie("AeAtlasOption", "atlas", { expires: 365 });
 }
 
-
+function
+aeSwitchToAew()
+{
+    $("#ae_atlas_box").hide();
+    $("#ae_warehouse_box").show();
+    $.cookie("AeAtlasOption", null);
+}
 
 // runs on page reload after rendering is done
 $(document).ready(function()
@@ -32,15 +39,38 @@ $(document).ready(function()
             }
             window.location.href = location;
         }
-
     }
 
+    var atlas = $.cookie("AeAtlasOption");
+    if ( "atlas" == atlas ) {
+        aeSwitchToAtlas();
+    }
+    
     // adds a trigger callback for more/less intro text switching
     $("a.ae_intro_more_toggle").click(function()
     {
         $("div.ae_intro_more").toggle();
     });
+    /*** this does not work
+    $("#atlas_experiments_field").autocomplete("test/autocomplete_exp.txt", {
+            minChars:1,
+            matchSubset: false,
+            multiple: true,
+            multipleSeparator: " ",
+            extraParams: {type:"expt"},
+            formatItem:function(row) {return row[0] + " (" + row[1] + ")";}
+    });
 
+    $("#atlas_query_field").autocomplete("test/autocomplete_gene.txt", {
+            minChars:1,
+            matchCase: true,
+            matchSubset: false,
+            multiple: true,
+            multipleSeparator: " ",
+            extraParams: {type:"gene"},
+            formatItem:function(row) {return row[0] + " (" + row[1] + ")";}
+    });
+    ***/
     // gets aer stats and updates the page
     $.get("servlets/query/stats").next(updateAerStats);
 
@@ -52,6 +82,7 @@ $(document).ready(function()
     {
         var aew_avail_info = values[1] + " experiments, " + values[0] + " genes available";
         $("#aew_avail_info").text(aew_avail_info);
+        $("#atlas_avail_info").text(aew_avail_info);
     });
 
     // loads news page
