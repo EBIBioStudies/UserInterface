@@ -75,4 +75,43 @@
         logAbandoned="true"
         removeAbandonedTimeout="300"
     />
+
+    <Resource
+        name="jdbc/dwp.smithers"
+        type="javax.sql.DataSource"
+        url="jdbc:oracle:thin:@smithers.ebi.ac.uk:1521:AEDWP"
+        username="aemart"
+        password="marte"
+        driverClassName="oracle.jdbc.OracleDriver"
+        initialSize="0"
+        maxActive="2"
+        maxIdle="0"
+        minIdle="0"
+        maxWait="15000"
+        testOnBorrow="true"
+        validationQuery="select 1 from ae1__experiment__main where rownum = 1"
+        removeAbandoned="true"
+        logAbandoned="true"
+        removeAbandonedTimeout="300"
+    />
+
+    <Resource
+        name="jdbc/dwp.otto"
+        type="javax.sql.DataSource"
+        url="jdbc:oracle:thin:@otto.ebi.ac.uk:1521:AEDWP"
+        username="aemart"
+        password="marte"
+        driverClassName="oracle.jdbc.OracleDriver"
+        initialSize="0"
+        maxActive="2"
+        maxIdle="0"
+        minIdle="0"
+        maxWait="15000"
+        testOnBorrow="true"
+        validationQuery="select 1 from ae1__experiment__main where rownum = 1"
+        removeAbandoned="true"
+        logAbandoned="true"
+        removeAbandonedTimeout="300"
+    />
+
 </Context>

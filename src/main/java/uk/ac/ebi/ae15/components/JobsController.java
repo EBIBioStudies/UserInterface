@@ -8,6 +8,7 @@ import uk.ac.ebi.ae15.app.Application;
 import uk.ac.ebi.ae15.app.ApplicationComponent;
 import uk.ac.ebi.ae15.jobs.ReloadExperimentsJob;
 import uk.ac.ebi.ae15.jobs.RescanFilesJob;
+import uk.ac.ebi.ae15.jobs.RetrieveExperimentsListFromWarehouseJob;
 import uk.ac.ebi.ae15.jobs.RetrieveExperimentsXmlJob;
 
 import java.util.List;
@@ -33,8 +34,10 @@ public class JobsController extends ApplicationComponent
         addJob("rescan-files", RescanFilesJob.class);
         addJob("reload-xml", ReloadExperimentsJob.class);
         addJob("retrieve-xml", RetrieveExperimentsXmlJob.class);
+        addJob("reload-warehouse-info", RetrieveExperimentsListFromWarehouseJob.class);
         scheduleJob("rescan-files", "ae.files.rescan");
         scheduleJob("reload-xml", "ae.experiments.reload");
+        scheduleJob("reload-warehouse-info", "ae.warehouseexperiments.reload");
         startScheduler();
     }
 

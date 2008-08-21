@@ -77,6 +77,10 @@ public class AppXalanExtension
         return ((DownloadableFilesRegistry) application.getComponent("DownloadableFilesRegistry")).doesExist(fileName);
     }
 
+    public static boolean isExperimentInWarehouse( String accession )
+    {
+        return ((Experiments) application.getComponent("Experiments")).isInWarehouse(accession);
+    }
     public static boolean testRegexp( String input, String pattern, String flags )
     {
         boolean result = false;

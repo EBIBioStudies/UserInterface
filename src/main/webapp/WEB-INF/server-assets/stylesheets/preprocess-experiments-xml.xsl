@@ -32,6 +32,9 @@
             <xsl:for-each select="sampleattribute[@category = 'Organism'][generate-id() = generate-id(key('experiment-species-by-name',concat(ancestor::experiment/@id, @value))[1])]">
                 <species><xsl:value-of select="@value"/></species>
             </xsl:for-each>
+            <xsl:if test="helper:isExperimentInWarehouse(@accession)">
+                <loadedinwarehouse><xsl:text>true</xsl:text></loadedinwarehouse>
+            </xsl:if>
             <samples>
                 <xsl:value-of select="substring-before(substring-after(description[contains(., '(Generated description)')], 'using '), ' samples')"/>
             </samples>

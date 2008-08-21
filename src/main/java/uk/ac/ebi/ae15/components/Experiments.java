@@ -7,10 +7,12 @@ import uk.ac.ebi.ae15.app.Application;
 import uk.ac.ebi.ae15.app.ApplicationComponent;
 import uk.ac.ebi.ae15.utils.persistence.PersistableDocumentContainer;
 import uk.ac.ebi.ae15.utils.persistence.PersistableString;
+import uk.ac.ebi.ae15.utils.persistence.PersistableStringList;
 import uk.ac.ebi.ae15.utils.persistence.TextFilePersistence;
 import uk.ac.ebi.ae15.utils.search.ExperimentSearch;
 
 import java.io.File;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +22,7 @@ public class Experiments extends ApplicationComponent
     private final Log log = LogFactory.getLog(getClass());
 
     private TextFilePersistence<PersistableDocumentContainer> experiments;
+    private TextFilePersistence<PersistableStringList> experimentsInWarehouse;
     private TextFilePersistence<PersistableString> species;
     private TextFilePersistence<PersistableString> arrays;
 
@@ -36,6 +39,11 @@ public class Experiments extends ApplicationComponent
         experiments = new TextFilePersistence<PersistableDocumentContainer>(
                 new PersistableDocumentContainer()
                 , new File(System.getProperty("java.io.tmpdir"), getPreferences().getString("ae.experiments.cache.filename"))
+        );
+
+        experimentsInWarehouse = new TextFilePersistence<PersistableStringList>(
+                new PersistableStringList()
+                , new File(System.getProperty("java.io.tmpdir"), getPreferences().getString("ae.warehouseexperiments.cache.filename"))
         );
 
         experimentSearch = new ExperimentSearch();
@@ -70,6 +78,11 @@ public class Experiments extends ApplicationComponent
     public synchronized ExperimentSearch getSearch()
     {
         return experimentSearch;
+    }
+
+    public boolean isInWarehouse( String accession )
+    {
+        return experimentsInWarehouse.getObject().contains(accession);
     }
 
     public String getSpecies()
@@ -119,7 +132,11 @@ public class Experiments extends ApplicationComponent
                         )
                 )
         );
+    }
 
+    public void setExperimentsInWarehouse( List<String> expList )
+    {
+        experimentsInWarehouse.setObject(new PersistableStringList(expList));    
     }
 
     // method attempts to extract experiment accession number from file location path and if found
