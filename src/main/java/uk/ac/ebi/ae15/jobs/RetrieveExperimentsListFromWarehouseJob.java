@@ -25,12 +25,17 @@ public class RetrieveExperimentsListFromWarehouseJob  extends ApplicationJob
             log.info("Reload of warehouse experiment data from [" + dsNames + "] requested");
 
             ds = new DataSourceFinder().findDataSource(dsNames);
-            exps = new ExperimentListInWarehouseDatabaseRetriever(ds).getExperimentList();
-            Thread.sleep(1);
+            if (null != ds) {
+                exps = new ExperimentListInWarehouseDatabaseRetriever(ds).getExperimentList();
+                Thread.sleep(1);
 
-            log.info("Got [" + String.valueOf(exps.size()) + "] experiments listed in the warehouse");
-            ((Experiments) app.getComponent("Experiments")).setExperimentsInWarehouse(exps);
-            log.info("Reload of warehouse experiment data completed");
+                log.info("Got [" + String.valueOf(exps.size()) + "] experiments listed in the warehouse");
+                ((Experiments) app.getComponent("Experiments")).setExperimentsInWarehouse(exps);
+                log.info("Reload of warehouse experiment data completed");
+            } else {
+                log.warn("No data sources available, reload aborted");
+            }
+
         }
     }
 }

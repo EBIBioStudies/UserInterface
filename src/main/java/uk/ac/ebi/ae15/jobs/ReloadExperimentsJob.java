@@ -40,32 +40,36 @@ public class ReloadExperimentsJob extends ApplicationJob implements JobListener
                 log.info("Reload of experiment data from [" + dsNames + "] requested");
 
                 ds = new DataSourceFinder().findDataSource(dsNames);
-                exps = new ExperimentListDatabaseRetriever(
-                        ds,
-                        app.getPreferences().getBoolean("ae.experiments.publiconly")
-                ).getExperimentList();
-                Thread.sleep(1);
-
-                log.info("Got [" + String.valueOf(exps.size()) + "] experiments listed in the database, scheduling retrieval");
-                xmlBuffer.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><experiments total=\"").append(exps.size()).append("\">");
-
-                ((JobsController) app.getComponent("JobsController")).setJobListener(this);
-                // split list into several pieces
-                expsPerThread = (int) Math.floor(exps.size() / numThreadsForRetrieval) + 1;
-                for ( int i = 0; i < numThreadsForRetrieval; ++i ) {
-                    ((JobsController) app.getComponent("JobsController")).executeJob("retrieve-xml", i);
+                if (null != ds) {
+                    exps = new ExperimentListDatabaseRetriever(
+                            ds,
+                            app.getPreferences().getBoolean("ae.experiments.publiconly")
+                    ).getExperimentList();
                     Thread.sleep(1);
-                }
 
-                while ( numThreadsCompleted < numThreadsForRetrieval ) {
-                    Thread.sleep(1000);
-                }
+                    log.info("Got [" + String.valueOf(exps.size()) + "] experiments listed in the database, scheduling retrieval");
+                    xmlBuffer.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><experiments total=\"").append(exps.size()).append("\">");
 
-                ((JobsController) app.getComponent("JobsController")).setJobListener(null);
-                xmlBuffer.append("</experiments>");
-                ((Experiments) app.getComponent("Experiments")).reload(xmlBuffer.toString().replaceAll("[^\\p{Print}]", " "));
-                log.info("Reload of experiment data completed");
-                xmlBuffer = null;
+                    ((JobsController) app.getComponent("JobsController")).setJobListener(this);
+                    // split list into several pieces
+                    expsPerThread = (int) Math.floor(exps.size() / numThreadsForRetrieval) + 1;
+                    for ( int i = 0; i < numThreadsForRetrieval; ++i ) {
+                        ((JobsController) app.getComponent("JobsController")).executeJob("retrieve-xml", i);
+                        Thread.sleep(1);
+                    }
+
+                    while ( numThreadsCompleted < numThreadsForRetrieval ) {
+                        Thread.sleep(1000);
+                    }
+
+                    ((JobsController) app.getComponent("JobsController")).setJobListener(null);
+                    xmlBuffer.append("</experiments>");
+                    ((Experiments) app.getComponent("Experiments")).reload(xmlBuffer.toString().replaceAll("[^\\p{Print}]", " "));
+                    log.info("Reload of experiment data completed");
+                    xmlBuffer = null;
+                } else {
+                    log.warn("No data sources available, reload aborted");
+                }
             }
         }
     }

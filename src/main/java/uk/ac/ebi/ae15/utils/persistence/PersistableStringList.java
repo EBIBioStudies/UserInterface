@@ -29,11 +29,12 @@ public class PersistableStringList extends ArrayList<String> implements Persista
     public void fromPersistence( String str )
     {
         this.clear();
-        this.addAll(Arrays.asList(str.split("\n")));
+        this.addAll(Arrays.asList(str.split("" + EOL)));
     }
 
     public boolean shouldLoadFromPersistence()
     {
         return (0 == this.size());
-    }}
+    }
+}
 
