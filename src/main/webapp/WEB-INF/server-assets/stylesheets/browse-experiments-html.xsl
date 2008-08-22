@@ -145,9 +145,18 @@
                             <td class="name"/>
                             <td class="value">
                                 <a href="${interface.application.link.aer_old.base.url}/result?queryFor=Experiment&amp;eAccession={accession/text()}"
-                                            target="_blank" title="Opens in a new window">&#187; Advanced interface page for <xsl:value-of select="accession"/></a>
+                                   target="_blank" title="Opens in a new window">&#187; Advanced interface page for <xsl:value-of select="accession"/></a>
                             </td>
                         </tr>
+                        <xsl:if test="@loadedinatlas">
+                            <tr>
+                                <td class="name">ArrayExpress Atlas link:</td>
+                                <td class="value">
+                                    <a href="${interface.application.link.atlas.exp_query.url}{accession/text()}"
+                                       target="_blank" title="Opens in a new window">&#187; Query Atlas for most differentially expressed genes in <xsl:value-of select="accession"/></a>
+                                </td>
+                            </tr>
+                        </xsl:if>
                         <xsl:if test="count(secondaryaccession/text())&gt;0">
                             <tr>
                                 <td class="name">Secondary&#160;accession<xsl:if test="count(secondaryaccession/text())&gt;1">s</xsl:if>:</td>

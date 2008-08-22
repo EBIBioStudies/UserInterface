@@ -24,6 +24,9 @@
 
     <xsl:template match="experiment">
         <experiment>
+            <xsl:if test="helper:isExperimentInWarehouse(@accession)">
+                <xsl:attribute name="loadedinatlas">true</xsl:attribute>
+            </xsl:if>
             <xsl:for-each select="@*">
                 <xsl:element name="{helper:toLowerCase(name())}">
                     <xsl:value-of select="." />
@@ -32,9 +35,6 @@
             <xsl:for-each select="sampleattribute[@category = 'Organism'][generate-id() = generate-id(key('experiment-species-by-name',concat(ancestor::experiment/@id, @value))[1])]">
                 <species><xsl:value-of select="@value"/></species>
             </xsl:for-each>
-            <xsl:if test="helper:isExperimentInWarehouse(@accession)">
-                <loadedinwarehouse><xsl:text>true</xsl:text></loadedinwarehouse>
-            </xsl:if>
             <samples>
                 <xsl:value-of select="substring-before(substring-after(description[contains(., '(Generated description)')], 'using '), ' samples')"/>
             </samples>
