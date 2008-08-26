@@ -111,6 +111,21 @@
                     <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:when>
+            <xsl:when test="$pSortBy='atlas'">
+                <xsl:apply-templates select="$pExperiments">
+                    <xsl:sort select="@loadedinatlas" order="{$pSortOrder}"/>
+                    <!-- then sort by accession -->
+                    <xsl:sort select="substring(accession/text(),3,4)" order="ascending"/>
+                    <!-- sort by experiment 4-letter code -->
+                    <xsl:sort select="substring(accession/text(),8)" order="ascending" data-type="number"/>
+                    <!-- sort by number -->
+
+                    <xsl:with-param name="pFrom" select="$pFrom"/>
+                    <xsl:with-param name="pTo" select="$pTo"/>
+                    <xsl:with-param name="pDetailedViewMainClass" select="$pDetailedViewMainClass"/>
+                    <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
+                </xsl:apply-templates>
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="$pExperiments">
                     <xsl:sort select="*[name()=$pSortBy]" order="{$pSortOrder}"/>

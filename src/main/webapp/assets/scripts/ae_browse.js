@@ -10,6 +10,7 @@ aeClearKeywords()
 {
     $("#ae_keywords").val("");
     $("#ae_wholewords").removeAttr("checked");
+    $("#ae_inatlas").removeAttr("checked");
 }
 
 function
@@ -30,7 +31,7 @@ aeResetOptions()
 function
 aeSort( sortby )
 {
-    if ( -1 != String("accession name assays species releasedate fgem raw").indexOf(sortby) ) {
+    if ( -1 != String("accession name assays species releasedate fgem raw atlas").indexOf(sortby) ) {
         var innerElt = $( "#ae_results_header_" + sortby ).find("div.table_header_inner");
         var sortorder = "ascending";
         if ( undefined != innerElt && innerElt.hasClass("table_header_sort_asc") )
@@ -84,6 +85,9 @@ $(document).ready( function() {
     query.species = $.query.get("species");
     query.array = $.query.get("array");
     query.exptype = $.query.get("exptype");
+
+    if ("" != $.query.get("inatlas"))
+        query.inatlas = true;
 
     if ("" != $.query.get("page"))
         query.page = $.query.get("page");
@@ -204,6 +208,8 @@ initControls()
     $("#ae_keywords").val(query.keywords);
     if (query.wholewords)
         $("#ae_wholewords").attr("checked","true");
+    if (query.inatlas)
+        $("#ae_inatlas").attr("checked","true");
     $("#ae_sortby").val(query.sortby);
     $("#ae_sortorder").val(query.sortorder);
     $("#ae_pagesize").val(query.pagesize);

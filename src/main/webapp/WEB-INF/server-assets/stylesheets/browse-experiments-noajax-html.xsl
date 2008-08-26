@@ -18,6 +18,7 @@
     <xsl:param name="keywords"/>
     <xsl:param name="wholewords"/>
     <xsl:param name="exptype"/>
+    <xsl:param name="inatlas"/>
 
     <xsl:param name="detailedview"/>
 
@@ -42,9 +43,9 @@
     </xsl:template>
 
     <xsl:template name="ae-contents">
-        <helper:logInfo select="[browse-experiments-noajax-html] Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], detailedview [{$detailedview}]"/>
+        <helper:logInfo select="[browse-experiments-noajax-html] Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
         <helper:logInfo select="[browse-experiments-noajax-html] Sort by: [{$sortby}], [{$sortorder}]"/>
-        <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array,$exptype)"/>
+        <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array,$exptype,$inatlas)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
         <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments[samples/text()>0]/samples/text())"/>
         <xsl:variable name="vTotalAssays" select="sum($vFilteredExperiments[assays/text()>0]/assays/text())"/>

@@ -47,6 +47,7 @@
                                     <label for="ae_keywords">Experiment, citation, sample and factor annotations [<a href="javascript:aeClearKeywords()">clear</a>]</label>
                                     <input id="ae_keywords" name="keywords" maxlength="200" class="assign_font">
                                     <span><input id="ae_wholewords" name="wholewords" type="checkbox"><label for="ae_wholewords">Match whole words</label></span>
+                                    <span><input id="ae_inatlas" name="inatlas" type="checkbox"><label for="ae_inatlas">Loaded in ArrayExpress Atlas</label></span>
                                 </fieldset>
                                 <fieldset id="ae_filters_box">
                                     <label for="ae_species">Filter on [<a href="javascript:aeResetFilters()">reset</a>]</label>
@@ -88,6 +89,7 @@
                                                     <th class="table_header_box sortable ae_results_releasedate" id="ae_results_header_releasedate"><a href="javascript:aeSort('releasedate')" title="Click to sort by release date"><div class="table_header_border_left"><div class="table_header_border_right"><div class="table_header_inner"><div class="table_header_label">Date</div></div></div></div></a></th>
                                                     <th class="table_header_box sortable ae_results_fgem" id="ae_results_header_fgem"><a href="javascript:aeSort('fgem')" title="Click to sort by number of assays of processed data"><div class="table_header_border_left"><div class="table_header_border_right"><div class="table_header_inner"><div class="table_header_label">Processed</div></div></div></div></a></th>
                                                     <th class="table_header_box sortable ae_results_raw" id="ae_results_header_raw"><a href="javascript:aeSort('raw')" title="Click to sort by number of assays of raw data"><div class="table_header_border_left"><div class="table_header_border_right"><div class="table_header_inner"><div class="table_header_label">Raw</div></div></div></div></a></th>
+                                                    <th class="table_header_box sortable ae_results_atlas" id="ae_results_header_atlas"><a href="javascript:aeSort('atlas')" title="Click to sort by presence of experiment data in ArrayExpress Atlas"><div class="table_header_border_left"><div class="table_header_border_right"><div class="table_header_inner"><div class="table_header_label">Atlas</div></div></div></div></a></th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -106,6 +108,7 @@
                                                     <th class="table_header_box_fake ae_results_releasedate"></th>
                                                     <th class="table_header_box_fake ae_results_fgem"></th>
                                                     <th class="table_header_box_fake ae_results_raw"></th>
+                                                    <th class="table_header_box_fake ae_results_atlas"></th>
                                                 </tr>
                                             </thead>
                                             <tbody id="ae_results_tbody"></tbody>

@@ -168,7 +168,7 @@ a:active .table_header_label {
 
 #ae_browse_area {
     position: absolute;
-    padding: 110px 5px 5px 5px;
+    padding: 115px 5px 5px 5px;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -177,10 +177,10 @@ a:active .table_header_label {
 /* ae keywords filters area */
 #ae_keywords_filters_area {
     position: relative;
-    top: -110px;
+    top: -115px;
     left: 0;
     width: 100%;
-    height: 110px;
+    height: 115px;
     overflow: hidden;
     padding: 5px 0 5px 0;
 }
@@ -204,7 +204,7 @@ a:active .table_header_label {
 #ae_help_link {
     position: absolute;
     left: 0;
-    top: 68px;
+    top: 78px;
     margin: 0;
     padding: 0 0 0 10px;
     border: 0 none;
@@ -219,6 +219,10 @@ a:active .table_header_label {
     margin: 0;
     padding: 5px 5px 5px 10px;
     border: 0 none;
+}
+
+#ae_keywords_box span {
+    margin-right: 10px;
 }
 
 #ae_filters_box {
@@ -275,6 +279,7 @@ a:active .table_header_label {
 #ae_keyword_filters_submit {
     float: right;
     font-size: 11px;
+    margin-top: 29px;
 }
 
 /* ae resutls area */
@@ -284,7 +289,7 @@ a:active .table_header_label {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    top: -110px;
+    top: -115px;
 }
 
 #ae_results_area th,
@@ -394,6 +399,10 @@ ae_results_body img {
 
 .ae_results_raw {
     width: 42px;
+}
+
+.ae_results_atlas {
+    width: 50px;
 }
 
 .tr_main_active {

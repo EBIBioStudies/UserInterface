@@ -16,6 +16,7 @@
     <xsl:param name="keywords"/>
     <xsl:param name="wholewords"/>
     <xsl:param name="exptype"/>
+    <xsl:param name="inatlas"/>
 
     <xsl:output omit-xml-declaration="yes" method="xml" indent="no"/>
     
@@ -23,9 +24,9 @@
     <xsl:include href="ae-sort-experiments.xsl"/>
 
     <xsl:template match="/experiments">
-        <helper:logInfo select="[experiments-xml] Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}]"/>
+        <helper:logInfo select="[experiments-xml] Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}]"/>
         <helper:logInfo select="[experiments-xml] Sort by: [{$sortby}], [{$sortorder}]"/>
-        <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array,$exptype)"/>
+        <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array,$exptype,$inatlas)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
 
         <helper:logInfo select="[experiments-xml] Query filtered {$vTotal} experiments."/>
