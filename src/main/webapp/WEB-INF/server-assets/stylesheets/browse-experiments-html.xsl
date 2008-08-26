@@ -303,6 +303,18 @@
                             </tr>
                         </xsl:if>
 
+                        <xsl:if test="count(experimenttype)&gt;0">
+                            <tr>
+                                <td class="name">Experiment&#160;type<xsl:if test="count(experimenttype)&gt;1">s</xsl:if>:</td>
+                                <td class="value">
+                                    <xsl:for-each select="experimenttype">
+                                        <xsl:apply-templates select="." mode="highlight"/>
+                                        <xsl:if test="position()!=last()">, </xsl:if>
+                                    </xsl:for-each>
+                                </td>
+                            </tr>
+                        </xsl:if>
+
                         <xsl:if test="count(experimentdesign)&gt;0">
                             <tr>
                                 <td class="name">Design&#160;type<xsl:if test="count(experimentdesign)&gt;1">s</xsl:if>:</td>
