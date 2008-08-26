@@ -29,7 +29,7 @@
         <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array,$exptype,$inatlas)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
 
-        <helper:logInfo select="[experiments-xml] Query filtered {$vTotal} experiments."/>
+        <helper:logInfo select="[experiments-xml] Query filtered [{$vTotal}] experiments."/>
 
         <experiments version="1.1"
                      total="{$vTotal}"

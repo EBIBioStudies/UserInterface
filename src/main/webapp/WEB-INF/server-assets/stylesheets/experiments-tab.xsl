@@ -1,8 +1,11 @@
-<xsl:stylesheet version="1.0"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:func="http://exslt.org/functions"
                 xmlns:ae="http://www.ebi.ac.uk/arrayexpress"
-                xmlns:helper="uk.ac.ebi.ae15.utils.AppXalanExtension">
+                xmlns:helper="uk.ac.ebi.ae15.utils.AppXalanExtension"
+                extension-element-prefixes="func ae helper"
+                exclude-result-prefixes="func ae helper"
+                version="1.0">
 
     <xsl:param name="species"/>
     <xsl:param name="array"/>
@@ -22,6 +25,9 @@
     <xsl:template match="/experiments">
         <helper:logInfo select="[experiments-tab] Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}]"/>
         <helper:logInfo select="[experiments-tab] Sort by: [{$sortby}], [{$sortorder}]"/>
+        <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array,$exptype,$inatlas)"/>
+        <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
+        <helper:logInfo select="[experiments-tab] Query filtered [{$vTotal}] experiments."/>
         <xsl:text>Accession</xsl:text>
         <xsl:text>&#9;</xsl:text>
         <xsl:text>Title</xsl:text>
@@ -39,7 +45,7 @@
         <xsl:text>ArrayExpress URL</xsl:text>
         <xsl:text>&#10;</xsl:text>
         <xsl:call-template name="ae-sort-experiments">
-            <xsl:with-param name="pExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array,$exptype,$inatlas)"/>
+            <xsl:with-param name="pExperiments" select="$vFilteredExperiments"/>
             <xsl:with-param name="pSortBy" select="$sortby"/>
             <xsl:with-param name="pSortOrder" select="$sortorder"/>
         </xsl:call-template>
