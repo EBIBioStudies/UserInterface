@@ -17,6 +17,7 @@ aeResetFilters()
 {
     $("#ae_species").val("");
     $("#ae_array").val("");
+    $("#ae_exptype").val("");
 }
 
 function
@@ -82,6 +83,7 @@ $(document).ready( function() {
 
     query.species = $.query.get("species");
     query.array = $.query.get("array");
+    query.exptype = $.query.get("exptype");
 
     if ("" != $.query.get("page"))
         query.page = $.query.get("page");
@@ -211,6 +213,11 @@ initControls()
     $.get("servlets/query/species-select/html").next( function(data) {
         $("#ae_species").html(data).removeAttr("disabled").val(query.species);
         
+    });
+
+    $.get("servlets/query/exptypes-select/html").next( function(data) {
+        $("#ae_exptype").html(data).removeAttr("disabled").val(query.exptype);
+
     });
 
     $.get("servlets/query/arrays-select/html").next( function(data) {

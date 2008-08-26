@@ -75,6 +75,12 @@ public class ExperimentSearch
         return (-1 != expText.get(idx).array.indexOf(array.trim().toLowerCase()));
     }
 
+    public boolean matchExperimentType( String textIdx, String experimentType )
+    {
+        int idx = Integer.parseInt(textIdx);
+        return (-1 != expText.get(idx).experimentType.indexOf(experimentType.trim().toLowerCase()));
+    }
+
     public boolean doesPresent( String accession )
     {
         return accessionIdx.containsKey(accession.toLowerCase());

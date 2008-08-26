@@ -25,6 +25,7 @@ public class Experiments extends ApplicationComponent
     private TextFilePersistence<PersistableStringList> experimentsInWarehouse;
     private TextFilePersistence<PersistableString> species;
     private TextFilePersistence<PersistableString> arrays;
+    private TextFilePersistence<PersistableString> experimentTypes;
 
     private ExperimentSearch experimentSearch;
     private String dataSource;
@@ -57,6 +58,11 @@ public class Experiments extends ApplicationComponent
         arrays = new TextFilePersistence<PersistableString>(
                 new PersistableString()
                 , new File(System.getProperty("java.io.tmpdir"), getPreferences().getString("ae.arrays.cache.filename"))
+        );
+
+        experimentTypes = new TextFilePersistence<PersistableString>(
+                new PersistableString()
+                , new File(System.getProperty("java.io.tmpdir"), getPreferences().getString("ae.exptypes.cache.filename"))
         );
     }
 
@@ -95,6 +101,11 @@ public class Experiments extends ApplicationComponent
         return arrays.getObject().get();
     }
 
+    public String getExperimentTypes()
+    {
+        return experimentTypes.getObject().get();
+    }
+
     public String getDataSource()
     {
         if (null == dataSource) {
@@ -128,6 +139,16 @@ public class Experiments extends ApplicationComponent
                         ((XsltHelper) getApplication().getComponent("XsltHelper")).transformDocumentToString(
                                 experiments.getObject().getDocument()
                                 , "preprocess-arrays-html.xsl"
+                                , null
+                        )
+                )
+        );
+
+        experimentTypes.setObject(
+                new PersistableString(
+                        ((XsltHelper) getApplication().getComponent("XsltHelper")).transformDocumentToString(
+                                experiments.getObject().getDocument()
+                                , "preprocess-exptypes-html.xsl"
                                 , null
                         )
                 )

@@ -168,7 +168,7 @@ a:active .table_header_label {
 
 #ae_browse_area {
     position: absolute;
-    padding: 95px 5px 5px 5px;
+    padding: 110px 5px 5px 5px;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -177,10 +177,10 @@ a:active .table_header_label {
 /* ae keywords filters area */
 #ae_keywords_filters_area {
     position: relative;
-    top: -95px;
+    top: -110px;
     left: 0;
     width: 100%;
-    height: 95px;
+    height: 110px;
     overflow: hidden;
     padding: 5px 0 5px 0;
 }
@@ -250,14 +250,15 @@ a:active .table_header_label {
     font-size: 11px;
 }
 
-#ae_species {
+#ae_species,
+#ae_array {
     margin: 3px 0 5px 0;
     width: 100%;
     font-size: 11px;
 }
 
-#ae_array {
-    margin: 0;
+#ae_exptype {
+    margin: 3px 0 0 0;
     width: 100%;
     font-size: 11px;
 }
@@ -283,7 +284,7 @@ a:active .table_header_label {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    top: -95px;
+    top: -110px;
 }
 
 #ae_results_area th,

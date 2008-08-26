@@ -28,6 +28,8 @@ public class ExperimentText
     // all array info, concatenated
     public String array;
 
+    // experiment type info, concatenated
+    public String experimentType;
 
     public ExperimentText populateFromElement( Element elt )
     {
@@ -40,6 +42,7 @@ public class ExperimentText
         }
         species = concatAll(elt.getElementsByTagName("species")).toLowerCase();
         array = concatAll(elt.getElementsByTagName("arraydesign")).toLowerCase();
+        experimentType = concatAll(elt.getElementsByTagName("experimenttype")).toLowerCase();
 
         return this;
     }

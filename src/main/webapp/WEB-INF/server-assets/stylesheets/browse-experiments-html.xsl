@@ -17,6 +17,7 @@
     <xsl:param name="array"/>
     <xsl:param name="keywords"/>
     <xsl:param name="wholewords"/>
+    <xsl:param name="exptype"/>
 
     <xsl:param name="detailedview"/>
 
@@ -26,9 +27,9 @@
     <xsl:include href="ae-sort-experiments.xsl"/>
 
     <xsl:template match="/experiments">
-        <helper:logInfo select="[browse-experiments-html] Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], detailedview [{$detailedview}]"/>
+        <helper:logInfo select="[browse-experiments-html] Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], detailedview [{$detailedview}]"/>
         <helper:logInfo select="[browse-experiments-html] Sort by: [{$sortby}], [{$sortorder}]"/>
-        <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array)"/>
+        <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array,$exptype)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
         <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments[samples/text()>0]/samples/text())"/>
         <xsl:variable name="vTotalAssays" select="sum($vFilteredExperiments[assays/text()>0]/assays/text())"/>
@@ -80,6 +81,7 @@
                     <td colspan="8">
                         <p><strong>The query '<xsl:value-of select="$keywords"/>'<xsl:if test="string-length($species)>0">&#160;<em>and</em> species '<xsl:value-of select="$species"/>'</xsl:if>
                             <xsl:if test="string-length($array)>0">&#160;<em>and</em> array <xsl:value-of select="$array"/></xsl:if>
+                            <xsl:if test="string-length($exptype)>0">&#160;<em>and</em> experiment type <xsl:value-of select="$exptype"/></xsl:if>
                             returned no matches.</strong></p>
                         <p>Try shortening the query term e.g. 'embryo' will match embryo, embryoid, embryonic across all annotation fields.</p>
                         <p>Note that '*' is <strong>not</strong> supported as a wild card. More information available at <a href="http://www.ebi.ac.uk/microarray/doc/help/ae_help.html">ArrayExpress Query Help</a>.</p>

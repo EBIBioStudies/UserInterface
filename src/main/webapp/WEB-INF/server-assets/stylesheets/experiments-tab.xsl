@@ -8,6 +8,7 @@
     <xsl:param name="array"/>
     <xsl:param name="keywords"/>
     <xsl:param name="wholewords"/>
+    <xsl:param name="exptype"/>
 
     <xsl:param name="sortby">releasedate</xsl:param>
     <xsl:param name="sortorder">descending</xsl:param>
@@ -18,7 +19,7 @@
     <xsl:include href="ae-sort-experiments.xsl"/>
 
     <xsl:template match="/experiments">
-        <helper:logInfo select="[experiments-tab] Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}]"/>
+        <helper:logInfo select="[experiments-tab] Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}]"/>
         <helper:logInfo select="[experiments-tab] Sort by: [{$sortby}], [{$sortorder}]"/>
         <xsl:text>Accession</xsl:text>
         <xsl:text>&#9;</xsl:text>
@@ -37,7 +38,7 @@
         <xsl:text>ArrayExpress URL</xsl:text>
         <xsl:text>&#10;</xsl:text>
         <xsl:call-template name="ae-sort-experiments">
-            <xsl:with-param name="pExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array)"/>
+            <xsl:with-param name="pExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array,$exptype)"/>
             <xsl:with-param name="pSortBy" select="$sortby"/>
             <xsl:with-param name="pSortOrder" select="$sortorder"/>
         </xsl:call-template>
@@ -77,7 +78,7 @@
         <xsl:param name="node"/>
         <xsl:choose>
             <xsl:when test="helper:isFileAvailableForDownload($node/@name)"><xsl:value-of select="concat('http://www.ebi.ac.uk/microarray-as/ae/download/',$node/@name)"/></xsl:when>
-            <xsl:otherwise><xsl:text>Data is not yet available</xsl:text></xsl:otherwise>
+            <xsl:otherwise><xsl:text>Data is not available</xsl:text></xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 </xsl:stylesheet>
