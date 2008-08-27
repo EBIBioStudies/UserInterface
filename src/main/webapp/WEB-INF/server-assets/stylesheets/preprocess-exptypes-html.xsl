@@ -14,7 +14,7 @@
         <option value="">Any experiment type</option>
         <xsl:for-each select=".//experimenttype[generate-id(key('distinct-exptypes',helper:toLowerCase(text())))=generate-id()]">
             <xsl:sort select="text()"/>
-            <option value="{helper:toLowerCase(text())}">
+            <option value="{text()}">
                 <xsl:value-of select="text()"/>
             </option>
         </xsl:for-each>
