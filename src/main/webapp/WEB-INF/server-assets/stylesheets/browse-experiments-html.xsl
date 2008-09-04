@@ -55,7 +55,7 @@
         <helper:logInfo select="[browse-experiments-html] Query filtered {$vTotal} experiments. Will output from {$vFrom} to {$vTo}."/>
 
         <tr id="ae_results_summary_info">
-            <td colspan="8">
+            <td colspan="9">
                 <div id="ae_results_total"><xsl:value-of select="$vTotal"/></div>
                 <div id="ae_results_total_samples"><xsl:value-of select="$vTotalSamples"/></div>
                 <div id="ae_results_total_assays"><xsl:value-of select="$vTotalAssays"/></div>
@@ -79,7 +79,7 @@
             </xsl:when>
             <xsl:otherwise>
                 <tr class="ae_results_tr_error">
-                    <td colspan="8">
+                    <td colspan="9">
                         <xsl:choose>
                             <xsl:when test="helper:testRegexp($keywords,'^E-.+-\d+$','i')">
                                 <p><strong>The experiment with accession number '<xsl:value-of select="$keywords"/>' is not available.</strong></p>
@@ -153,7 +153,7 @@
                 </td>
             </tr>
             <tr id="{$vExpId}_ext" class="ae_results_tr_ext" style="{$pDetailedViewExtStyle}">
-                <td colspan="8">
+                <td colspan="9">
                     <table class="ae_results_tr_ext_table" cellpadding="0" cellspacing="0" border="0">
                         <xsl:if test="name">
                             <tr>

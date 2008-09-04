@@ -198,7 +198,7 @@ function
 onQueryError()
 {
     $(this).removeClass("ae_results_table_loading");
-    $("#ae_results_tbody").html("<tr class=\"ae_results_tr_error\"><td colspan=\"8\">There was an error processing the query. Please try again later.</td></tr>");
+    $("#ae_results_tbody").html("<tr class=\"ae_results_tr_error\"><td colspan=\"9\">There was an error processing the query. Please try again later.</td></tr>");
 }
 
 function
