@@ -9,8 +9,11 @@ import org.quartz.JobListener;
 import uk.ac.ebi.ae15.app.Application;
 import uk.ac.ebi.ae15.components.Experiments;
 import uk.ac.ebi.ae15.components.JobsController;
+import uk.ac.ebi.ae15.components.Users;
 import uk.ac.ebi.ae15.utils.db.DataSourceFinder;
 import uk.ac.ebi.ae15.utils.db.ExperimentListDatabaseRetriever;
+import uk.ac.ebi.ae15.utils.db.UserListDatabaseRetriever;
+import uk.ac.ebi.ae15.utils.users.UserList;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -41,6 +44,10 @@ public class ReloadExperimentsJob extends ApplicationJob implements JobListener
 
                 ds = new DataSourceFinder().findDataSource(dsNames);
                 if (null != ds) {
+                    UserList userList = new UserListDatabaseRetriever(ds).getUserList();
+                    ((Users)app.getComponent("Users")).setUserList(userList);
+                    log.info("Reloaded the user list from [" + ds + "]");
+                    
                     exps = new ExperimentListDatabaseRetriever(
                             ds,
                             app.getPreferences().getBoolean("ae.experiments.publiconly")
@@ -112,14 +119,6 @@ public class ReloadExperimentsJob extends ApplicationJob implements JobListener
 
             incrementCompletedThreadsCounter();
         }
-    }
-
-    private void startXmlRetrieval( int index, List<Long> exps )
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Starting subjob [").append(index).append("], list size [").append(exps.size()).append("]");
-        log.debug(sb.toString());
-
     }
 
     private synchronized void incrementCompletedThreadsCounter()

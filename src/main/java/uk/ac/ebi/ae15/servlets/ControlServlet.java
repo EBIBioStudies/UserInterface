@@ -4,11 +4,13 @@ import uk.ac.ebi.ae15.app.ApplicationServlet;
 import uk.ac.ebi.ae15.components.DownloadableFilesRegistry;
 import uk.ac.ebi.ae15.components.Experiments;
 import uk.ac.ebi.ae15.components.JobsController;
+import uk.ac.ebi.ae15.components.Users;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,6 +42,18 @@ public class ControlServlet extends ApplicationServlet
                 ((DownloadableFilesRegistry) getComponent("DownloadableFilesRegistry")).setRootFolder(params);
             }
             ((JobsController) getComponent("JobsController")).executeJob("rescan-files");
+        } else if (command.equals("verify-login")) {
+            response.setContentType("text/plain; charset=ISO-8859-1");
+            // Disable cache no matter what (or we're fucked on IE side)
+            response.addHeader("Pragma", "no-cache");
+            response.addHeader("Cache-Control", "no-cache");
+            response.addHeader("Cache-Control", "must-revalidate");
+            response.addHeader("Expires", "Fri, 16 May 2008 10:00:00 GMT"); // some date in the past
+
+            // Output goes to the response PrintWriter.
+            PrintWriter out = response.getWriter();
+            out.print(((Users) getComponent("Users")).hashLogin(request.getParameter("u"), request.getParameter("p")));
+            out.close();
         }
     }
 }

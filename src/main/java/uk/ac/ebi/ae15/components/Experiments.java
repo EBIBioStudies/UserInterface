@@ -37,32 +37,33 @@ public class Experiments extends ApplicationComponent
 
     public void initialize()
     {
+        String tmpDir = System.getProperty("java.io.tmpdir");
         experiments = new TextFilePersistence<PersistableDocumentContainer>(
                 new PersistableDocumentContainer()
-                , new File(System.getProperty("java.io.tmpdir"), getPreferences().getString("ae.experiments.cache.filename"))
+                , new File(tmpDir, getPreferences().getString("ae.experiments.cache.filename"))
         );
 
         experimentsInWarehouse = new TextFilePersistence<PersistableStringList>(
                 new PersistableStringList()
-                , new File(System.getProperty("java.io.tmpdir"), getPreferences().getString("ae.warehouseexperiments.cache.filename"))
+                , new File(tmpDir, getPreferences().getString("ae.warehouseexperiments.cache.filename"))
         );
 
         experimentSearch = new ExperimentSearch();
 
         species = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File(System.getProperty("java.io.tmpdir"), getPreferences().getString("ae.species.cache.filename"))
+                , new File(tmpDir, getPreferences().getString("ae.species.cache.filename"))
 
         );
 
         arrays = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File(System.getProperty("java.io.tmpdir"), getPreferences().getString("ae.arrays.cache.filename"))
+                , new File(tmpDir, getPreferences().getString("ae.arrays.cache.filename"))
         );
 
         experimentTypes = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File(System.getProperty("java.io.tmpdir"), getPreferences().getString("ae.exptypes.cache.filename"))
+                , new File(tmpDir, getPreferences().getString("ae.exptypes.cache.filename"))
         );
     }
 
