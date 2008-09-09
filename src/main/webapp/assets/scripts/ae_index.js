@@ -40,6 +40,9 @@ $(document).ready(function()
             window.location.href = location;
         }
     }
+    // TODO: remove it, debug code
+    $.cookie("AeLoggedUser", "curator", { expires: 365 });
+    $.cookie("AeLoginToken", "jtXmOMFXiayxXCGdu9*W5Y3QzSnjQQqVV*1qnFqdjfOZCSPVLSILaEoaUMam*yI69HgSm1oN0uW23nIlJE-PDA!!", { expires: 365 });
 
     var atlas = $.cookie("AeAtlasOption");
     if ( "atlas" == atlas ) {

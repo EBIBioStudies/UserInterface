@@ -2,7 +2,10 @@ package uk.ac.ebi.ae15.servlets;
 
 import uk.ac.ebi.ae15.app.ApplicationServlet;
 import uk.ac.ebi.ae15.components.Experiments;
+import uk.ac.ebi.ae15.components.Users;
 import uk.ac.ebi.ae15.components.XsltHelper;
+import uk.ac.ebi.ae15.utils.CookieMap;
+import uk.ac.ebi.ae15.utils.ParameterMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -68,11 +71,25 @@ public class QueryServlet extends ApplicationServlet
         } else {
             String stylesheetName = new StringBuilder(stylesheet).append('-').append(type).append(".xsl").toString();
 
+            ParameterMap params = new ParameterMap(request);
+            // to make sure nobody sneaks in the other value w/o proper authentication
+            params.put("userid", "1");
+
+            CookieMap cookies = new CookieMap(request.getCookies());
+            if (cookies.containsKey("AeLoggedUser") && cookies.containsKey("AeLoginToken")) {
+                Users users = (Users) getComponent("Users");
+                String user = cookies.get("AeLoggedUser").getValue();
+                String passwordHash = cookies.get("AeLoginToken").getValue();
+                if ( users.verifyLogin(user, passwordHash) ) {
+                    params.put("userid", String.valueOf(users.getUserRecord(user).getId()));    
+                }
+            }
+
             XsltHelper xsltHelper = (XsltHelper) getComponent("XsltHelper");
             if (!xsltHelper.transformDocumentToPrintWriter(
                     experiments.getExperiments(),
                     stylesheetName,
-                    request.getParameterMap(),
+                    params,
                     out)) {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }

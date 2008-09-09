@@ -6,6 +6,7 @@ import org.w3c.dom.Document;
 import uk.ac.ebi.ae15.app.Application;
 import uk.ac.ebi.ae15.app.ApplicationComponent;
 import uk.ac.ebi.ae15.utils.AppXalanExtension;
+import uk.ac.ebi.ae15.utils.ParameterMap;
 
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMResult;
@@ -61,7 +62,7 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return src;
     }
 
-    public boolean transformDocumentToFile( Document srcDocument, String stylesheet, Map params, File dstFile )
+    public boolean transformDocumentToFile( Document srcDocument, String stylesheet, ParameterMap params, File dstFile )
     {
         try {
             return transform(new DOMSource(srcDocument), stylesheet, params, new StreamResult(new FileOutputStream(dstFile)));
@@ -72,7 +73,7 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return false;
     }
 
-    public String transformDocumentToString( Document srcDocument, String stylesheet, Map params )
+    public String transformDocumentToString( Document srcDocument, String stylesheet, ParameterMap params )
     {
         try {
             StringWriter sw = new StringWriter();
@@ -86,7 +87,7 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return null;
     }
 
-    public Document transformStringToDocument( String srcXmlString, String stylesheet, Map params )
+    public Document transformStringToDocument( String srcXmlString, String stylesheet, ParameterMap params )
     {
         try {
             InputStream inStream = new ByteArrayInputStream(srcXmlString.getBytes("ISO-8859-1"));
@@ -102,12 +103,12 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return null;
     }
 
-    public boolean transformDocumentToPrintWriter( Document srcDocument, String stylesheet, Map params, PrintWriter dstWriter )
+    public boolean transformDocumentToPrintWriter( Document srcDocument, String stylesheet, ParameterMap params, PrintWriter dstWriter )
     {
         return transform(new DOMSource(srcDocument), stylesheet, params, new StreamResult(dstWriter));
     }
 
-    private boolean transform( Source src, String stylesheet, Map params, Result dst )
+    private boolean transform( Source src, String stylesheet, ParameterMap params, Result dst )
     {
         boolean result = false;
         try {
@@ -125,9 +126,8 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
 
             // assign the parameters (if not null)
             if (null != params) {
-                for ( Object param : params.entrySet() ) {
-                    Map.Entry p = (Map.Entry) param;
-                    transformer.setParameter((String) p.getKey(), arrayToString((String[]) p.getValue()));
+                for ( Map.Entry<String,String> param : params.entrySet() ) {
+                    transformer.setParameter(param.getKey(), param.getValue());
                 }
             }
 
@@ -141,14 +141,5 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
             log.error("Caught an exception transforming [" + stylesheet + "]:", x);
         }
         return result;
-    }
-
-    private static String arrayToString( String[] array )
-    {
-        StringBuilder sb = new StringBuilder();
-        for ( String item : array ) {
-            sb.append(item).append(' ');
-        }
-        return sb.toString().trim();
     }
 }

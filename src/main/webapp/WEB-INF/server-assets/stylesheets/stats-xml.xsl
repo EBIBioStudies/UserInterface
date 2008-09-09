@@ -2,9 +2,10 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
     <xsl:output method="xml" encoding="UTF-8" indent="no"/>
+    <xsl:param name="userid"/>
 
     <xsl:template match="/experiments">
-        <experiments total="{@total}"
+        <experiments total="{count(experiment[ $userid = '0' or user/text() = $userid or user/text() = '1'])}"
                      total-samples="{sum(experiment[samples/text()>0]/samples/text())}"
                      total-assays="{sum(experiment[assays/text()>0]/assays/text())}"/>
     </xsl:template>

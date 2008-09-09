@@ -29,11 +29,11 @@ public class PersistableUserList extends UserList implements Persistable
         for ( Map.Entry<String, UserRecord> entry : this.entrySet() ) {
             UserRecord user = entry.getValue();
             sb.append(entry.getKey()).append('\t')
-                    .append(user.id).append('\t')
-                    .append(user.name).append('\t')
-                    .append(user.password).append('\t')
-                    .append(nullToEmpty(user.email)).append('\t')
-                    .append(user.isPrivileged).append('\n');
+                    .append(user.getId()).append('\t')
+                    .append(user.getName()).append('\t')
+                    .append(user.getPassword()).append('\t')
+                    .append(nullToEmpty(user.getEmail())).append('\t')
+                    .append(user.isPrivileged()).append('\n');
         }
 
         return sb.toString();

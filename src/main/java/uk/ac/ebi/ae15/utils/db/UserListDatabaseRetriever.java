@@ -49,7 +49,7 @@ public class UserListDatabaseRetriever extends SqlStatementExecutor
         while ( resultSet.next() ) {
             UserRecord userRecord = new UserRecord(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getBoolean(5));
 
-            userList.put(userRecord.name, userRecord);
+            userList.put(userRecord.getName(), userRecord);
         }
     }
 }
