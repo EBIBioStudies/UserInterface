@@ -59,13 +59,11 @@
     padding: 0;
 }
 
-#ae_query_area .ae_left_box form {
+#aer_query_form,
+#aew_query_form,
+#atlas_query_form {
     margin: 25px 0 10px 0;
 
-}
-
-#ae_query_area .ae_right_box form {
-    margin: 25px 0 10px 0;
 }
 
 #ae_query_area input,
@@ -120,11 +118,54 @@
     font-size: 11px;
 }
 
-#aer_adv_query_link {
-    margin: 20px 0 0 0;
+#aer_login_link {
+    margin: 15px 0 0 0;
+}
+
+#aer_login_form {
+    display: none;
+    margin-top: 5px;
+    padding: 5px 5px;
+    height: 33px;
+    border: 1px solid #5e9e9e;    
+    background-color: #bdd7d7;
+}
+
+#aer_login_user_fset {
+    width: 42%;
+    margin: 0;
+    float: left;
+}
+
+#aer_login_pass_fset {
+    width: 42%;
+    margin: 0;
+    float: left;
+}
+
+#aer_login_form label {
+    font-size: 10px
+}
+
+#aer_login_form input {
+    margin-top: 2px;
+    margin-bottom: 3px;
+    font-size: 10px;
+}
+
+#aer_user_field,
+#aer_pass_field {
+    border: 1px solid #5e9e9e;
+    width: 65%;
+}
+
+#aer_login_info {
+    margin: 15px 0 0 0;
+    display: none;
 }
 
 #aer_query_submit,
+#aer_login_submit,
 #aew_query_submit {
     float: right;
     font-size: 11px;

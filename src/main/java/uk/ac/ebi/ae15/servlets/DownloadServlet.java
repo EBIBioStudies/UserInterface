@@ -5,6 +5,8 @@ import org.apache.commons.logging.LogFactory;
 import uk.ac.ebi.ae15.app.ApplicationServlet;
 import uk.ac.ebi.ae15.components.DownloadableFilesRegistry;
 import uk.ac.ebi.ae15.components.Experiments;
+import uk.ac.ebi.ae15.components.Users;
+import uk.ac.ebi.ae15.utils.CookieMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -35,7 +37,7 @@ public class DownloadServlet extends ApplicationServlet
         try {
             if (m.find()) {
                 filename = m.group(1);
-                sendFile(filename, response);
+                sendFile(filename, request, response);
             } else {
                 log.error("Unable to get a filename from [" + request.getRequestURL() + "]");
                 throw (new Exception());
@@ -53,11 +55,23 @@ public class DownloadServlet extends ApplicationServlet
         }
     }
 
-    private void sendFile( String filename, HttpServletResponse response ) throws IOException
+    private void sendFile( String filename, HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
         log.info("Requested download of [" + filename + "]");
         DownloadableFilesRegistry filesRegistry = (DownloadableFilesRegistry) getComponent("DownloadableFilesRegistry");
         Experiments experiments = (Experiments) getComponent("Experiments");
+
+        String userId = "1";
+        CookieMap cookies = new CookieMap(request.getCookies());
+        if (cookies.containsKey("AeLoggedUser") && cookies.containsKey("AeLoginToken")) {
+            Users users = (Users) getComponent("Users");
+            String user = cookies.get("AeLoggedUser").getValue();
+            String passwordHash = cookies.get("AeLoginToken").getValue();
+            if ( users.verifyLogin(user, passwordHash, request.getRemoteAddr().concat(request.getHeader("User-Agent"))) ) {
+                userId = String.valueOf(users.getUserRecord(user).getId());
+            }
+        }
+
 
         if (!filesRegistry.doesExist(filename)) {
             log.error("File [" + filename + "] is not in files registry");
@@ -77,7 +91,7 @@ public class DownloadServlet extends ApplicationServlet
             if (!file.exists()) {
                 log.error("File [" + fileLocation + "] does not exist");
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            } else if (!experiments.isFilePublic(fileLocation)) {
+            } else if (!experiments.isFileAccessible(fileLocation, userId)) {
                 log.error("Attempting to download file for the experiment that is not present in the index");
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             } else {

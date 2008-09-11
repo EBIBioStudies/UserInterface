@@ -52,7 +52,11 @@ public class ControlServlet extends ApplicationServlet
 
             // Output goes to the response PrintWriter.
             PrintWriter out = response.getWriter();
-            out.print(((Users) getComponent("Users")).hashLogin(request.getParameter("u"), request.getParameter("p")));
+            out.print(((Users) getComponent("Users")).hashLogin(
+                    request.getParameter("u")
+                    , request.getParameter("p")
+                    , request.getRemoteAddr().concat(request.getHeader("User-Agent"))
+            ));
             out.close();
         }
     }

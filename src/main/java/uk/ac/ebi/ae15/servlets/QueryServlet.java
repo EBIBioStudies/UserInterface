@@ -80,7 +80,7 @@ public class QueryServlet extends ApplicationServlet
                 Users users = (Users) getComponent("Users");
                 String user = cookies.get("AeLoggedUser").getValue();
                 String passwordHash = cookies.get("AeLoginToken").getValue();
-                if ( users.verifyLogin(user, passwordHash) ) {
+                if ( users.verifyLogin(user, passwordHash, request.getRemoteAddr().concat(request.getHeader("User-Agent"))) ) {
                     params.put("userid", String.valueOf(users.getUserRecord(user).getId()));    
                 }
             }

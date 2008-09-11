@@ -375,7 +375,7 @@ ae_results_body img {
 }
 
 .ae_results_accession {
-    width: 100px;
+    width: 105px;
 }
 
 .ae_results_name {
@@ -433,6 +433,11 @@ ae_results_body img {
     text-overflow: ellipsis;
     padding: 1px 2px 1px 3px;
     margin: 0 1px 0 1px;
+}
+
+.ae_results_tr_main .lock {
+    margin: 0;
+    padding: 2px 0 0 3px;
 }
 
 .ae_results_tr_main td div.table_row_expand {

@@ -78,21 +78,33 @@
                             </div>
                             <div class="ae_box_title"><img src="assets/images/ae_exps_header.gif" alt="Experiments"></div>
                             <div id="aer_avail_info">Retrieving data, please wait...</div>
-                            <form method="get" action="browse.html">
+                            <form id="aer_query_form" method="get" action="browse.html">
                                 <label for="aer_query_field">Experiment, citation, sample and factor annotations</label>
                                 <input id="aer_query_field" name="keywords" maxlength="200" class="assign_font">
                                 <input id="aer_query_submit" type="submit" value="Query">
                             </form>
                             <div id="aer_browse_link"><a href="browse.html">&#187; Browse experiments</a></div>
                             <div id="aer_adv_query_link"><a href="${interface.application.link.aer_old.base.url}/entry">&#187; Advanced query interface</a></div>
-                            <div id="aer_login_link"><a href="${interface.application.link.aer_old.base.url}/login">&#187; Submitter/reviewer login</a></div>
+                            <div id="aer_login_link"><a href="javascript:aeShowLoginForm();">&#187; Submitter/reviewer login</a></div>
+                            <form id="aer_login_form" method="get" action="index.html" onsubmit="aeDoLogin(); return false">
+                                <fieldset id="aer_login_user_fset">
+                                    <label for="aer_user_field">Name</label>
+                                    <input id="aer_user_field" name="u" maxlength="50" class="assign_font">
+                                </fieldset>
+                                <fieldset id="aer_login_pass_fset">
+                                    <label for="aer_pass_field">Password</label>
+                                    <input id="aer_pass_field" type="password" name="p" maxlength="50" class="assign_font">
+                                </fieldset>
+                                <input id="aer_login_submit" type="submit" value="Log in">
+                            </form>
+                            <div id="aer_login_info">Logged in as <strong>user</strong> [<a href="javascript:aeDoLogout()">log out</a>]</div>
                         </div></div></div></div></div></div></div></div></div></div>
                     </div>
                     <div id="ae_warehouse_box" class="ae_right_box">
                         <div class="form_outer"><div class="form_top"><div class="form_bottom"><div class="form_left"><div class="form_right"><div class="form_bottom_left"><div class="form_bottom_right"><div class="form_top_left"><div class="form_top_right"><div class="form_inner">
                             <div class="ae_box_title"><img src="assets/images/ae_genes_header.gif" alt="Expression Profiles"></div>
                             <div id="aew_avail_info">Retrieving data, please wait...</div>
-                            <form method="get" action="${interface.application.link.aew.base.url}/DW">
+                            <form id="aew_query_form" method="get" action="${interface.application.link.aew.base.url}/DW">
                                 <fieldset id="aew_gene_fset">
                                     <label for="aew_query_field">Genes</label>
                                     <input id="aew_query_field" name="gene_query" maxlength="60" class="assign_font">
@@ -127,7 +139,7 @@
                             <div id="atlas_beta_notice"><img src="assets/images/atlas_beta.gif" alt="ArrayExpress Atlas Beta"></div>
                             <div class="ae_box_title"><img src="assets/images/ae_atlas_header.gif" alt="Altas of Gene Expression"></div>
                             <div id="atlas_avail_info">Retrieving data, please wait...</div>
-                            <form method="get" action="${interface.application.link.www_domain}/microarray-as/atlas/qr">
+                            <form id="atlas_query_form" method="get" action="${interface.application.link.www_domain}/microarray-as/atlas/qr">
                                 <fieldset id="atlas_gene_fset">
                                     <label for="atlas_query_field">Genes</label>
                                     <input id="atlas_query_field" name="q_gene" maxlength="60" class="assign_font">

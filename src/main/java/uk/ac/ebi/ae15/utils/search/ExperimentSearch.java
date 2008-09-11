@@ -81,6 +81,12 @@ public class ExperimentSearch
         return (-1 != expText.get(idx).experimentType.indexOf(experimentType.trim().toLowerCase()));
     }
 
+    public boolean isAccessible( String accession, String user )
+    {
+        Integer idx = accessionIdx.get(accession.toLowerCase());
+        return (user.equals("0") || (null != idx && -1 != expText.get(idx).users.indexOf(" ".concat(user).concat(" "))));
+    }
+
     public boolean doesPresent( String accession )
     {
         return accessionIdx.containsKey(accession.toLowerCase());

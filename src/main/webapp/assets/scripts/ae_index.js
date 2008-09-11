@@ -2,6 +2,8 @@
 //  AE Index Page Scripting Support. Requires jQuery 1.2.3 and JSDefeered.jQuery 0.2.1
 //
 
+var user = "";
+
 function
 aeSwitchToAtlas()
 {
@@ -16,6 +18,56 @@ aeSwitchToAew()
     $("#ae_atlas_box").hide();
     $("#ae_warehouse_box").show();
     $.cookie("AeAtlasOption", null);
+}
+
+function
+aeShowLoginForm()
+{
+    $("#aer_login_link").hide();
+    $("#aer_login_form").show();
+    $("#aer_user_field").focus();
+}
+
+function
+aeDoLogin()
+{
+    user = $("#aer_user_field").val();
+    var pass = $("#aer_pass_field").val();
+    $("#aer_pass_field").val("");
+    $("#aer_login_submit").attr("disabled", "true");
+    $.get("servlets/control/verify-login", { u: user, p: pass }).next(aeDoLoginNext);
+}
+
+function
+aeDoLoginNext(text)
+{
+    if ( "" != text ) {
+        $("#aer_login_form").hide();
+        $("#aer_login_submit").removeAttr("disabled");
+
+        $.cookie("AeLoggedUser", user);
+        $.cookie("AeLoginToken", text);
+
+        $("#aer_login_info strong").text(user);
+        $("#aer_login_info").show();
+        $("#aer_avail_info").text("Updating data, please wait...");
+        $.get("servlets/query/stats").next(updateAerStats);        
+    } else {
+        alert("Either username or password is incorrect.");
+        $("#aer_login_submit").removeAttr("disabled");
+        $("#aer_user_field").focus();
+    }
+}
+
+function
+aeDoLogout()
+{
+    $("#aer_login_info").hide();
+    $("#aer_login_link").show();
+    $.cookie("AeLoggedUser", null);
+    $.cookie("AeLoginToken", null);
+    $("#aer_avail_info").text("Updating data, please wait...");    
+    $.get("servlets/query/stats").next(updateAerStats);
 }
 
 // runs on page reload after rendering is done
@@ -40,15 +92,20 @@ $(document).ready(function()
             window.location.href = location;
         }
     }
-    // TODO: remove it, debug code
-    $.cookie("AeLoggedUser", "curator", { expires: 365 });
-    $.cookie("AeLoginToken", "jtXmOMFXiayxXCGdu9*W5Y3QzSnjQQqVV*1qnFqdjfOZCSPVLSILaEoaUMam*yI69HgSm1oN0uW23nIlJE-PDA!!", { expires: 365 });
-
     var atlas = $.cookie("AeAtlasOption");
     if ( "atlas" == atlas ) {
         aeSwitchToAtlas();
     }
-    
+
+    var _user = $.cookie("AeLoggedUser");
+    var _token = $.cookie("AeLoginToken");
+    if ( undefined != _user && undefined != _token ) {
+        user = _user;
+        $("#aer_login_link").hide();
+        $("#aer_login_info strong").text(user);
+        $("#aer_login_info").show();
+    }
+
     // adds a trigger callback for more/less intro text switching
     $("a.ae_intro_more_toggle").click(function()
     {

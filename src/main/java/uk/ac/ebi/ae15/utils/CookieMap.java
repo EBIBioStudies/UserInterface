@@ -7,8 +7,10 @@ public class CookieMap extends HashMap<String, Cookie>
 {
     public CookieMap( Cookie[] cookies )
     {
-        for ( Cookie c : cookies ) {
-            this.put(c.getName(), c);    
+        if ( null != cookies ) {
+            for ( Cookie c : cookies ) {
+                this.put(c.getName(), c);
+            }
         }
     }
 }

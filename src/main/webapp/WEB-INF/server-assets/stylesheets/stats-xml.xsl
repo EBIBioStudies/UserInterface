@@ -5,9 +5,9 @@
     <xsl:param name="userid"/>
 
     <xsl:template match="/experiments">
-        <experiments total="{count(experiment[ $userid = '0' or user/text() = $userid or user/text() = '1'])}"
-                     total-samples="{sum(experiment[samples/text()>0]/samples/text())}"
-                     total-assays="{sum(experiment[assays/text()>0]/assays/text())}"/>
+        <experiments total="{count(experiment[user/text()='1' or $userid='0' or user/text()=$userid])}"
+                     total-samples="{sum(experiment[user/text()='1' or $userid='0' or user/text()=$userid][samples/text()>0]/samples/text())}"
+                     total-assays="{sum(experiment[user/text()='1' or $userid='0' or user/text()=$userid][assays/text()>0]/assays/text())}"/>
     </xsl:template>
 
 </xsl:stylesheet>

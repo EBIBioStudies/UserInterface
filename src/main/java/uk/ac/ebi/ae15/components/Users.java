@@ -38,23 +38,23 @@ public class Users extends ApplicationComponent
         userList.setObject(new PersistableUserList(_userList));
     }
 
-    public String hashLogin( String username, String password )
+    public String hashLogin( String username, String password, String suffix )
     {
         if ( userList.getObject().containsKey(username) ) {
             UserRecord user = userList.getObject().get(username);
             if ( user.getPassword().equals(password) ) {
-                return user.getPasswordHash();
+                return user.getPasswordHash(suffix);
             }
         }
         // otherwise
         return "";
     }
 
-    public boolean verifyLogin( String username, String hash )
+    public boolean verifyLogin( String username, String hash, String suffix )
     {
         if ( userList.getObject().containsKey(username) ) {
             UserRecord user = userList.getObject().get(username);
-            return user.getPasswordHash().equals(hash);
+            return user.getPasswordHash(suffix).equals(hash);
         }
         return false;
     }

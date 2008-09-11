@@ -163,7 +163,7 @@ public class Experiments extends ApplicationComponent
 
     // method attempts to extract experiment accession number from file location path and if found
     // checks the expeirment presence in xml index
-    public boolean isFilePublic( String file )
+    public boolean isFileAccessible( String file, String userId )
     {
         boolean result = true;
 
@@ -171,7 +171,7 @@ public class Experiments extends ApplicationComponent
         Matcher m = p.matcher(file);
         if (m.find()) {
             String accession = m.group(1);
-            result = getSearch().doesPresent(accession);
+            result = getSearch().isAccessible(accession, userId);
         }
         return result;
     }
