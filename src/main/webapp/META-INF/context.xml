@@ -60,7 +60,7 @@
     <Resource
         name="jdbc/aecur"
         type="javax.sql.DataSource"
-        url="jdbc:oracle:thin:@progression.ebi.ac.uk:1521:AECUR"
+        url="jdbc:oracle:thin:@moe.ebi.ac.uk:1521:AECUR"
         username="aequery"
         password="aeq007tt"
         driverClassName="oracle.jdbc.OracleDriver"

@@ -20,12 +20,12 @@
         <interface.application.log.appender.ref>ROLLINGFILE</interface.application.log.appender.ref>
 
         <interface.application.base.url>/microarray-as/ae</interface.application.base.url>
-        <interface.application.link.www_domain></interface.application.link.www_domain>
+        <interface.application.link.www_domain/>
         <interface.application.link.browse_help>${interface.application.link.www_domain}/microarray/doc/help/browse_results.html</interface.application.link.browse_help>
         <interface.application.link.aer_old.base.url>/microarray-as/aer</interface.application.link.aer_old.base.url>
         <interface.application.link.aew.base.url>/microarray-as/aew</interface.application.link.aew.base.url>
         <interface.application.link.atlas.exp_query.url>/microarray-as/atlas/qr?view=table&amp;amp;q_expt=aer_txt_expaccession%3A</interface.application.link.atlas.exp_query.url>
-        <interface.application.link.aer_old.experiment_link.style></interface.application.link.aer_old.experiment_link.style>
+        <interface.application.link.aer_old.experiment_link.style/>
         <interface.application.link.solr_gene_stats.url>/microarray-as/solr_gene/admin/stats.jsp</interface.application.link.solr_gene_stats.url>
         <interface.application.link.solr_exp_stats.url>/microarray-as/solr_exp/admin/stats.jsp</interface.application.link.solr_exp_stats.url>
 
@@ -36,7 +36,7 @@
         <interface.application.pref.experiments.reload.schedule>0 0 6 * * ?</interface.application.pref.experiments.reload.schedule>
         <interface.application.pref.ftp.root.location>/ebi/ArrayExpress-ftp</interface.application.pref.ftp.root.location>
         <interface.application.pref.files.rescan.interval>3600000</interface.application.pref.files.rescan.interval>
-        <interface.application.google.analytics></interface.application.google.analytics>
+        <interface.application.google.analytics/>
     </properties>
     <profiles>
         <profile>
@@ -75,7 +75,7 @@
                 <interface.application.link.browse_help>${interface.application.link.www_domain}/microarray/doc/help/browse_results.html</interface.application.link.browse_help>
                 <interface.application.link.aer_old.base.url>/arrayexpress</interface.application.link.aer_old.base.url>
                 <interface.application.link.atlas.exp_query.url>${interface.application.link.www_domain}/microarray-as/atlas/qr?view=table&amp;amp;q_expt=aer_txt_expaccession%3A</interface.application.link.atlas.exp_query.url>
-                <interface.application.link.aer_old.experiment_link.style></interface.application.link.aer_old.experiment_link.style>
+                <interface.application.link.aer_old.experiment_link.style/>
                 <interface.application.link.aew.base.url>/arrayexpress-aew</interface.application.link.aew.base.url>
 
                 <interface.application.link.solr_gene_stats.url>/solr_gene/admin/stats.jsp</interface.application.link.solr_gene_stats.url>
