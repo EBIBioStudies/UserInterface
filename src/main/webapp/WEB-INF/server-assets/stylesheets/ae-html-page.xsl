@@ -33,7 +33,6 @@
         </head>
     </xsl:template>
     <xsl:template name="page-body">
-        <xsl:param name="pContentsTemplateName"/>
         <body>
             <div class="headerdiv" id="headerdiv" style="position:absolute; z-index: 1;">
                 <iframe src="${interface.application.link.www_domain}/inc/head.html" name="head" id="head"

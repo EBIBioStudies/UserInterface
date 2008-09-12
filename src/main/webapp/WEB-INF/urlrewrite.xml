@@ -5,8 +5,12 @@
 
 <urlrewrite>
     <rule>
-        <from>^/experiments/(E-.+)$</from>
+        <from>^/experiments/([eE]-\w{4}-\d+)$</from>
         <to type="redirect">${interface.application.base.url}/browse.html?keywords=$1&amp;detailedview=on</to>
+    </rule>
+    <rule>
+        <from>^/download/([eE]-\w{4}-\d+)$</from>
+        <to type="forward">/servlets/query/browse-files/html?accession=$1</to>
     </rule>
     <rule>
         <from>^/download/(.+)$</from>

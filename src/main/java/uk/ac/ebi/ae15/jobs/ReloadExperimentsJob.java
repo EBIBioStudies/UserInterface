@@ -48,10 +48,7 @@ public class ReloadExperimentsJob extends ApplicationJob implements JobListener
                     ((Users)app.getComponent("Users")).setUserList(userList);
                     log.info("Reloaded the user list from [" + ds + "]");
                     
-                    exps = new ExperimentListDatabaseRetriever(
-                            ds,
-                            app.getPreferences().getBoolean("ae.experiments.publiconly")
-                    ).getExperimentList();
+                    exps = new ExperimentListDatabaseRetriever(ds, false).getExperimentList();
                     Thread.sleep(1);
 
                     log.info("Got [" + String.valueOf(exps.size()) + "] experiments listed in the database, scheduling retrieval");

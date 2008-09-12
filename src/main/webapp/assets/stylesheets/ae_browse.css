@@ -204,7 +204,17 @@ a:active .table_header_label {
 #ae_help_link {
     position: absolute;
     left: 0;
-    top: 78px;
+    top: 65px;
+    margin: 0;
+    padding: 0 0 0 10px;
+    border: 0 none;
+}
+
+#ae_login_info {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 85px;
     margin: 0;
     padding: 0 0 0 10px;
     border: 0 none;

@@ -19,6 +19,7 @@
     <xsl:param name="wholewords"/>
     <xsl:param name="exptype"/>
     <xsl:param name="inatlas"/>
+    <xsl:param name="userid"/>
 
     <xsl:param name="detailedview"/>
     
@@ -28,9 +29,9 @@
     <xsl:include href="ae-sort-experiments.xsl"/>
 
     <xsl:template match="/experiments">
-        <helper:logInfo select="[experiments-rss-xml] Parameters: keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
+        <helper:logInfo select="[experiments-rss-xml] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
         <helper:logInfo select="[experiments-rss-xml] Sort by: [{$sortby}], [{$sortorder}]"/>
-        <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($keywords,$wholewords,$species,$array,$exptype,$inatlas)"/>
+        <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($userid,$keywords,$wholewords,$species,$array,$exptype,$inatlas)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
 
         <helper:logInfo select="[experiments-rss-xml] Query filtered {$vTotal} experiments. Will output first {$pagesize} entries."/>

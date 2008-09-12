@@ -76,6 +76,13 @@ $(document).ready( function() {
         onWindowResize();
     }
 
+    var _user = $.cookie("AeLoggedUser");
+    var _token = $.cookie("AeLoginToken");
+    if ( undefined != _user && undefined != _token ) {
+        $("#ae_login_info strong").text(_user);
+        $("#ae_login_info").show();
+    }
+
     if ("" != $.query.get("keywords"))
         query.keywords = $.query.get("keywords");
 
