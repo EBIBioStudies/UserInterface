@@ -67,7 +67,7 @@ public class DownloadServlet extends ApplicationServlet
             Users users = (Users) getComponent("Users");
             String user = cookies.get("AeLoggedUser").getValue();
             String passwordHash = cookies.get("AeLoginToken").getValue();
-            if ( users.verifyLogin(user, passwordHash, request.getRemoteAddr().concat(request.getHeader("User-Agent"))) ) {
+            if (users.verifyLogin(user, passwordHash, request.getRemoteAddr().concat(request.getHeader("User-Agent")))) {
                 userId = String.valueOf(users.getUserRecord(user).getId());
             }
         }
@@ -99,8 +99,8 @@ public class DownloadServlet extends ApplicationServlet
                 ServletOutputStream servletOutStream = null;
                 try {
                     fileInputStream = new FileInputStream(file);
-                    int size = fileInputStream.available();
-                    response.setContentLength(size);
+                    long size = file.length();
+                    response.addHeader("Content-Length", Long.toString(size));
 
                     servletOutStream = response.getOutputStream();
 
@@ -113,7 +113,7 @@ public class DownloadServlet extends ApplicationServlet
                         servletOutStream.write(buffer, 0, bytesRead);
                         servletOutStream.flush();
                     }
-                    log.info("Download of [" + filename + "] completed, sent [" + size + "] bytes");                    
+                    log.info("Download of [" + filename + "] completed, sent [" + size + "] bytes");
                 } finally {
                     if (null != fileInputStream)
                         fileInputStream.close();
