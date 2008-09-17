@@ -12,6 +12,7 @@
         <artifactId>arrayexpress</artifactId>
         <groupId>uk.ac.ebi.microarray</groupId>
         <version>7.5-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <!-- default values for repository related properties -->
