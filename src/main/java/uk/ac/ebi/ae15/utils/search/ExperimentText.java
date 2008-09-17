@@ -86,6 +86,6 @@ public class ExperimentText
             log.error("Caught an exception:", x);
         }
 
-        return buf.toString().trim();
+        return buf.toString();
     }
 }

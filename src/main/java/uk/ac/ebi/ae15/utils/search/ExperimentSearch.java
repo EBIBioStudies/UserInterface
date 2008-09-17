@@ -84,7 +84,8 @@ public class ExperimentSearch
     public boolean isAccessible( String accession, String user )
     {
         Integer idx = accessionIdx.get(accession.toLowerCase());
-        return (user.equals("0") || (null != idx && -1 != expText.get(idx).users.indexOf(" ".concat(user).concat(" "))));
+        ExperimentText txt = expText.get(idx);
+        return (user.equals("0") || (null != idx && null != txt && -1 != txt.users.indexOf(" ".concat(user).concat(" "))));
     }
 
     public boolean doesPresent( String accession )
