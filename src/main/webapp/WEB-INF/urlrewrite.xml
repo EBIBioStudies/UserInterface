@@ -4,30 +4,41 @@
         "http://tuckey.org/res/dtds/urlrewrite3.0.dtd">
 
 <urlrewrite>
+    <!-- experiment by accession page -->
     <rule>
         <from>^/experiments/([eE]-\w{4}-\d+)$</from>
         <to type="redirect">${interface.application.base.url}/browse.html?keywords=$1&amp;detailedview=on</to>
     </rule>
+    <!-- available files by accession page -->
     <rule>
-        <from>^/download/([eE]-\w{4}-\d+)$</from>
+        <from>^/files/([aAeE]-\w{4}-\d+)/?$</from>
         <to type="forward">/servlets/query/browse-files/html?accession=$1</to>
     </rule>
+    <rule>
+        <from>^/files/([aAeE]-\w{4}-\d+)/index.html$</from>
+        <to type="forward">/servlets/query/browse-files/html?accession=$1</to>
+    </rule>
+    <!-- files download support -->
+    <rule>
+        <from>^/files/([aAeE]-\w{4}-\d+)/(.+)$</from>
+        <to type="forward">/servlets/download/$1/$2</to>
+    </rule>
+    <!-- legacy download support -->
     <rule>
         <from>^/download/(.+)$</from>
         <to type="forward">/servlets/download/$1</to>
     </rule>
+    <!-- rss feeds support -->
     <rule>
         <from>^/rss/experiments$</from>
         <to type="forward">/servlets/query/experiments-rss/xml</to>
     </rule>
+    <!-- rest interfaces support -->
     <rule>
         <from>^/xml/experiments$</from>
         <to type="forward">/servlets/query/experiments/xml</to>
     </rule>
-    <rule>
-        <from>^/browse-noajax.html$</from>
-        <to type="forward">/servlets/query/browse-experiments-noajax/html</to>
-    </rule>
+    <!-- search results export in tab format -->
     <rule>
         <from>^/ArrayExpress-Experiments\.xls$</from>
         <to type="forward">/servlets/query/experiments/xls</to>
@@ -36,4 +47,10 @@
         <from>^/ArrayExpress-Experiments\.txt$</from>
         <to type="forward">/servlets/query/experiments/tab</to>
     </rule>
+    <!-- experimental noajax browse interface -->
+    <rule>
+        <from>^/browse-noajax.html$</from>
+        <to type="forward">/servlets/query/browse-experiments-noajax/html</to>
+    </rule>
+
 </urlrewrite>

@@ -9,7 +9,7 @@ aeSwitchToAtlas()
 {
     $("#ae_warehouse_box").hide();
     $("#ae_atlas_box").show();
-    $.cookie("AeAtlasOption", "atlas", { expires: 365 });
+    $.cookie("AeAtlasOption", "atlas", { expires: 365, path: '/' });
 }
 
 function
@@ -17,7 +17,7 @@ aeSwitchToAew()
 {
     $("#ae_atlas_box").hide();
     $("#ae_warehouse_box").show();
-    $.cookie("AeAtlasOption", null);
+    $.cookie("AeAtlasOption", null, {path: '/' });
 }
 
 function
@@ -45,8 +45,8 @@ aeDoLoginNext(text)
         $("#aer_login_form").hide();
         $("#aer_login_submit").removeAttr("disabled");
 
-        $.cookie("AeLoggedUser", user);
-        $.cookie("AeLoginToken", text);
+        $.cookie("AeLoggedUser", user, {expires: 365, path: '/'});
+        $.cookie("AeLoginToken", text, {expires: 365, path: '/'});
 
         $("#aer_login_info strong").text(user);
         $("#aer_login_info").show();
@@ -64,8 +64,8 @@ aeDoLogout()
 {
     $("#aer_login_info").hide();
     $("#aer_login_link").show();
-    $.cookie("AeLoggedUser", null);
-    $.cookie("AeLoginToken", null);
+    $.cookie("AeLoggedUser", null, {path: '/' });
+    $.cookie("AeLoginToken", null, {path: '/' });
     $("#aer_avail_info").text("Updating data, please wait...");    
     $.get("servlets/query/stats").next(updateAerStats);
 }
