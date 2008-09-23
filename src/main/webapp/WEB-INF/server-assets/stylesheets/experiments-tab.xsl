@@ -43,6 +43,8 @@
         <xsl:text>&#9;</xsl:text>
         <xsl:text>Raw Data</xsl:text>
         <xsl:text>&#9;</xsl:text>
+        <xsl:text>Present in Atlas</xsl:text>
+        <xsl:text>&#9;</xsl:text>
         <xsl:text>ArrayExpress URL</xsl:text>
         <xsl:text>&#10;</xsl:text>
         <xsl:call-template name="ae-sort-experiments">
@@ -70,6 +72,8 @@
         <xsl:call-template name="list-data">
             <xsl:with-param name="node" select="files/raw"/>
         </xsl:call-template>
+        <xsl:text>&#9;</xsl:text>
+            <xsl:if test="@loadedinatlas">Yes</xsl:if>
         <xsl:text>&#9;</xsl:text>
         <xsl:value-of select="concat('http://www.ebi.ac.uk/microarray-as/ae/experiments/',accession)"/>
         <xsl:text>&#10;</xsl:text>
