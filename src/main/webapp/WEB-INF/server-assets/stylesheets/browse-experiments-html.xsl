@@ -121,18 +121,18 @@
                         </xsl:if>
                     </div>
                 </td>
-                <td><div><xsl:apply-templates select="name" mode="highlight" />&#160;</div></td>
+                <td><div><xsl:apply-templates select="name" mode="highlight" /></div></td>
                 <td class="align_right">
-                    <div><xsl:apply-templates select="assays" mode="highlight" />&#160;</div>
+                    <div><xsl:apply-templates select="assays" mode="highlight" /></div>
                 </td>
                 <td><div>
                     <xsl:for-each select="species">
                         <xsl:apply-templates select="." mode="highlight" />
                         <xsl:if test="position() != last()">, </xsl:if>
                     </xsl:for-each>
-                    <xsl:text>&#160;</xsl:text>
+                    <xsl:if test="count(species)=0"><xsl:text>&#160;</xsl:text></xsl:if>
                 </div></td>
-                <td><div><xsl:apply-templates select="releasedate" mode="highlight" />&#160;</div></td>
+                <td><div><xsl:apply-templates select="releasedate" mode="highlight" /></div></td>
                 <td class="align_center">
                     <div>
                         <xsl:choose>
