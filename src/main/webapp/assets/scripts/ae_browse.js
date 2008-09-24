@@ -92,6 +92,11 @@ $(document).ready( function() {
         $("#ae_login_info").show();
     }
 
+    if ("" != $.query.get("accnum")) {
+        query.keywords = $.query.get("accnum");
+        query.detailedview = true;
+    }
+
     if ("" != $.query.get("keywords"))
         query.keywords = $.query.get("keywords");
 
