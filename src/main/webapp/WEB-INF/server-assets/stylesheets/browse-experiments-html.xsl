@@ -110,9 +110,7 @@
         <xsl:variable name="vExpId" select="id"/>
         <xsl:if test="position() &gt;= $pFrom and position() &lt;= $pTo">
             <tr id="{$vExpId}_main" class="{$pDetailedViewMainClass}">
-                <td><div class="table_row_expand">
-                    <img src="${interface.application.base.url}/assets/images/empty.gif" width="9" height="9"/>
-                </div></td>
+                <td><div class="table_row_expand"/></td>
                 <td>
                     <div>
                         <xsl:apply-templates select="accession" mode="highlight" />
