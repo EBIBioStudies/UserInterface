@@ -46,7 +46,7 @@ public class ReloadExperimentsJob extends ApplicationJob implements JobListener
                 if (null != ds) {
                     UserList userList = new UserListDatabaseRetriever(ds).getUserList();
                     ((Users)app.getComponent("Users")).setUserList(userList);
-                    log.info("Reloaded the user list from [" + ds + "]");
+                    log.info("Reloaded the user list from the database");
                     
                     exps = new ExperimentListDatabaseRetriever(ds, false).getExperimentList();
                     Thread.sleep(1);
