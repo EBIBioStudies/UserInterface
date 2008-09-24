@@ -29,6 +29,15 @@ aeResetOptions()
 }
 
 function
+aeDoLogout()
+{
+    $("#ae_login_info").hide();
+    $.cookie("AeLoggedUser", null, {path: '/' });
+    $.cookie("AeLoginToken", null, {path: '/' });
+    window.location.href = decodeURI(window.location.pathname);
+}
+
+function
 aeSort( sortby )
 {
     if ( -1 != String("accession name assays species releasedate fgem raw atlas").indexOf(sortby) ) {
@@ -79,7 +88,7 @@ $(document).ready( function() {
     var _user = $.cookie("AeLoggedUser");
     var _token = $.cookie("AeLoginToken");
     if ( undefined != _user && undefined != _token ) {
-        $("#ae_login_info strong").text(_user);
+        $("#ae_login_info em").text(_user);
         $("#ae_login_info").show();
     }
 

@@ -48,7 +48,7 @@ aeDoLoginNext(text)
         $.cookie("AeLoggedUser", user, {expires: 365, path: '/'});
         $.cookie("AeLoginToken", text, {expires: 365, path: '/'});
 
-        $("#aer_login_info strong").text(user);
+        $("#aer_login_info em").text(user);
         $("#aer_login_info").show();
         $("#aer_avail_info").text("Updating data, please wait...");
         $.get("servlets/query/stats").next(updateAerStats);        
@@ -102,7 +102,7 @@ $(document).ready(function()
     if ( undefined != _user && undefined != _token ) {
         user = _user;
         $("#aer_login_link").hide();
-        $("#aer_login_info strong").text(user);
+        $("#aer_login_info em").text(user);
         $("#aer_login_info").show();
     }
 

@@ -49,6 +49,8 @@
                                     <input id="ae_keywords" name="keywords" maxlength="200" class="assign_font">
                                     <span><input id="ae_wholewords" name="wholewords" type="checkbox"><label for="ae_wholewords">Match whole words</label></span>
                                     <span><input id="ae_inatlas" name="inatlas" type="checkbox"><label for="ae_inatlas">Loaded in ArrayExpress Atlas</label></span>
+                                    <div id="ae_help_link"><a href="${interface.application.link.browse_help}" title="Opens in a new window" target="_blank">&#187; ArrayExpress Browse Help</a></div>
+                                    <div id="ae_login_info">Logged in as <em>user</em> [<a href="javascript:aeDoLogout()">log out</a>]</div>
                                 </fieldset>
                                 <fieldset id="ae_filters_box">
                                     <label for="ae_species">Filter on [<a href="javascript:aeResetFilters()">reset</a>]</label>
@@ -66,8 +68,6 @@
                                 </fieldset>
                             </form>
                             <div id="ae_logo_browse"><a href="${interface.application.base.url}" title="ArrayExpress Home"><img src="assets/images/ae_logo_browse.gif" alt="ArrayExpress Home"></a></div>
-                            <div id="ae_help_link"><a href="${interface.application.link.browse_help}" title="Opens in a new window" target="_blank">&#187; ArrayExpress Browse Help</a></div>
-                            <div id="ae_login_info">Logged in as <strong>user</strong>.</div>
                         </div>
                     </div></div></div></div></div></div></div></div></div>
                 </div>
