@@ -188,17 +188,16 @@ onExperimentQuery( tableHtml )
             ( totalPages > 1 ? (" Displaying experiments " + from + " to " + to + ".") : "" )
             );
 
-        var pagesAround = 10;
         if ( totalPages > 1 ) {
             var pagerHtml = "Pages: ";
             for ( var page = 1; page <= totalPages; page++ ) {
                 if ( curpage == page ) {
                     pagerHtml = pagerHtml + "" + page + "";
-                } else if ( 2 == page && curpage > pagesAround && totalPages > 20 ) {
+                } else if ( 2 == page && curpage > 6 && totalPages > 11 ) {
                     pagerHtml = pagerHtml + "..";
-                } else if ( totalPages - 1 == page && totalPages - curpage > pagesAround && totalPages > 20 ) {
+                } else if ( totalPages - 1 == page && totalPages - curpage > 5 && totalPages > 11 ) {
                     pagerHtml = pagerHtml + "..";
-                } else if ( 1 == page || ( Math.abs( curpage - page ) <= pagesAround ) || totalPages == page || totalPages <= 20 ) {
+                } else if ( 1 == page || ( curpage < 7 && page < 11 ) || ( Math.abs( page - curpage ) < 5 ) || ( totalPages - curpage < 6 && totalPages - page < 10 ) || totalPages == page || totalPages <= 11 ) {
                     var newQuery = $.query.set( "page", page ).set( "pagesize", pagesize ).toString()
                     pagerHtml = pagerHtml + "<a href=\"browse.html" + newQuery + "\">" + page + "</a>";
                 }
