@@ -32,7 +32,7 @@
 
         <helper:logInfo select="[experiments-xml] Query filtered [{$vTotal}] experiments."/>
 
-        <experiments version="1.1"
+        <experiments version="1.1" revision="080925"
                      total="{$vTotal}"
                      total-samples="{sum($vFilteredExperiments[samples/text()>0]/samples/text())}"
                      total-assays="{sum($vFilteredExperiments[assays/text()>0]/assays/text())}">
@@ -45,7 +45,7 @@
     </xsl:template>
 
     <xsl:template match="experiment">
-        <experiment><xsl:copy-of select="*"/></experiment>
+        <experiment><xsl:copy-of select="*[name()!='user']"/></experiment>
     </xsl:template>
 
 </xsl:stylesheet>

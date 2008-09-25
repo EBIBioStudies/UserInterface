@@ -38,6 +38,10 @@
         <from>^/xml/experiments$</from>
         <to type="forward">/servlets/query/experiments/xml</to>
     </rule>
+    <rule>
+        <from>^/xml/experiments/([eE]-\w{4}-\d+)$</from>
+        <to type="forward">/servlets/query/experiments/xml?keywords=$1</to>
+    </rule>
     <!-- search results export in tab format -->
     <rule>
         <from>^/ArrayExpress-Experiments\.xls$</from>
