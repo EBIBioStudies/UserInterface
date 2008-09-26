@@ -43,12 +43,12 @@
                 <xsl:with-param name="pFileName" select="concat(@accession, '.raw.zip')"/>
             </xsl:call-template>
             <xsl:call-template name="gen-file-on-presence">
-                <xsl:with-param name="pType">adf</xsl:with-param>
-                <xsl:with-param name="pFileName" select="concat(@accession, '.adf.txt')"/>
+                <xsl:with-param name="pType">idf</xsl:with-param>
+                <xsl:with-param name="pFileName" select="concat(@accession, '.idf.txt')"/>
             </xsl:call-template>
             <xsl:call-template name="gen-file-on-presence">
-                <xsl:with-param name="pType">edf</xsl:with-param>
-                <xsl:with-param name="pFileName" select="concat(@accession, '.edf.txt')"/>
+                <xsl:with-param name="pType">adf</xsl:with-param>
+                <xsl:with-param name="pFileName" select="concat(@accession, '.adf.txt')"/>
             </xsl:call-template>
             <xsl:call-template name="gen-file-on-presence">
                 <xsl:with-param name="pType">sdrf</xsl:with-param>
