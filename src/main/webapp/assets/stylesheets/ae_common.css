@@ -16,6 +16,7 @@ table td.contentsarea {
     padding: 0 5px;
     margin: 0;
     text-align: center;
+    background-color: transparent;
 }
 
 p {
@@ -24,7 +25,12 @@ p {
 
 /* hack for position:fixed for stooped EBI footer */
 body {
-	background:url(../images/empty.gif) fixed;
+	background: #ffffff url(../images/empty.gif) fixed top;
+    overflow: auto;
+}
+
+body.dev_preview {
+	background: #ffffff url(../images/ae_dev_bg.gif) repeat fixed top;
     overflow: auto;
 }
 

@@ -134,7 +134,7 @@ $(document).ready( function() {
     initControls();
 
     $("#ae_results_body_inner").ajaxError(onQueryError);
-    $.get( "servlets/query/browse-experiments/html", query ).next(onExperimentQuery);
+    $.get( "browse-table.html", query ).next(onExperimentQuery);
 });
 
 function
@@ -236,17 +236,17 @@ initControls()
     if (query.detailedview)
         $("#ae_detailedview").attr("checked","true");
 
-    $.get("servlets/query/species-select/html").next( function(data) {
+    $.get("species-list.html").next( function(data) {
         $("#ae_species").html(data).removeAttr("disabled").val(query.species);
         
     });
 
-    $.get("servlets/query/exptypes-select/html").next( function(data) {
+    $.get("exptypes-list.html").next( function(data) {
         $("#ae_exptype").html(data).removeAttr("disabled").val(query.exptype);
 
     });
 
-    $.get("servlets/query/arrays-select/html").next( function(data) {
+    $.get("arrays-list.html").next( function(data) {
         addHtmlToSelect("ae_array", data);
         $("#ae_array").removeAttr("disabled").val(query.array);
     });

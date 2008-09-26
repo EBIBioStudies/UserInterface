@@ -17,6 +17,11 @@
         <servlet-name>ControlServlet</servlet-name>
         <servlet-class>uk.ac.ebi.ae15.servlets.ControlServlet</servlet-class>
     </servlet>
+    <servlet>
+        <description>ArrayExpress HTTP Proxy Servlet</description>
+        <servlet-name>HttpProxyServlet</servlet-name>
+        <servlet-class>uk.ac.ebi.ae15.servlets.HttpProxyServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>QueryServlet</servlet-name>
         <url-pattern>/servlets/query/*</url-pattern>
@@ -28,6 +33,10 @@
     <servlet-mapping>
         <servlet-name>ControlServlet</servlet-name>
         <url-pattern>/servlets/control/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HttpProxyServlet</servlet-name>
+        <url-pattern>/servlets/proxy/*</url-pattern>
     </servlet-mapping>
     <filter>
         <filter-name>UrlRewriteFilter</filter-name>

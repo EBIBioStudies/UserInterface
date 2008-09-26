@@ -38,6 +38,7 @@
         <interface.application.pref.ftp.root.location>/ebi/ArrayExpress-ftp</interface.application.pref.ftp.root.location>
         <interface.application.pref.files.rescan.interval>3600000</interface.application.pref.files.rescan.interval>
         <interface.application.google.analytics/>
+        <interface.application.body.class/>
     </properties>
     <profiles>
         <profile>
@@ -49,20 +50,21 @@
         <profile>
             <id>preproduction</id>
             <properties>
-                <interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
+                <interface.application.link.www_domain>http://www.embl-ebi.ac.uk</interface.application.link.www_domain>
                 <interface.application.link.browse_help>${interface.application.link.www_domain}/microarray/doc/help/browse_results.html</interface.application.link.browse_help>
                 <interface.application.link.aew.base.url>${interface.application.link.www_domain}/microarray-as/aew</interface.application.link.aew.base.url>
                 <interface.application.link.atlas.exp_query.url>${interface.application.link.www_domain}/microarray-as/atlas/qr?view=table&amp;amp;q_expt=aer_txt_expaccession%3A</interface.application.link.atlas.exp_query.url>
-                <interface.application.link.solr_gene_stats.url>test/aew_gene_avail_info.xml</interface.application.link.solr_gene_stats.url>
-                <interface.application.link.solr_exp_stats.url>test/aew_exp_avail_info.xml</interface.application.link.solr_exp_stats.url>
+                <interface.application.link.solr_gene_stats.url>aew-gene-stats.xml</interface.application.link.solr_gene_stats.url>
+                <interface.application.link.solr_exp_stats.url>aew-exp-stats.xml</interface.application.link.solr_exp_stats.url>
 
-                <interface.application.link.news_xml.url>test/ae_news.xml</interface.application.link.news_xml.url>
-                <interface.application.link.links_xml.url>test/ae_links.xml</interface.application.link.links_xml.url>
+                <interface.application.link.news_xml.url>ae-news.xml</interface.application.link.news_xml.url>
+                <interface.application.link.links_xml.url>ae-links.xml</interface.application.link.links_xml.url>
 
                 <interface.application.pref.experiments.datasources>aepub1</interface.application.pref.experiments.datasources>
                 <interface.application.pref.experiments.reload.schedule>0 0 0/1 * * ?</interface.application.pref.experiments.reload.schedule>
 
                 <interface.application.pref.files.rescan.interval>900000</interface.application.pref.files.rescan.interval>
+                <interface.application.body.class>dev_preview</interface.application.body.class>
             </properties>
         </profile>
         <profile>

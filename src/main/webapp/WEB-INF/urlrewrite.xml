@@ -51,6 +51,48 @@
         <from>^/ArrayExpress-Experiments\.txt$</from>
         <to type="forward">/servlets/query/experiments/tab</to>
     </rule>
+    <!-- redirects to some pages at www.ebi.ac.uk (via proxy servlet) -->
+    <rule>
+        <from>^/ae-news.xml</from>
+        <to type="forward">/servlets/proxy/microarray-srv/ae/ae-main-news.xml</to>
+    </rule>
+    <rule>
+        <from>^/ae-links.xml</from>
+        <to type="forward">/servlets/proxy/microarray-srv/ae/ae-main-links.xml</to>
+    </rule>
+    <rule>
+        <from>^/aew-gene-stats.xml</from>
+        <to type="forward">/servlets/proxy/microarray-as/solr_gene/admin/stats.jsp</to>
+    </rule>
+    <rule>
+        <from>^/aew-exp-stats.xml</from>
+        <to type="forward">/servlets/proxy/microarray-as/solr_exp/admin/stats.jsp</to>
+    </rule>
+    <!-- hiding browse helers behind innocent names -->
+    <rule>
+        <from>^/browse-table.html</from>
+        <to type="forward">servlets/query/browse-experiments/html</to>
+    </rule>
+    <rule>
+        <from>^/species-list.html</from>
+        <to type="forward">servlets/query/species-select/html</to>
+    </rule>
+    <rule>
+        <from>^/arrays-list.html</from>
+        <to type="forward">servlets/query/arrays-select/html</to>
+    </rule>
+    <rule>
+        <from>^/exptypes-list.html</from>
+        <to type="forward">servlets/query/exptypes-select/html</to>
+    </rule>
+    <rule>
+        <from>^/ae-stats.xml</from>
+        <to type="forward">/servlets/query/stats</to>
+    </rule>
+    <rule>
+        <from>^/verify-login.txt</from>
+        <to type="forward">servlets/control/verify-login</to>
+    </rule>
     <!-- experimental noajax browse interface -->
     <rule>
         <from>^/browse-noajax.html$</from>

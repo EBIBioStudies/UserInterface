@@ -35,7 +35,7 @@ aeDoLogin()
     var pass = $("#aer_pass_field").val();
     $("#aer_pass_field").val("");
     $("#aer_login_submit").attr("disabled", "true");
-    $.get("servlets/control/verify-login", { u: user, p: pass }).next(aeDoLoginNext);
+    $.get("verify-login.txt", { u: user, p: pass }).next(aeDoLoginNext);
 }
 
 function
@@ -51,7 +51,7 @@ aeDoLoginNext(text)
         $("#aer_login_info em").text(user);
         $("#aer_login_info").show();
         $("#aer_avail_info").text("Updating data, please wait...");
-        $.get("servlets/query/stats").next(updateAerStats);        
+        $.get("ae-stats.xml").next(updateAerStats);        
     } else {
         alert("Either username or password is incorrect.");
         $("#aer_login_submit").removeAttr("disabled");
@@ -67,7 +67,7 @@ aeDoLogout()
     $.cookie("AeLoggedUser", null, {path: '/' });
     $.cookie("AeLoginToken", null, {path: '/' });
     $("#aer_avail_info").text("Updating data, please wait...");    
-    $.get("servlets/query/stats").next(updateAerStats);
+    $.get("ae-stats.xml").next(updateAerStats);
 }
 
 // runs on page reload after rendering is done
@@ -132,7 +132,7 @@ $(document).ready(function()
     });
     ***/
     // gets aer stats and updates the page
-    $.get("servlets/query/stats").next(updateAerStats);
+    $.get("ae-stats.xml").next(updateAerStats);
 
     // gets aew stats and updates the page
     Deferred.parallel([
