@@ -554,12 +554,14 @@ div.table_row_expand a {
 }
 
 #ae_results_status,
-#ae_results_pager,
-.status_icon {
+#ae_results_pager {
     float: left;
-    padding: 0 4px 0 4px;
+    padding: 2px 4px 0;
+    line-height: 12px;
 }
 
 .status_icon {
     display: none;
+    float: left;
+    padding: 0 4px;
 }
