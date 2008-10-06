@@ -419,7 +419,6 @@ ae_results_body img {
     color: black;
     font-size: 11px;
     padding: 130px 0 0 0;
-    margin: 0 0 10px 0;
 }
 
 .tr_main_expanded td {
@@ -436,9 +435,18 @@ ae_results_body img {
     margin: 0 1px 0 1px;
 }
 
-.ae_results_tr_main .lock {
-    margin: 0;
-    padding: 2px 0 0 3px;
+.ae_results_tr_main td div.accession {
+    float: left;
+    width: 92px;
+}
+
+.ae_results_tr_main td div.lock {
+    background: url( ../images/silk_lock.gif ) 0 0 no-repeat;
+    float: right;
+    width: 10px;
+    height: 10px;
+    margin: 4px 0 0 0;
+    padding: 0;
 }
 
 .ae_results_tr_main td a {
