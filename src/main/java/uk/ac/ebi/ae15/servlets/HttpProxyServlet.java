@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,13 +37,16 @@ public class HttpProxyServlet extends ApplicationServlet
         if (null != path) {
             try {
                 URL url = new URL("http://www.ebi.ac.uk/" + path + (null != queryString ? "?" + queryString : ""));
-                URLConnection conn = url.openConnection();
+                log.debug("Will access [" + url.toString() + "]");
+                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
                 conn.setDoOutput(true);
                 conn.setDoInput(true);
                 conn.setUseCaches(true);
                 conn.connect();
+                int responseStatus = conn.getResponseCode();
                 int contentLength = conn.getContentLength();
-                if (0 < contentLength) {
+                log.debug("Response: http status [" + String.valueOf(responseStatus) + "], length [" + String.valueOf(contentLength) + "]" );
+                if (0 < contentLength && 200 == responseStatus) {
 
                     String contentType = conn.getContentType();
                     if (null != contentType) {
@@ -62,6 +65,8 @@ public class HttpProxyServlet extends ApplicationServlet
 
                     in.close();
                     out.close();
+                } else {
+                    log.error("Response from [" + url.toString() + "] was invalid: htpt status [" + String.valueOf(responseStatus) + "], length [" + String.valueOf(contentLength) + "]");
                 }
 
             } catch ( Exception e ) {
