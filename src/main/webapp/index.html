@@ -47,12 +47,12 @@
                         <div id="ae_logo"><img src="assets/images/ae_logo.gif" alt="ArrayExpress Logo"/></div>
                         <div id="ae_header"><img src="assets/images/ae_header.gif" alt="ArrayExpress"/></div>
                         <div id="ae_intro_text">
-                            <p>ArrayExpress is a public repository for <strong>transcriptomics data</strong>,
+                            <p>ArrayExpress is a public archive for <strong>transcriptomics data</strong>,
                                 which is aimed at storing <a href="http://www.mged.org/Workgroups/MIAME/miame.html" title="Opens in a new window" target="_blank">MIAME</a>-
                                 and <a href="http://www.mged.org/minseqe"  title="Opens in a new window" target="_blank">MINSEQE</a>-
                                 compliant data in accordance with <a href="http://www.mged.org/" title="Opens in a new window" target="_blank">MGED</a> recommendations.
                                 The ArrayExpress Warehouse stores gene-indexed <strong>expression profiles</strong> from a curated subset of experiments
-                                in the repository.</p>
+                                in the archive.</p>
 
                             <div class="ae_intro_more" style="display: none;">
                                 <p>Public data in ArrayExpress are made available for browsing and querying on experiment
@@ -85,7 +85,7 @@
                             </form>
                             <div id="aer_browse_link"><a href="browse.html">&#187; Browse experiments</a></div>
                             <div id="aer_adv_query_link"><a href="${interface.application.link.aer_old.base.url}/entry">&#187; Advanced query interface</a></div>
-                            <div id="aer_login_link"><a href="${interface.application.link.aer_old.base.url}/login">&#187; Submitter/reviewer login</a></div>
+                            <div id="aer_login_link"><a href="javascript:aeShowLoginForm();">&#187; Submitter/reviewer login</a></div>
                             <form id="aer_login_form" method="get" action="index.html" onsubmit="aeDoLogin(); return false">
                                 <fieldset id="aer_login_user_fset">
                                     <label for="aer_user_field">Name</label>
