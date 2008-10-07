@@ -6,7 +6,7 @@ import org.w3c.dom.Document;
 import uk.ac.ebi.ae15.app.Application;
 import uk.ac.ebi.ae15.app.ApplicationComponent;
 import uk.ac.ebi.ae15.utils.AppXalanExtension;
-import uk.ac.ebi.ae15.utils.ParameterMap;
+import uk.ac.ebi.ae15.utils.HttpServletRequestParameterMap;
 
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMResult;
@@ -62,7 +62,7 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return src;
     }
 
-    public boolean transformDocumentToFile( Document srcDocument, String stylesheet, ParameterMap params, File dstFile )
+    public boolean transformDocumentToFile( Document srcDocument, String stylesheet, HttpServletRequestParameterMap params, File dstFile )
     {
         try {
             return transform(new DOMSource(srcDocument), stylesheet, params, new StreamResult(new FileOutputStream(dstFile)));
@@ -73,7 +73,7 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return false;
     }
 
-    public String transformDocumentToString( Document srcDocument, String stylesheet, ParameterMap params )
+    public String transformDocumentToString( Document srcDocument, String stylesheet, HttpServletRequestParameterMap params )
     {
         try {
             StringWriter sw = new StringWriter();
@@ -87,7 +87,7 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return null;
     }
 
-    public Document transformStringToDocument( String srcXmlString, String stylesheet, ParameterMap params )
+    public Document transformStringToDocument( String srcXmlString, String stylesheet, HttpServletRequestParameterMap params )
     {
         try {
             InputStream inStream = new ByteArrayInputStream(srcXmlString.getBytes("ISO-8859-1"));
@@ -103,12 +103,12 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return null;
     }
 
-    public boolean transformDocumentToPrintWriter( Document srcDocument, String stylesheet, ParameterMap params, PrintWriter dstWriter )
+    public boolean transformDocumentToPrintWriter( Document srcDocument, String stylesheet, HttpServletRequestParameterMap params, PrintWriter dstWriter )
     {
         return transform(new DOMSource(srcDocument), stylesheet, params, new StreamResult(dstWriter));
     }
 
-    private boolean transform( Source src, String stylesheet, ParameterMap params, Result dst )
+    private boolean transform( Source src, String stylesheet, HttpServletRequestParameterMap params, Result dst )
     {
         boolean result = false;
         try {

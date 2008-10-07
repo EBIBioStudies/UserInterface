@@ -5,7 +5,7 @@ import uk.ac.ebi.ae15.components.Experiments;
 import uk.ac.ebi.ae15.components.Users;
 import uk.ac.ebi.ae15.components.XsltHelper;
 import uk.ac.ebi.ae15.utils.CookieMap;
-import uk.ac.ebi.ae15.utils.ParameterMap;
+import uk.ac.ebi.ae15.utils.HttpServletRequestParameterMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -71,7 +71,7 @@ public class QueryServlet extends ApplicationServlet
         } else {
             String stylesheetName = new StringBuilder(stylesheet).append('-').append(type).append(".xsl").toString();
 
-            ParameterMap params = new ParameterMap(request);
+            HttpServletRequestParameterMap params = new HttpServletRequestParameterMap(request);
             // to make sure nobody sneaks in the other value w/o proper authentication
             params.put("userid", "1");
 

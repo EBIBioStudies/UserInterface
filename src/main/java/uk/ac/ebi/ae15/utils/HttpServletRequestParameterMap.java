@@ -4,9 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ParameterMap extends HashMap<String,String>
+public class HttpServletRequestParameterMap extends HashMap<String,String>
 {
-    public ParameterMap( HttpServletRequest request )
+    public HttpServletRequestParameterMap( HttpServletRequest request )
     {
         if (null != request) {
             Map params = request.getParameterMap();
