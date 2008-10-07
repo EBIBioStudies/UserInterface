@@ -45,7 +45,9 @@ public class HttpProxyServlet extends ApplicationServlet
                 conn.connect();
                 int responseStatus = conn.getResponseCode();
                 int contentLength = conn.getContentLength();
+
                 log.debug("Response: http status [" + String.valueOf(responseStatus) + "], length [" + String.valueOf(contentLength) + "]" );
+
                 if (0 < contentLength && 200 == responseStatus) {
 
                     String contentType = conn.getContentType();
@@ -66,11 +68,14 @@ public class HttpProxyServlet extends ApplicationServlet
                     in.close();
                     out.close();
                 } else {
-                    log.error("Response from [" + url.toString() + "] was invalid: htpt status [" + String.valueOf(responseStatus) + "], length [" + String.valueOf(contentLength) + "]");
+                    String err = "Response from [" + url.toString() + "] was invalid: http status [" + String.valueOf(responseStatus) + "], length [" + String.valueOf(contentLength) + "]";
+                    log.error(err);
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, err);
                 }
 
             } catch ( Exception e ) {
                 log.error("Caught an exception:", e);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             }
         }
     }
