@@ -435,7 +435,7 @@ ae_results_body img {
     margin: 0 1px 0 1px;
 }
 
-.ae_results_tr_main td div.accession {
+.ae_results_tr_main td div.table_row_accession {
     float: left;
     width: 92px;
 }

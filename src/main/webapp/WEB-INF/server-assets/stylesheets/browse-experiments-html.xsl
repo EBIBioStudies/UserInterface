@@ -112,18 +112,14 @@
             <tr id="{$vExpId}_main" class="{$pDetailedViewMainClass}">
                 <td><div class="table_row_expand"/></td>
                 <td>
-                    <div>
-                        <xsl:apply-templates select="accession" mode="highlight" />
-                        <xsl:if test="not(user/text()='1')">
-                            <span class="lock">
-                                <img src="${interface.application.base.url}/assets/images/silk_lock.gif" width="8" height="9" alt="*"/>
-                            </span>
-                        </xsl:if>
-                    </div>
+                    <div class="table_row_accession"><xsl:apply-templates select="accession" mode="highlight" /></div>
+                    <xsl:if test="not(user/text()='1')">
+                        <div class="lock">&#160;</div>
+                    </xsl:if>
                 </td>
-                <td><div><xsl:apply-templates select="name" mode="highlight" /></div></td>
+                <td><div><xsl:apply-templates select="name" mode="highlight" /><xsl:if test="count(name)=0">&#160;</xsl:if></div></td>
                 <td class="align_right">
-                    <div><xsl:apply-templates select="assays" mode="highlight" /></div>
+                    <div><xsl:apply-templates select="assays" mode="highlight" /><xsl:if test="count(assays)=0">&#160;</xsl:if></div>
                 </td>
                 <td><div>
                     <xsl:for-each select="species">
@@ -132,7 +128,7 @@
                     </xsl:for-each>
                     <xsl:if test="count(species)=0"><xsl:text>&#160;</xsl:text></xsl:if>
                 </div></td>
-                <td><div><xsl:apply-templates select="releasedate" mode="highlight" /></div></td>
+                <td><div><xsl:apply-templates select="releasedate" mode="highlight" /></div><xsl:if test="count(releasedate)=0">&#160;</xsl:if></td>
                 <td class="align_center">
                     <div>
                         <xsl:choose>
