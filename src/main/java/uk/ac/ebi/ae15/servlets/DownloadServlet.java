@@ -7,6 +7,7 @@ import uk.ac.ebi.ae15.components.DownloadableFilesRegistry;
 import uk.ac.ebi.ae15.components.Experiments;
 import uk.ac.ebi.ae15.components.Users;
 import uk.ac.ebi.ae15.utils.CookieMap;
+import uk.ac.ebi.ae15.utils.RegExpHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -15,8 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DownloadServlet extends ApplicationServlet
 {
@@ -31,12 +30,10 @@ public class DownloadServlet extends ApplicationServlet
     {
         logRequest(request);
 
-        Pattern p = Pattern.compile("/([^/]+)$");
-        Matcher m = p.matcher(request.getRequestURL());
-        String filename;
+        String filename = new RegExpHelper("/([^/]+)$", "i")
+                .matchFirst(request.getRequestURL().toString());
         try {
-            if (m.find()) {
-                filename = m.group(1);
+            if (0 < filename.length()) {
                 sendFile(filename, request, response);
             } else {
                 log.error("Unable to get a filename from [" + request.getRequestURL() + "]");

@@ -3,6 +3,7 @@ package uk.ac.ebi.ae15.servlets;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import uk.ac.ebi.ae15.app.ApplicationServlet;
+import uk.ac.ebi.ae15.utils.RegExpHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -13,8 +14,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class HttpProxyServlet extends ApplicationServlet
 {
@@ -26,19 +25,15 @@ public class HttpProxyServlet extends ApplicationServlet
     {
         logRequest(request);
 
-        String path = null;
-        Pattern p = Pattern.compile("servlets/proxy/(.+)");
-        Matcher m = p.matcher(request.getRequestURL());
-        if (m.find()) {
-            path = m.group(1);
-        }
-
+        String path = new RegExpHelper("servlets/proxy/(.+)", "i")
+                .matchFirst(request.getRequestURL().toString());
         String queryString = request.getQueryString();
-        if (null != path) {
+
+        if (0 < path.length()) {
             try {
                 URL url = new URL("http://www.ebi.ac.uk/" + path + (null != queryString ? "?" + queryString : ""));
                 log.debug("Will access [" + url.toString() + "]");
-                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setDoOutput(true);
                 conn.setDoInput(true);
                 conn.setUseCaches(true);
@@ -46,7 +41,7 @@ public class HttpProxyServlet extends ApplicationServlet
                 int responseStatus = conn.getResponseCode();
                 int contentLength = conn.getContentLength();
 
-                log.debug("Response: http status [" + String.valueOf(responseStatus) + "], length [" + String.valueOf(contentLength) + "]" );
+                log.debug("Response: http status [" + String.valueOf(responseStatus) + "], length [" + String.valueOf(contentLength) + "]");
 
                 if (0 < contentLength && 200 == responseStatus) {
 
@@ -61,7 +56,7 @@ public class HttpProxyServlet extends ApplicationServlet
                     ServletOutputStream out = response.getOutputStream();
 
                     String inputLine;
-                    while ((inputLine = in.readLine()) != null) {
+                    while ( (inputLine = in.readLine()) != null ) {
                         out.println(inputLine);
                     }
 

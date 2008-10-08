@@ -6,6 +6,7 @@ import uk.ac.ebi.ae15.components.Users;
 import uk.ac.ebi.ae15.components.XsltHelper;
 import uk.ac.ebi.ae15.utils.CookieMap;
 import uk.ac.ebi.ae15.utils.HttpServletRequestParameterMap;
+import uk.ac.ebi.ae15.utils.RegExpHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +15,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class QueryServlet extends ApplicationServlet
 {
@@ -27,12 +26,13 @@ public class QueryServlet extends ApplicationServlet
         String type = "xml";
         String stylesheet = "default";
 
-        Pattern p = Pattern.compile("servlets/query/([^/]+)/?([^/]*)");
-        Matcher m = p.matcher(request.getRequestURL());
-        if (m.find()) {
-            stylesheet = m.group(1);
-            if (0 < m.group(2).length())
-                type = m.group(2).toLowerCase();
+        String[] requestArgs = new RegExpHelper("servlets/query/([^/]+)/?([^/]*)", "i")
+                .match(request.getRequestURL().toString());
+        if (0 < requestArgs.length) {
+            stylesheet = requestArgs[1];
+            if (2 == requestArgs.length) {
+                type = requestArgs[2];
+            }
         }
 
         if (type.equals("xls")) {
@@ -80,8 +80,8 @@ public class QueryServlet extends ApplicationServlet
                 Users users = (Users) getComponent("Users");
                 String user = cookies.get("AeLoggedUser").getValue();
                 String passwordHash = cookies.get("AeLoginToken").getValue();
-                if ( users.verifyLogin(user, passwordHash, request.getRemoteAddr().concat(request.getHeader("User-Agent"))) ) {
-                    params.put("userid", String.valueOf(users.getUserRecord(user).getId()));    
+                if (users.verifyLogin(user, passwordHash, request.getRemoteAddr().concat(request.getHeader("User-Agent")))) {
+                    params.put("userid", String.valueOf(users.getUserRecord(user).getId()));
                 }
             }
 

@@ -5,14 +5,13 @@ import uk.ac.ebi.ae15.components.DownloadableFilesRegistry;
 import uk.ac.ebi.ae15.components.Experiments;
 import uk.ac.ebi.ae15.components.JobsController;
 import uk.ac.ebi.ae15.components.Users;
+import uk.ac.ebi.ae15.utils.RegExpHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ControlServlet extends ApplicationServlet
 {
@@ -24,12 +23,13 @@ public class ControlServlet extends ApplicationServlet
         String command = "";
         String params = "";
 
-        Pattern p = Pattern.compile("servlets/control/([^/]+)/?(.*)");
-        Matcher m = p.matcher(request.getRequestURL());
-        if (m.find()) {
-            command = m.group(1);
-            if (0 < m.group(2).length())
-                params = m.group(2);
+        String[] requestArgs = new RegExpHelper("servlets/control/([^/]+)/?(.*)", "i")
+                .match(request.getRequestURL().toString());
+        if (0 < requestArgs.length) {
+            command = requestArgs[1];
+            if (2 == requestArgs.length) {
+                params = requestArgs[2];
+            }
         }
 
         if (command.equals("reload-xml")) {

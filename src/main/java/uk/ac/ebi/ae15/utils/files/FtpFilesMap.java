@@ -1,4 +1,4 @@
-package uk.ac.ebi.ae15.utils;
+package uk.ac.ebi.ae15.utils.files;
 
 import java.util.ArrayList;
 import java.util.List;
