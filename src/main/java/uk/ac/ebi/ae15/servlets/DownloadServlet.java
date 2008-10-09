@@ -98,7 +98,7 @@ public class DownloadServlet extends ApplicationServlet
             if (!file.exists()) {
                 log.error("File [" + fileLocation + "] does not exist");
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            } else if (!experiments.isExperimentAccessible(FtpFileEntry.getAccession(new FtpFileEntry(fileLocation, null, null)), userId)) {
+            } else if (!experiments.isAccessible(FtpFileEntry.getAccession(new FtpFileEntry(fileLocation, null, null)), userId)) {
                 log.error("Attempting to download file for the experiment that is not present in the index");
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             } else {

@@ -152,22 +152,31 @@
                 <xsl:if test="$pType='fgem'">
                     <xsl:attribute name="bioassays"><xsl:value-of select="sum(bioassaydatagroup[@isderived = '1']/@bioassays)"/></xsl:attribute>
                     <xsl:attribute name="dataformat">
-                        <xsl:for-each select="bioassaydatagroup[generate-id(key('distinct-fgem-dataformat', concat(ancestor::experiment/@id, @dataformat))) = generate-id()]">
-                            <xsl:value-of select="@dataformat"/>
-                            <xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
-                        </xsl:for-each>
+                        <xsl:call-template name="list-fgem-dataformats"/>
                     </xsl:attribute>
                 </xsl:if>
                 <xsl:if test="$pType='raw'">
                     <xsl:attribute name="bioassays"><xsl:value-of select="sum(bioassaydatagroup[@isderived = '0']/@bioassays)"/></xsl:attribute>
                     <xsl:attribute name="dataformat">
-                        <xsl:for-each select="bioassaydatagroup[generate-id(key('distinct-raw-dataformat', concat(ancestor::experiment/@id, @dataformat))) = generate-id()]">
-                            <xsl:value-of select="@dataformat"/>
-                            <xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
-                        </xsl:for-each>
+
                     </xsl:attribute>
                 </xsl:if>
             </file>
         </xsl:if>
     </xsl:template>
+
+    <xsl:template name="list-fgem-dataformats">
+        <xsl:for-each select="bioassaydatagroup[generate-id(key('distinct-fgem-dataformat', concat(ancestor::experiment/@id, @dataformat))) = generate-id()]">
+            <xsl:value-of select="@dataformat"/>
+            <xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
+        </xsl:for-each>
+    </xsl:template>
+
+    <xsl:template name="fist-raw-dataformats">
+        <xsl:for-each select="bioassaydatagroup[generate-id(key('distinct-raw-dataformat', concat(ancestor::experiment/@id, @dataformat))) = generate-id()]">
+            <xsl:value-of select="@dataformat"/>
+            <xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
+        </xsl:for-each>
+    </xsl:template>
+
 </xsl:stylesheet>

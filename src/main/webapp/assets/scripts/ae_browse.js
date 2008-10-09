@@ -43,9 +43,14 @@ aeSort( sortby )
     if ( -1 != String("accession name assays species releasedate fgem raw atlas").indexOf(sortby) ) {
         var innerElt = $( "#ae_results_header_" + sortby ).find("div.table_header_inner");
         var sortorder = "ascending";
-        if ( undefined != innerElt && innerElt.hasClass("table_header_sort_asc") )
+        if ( -1 != String("accession name species").indexOf(sortby)) {
+            if ( undefined != innerElt && innerElt.hasClass("table_header_sort_asc") )
+                sortorder = "descending";
+        } else {
             sortorder = "descending";
-
+            if ( undefined != innerElt && innerElt.hasClass("table_header_sort_desc") )
+                sortorder = "ascending";
+        }
         var newQuery = $.query.set( "sortby", sortby ).set( "sortorder", sortorder ).toString()
         window.location.href = "browse.html" + newQuery;
     }

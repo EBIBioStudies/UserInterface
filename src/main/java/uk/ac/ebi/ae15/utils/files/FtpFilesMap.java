@@ -34,14 +34,15 @@ public class FtpFilesMap
     public List<FtpFileEntry> getEntriesByAccession( String accession )
     {
         List<FtpFileEntry> result = null;
-        Set<Integer> set = new HashSet<Integer>(accessionMap.get(accession));
-        if (0 < set.size()) {
-            result = new ArrayList<FtpFileEntry>(set.size());
-            for ( Integer entryIndex : set ) {
-                result.add(entries.get(entryIndex));
+        if (doesAccessionExist(accession)) {
+            Set<Integer> set = new HashSet<Integer>(accessionMap.get(accession));
+            if (0 < set.size()) {
+                result = new ArrayList<FtpFileEntry>(set.size());
+                for ( Integer entryIndex : set ) {
+                    result.add(entries.get(entryIndex));
+                }
             }
         }
-
         return result;
     }
 

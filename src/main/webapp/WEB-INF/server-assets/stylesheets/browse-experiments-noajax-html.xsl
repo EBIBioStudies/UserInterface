@@ -34,7 +34,9 @@
             <xsl:call-template name="page-header">
                 <xsl:with-param name="pTitle">ArrayExpress Browser</xsl:with-param>
                 <xsl:with-param name="pExtraCode">
-                    <link rel="stylesheet" href="assets/stylesheets/ae_browse_noajax.css" type="text/css"/> 
+                    <link rel="stylesheet" href="assets/stylesheets/ae_common.css" type="text/css"/>
+                    <link rel="stylesheet" href="assets/stylesheets/ae_browse_noajax.css" type="text/css"/>
+                    <script src="assets/scripts/jquery-1.2.3.js" type="text/javascript"/>
                 </xsl:with-param>
             </xsl:call-template>
             <xsl:call-template name="page-body"/>

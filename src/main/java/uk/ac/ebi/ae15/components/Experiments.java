@@ -89,6 +89,11 @@ public class Experiments extends ApplicationComponent
         return experimentSearch;
     }
 
+    public boolean isAccessible( String accession, String userId )
+    {
+        return getSearch().isAccessible(accession, userId);
+    }
+
     public boolean isInWarehouse( String accession )
     {
         return experimentsInWarehouse.getObject().contains(accession);
@@ -161,11 +166,6 @@ public class Experiments extends ApplicationComponent
     public void setExperimentsInWarehouse( List<String> expList )
     {
         experimentsInWarehouse.setObject(new PersistableStringList(expList));    
-    }
-
-    public boolean isExperimentAccessible( String accession, String userId )
-    {
-        return getSearch().isAccessible(accession, userId);
     }
 
     private synchronized void setExperiments( Document doc )

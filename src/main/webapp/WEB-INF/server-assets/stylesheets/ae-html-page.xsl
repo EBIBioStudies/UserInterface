@@ -24,10 +24,8 @@
 
             <link rel="stylesheet" href="${interface.application.link.www_domain}/inc/css/contents.css" type="text/css"/>
             <link rel="stylesheet" href="${interface.application.link.www_domain}/inc/css/userstyles.css" type="text/css"/>
-            <link rel="stylesheet" href="assets/stylesheets/ae_common.css" type="text/css"/>
 
             <script src="${interface.application.link.www_domain}/inc/js/contents.js" type="text/javascript"/>
-            <script src="assets/scripts/jquery-1.2.3.js" type="text/javascript"/>
 
             <xsl:copy-of select="$pExtraCode"/>
         </head>

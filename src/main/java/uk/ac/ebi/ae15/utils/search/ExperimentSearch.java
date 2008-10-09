@@ -5,13 +5,12 @@ import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import uk.ac.ebi.ae15.utils.RegExpHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Search experiments based on full-text information stored in ExperimentText class
@@ -63,53 +62,49 @@ public class ExperimentSearch
         return matchString(expText.get(idx).text, keywords, wholeWords);
     }
 
+    public boolean matchAccession( String textIdx, String accession )
+    {
+        int idx = Integer.parseInt(textIdx);
+        return expText.get(idx).accessions.contains(" ".concat(accession).concat(" ").toLowerCase());
+    }
+
     public boolean matchSpecies( String textIdx, String species )
     {
         int idx = Integer.parseInt(textIdx);
-        return (-1 != expText.get(idx).species.indexOf(species.trim().toLowerCase()));
+        return expText.get(idx).species.contains(species.trim().toLowerCase());
     }
 
     public boolean matchArray( String textIdx, String array )
     {
         int idx = Integer.parseInt(textIdx);
-        return (-1 != expText.get(idx).array.indexOf(array.trim().toLowerCase()));
+        return expText.get(idx).array.contains(array.trim().toLowerCase());
     }
 
     public boolean matchExperimentType( String textIdx, String experimentType )
     {
         int idx = Integer.parseInt(textIdx);
-        return (-1 != expText.get(idx).experimentType.indexOf(experimentType.trim().toLowerCase()));
+        return expText.get(idx).experimentType.contains(experimentType.trim().toLowerCase());
+    }
+
+    public boolean matchUser( String textIdx, String user )
+    {
+        int idx = Integer.parseInt(textIdx);
+        return expText.get(idx).users.contains(" ".concat(user).concat(" "));
     }
 
     public boolean isAccessible( String accession, String user )
     {
+        if (user.equals("0")) {
+            return true;
+        }
+
         Integer idx = accessionIdx.get(accession.toLowerCase());
-        ExperimentText txt = expText.get(idx);
-        return (user.equals("0") || (null != idx && null != txt && -1 != txt.users.indexOf(" ".concat(user).concat(" "))));
+        return (null != idx) && matchUser(String.valueOf(idx), user);
     }
 
     public boolean doesPresent( String accession )
     {
         return accessionIdx.containsKey(accession.toLowerCase());
-    }
-
-    private boolean matchRegexp( String input, String pattern, String flags )
-    {
-        boolean result = false;
-        try {
-            int patternFlags = (flags.indexOf("i") >= 0 ? Pattern.CASE_INSENSITIVE : 0);
-
-            String inputStr = (input == null ? "" : input);
-            String patternStr = (pattern == null ? "" : pattern);
-
-            Pattern p = Pattern.compile(patternStr, patternFlags);
-            Matcher matcher = p.matcher(inputStr);
-            result = matcher.find();
-        } catch ( Throwable x ) {
-            log.error("Caught an exception:", x);
-        }
-
-        return result;
     }
 
     private String keywordToPattern( String keyword, boolean wholeWord )
@@ -127,7 +122,7 @@ public class ExperimentSearch
         if (0 < keywords.length()) {
             String[] kwdArray = keywords.split("\\s");
             for ( String keyword : kwdArray ) {
-                if (!matchRegexp(input, keywordToPattern(keyword, wholeWords), "i"))
+                if (!new RegExpHelper(keywordToPattern(keyword, wholeWords), "i").test(input))
                     return false;
             }
         }

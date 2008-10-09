@@ -2,24 +2,25 @@ package uk.ac.ebi.ae15.utils;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.xalan.extensions.ExpressionContext;
 import org.apache.xalan.extensions.XSLProcessorContext;
 import org.apache.xalan.templates.ElemExtensionCall;
 import org.apache.xpath.NodeSet;
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import uk.ac.ebi.ae15.app.Application;
 import uk.ac.ebi.ae15.components.DownloadableFilesRegistry;
 import uk.ac.ebi.ae15.components.Experiments;
 import uk.ac.ebi.ae15.utils.files.FtpFileEntry;
+import uk.ac.ebi.ae15.utils.search.ExperimentSearch;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class AppXalanExtension
 {
@@ -27,6 +28,8 @@ public class AppXalanExtension
     private static final Log log = LogFactory.getLog(AppXalanExtension.class);
     // Application reference
     private static Application application;
+    // Accession RegExp filter
+    private static final RegExpHelper accessionRegExp = new RegExpHelper("^E-\\w{4}-\\d+$", "i");
 
     public static String toUpperCase( String str )
     {
@@ -67,7 +70,7 @@ public class AppXalanExtension
             try {
                 Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
                 dateString = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(date);
-            } catch (Throwable x) {
+            } catch ( Throwable x ) {
                 log.debug("Caught an exception:", x);
             }
         } else {
@@ -89,40 +92,47 @@ public class AppXalanExtension
                 .isInWarehouse(accession);
     }
 
-    public static NodeSet getFilesForExperiment( ExpressionContext context, String accession )
+    public static boolean isExperimentAccessible( String accession, String userId )
     {
-        NodeSet n = new NodeSet();
-        if (null != context && null != context.getContextNode()) {
-            Document doc = context.getContextNode().getOwnerDocument();
-            if (null != doc) {
-                List<FtpFileEntry> files = ((DownloadableFilesRegistry) application.getComponent("DownloadableFilesRegistry"))
-                        .getFilesMap()
-                        .getEntriesByAccession(accession);
-                for (FtpFileEntry file : files) {
+        return ((Experiments) application.getComponent("Experiments"))
+                .isAccessible(accession, userId);
+    }
+
+    public static NodeSet getFilesForExperiment( String accession )
+    {
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.newDocument();
+
+            DocumentFragment df = doc.createDocumentFragment();
+
+            List<FtpFileEntry> files = ((DownloadableFilesRegistry) application.getComponent("DownloadableFilesRegistry"))
+                    .getFilesMap()
+                    .getEntriesByAccession(accession);
+            if (null != files) {
+                for ( FtpFileEntry file : files ) {
                     Element fileElt = doc.createElement("file");
                     fileElt.setAttribute("name", FtpFileEntry.getName(file));
                     fileElt.setAttribute("size", String.valueOf(file.getSize()));
                     fileElt.setAttribute("lastmodified", new SimpleDateFormat("d MMMMM yyyy, HH:mm").format(new Date(file.getLastModified())));
-                    n.addElement(fileElt);
+                    df.appendChild(fileElt);
                 }
             }
+            return new NodeSet(df);
+
+        } catch ( Throwable x ) {
+            log.error("Caught an exception:", x);
         }
-        return n;
+        return new NodeSet();
     }
-    
+
     public static boolean testRegexp( String input, String pattern, String flags )
     {
         boolean result = false;
 
         try {
-            int patternFlags = (flags.indexOf("i") >= 0 ? Pattern.CASE_INSENSITIVE : 0);
-
-            String inputStr = (input == null ? "" : input);
-            String patternStr = (pattern == null ? "" : pattern);
-
-            Pattern p = Pattern.compile(patternStr, patternFlags);
-            Matcher matcher = p.matcher(inputStr);
-            result = matcher.find();
+            return new RegExpHelper(pattern, flags).test(input);
         } catch ( Throwable t ) {
             log.debug("Caught an exception:", t);
         }
@@ -130,90 +140,45 @@ public class AppXalanExtension
         return result;
     }
 
-    public static String replaceRegexp( String input, String pattern, String flags, String replace )
-    {
-        int patternFlags = (flags.indexOf("i") >= 0 ? Pattern.CASE_INSENSITIVE : 0);
-
-        String inputStr = (input == null ? "" : input);
-        String patternStr = (pattern == null ? "" : pattern);
-        String replaceStr = (replace == null ? "" : replace);
-
-        Pattern p = Pattern.compile(patternStr, patternFlags);
-        Matcher matcher = p.matcher(inputStr);
-        return (flags.indexOf("g") >= 0 ? matcher.replaceAll(replaceStr) : matcher.replaceFirst(replaceStr));
-    }
-
     private static String keywordToPattern( String keyword, boolean wholeWord )
     {
         return (wholeWord ? "\\b\\Q" + keyword + "\\E\\b" : "\\Q" + keyword + "\\E");
     }
 
-    public static boolean testSpecies( NodeList nl, String species )
+    public static boolean testExperiment( NodeList nl, String userId, String keywords, boolean wholeWords, String species, String array, String experimentType, boolean inAtlas )
     {
-        boolean result = false;
-
         try {
-            if (0 < nl.getLength()) {
+            if (null != nl && 0 < nl.getLength()) {
+                Element elt = (Element) nl.item(0);
 
-                String textIdx = ((Element) nl.item(0)).getAttribute("textIdx");
-                return ((Experiments) application.getComponent("Experiments")).getSearch().matchSpecies(textIdx, species);
+                if (inAtlas && elt.getAttribute("loadedinatlas").equals(""))
+                    return false;
+
+                String textIdx = elt.getAttribute("textIdx");
+                ExperimentSearch search = ((Experiments) application.getComponent("Experiments")).getSearch();
+
+                if (!userId.equals("0") && !search.matchUser(textIdx, userId))
+                    return false;
+
+                if (accessionRegExp.test(keywords) && !search.matchAccession(textIdx, keywords))
+                    return false;
+
+                if (!keywords.equals("") && !search.matchText(textIdx, keywords, wholeWords))
+                    return false;
+
+                if (!species.equals("") && !search.matchSpecies(textIdx, species))
+                    return false;
+
+                if (!array.equals("") && !search.matchArray(textIdx, array))
+                    return false;
+
+                return experimentType.equals("") || !search.matchExperimentType(textIdx, experimentType);
             }
-        } catch (Throwable x) {
+
+        } catch ( Throwable x ) {
             log.error("Caught an exception:", x);
         }
-
-        return result;
-    }
-
-    public static boolean testArray( NodeList nl, String array )
-    {
-        boolean result = false;
-
-        try {
-            if (0 < nl.getLength()) {
-
-                String textIdx = ((Element) nl.item(0)).getAttribute("textIdx");
-                return ((Experiments) application.getComponent("Experiments")).getSearch().matchArray(textIdx, array);
-            }
-        } catch (Throwable x) {
-            log.error("Caught an exception:", x);
-        }
-
-        return result;
-    }
-
-    public static boolean testExperimentType( NodeList nl, String experimentType )
-    {
-        boolean result = false;
-
-        try {
-            if (0 < nl.getLength()) {
-
-                String textIdx = ((Element) nl.item(0)).getAttribute("textIdx");
-                return ((Experiments) application.getComponent("Experiments")).getSearch().matchExperimentType(textIdx, experimentType);
-            }
-        } catch (Throwable x) {
-            log.error("Caught an exception:", x);
-        }
-
-        return result;
-    }
-
-    public static boolean testKeywords( NodeList nl, String keywords, boolean wholeWords )
-    {
-        boolean result = false;
-
-        try {
-            if (0 < nl.getLength()) {
-
-                String textIdx = ((Element) nl.item(0)).getAttribute("textIdx");
-                return ((Experiments) application.getComponent("Experiments")).getSearch().matchText(textIdx, keywords, wholeWords);
-            }
-        } catch (Throwable x) {
-            log.error("Caught an exception:", x);
-        }
-        
-        return result;
+        return false;
     }
 
     public static String markKeywords( String input, String keywords, boolean wholeWords )
@@ -224,20 +189,20 @@ public class AppXalanExtension
             if (null != keywords && 0 < keywords.length()) {
                 String[] kwdArray = keywords.split("\\s");
                 for ( String keyword : kwdArray ) {
-                    result = replaceRegexp(result, "(" + keywordToPattern(keyword, wholeWords) + ")", "ig", "\u00ab$1\u00bb");
+                    result = new RegExpHelper("(" + keywordToPattern(keyword, wholeWords) + ")", "ig").replace(result, "\u00ab$1\u00bb");
                 }
             }
             boolean shouldRemoveExtraMarkers = true;
             String newResult;
 
             while ( shouldRemoveExtraMarkers ) {
-                newResult = replaceRegexp(result, "\u00ab([^\u00ab\u00bb]*)\u00ab", "ig", "\u00ab$1");
+                newResult = new RegExpHelper("\u00ab([^\u00ab\u00bb]*)\u00ab", "ig").replace(result, "\u00ab$1");
                 shouldRemoveExtraMarkers = !newResult.equals(result);
                 result = newResult;
             }
             shouldRemoveExtraMarkers = true;
             while ( shouldRemoveExtraMarkers ) {
-                newResult = replaceRegexp(result, "\u00bb([^\u00ab\u00bb]*)\u00bb", "ig", "$1\u00bb");
+                newResult = new RegExpHelper("\u00bb([^\u00ab\u00bb]*)\u00bb", "ig").replace(result, "$1\u00bb");
                 shouldRemoveExtraMarkers = !newResult.equals(result);
                 result = newResult;
             }

@@ -45,7 +45,9 @@
     </xsl:template>
 
     <xsl:template match="experiment">
-        <experiment><xsl:copy-of select="*[name()!='user']"/></experiment>
+        <experiment>
+            <xsl:copy-of select="*[not(name() = 'user')]"/>
+        </experiment>
     </xsl:template>
 
 </xsl:stylesheet>

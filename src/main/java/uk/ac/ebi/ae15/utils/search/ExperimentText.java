@@ -22,6 +22,9 @@ public class ExperimentText
 
     public String accession;
 
+    // all accessions, concatenated
+    public String accessions;
+
     // all species, concatenated
     public String species;
 
@@ -43,6 +46,7 @@ public class ExperimentText
         } catch ( Throwable x ) {
             log.debug("Caught an exception:", x);
         }
+        accessions = " ".concat(accession).concat(" ").concat(concatAll(elt.getElementsByTagName("secondaryaccession"))).toLowerCase();
         species = concatAll(elt.getElementsByTagName("species")).toLowerCase();
         array = concatAll(elt.getElementsByTagName("arraydesign")).toLowerCase();
         experimentType = concatAll(elt.getElementsByTagName("experimenttype")).toLowerCase();

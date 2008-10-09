@@ -6,29 +6,36 @@ import java.util.regex.Pattern;
 public class RegExpHelper
 {
     private Pattern pattern = null;
+    private String flags = "";
 
     public RegExpHelper( String regexp )
     {
         pattern = Pattern.compile(regexp);
     }
 
-    public RegExpHelper( String regexp, String flags )
+    public RegExpHelper( String regexp, String aFlags )
     {
-        pattern = Pattern.compile(
-                regexp
-                , (flags.contains("m") ? Pattern.MULTILINE : 0)
-                + (flags.contains("i") ? Pattern.CASE_INSENSITIVE : 0)
-        );
+        if (null != aFlags) {
+            flags = aFlags.toLowerCase();
+        }
+
+        if (null != regexp) {
+            pattern = Pattern.compile(
+                    regexp
+                    , (flags.contains("m") ? Pattern.MULTILINE : 0)
+                    + (flags.contains("i") ? Pattern.CASE_INSENSITIVE : 0)
+            );
+        }
     }
 
     public boolean test( String input )
     {
-        return (null != pattern) && pattern.matcher(input).find();
+        return (null != pattern) && (null != input) && pattern.matcher(input).find();
     }
 
     public String matchFirst( String input )
     {
-        if (null != pattern) {
+        if (null != pattern && null != input) {
             Matcher matcher = pattern.matcher(input);
             if (matcher.find() && 0 < matcher.groupCount()) {
                 return matcher.group(1);
@@ -40,7 +47,7 @@ public class RegExpHelper
     public String[] match( String input )
     {
         String result[] = null;
-        if (null != pattern) {
+        if (null != pattern && null != input) {
             Matcher matcher = pattern.matcher(input);
             if (matcher.find() && 0 < matcher.groupCount()) {
                 result = new String[matcher.groupCount()];
@@ -52,4 +59,16 @@ public class RegExpHelper
         return result;
     }
 
+    public String replace( String input, String replace )
+    {
+        if (null == replace) {
+            replace = "";
+        }
+        if (null != pattern && null != input) {
+            Matcher matcher = pattern.matcher(input);
+            return flags.contains("g") ? matcher.replaceAll(replace) : matcher.replaceFirst(replace);
+        } else {
+            return input;
+        }
+    }
 }
