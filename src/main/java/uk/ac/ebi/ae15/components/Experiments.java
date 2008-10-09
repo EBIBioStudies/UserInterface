@@ -13,8 +13,6 @@ import uk.ac.ebi.ae15.utils.search.ExperimentSearch;
 
 import java.io.File;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Experiments extends ApplicationComponent
 {
@@ -84,6 +82,10 @@ public class Experiments extends ApplicationComponent
 
     public synchronized ExperimentSearch getSearch()
     {
+        if (experimentSearch.isEmpty()) {
+            experimentSearch.buildText(experiments.getObject().getDocument());
+        }
+
         return experimentSearch;
     }
 
@@ -161,19 +163,9 @@ public class Experiments extends ApplicationComponent
         experimentsInWarehouse.setObject(new PersistableStringList(expList));    
     }
 
-    // method attempts to extract experiment accession number from file location path and if found
-    // checks the expeirment presence in xml index
-    public boolean isFileAccessible( String file, String userId )
+    public boolean isExperimentAccessible( String accession, String userId )
     {
-        boolean result = true;
-
-        Pattern p = Pattern.compile("/(E-[^-]+-[0-9]+)/");
-        Matcher m = p.matcher(file);
-        if (m.find()) {
-            String accession = m.group(1);
-            result = getSearch().isAccessible(accession, userId);
-        }
-        return result;
+        return getSearch().isAccessible(accession, userId);
     }
 
     private synchronized void setExperiments( Document doc )

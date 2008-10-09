@@ -25,11 +25,9 @@ public class ControlServlet extends ApplicationServlet
 
         String[] requestArgs = new RegExpHelper("servlets/control/([^/]+)/?(.*)", "i")
                 .match(request.getRequestURL().toString());
-        if (0 < requestArgs.length) {
-            command = requestArgs[1];
-            if (2 == requestArgs.length) {
-                params = requestArgs[2];
-            }
+        if (null != requestArgs) {
+            command = requestArgs[0];
+            params = requestArgs[1];
         }
 
         if (command.equals("reload-xml")) {

@@ -8,6 +8,7 @@ import uk.ac.ebi.ae15.components.Experiments;
 import uk.ac.ebi.ae15.components.Users;
 import uk.ac.ebi.ae15.utils.CookieMap;
 import uk.ac.ebi.ae15.utils.RegExpHelper;
+import uk.ac.ebi.ae15.utils.files.FtpFileEntry;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -30,18 +31,27 @@ public class DownloadServlet extends ApplicationServlet
     {
         logRequest(request);
 
-        String filename = new RegExpHelper("/([^/]+)$", "i")
-                .matchFirst(request.getRequestURL().toString());
+        String accession = null;
+        String name = null;
+        String[] requestArgs = new RegExpHelper("servlets/download/([^/]+)/?([^/]*)", "i")
+                .match(request.getRequestURL().toString());
+        if (null != requestArgs) {
+            if (requestArgs[1].equals("")) {
+                name = requestArgs[0]; // old-style
+            } else {
+                accession = requestArgs[0];
+                name = requestArgs[1];
+            }
+        }
         try {
-            if (0 < filename.length()) {
-                sendFile(filename, request, response);
+            if (null != name) {
+                sendFile(accession, name, request, response);
             } else {
                 log.error("Unable to get a filename from [" + request.getRequestURL() + "]");
                 throw (new Exception());
             }
         } catch ( Throwable x ) {
-            String name = x.getClass().getName();
-            if (name.equals("org.apache.catalina.connector.ClientAbortException")) {
+            if (x.getClass().getName().equals("org.apache.catalina.connector.ClientAbortException")) {
                 // generate log entry for client abortion
                 log.warn("Download aborted");
             } else {
@@ -52,9 +62,9 @@ public class DownloadServlet extends ApplicationServlet
         }
     }
 
-    private void sendFile( String filename, HttpServletRequest request, HttpServletResponse response ) throws IOException
+    private void sendFile( String accession, String name, HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
-        log.info("Requested download of [" + filename + "]");
+        log.info("Requested download of [" + name + "]" + (null != accession ? ", accession [" + accession + "]" : ""));
         DownloadableFilesRegistry filesRegistry = (DownloadableFilesRegistry) getComponent("DownloadableFilesRegistry");
         Experiments experiments = (Experiments) getComponent("Experiments");
 
@@ -70,11 +80,11 @@ public class DownloadServlet extends ApplicationServlet
         }
 
 
-        if (!filesRegistry.doesExist(filename)) {
-            log.error("File [" + filename + "] is not in files registry");
+        if (!filesRegistry.doesExist(accession, name)) {
+            log.error("File [" + name + "]" + (null != accession ? ", accession [" + accession + "]" : "") + " is not in files registry");
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         } else {
-            String fileLocation = filesRegistry.getLocation(filename);
+            String fileLocation = filesRegistry.getLocation(accession, name);
             String contentType = getServletContext().getMimeType(fileLocation);
             if (null != contentType) {
                 log.debug("Setting content type to [" + contentType + "]");
@@ -88,7 +98,7 @@ public class DownloadServlet extends ApplicationServlet
             if (!file.exists()) {
                 log.error("File [" + fileLocation + "] does not exist");
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            } else if (!experiments.isFileAccessible(fileLocation, userId)) {
+            } else if (!experiments.isExperimentAccessible(FtpFileEntry.getAccession(new FtpFileEntry(fileLocation, null, null)), userId)) {
                 log.error("Attempting to download file for the experiment that is not present in the index");
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             } else {
@@ -110,7 +120,7 @@ public class DownloadServlet extends ApplicationServlet
                         servletOutStream.write(buffer, 0, bytesRead);
                         servletOutStream.flush();
                     }
-                    log.info("Download of [" + filename + "] completed, sent [" + size + "] bytes");
+                    log.info("Download of [" + name + "] completed, sent [" + size + "] bytes");
                 } finally {
                     if (null != fileInputStream)
                         fileInputStream.close();

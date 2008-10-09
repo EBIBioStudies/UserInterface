@@ -147,7 +147,7 @@
     <xsl:template name="gen-file-on-presence">
         <xsl:param name="pType"/>
         <xsl:param name="pFileName"/>
-        <xsl:if test="helper:isFileAvailableForDownload($pFileName)">
+        <xsl:if test="helper:isFileAvailableForDownload(@accession, $pFileName)">
             <file type="{$pType}" name="{$pFileName}">
                 <xsl:if test="$pType='fgem'">
                     <xsl:attribute name="bioassays"><xsl:value-of select="sum(bioassaydatagroup[@isderived = '1']/@bioassays)"/></xsl:attribute>

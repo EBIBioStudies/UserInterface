@@ -2,17 +2,22 @@ package uk.ac.ebi.ae15.utils;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.xalan.extensions.ExpressionContext;
 import org.apache.xalan.extensions.XSLProcessorContext;
 import org.apache.xalan.templates.ElemExtensionCall;
+import org.apache.xpath.NodeSet;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import uk.ac.ebi.ae15.app.Application;
 import uk.ac.ebi.ae15.components.DownloadableFilesRegistry;
 import uk.ac.ebi.ae15.components.Experiments;
+import uk.ac.ebi.ae15.utils.files.FtpFileEntry;
 
 import javax.xml.transform.TransformerException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,15 +77,39 @@ public class AppXalanExtension
         return dateString;
     }
 
-    public static boolean isFileAvailableForDownload( String fileName )
+    public static boolean isFileAvailableForDownload( String accession, String name )
     {
-        return ((DownloadableFilesRegistry) application.getComponent("DownloadableFilesRegistry")).doesExist(fileName);
+        return ((DownloadableFilesRegistry) application.getComponent("DownloadableFilesRegistry"))
+                .doesExist(accession, name);
     }
 
     public static boolean isExperimentInWarehouse( String accession )
     {
-        return ((Experiments) application.getComponent("Experiments")).isInWarehouse(accession);
+        return ((Experiments) application.getComponent("Experiments"))
+                .isInWarehouse(accession);
     }
+
+    public static NodeSet getFilesForExperiment( ExpressionContext context, String accession )
+    {
+        NodeSet n = new NodeSet();
+        if (null != context && null != context.getContextNode()) {
+            Document doc = context.getContextNode().getOwnerDocument();
+            if (null != doc) {
+                List<FtpFileEntry> files = ((DownloadableFilesRegistry) application.getComponent("DownloadableFilesRegistry"))
+                        .getFilesMap()
+                        .getEntriesByAccession(accession);
+                for (FtpFileEntry file : files) {
+                    Element fileElt = doc.createElement("file");
+                    fileElt.setAttribute("name", FtpFileEntry.getName(file));
+                    fileElt.setAttribute("size", String.valueOf(file.getSize()));
+                    fileElt.setAttribute("lastmodified", new SimpleDateFormat("d MMMMM yyyy, HH:mm").format(new Date(file.getLastModified())));
+                    n.addElement(fileElt);
+                }
+            }
+        }
+        return n;
+    }
+    
     public static boolean testRegexp( String input, String pattern, String flags )
     {
         boolean result = false;

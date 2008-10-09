@@ -89,7 +89,7 @@
     <xsl:template name="list-data">
         <xsl:param name="node"/>
         <xsl:choose>
-            <xsl:when test="helper:isFileAvailableForDownload($node/@name)"><xsl:value-of select="concat('http://www.ebi.ac.uk/microarray-as/ae/download/',$node/@name)"/></xsl:when>
+            <xsl:when test="helper:isFileAvailableForDownload(accession, $node/@name)"><xsl:value-of select="concat('http://www.ebi.ac.uk/microarray-as/ae/download/',$node/@name)"/></xsl:when>
             <xsl:otherwise><xsl:text>Data is not available</xsl:text></xsl:otherwise>
         </xsl:choose>
     </xsl:template>

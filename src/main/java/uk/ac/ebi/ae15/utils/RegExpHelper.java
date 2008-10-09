@@ -39,13 +39,13 @@ public class RegExpHelper
 
     public String[] match( String input )
     {
-        String result[] = new String[0];
+        String result[] = null;
         if (null != pattern) {
             Matcher matcher = pattern.matcher(input);
             if (matcher.find() && 0 < matcher.groupCount()) {
                 result = new String[matcher.groupCount()];
                 for (int i = 1; i <= matcher.groupCount(); ++i) {
-                    result[i] = matcher.group(i);
+                    result[i-1] = matcher.group(i);
                 }
             }
         }

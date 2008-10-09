@@ -43,8 +43,9 @@
     </xsl:template>
 
     <xsl:template match="experiment">
-        <xsl:for-each select="*">
-            <div><xsl:value-of select="name()"/> - yet another file</div>
+        <xsl:variable name="files" select="helper:getFilesForExperiment(accession)"/>
+        <xsl:for-each select="$files">
+            <div><xsl:value-of select="@name"/> - <xsl:value-of select="@size"/> - <xsl:value-of select="@lastmodified"/></div>
         </xsl:for-each>
     </xsl:template>
 

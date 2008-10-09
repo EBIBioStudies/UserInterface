@@ -28,10 +28,12 @@ public class QueryServlet extends ApplicationServlet
 
         String[] requestArgs = new RegExpHelper("servlets/query/([^/]+)/?([^/]*)", "i")
                 .match(request.getRequestURL().toString());
-        if (0 < requestArgs.length) {
-            stylesheet = requestArgs[1];
-            if (2 == requestArgs.length) {
-                type = requestArgs[2];
+        if (null != requestArgs) {
+            if (!requestArgs[0].equals("")) {
+                stylesheet = requestArgs[0];
+            }
+            if (!requestArgs[1].equals("")) {
+                type = requestArgs[1];
             }
         }
 

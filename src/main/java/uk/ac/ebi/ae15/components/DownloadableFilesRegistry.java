@@ -4,11 +4,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import uk.ac.ebi.ae15.app.Application;
 import uk.ac.ebi.ae15.app.ApplicationComponent;
+import uk.ac.ebi.ae15.utils.files.FtpFileEntry;
+import uk.ac.ebi.ae15.utils.files.FtpFilesMap;
 import uk.ac.ebi.ae15.utils.persistence.PersistableFilesMap;
 import uk.ac.ebi.ae15.utils.persistence.TextFilePersistence;
 
 import java.io.File;
-import java.util.Map;
+import java.util.List;
 
 public class DownloadableFilesRegistry extends ApplicationComponent
 {
@@ -88,31 +90,45 @@ public class DownloadableFilesRegistry extends ApplicationComponent
     }
 
     // returns true is file is registered in the registry
-    public synchronized boolean doesExist( String fileName )
+    public synchronized boolean doesExist( String accession, String name )
     {
-        return filesMap.getObject().containsKey(fileName);
+        if (null != accession && !accession.equals("")) {
+            return filesMap.getObject().doesExist(accession, name);
+        } else {
+            return filesMap.getObject().doesNameExist(name);
+        }
     }
 
     // returns absolute file location (if file exists, null otherwise) in local filesystem
-    public synchronized String getLocation( String fileName )
+    public synchronized String getLocation( String accession, String name )
     {
-        return filesMap.getObject().get(fileName);
-    }
+        String result = null;
 
-    // returns relative file location (to the rootFolder folder) if file exists, null otherwise)
-    public synchronized String getRelativeLocation( String fileName )
-    {
-        String location = filesMap.getObject().get(fileName);
-        if (null != location) {
-            int ix = location.indexOf(getRootFolder());
-            if (-1 != ix) {
-                location = location.substring(ix);
+        if (null != accession && !accession.equals("")) {
+            FtpFileEntry entry = filesMap.getObject().getEntry(accession, name);
+            if (null != entry) {
+                result = entry.getLocation();
+            }
+        } else {
+            List<FtpFileEntry> entries = filesMap.getObject().getEntriesByName(name);
+
+            if (null != entries) {
+                if (1 == entries.size()) {
+                    result = entries.get(0).getLocation();
+                } else {
+                    log.error("Multiple entries found for file [" + name + "], cannot offer a definitive download");
+                }
             }
         }
-        return location;
+        return result;
     }
 
-    private void rescanFolder( File folder, Map<String, String> map ) throws InterruptedException
+    public synchronized FtpFilesMap getFilesMap()
+    {
+        return filesMap.getObject();
+    }
+
+    private void rescanFolder( File folder, PersistableFilesMap map ) throws InterruptedException
     {
         if (folder.canRead()) {
             File[] files = folder.listFiles();
@@ -126,10 +142,8 @@ public class DownloadableFilesRegistry extends ApplicationComponent
 
                     if (!f.canRead()) {
                         log.warn("Rescan found non-readable file [" + location + "]");
-                    } else if (map.containsKey(name)) {
-                        log.warn("Rescan found a duplicate file [" + location + "], registry entry is [" + name + "," + map.get(name) + "]");
                     } else if (!name.startsWith(".")) {
-                        map.put(name, location);
+                        map.putEntry(new FtpFileEntry(f));
                     }
                 }
             }

@@ -6,10 +6,17 @@ import java.io.File;
 
 public class FtpFileEntry
 {
-    public String location = null;
-    public Long size = null;
-    public Long lastModified = null;
+    private String location = null;
+    private Long size = null;
+    private Long lastModified = null;
 
+    public FtpFileEntry( String aLocation, Long aSize, Long aLastModified )
+    {
+        location = aLocation;
+        size = aSize;
+        lastModified = aLastModified;
+    }
+    
     public FtpFileEntry( File file )
     {
         if (file.isFile()) {
@@ -19,6 +26,21 @@ public class FtpFileEntry
         }
     }
 
+    public String getLocation()
+    {
+        return location;
+    }
+
+    public Long getSize()
+    {
+        return size;
+    }
+
+    public Long getLastModified()
+    {
+        return lastModified;
+    }
+    
     public static String getAccession( FtpFileEntry entry )
     {
         return (null != entry.location) ? accessionRegExp.matchFirst(entry.location) : "";
@@ -33,5 +55,5 @@ public class FtpFileEntry
             = new RegExpHelper("/([aAeE]-\\w{4}-\\d+)/");
 
     private static final RegExpHelper nameRegExp
-            = new RegExpHelper("/([^/])$");
+            = new RegExpHelper("/([^/]+)$");
 }
