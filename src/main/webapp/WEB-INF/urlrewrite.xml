@@ -71,19 +71,19 @@
     <!-- hiding browse helers behind innocent names -->
     <rule>
         <from>^/browse-table.html</from>
-        <to type="forward">servlets/query/browse-experiments/html</to>
+        <to type="forward">/servlets/query/browse-experiments/html</to>
     </rule>
     <rule>
         <from>^/species-list.html</from>
-        <to type="forward">servlets/query/species-select/html</to>
+        <to type="forward">/servlets/query/species-select/html</to>
     </rule>
     <rule>
         <from>^/arrays-list.html</from>
-        <to type="forward">servlets/query/arrays-select/html</to>
+        <to type="forward">/servlets/query/arrays-select/html</to>
     </rule>
     <rule>
         <from>^/exptypes-list.html</from>
-        <to type="forward">servlets/query/exptypes-select/html</to>
+        <to type="forward">/servlets/query/exptypes-select/html</to>
     </rule>
     <rule>
         <from>^/ae-stats.xml</from>
@@ -91,24 +91,24 @@
     </rule>
     <rule>
         <from>^/verify-login.txt</from>
-        <to type="forward">servlets/control/verify-login</to>
+        <to type="forward">/servlets/control/verify-login</to>
     </rule>
     <!-- control links -->
     <rule>
         <from>^/reload-xml</from>
-        <to type="forward">servlets/control/reload-xml</to>
+        <to type="forward">/servlets/control/reload-xml</to>
     </rule>
     <rule>
         <from>^/reload-xml/(.+)</from>
-        <to type="forward">servlets/control/reload-xml/$1</to>
+        <to type="forward">/servlets/control/reload-xml/$1</to>
     </rule>
     <rule>
         <from>^/rescan-ftp</from>
-        <to type="forward">servlets/control/rescan-files</to>
+        <to type="forward">/servlets/control/rescan-files</to>
     </rule>
     <rule>
         <from>^/rescan-ftp/(.+)</from>
-        <to type="forward">servlets/control/rescan-files/$1</to>
+        <to type="forward">/servlets/control/rescan-files/$1</to>
     </rule>
     <!-- experimental noajax browse interface -->
     <rule>
