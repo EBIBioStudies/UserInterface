@@ -113,6 +113,8 @@ public class AppXalanExtension
             if (null != files) {
                 for ( FtpFileEntry file : files ) {
                     Element fileElt = doc.createElement("file");
+                    fileElt.setAttribute("kind", FtpFileEntry.getKind(file));
+                    fileElt.setAttribute("extension", FtpFileEntry.getExtension(file));
                     fileElt.setAttribute("name", FtpFileEntry.getName(file));
                     fileElt.setAttribute("size", String.valueOf(file.getSize()));
                     fileElt.setAttribute("lastmodified", new SimpleDateFormat("d MMMMM yyyy, HH:mm").format(new Date(file.getLastModified())));

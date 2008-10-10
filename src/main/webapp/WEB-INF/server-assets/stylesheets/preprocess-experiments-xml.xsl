@@ -6,8 +6,6 @@
                 version="1.0">
     <xsl:output method="xml" encoding="ISO-8859-1" indent="no"/>
 
-    <xsl:include href="ae-update-experiment-files.xsl"/>
-
     <xsl:key name="experiment-species-by-name" match="sampleattribute[@category = 'Organism']" use="concat(ancestor::experiment/@id, @value)"/>
     <xsl:key name="experiment-sampleattribute-by-category" match="sampleattribute" use="concat(ancestor::experiment/@id, @category)"/>
     <xsl:key name="experiment-experimentalfactor-by-name" match="experimentalfactor" use="concat(ancestor::experiment/@id, @name)"/>
@@ -34,8 +32,7 @@
                     <xsl:value-of select="." />
                 </xsl:element>
             </xsl:for-each>
-            <xsl:call-template name="update-files"/>
-                
+
             <xsl:for-each select="sampleattribute[@category = 'Organism'][generate-id() = generate-id(key('experiment-species-by-name',concat(ancestor::experiment/@id, @value))[1])]">
                 <species><xsl:value-of select="@value"/></species>
             </xsl:for-each>

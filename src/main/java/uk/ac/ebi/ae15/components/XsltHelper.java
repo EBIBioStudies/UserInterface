@@ -44,11 +44,11 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         Source src;
         try {
             URL resource = getApplication().getServletContext().getResource("/WEB-INF/server-assets/stylesheets/" + href);
-            if ( null == resource ) {
+            if (null == resource) {
                 throw new TransformerException("Unable to locate stylesheet resource [" + href + "]");
             }
             InputStream input = resource.openStream();
-            if ( null == input ) {
+            if (null == input) {
                 throw new TransformerException("Unable to open stream for resource [" + resource + "]");
             }
             src = new StreamSource(input);
@@ -103,6 +103,22 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         return null;
     }
 
+    public Document transformDocument( Document srcDocument, String stylesheet, HttpServletRequestParameterMap params )
+    {
+        try {
+            DOMResult dst = new DOMResult();
+            if (transform(new DOMSource(srcDocument), stylesheet, params, dst)) {
+                if (null != dst.getNode()) {
+                    return (Document) dst.getNode();
+                }
+            }
+        } catch ( Throwable x ) {
+            log.error("Caught an exceptiom:", x);
+        }
+
+        return null;
+    }
+
     public boolean transformDocumentToPrintWriter( Document srcDocument, String stylesheet, HttpServletRequestParameterMap params, PrintWriter dstWriter )
     {
         return transform(new DOMSource(srcDocument), stylesheet, params, new StreamResult(dstWriter));
@@ -126,7 +142,7 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
 
             // assign the parameters (if not null)
             if (null != params) {
-                for ( Map.Entry<String,String> param : params.entrySet() ) {
+                for ( Map.Entry<String, String> param : params.entrySet() ) {
                     transformer.setParameter(param.getKey(), param.getValue());
                 }
             }

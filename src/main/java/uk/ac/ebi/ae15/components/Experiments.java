@@ -178,7 +178,12 @@ public class Experiments extends ApplicationComponent
     {
         Document doc = ((XsltHelper) getComponent("XsltHelper")).transformStringToDocument(xmlString, "preprocess-experiments-xml.xsl", null);
         if (null == doc) {
-            log.error("Pre-processing returned an error, returning null");
+            log.error("Transformation [preprocess-experiments-xml.xsl] returned an error, returning null");
+            return null;
+        }
+        doc = ((XsltHelper) getComponent("XsltHelper")).transformDocument(doc, "preprocess-experiment-files-xml.xsl", null);
+        if (null == doc) {
+            log.error("Transformation [preprocess-experiment-files-xml.xsl] returned an error, returning null");
             return null;
         }
         return doc;

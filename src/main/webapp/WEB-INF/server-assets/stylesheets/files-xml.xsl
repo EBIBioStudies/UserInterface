@@ -20,7 +20,7 @@
     <xsl:param name="userid"/>
 
     <xsl:output omit-xml-declaration="yes" method="xml" indent="no"/>
-    
+
     <xsl:include href="ae-filter-experiments.xsl"/>
     <xsl:include href="ae-sort-experiments.xsl"/>
 
@@ -32,24 +32,22 @@
 
         <helper:logInfo select="[experiments-xml] Query filtered [{$vTotal}] experiments."/>
 
-        <experiments version="1.1" revision="080925"
-                     total="{$vTotal}"
-                     total-samples="{sum($vFilteredExperiments[samples/text()>0]/samples/text())}"
-                     total-assays="{sum($vFilteredExperiments[assays/text()>0]/assays/text())}">
+        <files version="1.1" revision="080925"
+                     total-experiments="{$vTotal}">
             <xsl:call-template name="ae-sort-experiments">
                 <xsl:with-param name="pExperiments" select="$vFilteredExperiments"/>
                 <xsl:with-param name="pSortBy" select="$sortby"/>
                 <xsl:with-param name="pSortOrder" select="$sortorder"/>
             </xsl:call-template>
-        </experiments>
+        </files>
     </xsl:template>
 
     <xsl:template match="experiment">
         <experiment>
-            <xsl:copy-of select="*[not(name() = 'user') and not(name() = 'file') and not(name() = 'arraydesign')]"/>
+            <xsl:copy-of select="*[(name() = 'accession') or (name() = 'file')]"/>
             <xsl:for-each select="arraydesign">
                 <arraydesign>
-                    <xsl:copy-of select="*[not(name() = 'file')]"/>
+                    <xsl:copy-of select="*[(name() = 'accession') or (name() = 'file')]"/>
                 </arraydesign>
             </xsl:for-each>
         </experiment>

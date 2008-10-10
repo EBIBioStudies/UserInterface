@@ -51,9 +51,84 @@ public class FtpFileEntry
         return (null != entry.location) ? nameRegExp.matchFirst(entry.location) : "";
     }
 
+    public static String getKind( FtpFileEntry entry )
+    {
+        String name = getName(entry);
+        if (null != name && !name.equals("")) {
+            if (fgemArchiveRegExp.test(name)) {
+                return "fgem";
+            }
+            if (rawArchiveRegExp.test(name)) {
+                return "raw";
+            }
+            if (celArchiveRegExp.test(name)) {
+                return "cel";
+            }
+            if (magemlArchiveRegExp.test(name)) {
+                return "mageml";
+            }
+            if (adfFileRegExp.test(name)) {
+                return "adf";
+            }
+            if (idfFileRegExp.test(name)) {
+                return "idf";
+            }
+            if (sdrfFileRegExp.test(name)) {
+                return "sdrf";
+            }
+            if (twoColsFileRegExp.test(name)) {
+                return "twocolumns";
+            }
+            if (biosamplesFileRegExp.test(name)) {
+                return "biosamples";
+            }
+
+        }
+        return "";
+    }
+
+    public static String getExtension( FtpFileEntry entry )
+    {
+        String name = getName(entry);
+        if (null != name && !name.equals("")) {
+            return extensionRegExp.matchFirst(name);
+        }
+        return "";
+    }
+
     private static final RegExpHelper accessionRegExp
-            = new RegExpHelper("/([aAeE]-\\w{4}-\\d+)/");
+            = new RegExpHelper("/([AE]-\\w{4}-\\d+)/", "i");
 
     private static final RegExpHelper nameRegExp
             = new RegExpHelper("/([^/]+)$");
+
+    private static final RegExpHelper extensionRegExp
+            = new RegExpHelper("\\.([^.]+|tar\\.gz)$", "i");
+
+    private static final RegExpHelper fgemArchiveRegExp
+            = new RegExpHelper("\\.processed\\.zip|\\.processed\\.tgz|\\.processed\\.tar\\.gz", "i");
+
+    private static final RegExpHelper rawArchiveRegExp
+            = new RegExpHelper("\\.raw\\.zip|\\.raw\\.tgz|\\.raw\\.tar\\.gz", "i");
+
+    private static final RegExpHelper celArchiveRegExp
+            = new RegExpHelper("\\.cel\\.zip|\\.cel\\.tgz|\\.cel\\.tar\\.gz", "i");
+
+    private static final RegExpHelper adfFileRegExp
+            = new RegExpHelper("\\.adf\\.txt|\\.adf\\.xls", "i");
+
+    private static final RegExpHelper idfFileRegExp
+            = new RegExpHelper("\\.idf\\.txt|\\.idf\\.xls", "i");
+
+    private static final RegExpHelper sdrfFileRegExp
+            = new RegExpHelper("\\.sdrf\\.txt|\\.sdrf\\.xls", "i");
+
+    private static final RegExpHelper twoColsFileRegExp
+            = new RegExpHelper("\\.2columns\\.txt|\\.2columns\\.xls", "i");
+
+    private static final RegExpHelper biosamplesFileRegExp
+            = new RegExpHelper("\\.biosamples\\.map|\\.biosamples\\.png|\\.biosamples\\.svg", "i");
+
+    private static final RegExpHelper magemlArchiveRegExp
+            = new RegExpHelper("\\.mageml\\.zip|\\.mageml\\.tgz|\\.mageml\\.tar\\.gz", "i");
 }

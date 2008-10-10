@@ -18,22 +18,17 @@ public class ExperimentListDatabaseRetriever extends SqlStatementExecutor
     // (the parameter is either 0 for all experiments and 1 for public only)
     private final static String getExperimentListSql = "select distinct e.id" +
             " from tt_experiment e" +
-            "  left outer join tt_extendable ext on ext.id = e.id" +
-            "  left outer join pl_visibility v on v.label_id = ext.label_id" +
-            "  where v.user_id = 1 or 0 = ?" +
+            "  where e.id in (348637031, 352682122, 366346722)" +
             " order by" +
             "  e.id asc";
 
     // experiment list
     private List<Long> experimentList;
-    // should I list experiments that are public?
-    private boolean shouldListOnlyPublic;
 
-    public ExperimentListDatabaseRetriever( DataSource ds, boolean publicOnly )
+    public ExperimentListDatabaseRetriever( DataSource ds )
     {
         super(ds, getExperimentListSql);
         experimentList = new ArrayList<Long>();
-        shouldListOnlyPublic = publicOnly;
     }
 
     public List<Long> getExperimentList()
@@ -46,7 +41,6 @@ public class ExperimentListDatabaseRetriever extends SqlStatementExecutor
 
     protected void setParameters( PreparedStatement stmt ) throws SQLException
     {
-        stmt.setInt(1, shouldListOnlyPublic ? 1 : 0);
     }
 
     protected void processResultSet( ResultSet resultSet ) throws SQLException
