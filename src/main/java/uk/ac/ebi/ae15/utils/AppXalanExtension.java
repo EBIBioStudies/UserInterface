@@ -80,12 +80,6 @@ public class AppXalanExtension
         return dateString;
     }
 
-    public static boolean isFileAvailableForDownload( String accession, String name )
-    {
-        return ((DownloadableFilesRegistry) application.getComponent("DownloadableFilesRegistry"))
-                .doesExist(accession, name);
-    }
-
     public static boolean isExperimentInWarehouse( String accession )
     {
         return ((Experiments) application.getComponent("Experiments"))
