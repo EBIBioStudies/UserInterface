@@ -48,8 +48,8 @@
 
     <xsl:template match="experiment">
         <xsl:for-each select="file">
-            <xsl:sort select="@name" order="ascending"/>
-            <div><xsl:value-of select="@name"/> - <xsl:value-of select="@size"/> - <xsl:value-of select="@lastmodified"/></div>
+            <xsl:sort select="name" order="ascending"/>
+            <div><a href="{url}"><xsl:value-of select="name"/></a> - <xsl:value-of select="size"/> - <xsl:value-of select="lastmodified"/></div>
         </xsl:for-each>
     </xsl:template>
 

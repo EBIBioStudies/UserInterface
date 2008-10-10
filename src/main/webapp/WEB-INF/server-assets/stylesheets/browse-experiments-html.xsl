@@ -126,13 +126,13 @@
                         <xsl:apply-templates select="." mode="highlight" />
                         <xsl:if test="position() != last()">, </xsl:if>
                     </xsl:for-each>
-                    <xsl:if test="count(species)=0"><xsl:text>&#160;</xsl:text></xsl:if>
+                    <xsl:if test="count(species) = 0"><xsl:text>&#160;</xsl:text></xsl:if>
                 </div></td>
                 <td><div><xsl:apply-templates select="releasedate" mode="highlight" /></div><xsl:if test="count(releasedate)=0">&#160;</xsl:if></td>
                 <td class="align_center">
                     <div>
                         <xsl:choose>
-                            <xsl:when test="helper:isFileAvailableForDownload(accession, concat(accession, '.processed.zip'))"><a href="{concat('${interface.application.base.url}/files/', concat(accession, concat('/', concat(accession, '.processed.zip'))))}" title="Click to download processed data"><img src="${interface.application.base.url}/assets/images/silk_data_save.gif" width="16" height="16" alt="Click to download processed data"/></a></xsl:when>
+                            <xsl:when test="file[kind = 'fgem']"><a href="{concat('${interface.application.base.url}/files/', concat(accession, concat('/', file[kind = 'fgem']/name)))}" title="Click to download processed data"><img src="${interface.application.base.url}/assets/images/silk_data_save.gif" width="16" height="16" alt="Click to download processed data"/></a></xsl:when>
                             <xsl:otherwise><img src="${interface.application.base.url}/assets/images/silk_data_unavail.gif" width="16" height="16"/></xsl:otherwise>
                         </xsl:choose>
                     </div>
@@ -140,9 +140,9 @@
                 <td class="align_center">
                     <div>
                         <xsl:choose>
-                            <xsl:when test="helper:isFileAvailableForDownload(accession, concat(accession, '.raw.zip')) and contains(file[@type='raw']/@dataformat, 'CEL')"><a href="{concat('${interface.application.base.url}/download/',concat(accession, '.raw.zip'))}" title="Click to download Affymetrix data"><img src="${interface.application.base.url}/assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Click to download Affymetrix data"/></a></xsl:when>
-                            <xsl:when test="helper:isFileAvailableForDownload(accession, concat(accession, '.raw.zip')) and not(contains(file[@type='raw']/@dataformat, 'CEL'))"><a href="{concat('${interface.application.base.url}/download/',concat(accession, '.raw.zip'))}" title="Click to download raw data"><img src="${interface.application.base.url}/assets/images/silk_data_save.gif" width="16" height="16" alt="Click to download raw data"/></a></xsl:when>
-                            <xsl:when test="accession='E-TABM-185' and helper:isFileAvailableForDownload(accession, 'E-TABM-185.raw_data_readme.txt')"><a href="${interface.application.base.url}/download/E-TABM-185.raw_data_readme.txt" title="Click to download Affymetrix data"><img src="${interface.application.base.url}/assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Click to download Affymetrix data"/></a></xsl:when>
+                            <xsl:when test="contains(file[kind = 'raw']/dataformat, 'CEL')"><a href="{concat('${interface.application.base.url}/files/', concat(accession, concat('/', file[kind = 'raw']/name)))}" title="Click to download Affymetrix data"><img src="${interface.application.base.url}/assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Click to download Affymetrix data"/></a></xsl:when>
+                            <xsl:when test="file[kind = 'raw']"><a href="{concat('${interface.application.base.url}/files/', concat(accession, concat('/', file[kind = 'raw']/name)))}" title="Click to download raw data"><img src="${interface.application.base.url}/assets/images/silk_data_save.gif" width="16" height="16" alt="Click to download raw data"/></a></xsl:when>
+                            <xsl:when test="accession='E-TABM-185'"><a href="${interface.application.base.url}/files/E-TABM-185/E-TABM-185.raw_data_readme.txt" title="Click to download Affymetrix data"><img src="${interface.application.base.url}/assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Click to download Affymetrix data"/></a></xsl:when>
                             <xsl:otherwise><img src="${interface.application.base.url}/assets/images/silk_data_unavail.gif" width="16" height="16" alt="-"/></xsl:otherwise>
                         </xsl:choose>
                     </div>
@@ -212,8 +212,8 @@
                             <td class="name">Sample&#160;annotation:</td>
                             <td>
                                 <xsl:choose>
-                                    <xsl:when test="helper:isFileAvailableForDownload(accession, concat(accession, '.2columns.txt'))">
-                                        <a href="{concat('${interface.application.base.url}/download/', concat(accession, '.2columns.txt'))}"
+                                    <xsl:when test="file[kind = 'twocolumns' and extension = 'txt']">
+                                        <a href="{concat('${interface.application.base.url}/files/', concat(accession, concat('/', file[kind = 'twocolumns' and extension = 'txt']/name)))}"
                                             target="_blank" title="Opens in a new window">&#187; Tab-delimited spreadsheet</a>
                                     </xsl:when>
                                     <xsl:otherwise>Data is not yet available</xsl:otherwise>
@@ -245,9 +245,9 @@
                             <td class="name">Downloads:</td>
                             <td class="value">
                                 <p>
-                                    <a href="ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/experiment/{substring(accession,3,4)}/{accession}"
+                                    <a href="${interface.application.base.url}/files/{accession}"
                                        target="_blank" title="Opens in a new window">
-                                        <xsl:text>&#187; FTP server direct link</xsl:text>
+                                        <xsl:text>&#187; Browse all available files</xsl:text>
                                     </a>
                                 </p>
                                 <xsl:if test="accession!='E-TABM-185'">
@@ -262,24 +262,14 @@
                             <tr>
                                 <td class="name">Experiment&#160;design:</td>
                                 <td class="value">
-                                    <xsl:if test="helper:isFileAvailableForDownload(accession, concat(accession, '.biosamples.png'))">
-                                        <a href="{concat('${interface.application.base.url}/download/', concat(accession, '.biosamples.png'))}"
+                                    <xsl:for-each select="file[kind = 'biosamples']">
+                                        <a href="{concat('${interface.application.base.url}/files/', concat(../accession, concat('/', name)))}"
                                            target="_blank" title="Opens in a new window">
-                                            <xsl:text>&#187; PNG</xsl:text>
+                                            <xsl:text>&#187; </xsl:text>
+                                            <xsl:value-of select="helper:toUpperCase(extension)"/>
                                         </a>
-                                        <xsl:if test="helper:isFileAvailableForDownload(accession, concat(accession, '.biosamples.svg'))">
-                                            <xsl:text>, </xsl:text>
-                                        </xsl:if>
-                                    </xsl:if>
-                                    <xsl:if test="helper:isFileAvailableForDownload(accession, concat(accession, '.biosamples.svg'))">
-                                        <a href="{concat('${interface.application.base.url}/download/', concat(accession, '.biosamples.svg'))}"
-                                           target="_blank" title="Opens in a new window">
-                                            <xsl:text>&#187; SVG</xsl:text>
-                                        </a>
-                                    </xsl:if>
-                                    <xsl:if test="not (helper:isFileAvailableForDownload(accession, concat(accession, '.biosamples.png')) or helper:isFileAvailableForDownload(accession, concat(accession, '.biosamples.svg')))">
-                                        <xsl:text>Data is not yet available</xsl:text>
-                                    </xsl:if>
+                                        <xsl:if test="position()!=last()">, </xsl:if>
+                                    </xsl:for-each>
                                 </td>
                             </tr>
                         </xsl:if>
@@ -305,8 +295,8 @@
                             <td class="name">Detailed sample&#160;annotation:</td>
                             <td>
                                 <xsl:choose>
-                                    <xsl:when test="helper:isFileAvailableForDownload(accession, concat(accession, '.sdrf.txt'))">
-                                        <a href="{concat('${interface.application.base.url}/download/', concat(accession, '.sdrf.txt'))}"
+                                    <xsl:when test="file[kind = 'sdrf' and extension = 'txt']">
+                                        <a href="{concat('${interface.application.base.url}/files/', concat(accession, concat('/', file[kind = 'sdrf' and extension = 'txt']/name)))}"
                                             target="_blank" title="Opens in a new window">
                                             <xsl:text>&#187; Tab-delimited spreadsheet</xsl:text>
                                         </a>

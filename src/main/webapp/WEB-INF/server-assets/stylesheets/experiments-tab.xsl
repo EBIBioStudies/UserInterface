@@ -66,11 +66,11 @@
         <xsl:value-of select="releasedate" />
         <xsl:text>&#9;</xsl:text>
         <xsl:call-template name="list-data">
-            <xsl:with-param name="node" select="files/fgem"/>
+            <xsl:with-param name="node" select="file[kind = 'fgem']"/>
         </xsl:call-template>
         <xsl:text>&#9;</xsl:text>
         <xsl:call-template name="list-data">
-            <xsl:with-param name="node" select="files/raw"/>
+            <xsl:with-param name="node" select="file[kind = 'raw']"/>
         </xsl:call-template>
         <xsl:text>&#9;</xsl:text>
             <xsl:if test="@loadedinatlas">Yes</xsl:if>
@@ -89,7 +89,7 @@
     <xsl:template name="list-data">
         <xsl:param name="node"/>
         <xsl:choose>
-            <xsl:when test="helper:isFileAvailableForDownload(accession, $node/@name)"><xsl:value-of select="concat('http://www.ebi.ac.uk/microarray-as/ae/download/',$node/@name)"/></xsl:when>
+            <xsl:when test="$node/url"><xsl:value-of select="$node/url"/></xsl:when>
             <xsl:otherwise><xsl:text>Data is not available</xsl:text></xsl:otherwise>
         </xsl:choose>
     </xsl:template>
