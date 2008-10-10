@@ -6,11 +6,11 @@
                 version="1.0">
     <xsl:output method="xml" encoding="ISO-8859-1" indent="no"/>
 
+    <xsl:include href="ae-update-experiment-files.xsl"/>
+
     <xsl:key name="experiment-species-by-name" match="sampleattribute[@category = 'Organism']" use="concat(ancestor::experiment/@id, @value)"/>
     <xsl:key name="experiment-sampleattribute-by-category" match="sampleattribute" use="concat(ancestor::experiment/@id, @category)"/>
     <xsl:key name="experiment-experimentalfactor-by-name" match="experimentalfactor" use="concat(ancestor::experiment/@id, @name)"/>
-    <xsl:key name="distinct-raw-dataformat" match="bioassaydatagroup[@isderived = '0']" use="concat(ancestor::experiment/@id, @dataformat)"/>
-    <xsl:key name="distinct-fgem-dataformat" match="bioassaydatagroup[@isderived = '1']" use="concat(ancestor::experiment/@id, @dataformat)"/>
     
     <xsl:template match="/experiments">
         <experiments
@@ -34,38 +34,8 @@
                     <xsl:value-of select="." />
                 </xsl:element>
             </xsl:for-each>
-            <xsl:call-template name="gen-file-on-presence">
-                <xsl:with-param name="pType">fgem</xsl:with-param>
-                <xsl:with-param name="pFileName" select="concat(@accession, '.processed.zip')"/>
-            </xsl:call-template>
-            <xsl:call-template name="gen-file-on-presence">
-                <xsl:with-param name="pType">raw</xsl:with-param>
-                <xsl:with-param name="pFileName" select="concat(@accession, '.raw.zip')"/>
-            </xsl:call-template>
-            <xsl:call-template name="gen-file-on-presence">
-                <xsl:with-param name="pType">idf</xsl:with-param>
-                <xsl:with-param name="pFileName" select="concat(@accession, '.idf.txt')"/>
-            </xsl:call-template>
-            <xsl:call-template name="gen-file-on-presence">
-                <xsl:with-param name="pType">adf</xsl:with-param>
-                <xsl:with-param name="pFileName" select="concat(@accession, '.adf.txt')"/>
-            </xsl:call-template>
-            <xsl:call-template name="gen-file-on-presence">
-                <xsl:with-param name="pType">sdrf</xsl:with-param>
-                <xsl:with-param name="pFileName" select="concat(@accession, '.sdrf.txt')"/>
-            </xsl:call-template>
-            <xsl:call-template name="gen-file-on-presence">
-                <xsl:with-param name="pType">twocolumns</xsl:with-param>
-                <xsl:with-param name="pFileName" select="concat(@accession, '.2columns.txt')"/>
-            </xsl:call-template>
-            <xsl:call-template name="gen-file-on-presence">
-                <xsl:with-param name="pType">biosamples-png</xsl:with-param>
-                <xsl:with-param name="pFileName" select="concat(@accession, '.biosamples.png')"/>
-            </xsl:call-template>
-            <xsl:call-template name="gen-file-on-presence">
-                <xsl:with-param name="pType">biosamples-svg</xsl:with-param>
-                <xsl:with-param name="pFileName" select="concat(@accession, '.biosamples.svg')"/>
-            </xsl:call-template>
+            <xsl:call-template name="update-files"/>
+                
             <xsl:for-each select="sampleattribute[@category = 'Organism'][generate-id() = generate-id(key('experiment-species-by-name',concat(ancestor::experiment/@id, @value))[1])]">
                 <species><xsl:value-of select="@value"/></species>
             </xsl:for-each>
@@ -97,6 +67,12 @@
             </xsl:for-each>
             <xsl:apply-templates select="*[name() != 'sampleattribute' and name() != 'experimentalfactor']" mode="copy" />
         </experiment>
+    </xsl:template>
+
+    <xsl:template match="secondaryaccession" mode="copy">
+        <xsl:if test="text() != ''">
+            <xsl:copy-of select="."/>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="miamescore" mode="copy">
@@ -142,41 +118,6 @@
             </xsl:if>
             <xsl:apply-templates mode="copy" />
         </xsl:copy>
-    </xsl:template>
-
-    <xsl:template name="gen-file-on-presence">
-        <xsl:param name="pType"/>
-        <xsl:param name="pFileName"/>
-        <xsl:if test="helper:isFileAvailableForDownload(@accession, $pFileName)">
-            <file type="{$pType}" name="{$pFileName}">
-                <xsl:if test="$pType='fgem'">
-                    <xsl:attribute name="bioassays"><xsl:value-of select="sum(bioassaydatagroup[@isderived = '1']/@bioassays)"/></xsl:attribute>
-                    <xsl:attribute name="dataformat">
-                        <xsl:call-template name="list-fgem-dataformats"/>
-                    </xsl:attribute>
-                </xsl:if>
-                <xsl:if test="$pType='raw'">
-                    <xsl:attribute name="bioassays"><xsl:value-of select="sum(bioassaydatagroup[@isderived = '0']/@bioassays)"/></xsl:attribute>
-                    <xsl:attribute name="dataformat">
-
-                    </xsl:attribute>
-                </xsl:if>
-            </file>
-        </xsl:if>
-    </xsl:template>
-
-    <xsl:template name="list-fgem-dataformats">
-        <xsl:for-each select="bioassaydatagroup[generate-id(key('distinct-fgem-dataformat', concat(ancestor::experiment/@id, @dataformat))) = generate-id()]">
-            <xsl:value-of select="@dataformat"/>
-            <xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
-        </xsl:for-each>
-    </xsl:template>
-
-    <xsl:template name="fist-raw-dataformats">
-        <xsl:for-each select="bioassaydatagroup[generate-id(key('distinct-raw-dataformat', concat(ancestor::experiment/@id, @dataformat))) = generate-id()]">
-            <xsl:value-of select="@dataformat"/>
-            <xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
-        </xsl:for-each>
     </xsl:template>
 
 </xsl:stylesheet>
