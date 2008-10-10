@@ -31,6 +31,8 @@
         </xsl:copy>
     </xsl:template>
 
+    <xsl:template match="file"/>
+
     <xsl:template name="add-files">
         <xsl:variable name="vAccession" select="accession"/>
         <xsl:variable name="vProcessedBioassays" select="sum(bioassaydatagroup[isderived = '1']/bioassays)"/>

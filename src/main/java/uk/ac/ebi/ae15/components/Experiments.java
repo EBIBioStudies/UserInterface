@@ -163,9 +163,21 @@ public class Experiments extends ApplicationComponent
         );
     }
 
+    public void updateFiles()
+    {
+        log.info("Experiments: file info update requested");
+        Document doc = ((XsltHelper) getComponent("XsltHelper")).transformDocument(getExperiments(), "preprocess-experiment-files-xml.xsl", null);
+        if (null != doc) {
+            setExperiments(doc);
+            log.info("Experiments: file info update completed");
+        } else {
+            log.error("Transformation [preprocess-experiment-files-xml.xsl] returned an error, experiments NOT updated");
+        }
+    }
+
     public void setExperimentsInWarehouse( List<String> expList )
     {
-        experimentsInWarehouse.setObject(new PersistableStringList(expList));    
+        experimentsInWarehouse.setObject(new PersistableStringList(expList));
     }
 
     private synchronized void setExperiments( Document doc )

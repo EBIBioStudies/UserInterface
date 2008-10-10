@@ -77,6 +77,8 @@ public class DownloadableFilesRegistry extends ApplicationComponent
                     PersistableFilesMap newMap = new PersistableFilesMap();
                     rescanFolder(root, newMap);
                     setFilesMap(newMap);
+                    ((Experiments) getComponent("Experiments")).updateFiles();
+
                     log.info("Rescan of downloadable files completed");
                 } catch ( InterruptedException x ) {
                     throw x;
