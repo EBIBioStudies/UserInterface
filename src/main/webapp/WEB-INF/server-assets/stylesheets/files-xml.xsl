@@ -45,11 +45,6 @@
     <xsl:template match="experiment">
         <experiment>
             <xsl:copy-of select="*[(name() = 'accession') or (name() = 'file')]"/>
-            <xsl:for-each select="arraydesign">
-                <arraydesign>
-                    <xsl:copy-of select="*[(name() = 'accession') or (name() = 'file')]"/>
-                </arraydesign>
-            </xsl:for-each>
         </experiment>
     </xsl:template>
 

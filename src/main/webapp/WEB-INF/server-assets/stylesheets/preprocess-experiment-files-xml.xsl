@@ -25,7 +25,7 @@
                 </xsl:for-each>
             </xsl:if>
             <xsl:apply-templates/>
-            <xsl:if test="(name() = 'experiment') or (name() = 'arraydesign')">
+            <xsl:if test="(name() = 'experiment')">
                 <xsl:call-template name="add-files"/>
             </xsl:if>
         </xsl:copy>
@@ -65,6 +65,21 @@
                     <xsl:value-of select="@name"/>
                 </xsl:element>
             </xsl:element>
+        </xsl:for-each>
+        <xsl:for-each select="arraydesign">
+            <xsl:for-each select="helper:getFilesForExperiment(accession)/file[@kind='adf']">
+                <xsl:element name="file">
+                    <xsl:for-each select="@*">
+                        <xsl:element name="{name()}"><xsl:value-of select="."/></xsl:element>
+                    </xsl:for-each>
+                    <xsl:element name="url">
+                        <xsl:text>http://www.ebi.ac.uk/microarray-as/ae/files/</xsl:text>
+                        <xsl:value-of select="$vAccession"/>
+                        <xsl:text>/</xsl:text>
+                        <xsl:value-of select="@name"/>
+                    </xsl:element>
+                </xsl:element>
+            </xsl:for-each>
         </xsl:for-each>
     </xsl:template>
 
