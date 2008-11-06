@@ -92,7 +92,7 @@ public class AppXalanExtension
                 .isAccessible(accession, userId);
     }
 
-    public static NodeSet getFilesForExperiment( String accession )
+    public static NodeSet getFilesForAccession( String accession )
     {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -183,9 +183,15 @@ public class AppXalanExtension
 
         try {
             if (null != keywords && 0 < keywords.length()) {
-                String[] kwdArray = keywords.split("\\s");
-                for ( String keyword : kwdArray ) {
-                    result = new RegExpHelper("(" + keywordToPattern(keyword, wholeWords) + ")", "ig").replace(result, "\u00ab$1\u00bb");
+                if (2 < keywords.length() && '"' == keywords.charAt(0) && '"' == keywords.charAt(keywords.length() - 1)) {
+                    // if keywords are adorned with double-quotes we do phrase matching
+                    result = new RegExpHelper("(" + keywordToPattern(keywords.substring(1, keywords.length() - 1), true) + ")", "ig").replace(result, "\u00ab$1\u00bb");
+                } else {
+
+                    String[] kwdArray = keywords.split("\\s");
+                    for ( String keyword : kwdArray ) {
+                        result = new RegExpHelper("(" + keywordToPattern(keyword, wholeWords) + ")", "ig").replace(result, "\u00ab$1\u00bb");
+                    }
                 }
             }
             boolean shouldRemoveExtraMarkers = true;

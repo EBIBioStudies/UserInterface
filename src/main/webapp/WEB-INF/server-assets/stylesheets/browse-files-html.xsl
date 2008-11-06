@@ -28,29 +28,17 @@
 
     <xsl:template name="ae-contents">
         <helper:logInfo select="[browse-files-html] Parameters: accession [{$accession}], userid [{$userid}]"/>
-        <xsl:variable name="vAccession" select="helper:toUpperCase($accession)"/>
-        <xsl:variable name="vSelectedExperiment" select="experiment[accession/text() = $vAccession]"/>
+        <!--
         <helper:logInfo select="[browse-files-html] Query filtered {count($vSelectedExperiment)} experiments."/>
-
+        -->
 
         <div class="ae_centered_container_100pc assign_font">
-            <xsl:choose>
-                <xsl:when test="helper:isExperimentAccessible($vAccession, $userid) and (count($vSelectedExperiment) = 1)">
-                    <xsl:apply-templates select="$vSelectedExperiment"/>
-                </xsl:when>
-                <xsl:when test="not(helper:isExperimentAccessible($vAccession, $userid)) and (count($vSelectedExperiment) = 1)">
-                    <xsl:text>The experiment is private in the database</xsl:text>
-                </xsl:when>
-                <xsl:otherwise><xsl:text>The experiment is not in the database</xsl:text></xsl:otherwise>
-            </xsl:choose>
+            <xsl:for-each select="helper:getFilesForAccession($accession)/file">
+                <xsl:sort select="@name" order="ascending"/>
+                <div><a href="${interface.application.base.url}/files/{$accession}/{@name}"><xsl:value-of select="@name"/></a> - <xsl:value-of select="@size"/> - <xsl:value-of select="@lastmodified"/></div>
+        </xsl:for-each>
         </div>
     </xsl:template>
 
-    <xsl:template match="experiment">
-        <xsl:for-each select="file">
-            <xsl:sort select="name" order="ascending"/>
-            <div><a href="{url}"><xsl:value-of select="name"/></a> - <xsl:value-of select="size"/> - <xsl:value-of select="lastmodified"/></div>
-        </xsl:for-each>
-    </xsl:template>
 
 </xsl:stylesheet>

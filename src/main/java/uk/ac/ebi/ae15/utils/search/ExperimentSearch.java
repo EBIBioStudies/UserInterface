@@ -117,13 +117,19 @@ public class ExperimentSearch
         // trim spaces on both sides
         keywords = keywords.trim();
 
-        // by default (i.e. no keywords) it'll always match
-        // otherwise any keyword fails -> no match :)
         if (0 < keywords.length()) {
-            String[] kwdArray = keywords.split("\\s");
-            for ( String keyword : kwdArray ) {
-                if (!new RegExpHelper(keywordToPattern(keyword, wholeWords), "i").test(input))
-                    return false;
+            // by default (i.e. no keywords) it'll always match
+
+            if (2 < keywords.length() && '"' == keywords.charAt(0) && '"' == keywords.charAt(keywords.length() - 1)) {
+                // if keywords are adorned with double-quotes we do phrase matching
+                return new RegExpHelper(keywordToPattern(keywords.substring(1, keywords.length() - 1), true), "i").test(input);
+            } else {
+                // any keyword fails -> no match :)
+                String[] kwdArray = keywords.split("\\s");
+                for ( String keyword : kwdArray ) {
+                    if (!new RegExpHelper(keywordToPattern(keyword, wholeWords), "i").test(input))
+                        return false;
+                }
             }
         }
         return true;

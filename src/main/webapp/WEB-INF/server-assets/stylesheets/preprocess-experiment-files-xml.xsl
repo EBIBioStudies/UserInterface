@@ -43,7 +43,7 @@
         <xsl:variable name="vRawDataformats">
             <xsl:call-template name="list-raw-dataformats"/>
         </xsl:variable>
-        <xsl:for-each select="helper:getFilesForExperiment(accession)/file">
+        <xsl:for-each select="helper:getFilesForAccession(accession)/file">
             <xsl:element name="file">
                 <xsl:for-each select="@*">
                     <xsl:element name="{name()}"><xsl:value-of select="."/></xsl:element>
@@ -67,14 +67,15 @@
             </xsl:element>
         </xsl:for-each>
         <xsl:for-each select="arraydesign">
-            <xsl:for-each select="helper:getFilesForExperiment(accession)/file[@kind='adf']">
+            <xsl:variable name="vArrayAccession" select="accession"/>
+            <xsl:for-each select="helper:getFilesForAccession(accession)/file[@kind='adf']">
                 <xsl:element name="file">
                     <xsl:for-each select="@*">
                         <xsl:element name="{name()}"><xsl:value-of select="."/></xsl:element>
                     </xsl:for-each>
                     <xsl:element name="url">
                         <xsl:text>http://www.ebi.ac.uk/microarray-as/ae/files/</xsl:text>
-                        <xsl:value-of select="$vAccession"/>
+                        <xsl:value-of select="$vArrayAccession"/>
                         <xsl:text>/</xsl:text>
                         <xsl:value-of select="@name"/>
                     </xsl:element>
