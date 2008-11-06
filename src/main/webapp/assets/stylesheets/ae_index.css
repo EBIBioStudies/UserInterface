@@ -286,7 +286,7 @@
 /* ae news links area */
 #ae_news_links_area {
     position: relative;
-    margin: 0 0 5px 0;
+    margin: 0;
     height: 175px;
 }
 
