@@ -86,17 +86,21 @@
                             <div id="aer_browse_link"><a href="browse.html">&#187; Browse experiments</a></div>
                             <div id="aer_adv_query_link"><a href="${interface.application.link.aer_old.base.url}/entry">&#187; Advanced query interface</a></div>
                             <div id="aer_login_link"><a href="javascript:aeShowLoginForm();">&#187; Submitter/reviewer login</a></div>
-                            <form id="aer_login_form" method="get" action="index.html" onsubmit="aeDoLogin(); return false">
-                                <fieldset id="aer_login_user_fset">
-                                    <label for="aer_user_field">Name</label>
-                                    <input id="aer_user_field" name="u" maxlength="50" class="assign_font">
-                                </fieldset>
-                                <fieldset id="aer_login_pass_fset">
-                                    <label for="aer_pass_field">Password</label>
-                                    <input id="aer_pass_field" type="password" name="p" maxlength="50" class="assign_font">
-                                </fieldset>
-                                <input id="aer_login_submit" type="submit" value="Log in">
-                            </form>
+                            <div id="aer_login_box"><div class="login_outer"><div class="login_top"><div class="login_bottom"><div class="login_left"><div class="login_right"><div class="login_top_left"><div class="login_top_right"><div class="login_bottom_left"><div class="login_bottom_right"><div class="login_inner">
+                                <div id="aer_login_title">Submitter/reviewer login [<a href="javascript:aeHideLoginForm();">close</a>]</div>
+                                <form id="aer_login_form" method="get" action="index.html" onsubmit="aeDoLogin(); return false">
+                                    <fieldset id="aer_login_user_fset">
+                                        <label for="aer_user_field">User name</label>
+                                        <input id="aer_user_field" name="u" maxlength="50" class="assign_font">
+                                    </fieldset>
+                                    <fieldset id="aer_login_pass_fset">
+                                        <label for="aer_pass_field">Password</label>
+                                        <input id="aer_pass_field" type="password" name="p" maxlength="50" class="assign_font">
+                                    </fieldset>
+                                    <input id="aer_login_submit" type="submit" value="Log in">
+                                </form>
+                                <div id="aer_login_reminder"><a href="javascript:aeShowPasswordReminder();">Forgot user name and/or password?</a></div>
+                            </div></div></div></div></div></div></div></div></div></div></div>
                             <div id="aer_login_info">Logged in as <em>user</em> [<a href="javascript:aeDoLogout()">log out</a>]</div>
                         </div></div></div></div></div></div></div></div></div></div>
                     </div>

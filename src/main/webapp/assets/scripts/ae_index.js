@@ -24,9 +24,23 @@ function
 aeShowLoginForm()
 {
     $("#aer_login_link").hide();
-    $("#aer_login_form").show();
+    $("#aer_login_box").show();
     $("#aer_user_field").focus();
 }
+
+function
+aeHideLoginForm()
+{
+    $("#aer_login_box").hide();
+    if ( "" != user ) {
+        $("#aer_login_link").hide();
+        $("#aer_login_info em").text(user);
+        $("#aer_login_info").show();
+    } else {
+        $("#aer_login_link").show();
+    }
+}
+
 
 function
 aeDoLogin()
@@ -42,7 +56,7 @@ function
 aeDoLoginNext(text)
 {
     if ( "" != text ) {
-        $("#aer_login_form").hide();
+        $("#aer_login_box").hide();
         $("#aer_login_submit").removeAttr("disabled");
 
         $.cookie("AeLoggedUser", user, {expires: 365, path: '/'});
@@ -66,6 +80,7 @@ aeDoLogout()
     $("#aer_login_link").show();
     $.cookie("AeLoggedUser", null, {path: '/' });
     $.cookie("AeLoginToken", null, {path: '/' });
+    user = "";
     $("#aer_avail_info").text("Updating data, please wait...");    
     $.get("ae-stats.xml").next(updateAerStats);
 }
