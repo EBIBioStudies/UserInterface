@@ -48,8 +48,8 @@
 
 #ae_switch_to_atlas_box {
     position: absolute;
-    right: 1;
-    top: 1;
+    right: 1px;
+    top: 1px;
     font-size: 1px;
 }
 
@@ -118,7 +118,8 @@
     font-size: 11px;
 }
 
-#aer_login_link {
+#aer_login_link,
+#aer_login_info {
     position: absolute;
     bottom: 8px;
     left: 10px;
@@ -130,12 +131,12 @@
     position: absolute;
     bottom: 8px;
     left: 5px;
-    right: 5px;
     height: 125px;
+    width: 420px;
 }
 
 #aer_login_title {
-    margin: 0 0 10px 0;    
+    margin: 0 0 15px 0;    
 }
 
 .login_inner {
@@ -167,12 +168,12 @@
     width: 100%;
 }
 
-#aer_login_reminder {
-    margin: 5px 0 0 0;    
+#aer_login_status {
+    margin: 0;
+    color: red;
 }
 
 #aer_login_info {
-    margin: 15px 0 0 0;
     display: none;
 }
 
@@ -231,54 +232,6 @@
 #atlas_beta_notice {
     float: right;
 }
-/******************/
-.ac_results {
-	padding: 0px;
-	border: 1px solid WindowFrame;
-	background-color: Window;
-	overflow: hidden;
-}
-
-.ac_results ul {
-	width: 100%;
-	list-style-position: outside;
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-
-.ac_results iframe {
-	display:none;/*sorry for IE5*/
-	display/**/:block;/*sorry for IE5*/
-	position:absolute;
-	top:0;
-	left:0;
-	z-index:-1;
-	filter:mask();
-	width:3000px;
-	height:3000px;
-}
-
-.ac_results li {
-	margin: 0px;
-	padding: 2px 5px;
-	cursor: pointer;
-	display: block;
-	width: 100%;
-	font: menu;
-	font-size: 12px;
-	overflow: hidden;
-}
-
-.ac_loading {
-	background : Window url('../images/busy.gif') right center no-repeat;
-}
-
-.ac_over {
-	background-color: Highlight;
-	color: HighlightText;
-}
-/******************/
 
 #aer_feed_link {
     float: right;

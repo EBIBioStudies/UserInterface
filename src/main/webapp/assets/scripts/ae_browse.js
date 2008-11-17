@@ -4,6 +4,7 @@
 
 // query object is a global variable
 var query = new Object();
+var user = "";
 
 function
 aeClearKeywords()
@@ -29,11 +30,72 @@ aeResetOptions()
 }
 
 function
+aeShowLoginForm()
+{
+    $("#ae_login_link").hide();
+    $("#ae_help_link").hide();
+    $("#ae_login_status").text("");
+    $("#ae_login_box").show();
+    $("#ae_user_field").focus();
+}
+
+function
+aeHideLoginForm()
+{
+    $("#ae_login_box").hide();
+    $("#ae_help_link").show();
+    $("#ae_login_status").text("");
+    if ( "" != user ) {
+        $("#ae_login_link").hide();
+        $("#ae_login_info em").text(user);
+        $("#ae_login_info").show();
+    } else {
+        $("#ae_login_link").show();
+    }
+}
+
+
+function
+aeDoLogin()
+{
+    user = $("#ae_user_field").val();
+    var pass = $("#ae_pass_field").val();
+    $("#ae_pass_field").val("");
+    $("#ae_login_status").text("");
+    $("#ae_login_submit").attr("disabled", "true");
+    $.get("verify-login.txt", { u: user, p: pass }).next(aeDoLoginNext);
+}
+
+function
+aeDoLoginNext(text)
+{
+    if ( "" != text ) {
+        $("#ae_login_box").hide();
+        $("#ae_help_link").show();
+        $("#ae_login_submit").removeAttr("disabled");
+
+        $.cookie("AeLoggedUser", user, {expires: 365, path: '/'});
+        $.cookie("AeLoginToken", text, {expires: 365, path: '/'});
+
+        $("#ae_login_info em").text(user);
+        $("#ae_login_info").show();
+        window.location.href = decodeURI(window.location.pathname);        
+    } else {
+        user = "";
+        $("#ae_login_status").text("The information you provided does not match our records. Please verity the entry and try again.");
+        $("#ae_login_submit").removeAttr("disabled");
+        $("#ae_user_field").focus();
+    }
+}
+
+function
 aeDoLogout()
 {
     $("#ae_login_info").hide();
+    $("#ae_login_link").show();
     $.cookie("AeLoggedUser", null, {path: '/' });
     $.cookie("AeLoginToken", null, {path: '/' });
+    user = "";
     window.location.href = decodeURI(window.location.pathname);
 }
 
@@ -93,9 +155,20 @@ $(document).ready( function() {
     var _user = $.cookie("AeLoggedUser");
     var _token = $.cookie("AeLoginToken");
     if ( undefined != _user && undefined != _token ) {
+        user = _user;
+        $("#ae_login_link").hide();
         $("#ae_login_info em").text(_user);
         $("#ae_login_info").show();
     }
+
+    // adds a callback to close a login form on escape
+    $("#ae_login_form input").keypress(
+            function (e) {
+                if (e.keyCode == 27) {
+                    aeHideLoginForm();
+                }
+            }
+        );
 
     if ("" != $.query.get("accnum")) {
         query.keywords = $.query.get("accnum");

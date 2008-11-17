@@ -24,6 +24,7 @@ function
 aeShowLoginForm()
 {
     $("#aer_login_link").hide();
+    $("#aer_login_status").text("");
     $("#aer_login_box").show();
     $("#aer_user_field").focus();
 }
@@ -32,6 +33,7 @@ function
 aeHideLoginForm()
 {
     $("#aer_login_box").hide();
+    $("#aer_login_status").text("");
     if ( "" != user ) {
         $("#aer_login_link").hide();
         $("#aer_login_info em").text(user);
@@ -48,6 +50,7 @@ aeDoLogin()
     user = $("#aer_user_field").val();
     var pass = $("#aer_pass_field").val();
     $("#aer_pass_field").val("");
+    $("#aer_login_status").text("");
     $("#aer_login_submit").attr("disabled", "true");
     $.get("verify-login.txt", { u: user, p: pass }).next(aeDoLoginNext);
 }
@@ -67,7 +70,8 @@ aeDoLoginNext(text)
         $("#aer_avail_info").text("Updating data, please wait...");
         $.get("ae-stats.xml").next(updateAerStats);        
     } else {
-        alert("Either username or password is incorrect.");
+        user = "";
+        $("#aer_login_status").text("The information you provided does not match our records. Please verity the entry and try again.");
         $("#aer_login_submit").removeAttr("disabled");
         $("#aer_user_field").focus();
     }
@@ -121,31 +125,21 @@ $(document).ready(function()
         $("#aer_login_info").show();
     }
 
+    // adds a callback to close a login form on escape
+    $("#aer_login_form input").keypress(
+            function (e) {
+                if (e.keyCode == 27) {
+                    aeHideLoginForm();
+                }
+            }
+        );
+
     // adds a trigger callback for more/less intro text switching
     $("a.ae_intro_more_toggle").click(function()
     {
         $("div.ae_intro_more").toggle();
     });
-    /*** this does not work
-    $("#atlas_experiments_field").autocomplete("test/autocomplete_exp.txt", {
-            minChars:1,
-            matchSubset: false,
-            multiple: true,
-            multipleSeparator: " ",
-            extraParams: {type:"expt"},
-            formatItem:function(row) {return row[0] + " (" + row[1] + ")";}
-    });
 
-    $("#atlas_query_field").autocomplete("test/autocomplete_gene.txt", {
-            minChars:1,
-            matchCase: true,
-            matchSubset: false,
-            multiple: true,
-            multipleSeparator: " ",
-            extraParams: {type:"gene"},
-            formatItem:function(row) {return row[0] + " (" + row[1] + ")";}
-    });
-    ***/
     // gets aer stats and updates the page
     $.get("ae-stats.xml").next(updateAerStats);
 
