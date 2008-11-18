@@ -223,10 +223,13 @@ a:active .table_header_label {
 #ae_login_box {
     display: none;
     position: absolute;
-    top: 2px;
     left: 2px;
+    top: 2px;
     width: 40%;
     height: 101px;
+    margin: 0;
+    padding: 0;
+    border: 0 none;
 }
 
 #ae_login_title {
@@ -234,7 +237,7 @@ a:active .table_header_label {
 }
 
 .login_inner {
-    padding: 5px 8px;
+    padding: 5px 8px 0 8px;
 }
 #ae_login_form fieldset {
     border: 0 none;
@@ -253,13 +256,12 @@ a:active .table_header_label {
 
 #ae_login_form label {
     width: 100%;
-    padding: 5px 0 0 0;
+    padding: 0;
     font-size: 11px
 }
 
 #ae_login_form input {
-    margin-top: 3px;
-    margin-bottom: 8px;
+    margin: 3px 0 5px 0;
     font-size: 11px;
 }
 
@@ -268,9 +270,12 @@ a:active .table_header_label {
     border: 1px solid #5e9e9e;
     width: 100%;
 }
-#ae_login_submit {
+
+#ae_login_form input#ae_login_submit {
     float: right;
     font-size: 11px;
+    margin: 0;
+    padding: 0;
 }
 
 #ae_login_status {
