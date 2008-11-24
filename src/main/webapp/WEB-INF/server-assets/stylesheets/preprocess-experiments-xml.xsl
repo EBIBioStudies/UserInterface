@@ -70,8 +70,9 @@
         <xsl:choose>
             <xsl:when test="text() = ''"/>
             <xsl:when test="contains(text(), ';GDS')">
-                <secondaryaccession><xsl:value-of select="substring-before(text(),';')"/></secondaryaccession>
-                <secondaryaccession><xsl:value-of select="substring-after(text(),';')"/></secondaryaccession> 
+                <xsl:call-template name="split-secondaryaccession">
+                    <xsl:with-param name="str" select="text()"/>
+                </xsl:call-template>
             </xsl:when>
             <xsl:otherwise><xsl:copy-of select="."/></xsl:otherwise>
         </xsl:choose>
@@ -122,4 +123,18 @@
         </xsl:copy>
     </xsl:template>
 
+    <xsl:template name="split-secondaryaccession">
+        <xsl:param name="str"/>
+        <xsl:choose>
+            <xsl:when test="contains($str,';')">
+                <secondaryaccession><xsl:value-of select="substring-before($str, ';')"/></secondaryaccession>
+                <xsl:call-template name="split-secondaryaccession">
+                    <xsl:with-param name="str" select="substring-after($str, ';')"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <secondaryaccession><xsl:value-of select="$str"/></secondaryaccession>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 </xsl:stylesheet>
