@@ -67,9 +67,14 @@
     </xsl:template>
 
     <xsl:template match="secondaryaccession" mode="copy">
-        <xsl:if test="text() != ''">
-            <xsl:copy-of select="."/>
-        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="text() = ''"/>
+            <xsl:when test="contains(text(), ';GDS')">
+                <secondaryaccession><xsl:value-of select="substring-before(text(),';')"/></secondaryaccession>
+                <secondaryaccession><xsl:value-of select="substring-after(text(),';')"/></secondaryaccession> 
+            </xsl:when>
+            <xsl:otherwise><xsl:copy-of select="."/></xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="miamescore" mode="copy">
