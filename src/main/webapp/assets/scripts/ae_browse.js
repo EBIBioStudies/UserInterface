@@ -79,7 +79,7 @@ aeDoLoginNext(text)
 
         $("#ae_login_info em").text(user);
         $("#ae_login_info").show();
-        window.location.href = decodeURI(window.location.pathname);        
+        window.location.href = decodeURI(window.location.pathname) + $.query.toString();        
     } else {
         user = "";
         $("#ae_login_status").text("The information you provided does not match our records. Please verity the entry and try again.");
@@ -96,7 +96,7 @@ aeDoLogout()
     $.cookie("AeLoggedUser", null, {path: '/' });
     $.cookie("AeLoginToken", null, {path: '/' });
     user = "";
-    window.location.href = decodeURI(window.location.pathname);
+    window.location.href = decodeURI(window.location.pathname) + $.query.toString();
 }
 
 function
@@ -113,7 +113,7 @@ aeSort( sortby )
             if ( undefined != innerElt && innerElt.hasClass("table_header_sort_desc") )
                 sortorder = "ascending";
         }
-        var newQuery = $.query.set( "sortby", sortby ).set( "sortorder", sortorder ).toString()
+        var newQuery = $.query.set( "sortby", sortby ).set( "sortorder", sortorder ).toString();
         window.location.href = "browse.html" + newQuery;
     }
 }
@@ -276,7 +276,7 @@ onExperimentQuery( tableHtml )
                 } else if ( totalPages - 1 == page && totalPages - curpage > 5 && totalPages > 11 ) {
                     pagerHtml = pagerHtml + "..";
                 } else if ( 1 == page || ( curpage < 7 && page < 11 ) || ( Math.abs( page - curpage ) < 5 ) || ( totalPages - curpage < 6 && totalPages - page < 10 ) || totalPages == page || totalPages <= 11 ) {
-                    var newQuery = $.query.set( "page", page ).set( "pagesize", pagesize ).toString()
+                    var newQuery = $.query.set( "page", page ).set( "pagesize", pagesize ).toString();
                     pagerHtml = pagerHtml + "<a href=\"browse.html" + newQuery + "\">" + page + "</a>";
                 }
                 if ( page < totalPages ) {
@@ -352,18 +352,25 @@ addExpansionHandlers()
             .mouseout(onTableRowMouseOut)
             .find("div.table_row_expand")
             .wrap("<a href=\"javascript:aeToggleExpand('" + this.id  + "');\" title=\"Click to reveal/hide more information on the experiment\"><div class=\"table_row_expander\"></div></a>");
+
+    var ext_id = String(this.id).replace("_main", "_ext");
+    $("#" + ext_id).mouseover(onTableRowMouseOver).mouseout(onTableRowMouseOut);
 }
 
 function
 onTableRowMouseOver()
 {
-    $(this).addClass("tr_main_active");
+    var id = String(this.id).split("_")[0];
+    $("#" + id + "_main").addClass("tr_main_active");
+    $("#" + id + "_ext").addClass("tr_ext_active");
 }
 
 function
 onTableRowMouseOut()
 {
-    $(this).removeClass("tr_main_active");
+    var id = String(this.id).split("_")[0];
+    $("#" + id + "_main").removeClass("tr_main_active");
+    $("#" + id + "_ext").removeClass("tr_ext_active");
 }
 
 function

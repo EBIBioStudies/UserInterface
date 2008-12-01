@@ -68,14 +68,32 @@
 
     <xsl:template match="secondaryaccession" mode="copy">
         <xsl:choose>
-            <xsl:when test="text() = ''"/>
+            <xsl:when test="string-length(text()) = 0"/>
             <xsl:when test="contains(text(), ';GDS')">
-                <xsl:call-template name="split-secondaryaccession">
+                <xsl:call-template name="split-string-to-elements">
                     <xsl:with-param name="str" select="text()"/>
+                    <xsl:with-param name="separator" select="';'"/>
+                    <xsl:with-param name="element" select="'secondaryaccession'"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise><xsl:copy-of select="."/></xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="experimentdesign" mode="copy">
+        <xsl:call-template name="split-string-to-elements">
+            <xsl:with-param name="str" select="text()"/>
+            <xsl:with-param name="separator" select="','"/>
+            <xsl:with-param name="element" select="'experimentdesign'"/>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template match="experimenttype" mode="copy">
+        <xsl:call-template name="split-string-to-elements">
+            <xsl:with-param name="str" select="text()"/>
+            <xsl:with-param name="separator" select="','"/>
+            <xsl:with-param name="element" select="'experimenttype'"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="miamescore" mode="copy">
@@ -123,17 +141,22 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template name="split-secondaryaccession">
+    <xsl:template name="split-string-to-elements">
         <xsl:param name="str"/>
+        <xsl:param name="separator"/>
+        <xsl:param name="element"/>
         <xsl:choose>
-            <xsl:when test="contains($str,';')">
-                <secondaryaccession><xsl:value-of select="substring-before($str, ';')"/></secondaryaccession>
-                <xsl:call-template name="split-secondaryaccession">
-                    <xsl:with-param name="str" select="substring-after($str, ';')"/>
+            <xsl:when test="string-length($str) = 0"/>
+            <xsl:when test="contains($str, $separator)">
+                <xsl:element name="{$element}"><xsl:value-of select="substring-before($str, $separator)"/></xsl:element>
+                <xsl:call-template name="split-string-to-elements">
+                    <xsl:with-param name="str" select="substring-after($str, $separator)"/>
+                    <xsl:with-param name="separator" select="$separator"/>
+                    <xsl:with-param name="element" select="$element"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-                <secondaryaccession><xsl:value-of select="$str"/></secondaryaccession>
+                <xsl:element name="{$element}"><xsl:value-of select="$str"/></xsl:element>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

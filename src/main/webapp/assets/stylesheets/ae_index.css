@@ -249,6 +249,10 @@
     height: 175px;
 }
 
+#ae_news_links_area p {
+    font-size: 11px;
+}
+
 #ae_news_links_area .lite_form_top_right {
     padding: 5px 0;
 }

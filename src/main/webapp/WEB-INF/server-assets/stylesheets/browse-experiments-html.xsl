@@ -83,16 +83,16 @@
                     <td colspan="9">
                         <xsl:choose>
                             <xsl:when test="helper:testRegexp($keywords,'^E-.+-\d+$','i')">
-                                <p><strong>The experiment with accession number '<xsl:value-of select="$keywords"/>' is not available.</strong></p>
-                                <p>If you believe this is an error, please do not hesitate to drop us a line to <strong>arrayexpress(at)ebi.ac.uk</strong> or use <a href="${interface.application.link.www_domain}/support/" title="EBI Support">EBI Support Feedback</a> form.</p>
+                                <div><strong>The experiment with accession number '<xsl:value-of select="$keywords"/>' is not available.</strong></div>
+                                <div>If you believe this is an error, please do not hesitate to drop us a line to <strong>arrayexpress(at)ebi.ac.uk</strong> or use <a href="${interface.application.link.www_domain}/support/" title="EBI Support">EBI Support Feedback</a> form.</div>
                             </xsl:when>
                             <xsl:otherwise>
-                                <p><strong>The query '<xsl:value-of select="$keywords"/>'<xsl:if test="string-length($species)>0">&#160;<em>and</em> species '<xsl:value-of select="$species"/>'</xsl:if>
+                                <div><strong>The query '<xsl:value-of select="$keywords"/>'<xsl:if test="string-length($species)>0">&#160;<em>and</em> species '<xsl:value-of select="$species"/>'</xsl:if>
                                     <xsl:if test="string-length($array)>0">&#160;<em>and</em> array <xsl:value-of select="$array"/></xsl:if>
                                     <xsl:if test="string-length($exptype)>0">&#160;<em>and</em> experiment type '<xsl:value-of select="$exptype"/>'</xsl:if>
-                                    returned no matches.</strong></p>
-                                <p>Try shortening the query term e.g. 'embryo' will match embryo, embryoid, embryonic across all annotation fields.</p>
-                                <p>Note that '*' is <strong>not</strong> supported as a wild card. More information available at <a href="http://www.ebi.ac.uk/microarray/doc/help/ae_help.html">ArrayExpress Query Help</a>.</p>
+                                    returned no matches.</strong></div>
+                                <div>Try shortening the query term e.g. 'embryo' will match embryo, embryoid, embryonic across all annotation fields.</div>
+                                <div>Note that '*' is <strong>not</strong> supported as a wild card. More information available at <a href="http://www.ebi.ac.uk/microarray/doc/help/ae_help.html">ArrayExpress Query Help</a>.</div>
                             </xsl:otherwise>
                         </xsl:choose>
 
@@ -161,189 +161,54 @@
                     <table class="ae_results_tr_ext_table" cellpadding="0" cellspacing="0" border="0">
                         <xsl:if test="name">
                             <tr>
-                                <td class="name">Title:</td>
+                                <td class="name">Title</td>
                                 <td class="value"><xsl:apply-templates select="name" mode="highlight" /></td>
                             </tr>
                         </xsl:if>
-                        <tr style="${interface.application.link.aer_old.experiment_link.style}">
-                            <td class="name"/>
-                            <td class="value">
-                                <a href="${interface.application.link.aer_old.base.url}/result?queryFor=Experiment&amp;eAccession={accession}"
-                                   target="_blank" title="Opens in a new window">&#187; Advanced interface page for <xsl:value-of select="accession"/></a>
-                            </td>
-                        </tr>
-                        <xsl:if test="@loadedinatlas">
-                            <tr>
-                                <td class="name">ArrayExpress Atlas link:</td>
-                                <td class="value">
-                                    <a href="${interface.application.link.atlas.exp_query.url}{accession}"
-                                       target="_blank" title="Opens in a new window">&#187; Query Atlas for most differentially expressed genes in <xsl:value-of select="accession"/></a>
-                                </td>
-                            </tr>
-                        </xsl:if>
-                        <xsl:if test="count(secondaryaccession)&gt;0">
-                            <tr>
-                                <td class="name">Secondary&#160;accession<xsl:if test="count(secondaryaccession)&gt;1">s</xsl:if>:</td>
-                                <td class="value"><xsl:call-template name="secondaryaccession"/></td>
-                            </tr>
-                        </xsl:if>
-
                         <xsl:if test="miamescores">
                             <tr>
-                                <td class="name">MIAME&#160;score:</td>
+                                <td class="name">MIAME&#160;score</td>
                                 <td class="value">
-                                    <strong><xsl:value-of select="miamescores/overallscore"/></strong>
-                                    <xsl:text> ( array: </xsl:text>
-                                    <xsl:value-of select="miamescores/reportersequencescore"/>
-                                    <xsl:text>, protocols: </xsl:text>
-                                    <xsl:value-of select="miamescores/protocolscore"/>
-                                    <xsl:text>, factors: </xsl:text>
-                                    <xsl:value-of select="miamescores/factorvaluescore"/>
-                                    <xsl:text>, processed data: </xsl:text>
-                                    <xsl:value-of select="miamescores/derivedbioassaydatascore"/>
-                                    <xsl:text>, raw data: </xsl:text>
-                                    <xsl:value-of select="miamescores/measuredbioassaydatascore"/>
-                                    <xsl:text> )</xsl:text>
+                                    <div class="miame_stars">
+                                        <xsl:call-template name="miame-star">
+                                            <xsl:with-param name="count" select="miamescores/overallscore"/>
+                                        </xsl:call-template>
+                                    </div>
+                                    <div>
+                                        <xsl:text>(</xsl:text>
+                                        <xsl:if test="miamescores/reportersequencescore = '1'">
+                                            <xsl:text>arrays</xsl:text>
+                                            <xsl:if test="miamescores/protocolscore = '1' or miamescores/factorvaluescore = '1' or miamescores/derivedbioassaydatascore = '1' or miamescores/measuredbioassaydatascore = '1'">
+                                                <xsl:text>, </xsl:text>
+                                            </xsl:if>
+                                        </xsl:if>
+                                        <xsl:if test="miamescores/protocolscore = '1'">
+                                            <xsl:text>protocols</xsl:text>
+                                            <xsl:if test="miamescores/factorvaluescore = '1' or miamescores/derivedbioassaydatascore = '1' or miamescores/measuredbioassaydatascore = '1'">
+                                                <xsl:text>, </xsl:text>
+                                            </xsl:if>
+                                        </xsl:if>
+                                        <xsl:if test="miamescores/factorvaluescore = '1'">
+                                            <xsl:text>factors</xsl:text>
+                                            <xsl:if test="miamescores/derivedbioassaydatascore = '1' or miamescores/measuredbioassaydatascore = '1'">
+                                                <xsl:text>, </xsl:text>
+                                            </xsl:if>
+                                        </xsl:if>
+                                        <xsl:if test="miamescores/derivedbioassaydatascore = '1'">
+                                            <xsl:text>processed data</xsl:text>
+                                            <xsl:if test="miamescores/measuredbioassaydatascore = '1'">
+                                                <xsl:text>, </xsl:text>
+                                            </xsl:if>
+                                        </xsl:if>
+                                        <xsl:if test="miamescores/measuredbioassaydatascore = '1'">raw data</xsl:if>
+                                        <xsl:text>)</xsl:text>
+                                    </div>
                                 </td>
                             </tr>
                         </xsl:if>
-
-                        <tr>
-                            <td class="name">Sample&#160;annotation:</td>
-                            <td>
-                                <xsl:choose>
-                                    <xsl:when test="file[kind = 'twocolumns' and extension = 'txt']">
-                                        <a href="{concat('${interface.application.base.url}/files/', concat(accession, concat('/', file[kind = 'twocolumns' and extension = 'txt']/name)))}"
-                                            target="_blank" title="Opens in a new window">&#187; Tab-delimited spreadsheet</a>
-                                    </xsl:when>
-                                    <xsl:otherwise>Data is not yet available</xsl:otherwise>
-                                </xsl:choose>
-                           </td>
-                        </tr>
-
-                        <xsl:if test="count(arraydesign)&gt;0">
-                            <tr>
-                                <td class="name">Array<xsl:if test="count(arraydesign)&gt;1">s</xsl:if>:</td>
-                                <td class="value">
-                                  <div id="{$vExpId}_array">
-                                        <xsl:for-each select="arraydesign">
-                                            <xsl:apply-templates select="name" mode="highlight" />
-                                            <xsl:text> (</xsl:text>
-                                            <a href="${interface.application.link.aer_old.base.url}/result?queryFor=PhysicalArrayDesign&amp;aAccession={accession}"
-                                               target="_blank" title="Opens in a new window">
-                                                <xsl:text>&#187; </xsl:text>
-                                                <xsl:apply-templates select="accession" mode="highlight" />
-                                            </a>
-                                            <xsl:text>)</xsl:text>
-                                            <xsl:if test="position()!=last()">, </xsl:if>
-                                        </xsl:for-each>
-                                  </div>
-                                </td>
-                            </tr>
-                        </xsl:if>
-                        <tr>
-                            <td class="name">Downloads:</td>
-                            <td class="value">
-                                <p>
-                                    <a href="${interface.application.base.url}/files/{accession}"
-                                       target="_blank" title="Opens in a new window">
-                                        <xsl:text>&#187; Browse all available files</xsl:text>
-                                    </a>
-                                </p>
-                                <xsl:if test="accession!='E-TABM-185'">
-                                    <a href="${interface.application.link.aer_old.base.url}/dataselection?expid={$vExpId}"
-                                       target="_blank" title="Opens in a new window">
-                                        <xsl:text>&#187; View detailed data retrieval page</xsl:text>
-                                    </a>
-                                </xsl:if>
-                            </td>
-                        </tr>
-                        <xsl:if test="accession!='E-TABM-185'">
-                            <tr>
-                                <td class="name">Experiment&#160;design:</td>
-                                <td class="value">
-                                    <xsl:for-each select="file[kind = 'biosamples']">
-                                        <a href="{concat('${interface.application.base.url}/files/', concat(../accession, concat('/', name)))}"
-                                           target="_blank" title="Opens in a new window">
-                                            <xsl:text>&#187; </xsl:text>
-                                            <xsl:value-of select="helper:toUpperCase(extension)"/>
-                                        </a>
-                                        <xsl:if test="position()!=last()">, </xsl:if>
-                                    </xsl:for-each>
-                                </td>
-                            </tr>
-                        </xsl:if>
-
-                        <tr>
-                            <td class="name">Protocols:</td>
-                            <td class="value">
-                                <a href="${interface.application.link.aer_old.base.url}/details?class=MAGE.Experiment_protocols&amp;criteria=Experiment%3D{$vExpId}&amp;contextClass=MAGE.Protocol&amp;templateName=Protocol.vm"
-                                        target="_blank" title="Opens in a new window">
-                                    <xsl:text>&#187; Experimental protocols</xsl:text>
-                                </a>
-                            </td>
-                        </tr>
-
-                        <xsl:if test="count(bibliography/*)&gt;0">
-                            <tr>
-                                <td class="name">Citation<xsl:if test="count(bibliography/*)&gt;1">s</xsl:if>:</td>
-                                <td class="value"><xsl:apply-templates select="bibliography" /></td>
-                            </tr>
-                        </xsl:if>
-
-                        <tr>
-                            <td class="name">Detailed sample&#160;annotation:</td>
-                            <td>
-                                <xsl:choose>
-                                    <xsl:when test="file[kind = 'sdrf' and extension = 'txt']">
-                                        <a href="{concat('${interface.application.base.url}/files/', concat(accession, concat('/', file[kind = 'sdrf' and extension = 'txt']/name)))}"
-                                            target="_blank" title="Opens in a new window">
-                                            <xsl:text>&#187; Tab-delimited spreadsheet</xsl:text>
-                                        </a>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:text>Data is not yet available</xsl:text>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </td>
-                        </tr>
-
-                        <xsl:if test="count(provider[role!='data_coder'])&gt;0">
-                            <tr>
-                                <td class="name">Contact<xsl:if test="count(provider[role!='data_coder'])&gt;1">s</xsl:if>:</td>
-                                <td class="value">
-                                    <xsl:call-template name="providers"/>
-                                </td>
-                            </tr>
-                        </xsl:if>
-
-                        <xsl:if test="count(experimenttype)&gt;0">
-                            <tr>
-                                <td class="name">Experiment&#160;type<xsl:if test="count(experimenttype)&gt;1">s</xsl:if>:</td>
-                                <td class="value">
-                                    <xsl:for-each select="experimenttype">
-                                        <xsl:apply-templates select="." mode="highlight"/>
-                                        <xsl:if test="position()!=last()">, </xsl:if>
-                                    </xsl:for-each>
-                                </td>
-                            </tr>
-                        </xsl:if>
-
-                        <xsl:if test="count(experimentdesign)&gt;0">
-                            <tr>
-                                <td class="name">Design&#160;type<xsl:if test="count(experimentdesign)&gt;1">s</xsl:if>:</td>
-                                <td class="value">
-                                    <xsl:for-each select="experimentdesign">
-                                        <xsl:apply-templates select="." mode="highlight"/>
-                                        <xsl:if test="position()!=last()">, </xsl:if>
-                                    </xsl:for-each>
-                                </td>
-                            </tr>
-                        </xsl:if>
-
                         <xsl:if test="count(description[text/text()!='' and not(contains(text/text(),'Generated description'))])&gt;0">
                             <tr>
-                                <td class="name">Description:</td>
+                                <td class="name">Description</td>
                                 <td class="value">
                                     <xsl:for-each select="description[text/text()!='' and not(contains(text/text(),'Generated description'))]">
                                         <xsl:call-template name="description">
@@ -354,9 +219,107 @@
                             </tr>
                         </xsl:if>
 
+                        <xsl:if test="count(provider[role!='data_coder'])&gt;0">
+                            <tr>
+                                <td class="name">Contact<xsl:if test="count(provider[role!='data_coder'])&gt;1">s</xsl:if></td>
+                                <td class="value">
+                                    <xsl:call-template name="providers"/>
+                                </td>
+                            </tr>
+                        </xsl:if>
+
+                        <xsl:if test="count(bibliography/*)&gt;0">
+                            <tr>
+                                <td class="name">Citation<xsl:if test="count(bibliography/*)&gt;1">s</xsl:if></td>
+                                <td class="value"><xsl:apply-templates select="bibliography" /></td>
+                            </tr>
+                        </xsl:if>
+
+                        <tr style="${interface.application.link.aer_old.experiment_link.style}">
+                            <td class="name">Links</td>
+                            <td class="value">
+                                <a href="${interface.application.link.aer_old.base.url}/result?queryFor=Experiment&amp;eAccession={accession}"
+                                   target="_blank" title="Opens in a new window">&#187; Query ArrayExpress advanced interface for <xsl:value-of select="accession"/></a>
+                                <xsl:if test="@loadedinatlas">
+                                    <xsl:text>, </xsl:text>
+                                    <a href="${interface.application.link.atlas.exp_query.url}{accession}"
+                                       target="_blank" title="Opens in a new window">&#187; Query ArrayExpress Atlas for most differentially expressed genes in <xsl:value-of select="accession"/></a>
+                                </xsl:if>
+                            </td>
+                        </tr>
+
+                        <xsl:if test="count(secondaryaccession)&gt;0">
+                            <tr>
+                                <td class="name">External&#160;link<xsl:if test="count(secondaryaccession)&gt;1">s</xsl:if></td>
+                                <td class="value"><xsl:call-template name="secondaryaccession"/></td>
+                            </tr>
+                        </xsl:if>
+
+                        <xsl:if test="count(arraydesign)&gt;0">
+                            <tr>
+                                <td class="name">Array<xsl:if test="count(arraydesign)&gt;1">s</xsl:if></td>
+                                <td class="value">
+                                  <div id="{$vExpId}_array">
+                                        <xsl:for-each select="arraydesign">
+                                            <a href="${interface.application.link.aer_old.base.url}/result?queryFor=PhysicalArrayDesign&amp;aAccession={accession}"
+                                               target="_blank" title="Opens in a new window">
+                                                <xsl:text>&#187; </xsl:text>
+                                                <xsl:apply-templates select="name" mode="highlight" />
+                                            </a>
+                                            <xsl:if test="position()!=last()">, </xsl:if>
+                                        </xsl:for-each>
+                                  </div>
+                                </td>
+                            </tr>
+                        </xsl:if>
+                        <tr>
+                            <td class="name">Downloads</td>
+                            <td class="value">
+                                <div>
+                                    <a href="${interface.application.base.url}/files/{accession}"
+                                       target="_blank" title="Opens in a new window">
+                                        <xsl:text>&#187; Browse all available files</xsl:text>
+                                    </a>
+                                </div>
+                                <xsl:if test="accession!='E-TABM-185'">
+                                    <a href="${interface.application.link.aer_old.base.url}/dataselection?expid={$vExpId}"
+                                       target="_blank" title="Opens in a new window">
+                                        <xsl:text>&#187; View detailed data retrieval page</xsl:text>
+                                    </a>
+                                </xsl:if>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="name">Protocols</td>
+                            <td class="value">
+                                <a href="${interface.application.link.aer_old.base.url}/details?class=MAGE.Experiment_protocols&amp;criteria=Experiment%3D{$vExpId}&amp;contextClass=MAGE.Protocol&amp;templateName=Protocol.vm"
+                                        target="_blank" title="Opens in a new window">
+                                    <xsl:text>&#187; Experimental protocols</xsl:text>
+                                </a>
+                            </td>
+                        </tr>
+
+                        <xsl:if test="(count(experimenttype) + count(experimentdesign))&gt;0">
+                            <tr>
+                                <td class="name">Experiment&#160;type<xsl:if test="(count(experimenttype) + count(experimentdesign))&gt;1">s</xsl:if></td>
+                                <td class="value">
+                                    <xsl:for-each select="experimenttype">
+                                        <xsl:apply-templates select="." mode="highlight"/>
+                                        <xsl:if test="position()!=last()">, </xsl:if>
+                                    </xsl:for-each>
+                                    <xsl:if test="count(experimenttype)&gt;0 and count(experimentdesign)&gt;0">, </xsl:if>
+                                    <xsl:for-each select="experimentdesign">
+                                        <xsl:apply-templates select="." mode="highlight"/>
+                                        <xsl:if test="position()!=last()">, </xsl:if>
+                                    </xsl:for-each>
+                                </td>
+                            </tr>
+                        </xsl:if>
+
                         <xsl:if test="count(experimentalfactor/name)&gt;0">
                             <tr>
-                                <td class="name">Experimental factor<xsl:if test="count(experimentalfactor/name)&gt;1">s</xsl:if>:</td>
+                                <td class="name">Experimental factor<xsl:if test="count(experimentalfactor/name)&gt;1">s</xsl:if></td>
                                 <td class="attrs">
                                     <table cellpadding="0" cellspacing="2" border="0">
                                         <thead>
@@ -387,7 +350,7 @@
 
                         <xsl:if test="count(sampleattribute/category)&gt;0">
                             <tr>
-                                <td class="name">Sample attribute<xsl:if test="count(sampleattribute/category)&gt;1">s</xsl:if>:</td>
+                                <td class="name">Sample attribute<xsl:if test="count(sampleattribute/category)&gt;1">s</xsl:if></td>
                                 <td class="attrs">
                                     <table cellpadding="0" cellspacing="2" border="0">
                                         <thead>
@@ -422,7 +385,7 @@
     </xsl:template>
 
     <xsl:template match="bibliography">
-        <p>
+        <div>
             <xsl:variable name="publication_title">
                 <xsl:if test="authors/text()!=''"><xsl:apply-templates select="authors" mode="highlight"/>. </xsl:if>
                 <xsl:if test="title/text()!=''"><xsl:apply-templates select="title" mode="highlight"/>. </xsl:if>
@@ -444,7 +407,7 @@
             <xsl:if test="accession">
                 <xsl:if test="number(accession)>0">(<a href="http://www.ncbi.nlm.nih.gov/pubmed/{accession}" target="_blank" title="Opens in a new window">&#187; PubMed <xsl:apply-templates select="accession" mode="highlight"/></a>)</xsl:if>
             </xsl:if>
-        </p>
+        </div>
     </xsl:template>
 
     <xsl:template name="secondaryaccession">
@@ -479,21 +442,21 @@
         <xsl:param name="text"/>
         <xsl:choose>
             <xsl:when test="contains($text, '&lt;br&gt;')">
-                <p>
+                <div>
                     <xsl:call-template name="add_highlight_element">
                         <xsl:with-param name="text" select="helper:markKeywords(substring-before($text, '&lt;br&gt;'),$keywords,$wholewords)"/>
                     </xsl:call-template>
-                </p>
+                </div>
                 <xsl:call-template name="description">
                     <xsl:with-param name="text" select="substring-after($text,'&lt;br&gt;')"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-                <p>
+                <div>
                     <xsl:call-template name="add_highlight_element">
                         <xsl:with-param name="text" select="helper:markKeywords($text,$keywords,$wholewords)"/>
                     </xsl:call-template>
-                </p>
+                </div>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -527,4 +490,14 @@
             </xsl:otherwise>
        </xsl:choose>
    </xsl:template>
+
+    <xsl:template name="miame-star">
+        <xsl:param name="count" />
+        <xsl:if test="$count">
+            <img src="${interface.application.base.url}/assets/images/miame_star.gif" width="14" height="14" alt="*"/>
+            <xsl:call-template name="miame-star">
+                <xsl:with-param name="count" select="$count - 1" />
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
 </xsl:stylesheet>

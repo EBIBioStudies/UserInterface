@@ -46,20 +46,20 @@
                             <form method="get" action="browse.html">
                                 <fieldset id="ae_keywords_box">
                                     <label for="ae_keywords">Experiment, citation, sample and factor annotations [<a href="javascript:aeClearKeywords()">clear</a>]</label>
-                                    <input id="ae_keywords" name="keywords" maxlength="200" class="assign_font">
+                                    <input id="ae_keywords" name="keywords" maxlength="200">
                                     <span><input id="ae_wholewords" name="wholewords" type="checkbox"><label for="ae_wholewords">Match whole words</label></span>
                                     <span><input id="ae_inatlas" name="inatlas" type="checkbox"><label for="ae_inatlas">Loaded in ArrayExpress Atlas</label></span>
                                 </fieldset>
                                 <fieldset id="ae_filters_box">
                                     <label for="ae_species">Filter on [<a href="javascript:aeResetFilters()">reset</a>]</label>
-                                    <select id="ae_species" name="species" class="assign_font" disabled="true"><option value="">Any species (loading options)</option></select>
-                                    <select id="ae_array" name="array" class="assign_font" disabled="true"><option value="">Any array (loading options)</option></select>
-                                    <select id="ae_exptype" name="exptype" class="assign_font" disabled="true"><option value="">Any experiment type (loading options)</option></select>
+                                    <select id="ae_species" name="species" disabled="true"><option value="">Any species (loading options)</option></select>
+                                    <select id="ae_array" name="array" disabled="true"><option value="">Any array (loading options)</option></select>
+                                    <select id="ae_exptype" name="exptype" disabled="true"><option value="">Any experiment type (loading options)</option></select>
                                 </fieldset>
                                 <fieldset id="ae_options_box">
                                     <label>Display options [<a href="javascript:aeResetOptions()">reset</a>]</label>
-                                    <div class="select_margin"><select id="ae_pagesize" name="pagesize" class="assign_font"><option value="25">25</option><option value="50">50</option><option value="100">100</option><option value="250">250</option><option value="500">500</option></select><label for="ae_pagesize"> experiments per page</label></div>
-                                    <input id="ae_keyword_filters_submit" type="submit" value="Query" class="assign_font">
+                                    <div class="select_margin"><select id="ae_pagesize" name="pagesize"><option value="25">25</option><option value="50">50</option><option value="100">100</option><option value="250">250</option><option value="500">500</option></select><label for="ae_pagesize"> experiments per page</label></div>
+                                    <input id="ae_keyword_filters_submit" type="submit" value="Query">
                                     <input type="hidden" id="ae_sortby" name="sortby">
                                     <input type="hidden" id="ae_sortorder" name="sortorder">
                                     <div><input id="ae_detailedview" name="detailedview" type="checkbox"><label for="ae_detailedview">Detailed view</label></div>
@@ -71,11 +71,11 @@
                                 <form id="ae_login_form" method="get" action="index.html" onsubmit="aeDoLogin(); return false">
                                     <fieldset id="ae_login_user_fset">
                                         <label for="ae_user_field">User name</label>
-                                        <input id="ae_user_field" name="u" maxlength="50" class="assign_font">
+                                        <input id="ae_user_field" name="u" maxlength="50">
                                     </fieldset>
                                     <fieldset id="ae_login_pass_fset">
                                         <label for="ae_pass_field">Password</label>
-                                        <input id="ae_pass_field" type="password" name="p" maxlength="50" class="assign_font">
+                                        <input id="ae_pass_field" type="password" name="p" maxlength="50">
                                     </fieldset>
                                     <input id="ae_login_submit" type="submit" value="Log in">
                                 </form>
