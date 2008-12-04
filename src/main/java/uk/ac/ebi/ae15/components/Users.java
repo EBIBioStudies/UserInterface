@@ -23,8 +23,8 @@ public class Users extends ApplicationComponent
         userList = new TextFilePersistence<PersistableUserList>(
                 new PersistableUserList()
                 , new File(
-                    System.getProperty("java.io.tmpdir")
-                    , getPreferences().getString("ae.users.cache.filename")
+                        System.getProperty("java.io.tmpdir")
+                        , getPreferences().getString("ae.users.cache.filename")
                 )
         );
     }
@@ -38,7 +38,7 @@ public class Users extends ApplicationComponent
         userList.setObject(new PersistableUserList(_userList));
     }
 
-   public String hashLogin( String username, String password, String suffix )
+    public String hashLogin( String username, String password, String suffix )
     {
         if ( null != username && null != password && null != suffix
                 && userList.getObject().containsKey(username) ) {
