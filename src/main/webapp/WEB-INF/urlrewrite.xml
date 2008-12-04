@@ -76,7 +76,7 @@
         <from>^/aew-exp-stats.xml</from>
         <to type="forward">/servlets/proxy/microarray-as/solr_exp/admin/stats.jsp</to>
     </rule>
-    <!-- hiding browse helers behind innocent names -->
+    <!-- hiding browse helpers behind innocent names -->
     <rule>
         <from>^/browse-table.html</from>
         <to type="forward">/servlets/query/browse-experiments/html</to>

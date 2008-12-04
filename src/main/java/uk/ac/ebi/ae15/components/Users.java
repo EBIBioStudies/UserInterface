@@ -38,9 +38,10 @@ public class Users extends ApplicationComponent
         userList.setObject(new PersistableUserList(_userList));
     }
 
-    public String hashLogin( String username, String password, String suffix )
+   public String hashLogin( String username, String password, String suffix )
     {
-        if ( userList.getObject().containsKey(username) ) {
+        if ( null != username && null != password && null != suffix
+                && userList.getObject().containsKey(username) ) {
             UserRecord user = userList.getObject().get(username);
             if ( user.getPassword().equals(password) ) {
                 return user.getPasswordHash(suffix);
@@ -52,7 +53,8 @@ public class Users extends ApplicationComponent
 
     public boolean verifyLogin( String username, String hash, String suffix )
     {
-        if ( userList.getObject().containsKey(username) ) {
+        if ( null != username && null != hash && null != suffix
+                && userList.getObject().containsKey(username) ) {
             UserRecord user = userList.getObject().get(username);
             return user.getPasswordHash(suffix).equals(hash);
         }
@@ -61,6 +63,6 @@ public class Users extends ApplicationComponent
 
     public UserRecord getUserRecord( String username )
     {
-        return userList.getObject().get(username);    
+        return ( null != username ) ? userList.getObject().get(username) : null;
     }
 }
