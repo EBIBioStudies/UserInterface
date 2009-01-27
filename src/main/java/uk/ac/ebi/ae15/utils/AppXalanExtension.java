@@ -92,7 +92,7 @@ public class AppXalanExtension
                 .isAccessible(accession, userId);
     }
 
-    public static NodeSet getFilesForAccession( String accession )
+    public static NodeSet getFilesForAccession( String accession ) throws InterruptedException
     {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -115,8 +115,12 @@ public class AppXalanExtension
                     df.appendChild(fileElt);
                 }
             }
+            Thread.sleep(1);
             return new NodeSet(df);
 
+        } catch (InterruptedException x) {
+            log.warn("Method interrupted");
+            throw x;
         } catch ( Throwable x ) {
             log.error("Caught an exception:", x);
         }

@@ -17,7 +17,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.Map;
 
-public class XsltHelper extends ApplicationComponent implements URIResolver
+public class XsltHelper extends ApplicationComponent implements URIResolver, ErrorListener
 {
     // logging machinery
     private final Log log = LogFactory.getLog(getClass());
@@ -36,9 +36,10 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
 
     public void terminate()
     {
-        AppXalanExtension.setApplication(null);
+        //AppXalanExtension.setApplication(null);
     }
 
+    // implements URIResolver.resolve
     public Source resolve( String href, String base ) throws TransformerException
     {
         Source src;
@@ -60,6 +61,24 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
         }
 
         return src;
+    }
+
+    // implements ErrorListener.error
+    public void error( TransformerException x ) throws TransformerException
+    {
+        throw x;
+    }
+
+    // implements ErrorListener.fatalError
+    public void fatalError( TransformerException x ) throws TransformerException
+    {
+        throw x;
+    }
+
+    // implements ErrorListenet.warning
+    public void	warning( TransformerException x )
+    {
+        log.warn("There was a warning while transforming:", x);
     }
 
     public boolean transformDocumentToFile( Document srcDocument, String stylesheet, HttpServletRequestParameterMap params, File dstFile )
@@ -147,6 +166,8 @@ public class XsltHelper extends ApplicationComponent implements URIResolver
                 }
             }
 
+            // set the error event listener so we catch problems and don't generate result
+            transformer.setErrorListener(this);
             // Perform the transformation, sending the output to the response.
             log.debug("about to start transformer.transform() with stylesheet [" + stylesheet + "]");
             transformer.transform(src, dst);

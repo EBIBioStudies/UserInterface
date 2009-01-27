@@ -12,7 +12,7 @@
         <xsl:param name="pTo"/>
         <xsl:param name="pSortBy"/>
         <xsl:param name="pSortOrder"/>
-        <xsl:param name="pDetailedViewMainClass"/>
+        <xsl:param name="pDetailedViewMainTdClass"/>
         <xsl:param name="pDetailedViewExtStyle"/>
         <xsl:choose>
             <xsl:when test="$pSortBy='accession'">
@@ -23,7 +23,7 @@
                     <!-- sort by number -->
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMainClass" select="$pDetailedViewMainClass"/>
+                    <xsl:with-param name="pDetailedViewMainTdClass" select="$pDetailedViewMainTdClass"/>
                     <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:when>
@@ -38,7 +38,7 @@
 
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMainClass" select="$pDetailedViewMainClass"/>
+                    <xsl:with-param name="pDetailedViewMainTdClass" select="$pDetailedViewMainTdClass"/>
                     <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:when>
@@ -60,7 +60,7 @@
 
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMainClass" select="$pDetailedViewMainClass"/>
+                    <xsl:with-param name="pDetailedViewMainTdClass" select="$pDetailedViewMainTdClass"/>
                     <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:when>
@@ -77,7 +77,7 @@
 
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMainClass" select="$pDetailedViewMainClass"/>
+                    <xsl:with-param name="pDetailedViewMainTdClass" select="$pDetailedViewMainTdClass"/>
                     <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:when>
@@ -92,7 +92,7 @@
 
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMainClass" select="$pDetailedViewMainClass"/>
+                    <xsl:with-param name="pDetailedViewMainTdClass" select="$pDetailedViewMainTdClass"/>
                     <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:when>
@@ -107,7 +107,7 @@
 
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMainClass" select="$pDetailedViewMainClass"/>
+                    <xsl:with-param name="pDetailedViewMainTdClass" select="$pDetailedViewMainTdClass"/>
                     <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:when>
@@ -122,7 +122,7 @@
 
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMainClass" select="$pDetailedViewMainClass"/>
+                    <xsl:with-param name="pDetailedViewMainTdClass" select="$pDetailedViewMainTdClass"/>
                     <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:when>
@@ -137,7 +137,7 @@
 
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMainClass" select="$pDetailedViewMainClass"/>
+                    <xsl:with-param name="pDetailedViewMaintdClass" select="$pDetailedViewMainTdClass"/>
                     <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:otherwise>

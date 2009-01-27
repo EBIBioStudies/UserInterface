@@ -124,12 +124,12 @@ aeToggleExpand( id )
     id = String(id);
     var mainElt = $("#" + id);
     var extElt = $("#" + id.replace("_main", "_ext"));
-    if ( mainElt.hasClass("tr_main_expanded")) {
+    if ( mainElt.hasClass("exp_expanded")) {
         // collapse now
-        mainElt.removeClass("tr_main_expanded");
+        mainElt.removeClass("exp_expanded").find("td").removeClass("td_expanded");
         extElt.hide();
     } else {
-        mainElt.addClass("tr_main_expanded");
+        mainElt.addClass("exp_expanded").find("td").addClass("td_expanded");
         extElt.show();
     }
     onWindowResize();
@@ -232,7 +232,7 @@ function
 onExperimentQuery( tableHtml )
 {
     // remove progress gif
-    $("#ae_results_body_inner").removeClass("ae_results_table_loading");
+    $("#ae_results_body_inner").removeClass("ae_results_tbl_loading");
 
     // populate table with data
     $("#ae_results_tbody").html(tableHtml);
@@ -288,14 +288,14 @@ onExperimentQuery( tableHtml )
     }
 
     // attach handlers
-    $(".ae_results_tr_main").each(addExpansionHandlers);
+    $(".tr_main").each(addExpansionHandlers);
 
 }
 
 function
 onQueryError()
 {
-    $(this).removeClass("ae_results_table_loading");
+    $(this).removeClass("ae_results_tbl_loading");
     $("#ae_results_tbody").html("<tr class=\"ae_results_tr_error\"><td colspan=\"9\">There was an error processing the query. Please try again later.</td></tr>");
 }
 
@@ -348,29 +348,7 @@ initControls()
 function
 addExpansionHandlers()
 {
-    $(this).mouseover(onTableRowMouseOver)
-            .mouseout(onTableRowMouseOut)
-            .find("div.table_row_expand")
-            .wrap("<a href=\"javascript:aeToggleExpand('" + this.id  + "');\" title=\"Click to reveal/hide more information on the experiment\"><div class=\"table_row_expander\"></div></a>");
-
-    var ext_id = String(this.id).replace("_main", "_ext");
-    $("#" + ext_id).mouseover(onTableRowMouseOver).mouseout(onTableRowMouseOut);
-}
-
-function
-onTableRowMouseOver()
-{
-    var id = String(this.id).split("_")[0];
-    $("#" + id + "_main").addClass("tr_main_active");
-    $("#" + id + "_ext").addClass("tr_ext_active");
-}
-
-function
-onTableRowMouseOut()
-{
-    var id = String(this.id).split("_")[0];
-    $("#" + id + "_main").removeClass("tr_main_active");
-    $("#" + id + "_ext").removeClass("tr_ext_active");
+    $(this).find("div.table_row_expand").wrap("<a href=\"javascript:aeToggleExpand('" + this.id  + "');\" title=\"Click to reveal/hide more information on the experiment\"><div class=\"table_row_expander\"></div></a>");
 }
 
 function
