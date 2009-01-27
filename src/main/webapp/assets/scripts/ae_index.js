@@ -5,6 +5,12 @@
 var user = "";
 
 function
+aeMoreLess()
+{
+    $("div.ae_intro_more").toggle();
+}
+
+function
 aeSwitchToAtlas()
 {
     $("#ae_warehouse_box").hide();
@@ -133,12 +139,6 @@ $(document).ready(function()
                 }
             }
         );
-
-    // adds a trigger callback for more/less intro text switching
-    $("a.ae_intro_more_toggle").click(function()
-    {
-        $("div.ae_intro_more").toggle();
-    });
 
     // gets aer stats and updates the page
     $.get("ae-stats.xml").next(updateAerStats);
