@@ -42,7 +42,7 @@ aeHideLoginForm()
     $("#aer_login_status").text("");
     if ( "" != user ) {
         $("#aer_login_link").hide();
-        $("#aer_login_info em").text(user);
+        $("#aer_login_info strong").text(user);
         $("#aer_login_info").show();
     } else {
         $("#aer_login_link").show();
@@ -68,16 +68,21 @@ aeDoLoginNext(text)
         $("#aer_login_box").hide();
         $("#aer_login_submit").removeAttr("disabled");
 
-        $.cookie("AeLoggedUser", user, {expires: 365, path: '/'});
-        $.cookie("AeLoginToken", text, {expires: 365, path: '/'});
+        var loginExpiration = null;
+        if ( $("#aer_login_remember").attr("checked") ) {
+            loginExpiration = 365;
+        }
+        
+        $.cookie("AeLoggedUser", user, {expires: loginExpiration, path: '/'});
+        $.cookie("AeLoginToken", text, {expires: loginExpiration, path: '/'});
 
-        $("#aer_login_info em").text(user);
+        $("#aer_login_info strong").text(user);
         $("#aer_login_info").show();
         $("#aer_avail_info").text("Updating data, please wait...");
         $.get("ae-stats.xml").next(updateAerStats);        
     } else {
         user = "";
-        $("#aer_login_status").text("The information you provided does not match our records. Please verity the entry and try again.");
+        $("#aer_login_status").text("Incorrect user name or password. Please try again.");
         $("#aer_login_submit").removeAttr("disabled");
         $("#aer_user_field").focus();
     }
@@ -127,7 +132,7 @@ $(document).ready(function()
     if ( undefined != _user && undefined != _token ) {
         user = _user;
         $("#aer_login_link").hide();
-        $("#aer_login_info em").text(user);
+        $("#aer_login_info strong").text(user);
         $("#aer_login_info").show();
     }
 
@@ -181,6 +186,13 @@ updateAerStats(xml)
         }
     }
     $("#aer_avail_info").text(aer_avail_info);
+
+    // verifying AeLoggedUser cookie still here
+    if ("" != user && $.cookie("AeLoggedUser") != user) {
+        // cookie was removed :)
+        alert("The session for user " + user + " has expired.");
+        aeDoLogout();
+    }
 }
 
 function
