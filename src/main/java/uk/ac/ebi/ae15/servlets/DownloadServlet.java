@@ -12,6 +12,7 @@ import uk.ac.ebi.ae15.utils.files.FtpFileEntry;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -76,7 +77,16 @@ public class DownloadServlet extends ApplicationServlet
             String passwordHash = cookies.get("AeLoginToken").getValue();
             if (users.verifyLogin(user, passwordHash, request.getRemoteAddr().concat(request.getHeader("User-Agent")))) {
                 userId = String.valueOf(users.getUserRecord(user).getId());
+            } else {
+                log.warn("Removing invalid session cookie for user [" + user + "]");
+                // resetting cookies
+                Cookie userCookie = new Cookie("AeLoggedUser", "");
+                userCookie.setPath("/");
+                userCookie.setMaxAge(0);
+
+                response.addCookie(userCookie);
             }
+
         }
 
 

@@ -1,5 +1,7 @@
 package uk.ac.ebi.ae15.servlets;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import uk.ac.ebi.ae15.app.ApplicationServlet;
 import uk.ac.ebi.ae15.components.Experiments;
 import uk.ac.ebi.ae15.components.Users;
@@ -9,6 +11,7 @@ import uk.ac.ebi.ae15.utils.HttpServletRequestParameterMap;
 import uk.ac.ebi.ae15.utils.RegExpHelper;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -18,6 +21,9 @@ import java.util.Date;
 
 public class QueryServlet extends ApplicationServlet
 {
+    // logging machinery
+    private final Log log = LogFactory.getLog(getClass());
+
     // Respond to HTTP GET requests from browsers.
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
@@ -84,6 +90,14 @@ public class QueryServlet extends ApplicationServlet
                 String passwordHash = cookies.get("AeLoginToken").getValue();
                 if (users.verifyLogin(user, passwordHash, request.getRemoteAddr().concat(request.getHeader("User-Agent")))) {
                     params.put("userid", String.valueOf(users.getUserRecord(user).getId()));
+                } else {
+                    log.warn("Removing invalid session cookie for user [" + user + "]");
+                    // resetting cookies
+                    Cookie userCookie = new Cookie("AeLoggedUser", "");
+                    userCookie.setPath("/");
+                    userCookie.setMaxAge(0);
+
+                    response.addCookie(userCookie);
                 }
             }
 
