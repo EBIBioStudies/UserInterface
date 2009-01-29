@@ -137,7 +137,7 @@
 
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMaintdClass" select="$pDetailedViewMainTdClass"/>
+                    <xsl:with-param name="pDetailedViewMainTdClass" select="$pDetailedViewMainTdClass"/>
                     <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:otherwise>
