@@ -212,7 +212,7 @@ a:active .table_header_label {
 #ae_login_info,
 #ae_help_link {
     position: absolute;
-    bottom: 10px;
+    bottom: 8px;
 }
 
 #ae_login_link,
@@ -220,13 +220,17 @@ a:active .table_header_label {
     left: 10px;
 }
 
+#ae_login_info img {
+    vertical-align: text-bottom;
+}
+
 #ae_login_box {
     display: none;
     position: absolute;
     left: 2px;
-    top: 2px;
+    top: 1px;
     width: 40%;
-    height: 101px;
+    height: 103px;
     margin: 0;
     padding: 0;
     border: 0 none;
@@ -237,6 +241,7 @@ a:active .table_header_label {
 }
 
 .login_inner {
+    position: relative;
     padding: 5px 8px 0 8px;
 }
 #ae_login_form fieldset {
@@ -255,7 +260,7 @@ a:active .table_header_label {
 }
 
 #ae_login_form label {
-    width: 100%;
+    /*width: 100%;*/
     padding: 0;
 }
 
@@ -280,8 +285,19 @@ a:active .table_header_label {
 }
 
 #ae_login_status {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
     margin: 0;
     color: red;
+    font-size: 9px;
+}
+
+#ae_login_remember {
+    vertical-align: middle;
+    margin: 3px 3px 8px;
 }
 
 #ae_help_link {
@@ -546,7 +562,7 @@ a:active .table_header_label {
     float: right;
     width: 10px;
     height: 10px;
-    margin: 4px 0 0 0;
+    margin: 5px 0 0 0;
     padding: 0;
 }
 
@@ -625,9 +641,9 @@ a:active .table_header_label {
     margin: 2px 0 2px 3px;
 }
 
-.td_ext div.miame_stars {
-    float: left;
-    margin: 0 5px 0 0;
+.td_ext td.miame_score img,
+.td_ext td.miame_score span {
+    vertical-align: bottom;
 }
 
 .td_ext td.attrs {

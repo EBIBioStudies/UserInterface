@@ -34,6 +34,7 @@ aeShowLoginForm()
 {
     $("#ae_login_link").hide();
     $("#ae_help_link").hide();
+    $("#ae_keywords_box").hide();
     $("#ae_login_status").text("");
     $("#ae_login_box").show();
     $("#ae_user_field").focus();
@@ -44,10 +45,11 @@ aeHideLoginForm()
 {
     $("#ae_login_box").hide();
     $("#ae_help_link").show();
+    $("#ae_keywords_box").show();
     $("#ae_login_status").text("");
     if ( "" != user ) {
         $("#ae_login_link").hide();
-        $("#ae_login_info em").text(user);
+        $("#ae_login_info strong").text(user);
         $("#ae_login_info").show();
     } else {
         $("#ae_login_link").show();
@@ -72,31 +74,39 @@ aeDoLoginNext(text)
     if ( "" != text ) {
         $("#ae_login_box").hide();
         $("#ae_help_link").show();
+        $("#ae_keywords_box").show();
         $("#ae_login_submit").removeAttr("disabled");
 
-        $.cookie("AeLoggedUser", user, {expires: 365, path: '/'});
-        $.cookie("AeLoginToken", text, {expires: 365, path: '/'});
+        var loginExpiration = null;
+        if ( $("#ae_login_remember").attr("checked") ) {
+            loginExpiration = 365;
+        }
 
-        $("#ae_login_info em").text(user);
+        $.cookie("AeLoggedUser", user, {expires: loginExpiration, path: '/'});
+        $.cookie("AeLoginToken", text, {expires: loginExpiration, path: '/'});
+
+        $("#ae_login_info strong").text(user);
         $("#ae_login_info").show();
         window.location.href = decodeURI(window.location.pathname) + $.query.toString();        
     } else {
         user = "";
-        $("#ae_login_status").text("The information you provided does not match our records. Please verity the entry and try again.");
+        $("#ae_login_status").text("Incorrect user name or password. Please try again.");
         $("#ae_login_submit").removeAttr("disabled");
         $("#ae_user_field").focus();
     }
 }
 
 function
-aeDoLogout()
+aeDoLogout(shouldReQuery)
 {
     $("#ae_login_info").hide();
     $("#ae_login_link").show();
     $.cookie("AeLoggedUser", null, {path: '/' });
     $.cookie("AeLoginToken", null, {path: '/' });
     user = "";
-    window.location.href = decodeURI(window.location.pathname) + $.query.toString();
+    if (undefined == shouldReQuery || shouldReQuery) {
+        window.location.href = decodeURI(window.location.pathname) + $.query.toString();
+    }
 }
 
 function
@@ -157,7 +167,7 @@ $(document).ready( function() {
     if ( undefined != _user && undefined != _token ) {
         user = _user;
         $("#ae_login_link").hide();
-        $("#ae_login_info em").text(_user);
+        $("#ae_login_info strong").text(_user);
         $("#ae_login_info").show();
     }
 
@@ -290,6 +300,12 @@ onExperimentQuery( tableHtml )
     // attach handlers
     $(".tr_main").each(addExpansionHandlers);
 
+    // check if user cookie has been invalidated
+    if ("" != user && $.cookie("AeLoggedUser") != user) {
+        // cookie was removed :)
+        alert("The session for user " + user + " has expired.");
+        aeDoLogout(false);
+    }
 }
 
 function

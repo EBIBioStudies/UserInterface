@@ -176,41 +176,41 @@
                             <xsl:if test="miamescores">
                                 <tr>
                                     <td class="name"><div>MIAME score</div></td>
-                                    <td class="value">
-                                        <div class="miame_stars">
+                                    <td class="value miame_score">
+                                        <div>
                                             <xsl:call-template name="miame-star">
                                                 <xsl:with-param name="stars" select="miamescores/overallscore"/>
                                                 <xsl:with-param name="count">0</xsl:with-param>
                                             </xsl:call-template>
-                                        </div>
-                                        <div>
-                                            <xsl:text>(</xsl:text>
-                                            <xsl:if test="miamescores/reportersequencescore = '1'">
-                                                <xsl:text>arrays</xsl:text>
-                                                <xsl:if test="miamescores/protocolscore = '1' or miamescores/factorvaluescore = '1' or miamescores/derivedbioassaydatascore = '1' or miamescores/measuredbioassaydatascore = '1'">
-                                                    <xsl:text>, </xsl:text>
+                                            <span>
+                                                <xsl:text> (</xsl:text>
+                                                <xsl:if test="miamescores/reportersequencescore = '1'">
+                                                    <xsl:text>arrays</xsl:text>
+                                                    <xsl:if test="miamescores/protocolscore = '1' or miamescores/factorvaluescore = '1' or miamescores/derivedbioassaydatascore = '1' or miamescores/measuredbioassaydatascore = '1'">
+                                                        <xsl:text>, </xsl:text>
+                                                    </xsl:if>
                                                 </xsl:if>
-                                            </xsl:if>
-                                            <xsl:if test="miamescores/protocolscore = '1'">
-                                                <xsl:text>protocols</xsl:text>
-                                                <xsl:if test="miamescores/factorvaluescore = '1' or miamescores/derivedbioassaydatascore = '1' or miamescores/measuredbioassaydatascore = '1'">
-                                                    <xsl:text>, </xsl:text>
+                                                <xsl:if test="miamescores/protocolscore = '1'">
+                                                    <xsl:text>protocols</xsl:text>
+                                                    <xsl:if test="miamescores/factorvaluescore = '1' or miamescores/derivedbioassaydatascore = '1' or miamescores/measuredbioassaydatascore = '1'">
+                                                        <xsl:text>, </xsl:text>
+                                                    </xsl:if>
                                                 </xsl:if>
-                                            </xsl:if>
-                                            <xsl:if test="miamescores/factorvaluescore = '1'">
-                                                <xsl:text>factors</xsl:text>
-                                                <xsl:if test="miamescores/derivedbioassaydatascore = '1' or miamescores/measuredbioassaydatascore = '1'">
-                                                    <xsl:text>, </xsl:text>
+                                                <xsl:if test="miamescores/factorvaluescore = '1'">
+                                                    <xsl:text>factors</xsl:text>
+                                                    <xsl:if test="miamescores/derivedbioassaydatascore = '1' or miamescores/measuredbioassaydatascore = '1'">
+                                                        <xsl:text>, </xsl:text>
+                                                    </xsl:if>
                                                 </xsl:if>
-                                            </xsl:if>
-                                            <xsl:if test="miamescores/derivedbioassaydatascore = '1'">
-                                                <xsl:text>processed data</xsl:text>
-                                                <xsl:if test="miamescores/measuredbioassaydatascore = '1'">
-                                                    <xsl:text>, </xsl:text>
+                                                <xsl:if test="miamescores/derivedbioassaydatascore = '1'">
+                                                    <xsl:text>processed data</xsl:text>
+                                                    <xsl:if test="miamescores/measuredbioassaydatascore = '1'">
+                                                        <xsl:text>, </xsl:text>
+                                                    </xsl:if>
                                                 </xsl:if>
-                                            </xsl:if>
-                                            <xsl:if test="miamescores/measuredbioassaydatascore = '1'">raw data</xsl:if>
-                                            <xsl:text>)</xsl:text>
+                                                <xsl:if test="miamescores/measuredbioassaydatascore = '1'">raw data</xsl:if>
+                                                <xsl:text>)</xsl:text>
+                                            </span>
                                         </div>
                                     </td>
                                 </tr>

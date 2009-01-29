@@ -89,15 +89,17 @@ aeDoLoginNext(text)
 }
 
 function
-aeDoLogout()
+aeDoLogout(shouldUpdateStats)
 {
     $("#aer_login_info").hide();
     $("#aer_login_link").show();
     $.cookie("AeLoggedUser", null, {path: '/' });
     $.cookie("AeLoginToken", null, {path: '/' });
     user = "";
-    $("#aer_avail_info").text("Updating data, please wait...");    
-    $.get("ae-stats.xml").next(updateAerStats);
+    if (undefined == shouldUpdateStats || shouldUpdateStats) {
+        $("#aer_avail_info").text("Updating data, please wait...");
+        $.get("ae-stats.xml").next(updateAerStats);
+    }
 }
 
 // runs on page reload after rendering is done
@@ -191,7 +193,7 @@ updateAerStats(xml)
     if ("" != user && $.cookie("AeLoggedUser") != user) {
         // cookie was removed :)
         alert("The session for user " + user + " has expired.");
-        aeDoLogout();
+        aeDoLogout(false);
     }
 }
 
