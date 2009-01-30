@@ -641,8 +641,8 @@ a:active .table_header_label {
     margin: 2px 0 2px 3px;
 }
 
-.td_ext td.miame_score img,
-.td_ext td.miame_score span {
+.td_ext td.value img,
+.td_ext td.value span {
     vertical-align: bottom;
 }
 

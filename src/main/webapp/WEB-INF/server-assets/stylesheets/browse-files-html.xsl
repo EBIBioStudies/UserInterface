@@ -41,7 +41,7 @@
             </xsl:choose>
             <xsl:for-each select="helper:getFilesForAccession($accession)/file">
                 <xsl:sort select="@name" order="ascending"/>
-                <div><a href="${interface.application.base.url}/files/{$accession}/{@name}"><xsl:value-of select="@name"/></a> - <xsl:value-of select="@size"/> - <xsl:value-of select="@lastmodified"/></div>
+                <div><a href="${interface.application.base.url}/files/{$accession}/{@name}"><xsl:value-of select="@name"/></a> - <xsl:value-of select="@kind"/> - <xsl:value-of select="@size"/> - <xsl:value-of select="@lastmodified"/></div>
             </xsl:for-each>
             <xsl:for-each select="experiment[accession=$accession]/arraydesign">
                 <xsl:sort select="accession" order="ascending"/>
