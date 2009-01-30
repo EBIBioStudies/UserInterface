@@ -625,7 +625,7 @@ a:active .table_header_label {
     width: 118px;
     padding: 0;
     font-weight: bold;
-    color: #408c8c;
+    color: #005555;
     text-align: right;
     vertical-align: top;
     overflow: hidden;
@@ -657,7 +657,7 @@ a:active .table_header_label {
 
 .td_ext td.attrs th {
     font-weight: bold;
-    color: #408c8c;
+    color: #005555;
     padding-bottom: 4px;
     text-align: left;
 }
