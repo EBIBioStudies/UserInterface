@@ -610,6 +610,11 @@ a:active .table_header_label {
     padding: 3px 2px;
 }
 
+.td_ext table {
+    margin: 0;
+    width: 100%;
+}
+
 .td_ext td {
     margin: 0;
     padding: 0 0 3px 0;
@@ -648,11 +653,6 @@ a:active .table_header_label {
 
 .td_ext td.attrs {
     font-weight: normal;
-}
-
-.td_ext td.attrs table {
-    margin: 0;
-    width: 100%;
 }
 
 .td_ext td.attrs th {
