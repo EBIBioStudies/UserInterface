@@ -505,7 +505,7 @@
         <xsl:variable name="vAccession" select="accession"/>
         <xsl:for-each select="file[extension='txt' and (kind='idf' or kind='sdrf' or kind='adf')]">
             <div>
-                <a href="${interface.application.base.url}/files/{$vAccession}/{name}"
+                <a href="{url}"
                    target="_blank" title="Opens in a new window">
                     <xsl:text>&#187; </xsl:text>
                     <xsl:choose>
@@ -525,7 +525,7 @@
         <xsl:variable name="vAccession" select="accession"/>
         <xsl:for-each select="file[kind='biosamples' and (extension='png' or extension='svg')]">
             <div>
-                <a href="${interface.application.base.url}/files/{$vAccession}/{name}"
+                <a href="{url}"
                    target="_blank" title="Opens in a new window">
                     <xsl:text>&#187; Experiment Design Image (</xsl:text>
                     <xsl:value-of select="name"/>
