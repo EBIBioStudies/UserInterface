@@ -129,7 +129,7 @@
                     <xsl:if test="count(species) = 0"><xsl:text>&#160;</xsl:text></xsl:if>
                 </div></td>
                 <td class="{$pDetailedViewMainTdClass}"><div><xsl:apply-templates select="releasedate" mode="highlight" /></div><xsl:if test="count(releasedate)=0">&#160;</xsl:if></td>
-                <td class="align_center {$pDetailedViewMainTdClass}">
+                <td class="td_main_img align_center {$pDetailedViewMainTdClass}">
                     <div>
                         <xsl:choose>
                             <xsl:when test="file[kind = 'fgem']"><a href="{concat('${interface.application.base.url}/files/', concat(accession, concat('/', file[kind = 'fgem']/name)))}" title="Click to download processed data"><img src="${interface.application.base.url}/assets/images/silk_data_save.gif" width="16" height="16" alt="Click to download processed data"/></a></xsl:when>
@@ -137,7 +137,7 @@
                         </xsl:choose>
                     </div>
                 </td>
-                <td class="align_center {$pDetailedViewMainTdClass}">
+                <td class="td_main_img align_center {$pDetailedViewMainTdClass}">
                     <div>
                         <xsl:choose>
                             <xsl:when test="contains(file[kind = 'raw']/dataformat, 'CEL')"><a href="{concat('${interface.application.base.url}/files/', concat(accession, concat('/', file[kind = 'raw']/name)))}" title="Click to download Affymetrix data"><img src="${interface.application.base.url}/assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Click to download Affymetrix data"/></a></xsl:when>
@@ -147,7 +147,7 @@
                         </xsl:choose>
                     </div>
                 </td>
-                <td class="align_center {$pDetailedViewMainTdClass}">
+                <td class="td_main_img align_center {$pDetailedViewMainTdClass}">
                     <div>
                         <xsl:choose>
                             <xsl:when test="@loadedinatlas"><a href="${interface.application.link.atlas.exp_query.url}{accession}" target="_blank" title="Click to query ArrayExpress Atlas for most differentially expressed genes in {accession}"><img src="${interface.application.base.url}/assets/images/silk_tick.gif" width="16" height="16" alt="*"/></a></xsl:when>
