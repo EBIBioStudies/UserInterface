@@ -6,10 +6,7 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import uk.ac.ebi.ae15.app.Application;
 import uk.ac.ebi.ae15.app.ApplicationComponent;
-import uk.ac.ebi.ae15.jobs.ReloadExperimentsJob;
-import uk.ac.ebi.ae15.jobs.RescanFilesJob;
-import uk.ac.ebi.ae15.jobs.RetrieveExperimentsListFromWarehouseJob;
-import uk.ac.ebi.ae15.jobs.RetrieveExperimentsXmlJob;
+import uk.ac.ebi.ae15.jobs.*;
 
 import java.util.List;
 
@@ -22,6 +19,7 @@ public class JobsController extends ApplicationComponent
     // jobs group
     private final String AE_JOBS_GROUP = "ae-jobs";
 
+    // quartz scheduler
     private Scheduler scheduler;
 
     public JobsController( Application app )
@@ -31,6 +29,7 @@ public class JobsController extends ApplicationComponent
 
     public void initialize()
     {
+        addTriggerListener(new ApplicationTriggerListener());
         addJob("rescan-files", RescanFilesJob.class);
         addJob("reload-xml", ReloadExperimentsJob.class);
         addJob("retrieve-xml", RetrieveExperimentsXmlJob.class);
@@ -103,6 +102,15 @@ public class JobsController extends ApplicationComponent
         return scheduler;
     }
 
+    private void addTriggerListener( TriggerListener tl )
+    {
+        try {
+            getScheduler().addGlobalTriggerListener(tl);
+        } catch (Throwable x ) {
+            log.error("Caught an exception:", x);                
+        }
+    }
+    
     private void addJob( String name, Class c )
     {
         JobDetail j = new JobDetail(name, AE_JOBS_GROUP, c, true /* volatilily */, true /*durability */, false /* recover */);

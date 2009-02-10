@@ -279,6 +279,7 @@
                             <tr>
                                 <td class="name"><div>Files</div></td>
                                 <td class="value">
+                                    <xsl:call-template name="data-files"/>
                                     <xsl:call-template name="magetab-files"/>
                                     <xsl:call-template name="image-files"/>
                                     <div>
@@ -501,9 +502,30 @@
         </xsl:if>
     </xsl:template>
 
+    <xsl:template name="data-files">
+        <xsl:variable name="vAccession" select="accession"/>
+        <xsl:for-each select="file[extension='zip' and (kind='raw' or kind='fgem')]">
+            <xsl:sort select="kind"/>
+            <div>
+                <a href="{url}"
+                   target="_blank" title="Opens in a new window">
+                    <xsl:text>&#187; </xsl:text>
+                    <xsl:choose>
+                        <xsl:when test="kind='raw'">Raw Data</xsl:when>
+                        <xsl:when test="kind='fgem'">Processed Data</xsl:when>
+                    </xsl:choose>
+                    <xsl:text> Archive (</xsl:text>
+                    <xsl:value-of select="name"/>
+                    <xsl:text>)</xsl:text>
+                </a>
+            </div>
+        </xsl:for-each>
+    </xsl:template>
+
     <xsl:template name="magetab-files">
         <xsl:variable name="vAccession" select="accession"/>
         <xsl:for-each select="file[extension='txt' and (kind='idf' or kind='sdrf' or kind='adf')]">
+            <xsl:sort select="kind"/>
             <div>
                 <a href="{url}"
                    target="_blank" title="Opens in a new window">
@@ -524,6 +546,7 @@
         <xsl:template name="image-files">
         <xsl:variable name="vAccession" select="accession"/>
         <xsl:for-each select="file[kind='biosamples' and (extension='png' or extension='svg')]">
+            <xsl:sort select="extension"/>
             <div>
                 <a href="{url}"
                    target="_blank" title="Opens in a new window">
