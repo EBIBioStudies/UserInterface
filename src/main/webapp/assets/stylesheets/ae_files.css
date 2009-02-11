@@ -1,0 +1,41 @@
+#ae_files_content {
+    width: 700px;
+    margin: 20px;
+}
+
+.ae_accession {
+    font-size: 18px;
+    line-height: normal;
+}
+
+.ae_title {
+    border-bottom: 1px solid #005555;
+    padding: 0 0 5px 0;
+}
+
+.ae_files_table {
+    table-layout: fixed;
+    width: 100%;
+    margin: 5px 0 10px 0;
+}
+
+.ae_files_table td {
+    font-size: 11px;
+    line-height: normal;
+    vertical-align: top;
+    padding: 0 10px;
+    overflow: hidden;
+}
+.td_center {
+    text-align: center;
+}
+
+.td_size {
+    width: 100px;
+    text-align: right;
+}
+
+.td_date {
+    width: 200px;
+    text-align: left;
+}

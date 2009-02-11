@@ -46,6 +46,21 @@ public class AppXalanExtension
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
+    public static String fileSizeToString( long size )
+    {
+        StringBuilder str = new StringBuilder();
+        if (922L > size ) {
+            str.append(size).append(" B");
+        } else if (944128L > size) {
+            str.append(String.format("%.0f KB", (Long.valueOf(size).doubleValue()/1024.0)));
+        } else if (1073741824L > size) {
+            str.append(String.format("%.1f MB", (Long.valueOf(size).doubleValue()/1048576.0)));
+        } else if (1099511627776L > size) {
+            str.append(String.format("%.2f GB", (Long.valueOf(size).doubleValue()/1073741824.0)));
+        }
+        return str.toString();
+    }
+
     public static String normalizeSpecies( String species )
     {
         // if more than one word: "First second", otherwise "First"
