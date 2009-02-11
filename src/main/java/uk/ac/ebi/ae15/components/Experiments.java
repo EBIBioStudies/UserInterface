@@ -91,7 +91,10 @@ public class Experiments extends ApplicationComponent
 
     public boolean isAccessible( String accession, String userId )
     {
-        return getSearch().isAccessible(accession, userId);
+        if (accession.toUpperCase().startsWith("A"))
+            return true; // TODO: ugly shortcut to bypass security for Array Designs
+        else
+            return getSearch().isAccessible(accession, userId);
     }
 
     public boolean isInWarehouse( String accession )
