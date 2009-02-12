@@ -403,26 +403,28 @@
     <xsl:template match="bibliography">
         <div>
             <xsl:variable name="publication_title">
-                <xsl:if test="authors/text()!=''"><xsl:apply-templates select="authors" mode="highlight"/>. </xsl:if>
-                <xsl:if test="title/text()!=''"><xsl:apply-templates select="title" mode="highlight"/>. </xsl:if>
-                <xsl:if test="publication/text()!=''"><em><xsl:apply-templates select="publication" mode="highlight"/></em></xsl:if>
+                <xsl:if test="title/text()!=''"><xsl:call-template name="highlight"><xsl:with-param name="pText" select="helper:trimTrailingDot(title)"/></xsl:call-template>. </xsl:if>
+                <xsl:if test="authors/text()!=''"><xsl:call-template name="highlight"><xsl:with-param name="pText" select="helper:trimTrailingDot(authors)"/></xsl:call-template>. </xsl:if>
             </xsl:variable>
-            <xsl:variable name="publication_url">
+            <xsl:variable name="publication_link_title">
+                <xsl:if test="publication/text()!=''"><em><xsl:apply-templates select="publication" mode="highlight"/></em>&#160;</xsl:if>
                 <xsl:if test="volume/text()!=''"><xsl:apply-templates select="volume" mode="highlight"/><xsl:if test="issue/text()!=''">(<xsl:apply-templates select="issue" mode="highlight"/>)</xsl:if></xsl:if>
                 <xsl:if test="pages/text()!=''">:<xsl:apply-templates select="pages" mode="highlight"/></xsl:if>
                 <xsl:if test="year/text()!=''">&#160;(<xsl:apply-templates select="year" mode="highlight"/>)</xsl:if>
             </xsl:variable>
             <xsl:choose>
                 <xsl:when test="uri[starts-with(., 'http')]">
-                    <a href="{uri}" target="_blank" title="Opens in a new window">&#187; <xsl:copy-of select="$publication_title"/></a>
+                    <xsl:copy-of select="$publication_title"/>
+                    <a href="{uri}" target="_blank" title="Opens in a new window"><xsl:copy-of select="$publication_link_title"/></a>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:copy-of select="$publication_title" />
-                    <xsl:if test="uri/text()!=''">(<xsl:apply-templates select="uri" mode="highlight"/>)</xsl:if>
+                    <xsl:copy-of select="$publication_title"/>
+                    <xsl:copy-of select="$publication_link_title"/>
+                    <xsl:if test="uri/text()!=''"> (<xsl:apply-templates select="uri" mode="highlight"/>)</xsl:if>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:if test="accession">
-                <xsl:if test="number(accession)>0">(<a href="http://www.ncbi.nlm.nih.gov/pubmed/{accession}" target="_blank" title="Opens in a new window">&#187; PubMed <xsl:apply-templates select="accession" mode="highlight"/></a>)</xsl:if>
+                <xsl:if test="number(accession)>0">, <a href="http://www.ncbi.nlm.nih.gov/pubmed/{accession}" target="_blank" title="Opens in a new window">PubMed <xsl:apply-templates select="accession" mode="highlight"/></a></xsl:if>
             </xsl:if>
         </div>
     </xsl:template>
@@ -453,7 +455,7 @@
             <xsl:sort select="contact"/>
             <xsl:choose>
                 <xsl:when test="role='submitter' and string-length(email)&gt;0">
-                    <a href="mailto:{email}"><xsl:apply-templates select="contact" mode="highlight"/></a>
+                    <xsl:apply-templates select="contact" mode="highlight"/> &lt;<a href="mailto:{email}"><xsl:apply-templates select="email" mode="highlight"/></a>&gt;
                 </xsl:when>
                 <xsl:otherwise><xsl:apply-templates select="contact" mode="highlight"/></xsl:otherwise>
             </xsl:choose>
@@ -497,6 +499,19 @@
         </xsl:choose>
     </xsl:template>
 
+    <xsl:template name="highlight">
+        <xsl:param name="pText"/>
+        <xsl:variable name="vText" select="normalize-space($pText)"/>
+        <xsl:choose>
+            <xsl:when test="string-length($vText)!=0">
+                <xsl:variable name="markedtext" select="helper:markKeywords($vText,$keywords,$wholewords)"/>
+                <xsl:call-template name="add_highlight_element">
+                    <xsl:with-param name="text" select="$markedtext"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>&#160;</xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 
     <xsl:template name="add_highlight_element">
         <xsl:param name="text"/>

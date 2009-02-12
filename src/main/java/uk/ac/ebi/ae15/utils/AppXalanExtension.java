@@ -74,6 +74,14 @@ public class AppXalanExtension
         }
     }
 
+    public static String trimTrailingDot( String str )
+    {
+        if (str.endsWith(".")) {
+            return str.substring(0, str.length() - 2);
+        } else
+            return str;
+    }
+
     public static String dateToRfc822()
     {
         return new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(new Date());

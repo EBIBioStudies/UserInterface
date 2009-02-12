@@ -109,14 +109,18 @@
         </miamescores>
     </xsl:template>
 
-    <xsl:template match="bibliography[@pages = '' or @pages = '-']" mode="copy">
+    <xsl:template match="bibliography" mode="copy">
         <xsl:copy>
             <xsl:for-each select="@*">
-                <xsl:if test="helper:toLowerCase(name()) != 'pages'">
-                    <xsl:element name="{helper:toLowerCase(name())}">
-                        <xsl:value-of select="." />
-                    </xsl:element>
-                </xsl:if>
+                <xsl:variable name="vAttrName" select="helper:toLowerCase(name())"/>
+                <xsl:choose>
+                    <xsl:when test="$vAttrName = 'pages' and (text() = '' or text = '-')"/>
+                    <xsl:otherwise>
+                        <xsl:element name="{$vAttrName}">
+                            <xsl:value-of select="." />
+                        </xsl:element>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:for-each>
         </xsl:copy>
     </xsl:template>
