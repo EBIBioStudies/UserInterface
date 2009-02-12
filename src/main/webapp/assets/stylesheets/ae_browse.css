@@ -296,8 +296,8 @@ a:active .table_header_label {
 }
 
 #ae_login_remember {
-    vertical-align: middle;
-    margin: 3px 3px 8px;
+    margin: 0 2px;
+    vertical-align: text-bottom;
 }
 
 #ae_help_link {
