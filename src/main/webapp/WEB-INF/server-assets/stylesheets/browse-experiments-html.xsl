@@ -289,8 +289,8 @@
                                                     <tbody>
                                                         <xsl:call-template name="data-files"/>
                                                         <xsl:call-template name="magetab-files"/>
-                                                        <xsl:call-template name="magetab-files-array"/>
                                                         <xsl:call-template name="image-files"/>
+                                                        <xsl:call-template name="magetab-files-array"/>
                                                     </tbody>
                                                 </table>
                                             </div>
