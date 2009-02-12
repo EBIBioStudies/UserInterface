@@ -256,7 +256,9 @@
                                             <div>
                                                 <a href="${interface.application.link.aer_old.base.url}/result?queryFor=PhysicalArrayDesign&amp;aAccession={accession}"
                                                    target="_blank" title="Opens in a new window">
-                                                    <xsl:text>&#187; Array design - </xsl:text>
+                                                    <xsl:text>&#187; Array design </xsl:text>
+                                                    <xsl:apply-templates select="accession" mode="highlight"/>
+                                                    <xsl:text> - </xsl:text>
                                                     <xsl:apply-templates select="name" mode="highlight" />
                                                 </a>
                                             </div>
@@ -278,19 +280,41 @@
 
                             <tr>
                                 <td class="name"><div>Files</div></td>
-                                <td class="value">
-                                    <xsl:call-template name="data-files"/>
-                                    <xsl:call-template name="magetab-files"/>
-                                    <xsl:call-template name="image-files"/>
-                                    <div>
-                                        <a href="${interface.application.base.url}/files/{accession}"
-                                           target="_blank" title="Opens in a new window">
-                                            <xsl:text>&#187; Browse all available files</xsl:text>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
+                                <xsl:choose>
+                                    <xsl:when test="file[kind='raw' or kind='fgem' or kind='adf' or kind='idf' or kind='sdrf' or kind='biosamples']">
 
+                                        <td class="attrs">
+                                            <div>
+                                                <table cellpadding="0" cellspacing="0" border="0">
+                                                    <tbody>
+                                                        <xsl:call-template name="data-files"/>
+                                                        <xsl:call-template name="magetab-files"/>
+                                                        <xsl:call-template name="magetab-files-array"/>
+                                                        <xsl:call-template name="image-files"/>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div>
+                                                <a href="${interface.application.base.url}/files/{accession}"
+                                                   target="_blank" title="Opens in a new window">
+                                                    <xsl:text>&#187; Browse all available files</xsl:text>
+                                                </a>
+                                            </div>
+
+                                        </td>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <td class="value">
+                                            <div>
+                                                <a href="${interface.application.base.url}/files/{accession}"
+                                                   target="_blank" title="Opens in a new window">
+                                                    <xsl:text>&#187; Browse all available files</xsl:text>
+                                                </a>
+                                            </div>    
+                                        </td>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </tr>
                             <xsl:if test="(count(experimenttype) + count(experimentdesign))&gt;0">
                                 <tr>
                                     <td class="name"><div>Experiment type<xsl:if test="(count(experimenttype) + count(experimentdesign))&gt;1">s</xsl:if></div></td>
@@ -381,11 +405,12 @@
             <xsl:variable name="publication_title">
                 <xsl:if test="authors/text()!=''"><xsl:apply-templates select="authors" mode="highlight"/>. </xsl:if>
                 <xsl:if test="title/text()!=''"><xsl:apply-templates select="title" mode="highlight"/>. </xsl:if>
-                <xsl:if test="publication/text()!=''"><em><xsl:apply-templates select="publication" mode="highlight"/></em>&#160;</xsl:if>
+                <xsl:if test="publication/text()!=''"><em><xsl:apply-templates select="publication" mode="highlight"/></em></xsl:if>
+            </xsl:variable>
+            <xsl:variable name="publication_url">
                 <xsl:if test="volume/text()!=''"><xsl:apply-templates select="volume" mode="highlight"/><xsl:if test="issue/text()!=''">(<xsl:apply-templates select="issue" mode="highlight"/>)</xsl:if></xsl:if>
                 <xsl:if test="pages/text()!=''">:<xsl:apply-templates select="pages" mode="highlight"/></xsl:if>
                 <xsl:if test="year/text()!=''">&#160;(<xsl:apply-templates select="year" mode="highlight"/>)</xsl:if>
-                <xsl:if test="publication/text()!=''">.</xsl:if>
             </xsl:variable>
             <xsl:choose>
                 <xsl:when test="uri[starts-with(., 'http')]">
@@ -426,7 +451,13 @@
         <xsl:for-each select="provider[not(contact=following-sibling::provider/contact) and role!='data_coder']">
             <xsl:sort select="role='submitter'" order="descending"/>
             <xsl:sort select="contact"/>
-            <xsl:apply-templates select="contact" mode="highlight"/><xsl:if test="position()!=last()">, </xsl:if>
+            <xsl:choose>
+                <xsl:when test="role='submitter' and string-length(email)&gt;0">
+                    <a href="mailto:{email}"><xsl:apply-templates select="contact" mode="highlight"/></a>
+                </xsl:when>
+                <xsl:otherwise><xsl:apply-templates select="contact" mode="highlight"/></xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="position()!=last()">, </xsl:if>
         </xsl:for-each>
     </xsl:template>
 
@@ -504,58 +535,85 @@
 
     <xsl:template name="data-files">
         <xsl:variable name="vAccession" select="accession"/>
-        <xsl:for-each select="file[extension='zip' and (kind='raw' or kind='fgem')]">
-            <xsl:sort select="kind"/>
-            <div>
-                <a href="{url}"
-                   target="_blank" title="Opens in a new window">
-                    <xsl:text>&#187; </xsl:text>
-                    <xsl:choose>
-                        <xsl:when test="kind='raw'">Raw Data</xsl:when>
-                        <xsl:when test="kind='fgem'">Processed Data</xsl:when>
-                    </xsl:choose>
-                    <xsl:text> Archive (</xsl:text>
-                    <xsl:value-of select="name"/>
-                    <xsl:text>)</xsl:text>
-                </a>
-            </div>
-        </xsl:for-each>
+        <xsl:if test="file[extension='zip' and (kind='raw' or kind='fgem')]">
+            <tr>
+                <td class="attr_name">Data Archives</td>
+                <td class="attr_value">
+                    <xsl:for-each select="file[extension='zip' and (kind='raw' or kind='fgem')]">
+                        <xsl:sort select="kind"/>
+                        <a href="{url}">
+                            <xsl:value-of select="name"/>
+                        </a>
+                        <xsl:if test="position()!=last()">
+                            <xsl:text>, </xsl:text>
+                        </xsl:if>
+                    </xsl:for-each>
+                </td>
+            </tr>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template name="magetab-files">
         <xsl:variable name="vAccession" select="accession"/>
-        <xsl:for-each select="file[extension='txt' and (kind='idf' or kind='sdrf' or kind='adf')]">
+        <xsl:for-each select="file[extension='txt' and (kind='idf' or kind='sdrf')]">
             <xsl:sort select="kind"/>
-            <div>
-                <a href="{url}"
-                   target="_blank" title="Opens in a new window">
-                    <xsl:text>&#187; </xsl:text>
+            <tr>
+                <td class="attr_name">
                     <xsl:choose>
                         <xsl:when test="kind='idf'">Investigation Description</xsl:when>
                         <xsl:when test="kind='sdrf'">Sample and Data Relationship</xsl:when>
-                        <xsl:when test="kind='adf'">Array Design</xsl:when>
                     </xsl:choose>
-                    <xsl:text> File (</xsl:text>
-                    <xsl:value-of select="name"/>
-                    <xsl:text>)</xsl:text>
-                </a>
-            </div>
+                </td>
+                <td class="attr_value">
+                    <a href="{url}"
+                       target="_blank" title="Opens in a new window">
+                        <xsl:value-of select="name"/>
+                    </a>
+                </td>
+            </tr>
         </xsl:for-each>
     </xsl:template>
 
-        <xsl:template name="image-files">
+    <xsl:template name="magetab-files-array">
         <xsl:variable name="vAccession" select="accession"/>
-        <xsl:for-each select="file[kind='biosamples' and (extension='png' or extension='svg')]">
-            <xsl:sort select="extension"/>
-            <div>
-                <a href="{url}"
-                   target="_blank" title="Opens in a new window">
-                    <xsl:text>&#187; Experiment Design Image (</xsl:text>
-                    <xsl:value-of select="name"/>
-                    <xsl:text>)</xsl:text>
-                </a>
-            </div>
-        </xsl:for-each>
+        <xsl:if test="file[extension='txt' and kind='adf']">
+            <tr>
+                <td class="attr_name">Array Design</td>
+                <td class="attr_value">
+                    <xsl:for-each select="file[extension='txt' and kind='adf']">
+                        <xsl:sort select="name"/>
+                        <a href="{url}"
+                           target="_blank" title="Opens in a new window">
+                            <xsl:value-of select="name"/>
+                        </a>
+                        <xsl:if test="position()!=last()">
+                            <xsl:text>, </xsl:text>
+                        </xsl:if>
+                    </xsl:for-each>
+                </td>
+            </tr>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="image-files">
+        <xsl:variable name="vAccession" select="accession"/>
+        <xsl:if test="file[kind='biosamples' and (extension='png' or extension='svg')]">
+            <tr>
+                <td class="attr_name">Experiment Design Images</td>
+                <td class="attr_value">
+                    <xsl:for-each select="file[kind='biosamples' and (extension='png' or extension='svg')]">
+                        <xsl:sort select="extension"/>
+                        <a href="{url}"
+                           target="_blank" title="Opens in a new window">
+                            <xsl:value-of select="name"/>
+                        </a>
+                        <xsl:if test="position()!=last()">
+                            <xsl:text>, </xsl:text>
+                        </xsl:if>
+                    </xsl:for-each>
+                </td>
+            </tr>
+        </xsl:if>
     </xsl:template>
 
 </xsl:stylesheet>

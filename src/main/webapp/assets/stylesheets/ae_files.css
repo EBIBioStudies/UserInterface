@@ -26,6 +26,11 @@
     padding: 0 10px;
     overflow: hidden;
 }
+
+#ae_infotext {
+    font-size: 12px;    
+}
+
 .td_center {
     text-align: center;
 }

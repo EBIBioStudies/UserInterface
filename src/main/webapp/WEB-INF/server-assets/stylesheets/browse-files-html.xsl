@@ -54,12 +54,12 @@
                                 </xsl:for-each>
                             </xsl:when>
                             <xsl:otherwise>
-                                <div>The access to experiment data is prohibited.</div>
+                                <div id="ae_infotext">The access to experiment data for <xsl:value-of select="$vAccession"/> is restricted.</div>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:when>
                     <xsl:otherwise>
-                        <div>The experiment with the accession does not exist.</div>
+                        <div id="ae_infotext">The experiment with accession <xsl:value-of select="$vAccession"/> is not present in the archive.</div>
                     </xsl:otherwise>
                 </xsl:choose>
             </div>
@@ -72,12 +72,12 @@
         <table class="ae_files_table" border="0" cellpadding="0" cellspacing="0">
             <tbody>
                 <xsl:if test="not($vFiles/file)">
-                    <tr><td class="td_center" colspan="3">No files available</td></tr>
+                    <tr><td class="td_center" colspan="3">No files found</td></tr>
                 </xsl:if>
                 <xsl:for-each select="$vFiles/file">
                     <xsl:sort select="contains(helper:toUpperCase(@name), 'README')" order="descending"/>
-                    <xsl:sort select="@kind='adf' or @kind='idf' or @kind='sdrf'" order="descending"/>
                     <xsl:sort select="@kind='raw' or @kind='fgem'" order="descending"/>
+                    <xsl:sort select="@kind='adf' or @kind='idf' or @kind='sdrf'" order="descending"/>
                     <xsl:sort select="@name" order="ascending"/>
                     <tr>
                         <td class="td_name"><a href="${interface.application.base.url}/files/{$pAccession}/{@name}"><xsl:value-of select="@name"/></a></td>
