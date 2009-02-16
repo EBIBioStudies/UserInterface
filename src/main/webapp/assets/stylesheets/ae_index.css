@@ -139,6 +139,7 @@
 }
 
 .login_inner {
+    height: 108px;    
     padding: 5px 8px;
     position: relative;
 }
