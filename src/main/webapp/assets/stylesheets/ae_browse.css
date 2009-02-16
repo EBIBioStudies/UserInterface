@@ -2,6 +2,14 @@ body {
     overflow-y: hidden;
 }
 
+#ae_noscript {
+    position: absolute;
+    top: 57px;
+    left: 0;
+    width: 100%;
+    padding: 5px;
+}
+
 #ae_contents {
     position: absolute;
     top: 57px;

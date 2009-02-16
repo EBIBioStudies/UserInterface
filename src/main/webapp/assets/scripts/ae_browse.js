@@ -155,6 +155,9 @@ $(document).ready( function() {
         document.getElementById('ae_contents').style.zIndex = 1;
     }
 
+    // content is hidden by default to prevent its ugly appearance on IE if scripting is disabled
+    $("#ae_contents").show();
+    
     if ($.browser.opera && $.browser.version < 9.5) {
         onWindowResize();
         $(window).resize( onWindowResize );

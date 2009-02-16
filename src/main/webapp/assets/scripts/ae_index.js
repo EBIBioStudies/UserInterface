@@ -102,13 +102,24 @@ aeDoLogout(shouldUpdateStats)
     }
 }
 
-// runs on page reload after rendering is done
-$(document).ready(function()
+function
+aeOnLoad()
 {
     // step 0: hack for IE to work with this funny EBI header/footer (to be redeveloped with jQuery)
     if (-1 != navigator.userAgent.indexOf('MSIE')) {
         document.getElementById('head').allowTransparency = true;
+        // step 0.5: display a warning for those unlucky who use IE5.x
+        if ( -1 != navigator.userAgent.indexOf('MSIE 5')) {
+            document.getElementById('ae_jquery_unsupported').style.display = 'block';
+        }
     }
+}
+
+// runs on page reload after rendering is done
+$(document).ready(function()
+{
+    // footer is hidden by default to prevent its ugly appearance on IE if scripting is disabled
+    $("#ebi_footer").show();
 
     // check if there is a old-fasioned request which
     // we need to dispatch to the new browse interface
