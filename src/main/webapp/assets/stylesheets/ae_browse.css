@@ -4,11 +4,14 @@ body {
 
 #ae_contents {
     position: absolute;
-    top: 0;
+    top: 57px;
+    bottom: 22px;
     left: 0;
-    padding: 57px 0 22px 0;
-    height: 100%;
     width: 100%;
+}
+
+.ae_centered_container_100pc {
+    _height: expression(document.body.clientHeight-79);
 }
 
 /* ext-table style box */
@@ -54,13 +57,16 @@ body {
 .table_box_top_right {
     width: 100%;
     height: 100%;
+    _width: expression(document.body.clientWidth-10);
+    _height: expression(document.body.clientHeight-206);
 }
 
 .table_padding_box {
-    position: absolute;
     padding: 6px;
     width: 100%;
     height: 100%;
+    _width: expression(document.body.clientWidth-10);
+    _height: expression(document.body.clientHeight-206);
     overflow: hidden;
 }
 
@@ -68,6 +74,8 @@ body {
     position: relative;
     width: 100%;
     height: 100%;
+    _width: expression(document.body.clientWidth-22);
+    _height: expression(document.body.clientHeight-218);
     overflow: hidden;
     border: 1px solid #408c8c;
     background-color: white;
@@ -79,22 +87,18 @@ th {
 
 .table_header_filler {
     background: url( ../images/thead.gif ) 0 0 repeat-x;
-    height: 22px;
 }
 
 .table_header_border_left {
     background: url( ../images/thead.gif ) 0 -22px no-repeat;
-    height: 22px;
 }
 
 .table_header_box {
     background: url( ../images/thead.gif ) 0 -44px repeat-x;
-    height: 22px;
 }
 
 .table_header_border_right {
     background: url( ../images/thead.gif ) 100% -66px no-repeat;
-    height: 22px;
 }
 
 th.sortable:hover div.table_header_border_left,
@@ -105,13 +109,11 @@ th.sortable:active div.table_header_border_left {
 th.sortable:hover,
 th.sortable:active {
     background: url( ../images/thead.gif ) 0 -110px repeat-x;
-    height: 22px;
 }
 
 th.sortable:hover .table_header_border_right,
 th.sortable:active .table_header_border_right {
     background: url( ../images/thead.gif ) 100% -132px no-repeat;
-    height: 22px;
 }
 
 .table_header_box_selected .table_header_border_left {
@@ -120,12 +122,10 @@ th.sortable:active .table_header_border_right {
 
 .table_header_box_selected {
     background: url( ../images/thead.gif ) 0 -176px repeat-x;
-    height: 22px;
 }
 
 .table_header_box_selected .table_header_border_right {
     background: url( ../images/thead.gif ) 100% -198px no-repeat;
-    height: 22px;
 }
 
 .table_header_box_fake {
@@ -155,51 +155,47 @@ a:active .table_header_label {
 
 .table_footer_box {
     background: url( ../images/tfoot.gif ) 0 -22px repeat-x;
-    height: 22px;
 }
 
 .table_footer_left {
     background: url( ../images/tfoot.gif ) 0 0 no-repeat;
-    height: 22px;
 }
 
 .table_footer_right {
-    height: 100%;
 }
 
 .table_footer_inner {
-    height: 100%;
+    height: 22px;
     padding: 4px 4px 0 4px;
     text-align: left;
 }
 
-#ae_browse_area {
-    position: absolute;
-    padding: 115px 5px 5px 5px;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
-
 /* ae keywords filters area */
 #ae_keywords_filters_area {
-    position: relative;
-    top: -115px;
+    position: absolute;
+    top: 0;
     left: 0;
     width: 100%;
-    height: 115px;
+    height: 120px;
+    padding: 5px;
     overflow: hidden;
-    padding: 5px 0 5px 0;
 }
 
 #ae_keywords_filters_box {
     position: relative;
-    width: 100%;
-    height: 100%;
 }
 
 #ae_keywords_filters_box label {
     white-space: nowrap;
+}
+
+#ae_keywords_filters_box fieldset {
+    border: 0 none;
+}
+
+#ae_keywords_filters_inner_box {
+    position: relative;
+    height: 110px;
 }
 
 #ae_logo_browse {
@@ -229,8 +225,9 @@ a:active .table_header_label {
     position: absolute;
     left: 2px;
     top: 1px;
+    bottom: 1px;
     width: 40%;
-    height: 103px;
+    _height: 108px;
     margin: 0;
     padding: 0;
     border: 0 none;
@@ -242,25 +239,23 @@ a:active .table_header_label {
 
 .login_inner {
     position: relative;
+    height: 96px;
     padding: 5px 8px 0 8px;
-}
-#ae_login_form fieldset {
-    border: 0 none;
-    padding: 0;
 }
 
 #ae_login_user_fset {
     width: 50%;
     margin: 0 5px 0 0;
+    padding: 0;
     float: left;
 }
 
 #ae_login_pass_fset {
     margin: 0;
+    padding: 0;
 }
 
 #ae_login_form label {
-    /*width: 100%;*/
     padding: 0;
 }
 
@@ -313,10 +308,9 @@ a:active .table_header_label {
     left: 0;
     top: 0;
     width: 40%;
-    height: 100%;
+    height: 110px;
     margin: 0;
     padding: 5px 5px 5px 10px;
-    border: 0 none;
 }
 
 #ae_keywords_box span {
@@ -328,10 +322,9 @@ a:active .table_header_label {
     left: 40%;
     top: 0;
     width: 35%;
-    height: 100%;
+    height: 110px;
     margin: 0;
     padding: 5px 5px 5px 5px;
-    border: 0 none;
 }
 
 #ae_options_box {
@@ -339,10 +332,9 @@ a:active .table_header_label {
     left: 75%;
     top: 0;
     width: 25%;
-    height: 100%;
+    height: 110px;
     margin: 0;
     padding: 5px 10px 5px 5px;
-    border: 0 none;
 }
 
 /** font assignment **/
@@ -392,12 +384,19 @@ a:active .table_header_label {
 
 /* ae resutls area */
 #ae_results_area {
+    position: absolute;
+    top: 120px;
+    bottom: 0;
+    width: 100%;
+    padding: 0 5px 5px 5px;
+    overflow: hidden;
+}
+
+#ae_results_box {
     position: relative;
-    padding: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    top: -115px;
+    _height: auto;
 }
 
 #ae_results_summary_info {
@@ -406,9 +405,10 @@ a:active .table_header_label {
 
 #ae_results_tbl {
     position: absolute;
-    padding: 22px 0 22px 0;
     width: 100%;
     height: 100%;
+    _width: expression(document.body.clientWidth-24);
+    _height: expression(document.body.clientHeight-220);
     overflow: hidden;
 }
 
@@ -421,6 +421,7 @@ a:active .table_header_label {
     position: absolute;
     top: 0;
     left: 0;
+    height: 22px;
     overflow: hidden;
 }
 
@@ -438,15 +439,21 @@ a:active .table_header_label {
 }
 
 #ae_results_body {
-    position: relative;
+    position: absolute;
+    left: 0;
+    top: 22px;
     width: 100%;
     height: 100%;
+    _width: expression(document.body.clientWidth-24);
+    _height: expression(document.body.clientHeight-263);
     overflow: hidden;
 }
 
 #ae_results_body_inner {
     width: 100%;
     height: 100%;
+    _width: expression(document.body.clientWidth-24);
+    _height: expression(document.body.clientHeight-263);
     overflow: auto; /* for opera prior to 9.5 */
     overflow-y: scroll;
     overflow-x: hidden;
@@ -472,11 +479,12 @@ a:active .table_header_label {
 }
 
 #ae_results_ftr {
-    position: relative;
+    position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 22px;
+    _top: expression(this.parentElement.clientHeight-this.clientHeight+1);
     overflow: hidden;
 }
 
