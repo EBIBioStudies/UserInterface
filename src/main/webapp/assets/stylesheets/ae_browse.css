@@ -216,7 +216,7 @@ a:active .table_header_label {
 #ae_login_info,
 #ae_help_link {
     position: absolute;
-    bottom: 8px;
+    bottom: 10px;
 }
 
 #ae_login_link,
@@ -263,10 +263,6 @@ a:active .table_header_label {
     padding: 0;
 }
 
-#ae_login_form label {
-    padding: 0;
-}
-
 /** font assignment **/
 #ae_user_field,
 #ae_pass_field,
@@ -296,11 +292,6 @@ a:active .table_header_label {
     margin: 0;
     color: red;
     font-size: 9px;
-}
-
-#ae_login_remember {
-    margin: 0 2px;
-    vertical-align: text-bottom;
 }
 
 #ae_help_link {
@@ -387,7 +378,7 @@ a:active .table_header_label {
 #ae_keyword_filters_submit {
     float: right;
     font-size: 11px;
-    margin-top: 29px;
+    margin-top: 32px;
 }
 
 /* ae resutls area */
@@ -449,9 +440,9 @@ a:active .table_header_label {
 #ae_results_body {
     position: absolute;
     left: 0;
-    top: 22px;
     width: 100%;
-    height: 100%;
+    top: 22px;
+    bottom: 22px;
     _width: expression(document.body.clientWidth-24);
     _height: expression(document.body.clientHeight-263);
     overflow: hidden;
