@@ -195,7 +195,7 @@ public class AppXalanExtension
                 if (!array.equals("") && !search.matchArray(textIdx, array))
                     return false;
 
-                return experimentType.equals("") || !search.matchExperimentType(textIdx, experimentType);
+                return  experimentType.equals("") || search.matchExperimentType(textIdx, experimentType);
             }
 
         } catch ( Throwable x ) {

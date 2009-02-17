@@ -133,37 +133,54 @@ public class Experiments extends ApplicationComponent
 
     public void reload( String xmlString )
     {
-        setExperiments(loadExperimentsFromString(xmlString));
+        Document doc = loadExperimentsFromString(xmlString);
+        if (null != doc) {
+            setExperiments(doc);
 
-        species.setObject(
-                new PersistableString(
-                        ((XsltHelper) getApplication().getComponent("XsltHelper")).transformDocumentToString(
-                                experiments.getObject().getDocument()
-                                , "preprocess-species-html.xsl"
-                                , null
-                        )
+            PersistableString speciesList = new PersistableString(
+                ((XsltHelper) getApplication().getComponent("XsltHelper")).transformDocumentToString(
+                    experiments.getObject().getDocument()
+                    , "preprocess-species-html.xsl"
+                    , null
                 )
-        );
+            );
 
-        arrays.setObject(
-                new PersistableString(
-                        ((XsltHelper) getApplication().getComponent("XsltHelper")).transformDocumentToString(
-                                experiments.getObject().getDocument()
-                                , "preprocess-arrays-html.xsl"
-                                , null
-                        )
-                )
-        );
+            if (null != speciesList.get()) {
+                species.setObject(speciesList);
+            } else {
+                log.error("Species list NOT updated, NULL string passed");
+            }
 
-        experimentTypes.setObject(
-                new PersistableString(
-                        ((XsltHelper) getApplication().getComponent("XsltHelper")).transformDocumentToString(
-                                experiments.getObject().getDocument()
-                                , "preprocess-exptypes-html.xsl"
-                                , null
-                        )
+            PersistableString arraysList = new PersistableString(
+                ((XsltHelper) getApplication().getComponent("XsltHelper")).transformDocumentToString(
+                    experiments.getObject().getDocument()
+                    , "preprocess-arrays-html.xsl"
+                    , null
                 )
-        );
+            );
+
+            if (null != arraysList.get()) {
+                arrays.setObject(arraysList);
+            } else {
+                log.error("Arrays list NOT updated, NULL string passed");
+            }
+
+            PersistableString experimentTypesList = new PersistableString(
+                ((XsltHelper) getApplication().getComponent("XsltHelper")).transformDocumentToString(
+                    experiments.getObject().getDocument()
+                    , "preprocess-exptypes-html.xsl"
+                    , null
+                )
+            );
+
+            if (null != experimentTypesList.get()) {
+                experimentTypes.setObject(experimentTypesList);
+            } else {
+                log.error("Experiment Types list NOT updated, NULL string passed");
+            }
+        } else {
+            log.error("Experiments NOT updated, NULL document passed");
+        }
     }
 
     public void updateFiles()
@@ -180,13 +197,21 @@ public class Experiments extends ApplicationComponent
 
     public void setExperimentsInWarehouse( List<String> expList )
     {
-        experimentsInWarehouse.setObject(new PersistableStringList(expList));
+        if (null != expList && 0 < expList.size()) {
+            experimentsInWarehouse.setObject(new PersistableStringList(expList));
+        } else {
+            log.error("List of warehouse experiments NOT updated, attempted to assign NULL or EMPTY list");
+        }
     }
 
     private synchronized void setExperiments( Document doc )
     {
-        experiments.setObject(new PersistableDocumentContainer(doc));
-        experimentSearch.buildText(doc);
+        if (null != doc ) {
+            experiments.setObject(new PersistableDocumentContainer(doc));
+            experimentSearch.buildText(doc);
+        } else {
+            log.error("Experiments NOT updated, NULL document passed");
+        }
     }
 
     private Document loadExperimentsFromString( String xmlString )

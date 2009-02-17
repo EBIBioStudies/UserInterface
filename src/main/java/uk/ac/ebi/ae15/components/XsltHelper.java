@@ -175,7 +175,12 @@ public class XsltHelper extends ApplicationComponent implements URIResolver, Err
 
             result = true;
         } catch ( Throwable x ) {
-            log.error("Caught an exception transforming [" + stylesheet + "]:", x);
+            if (x.getMessage().contains("java.lang.InterruptedException")) {
+                log.error("Transformation has been interruped");
+
+            } else {
+                log.error("Caught an exception transforming [" + stylesheet + "]:", x);
+            }
         }
         return result;
     }

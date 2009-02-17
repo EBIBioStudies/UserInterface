@@ -3,6 +3,7 @@ package uk.ac.ebi.ae15.jobs;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.quartz.JobExecutionContext;
+import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerListener;
 
@@ -35,8 +36,15 @@ public class ApplicationTriggerListener implements TriggerListener
                 }
             }
         }
+        boolean isShuttingDown = false;
 
-        return false;
+        try {
+            isShuttingDown = context.getScheduler().isInStandbyMode();
+        } catch (SchedulerException x) {
+            log.error("Caught an exception:", x);
+        }
+        
+        return isShuttingDown;
     }
 
     public void triggerMisfired(Trigger trigger)
