@@ -1,5 +1,7 @@
 package uk.ac.ebi.ae15.servlets;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import uk.ac.ebi.ae15.app.ApplicationServlet;
@@ -12,8 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class HttpProxyServlet extends ApplicationServlet
 {
@@ -30,28 +30,33 @@ public class HttpProxyServlet extends ApplicationServlet
         String queryString = request.getQueryString();
 
         if (0 < path.length()) {
+
+            String url = new StringBuilder("http://www.ebi.ac.uk/").append(path).append(null != queryString ? "?" + queryString : "").toString();
+            log.debug("Will access [" + url + "]");
+
+            HttpClient httpClient = new HttpClient();
+            GetMethod getMethod = new GetMethod(url);
+
             try {
-                URL url = new URL("http://www.ebi.ac.uk/" + path + (null != queryString ? "?" + queryString : ""));
-                log.debug("Will access [" + url.toString() + "]");
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setDoOutput(true);
-                conn.setDoInput(true);
-                conn.setUseCaches(true);
-                conn.connect();
-                int responseStatus = conn.getResponseCode();
-                int contentLength = conn.getContentLength();
+                // establish a connection within 5 seconds
+                httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
 
-                log.debug("Response: http status [" + String.valueOf(responseStatus) + "], length [" + String.valueOf(contentLength) + "]");
+                httpClient.executeMethod(getMethod);
 
-                if (0 < contentLength && 200 == responseStatus) {
+                int responseStatus = getMethod.getStatusCode();
+                String contentLength = getMethod.getResponseHeader("Content-Length").getValue();
 
-                    String contentType = conn.getContentType();
+                log.debug("Response: http status [" + String.valueOf(responseStatus) + "], length [" + contentLength + "]");
+
+                if (0 < Long.parseLong(contentLength) && 200 == responseStatus) {
+
+                    String contentType = getMethod.getResponseHeader("Content-Type").getValue();
                     if (null != contentType) {
                         response.setContentType(contentType);
                     }
 
                     BufferedReader in = new BufferedReader(
-                            new InputStreamReader(conn.getInputStream()));
+                            new InputStreamReader(getMethod.getResponseBodyAsStream()));
 
                     ServletOutputStream out = response.getOutputStream();
 
@@ -63,14 +68,17 @@ public class HttpProxyServlet extends ApplicationServlet
                     in.close();
                     out.close();
                 } else {
-                    String err = "Response from [" + url.toString() + "] was invalid: http status [" + String.valueOf(responseStatus) + "], length [" + String.valueOf(contentLength) + "]";
+                    String err = "Response from [" + url + "] was invalid: http status [" + String.valueOf(responseStatus) + "], length [" + contentLength + "]";
                     log.error(err);
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, err);
                 }
 
+
             } catch ( Exception e ) {
                 log.error("Caught an exception:", e);
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            } finally {
+                getMethod.releaseConnection();
             }
         }
     }
