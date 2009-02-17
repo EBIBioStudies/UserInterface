@@ -32,7 +32,7 @@
     <xsl:template name="ae-contents">
         <helper:logInfo select="[browse-files-html] Parameters: accession [{$vAccession}], userid [{$userid}]"/>
 
-        <div class="ae_centered_container_100pc assign_font">
+        <div class="ae_left_container_100pc assign_font">
             <div id="ae_files_content">
                 <xsl:choose>
                     <xsl:when test="experiment[accession=$vAccession]">

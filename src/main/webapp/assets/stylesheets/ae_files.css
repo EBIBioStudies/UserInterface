@@ -1,3 +1,13 @@
+.ae_left_container_100pc {
+    width: 100%;
+    min-width: 950px;
+    text-align: left;
+    margin: 0;
+    overflow: hidden;
+    font-size: 11px;
+    line-height: 1.2em;
+}
+
 #ae_files_content {
     width: 700px;
     margin: 20px;
