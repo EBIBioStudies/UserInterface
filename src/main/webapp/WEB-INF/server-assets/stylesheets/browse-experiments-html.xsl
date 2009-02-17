@@ -28,6 +28,10 @@
     <xsl:include href="ae-filter-experiments.xsl"/>
     <xsl:include href="ae-sort-experiments.xsl"/>
 
+    <xsl:variable name="vDetailedViewMainTrClass">tr_main<xsl:if test="$detailedview"> exp_expanded</xsl:if></xsl:variable>
+    <xsl:variable name="vDetailedViewExtStyle"><xsl:if test="not($detailedview)">display:none</xsl:if></xsl:variable>
+    <xsl:variable name="vDetailedViewMainTdClass">td_main<xsl:if test="$detailedview"> td_expanded</xsl:if></xsl:variable>
+
     <xsl:template match="/experiments">
         <helper:logInfo select="[browse-experiments-html] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
         <helper:logInfo select="[browse-experiments-html] Sort by: [{$sortby}], [{$sortorder}]"/>
@@ -50,9 +54,6 @@
             </xsl:choose>
         </xsl:variable>
 
-        <xsl:variable name="vDetailedViewExtStyle"><xsl:if test="not($detailedview)">display:none</xsl:if></xsl:variable>
-        <xsl:variable name="vDetailedViewMainTdClass">td_main<xsl:if test="$detailedview"> td_expanded</xsl:if></xsl:variable>
-
         <helper:logInfo select="[browse-experiments-html] Query filtered {$vTotal} experiments. Will output from {$vFrom} to {$vTo}."/>
 
         <tr id="ae_results_summary_info">
@@ -74,8 +75,6 @@
                     <xsl:with-param name="pTo" select="$vTo"/>
                     <xsl:with-param name="pSortBy" select="$sortby"/>
                     <xsl:with-param name="pSortOrder" select="$sortorder"/>
-                    <xsl:with-param name="pDetailedViewMainTdClass" select="$vDetailedViewMainTdClass"/>
-                    <xsl:with-param name="pDetailedViewExtStyle" select="$vDetailedViewExtStyle"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
@@ -105,31 +104,29 @@
     <xsl:template match="experiment">
         <xsl:param name="pFrom"/>
         <xsl:param name="pTo"/>
-        <xsl:param name="pDetailedViewMainTdClass"/>
-        <xsl:param name="pDetailedViewExtStyle"/>
         <xsl:variable name="vExpId" select="id"/>
         <xsl:if test="position() &gt;= $pFrom and position() &lt;= $pTo">
-            <tr id="{$vExpId}_main" class="tr_main">
-                <td class="{$pDetailedViewMainTdClass}"><div class="table_row_expand"/></td>
-                <td class="{$pDetailedViewMainTdClass}">
+            <tr id="{$vExpId}_main" class="{$vDetailedViewMainTrClass}">
+                <td class="{$vDetailedViewMainTdClass}"><div class="table_row_expand"/></td>
+                <td class="{$vDetailedViewMainTdClass}">
                     <div class="table_row_accession"><xsl:apply-templates select="accession" mode="highlight" /></div>
                     <xsl:if test="not(user/text()='1')">
                         <div class="lock">&#160;</div>
                     </xsl:if>
                 </td>
-                <td class="{$pDetailedViewMainTdClass}"><div><xsl:apply-templates select="name" mode="highlight" /><xsl:if test="count(name)=0">&#160;</xsl:if></div></td>
-                <td class="align_right {$pDetailedViewMainTdClass}">
+                <td class="{$vDetailedViewMainTdClass}"><div><xsl:apply-templates select="name" mode="highlight" /><xsl:if test="count(name)=0">&#160;</xsl:if></div></td>
+                <td class="align_right {$vDetailedViewMainTdClass}">
                     <div><xsl:apply-templates select="assays" mode="highlight" /><xsl:if test="count(assays)=0">&#160;</xsl:if></div>
                 </td>
-                <td class="{$pDetailedViewMainTdClass}"><div>
+                <td class="{$vDetailedViewMainTdClass}"><div>
                     <xsl:for-each select="species">
                         <xsl:apply-templates select="." mode="highlight" />
                         <xsl:if test="position() != last()">, </xsl:if>
                     </xsl:for-each>
                     <xsl:if test="count(species) = 0"><xsl:text>&#160;</xsl:text></xsl:if>
                 </div></td>
-                <td class="{$pDetailedViewMainTdClass}"><div><xsl:apply-templates select="releasedate" mode="highlight" /></div><xsl:if test="count(releasedate)=0">&#160;</xsl:if></td>
-                <td class="td_main_img align_center {$pDetailedViewMainTdClass}">
+                <td class="{$vDetailedViewMainTdClass}"><div><xsl:apply-templates select="releasedate" mode="highlight" /></div><xsl:if test="count(releasedate)=0">&#160;</xsl:if></td>
+                <td class="td_main_img align_center {$vDetailedViewMainTdClass}">
                     <div>
                         <xsl:choose>
                             <xsl:when test="file[kind = 'fgem']"><a href="{concat('${interface.application.base.url}/files/', concat(accession, concat('/', file[kind = 'fgem']/name)))}" title="Click to download processed data"><img src="${interface.application.base.url}/assets/images/silk_data_save.gif" width="16" height="16" alt="Click to download processed data"/></a></xsl:when>
@@ -137,7 +134,7 @@
                         </xsl:choose>
                     </div>
                 </td>
-                <td class="td_main_img align_center {$pDetailedViewMainTdClass}">
+                <td class="td_main_img align_center {$vDetailedViewMainTdClass}">
                     <div>
                         <xsl:choose>
                             <xsl:when test="contains(file[kind = 'raw']/dataformat, 'CEL')"><a href="{concat('${interface.application.base.url}/files/', concat(accession, concat('/', file[kind = 'raw']/name)))}" title="Click to download Affymetrix data"><img src="${interface.application.base.url}/assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Click to download Affymetrix data"/></a></xsl:when>
@@ -147,7 +144,7 @@
                         </xsl:choose>
                     </div>
                 </td>
-                <td class="td_main_img align_center {$pDetailedViewMainTdClass}">
+                <td class="td_main_img align_center {$vDetailedViewMainTdClass}">
                     <div>
                         <xsl:choose>
                             <xsl:when test="@loadedinatlas"><a href="${interface.application.link.atlas.exp_query.url}{accession}" target="_blank" title="Click to query ArrayExpress Atlas for most differentially expressed genes in {accession}"><img src="${interface.application.base.url}/assets/images/silk_tick.gif" width="16" height="16" alt="*"/></a></xsl:when>
@@ -156,7 +153,7 @@
                     </div>
                 </td>
             </tr>
-            <tr id="{$vExpId}_ext" style="{$pDetailedViewExtStyle}">
+            <tr id="{$vExpId}_ext" style="{$vDetailedViewExtStyle}">
                 <td colspan="9" class="td_ext">
                     <div class="tbl">
                         <table cellpadding="0" cellspacing="0" border="0">

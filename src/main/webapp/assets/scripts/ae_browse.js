@@ -1,5 +1,5 @@
 //
-//  AE Browse Page Scripting Support. Requires jQuery 1.2.3 and JSDefeered.jQuery 0.2.1
+//  AE Browse Page Scripting Support. Requires jQuery 1.3.1 and JSDefeered.jQuery 0.2.1
 //
 
 // query object is a global variable

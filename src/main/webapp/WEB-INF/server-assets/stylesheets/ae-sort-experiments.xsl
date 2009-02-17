@@ -12,8 +12,6 @@
         <xsl:param name="pTo"/>
         <xsl:param name="pSortBy"/>
         <xsl:param name="pSortOrder"/>
-        <xsl:param name="pDetailedViewMainTdClass"/>
-        <xsl:param name="pDetailedViewExtStyle"/>
         <xsl:choose>
             <xsl:when test="$pSortBy='accession'">
                 <xsl:apply-templates select="$pExperiments">
@@ -23,8 +21,6 @@
                     <!-- sort by number -->
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMainTdClass" select="$pDetailedViewMainTdClass"/>
-                    <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="$pSortBy='assays'">
@@ -38,8 +34,6 @@
 
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMainTdClass" select="$pDetailedViewMainTdClass"/>
-                    <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="$pSortBy='releasedate'">
@@ -60,8 +54,6 @@
 
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMainTdClass" select="$pDetailedViewMainTdClass"/>
-                    <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="$pSortBy='species'">
@@ -77,8 +69,6 @@
 
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMainTdClass" select="$pDetailedViewMainTdClass"/>
-                    <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="$pSortBy='fgem'">
@@ -92,8 +82,6 @@
 
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMainTdClass" select="$pDetailedViewMainTdClass"/>
-                    <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="$pSortBy='raw'">
@@ -107,8 +95,6 @@
 
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMainTdClass" select="$pDetailedViewMainTdClass"/>
-                    <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="$pSortBy='atlas'">
@@ -122,8 +108,6 @@
 
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMainTdClass" select="$pDetailedViewMainTdClass"/>
-                    <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:otherwise>
@@ -137,8 +121,6 @@
 
                     <xsl:with-param name="pFrom" select="$pFrom"/>
                     <xsl:with-param name="pTo" select="$pTo"/>
-                    <xsl:with-param name="pDetailedViewMainTdClass" select="$pDetailedViewMainTdClass"/>
-                    <xsl:with-param name="pDetailedViewExtStyle" select="$pDetailedViewExtStyle"/>
                 </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
