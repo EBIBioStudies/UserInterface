@@ -1,5 +1,6 @@
 package uk.ac.ebi.ae15.servlets;
 
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
@@ -44,15 +45,15 @@ public class HttpProxyServlet extends ApplicationServlet
                 httpClient.executeMethod(getMethod);
 
                 int responseStatus = getMethod.getStatusCode();
-                String contentLength = getMethod.getResponseHeader("Content-Length").getValue();
+                Header contentLength = getMethod.getResponseHeader("Content-Length");
 
                 log.debug("Response: http status [" + String.valueOf(responseStatus) + "], length [" + contentLength + "]");
 
-                if (0 < Long.parseLong(contentLength) && 200 == responseStatus) {
+                if (null != contentLength && 0 < Long.parseLong(contentLength.getValue()) && 200 == responseStatus) {
 
-                    String contentType = getMethod.getResponseHeader("Content-Type").getValue();
+                    Header contentType = getMethod.getResponseHeader("Content-Type");
                     if (null != contentType) {
-                        response.setContentType(contentType);
+                        response.setContentType(contentType.getValue());
                     }
 
                     BufferedReader in = new BufferedReader(
@@ -68,7 +69,7 @@ public class HttpProxyServlet extends ApplicationServlet
                     in.close();
                     out.close();
                 } else {
-                    String err = "Response from [" + url + "] was invalid: http status [" + String.valueOf(responseStatus) + "], length [" + contentLength + "]";
+                    String err = "Response from [" + url + "] was invalid: http status [" + String.valueOf(responseStatus) + "], length [" + (null == contentLength ? "null" : contentLength.getValue())  + "]";
                     log.error(err);
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, err);
                 }
