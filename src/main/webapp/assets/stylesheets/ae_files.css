@@ -41,8 +41,10 @@
     font-size: 12px;    
 }
 
-.td_center {
-    text-align: center;
+.ae_files_table td.td_all {
+    text-align: left;
+    font-style: italic;
+    padding: 0 10px 10px 10px;
 }
 
 .td_size {

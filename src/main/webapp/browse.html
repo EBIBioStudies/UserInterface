@@ -66,8 +66,7 @@
                                 <div><input id="ae_detailedview" name="detailedview" type="checkbox"><label for="ae_detailedview">Detailed view</label></div>
                             </fieldset>
                         </form>
-                        <div id="ae_login_link"><a href="javascript:aeShowLoginForm();">&#187; Submitter/reviewer login</a></div>
-                        <div id="ae_login_box"><div class="login_outer"><div class="login_top"><div class="login_bottom"><div class="login_left"><div class="login_right"><div class="login_top_left"><div class="login_top_right"><div class="login_bottom_left"><div class="login_bottom_right"><div class="login_inner">
+                        <div id="ae_login_box" style="display:none"><div class="login_outer"><div class="login_top"><div class="login_bottom"><div class="login_left"><div class="login_right"><div class="login_top_left"><div class="login_top_right"><div class="login_bottom_left"><div class="login_bottom_right"><div class="login_inner">
                             <div id="ae_login_title">Submitter/reviewer login [<a href="javascript:aeHideLoginForm();">close</a>]</div>
                             <form id="ae_login_form" method="get" action="index.html" onsubmit="aeDoLogin(); return false">
                                 <fieldset id="ae_login_user_fset">
@@ -81,10 +80,11 @@
                                 <input id="ae_login_submit" type="submit" value="Log in">
                                 <span><input id="ae_login_remember" type="checkbox"><label for="ae_login_remember">Remember me</label></span>
                             </form>
-                            <div id="ae_login_status"></div>
+                            <div id="ae_login_status"> </div>
                         </div></div></div></div></div></div></div></div></div></div></div>
-                        <div id="ae_login_info"><img src="assets/images/mini_user.gif" width="16" height="16" alt="Logged in as"> <strong>user</strong> [<a href="javascript:aeDoLogout(true)">log out</a>]</div>
-                        <div id="ae_help_link"><a href="${interface.application.link.browse_help}" title="Opens in a new window" target="_blank">&#187; ArrayExpress Browse Help</a></div>
+                        <div id="ae_help_link"><a href="${interface.application.link.browse_help}"><img src="assets/images/silk_help.gif" width="16" height="16"> ArrayExpress Browser Help</a></div>
+                        <div id="ae_login_link"><a href="javascript:aeShowLoginForm();">Submitter/reviewer login</a></div>
+                        <div id="ae_login_info" style="display:none"><img src="assets/images/mini_user.gif" width="16" height="16" alt="Logged in as"> <strong>user</strong> [<a href="javascript:aeDoLogout(true)">log out</a>]</div>
                         <div id="ae_logo_browse"><a href="${interface.application.base.url}" title="ArrayExpress Home"><img src="assets/images/ae_logo_browse.gif" alt="ArrayExpress Home"></a></div>
                     </div></div></div></div></div></div></div></div></div></div>
                 </div>
@@ -140,7 +140,7 @@
                                         <div class="table_footer_inner">
                                             <div id="ae_results_save" class="status_icon"><a href="" title="Save results in a Tab-delimited format"><img src="assets/images/silk_save_txt.gif" alt="Save results in a Tab-delimited format"/></a></div>
                                             <div id="ae_results_save_xls" class="status_icon"><a href="" title="Open results table in Excel"><img src="assets/images/silk_save_xls.gif" alt="Open results table in Excel"/></a></div>
-                                            <div id="ae_results_save_feed" class="status_icon"><a href="" title="Get RSS feed with first page results matching selected criteria" target="_blank"><img src="assets/images/silk_save_feed.gif" alt="Open results as RSS feed"/></a></div>
+                                            <div id="ae_results_save_feed" class="status_icon"><a href="" title="Get RSS feed with first page results matching selected criteria"><img src="assets/images/silk_save_feed.gif" alt="Open results as RSS feed"/></a></div>
                                             <div id="ae_results_status">&nbsp;</div><div id="ae_results_pager">&nbsp;</div></div>
                                     </div></div></div>
                                 </div>

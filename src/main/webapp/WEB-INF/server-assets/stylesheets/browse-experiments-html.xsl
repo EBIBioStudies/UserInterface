@@ -147,7 +147,7 @@
                 <td class="td_main_img align_center {$vDetailedViewMainTdClass}">
                     <div>
                         <xsl:choose>
-                            <xsl:when test="@loadedinatlas"><a href="${interface.application.link.atlas.exp_query.url}{accession}" target="_blank" title="Click to query ArrayExpress Atlas for most differentially expressed genes in {accession}"><img src="${interface.application.base.url}/assets/images/silk_tick.gif" width="16" height="16" alt="*"/></a></xsl:when>
+                            <xsl:when test="@loadedinatlas"><a href="${interface.application.link.atlas.exp_query.url}{accession}"><img src="${interface.application.base.url}/assets/images/silk_tick.gif" width="16" height="16" alt="*"/></a></xsl:when>
                             <xsl:otherwise><img src="${interface.application.base.url}/assets/images/silk_data_unavail.gif" width="16" height="16" alt="-"/></xsl:otherwise>
                         </xsl:choose>
                     </div>
@@ -237,8 +237,7 @@
                                     <xsl:if test="@loadedinatlas">
                                         <div>
 
-                                            <a href="${interface.application.link.atlas.exp_query.url}{accession}"
-                                                target="_blank" title="Opens in a new window">&#187; Query ArrayExpress Atlas</a>
+                                            <a href="${interface.application.link.atlas.exp_query.url}{accession}">Query ArrayExpress Atlas</a>
                                             <xsl:text> </xsl:text>
                                             <img src="${interface.application.base.url}/assets/images/silk_new.gif" width="16" height="13" alt="new!"/>
                                         </div>
@@ -251,9 +250,8 @@
                                     <xsl:if test="count(arraydesign)&gt;0">
                                         <xsl:for-each select="arraydesign">
                                             <div>
-                                                <a href="${interface.application.link.aer_old.base.url}/result?queryFor=PhysicalArrayDesign&amp;aAccession={accession}"
-                                                   target="_blank" title="Opens in a new window">
-                                                    <xsl:text>&#187; Array design </xsl:text>
+                                                <a href="${interface.application.link.aer_old.base.url}/result?queryFor=PhysicalArrayDesign&amp;aAccession={accession}">
+                                                    <xsl:text>Array design </xsl:text>
                                                     <xsl:apply-templates select="accession" mode="highlight"/>
                                                     <xsl:text> - </xsl:text>
                                                     <xsl:apply-templates select="name" mode="highlight" />
@@ -262,14 +260,12 @@
                                         </xsl:for-each>
                                     </xsl:if>
                                     <div>
-                                        <a href="${interface.application.link.aer_old.base.url}/details?class=MAGE.Experiment_protocols&amp;criteria=Experiment%3D{$vExpId}&amp;contextClass=MAGE.Protocol&amp;templateName=Protocol.vm"
-                                            target="_blank" title="Opens in a new window">
-                                            <xsl:text>&#187; Experimental protocols</xsl:text>
+                                        <a href="${interface.application.link.aer_old.base.url}/details?class=MAGE.Experiment_protocols&amp;criteria=Experiment%3D{$vExpId}&amp;contextClass=MAGE.Protocol&amp;templateName=Protocol.vm">
+                                            <xsl:text>Experimental protocols</xsl:text>
                                         </a>
                                     </div>
                                     <div>
-                                        <a href="${interface.application.link.aer_old.base.url}/result?queryFor=Experiment&amp;eAccession={accession}"
-                                            target="_blank" title="Opens in a new window">&#187; ArrayExpress Advanced Interface</a>
+                                        <a href="${interface.application.link.aer_old.base.url}/result?queryFor=Experiment&amp;eAccession={accession}">ArrayExpress Advanced Interface</a>
 
                                     </div>
                                 </td>
@@ -292,9 +288,8 @@
                                                 </table>
                                             </div>
                                             <div>
-                                                <a href="${interface.application.base.url}/files/{accession}"
-                                                   target="_blank" title="Opens in a new window">
-                                                    <xsl:text>&#187; Browse all available files</xsl:text>
+                                                <a href="${interface.application.base.url}/files/{accession}">
+                                                    <xsl:text>Browse all available files</xsl:text>
                                                 </a>
                                             </div>
 
@@ -303,9 +298,8 @@
                                     <xsl:otherwise>
                                         <td class="value">
                                             <div>
-                                                <a href="${interface.application.base.url}/files/{accession}"
-                                                   target="_blank" title="Opens in a new window">
-                                                    <xsl:text>&#187; Browse all available files</xsl:text>
+                                                <a href="${interface.application.base.url}/files/{accession}">
+                                                    <xsl:text>Browse all available files</xsl:text>
                                                 </a>
                                             </div>    
                                         </td>
@@ -412,7 +406,7 @@
             <xsl:choose>
                 <xsl:when test="uri[starts-with(., 'http')]">
                     <xsl:copy-of select="$publication_title"/>
-                    <a href="{uri}" target="_blank" title="Opens in a new window"><xsl:copy-of select="$publication_link_title"/></a>
+                    <a href="{uri}"><xsl:copy-of select="$publication_link_title"/></a>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:copy-of select="$publication_title"/>
@@ -421,7 +415,7 @@
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:if test="accession">
-                <xsl:if test="number(accession)>0">, <a href="http://www.ncbi.nlm.nih.gov/pubmed/{accession}" target="_blank" title="Opens in a new window">PubMed <xsl:apply-templates select="accession" mode="highlight"/></a></xsl:if>
+                <xsl:if test="number(accession)>0">, <a href="http://www.ncbi.nlm.nih.gov/pubmed/{accession}">PubMed <xsl:apply-templates select="accession" mode="highlight"/></a></xsl:if>
             </xsl:if>
         </div>
     </xsl:template>
@@ -431,12 +425,10 @@
             <xsl:choose>
                 <xsl:when test="string-length(text())=0"/>
                 <xsl:when test="substring(text(), 1, 3)='GSE' or substring(text(), 1, 3)='GDS'">
-                    <a href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc={text()}"
-                       target="_blank" title="Opens in a new window">&#187; GEO - <xsl:apply-templates select="." mode="highlight" /></a>
+                    <a href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc={text()}">GEO - <xsl:apply-templates select="." mode="highlight" /></a>
                 </xsl:when>
                 <xsl:when test="substring(text(), 1, 2)='E-' and substring(text(), 7, 1)='-'">
-                    <a href="${interface.application.base.url}/experiments/{text()}"
-                       target="_blank" title="Opens in a new window">&#187; ArrayExpress - <xsl:apply-templates select="." mode="highlight" /></a>
+                    <a href="${interface.application.base.url}/experiments/{text()}">ArrayExpress - <xsl:apply-templates select="." mode="highlight" /></a>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select="." mode="highlight" />
@@ -577,10 +569,7 @@
                     </xsl:choose>
                 </td>
                 <td class="attr_value">
-                    <a href="{url}"
-                       target="_blank" title="Opens in a new window">
-                        <xsl:value-of select="name"/>
-                    </a>
+                    <a href="{url}"><xsl:value-of select="name"/></a>
                 </td>
             </tr>
         </xsl:for-each>
@@ -594,10 +583,7 @@
                 <td class="attr_value">
                     <xsl:for-each select="file[extension='txt' and kind='adf']">
                         <xsl:sort select="name"/>
-                        <a href="{url}"
-                           target="_blank" title="Opens in a new window">
-                            <xsl:value-of select="name"/>
-                        </a>
+                        <a href="{url}"><xsl:value-of select="name"/></a>
                         <xsl:if test="position()!=last()">
                             <xsl:text>, </xsl:text>
                         </xsl:if>
@@ -615,10 +601,7 @@
                 <td class="attr_value">
                     <xsl:for-each select="file[kind='biosamples' and (extension='png' or extension='svg')]">
                         <xsl:sort select="extension"/>
-                        <a href="{url}"
-                           target="_blank" title="Opens in a new window">
-                            <xsl:value-of select="name"/>
-                        </a>
+                        <a href="{url}"><xsl:value-of select="name"/></a>
                         <xsl:if test="position()!=last()">
                             <xsl:text>, </xsl:text>
                         </xsl:if>

@@ -72,7 +72,7 @@
         <table class="ae_files_table" border="0" cellpadding="0" cellspacing="0">
             <tbody>
                 <xsl:if test="not($vFiles/file)">
-                    <tr><td class="td_center" colspan="3">No files found</td></tr>
+                    <tr><td class="td_all" colspan="3"><div>No files</div></td></tr>
                 </xsl:if>
                 <xsl:for-each select="$vFiles/file">
                     <xsl:sort select="contains(helper:toUpperCase(@name), 'README')" order="descending"/>
