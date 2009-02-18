@@ -47,7 +47,7 @@ public class HttpProxyServlet extends ApplicationServlet
                 int responseStatus = getMethod.getStatusCode();
                 Header contentLength = getMethod.getResponseHeader("Content-Length");
 
-                log.debug("Response: http status [" + String.valueOf(responseStatus) + "], length [" + contentLength + "]");
+                log.debug("Response: http status [" + String.valueOf(responseStatus) + "], length [" + contentLength.getValue() + "]");
 
                 if (null != contentLength && 0 < Long.parseLong(contentLength.getValue()) && 200 == responseStatus) {
 
