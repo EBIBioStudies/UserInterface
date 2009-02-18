@@ -72,11 +72,9 @@ public class HttpProxyServlet extends ApplicationServlet
                     log.error(err);
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, err);
                 }
-
-
-            } catch ( Exception e ) {
-                log.error("Caught an exception:", e);
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            } catch ( Throwable x ) {
+                log.error("Caught an exception:", x);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, x.getMessage());
             } finally {
                 getMethod.releaseConnection();
             }
