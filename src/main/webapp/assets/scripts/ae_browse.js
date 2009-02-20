@@ -129,11 +129,11 @@ aeSort( sortby )
 }
 
 function
-aeToggleExpand( id )
+aeToggleExpand( id, shouldUpdateState )
 {
     id = String(id);
-    var mainElt = $("#" + id);
-    var extElt = $("#" + id.replace("_main", "_ext"));
+    var mainElt = $("#" + id + "_main");
+    var extElt = $("#" + id +  "_ext");
     if ( mainElt.hasClass("exp_expanded")) {
         // collapse now
         mainElt.removeClass("exp_expanded").find("td").removeClass("td_expanded");
@@ -143,6 +143,10 @@ aeToggleExpand( id )
         extElt.show();
     }
     onWindowResize();
+
+    if (shouldUpdateState) {
+        updateAppStateExpand(id);
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,7 +179,7 @@ $(document).ready( function() {
     }
 
     // adds a callback to close a login form on escape
-    $("#ae_login_form input").keypress(
+    $("#ae_login_form input").keydown(
             function (e) {
                 if (e.keyCode == 27) {
                     aeHideLoginForm();
@@ -183,44 +187,23 @@ $(document).ready( function() {
             }
         );
 
-    if ("" != $.query.get("accnum")) {
-        query.keywords = $.query.get("accnum");
+    // legacy support: we honor accnum and pass it as a keywords
+    query.keywords = getQueryStringParam("accnum");
+    if ("" != query.keywords) {
         query.detailedview = true;
+    } else {
+        query.keywords = getQueryStringParam("keywords");
     }
-
-    if ("" != $.query.get("keywords"))
-        query.keywords = $.query.get("keywords");
-
-    if ("" != $.query.get("wholewords"))
-        query.wholewords = true;
-
-    query.species = $.query.get("species");
-    query.array = $.query.get("array");
-    query.exptype = $.query.get("exptype");
-
-    if ("" != $.query.get("inatlas"))
-        query.inatlas = true;
-
-    if ("" != $.query.get("page"))
-        query.page = $.query.get("page");
-
-    if ("" != $.query.get("pagesize"))
-        query.pagesize = $.query.get("pagesize");
-    else
-        query.pagesize = "25";
-
-    if ("" != $.query.get("sortby"))
-        query.sortby = $.query.get("sortby");
-    else
-        query.sortby = "releasedate";
-
-    if ("" != $.query.get("sortorder"))
-        query.sortorder = $.query.get("sortorder");
-    else
-        query.sortorder = "descending";
-
-    if ("" != $.query.get("detailedview"))
-        query.detailedview = true;
+    query.wholewords = getQueryBooleanParam("wholewords");
+    query.species = getQueryStringParam("species");
+    query.array = getQueryStringParam("array");
+    query.exptype = getQueryStringParam("exptype");
+    query.inatlas = getQueryBooleanParam("inatlas");
+    query.page = getQueryStringParam("page");
+    query.pagesize = getQueryStringParam("pagesize", "25");
+    query.sortby = getQueryStringParam("sortby", "releasedate");
+    query.sortorder = getQueryStringParam("sortorder", "descending");
+    query.detailedview = getQueryBooleanParam("detailedview");
 
     initControls();
 
@@ -249,6 +232,21 @@ onExperimentQuery( tableHtml )
 
     // populate table with data
     $("#ae_results_tbody").html(tableHtml);
+
+    // check if the appstate was saved for the page
+    if (checkAppState()) {
+        // update checkboxes and scroll position
+        applySavedAppState();
+    } else {
+        // create a new appstate
+        createAppState();
+    }
+
+    $("#ae_results_body_inner").scroll(
+            function (e) {
+                updateAppStateScroll($(this).scrollTop());
+            }
+        );
 
     // adjust header width to accomodate scroller (for Opera <9.5)
     if ($.browser.opera && $.browser.version < 9.5)
@@ -367,7 +365,7 @@ initControls()
 function
 addExpansionHandlers()
 {
-    $(this).find("div.table_row_expand").wrap("<a href=\"javascript:aeToggleExpand('" + this.id  + "');\" title=\"Click to reveal/hide more information on the experiment\"><div class=\"table_row_expander\"></div></a>");
+    $(this).find("div.table_row_expand").wrap("<a href=\"javascript:aeToggleExpand('" + String(this.id).replace(/_main/, "") + "', true);\" title=\"Click to reveal/hide more information on the experiment\"><div class=\"table_row_expander\"></div></a>");
 }
 
 function
@@ -382,4 +380,79 @@ addHtmlToSelect( selectEltId, html )
     } else {
         $( "#" + selectEltId ).html(html);
     }
+}
+
+function
+getQueryStringParam( paramName, defaultValue )
+{
+    if (undefined == defaultValue) {
+        defaultValue = "";
+    }
+    var param = $.query.get(paramName);
+    if ("boolean" != typeof(param) && "" !== param) {
+        return param;
+    } else {
+        return defaultValue;
+    }
+}
+
+function
+getQueryBooleanParam( paramName )
+{
+    var param = $.query.get(paramName);
+    return (true === param || "" != param);
+}
+
+function
+checkAppState()
+{
+    return (($.query.toString() + "?") == $.cookie("AeAppStateQStr"));
+}
+
+function
+createAppState()
+{
+    $.cookie("AeAppStateQStr", $.query.toString() + "?", {path: '/'});
+    $.cookie("AeAppStateData", "0", {path: '/'});
+}
+
+function
+applySavedAppState()
+{
+    var appStateData = $.cookie("AeAppStateData");
+    if (null != appStateData) {
+        appStateData = appStateData.split(";");
+        for (var i = 1; i < appStateData.length; i++) {
+            aeToggleExpand(appStateData[i], false);
+        }
+        if (0 < appStateData[0] && 0 == $("#ae_results_body_inner").scrollTop()) {
+            $("#ae_results_body_inner").scrollTop(appStateData[0]);
+        }
+    }
+}
+
+function
+updateAppStateExpand( id )
+{
+    var appStateData = $.cookie("AeAppStateData");
+    if (null != appStateData) {
+        if (-1 != appStateData.indexOf(";" + id)) {
+            // found, remove it from the list
+            appStateData = appStateData.replace(new RegExp(";" + id), "");
+        } else {
+            appStateData = appStateData + ";"+ id;
+        }
+        $.cookie("AeAppStateData", appStateData);
+    }
+}
+
+function
+updateAppStateScroll( scrollValue )
+{
+    var appStateData = $.cookie("AeAppStateData");
+    if (null == appStateData) {
+        appStateData = "0";
+    }
+    appStateData = appStateData.replace(/^\d+/, scrollValue);
+    $.cookie("AeAppStateData", appStateData);
 }

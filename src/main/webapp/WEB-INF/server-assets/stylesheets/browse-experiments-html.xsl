@@ -28,9 +28,9 @@
     <xsl:include href="ae-filter-experiments.xsl"/>
     <xsl:include href="ae-sort-experiments.xsl"/>
 
-    <xsl:variable name="vDetailedViewMainTrClass">tr_main<xsl:if test="$detailedview"> exp_expanded</xsl:if></xsl:variable>
-    <xsl:variable name="vDetailedViewExtStyle"><xsl:if test="not($detailedview)">display:none</xsl:if></xsl:variable>
-    <xsl:variable name="vDetailedViewMainTdClass">td_main<xsl:if test="$detailedview"> td_expanded</xsl:if></xsl:variable>
+    <xsl:variable name="vDetailedViewMainTrClass">tr_main<xsl:if test="'true'=$detailedview"> exp_expanded</xsl:if></xsl:variable>
+    <xsl:variable name="vDetailedViewExtStyle"><xsl:if test="'true'!=$detailedview">display:none</xsl:if></xsl:variable>
+    <xsl:variable name="vDetailedViewMainTdClass">td_main<xsl:if test="'true'=$detailedview"> td_expanded</xsl:if></xsl:variable>
 
     <xsl:template match="/experiments">
         <helper:logInfo select="[browse-experiments-html] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>

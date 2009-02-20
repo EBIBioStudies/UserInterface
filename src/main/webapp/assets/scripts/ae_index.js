@@ -150,7 +150,7 @@ $(document).ready(function()
     }
 
     // adds a callback to close a login form on escape
-    $("#aer_login_form input").keypress(
+    $("#aer_login_form input").keydown(
             function (e) {
                 if (e.keyCode == 27) {
                     aeHideLoginForm();

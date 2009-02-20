@@ -85,7 +85,7 @@
                     <xsl:if test="(string-length($keywords)&gt;0) or (string-length($species)&gt;0) or (string-length($array)&gt;0)">
                         <xsl:text>/browse.html?keywords=</xsl:text>
                         <xsl:value-of select="$keywords"/>
-                        <xsl:if test="$wholewords">
+                        <xsl:if test="'true'=$wholewords">
                             <xsl:text>&amp;wholewords=on</xsl:text>
                         </xsl:if>
                         <xsl:text>&amp;species=</xsl:text>
