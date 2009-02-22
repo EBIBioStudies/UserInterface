@@ -358,7 +358,6 @@ initControls()
                 }
             }
         }
-
     }
 }
 
@@ -450,9 +449,8 @@ function
 updateAppStateScroll( scrollValue )
 {
     var appStateData = $.cookie("AeAppStateData");
-    if (null == appStateData) {
-        appStateData = "0";
+    if (null != appStateData) {
+        appStateData = appStateData.replace(/^\d+/, scrollValue);
+        $.cookie("AeAppStateData", appStateData);
     }
-    appStateData = appStateData.replace(/^\d+/, scrollValue);
-    $.cookie("AeAppStateData", appStateData);
 }

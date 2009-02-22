@@ -231,6 +231,7 @@ a:active .table_header_label {
 #ae_help_link img,
 #ae_login_info img {
     vertical-align: text-bottom;
+    margin: 0 2px 0 0;
 }
 
 #ae_login_box {
