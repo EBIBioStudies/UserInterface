@@ -96,7 +96,7 @@
                     <xsl:sort select="@kind='adf' or @kind='idf' or @kind='sdrf'" order="descending"/>
                     <xsl:sort select="@name" order="ascending"/>
                     <tr>
-                        <td class="td_name"><a href="{$vBaseUrl}/{$pAccession}/{@name}"><xsl:value-of select="@name"/></a></td>
+                        <td class="td_name"><a href="{$vBaseUrl}/files/{$pAccession}/{@name}"><xsl:value-of select="@name"/></a></td>
                         <td class="td_size"><xsl:value-of select="helper:fileSizeToString(@size)"/></td>
                         <td class="td_date"><xsl:value-of select="@lastmodified"/></td>
                     </tr>
