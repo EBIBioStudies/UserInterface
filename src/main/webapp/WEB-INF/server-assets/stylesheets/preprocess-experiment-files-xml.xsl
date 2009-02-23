@@ -49,17 +49,17 @@
                     <xsl:element name="{name()}"><xsl:value-of select="."/></xsl:element>
                 </xsl:for-each>
                 <xsl:choose>
-                    <xsl:when test="contains(@name, '.processed.zip')">
+                    <xsl:when test="@kind='fgem'">
                         <xsl:element name="bioassays"><xsl:value-of select="$vProcessedBioassays"/></xsl:element>
                         <xsl:element name="dataformat"><xsl:value-of select="$vProcessedDataformats"/></xsl:element>
                     </xsl:when>
-                    <xsl:when test="contains(@name, '.raw.zip')">
+                    <xsl:when test="@kind='raw'">
                         <xsl:element name="bioassays"><xsl:value-of select="$vRawBioassays"/></xsl:element>
                         <xsl:element name="dataformat"><xsl:value-of select="$vRawDataformats"/></xsl:element>
                     </xsl:when>
                 </xsl:choose>
-                <xsl:element name="url">
-                    <xsl:text>http://www.ebi.ac.uk/microarray-as/ae/files/</xsl:text>
+                <xsl:element name="relativepath">
+                    <xsl:text>files/</xsl:text>
                     <xsl:value-of select="$vAccession"/>
                     <xsl:text>/</xsl:text>
                     <xsl:value-of select="@name"/>
@@ -73,8 +73,8 @@
                     <xsl:for-each select="@*">
                         <xsl:element name="{name()}"><xsl:value-of select="."/></xsl:element>
                     </xsl:for-each>
-                    <xsl:element name="url">
-                        <xsl:text>http://www.ebi.ac.uk/microarray-as/ae/files/</xsl:text>
+                    <xsl:element name="relativepath">
+                        <xsl:text>files/</xsl:text>
                         <xsl:value-of select="$vArrayAccession"/>
                         <xsl:text>/</xsl:text>
                         <xsl:value-of select="@name"/>

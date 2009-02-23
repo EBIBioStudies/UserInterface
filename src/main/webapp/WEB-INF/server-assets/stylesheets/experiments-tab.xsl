@@ -7,6 +7,9 @@
                 exclude-result-prefixes="func ae helper"
                 version="1.0">
 
+    <xsl:param name="sortby">releasedate</xsl:param>
+    <xsl:param name="sortorder">descending</xsl:param>
+
     <xsl:param name="species"/>
     <xsl:param name="array"/>
     <xsl:param name="keywords"/>
@@ -15,9 +18,12 @@
     <xsl:param name="inatlas"/>
     <xsl:param name="userid"/>
 
-    <xsl:param name="sortby">releasedate</xsl:param>
-    <xsl:param name="sortorder">descending</xsl:param>
-    
+    <!-- dynamically set by QueryServlet: host name (as seen from client) and base context path of webapp -->
+    <xsl:param name="host"/>
+    <xsl:param name="basepath"/>
+
+    <xsl:variable name="vBaseUrl">http://<xsl:value-of select="$host"/><xsl:value-of select="$basepath"/></xsl:variable>
+
     <xsl:output method="text" indent="no" encoding="ISO-8859-1"/>
 
     <xsl:include href="ae-filter-experiments.xsl"/>
@@ -66,16 +72,18 @@
         <xsl:value-of select="releasedate" />
         <xsl:text>&#9;</xsl:text>
         <xsl:call-template name="list-data">
-            <xsl:with-param name="node" select="file[kind = 'fgem']"/>
+            <xsl:with-param name="pKind" select="'fgem'"/>
+            <xsl:with-param name="pAccession" select="accession"/>
         </xsl:call-template>
         <xsl:text>&#9;</xsl:text>
         <xsl:call-template name="list-data">
-            <xsl:with-param name="node" select="file[kind = 'raw']"/>
+            <xsl:with-param name="pKind" select="'raw'"/>
+            <xsl:with-param name="pAccession" select="accession"/>
         </xsl:call-template>
         <xsl:text>&#9;</xsl:text>
             <xsl:if test="@loadedinatlas">Yes</xsl:if>
         <xsl:text>&#9;</xsl:text>
-        <xsl:value-of select="concat('http://www.ebi.ac.uk/microarray-as/ae/experiments/',accession)"/>
+        <xsl:value-of select="$vBaseUrl"/>/experiments/<xsl:value-of select="accession"/>
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
@@ -87,9 +95,11 @@
     </xsl:template>
 
     <xsl:template name="list-data">
-        <xsl:param name="node"/>
+        <xsl:param name="pKind"/>
+        <xsl:param name="pAccession"/>
         <xsl:choose>
-            <xsl:when test="$node/url"><xsl:value-of select="$node/url"/></xsl:when>
+            <xsl:when test="count(file[kind=$pKind])>1"><xsl:value-of select="$vBaseUrl"/>/<xsl:value-of select="$pAccession"/>?kind=<xsl:value-of select="$pKind"/></xsl:when>
+            <xsl:when test="file[kind=$pKind]"><xsl:value-of select="$vBaseUrl"/>/<xsl:value-of select="file[kind=$pKind]/relativepath"/></xsl:when>
             <xsl:otherwise><xsl:text>Data is not available</xsl:text></xsl:otherwise>
         </xsl:choose>
     </xsl:template>

@@ -23,6 +23,12 @@
 
     <xsl:param name="detailedview"/>
 
+    <!-- dynamically set by QueryServlet: host name (as seen from client) and base context path of webapp -->
+    <xsl:param name="host"/>
+    <xsl:param name="basepath"/>
+
+    <xsl:variable name="vBaseUrl">http://<xsl:value-of select="$host"/><xsl:value-of select="$basepath"/></xsl:variable>
+
     <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="ISO-8859-1" />
 
     <xsl:include href="ae-filter-experiments.xsl"/>
@@ -42,14 +48,14 @@
 
         <xsl:variable name="vFrom">
             <xsl:choose>
-                <xsl:when test="$page &gt; 0"><xsl:value-of select="1 + ( $page - 1 ) * $pagesize"/></xsl:when>
+                <xsl:when test="$page > 0"><xsl:value-of select="1 + ( $page - 1 ) * $pagesize"/></xsl:when>
                 <xsl:when test="$vTotal = 0">0</xsl:when>
                 <xsl:otherwise>1</xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="vTo">
             <xsl:choose>
-                <xsl:when test="( $vFrom + $pagesize - 1 ) &gt; $vTotal"><xsl:value-of select="$vTotal"/></xsl:when>
+                <xsl:when test="( $vFrom + $pagesize - 1 ) > $vTotal"><xsl:value-of select="$vTotal"/></xsl:when>
                 <xsl:otherwise><xsl:value-of select="$vFrom + $pagesize - 1"/></xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -68,7 +74,7 @@
             </td>
         </tr>
         <xsl:choose>
-            <xsl:when test="$vTotal&gt;0">
+            <xsl:when test="$vTotal > 0">
                 <xsl:call-template name="ae-sort-experiments">
                     <xsl:with-param name="pExperiments" select="$vFilteredExperiments"/>
                     <xsl:with-param name="pFrom" select="$vFrom"/>
@@ -105,7 +111,7 @@
         <xsl:param name="pFrom"/>
         <xsl:param name="pTo"/>
         <xsl:variable name="vExpId" select="id"/>
-        <xsl:if test="position() &gt;= $pFrom and position() &lt;= $pTo">
+        <xsl:if test="position() >= $pFrom and not(position() > $pTo)">
             <tr id="{$vExpId}_main" class="{$vDetailedViewMainTrClass}">
                 <td class="{$vDetailedViewMainTdClass}"><div class="table_row_expand"/></td>
                 <td class="{$vDetailedViewMainTdClass}">
@@ -128,27 +134,19 @@
                 <td class="{$vDetailedViewMainTdClass}"><div><xsl:apply-templates select="releasedate" mode="highlight" /></div><xsl:if test="count(releasedate)=0">&#160;</xsl:if></td>
                 <td class="td_main_img align_center {$vDetailedViewMainTdClass}">
                     <div>
-                        <xsl:choose>
-                            <xsl:when test="file[kind = 'fgem']"><a href="{concat('${interface.application.base.url}/files/', concat(accession, concat('/', file[kind = 'fgem']/name)))}" title="Click to download processed data"><img src="${interface.application.base.url}/assets/images/silk_data_save.gif" width="16" height="16" alt="Click to download processed data"/></a></xsl:when>
-                            <xsl:otherwise><img src="${interface.application.base.url}/assets/images/silk_data_unavail.gif" width="16" height="16"/></xsl:otherwise>
-                        </xsl:choose>
+                        <xsl:call-template name="data-files-main"><xsl:with-param name="pKind" select="'fgem'"/></xsl:call-template>
+                    </div>
+                </td>
+                <td class="td_main_img align_center {$vDetailedViewMainTdClass}">
+                    <div>
+                        <xsl:call-template name="data-files-main"><xsl:with-param name="pKind" select="'raw'"/></xsl:call-template>
                     </div>
                 </td>
                 <td class="td_main_img align_center {$vDetailedViewMainTdClass}">
                     <div>
                         <xsl:choose>
-                            <xsl:when test="contains(file[kind = 'raw']/dataformat, 'CEL')"><a href="{concat('${interface.application.base.url}/files/', concat(accession, concat('/', file[kind = 'raw']/name)))}" title="Click to download Affymetrix data"><img src="${interface.application.base.url}/assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Click to download Affymetrix data"/></a></xsl:when>
-                            <xsl:when test="file[kind = 'raw']"><a href="{concat('${interface.application.base.url}/files/', concat(accession, concat('/', file[kind = 'raw']/name)))}" title="Click to download raw data"><img src="${interface.application.base.url}/assets/images/silk_data_save.gif" width="16" height="16" alt="Click to download raw data"/></a></xsl:when>
-                            <xsl:when test="accession='E-TABM-185'"><a href="${interface.application.base.url}/files/E-TABM-185/E-TABM-185.raw_data_readme.txt" title="Click to download Affymetrix data"><img src="${interface.application.base.url}/assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Click to download Affymetrix data"/></a></xsl:when>
-                            <xsl:otherwise><img src="${interface.application.base.url}/assets/images/silk_data_unavail.gif" width="16" height="16" alt="-"/></xsl:otherwise>
-                        </xsl:choose>
-                    </div>
-                </td>
-                <td class="td_main_img align_center {$vDetailedViewMainTdClass}">
-                    <div>
-                        <xsl:choose>
-                            <xsl:when test="@loadedinatlas"><a href="${interface.application.link.atlas.exp_query.url}{accession}"><img src="${interface.application.base.url}/assets/images/silk_tick.gif" width="16" height="16" alt="*"/></a></xsl:when>
-                            <xsl:otherwise><img src="${interface.application.base.url}/assets/images/silk_data_unavail.gif" width="16" height="16" alt="-"/></xsl:otherwise>
+                            <xsl:when test="@loadedinatlas"><a href="${interface.application.link.atlas.exp_query.url}{accession}"><img src="{$basepath}/assets/images/silk_tick.gif" width="16" height="16" alt="*"/></a></xsl:when>
+                            <xsl:otherwise><img src="{$basepath}/assets/images/silk_data_unavail.gif" width="16" height="16" alt="-"/></xsl:otherwise>
                         </xsl:choose>
                     </div>
                 </td>
@@ -157,7 +155,7 @@
                 <td colspan="9" class="td_ext">
                     <div class="tbl">
                         <table cellpadding="0" cellspacing="0" border="0">
-                            <xsl:if test="count(description[text/text()!='' and not(contains(text/text(),'Generated description'))])&gt;0">
+                            <xsl:if test="count(description[text/text()!='' and not(contains(text/text(),'Generated description'))]) > 0">
                                 <tr>
                                     <td class="name"><div>Description</div></td>
                                     <td class="value">
@@ -213,9 +211,9 @@
                                 </tr>
                             </xsl:if>
 
-                            <xsl:if test="count(provider[role!='data_coder'])&gt;0">
+                            <xsl:if test="count(provider[role!='data_coder']) > 0">
                                 <tr>
-                                    <td class="name"><div>Contact<xsl:if test="count(provider[role!='data_coder'])&gt;1">s</xsl:if></div></td>
+                                    <td class="name"><div>Contact<xsl:if test="count(provider[role!='data_coder']) > 1">s</xsl:if></div></td>
                                     <td class="value">
                                         <div>
                                             <xsl:call-template name="providers"/>
@@ -224,9 +222,9 @@
                                 </tr>
                             </xsl:if>
 
-                            <xsl:if test="count(bibliography/*)&gt;0">
+                            <xsl:if test="count(bibliography/*) > 0">
                                 <tr>
-                                    <td class="name"><div>Citation<xsl:if test="count(bibliography/*)&gt;1">s</xsl:if></div></td>
+                                    <td class="name"><div>Citation<xsl:if test="count(bibliography/*) > 1">s</xsl:if></div></td>
                                     <td class="value"><xsl:apply-templates select="bibliography" /></td>
                                 </tr>
                             </xsl:if>
@@ -239,15 +237,15 @@
 
                                             <a href="${interface.application.link.atlas.exp_query.url}{accession}">Query ArrayExpress Atlas</a>
                                             <xsl:text> </xsl:text>
-                                            <img src="${interface.application.base.url}/assets/images/silk_new.gif" width="16" height="13" alt="new!"/>
+                                            <img src="{$basepath}/assets/images/silk_new.gif" width="16" height="13" alt="new!"/>
                                         </div>
                                     </xsl:if>
                                     <div>
-                                        <xsl:if test="count(secondaryaccession)&gt;0">
+                                        <xsl:if test="count(secondaryaccession) > 0">
                                             <xsl:call-template name="secondaryaccession"/>
                                         </xsl:if>
                                     </div>
-                                    <xsl:if test="count(arraydesign)&gt;0">
+                                    <xsl:if test="count(arraydesign) > 0">
                                         <xsl:for-each select="arraydesign">
                                             <div>
                                                 <a href="${interface.application.link.aer_old.base.url}/result?queryFor=PhysicalArrayDesign&amp;aAccession={accession}">
@@ -288,7 +286,8 @@
                                                 </table>
                                             </div>
                                             <div>
-                                                <a href="${interface.application.base.url}/files/{accession}">
+                                                <a href="{$basepath}/files/{accession}">
+                                                    <img src="{$basepath}/assets/images/silk_ftp.gif" width="16" height="16" alt=""/>
                                                     <xsl:text>Browse all available files</xsl:text>
                                                 </a>
                                             </div>
@@ -298,7 +297,8 @@
                                     <xsl:otherwise>
                                         <td class="value">
                                             <div>
-                                                <a href="${interface.application.base.url}/files/{accession}">
+                                                <a href="{$basepath}/files/{accession}">
+                                                    <img src="{$basepath}/assets/images/silk_ftp.gif" width="16" height="16" alt=""/>
                                                     <xsl:text>Browse all available files</xsl:text>
                                                 </a>
                                             </div>    
@@ -306,15 +306,15 @@
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </tr>
-                            <xsl:if test="(count(experimenttype) + count(experimentdesign))&gt;0">
+                            <xsl:if test="(count(experimenttype) + count(experimentdesign)) > 0">
                                 <tr>
-                                    <td class="name"><div>Experiment type<xsl:if test="(count(experimenttype) + count(experimentdesign))&gt;1">s</xsl:if></div></td>
+                                    <td class="name"><div>Experiment type<xsl:if test="(count(experimenttype) + count(experimentdesign)) > 1">s</xsl:if></div></td>
                                     <td class="value"><div>
                                         <xsl:for-each select="experimenttype">
                                             <xsl:apply-templates select="." mode="highlight"/>
                                             <xsl:if test="position()!=last()">, </xsl:if>
                                         </xsl:for-each>
-                                        <xsl:if test="count(experimenttype)&gt;0 and count(experimentdesign)&gt;0">, </xsl:if>
+                                        <xsl:if test="count(experimenttype) > 0 and count(experimentdesign) > 0">, </xsl:if>
                                         <xsl:for-each select="experimentdesign">
                                             <xsl:apply-templates select="." mode="highlight"/>
                                             <xsl:if test="position()!=last()">, </xsl:if>
@@ -323,7 +323,7 @@
                                 </tr>
                             </xsl:if>
 
-                            <xsl:if test="count(experimentalfactor/name)&gt;0">
+                            <xsl:if test="count(experimentalfactor/name) > 0">
                                 <tr>
                                     <td class="name"><div>Experimental factors</div></td>
                                     <td class="attrs"><div>
@@ -354,7 +354,7 @@
                                 </tr>
                             </xsl:if>
 
-                            <xsl:if test="count(sampleattribute/category)&gt;0">
+                            <xsl:if test="count(sampleattribute/category) > 0">
                                 <tr>
                                     <td class="name"><div>Sample attributes</div></td>
                                     <td class="attrs"><div>
@@ -428,13 +428,13 @@
                     <a href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc={text()}">GEO - <xsl:apply-templates select="." mode="highlight" /></a>
                 </xsl:when>
                 <xsl:when test="substring(text(), 1, 2)='E-' and substring(text(), 7, 1)='-'">
-                    <a href="${interface.application.base.url}/experiments/{text()}">ArrayExpress - <xsl:apply-templates select="." mode="highlight" /></a>
+                    <a href="{$basepath}/experiments/{text()}">ArrayExpress - <xsl:apply-templates select="." mode="highlight" /></a>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select="." mode="highlight" />
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:if test="position()!=last() and string-length(text())&gt;0">, </xsl:if>
+            <xsl:if test="position()!=last() and string-length(text()) > 0">, </xsl:if>
         </xsl:for-each>
     </xsl:template>
 
@@ -443,7 +443,7 @@
             <xsl:sort select="role='submitter'" order="descending"/>
             <xsl:sort select="contact"/>
             <xsl:choose>
-                <xsl:when test="role='submitter' and string-length(email)&gt;0">
+                <xsl:when test="role='submitter' and string-length(email) > 0">
                     <a href="mailto:{email}"><xsl:apply-templates select="contact" mode="highlight"/> &lt;<xsl:apply-templates select="email" mode="highlight"/>&gt;</a>
                 </xsl:when>
                 <xsl:otherwise><xsl:apply-templates select="contact" mode="highlight"/></xsl:otherwise>
@@ -521,13 +521,13 @@
     <xsl:template name="miame-star">
         <xsl:param name="stars" />
         <xsl:param name="count" />
-        <xsl:if test="$count&lt;5">
+        <xsl:if test="$count &lt; 5">
             <xsl:choose>
-                <xsl:when test="$count&lt;$stars">
-                    <img src="${interface.application.base.url}/assets/images/miame_star.gif" width="14" height="13" alt="*"/>
+                <xsl:when test="$count &lt; $stars">
+                    <img src="{$basepath}/assets/images/miame_star.gif" width="14" height="13" alt="*"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <img src="${interface.application.base.url}/assets/images/miame_nostar.gif" width="14" height="13" alt="."/>
+                    <img src="{$basepath}/assets/images/miame_nostar.gif" width="14" height="13" alt="."/>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:call-template name="miame-star">
@@ -539,16 +539,16 @@
 
     <xsl:template name="data-files">
         <xsl:variable name="vAccession" select="accession"/>
-        <xsl:if test="file[extension='zip' and (kind='raw' or kind='fgem')]">
+        <xsl:if test="file[extension = 'zip' and (kind = 'raw' or kind = 'fgem')]">
             <tr>
                 <td class="attr_name">Data Archives</td>
                 <td class="attr_value">
-                    <xsl:for-each select="file[extension='zip' and (kind='raw' or kind='fgem')]">
+                    <xsl:for-each select="file[extension = 'zip' and (kind = 'raw' or kind = 'fgem')]">
                         <xsl:sort select="kind"/>
-                        <a href="{url}">
+                        <a href="{$vBaseUrl}/{relativepath}">
                             <xsl:value-of select="name"/>
                         </a>
-                        <xsl:if test="position()!=last()">
+                        <xsl:if test="position() != last()">
                             <xsl:text>, </xsl:text>
                         </xsl:if>
                     </xsl:for-each>
@@ -559,17 +559,17 @@
 
     <xsl:template name="magetab-files">
         <xsl:variable name="vAccession" select="accession"/>
-        <xsl:for-each select="file[extension='txt' and (kind='idf' or kind='sdrf')]">
+        <xsl:for-each select="file[extension = 'txt' and (kind = 'idf' or kind = 'sdrf')]">
             <xsl:sort select="kind"/>
             <tr>
                 <td class="attr_name">
                     <xsl:choose>
-                        <xsl:when test="kind='idf'">Investigation Description</xsl:when>
-                        <xsl:when test="kind='sdrf'">Sample and Data Relationship</xsl:when>
+                        <xsl:when test="kind = 'idf'">Investigation Description</xsl:when>
+                        <xsl:when test="kind = 'sdrf'">Sample and Data Relationship</xsl:when>
                     </xsl:choose>
                 </td>
                 <td class="attr_value">
-                    <a href="{url}"><xsl:value-of select="name"/></a>
+                    <a href="{$vBaseUrl}/{relativepath}"><xsl:value-of select="name"/></a>
                 </td>
             </tr>
         </xsl:for-each>
@@ -577,14 +577,14 @@
 
     <xsl:template name="magetab-files-array">
         <xsl:variable name="vAccession" select="accession"/>
-        <xsl:if test="file[extension='txt' and kind='adf']">
+        <xsl:if test="file[extension = 'txt' and kind = 'adf']">
             <tr>
                 <td class="attr_name">Array Design</td>
                 <td class="attr_value">
-                    <xsl:for-each select="file[extension='txt' and kind='adf']">
+                    <xsl:for-each select="file[extension = 'txt' and kind = 'adf']">
                         <xsl:sort select="name"/>
-                        <a href="{url}"><xsl:value-of select="name"/></a>
-                        <xsl:if test="position()!=last()">
+                        <a href="{$vBaseUrl}/{relativepath}"><xsl:value-of select="name"/></a>
+                        <xsl:if test="position() != last()">
                             <xsl:text>, </xsl:text>
                         </xsl:if>
                     </xsl:for-each>
@@ -595,14 +595,14 @@
 
     <xsl:template name="image-files">
         <xsl:variable name="vAccession" select="accession"/>
-        <xsl:if test="file[kind='biosamples' and (extension='png' or extension='svg')]">
+        <xsl:if test="file[kind = 'biosamples' and (extension = 'png' or extension = 'svg')]">
             <tr>
                 <td class="attr_name">Experiment Design Images</td>
                 <td class="attr_value">
-                    <xsl:for-each select="file[kind='biosamples' and (extension='png' or extension='svg')]">
+                    <xsl:for-each select="file[kind = 'biosamples' and (extension = 'png' or extension = 'svg')]">
                         <xsl:sort select="extension"/>
-                        <a href="{url}"><xsl:value-of select="name"/></a>
-                        <xsl:if test="position()!=last()">
+                        <a href="{$vBaseUrl}/{relativepath}"><xsl:value-of select="name"/></a>
+                        <xsl:if test="position() != last()">
                             <xsl:text>, </xsl:text>
                         </xsl:if>
                     </xsl:for-each>
@@ -611,4 +611,42 @@
         </xsl:if>
     </xsl:template>
 
+    <xsl:template name="data-files-main">
+        <xsl:param name="pKind"/>
+        <xsl:variable name="vFiles" select="file[kind = $pKind]"/>
+        <xsl:variable name="vImg">
+            <xsl:choose>
+                <xsl:when test="$pKind = 'raw' and contains($vFiles[1]/dataformat, 'CEL')">
+                    <img src="{$basepath}/assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Click to download Affymetrix data"/>
+                </xsl:when>
+                <xsl:when test="$pKind = 'raw'">
+                    <img src="{$basepath}/assets/images/silk_data_save.gif" width="16" height="16" alt="Click to download raw data"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <img src="{$basepath}/assets/images/silk_data_save.gif" width="16" height="16" alt="Click to download processed data"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
+        <xsl:variable name="vLinkUrl">
+            <xsl:choose>
+                <xsl:when test="count($vFiles) > 1">
+                    <xsl:value-of select="$basepath"/>
+                    <xsl:text>/files/</xsl:text>
+                    <xsl:value-of select="accession"/>
+                    <xsl:text>?kind=</xsl:text>
+                    <xsl:value-of select="$pKind"/>
+                </xsl:when>
+                <xsl:when test="$vFiles)">
+                    <xsl:value-of select="$vBaseUrl"/>
+                    <xsl:text>/</xsl:text>
+                    <xsl:value-of select="$vFiles/relativepath"/>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="string-length($vLinkUrl)>0"><a href="{$vLinkUrl}"><xsl:copy-of select="$vImg"/></a></xsl:when>
+            <xsl:otherwise><img src="{$basepath}/assets/images/silk_data_unavail.gif" width="16" height="16" alt="-"/></xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 </xsl:stylesheet>

@@ -22,7 +22,13 @@
     <xsl:param name="userid"/>
 
     <xsl:param name="detailedview"/>
-    
+
+    <!-- dynamically set by QueryServlet: host name (as seen from client) and base context path of webapp -->
+    <xsl:param name="host"/>
+    <xsl:param name="basepath"/>
+
+    <xsl:variable name="vBaseUrl">http://<xsl:value-of select="$host"/><xsl:value-of select="$basepath"/></xsl:variable>
+
     <xsl:output omit-xml-declaration="yes" method="xml" encoding="ISO-8859-1"/>
 
     <xsl:include href="ae-filter-experiments.xsl"/>
@@ -81,7 +87,7 @@
                     </xsl:if>
                 </title>
                 <link>
-                    <xsl:text>http://www.ebi.ac.uk/arrayexpress</xsl:text>
+                    <xsl:value-of select="$vBaseUrl"/>
                     <xsl:if test="(string-length($keywords)&gt;0) or (string-length($species)&gt;0) or (string-length($array)&gt;0)">
                         <xsl:text>/browse.html?keywords=</xsl:text>
                         <xsl:value-of select="$keywords"/>
@@ -104,7 +110,7 @@
                 <generator><xsl:text>ArrayExpress</xsl:text></generator>
                 <managingEditor><xsl:text>arrayexpress@ebi.ac.uk (ArrayExpress Team)</xsl:text></managingEditor>
                 <webMaster><xsl:text>arrayexpress@ebi.ac.uk (ArrayExpress Team)</xsl:text></webMaster>
-                <atom:link href="http://www.ebi.ac.uk${interface.application.base.url}/rss/experiments" rel="self" type="application/rss+xml" />
+                <atom:link href="{$vBaseUrl}/rss/experiments" rel="self" type="application/rss+xml" />
                 <xsl:call-template name="ae-sort-experiments">
                     <xsl:with-param name="pExperiments" select="$vFilteredExperiments"/>
                     <xsl:with-param name="pFrom" select="1"/>
@@ -136,13 +142,11 @@
                     </xsl:choose>
                 </title>
                 <link>
-                    <xsl:text>http://www.ebi.ac.uk/arrayexpress/experiments/</xsl:text>
-                    <xsl:value-of select="accession"/>
+                    <xsl:value-of select="$vBaseUrl"/>/experiments/<xsl:value-of select="accession"/>
                 </link>
                 <guid>
                     <xsl:attribute name="isPermaLink">true</xsl:attribute>
-                    <xsl:text>http://www.ebi.ac.uk/arrayexpress/experiments/</xsl:text>
-                    <xsl:value-of select="accession"/>
+                    <xsl:value-of select="$vBaseUrl"/>/experiments/<xsl:value-of select="accession"/>
                 </guid>
 
                 <description>
@@ -163,7 +167,7 @@
                     </xsl:for-each>
                 </description>
                 <xsl:for-each select="experimentdesign">
-                    <category domain="http://www.ebi.ac.uk/arrayexpress">
+                    <category domain="{$vBaseUrl}">
                         <xsl:value-of select="."/>
                     </category>
                 </xsl:for-each>

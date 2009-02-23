@@ -23,6 +23,14 @@
     padding: 0 0 5px 0;
 }
 
+.ae_comment {
+    background: ivory url(../images/silk_warn.gif) no-repeat scroll 10px 50%;
+    border-top: 1px solid #005555;
+    color: #005555;
+    font-style: italic;
+    padding: 5px 0 5px 30px;
+}
+
 .ae_files_table {
     table-layout: fixed;
     width: 100%;

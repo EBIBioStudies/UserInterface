@@ -19,6 +19,12 @@
     <xsl:param name="inatlas"/>
     <xsl:param name="userid"/>
 
+    <!-- dynamically set by QueryServlet: host name (as seen from client) and base context path of webapp -->
+    <xsl:param name="host"/>
+    <xsl:param name="basepath"/>
+
+    <xsl:variable name="vBaseUrl">http://<xsl:value-of select="$host"/><xsl:value-of select="$basepath"/></xsl:variable>
+
     <xsl:output omit-xml-declaration="yes" method="xml" indent="no"/>
 
     <xsl:include href="ae-filter-experiments.xsl"/>
@@ -44,8 +50,25 @@
 
     <xsl:template match="experiment">
         <experiment>
-            <xsl:copy-of select="*[(name() = 'accession') or (name() = 'file')]"/>
+            <xsl:apply-templates select="accession|file" mode="copy"/>
         </experiment>
+    </xsl:template>
+
+    <xsl:template match="accession" mode="copy">
+        <xsl:copy>
+            <xsl:apply-templates/>
+        </xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="file" mode="copy">
+        <xsl:element name="file">
+            <xsl:for-each select="*[name() != 'relativepath']">
+                <xsl:copy-of select="."/>
+            </xsl:for-each>
+            <xsl:element name="url">
+                <xsl:value-of select="$vBaseUrl"/>/<xsl:value-of select="relativepath"/>
+            </xsl:element>
+        </xsl:element>
     </xsl:template>
 
 </xsl:stylesheet>
