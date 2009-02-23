@@ -59,6 +59,11 @@
         <from>^/ArrayExpress-Experiments\.txt$</from>
         <to type="forward">/servlets/query/experiments/tab</to>
     </rule>
+    <!-- print-friendly layout for the experiments -->
+    <rule>
+        <from>^/browse\.printer-friendly\.html$</from>
+        <to type="forward">/servlets/query/print-experiments/html</to>
+    </rule>
     <!-- redirects to some pages at www.ebi.ac.uk (via proxy servlet) -->
     <rule>
         <from>^/ae-news.xml</from>
