@@ -83,6 +83,10 @@ public class QueryServlet extends ApplicationServlet
             // to make sure nobody sneaks in the other value w/o proper authentication
             params.put("userid", "1");
 
+            // adding "host" request header so we can dynamically create FQDN URLs
+            params.put("host", request.getHeader("host"));
+            params.put("basepath", request.getContextPath());
+            
             CookieMap cookies = new CookieMap(request.getCookies());
             if (cookies.containsKey("AeLoggedUser") && cookies.containsKey("AeLoginToken")) {
                 Users users = (Users) getComponent("Users");
