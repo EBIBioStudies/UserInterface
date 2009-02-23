@@ -661,6 +661,11 @@ a:active .table_header_label {
     font-weight: normal;
 }
 
+.td_ext td.attrs a img {
+    margin: 0 2px 0 0;
+    vertical-align: text-bottom;
+}
+
 .td_ext td.attrs th {
     font-weight: bold;
     color: #005555;
