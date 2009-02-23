@@ -545,6 +545,7 @@
                 <td class="attr_value">
                     <xsl:for-each select="file[extension = 'zip' and (kind = 'raw' or kind = 'fgem')]">
                         <xsl:sort select="kind"/>
+                        <xsl:sort select="name"/>
                         <a href="{$vBaseUrl}/{relativepath}">
                             <xsl:value-of select="name"/>
                         </a>
