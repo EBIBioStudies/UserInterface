@@ -637,7 +637,7 @@
                     <xsl:text>?kind=</xsl:text>
                     <xsl:value-of select="$pKind"/>
                 </xsl:when>
-                <xsl:when test="$vFiles)">
+                <xsl:when test="$vFiles">
                     <xsl:value-of select="$vBaseUrl"/>
                     <xsl:text>/</xsl:text>
                     <xsl:value-of select="$vFiles/relativepath"/>
