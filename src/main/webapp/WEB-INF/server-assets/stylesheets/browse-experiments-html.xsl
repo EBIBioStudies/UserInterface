@@ -87,11 +87,11 @@
                             </xsl:when>
                             <xsl:otherwise>
                                 <div><strong>The query '<xsl:value-of select="$keywords"/>'<xsl:if test="string-length($species)>0">&#160;<em>and</em> species '<xsl:value-of select="$species"/>'</xsl:if>
-                                    <xsl:if test="string-length($array)>0">&#160;<em>and</em> array <xsl:value-of select="$array"/></xsl:if>
+                                    <xsl:if test="string-length($array)>0">&#160;<em>and</em> array '<xsl:value-of select="//arraydesign[id=$array]/name"/>'</xsl:if>
                                     <xsl:if test="string-length($exptype)>0">&#160;<em>and</em> experiment type '<xsl:value-of select="$exptype"/>'</xsl:if>
                                     returned no matches.</strong></div>
                                 <div>Try shortening the query term e.g. 'embryo' will match embryo, embryoid, embryonic across all annotation fields.</div>
-                                <div>Note that '*' is <strong>not</strong> supported as a wild card. More information available at <a href="http://www.ebi.ac.uk/microarray/doc/help/ae_help.html">ArrayExpress Query Help</a>.</div>
+                                <div>Note that '*' is <strong>not</strong> supported as a wild card. More information available at <a href="http://www.ebi.ac.uk/microarray/doc/help/ae_help.html">ArrayExpress Browser Help</a>.</div>
                             </xsl:otherwise>
                         </xsl:choose>
 
@@ -444,7 +444,7 @@
             <xsl:sort select="contact"/>
             <xsl:choose>
                 <xsl:when test="role='submitter' and string-length(email)&gt;0">
-                    <xsl:apply-templates select="contact" mode="highlight"/> &lt;<a href="mailto:{email}"><xsl:apply-templates select="email" mode="highlight"/></a>&gt;
+                    <a href="mailto:{email}"><xsl:apply-templates select="contact" mode="highlight"/> &lt;<xsl:apply-templates select="email" mode="highlight"/>&gt;</a>
                 </xsl:when>
                 <xsl:otherwise><xsl:apply-templates select="contact" mode="highlight"/></xsl:otherwise>
             </xsl:choose>
