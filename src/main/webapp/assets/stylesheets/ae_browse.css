@@ -627,6 +627,10 @@ a:active .table_header_label {
     border: 0 none;
 }
 
+.td_ext a {
+    white-space: nowrap;    
+}
+
 .td_ext td.name {
     width: 118px;
     padding: 0;
