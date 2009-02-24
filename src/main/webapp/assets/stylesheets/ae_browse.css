@@ -483,7 +483,7 @@ a:active .table_header_label {
 }
 
 .ae_results_more {
-    width: 20px;
+    width: 19px;
 }
 
 .ae_results_accession {
@@ -613,7 +613,6 @@ a:active .table_header_label {
 }
 
 .td_ext div.tbl {
-    background: url( ../images/trbgl.gif ) repeat;
     padding: 3px 2px;
 }
 
@@ -624,7 +623,7 @@ a:active .table_header_label {
 
 .td_ext td {
     margin: 0;
-    padding: 0 0 3px 0;
+    padding: 0 0 2px 0;
     border: 0 none;
 }
 
@@ -637,6 +636,7 @@ a:active .table_header_label {
     padding: 0;
     font-weight: bold;
     color: #005555;
+    border-top: 1px solid #e5f0f0;
     text-align: right;
     vertical-align: top;
     overflow: hidden;
@@ -647,7 +647,6 @@ a:active .table_header_label {
 }
 
 .td_ext td.value {
-    font-weight: normal;
     text-align: left;
     vertical-align: top;
 }
@@ -662,10 +661,14 @@ a:active .table_header_label {
     vertical-align: bottom;
 }
 
+.td_ext td.value,
 .td_ext td.attrs {
     font-weight: normal;
+    background-color: #f2f8f8;
+    border-top: 1px solid #e5f0f0;
 }
 
+.td_ext td.value a img,
 .td_ext td.attrs a img {
     margin: 0 2px 0 0;
     vertical-align: text-bottom;

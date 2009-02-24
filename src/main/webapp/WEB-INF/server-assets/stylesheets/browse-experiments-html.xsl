@@ -97,7 +97,7 @@
                                     <xsl:if test="string-length($exptype)>0">&#160;<em>and</em> experiment type '<xsl:value-of select="$exptype"/>'</xsl:if>
                                     returned no matches.</strong></div>
                                 <div>Try shortening the query term e.g. 'embryo' will match embryo, embryoid, embryonic across all annotation fields.</div>
-                                <div>Note that '*' is <strong>not</strong> supported as a wild card. More information available at <a href="http://www.ebi.ac.uk/microarray/doc/help/ae_help.html">ArrayExpress Browser Help</a>.</div>
+                                <div>Note that '*' is <strong>not</strong> supported as a wild card. More information available in <a href="${interface.application.link.query_help}">ArrayExpress Query Help</a>.</div>
                             </xsl:otherwise>
                         </xsl:choose>
 
@@ -539,11 +539,11 @@
 
     <xsl:template name="data-files">
         <xsl:variable name="vAccession" select="accession"/>
-        <xsl:if test="file[extension = 'zip' and (kind = 'raw' or kind = 'fgem')]">
+        <xsl:if test="file[kind = 'raw' or kind = 'fgem']">
             <tr>
                 <td class="attr_name">Data Archives</td>
                 <td class="attr_value">
-                    <xsl:for-each select="file[extension = 'zip' and (kind = 'raw' or kind = 'fgem')]">
+                    <xsl:for-each select="file[kind = 'raw' or kind = 'fgem']">
                         <xsl:sort select="kind"/>
                         <xsl:sort select="name"/>
                         <a href="{$vBaseUrl}/{relativepath}">

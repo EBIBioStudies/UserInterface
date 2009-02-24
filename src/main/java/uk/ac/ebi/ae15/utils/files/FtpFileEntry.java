@@ -106,13 +106,13 @@ public class FtpFileEntry
             = new RegExpHelper("\\.([^.]+|tar\\.gz)$", "i");
 
     private static final RegExpHelper fgemArchiveRegExp
-            = new RegExpHelper("\\.processed\\.zip|\\.processed\\.\\d+\\.zip|\\.processed\\.tgz|\\.processed\\.tar\\.gz", "i");
+            = new RegExpHelper("\\.processed\\.(\\d+\\.)?(zip|tgz|tar\\.gz)$", "i");
 
     private static final RegExpHelper rawArchiveRegExp
-            = new RegExpHelper("\\.raw\\.zip|\\.raw\\.\\d+\\.zip|\\.raw\\.tgz|\\.raw\\.tar\\.gz", "i");
+            = new RegExpHelper("\\.raw\\.(\\d+\\.)?(zip|tgz|tar\\.gz)$", "i");
 
     private static final RegExpHelper celArchiveRegExp
-            = new RegExpHelper("\\.cel\\.zip|\\.cel\\.tgz|\\.cel\\.tar\\.gz", "i");
+            = new RegExpHelper("\\.cel\\.(\\d+\\.)?(zip|tgz|tar\\.gz)$", "i");
 
     private static final RegExpHelper adfFileRegExp
             = new RegExpHelper("\\.adf\\.txt|\\.adf\\.xls", "i");

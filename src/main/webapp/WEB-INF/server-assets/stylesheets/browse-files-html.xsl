@@ -53,7 +53,7 @@
                                     <xsl:with-param name="pAccession" select="$vAccession"/>
                                 </xsl:call-template>
                                 <xsl:if test="($kind='raw' or $kind='fgem') and count($vExperiment/file[kind=$kind])>1">
-                                    <div class="ae_comment">Due to the large amount of data we have created multiple files.</div>
+                                    <div class="ae_comment">Note: Due to the large amount of data there are multiple archive files for download.</div>
                                 </xsl:if>
 
                                 <xsl:if test="$kind='' or $kind='all'">
