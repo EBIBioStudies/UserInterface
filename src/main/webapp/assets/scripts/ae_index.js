@@ -30,6 +30,7 @@ function
 aeShowLoginForm()
 {
     $("#aer_login_link").hide();
+    $("#aer_help_link").hide();
     $("#aer_login_status").text("");
     $("#aer_login_box").show();
     $("#aer_user_field").focus();
@@ -47,6 +48,7 @@ aeHideLoginForm()
     } else {
         $("#aer_login_link").show();
     }
+    $("#aer_help_link").show();
 }
 
 
@@ -78,6 +80,7 @@ aeDoLoginNext(text)
 
         $("#aer_login_info strong").text(user);
         $("#aer_login_info").show();
+        $("#aer_help_link").show();
         $("#aer_avail_info").text("Updating data, please wait...");
         $.get("ae-stats.xml").next(updateAerStats);        
     } else {

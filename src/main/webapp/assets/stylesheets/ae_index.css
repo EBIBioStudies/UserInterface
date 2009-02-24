@@ -116,14 +116,24 @@
 }
 
 #aer_login_link,
-#aer_login_info {
+#aer_login_info,
+#aer_help_link {
     position: absolute;
     bottom: 8px;
-    left: 10px;
-    right: 10px;
 }
 
-#aer_login_info img {
+#aer_login_link,
+#aer_login_info {
+    left: 10px;
+}
+
+#aer_help_link {
+    right: 10px;
+    text-align: right;
+}
+
+#aer_login_info img,
+#aer_help_link img {
     vertical-align: text-bottom;
     margin: 0 2px 0 0;
 }
