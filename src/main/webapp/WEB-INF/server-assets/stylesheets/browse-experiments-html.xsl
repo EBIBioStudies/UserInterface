@@ -179,31 +179,40 @@
                                             </xsl:call-template>
                                             <span>
                                                 <xsl:text> (</xsl:text>
-                                                <xsl:if test="miamescores/reportersequencescore = '1'">
+                                                <span>
+                                                    <xsl:if test="miamescores/reportersequencescore = '0'">
+                                                        <xsl:attribute name="class">missing</xsl:attribute>
+                                                    </xsl:if>
                                                     <xsl:text>arrays</xsl:text>
-                                                    <xsl:if test="miamescores/protocolscore = '1' or miamescores/factorvaluescore = '1' or miamescores/derivedbioassaydatascore = '1' or miamescores/measuredbioassaydatascore = '1'">
-                                                        <xsl:text>, </xsl:text>
+                                                </span>
+                                                <xsl:text>, </xsl:text>
+                                                <span>
+                                                    <xsl:if test="miamescores/protocolscore = '0'">
+                                                        <xsl:attribute name="class">missing</xsl:attribute>
                                                     </xsl:if>
-                                                </xsl:if>
-                                                <xsl:if test="miamescores/protocolscore = '1'">
                                                     <xsl:text>protocols</xsl:text>
-                                                    <xsl:if test="miamescores/factorvaluescore = '1' or miamescores/derivedbioassaydatascore = '1' or miamescores/measuredbioassaydatascore = '1'">
-                                                        <xsl:text>, </xsl:text>
+                                                </span>
+                                                <xsl:text>, </xsl:text>
+                                                <span>
+                                                    <xsl:if test="miamescores/factorvaluescore = '0'">
+                                                        <xsl:attribute name="class">missing</xsl:attribute>
                                                     </xsl:if>
-                                                </xsl:if>
-                                                <xsl:if test="miamescores/factorvaluescore = '1'">
                                                     <xsl:text>factors</xsl:text>
-                                                    <xsl:if test="miamescores/derivedbioassaydatascore = '1' or miamescores/measuredbioassaydatascore = '1'">
-                                                        <xsl:text>, </xsl:text>
+                                                </span>
+                                                <xsl:text>, </xsl:text>
+                                                <span>
+                                                    <xsl:if test="miamescores/derivedbioassaydatascore = '0'">
+                                                        <xsl:attribute name="class">missing</xsl:attribute>
                                                     </xsl:if>
-                                                </xsl:if>
-                                                <xsl:if test="miamescores/derivedbioassaydatascore = '1'">
                                                     <xsl:text>processed data</xsl:text>
-                                                    <xsl:if test="miamescores/measuredbioassaydatascore = '1'">
-                                                        <xsl:text>, </xsl:text>
+                                                </span>
+                                                <xsl:text>, </xsl:text>
+                                                <span>
+                                                    <xsl:if test="miamescores/measuredbioassaydatascore = '0'">
+                                                        <xsl:attribute name="class">missing</xsl:attribute>
                                                     </xsl:if>
-                                                </xsl:if>
-                                                <xsl:if test="miamescores/measuredbioassaydatascore = '1'">raw data</xsl:if>
+                                                    <xsl:text>raw data</xsl:text>
+                                                </span>
                                                 <xsl:text>)</xsl:text>
                                             </span>
                                         </div>
