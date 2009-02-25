@@ -52,8 +52,22 @@
                                 <xsl:call-template name="files-for-accession">
                                     <xsl:with-param name="pAccession" select="$vAccession"/>
                                 </xsl:call-template>
-                                <xsl:if test="($kind='raw' or $kind='fgem') and count($vExperiment/file[kind=$kind])>1">
-                                    <div class="ae_comment">Note: Due to the large amount of data there are multiple archive files for download.</div>
+                                <xsl:variable name="vComment">
+                                    <xsl:if test="($kind='raw' or $kind='fgem') and count($vExperiment/file[kind=$kind])>1">
+                                        <div>
+                                            <xsl:text>Due to the large amount of data there are multiple archive files for download.</xsl:text>
+                                        </div>
+                                    </xsl:if>
+                                    <xsl:if test="count($vExperiment/file[size>2048000000])>0">
+                                        <div>
+                                            <xsl:text>Some files are larger that 2 GB, please use </xsl:text>
+                                            <a href="ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/experiment/{substring($vAccession, 3, 4)}/{$vAccession}">ArrayExpress FTP</a>
+                                            <xsl:text> to download these.</xsl:text>
+                                        </div>
+                                    </xsl:if>
+                                </xsl:variable>
+                                <xsl:if test="string-length($vComment)>0">
+                                    <div class="ae_comment"><xsl:copy-of select="$vComment"/></div>
                                 </xsl:if>
 
                                 <xsl:if test="$kind='' or $kind='all'">

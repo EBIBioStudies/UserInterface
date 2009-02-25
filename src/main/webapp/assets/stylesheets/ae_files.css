@@ -16,25 +16,29 @@
 .ae_accession {
     font-size: 18px;
     line-height: normal;
+    padding: 10px 0 0;
 }
 
 .ae_title {
-    border-bottom: 1px solid #005555;
+    border-bottom: 1px solid #bdd7d7;
     padding: 0 0 5px 0;
 }
 
 .ae_comment {
-    background: ivory url(../images/silk_warn.gif) no-repeat scroll 10px 50%;
-    border-top: 1px solid #005555;
-    color: #005555;
+    background: #f2f8f8 url(../images/silk_warn.gif) no-repeat scroll 10px 50%;
+    border-top: 1px solid #bdd7d7;
     font-style: italic;
-    padding: 5px 0 5px 30px;
+    padding: 3px 0 3px 35px;
+}
+
+.ae_comment div {
+    padding: 0 0 2px 0;
 }
 
 .ae_files_table {
     table-layout: fixed;
     width: 100%;
-    margin: 5px 0 10px 0;
+    margin: 5px 0;
 }
 
 .ae_files_table td {
