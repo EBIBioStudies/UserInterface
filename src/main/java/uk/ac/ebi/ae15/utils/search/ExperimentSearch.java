@@ -125,7 +125,7 @@ public class ExperimentSearch
                 return new RegExpHelper(keywordToPattern(keywords.substring(1, keywords.length() - 1), true), "i").test(input);
             } else {
                 // any keyword fails -> no match :)
-                String[] kwdArray = keywords.split("\\s");
+                String[] kwdArray = keywords.split("\\s+");
                 for ( String keyword : kwdArray ) {
                     if (!new RegExpHelper(keywordToPattern(keyword, wholeWords), "i").test(input))
                         return false;

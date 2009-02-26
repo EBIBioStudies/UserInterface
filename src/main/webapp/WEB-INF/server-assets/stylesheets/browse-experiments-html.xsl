@@ -179,40 +179,23 @@
                                             </xsl:call-template>
                                             <span>
                                                 <xsl:text> (</xsl:text>
-                                                <span>
-                                                    <xsl:if test="miamescores/reportersequencescore = '0'">
-                                                        <xsl:attribute name="class">missing</xsl:attribute>
+                                                <xsl:if test="miamescores/overallscore > 0">
+                                                    <xsl:text>present: </xsl:text>
+                                                    <xsl:call-template name="miame-desc">
+                                                        <xsl:with-param name="pScores" select="miamescores"/>
+                                                        <xsl:with-param name="pFilter" select="'1'"/>
+                                                    </xsl:call-template>
+                                                    <xsl:if test="miamescores/overallscore &lt; 5">
+                                                        <xsl:text>; </xsl:text>    
                                                     </xsl:if>
-                                                    <xsl:text>arrays</xsl:text>
-                                                </span>
-                                                <xsl:text>, </xsl:text>
-                                                <span>
-                                                    <xsl:if test="miamescores/protocolscore = '0'">
-                                                        <xsl:attribute name="class">missing</xsl:attribute>
-                                                    </xsl:if>
-                                                    <xsl:text>protocols</xsl:text>
-                                                </span>
-                                                <xsl:text>, </xsl:text>
-                                                <span>
-                                                    <xsl:if test="miamescores/factorvaluescore = '0'">
-                                                        <xsl:attribute name="class">missing</xsl:attribute>
-                                                    </xsl:if>
-                                                    <xsl:text>factors</xsl:text>
-                                                </span>
-                                                <xsl:text>, </xsl:text>
-                                                <span>
-                                                    <xsl:if test="miamescores/derivedbioassaydatascore = '0'">
-                                                        <xsl:attribute name="class">missing</xsl:attribute>
-                                                    </xsl:if>
-                                                    <xsl:text>processed data</xsl:text>
-                                                </span>
-                                                <xsl:text>, </xsl:text>
-                                                <span>
-                                                    <xsl:if test="miamescores/measuredbioassaydatascore = '0'">
-                                                        <xsl:attribute name="class">missing</xsl:attribute>
-                                                    </xsl:if>
-                                                    <xsl:text>raw data</xsl:text>
-                                                </span>
+                                                </xsl:if>
+                                                <xsl:if test="miamescores/overallscore &lt; 5">
+                                                    <xsl:text>missing: </xsl:text>
+                                                    <xsl:call-template name="miame-desc">
+                                                        <xsl:with-param name="pScores" select="miamescores"/>
+                                                        <xsl:with-param name="pFilter" select="'0'"/>
+                                                    </xsl:call-template>
+                                                </xsl:if>
                                                 <xsl:text>)</xsl:text>
                                             </span>
                                         </div>
@@ -543,6 +526,39 @@
                 <xsl:with-param name="stars" select="$stars"/>
                 <xsl:with-param name="count" select="$count + 1" />
             </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="miame-desc">
+        <xsl:param name="pScores"/>
+        <xsl:param name="pFilter"/>
+
+        <xsl:if test="$pScores/reportersequencescore = $pFilter">
+            <xsl:text>arrays</xsl:text>
+            <xsl:if test="($pScores//protocolscore = $pFilter) or ($pScores/factorvaluescore = $pFilter) or ($pScores/derivedbioassaydatascore = $pFilter) or ($pScores/measuredbioassaydatascore = $pFilter)">
+                <xsl:text>, </xsl:text>
+            </xsl:if>
+        </xsl:if>
+        <xsl:if test="$pScores/protocolscore = $pFilter">
+            <xsl:text>protocols</xsl:text>
+            <xsl:if test="($pScores/factorvaluescore = $pFilter) or ($pScores/derivedbioassaydatascore = $pFilter) or ($pScores/measuredbioassaydatascore = $pFilter)">
+                <xsl:text>, </xsl:text>
+            </xsl:if>
+        </xsl:if>
+        <xsl:if test="$pScores/factorvaluescore = $pFilter">
+            <xsl:text>factors</xsl:text>
+            <xsl:if test="($pScores/derivedbioassaydatascore = $pFilter) or ($pScores/measuredbioassaydatascore = $pFilter)">
+                <xsl:text>, </xsl:text>
+            </xsl:if>
+        </xsl:if>
+        <xsl:if test="$pScores/derivedbioassaydatascore = $pFilter">
+            <xsl:text>processed data</xsl:text>
+            <xsl:if test="$pScores/measuredbioassaydatascore = $pFilter">
+                <xsl:text>, </xsl:text>
+            </xsl:if>
+        </xsl:if>
+        <xsl:if test="$pScores/measuredbioassaydatascore = $pFilter">
+            <xsl:text>raw data</xsl:text>
         </xsl:if>
     </xsl:template>
 

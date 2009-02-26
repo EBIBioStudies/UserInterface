@@ -204,6 +204,9 @@ public class AppXalanExtension
         return false;
     }
 
+    private static RegExpHelper removeDupeMarkers1RegExp = new RegExpHelper("\u00ab([^\u00ab\u00bb]*)\u00ab", "ig");
+    private static RegExpHelper removeDupeMarkers2RegExp = new RegExpHelper("\u00bb([^\u00ab\u00bb]*)\u00bb", "ig");
+
     public static String markKeywords( String input, String keywords, String wholeWords )
     {
         String result = input;
@@ -215,7 +218,7 @@ public class AppXalanExtension
                     result = new RegExpHelper("(" + keywordToPattern(keywords.substring(1, keywords.length() - 1), true) + ")", "ig").replace(result, "\u00ab$1\u00bb");
                 } else {
 
-                    String[] kwdArray = keywords.split("\\s");
+                    String[] kwdArray = keywords.split("\\s+");
                     for ( String keyword : kwdArray ) {
                         result = new RegExpHelper("(" + keywordToPattern(keyword, wholeWords.equals("true")) + ")", "ig").replace(result, "\u00ab$1\u00bb");
                     }
@@ -225,13 +228,13 @@ public class AppXalanExtension
             String newResult;
 
             while ( shouldRemoveExtraMarkers ) {
-                newResult = new RegExpHelper("\u00ab([^\u00ab\u00bb]*)\u00ab", "ig").replace(result, "\u00ab$1");
+                newResult = removeDupeMarkers1RegExp.replace(result, "\u00ab$1");
                 shouldRemoveExtraMarkers = !newResult.equals(result);
                 result = newResult;
             }
             shouldRemoveExtraMarkers = true;
             while ( shouldRemoveExtraMarkers ) {
-                newResult = new RegExpHelper("\u00bb([^\u00ab\u00bb]*)\u00bb", "ig").replace(result, "$1\u00bb");
+                newResult = removeDupeMarkers2RegExp.replace(result, "$1\u00bb");
                 shouldRemoveExtraMarkers = !newResult.equals(result);
                 result = newResult;
             }
