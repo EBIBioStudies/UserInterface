@@ -673,9 +673,6 @@ a:active .table_header_label {
     padding: 0 15px 2px 0;
 }
 
-.miame-tbl th {
-}
-
 .td_ext td.value,
 .td_ext td.attrs {
     font-weight: normal;
