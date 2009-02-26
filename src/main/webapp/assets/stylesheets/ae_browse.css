@@ -661,6 +661,23 @@ a:active .table_header_label {
     vertical-align: bottom;
 }
 
+#ae_results_tbl table.miame-tbl {
+    width: auto;
+    table-layout: auto;
+}
+
+.miame-tbl td,
+.miame-tbl th {
+    text-align: center;
+    vertical-align: top;
+    padding: 0 15px 2px 0;
+}
+
+.miame-tbl th {
+    font-weight: bold;
+    color: #005555;
+}
+
 .td_ext td.value,
 .td_ext td.attrs {
     font-weight: normal;

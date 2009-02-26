@@ -171,33 +171,11 @@
                             <xsl:if test="miamescores">
                                 <tr>
                                     <td class="name"><div>MIAME score</div></td>
-                                    <td class="value miame_score">
+                                    <td class="value">
                                         <div>
-                                            <xsl:call-template name="miame-star">
-                                                <xsl:with-param name="stars" select="miamescores/overallscore"/>
-                                                <xsl:with-param name="count">0</xsl:with-param>
+                                            <xsl:call-template name="miame-score">
+                                                <xsl:with-param name="pScores" select="miamescores"/>
                                             </xsl:call-template>
-                                            <span>
-                                                <xsl:text> (</xsl:text>
-                                                <xsl:if test="miamescores/overallscore > 0">
-                                                    <xsl:text>present: </xsl:text>
-                                                    <xsl:call-template name="miame-desc">
-                                                        <xsl:with-param name="pScores" select="miamescores"/>
-                                                        <xsl:with-param name="pFilter" select="'1'"/>
-                                                    </xsl:call-template>
-                                                    <xsl:if test="miamescores/overallscore &lt; 5">
-                                                        <xsl:text>; </xsl:text>    
-                                                    </xsl:if>
-                                                </xsl:if>
-                                                <xsl:if test="miamescores/overallscore &lt; 5">
-                                                    <xsl:text>missing: </xsl:text>
-                                                    <xsl:call-template name="miame-desc">
-                                                        <xsl:with-param name="pScores" select="miamescores"/>
-                                                        <xsl:with-param name="pFilter" select="'0'"/>
-                                                    </xsl:call-template>
-                                                </xsl:if>
-                                                <xsl:text>)</xsl:text>
-                                            </span>
                                         </div>
                                     </td>
                                 </tr>
@@ -560,6 +538,64 @@
         <xsl:if test="$pScores/measuredbioassaydatascore = $pFilter">
             <xsl:text>raw data</xsl:text>
         </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="miame-score">
+        <xsl:param name="pScores"/>
+
+        <table class="miame-tbl" border="0" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Array designs</th>
+                    <th>Protocols</th>
+                    <th>Factors</th>
+                    <th>Processed data</th>
+                    <th>Raw data</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <xsl:call-template name="miame-tick">
+                            <xsl:with-param name="pValue" select="$pScores/reportersequencescore"/>
+                        </xsl:call-template>
+                    </td>
+                    <td>
+                        <xsl:call-template name="miame-tick">
+                            <xsl:with-param name="pValue" select="$pScores/protocolscore"/>
+                        </xsl:call-template>
+                    </td>
+                    <td>
+                        <xsl:call-template name="miame-tick">
+                            <xsl:with-param name="pValue" select="$pScores/factorvaluescore"/>
+                        </xsl:call-template>
+                    </td>
+                    <td>
+                        <xsl:call-template name="miame-tick">
+                            <xsl:with-param name="pValue" select="$pScores/derivedbioassaydatascore"/>
+                        </xsl:call-template>
+                    </td>
+                    <td>
+                        <xsl:call-template name="miame-tick">
+                            <xsl:with-param name="pValue" select="$pScores/measuredbioassaydatascore"/>
+                        </xsl:call-template>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </xsl:template>
+
+    <xsl:template name="miame-tick">
+        <xsl:param name="pValue"/>
+
+        <xsl:choose>
+            <xsl:when test="$pValue='1'">
+                <img src="{$basepath}/assets/images/silk_tick.gif" width="16" height="16" alt="*"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <img src="{$basepath}/assets/images/silk_data_unavail.gif" width="16" height="16" alt="-"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="data-files">
