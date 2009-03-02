@@ -19,6 +19,12 @@
     <xsl:param name="inatlas"/>
     <xsl:param name="userid"/>
 
+    <!-- dynamically set by QueryServlet: host name (as seen from client) and base context path of webapp -->
+    <xsl:param name="host"/>
+    <xsl:param name="basepath"/>
+
+    <xsl:variable name="vBaseUrl">http://<xsl:value-of select="$host"/><xsl:value-of select="$basepath"/></xsl:variable>
+
     <xsl:output omit-xml-declaration="yes" method="xml" indent="no"/>
     
     <xsl:include href="ae-filter-experiments.xsl"/>
@@ -52,6 +58,43 @@
                     <xsl:copy-of select="*[not(name() = 'file')]"/>
                 </arraydesign>
             </xsl:for-each>
+            <xsl:if test="count(file)>0">
+                <files>
+                    <xsl:comment>
+This section is deprecated, please use <xsl:value-of select="$vBaseUrl"/>/xml/files webservice to obtain
+detailed information on files available for the experiment.
+
+For more information, please go to:
+
+    http://www.ebi.ac.uk/microarray/doc/help/programmatic_access.html                  
+                    </xsl:comment>
+                    <xsl:if test="count(file[kind='raw'])>0">
+                        <raw name="{accession}.raw.zip"
+                             count="{sum(bioassaydatagroup[isderived = '0']/bioassays)}"
+                             celcount="{sum(bioassaydatagroup[isderived = '0'][contains(dataformat, 'CEL')]/bioassays)}"/>
+                    </xsl:if>
+                    <xsl:if test="count(file[kind='fgem'])>0">
+                        <fgem name="{accession}.processed.zip"
+                              count="{sum(bioassaydatagroup[isderived = '1']/bioassays)}"/>
+                    </xsl:if>
+                    <xsl:if test="count(file[kind='idf'])>0">
+                        <idf name="{accession}.idf.txt"/>
+                    </xsl:if>
+                    <xsl:if test="count(file[kind='sdrf'])>0">
+                        <sdrf name="{accession}.sdrf.txt"/>
+                    </xsl:if>
+                    <xsl:if test="count(file[kind='biosamples'])>0">
+                        <biosamples>
+                            <xsl:if test="count(file[kind='biosamples' and extension='png'])>0">
+                                <png name="{accession}.biosamples.png"/>
+                            </xsl:if>
+                            <xsl:if test="count(file[kind='biosamples' and extension='svg'])>0">
+                                <svg name="{accession}.biosamples.svg"/>
+                            </xsl:if>
+                        </biosamples>
+                    </xsl:if>
+                </files>
+            </xsl:if>
         </experiment>
     </xsl:template>
 
