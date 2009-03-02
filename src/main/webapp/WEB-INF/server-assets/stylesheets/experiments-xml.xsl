@@ -58,43 +58,27 @@
                     <xsl:copy-of select="*[not(name() = 'file')]"/>
                 </arraydesign>
             </xsl:for-each>
-            <xsl:if test="count(file)>0">
-                <files>
-                    <xsl:comment>
-This section is deprecated, please use <xsl:value-of select="$vBaseUrl"/>/xml/files webservice to obtain
-detailed information on files available for the experiment.
-
+            <files>
+                <xsl:comment>
+This section is deprecated and unsupported.
+Please use webservice located at:
+    <xsl:value-of select="$vBaseUrl"/>/xml/files
+to obtain detailed information on files available for the experiment.
 For more information, please go to:
-
-    http://www.ebi.ac.uk/microarray/doc/help/programmatic_access.html                  
-                    </xsl:comment>
-                    <xsl:if test="count(file[kind='raw'])>0">
-                        <raw name="{accession}.raw.zip"
-                             count="{sum(bioassaydatagroup[isderived = '0']/bioassays)}"
-                             celcount="{sum(bioassaydatagroup[isderived = '0'][contains(dataformat, 'CEL')]/bioassays)}"/>
-                    </xsl:if>
-                    <xsl:if test="count(file[kind='fgem'])>0">
-                        <fgem name="{accession}.processed.zip"
-                              count="{sum(bioassaydatagroup[isderived = '1']/bioassays)}"/>
-                    </xsl:if>
-                    <xsl:if test="count(file[kind='idf'])>0">
-                        <idf name="{accession}.idf.txt"/>
-                    </xsl:if>
-                    <xsl:if test="count(file[kind='sdrf'])>0">
-                        <sdrf name="{accession}.sdrf.txt"/>
-                    </xsl:if>
-                    <xsl:if test="count(file[kind='biosamples'])>0">
-                        <biosamples>
-                            <xsl:if test="count(file[kind='biosamples' and extension='png'])>0">
-                                <png name="{accession}.biosamples.png"/>
-                            </xsl:if>
-                            <xsl:if test="count(file[kind='biosamples' and extension='svg'])>0">
-                                <svg name="{accession}.biosamples.svg"/>
-                            </xsl:if>
-                        </biosamples>
-                    </xsl:if>
-                </files>
-            </xsl:if>
+    http://www.ebi.ac.uk/microarray/doc/help/programmatic_access.html
+                </xsl:comment>
+                <raw name="{accession}.raw.zip"
+                     count="{sum(bioassaydatagroup[isderived = '0']/bioassays)}"
+                     celcount="{sum(bioassaydatagroup[isderived = '0'][contains(dataformat, 'CEL')]/bioassays)}"/>
+                <fgem name="{accession}.processed.zip"
+                      count="{sum(bioassaydatagroup[isderived = '1']/bioassays)}"/>
+                <idf name="{accession}.idf.txt"/>
+                <sdrf name="{accession}.sdrf.txt"/>
+                <biosamples>
+                        <png name="{accession}.biosamples.png"/>
+                        <svg name="{accession}.biosamples.svg"/>
+                </biosamples>
+            </files>
         </experiment>
     </xsl:template>
 
