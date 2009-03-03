@@ -138,6 +138,18 @@ $(document).ready(function()
             window.location.href = location;
         }
     }
+
+    // populate species from atlas
+    $.get("${interface.application.link.atlas.species_options.url}").next( function(data) {
+        $("#aew_species_field").html(data).removeAttr("disabled");
+        $("#atlas_species_field").html(data).removeAttr("disabled");
+    });
+
+    // populate stats from atlas
+    $.get("${interface.application.link.atlas.stats.url}").next( function(data) {
+        $("#atlas_avail_info").text(data);
+    });
+
     var atlas = $.cookie("AeAtlasOption");
     if ( "atlas" == atlas ) {
         aeSwitchToAtlas();
@@ -170,9 +182,8 @@ $(document).ready(function()
         $.get("${interface.application.link.solr_exp_stats.url}").next(getNumDocsFromSolrStats)
     ]).next(function (values)
     {
-        var aew_avail_info = values[1] + " experiments, " + values[0] + " genes available";
+        var aew_avail_info = values[1] + " experiments, " + values[0] + " genes";
         $("#aew_avail_info").text(aew_avail_info);
-        $("#atlas_avail_info").text(aew_avail_info);
     });
 
     // loads news page
@@ -196,9 +207,9 @@ updateAerStats(xml)
     if (undefined != xml) {
         var ae_repxml = $($(xml).find("experiments")[0]);
         var etotal = ae_repxml.attr("total");
-        var htotal = ae_repxml.attr("total-assays");
+        var atotal = ae_repxml.attr("total-assays");
         if (etotal != undefined && etotal > 0) {
-            aer_avail_info = etotal + " experiments, " + htotal + " assays available";
+            aer_avail_info = etotal + " experiments, " + atotal + " assays";
         }
     }
     $("#aer_avail_info").text(aer_avail_info);
