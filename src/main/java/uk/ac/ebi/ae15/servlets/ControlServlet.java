@@ -30,16 +30,18 @@ public class ControlServlet extends ApplicationServlet
             params = requestArgs[1];
         }
 
-        if (command.equals("reload-xml")) {
+        if (command.equals("reload-warehouse-info")) {
+            ((JobsController) getComponent("JobsController")).executeJob(command);
+        } else if (command.equals("reload-xml")) {
             if (0 < params.length()) {
                 ((Experiments) getComponent("Experiments")).setDataSource(params);
             }
-            ((JobsController) getComponent("JobsController")).executeJob("reload-xml");
+            ((JobsController) getComponent("JobsController")).executeJob(command);
         } else if (command.equals("rescan-files")) {
             if (0 < params.length()) {
                 ((DownloadableFilesRegistry) getComponent("DownloadableFilesRegistry")).setRootFolder(params);
             }
-            ((JobsController) getComponent("JobsController")).executeJob("rescan-files");
+            ((JobsController) getComponent("JobsController")).executeJob(command);
         } else if (command.equals("verify-login")) {
             response.setContentType("text/plain; charset=ISO-8859-1");
             // Disable cache no matter what (or we're fucked on IE side)

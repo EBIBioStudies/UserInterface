@@ -15,7 +15,9 @@ public class ExperimentListInWarehouseDatabaseRetriever extends SqlStatementExec
     // logging facility
     private final Log log = LogFactory.getLog(getClass());
     // sql to get a list of experiments from the warehouse database
-    private final static String getExperimentListSql = "select distinct experiment_identifier as accession from ae1__experiment__main order by 1 asc";
+    private final static String getExperimentListSql =
+            "select e.experiment_identifier from atlas a, ae1__experiment__main e\n" +
+            "where a.experiment_id_key = e.experiment_id_key group by e.experiment_identifier having count(updn) > 0";
 
     // experiment list
     private List<String> experimentList;
