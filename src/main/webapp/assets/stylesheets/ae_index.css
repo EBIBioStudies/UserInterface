@@ -212,6 +212,10 @@
     float: left;
 }
 
+#atlas_updn_fset label {
+    width: 100%;
+}
+
 #atlas_updn_fset select {
     margin-bottom: 0;
 }
