@@ -244,8 +244,10 @@
     font-size: 11px;
 }
 
-#atlas_beta_notice {
-    float: right;
+#atlas_release_notice {
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 #aer_feed_link {

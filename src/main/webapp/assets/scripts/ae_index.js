@@ -147,6 +147,7 @@ $(document).ready(function()
 
     // populate stats from atlas
     $.get("${interface.application.link.atlas.stats.url}").next( function(data) {
+        data = String(data).replace(/\nAtlas Data Release \d+\.\d+: /, "");
         $("#atlas_avail_info").text(data);
     });
 
