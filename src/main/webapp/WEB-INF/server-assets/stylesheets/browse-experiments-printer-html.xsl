@@ -34,7 +34,7 @@
                 <xsl:with-param name="pExtraCode">
                     <link rel="stylesheet" href="assets/stylesheets/ae_common.css" type="text/css"/>
                     <link rel="stylesheet" href="assets/stylesheets/ae_browse_printer.css" type="text/css"/>
-                    <script src="assets/scripts/jquery-1.3.1.js" type="text/javascript"/>
+                    <script src="assets/scripts/jquery-1.3.1.min.js" type="text/javascript"/>
                 </xsl:with-param>
             </xsl:call-template>
             <xsl:call-template name="page-body"/>
