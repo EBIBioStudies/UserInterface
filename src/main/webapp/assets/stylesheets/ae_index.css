@@ -80,13 +80,6 @@
     padding: 0;
 }
 
-#ae_warehouse_box {
-}
-
-#ae_atlas_box {
-    display: none;
-}
-
 #aew_gene_fset {
     width: 40%;
     margin: 0 5px 0 0;
@@ -252,6 +245,11 @@
     position: absolute;
     right: 0;
     top: 0;
+}
+
+#atlas_switch_to_aew {
+    position: absolute;
+    bottom: 8px;
 }
 
 #aer_feed_link {

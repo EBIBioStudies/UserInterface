@@ -23,7 +23,7 @@ aeSwitchToAew()
 {
     $("#ae_atlas_box").hide();
     $("#ae_warehouse_box").show();
-    $.cookie("AeAtlasOption", null, {path: '/' });
+    $.cookie("AeAtlasOption", "warehouse", {path: '/' });
 }
 
 function
@@ -152,8 +152,8 @@ $(document).ready(function()
     });
 
     var atlas = $.cookie("AeAtlasOption");
-    if ( "atlas" == atlas ) {
-        aeSwitchToAtlas();
+    if ( "warehouse" == atlas ) {
+        aeSwitchToAew();
     }
 
     var _user = $.cookie("AeLoggedUser");
