@@ -517,11 +517,12 @@ a:active .table_header_label {
     width: 50px;
 }
 
-.ae_results_tr_error td {
+#ae_results_tbl tr.ae_results_tr_error td {
     background: url( ../images/ae_warn.gif ) 50% 50% no-repeat;
     text-align: center;
     color: black;
-    font-size: 11px;
+    font-size: 12px;
+    line-height: 1.5em;
     padding: 130px 0 0 0;
 }
 
