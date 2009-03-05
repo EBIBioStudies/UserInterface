@@ -92,10 +92,8 @@
                                 <div>If you believe this is an error, please do not hesitate to drop us a line to <strong>arrayexpress(at)ebi.ac.uk</strong> or use <a href="${interface.application.link.www_domain}/support/" title="EBI Support">EBI Support Feedback</a> form.</div>
                             </xsl:when>
                             <xsl:otherwise>
-                                <div><strong>The query '<xsl:value-of select="$keywords"/>'<xsl:if test="string-length($species)>0">&#160;<em>and</em> species '<xsl:value-of select="$species"/>'</xsl:if>
-                                    <xsl:if test="string-length($array)>0">&#160;<em>and</em> array '<xsl:value-of select="//arraydesign[id=$array]/name"/>'</xsl:if>
-                                    <xsl:if test="string-length($exptype)>0">&#160;<em>and</em> experiment type '<xsl:value-of select="$exptype"/>'</xsl:if>
-                                    returned no matches.</strong></div>
+                                <xsl:variable name="vArrayName" select="//arraydesign[id=$array]/name"/>
+                                <div>There are no experiments <strong><xsl:value-of select="helper:describeQuery($keywords,$wholewords,$species,$vArrayName,$exptype,$inatlas)"/></strong> found in ArrayExpress Archive.</div>
                                 <div>Try shortening the query term e.g. 'embryo' will match embryo, embryoid, embryonic across all annotation fields.</div>
                                 <div>Note that '*' is <strong>not</strong> supported as a wild card. More information available in <a href="${interface.application.link.query_help}">ArrayExpress Query Help</a>.</div>
                             </xsl:otherwise>

@@ -264,6 +264,7 @@ onExperimentQuery( tableHtml )
     if ( total > 0 ) {
 
         // assign valid hrefs to save to tab/xls
+        $("#ae_results_print a").attr("href", "browse.printer.html" + $.query.toString());
         $("#ae_results_save a").attr("href", "ArrayExpress-Experiments.txt" + $.query.toString());
         $("#ae_results_save_xls a").attr("href", "ArrayExpress-Experiments.xls" + $.query.toString());
         $("#ae_results_save_feed a").attr("href", "rss/experiments" + $.query.toString());

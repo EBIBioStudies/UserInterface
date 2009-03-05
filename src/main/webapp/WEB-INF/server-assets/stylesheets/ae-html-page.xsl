@@ -8,7 +8,6 @@
                 exclude-result-prefixes="func ae helper html"
                 version="1.0">
 
-    
     <xsl:template name="page-header">
         <xsl:param name="pTitle"/>
         <xsl:param name="pExtraCode"/>
@@ -30,6 +29,7 @@
             <xsl:copy-of select="$pExtraCode"/>
         </head>
     </xsl:template>
+
     <xsl:template name="page-body">
         <body>
             <div class="headerdiv" id="headerdiv" style="position:absolute; z-index: 1;">
@@ -55,6 +55,31 @@
                     <xsl:text>Your browser does not support inline frames or is currently configured not to display inline frames. Content can be viewed at actual source page: http://www.ebi.ac.uk/inc/foot.html</xsl:text>
                 </iframe>
             </div>
+            ${interface.application.google.analytics}
+        </body>
+    </xsl:template>
+
+    <!-- no EBI common crap -->
+    <xsl:template name="page-header-plain">
+        <xsl:param name="pTitle"/>
+        <xsl:param name="pExtraCode"/>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+            <meta http-equiv="Content-Language" content="en-GB"/>
+            <meta http-equiv="Window-target" content="_top"/>
+            <meta name="no-email-collection" content="http://www.unspam.com/noemailcollection/"/>
+
+            <title><xsl:value-of select="$pTitle"/></title>
+
+            <link rel="SHORTCUT ICON" href="${interface.application.link.www_domain}/bookmark.ico"/>
+
+            <xsl:copy-of select="$pExtraCode"/>
+        </head>
+    </xsl:template>
+
+    <xsl:template name="page-body-plain">
+        <body>
+            <div id="ae_contents"><xsl:call-template name="ae-contents"/></div>
             ${interface.application.google.analytics}
         </body>
     </xsl:template>

@@ -61,6 +61,44 @@ public class AppXalanExtension
         return str.toString();
     }
 
+    public static String describeQuery( String keywords, String wholeWords, String species, String array, String experimentType, String inAtlas )
+    {
+        StringBuilder desc = new StringBuilder();
+        if (!keywords.trim().equals("")) {
+            desc.append("'").append(keywords).append("'");
+        }
+        if (!species.trim().equals("")) {
+            if (0 != desc.length()) {
+                desc.append(" and ");
+            }
+            desc.append("species '").append(species).append("'");
+        }
+        if (!array.trim().equals("")) {
+            if (0 != desc.length()) {
+                desc.append(" and ");
+            }
+            desc.append("array '").append(array).append("'");
+        }
+        if (!experimentType.trim().equals("")) {
+            if (0 != desc.length()) {
+                desc.append(" and ");
+            }
+            desc.append("experiment type '").append(experimentType).append("'");
+        }
+
+        if (0 != desc.length()) {
+            desc.insert(0, "matching ");
+        }
+        
+        if (testCheckbox(inAtlas)) {
+            if (0 != desc.length()) {
+                desc.append(" and ");
+            }
+            desc.append("present in ArrayExpress Atlas");
+        }
+        return desc.toString();
+    }
+
     public static String normalizeSpecies( String species )
     {
         // if more than one word: "First second", otherwise "First"
@@ -168,13 +206,18 @@ public class AppXalanExtension
         return (wholeWord ? "\\b\\Q" + keyword + "\\E\\b" : "\\Q" + keyword + "\\E");
     }
 
+    private static boolean testCheckbox( String check )
+    {
+        return (null != check && ( check.toLowerCase().equals("true") || check.toLowerCase().equals("on")));
+    }
+
     public static boolean testExperiment( NodeList nl, String userId, String keywords, String wholeWords, String species, String array, String experimentType, String inAtlas )
     {
         try {
             if (null != nl && 0 < nl.getLength()) {
                 Element elt = (Element) nl.item(0);
 
-                if (inAtlas.equals("true") && elt.getAttribute("loadedinatlas").equals(""))
+                if (testCheckbox(inAtlas) && elt.getAttribute("loadedinatlas").equals(""))
                     return false;
 
                 String textIdx = elt.getAttribute("textIdx");
@@ -186,7 +229,7 @@ public class AppXalanExtension
                 if (accessionRegExp.test(keywords) && !search.matchAccession(textIdx, keywords))
                     return false;
 
-                if (!keywords.equals("") && !search.matchText(textIdx, keywords, wholeWords.equals("true")))
+                if (!keywords.equals("") && !search.matchText(textIdx, keywords, testCheckbox(wholeWords)))
                     return false;
 
                 if (!species.equals("") && !search.matchSpecies(textIdx, species))
@@ -220,7 +263,7 @@ public class AppXalanExtension
 
                     String[] kwdArray = keywords.split("\\s+");
                     for ( String keyword : kwdArray ) {
-                        result = new RegExpHelper("(" + keywordToPattern(keyword, wholeWords.equals("true")) + ")", "ig").replace(result, "\u00ab$1\u00bb");
+                        result = new RegExpHelper("(" + keywordToPattern(keyword, testCheckbox(wholeWords)) + ")", "ig").replace(result, "\u00ab$1\u00bb");
                     }
                 }
             }

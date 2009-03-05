@@ -114,7 +114,7 @@
 
     <xsl:template match="arraydesign">
         <option value="{id}">
-            <xsl:value-of select="translate(name,'[]()','')"/>
+            <xsl:value-of select="name"/>
         </option>
     </xsl:template>
 </xsl:stylesheet>

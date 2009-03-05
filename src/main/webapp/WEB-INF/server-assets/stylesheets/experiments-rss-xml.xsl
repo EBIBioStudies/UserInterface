@@ -46,37 +46,11 @@
             <channel>
                 <xsl:variable name="vCurrentDate" select="helper:dateToRfc822()"/>
                 <title>
-                    <xsl:text>ArrayExpress Experiments</xsl:text>
-                    <xsl:if test="string-length($keywords)&gt;0">
-                        <xsl:text> matching keywords '</xsl:text>
-                        <xsl:value-of select="$keywords"/>
-                        <xsl:text>'</xsl:text>
-                    </xsl:if>
-                    <xsl:if test="string-length($species)&gt;0">
-                        <xsl:choose>
-                            <xsl:when test="string-length($keywords)&gt;0">
-                                <xsl:text> and</xsl:text>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:text> matching </xsl:text>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                        <xsl:text> species '</xsl:text>
-                        <xsl:value-of select="$species"/>
-                        <xsl:text>'</xsl:text>
-                    </xsl:if>
-                    <xsl:if test="string-length($array)&gt;0">
-                        <xsl:choose>
-                            <xsl:when test="(string-length($keywords)&gt;0) or (string-length($species)&gt;0)">
-                                <xsl:text> and</xsl:text>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:text> matching </xsl:text>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                        <xsl:text> array id '</xsl:text>
-                        <xsl:value-of select="$array"/>
-                        <xsl:text>'</xsl:text>
+                    <xsl:text>ArrayExpress Archive - Experiments</xsl:text>
+                    <xsl:variable name="vArrayName" select="//arraydesign[id=$array]/name"/>
+                    <xsl:variable name="vQueryDesc" select="helper:describeQuery($keywords,$wholewords,$species,$vArrayName,$exptype,$inatlas)"/>
+                    <xsl:if test="string-length($vQueryDesc)>0">
+                        <xsl:text> </xsl:text><xsl:value-of select="$vQueryDesc"/>
                     </xsl:if>
                     <xsl:if test="$pagesize &lt; $vTotal">
                         <xsl:text> (first </xsl:text>
