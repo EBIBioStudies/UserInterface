@@ -29,8 +29,8 @@
             <xsl:call-template name="page-header">
                 <xsl:with-param name="pTitle">ArrayExpress Archive Files - <xsl:value-of select="$vAccession"/></xsl:with-param>
                 <xsl:with-param name="pExtraCode">
-                    <link rel="stylesheet" href="{$basepath}/assets/stylesheets/ae_common.css" type="text/css"/>
-                    <link rel="stylesheet" href="{$basepath}/assets/stylesheets/ae_files.css" type="text/css"/>
+                    <link rel="stylesheet" href="{$basepath}/assets/stylesheets/ae_common-1.3.css" type="text/css"/>
+                    <link rel="stylesheet" href="{$basepath}/assets/stylesheets/ae_files-1.3.css" type="text/css"/>
                 </xsl:with-param>
             </xsl:call-template>
             <xsl:call-template name="page-body"/>
