@@ -59,7 +59,7 @@ body {
     white-space: nowrap;
 }
 #ae_results_table th img {
-    margin: 0;
+    margin: 0 0 0 2px;
     vertical-align: bottom;
 }
 
