@@ -174,7 +174,7 @@ a:active .table_header_label {
 
 .table_footer_inner {
     height: 22px;
-    padding: 4px 4px 0 4px;
+    padding: 3px 4px 0;
     text-align: left;
 }
 
