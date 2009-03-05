@@ -143,8 +143,10 @@ th.sortable:active .table_header_border_right {
 
 .table_header_inner {
     height: 22px;
-    padding: 3px 0 0 4px;
+    padding: 5px 0 0 4px;
     text-align: left;
+    vertical-align: top;
+    line-height: 1.0em;
 }
 
 a:hover .table_header_label,
