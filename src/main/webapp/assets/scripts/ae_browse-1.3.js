@@ -5,6 +5,7 @@
 // query object is a global variable
 var query = new Object();
 var user = "";
+var headerPrintElt = null;
 
 function
 aeClearKeywords()
@@ -161,7 +162,13 @@ $(document).ready( function() {
 
     // content is hidden by default to prevent its ugly appearance on IE if scripting is disabled
     $("#ae_contents").show();
-    
+
+    // retrieve the location of print button element from header
+    $("#head").load(function () {
+        var frame = this.contentDocument;
+        headerPrintElt = $("#printiconhref", frame);
+    })
+
     if ($.browser.opera && $.browser.version < 9.5) {
         onWindowResize();
         $(window).resize( onWindowResize );
@@ -263,7 +270,11 @@ onExperimentQuery( tableHtml )
 
     if ( total > 0 ) {
 
-        // assign valid hrefs to save to tab/xls
+        // fix a header print icon so it does the right thing :)
+        if (null != headerPrintElt) {
+            headerPrintElt.attr("onClick", "").attr("target", "_top").attr("href", decodeURI(window.location.pathname).replace(/browse/, "browse.printer") + $.query.toString());
+        }
+        // assign valid hrefs to print, save and rss feed elements
         $("#ae_results_print a").attr("href", "browse.printer.html" + $.query.toString());
         $("#ae_results_save a").attr("href", "ArrayExpress-Experiments.txt" + $.query.toString());
         $("#ae_results_save_xls a").attr("href", "ArrayExpress-Experiments.xls" + $.query.toString());
