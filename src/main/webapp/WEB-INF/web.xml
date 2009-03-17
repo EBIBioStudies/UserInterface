@@ -5,22 +5,22 @@
     <servlet>
         <description>ArrayExpress Experiments Query Servlet</description>
         <servlet-name>QueryServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.ae15.servlets.QueryServlet</servlet-class>
+        <servlet-class>uk.ac.ebi.arrayexpress.servlets.QueryServlet</servlet-class>
     </servlet>
     <servlet>
         <description>ArrayExpress Data Download Servlet</description>
         <servlet-name>DownloadServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.ae15.servlets.DownloadServlet</servlet-class>
+        <servlet-class>uk.ac.ebi.arrayexpress.servlets.DownloadServlet</servlet-class>
     </servlet>
     <servlet>
         <description>ArrayExpress Data Control Servlet</description>
         <servlet-name>ControlServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.ae15.servlets.ControlServlet</servlet-class>
+        <servlet-class>uk.ac.ebi.arrayexpress.servlets.ControlServlet</servlet-class>
     </servlet>
     <servlet>
         <description>ArrayExpress HTTP Proxy Servlet</description>
         <servlet-name>HttpProxyServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.ae15.servlets.HttpProxyServlet</servlet-class>
+        <servlet-class>uk.ac.ebi.arrayexpress.servlets.HttpProxyServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>QueryServlet</servlet-name>
@@ -63,7 +63,7 @@
             "contextInitialized" and "contextDestroyed" messages indicating that the application
             is being de/initialized.
         </description>
-        <listener-class>uk.ac.ebi.ae15.AEInterfaceApplication</listener-class>
+        <listener-class>uk.ac.ebi.arrayexpress.AEInterfaceApplication</listener-class>
     </listener>
 
     <session-config>

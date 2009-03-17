@@ -3,17 +3,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.microarray</groupId>
-    <artifactId>arrayexpress-interface</artifactId>
+    <artifactId>arrayexpress-interface-webapp</artifactId>
     <name>ArrayExpress Interface Web Application</name>
-    <version>1.1</version>
+    <version>2.0</version>
     <packaging>war</packaging>
+    <url>http://www.ebi.ac.uk/arrayexpress</url>
 
-    <parent>
-        <artifactId>arrayexpress</artifactId>
-        <groupId>uk.ac.ebi.microarray</groupId>
-        <version>7.5-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
-    </parent>
+    <scm>
+        <connection>scm:svn:svn://dukkha.ebi.ac.uk/trunk/arrayexpress-interface-webapp</connection>
+        <developerConnection>scm:svn:svn://dukkha.ebi.ac.uk/trunk/arrayexpress-interface-webapp</developerConnection>
+        <url>svn://dukkha.ebi.ac.uk/trunk/arrayexpress-interface-webapp</url>
+    </scm>
 
     <!-- default values for repository related properties -->
     <properties>
@@ -128,13 +128,6 @@
         </profile>
     </profiles>
 
-    <distributionManagement>
-        <site>
-            <id>arrayexpress</id>
-            <url>scpexe://dukkha/ebi/microarray/home/maven-site/${pom.parent.artifactId}/${pom.artifactId}</url>
-        </site>
-    </distributionManagement>
-
     <developers>
         <developer>
             <id>kolais</id>
@@ -153,6 +146,27 @@
             </roles>
         </developer>
     </developers>
+
+    <repositories>
+        <repository>
+            <id>artifactory-repo</id>
+            <url>http://dukkha.ebi.ac.uk:8081/artifactory/repo</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>artifactory-repo</id>
+            <url>http://dukkha.ebi.ac.uk:8081/artifactory/repo</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
     <build>
         <resources>
             <resource>
@@ -184,6 +198,13 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -225,46 +246,45 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+			<scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.tuckey</groupId>
             <artifactId>urlrewritefilter</artifactId>
+			<version>3.0.4</version>
+			<scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>xalan</groupId>
-            <artifactId>xalan</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>xerces</groupId>
-            <artifactId>xercesImpl</artifactId>
+			<version>1.1.1</version>
         </dependency>
         <dependency>
             <groupId>opensymphony</groupId>
             <artifactId>quartz</artifactId>
+			<version>1.6.0</version>
         </dependency>
         <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>transaction-api</artifactId>
+			<version>1.1</version>
         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
         </dependency>
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.solr</groupId>
-            <artifactId>solr-core</artifactId>
+			<version>3.1</version>
         </dependency>
     </dependencies>
 </project>
