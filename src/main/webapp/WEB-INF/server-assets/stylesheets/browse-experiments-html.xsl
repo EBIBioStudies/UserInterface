@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:func="http://exslt.org/functions"
-                xmlns:ae="http://www.ebi.ac.uk/arrayexpress"
-                xmlns:helper="uk.ac.ebi.ae15.utils.AppXalanExtension"
+                xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.AESaxonExtension"
                 xmlns:html="http://www.w3.org/1999/xhtml"
-                extension-element-prefixes="func ae helper html"
-                exclude-result-prefixes="func ae helper html"
+                extension-element-prefixes="ae html"
+                exclude-result-prefixes="ae html"
                 version="1.0">
 
     <xsl:param name="page">1</xsl:param>
@@ -31,7 +29,6 @@
 
     <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="ISO-8859-1" />
 
-    <xsl:include href="ae-filter-experiments.xsl"/>
     <xsl:include href="ae-sort-experiments.xsl"/>
 
     <xsl:variable name="vDetailedViewMainTrClass">tr_main<xsl:if test="'true'=$detailedview"> exp_expanded</xsl:if></xsl:variable>
@@ -39,9 +36,11 @@
     <xsl:variable name="vDetailedViewMainTdClass">td_main<xsl:if test="'true'=$detailedview"> td_expanded</xsl:if></xsl:variable>
 
     <xsl:template match="/experiments">
-        <helper:logInfo select="[browse-experiments-html] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
-        <helper:logInfo select="[browse-experiments-html] Sort by: [{$sortby}], [{$sortorder}]"/>
-        <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($userid,$keywords,$wholewords,$species,$array,$exptype,$inatlas)"/>
+        <!--
+        <xsl:value-of select="[browse-experiments-html] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
+        <xsl:value-of select="[browse-experiments-html] Sort by: [{$sortby}], [{$sortorder}]"/>
+        -->
+        <xsl:variable name="vFilteredExperiments" select="experiment[ae:testExperiment(., $userid, $keywords, $wholewords, $species, $array, $exptype, $inatlas)]  "/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
         <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments[samples/text()>0]/samples/text())"/>
         <xsl:variable name="vTotalAssays" select="sum($vFilteredExperiments[assays/text()>0]/assays/text())"/>
@@ -60,7 +59,7 @@
             </xsl:choose>
         </xsl:variable>
 
-        <helper:logInfo select="[browse-experiments-html] Query filtered {$vTotal} experiments. Will output from {$vFrom} to {$vTo}."/>
+        <ae:logInfo select="[browse-experiments-html] Query filtered {$vTotal} experiments. Will output from {$vFrom} to {$vTo}."/>
 
         <tr id="ae_results_summary_info">
             <td colspan="9">
@@ -87,13 +86,13 @@
                 <tr class="ae_results_tr_error">
                     <td colspan="9">
                         <xsl:choose>
-                            <xsl:when test="helper:testRegexp($keywords,'^E-.+-\d+$','i')">
+                            <xsl:when test="ae:testRegexp($keywords,'^E-.+-\d+$','i')">
                                 <div><strong>The experiment with accession number '<xsl:value-of select="$keywords"/>' is not available.</strong></div>
                                 <div>If you believe this is an error, please do not hesitate to drop us a line to <strong>arrayexpress(at)ebi.ac.uk</strong> or use <a href="${interface.application.link.www_domain}/support/" title="EBI Support">EBI Support Feedback</a> form.</div>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:variable name="vArrayName" select="//arraydesign[id=$array]/name"/>
-                                <div>There are no experiments <strong><xsl:value-of select="helper:describeQuery($keywords,$wholewords,$species,$vArrayName,$exptype,$inatlas)"/></strong> found in ArrayExpress Archive.</div>
+                                <div>There are no experiments <strong><xsl:value-of select="ae:describeQuery($keywords,$wholewords,$species,$vArrayName,$exptype,$inatlas)"/></strong> found in ArrayExpress Archive.</div>
                                 <div>Try shortening the query term e.g. 'embryo' will match embryo, embryoid, embryonic across all annotation fields.</div>
                                 <div>Note that '*' is <strong>not</strong> supported as a wild card. More information available in <a href="${interface.application.link.query_help}">ArrayExpress Query Help</a>.</div>
                             </xsl:otherwise>
@@ -362,8 +361,8 @@
     <xsl:template match="bibliography">
         <div>
             <xsl:variable name="publication_title">
-                <xsl:if test="title/text()!=''"><xsl:call-template name="highlight"><xsl:with-param name="pText" select="helper:trimTrailingDot(title)"/></xsl:call-template>. </xsl:if>
-                <xsl:if test="authors/text()!=''"><xsl:call-template name="highlight"><xsl:with-param name="pText" select="helper:trimTrailingDot(authors)"/></xsl:call-template>. </xsl:if>
+                <xsl:if test="title/text()!=''"><xsl:call-template name="highlight"><xsl:with-param name="pText" select="ae:trimTrailingDot(title)"/></xsl:call-template>. </xsl:if>
+                <xsl:if test="authors/text()!=''"><xsl:call-template name="highlight"><xsl:with-param name="pText" select="ae:trimTrailingDot(authors)"/></xsl:call-template>. </xsl:if>
             </xsl:variable>
             <xsl:variable name="publication_link_title">
                 <xsl:if test="publication/text()!=''"><em><xsl:apply-templates select="publication" mode="highlight"/></em>&#160;</xsl:if>
@@ -426,7 +425,7 @@
             <xsl:when test="contains($text, '&lt;br&gt;')">
                 <div>
                     <xsl:call-template name="add_highlight_element">
-                        <xsl:with-param name="text" select="helper:markKeywords(substring-before($text, '&lt;br&gt;'),$keywords,$wholewords)"/>
+                        <xsl:with-param name="text" select="ae:markKeywords(substring-before($text, '&lt;br&gt;'),$keywords,$wholewords)"/>
                     </xsl:call-template>
                 </div>
                 <xsl:call-template name="description">
@@ -436,7 +435,7 @@
             <xsl:otherwise>
                 <div>
                     <xsl:call-template name="add_highlight_element">
-                        <xsl:with-param name="text" select="helper:markKeywords($text,$keywords,$wholewords)"/>
+                        <xsl:with-param name="text" select="ae:markKeywords($text,$keywords,$wholewords)"/>
                     </xsl:call-template>
                 </div>
             </xsl:otherwise>
@@ -447,7 +446,7 @@
         <xsl:variable name="vText" select="normalize-space(text())"/>
         <xsl:choose>
             <xsl:when test="string-length($vText)!=0">
-                <xsl:variable name="markedtext" select="helper:markKeywords($vText,$keywords,$wholewords)"/>
+                <xsl:variable name="markedtext" select="ae:markKeywords($vText,$keywords,$wholewords)"/>
                 <xsl:call-template name="add_highlight_element">
                     <xsl:with-param name="text" select="$markedtext"/>
                 </xsl:call-template>
@@ -461,7 +460,7 @@
         <xsl:variable name="vText" select="normalize-space($pText)"/>
         <xsl:choose>
             <xsl:when test="string-length($vText)!=0">
-                <xsl:variable name="markedtext" select="helper:markKeywords($vText,$keywords,$wholewords)"/>
+                <xsl:variable name="markedtext" select="ae:markKeywords($vText,$keywords,$wholewords)"/>
                 <xsl:call-template name="add_highlight_element">
                     <xsl:with-param name="text" select="$markedtext"/>
                 </xsl:call-template>

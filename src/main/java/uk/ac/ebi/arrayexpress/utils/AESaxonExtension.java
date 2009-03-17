@@ -11,10 +11,10 @@ import uk.ac.ebi.arrayexpress.utils.search.ExperimentSearch;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AppXalanExtension
+public class AESaxonExtension
 {
     // logging machinery
-    private static final Log log = LogFactory.getLog(AppXalanExtension.class);
+    private static final Log log = LogFactory.getLog(AESaxonExtension.class);
     // Application reference
     private static Application application;
     // Accession RegExp filter
