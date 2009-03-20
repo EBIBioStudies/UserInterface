@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:helper="uk.ac.ebi.ae15.utils.AppXalanExtension"
-                extension-element-prefixes="helper"
-                exclude-result-prefixes="helper"
+                xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.AESaxonExtension"
+                extension-element-prefixes="ae"
+                exclude-result-prefixes="ae"
                 version="1.0">
     <xsl:output method="xml" encoding="ISO-8859-1" indent="no"/>
 
@@ -23,12 +23,12 @@
     </xsl:template>
 
     <xsl:template match="experiment">
-        <experiment>
-            <xsl:if test="helper:isExperimentInWarehouse(@accession)">
+        <experiment textidx="{position() - 1}">
+            <xsl:if test="ae:isExperimentInWarehouse(@accession)">
                 <xsl:attribute name="loadedinatlas">true</xsl:attribute>
             </xsl:if>
             <xsl:for-each select="@*">
-                <xsl:element name="{helper:toLowerCase(name())}">
+                <xsl:element name="{ae:toLowerCase(name())}">
                     <xsl:value-of select="." />
                 </xsl:element>
             </xsl:for-each>
@@ -99,7 +99,7 @@
     <xsl:template match="miamescore" mode="copy">
         <miamescores>
             <xsl:for-each select="score">
-                <xsl:element name="{helper:toLowerCase(@name)}">
+                <xsl:element name="{ae:toLowerCase(@name)}">
                     <xsl:value-of select="@value"/>
                 </xsl:element>
             </xsl:for-each>
@@ -108,11 +108,11 @@
             </overallscore>
         </miamescores>
     </xsl:template>
-
+<!-- TODO
     <xsl:template match="bibliography" mode="copy">
         <xsl:copy>
             <xsl:for-each select="@*">
-                <xsl:variable name="vAttrName" select="helper:toLowerCase(name())"/>
+                <xsl:variable name="vAttrName" select="ae:toLowerCase(name())"/>
                 <xsl:choose>
                     <xsl:when test="$vAttrName = 'pages' and (text() = '' or text = '-')"/>
                     <xsl:otherwise>
@@ -124,7 +124,7 @@
             </xsl:for-each>
         </xsl:copy>
     </xsl:template>
-
+-->
     <xsl:template match="description" mode="copy">
         <description>
             <id><xsl:value-of select="@id"/></id>
@@ -136,7 +136,7 @@
         <xsl:copy>
             <xsl:if test="@*">
                 <xsl:for-each select="@*">
-                    <xsl:element name="{helper:toLowerCase(name())}">
+                    <xsl:element name="{ae:toLowerCase(name())}">
                         <xsl:value-of select="." />
                     </xsl:element>
                 </xsl:for-each>

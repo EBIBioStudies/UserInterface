@@ -36,11 +36,11 @@
     <xsl:variable name="vDetailedViewMainTdClass">td_main<xsl:if test="'true'=$detailedview"> td_expanded</xsl:if></xsl:variable>
 
     <xsl:template match="/experiments">
-        <!--
+        <!-- TODO
         <xsl:value-of select="[browse-experiments-html] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
         <xsl:value-of select="[browse-experiments-html] Sort by: [{$sortby}], [{$sortorder}]"/>
         -->
-        <xsl:variable name="vFilteredExperiments" select="experiment[ae:testExperiment(., $userid, $keywords, $wholewords, $species, $array, $exptype, $inatlas)]  "/>
+        <xsl:variable name="vFilteredExperiments" select="experiment[ae:testExperiment($userid, $keywords, $wholewords, $species, $array, $exptype, $inatlas)]  "/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
         <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments[samples/text()>0]/samples/text())"/>
         <xsl:variable name="vTotalAssays" select="sum($vFilteredExperiments[assays/text()>0]/assays/text())"/>
@@ -59,7 +59,8 @@
             </xsl:choose>
         </xsl:variable>
 
-        <ae:logInfo select="[browse-experiments-html] Query filtered {$vTotal} experiments. Will output from {$vFrom} to {$vTo}."/>
+        <!-- TODO
+        <xsl:value-of select="[browse-experiments-html] Query filtered {$vTotal} experiments. Will output from {$vFrom} to {$vTo}."/> -->
 
         <tr id="ae_results_summary_info">
             <td colspan="9">

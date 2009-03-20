@@ -122,5 +122,10 @@ public class Application implements ServletContextListener
         return appInstance;
     }
 
+    public static ApplicationComponent getAppComponent(String name)
+    {
+        return getInstance().getComponent(name);
+    }
+
     private static Application appInstance = null;
 }

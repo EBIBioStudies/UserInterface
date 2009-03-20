@@ -1,8 +1,8 @@
 package uk.ac.ebi.arrayexpress.components;
 
+import net.sf.saxon.s9api.XdmNode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.w3c.dom.Document;
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.utils.persistence.PersistableDocumentContainer;
@@ -69,9 +69,9 @@ public class Experiments extends ApplicationComponent
     {
     }
 
-    public synchronized Document getExperiments()
+    public synchronized XdmNode getExperiments()
     {
-        Document doc = experiments.getObject().getDocument();
+        XdmNode doc = experiments.getObject().getDocument();
 
         if (experimentSearch.isEmpty()) {
             experimentSearch.buildText(doc);
@@ -131,12 +131,12 @@ public class Experiments extends ApplicationComponent
 
     public void reload( String xmlString )
     {
-        Document doc = loadExperimentsFromString(xmlString);
+        XdmNode doc = loadExperimentsFromString(xmlString);
         if (null != doc) {
             setExperiments(doc);
 
             PersistableString speciesList = new PersistableString(
-                ((SaxonEngine) Application.getInstance().getComponent("SaxonEngine")).transformDocumentToString(
+                ((SaxonEngine) Application.getInstance().getComponent("SaxonEngine")).transformToString(
                     experiments.getObject().getDocument()
                     , "preprocess-species-html.xsl"
                     , null
@@ -150,7 +150,7 @@ public class Experiments extends ApplicationComponent
             }
 
             PersistableString arraysList = new PersistableString(
-                ((SaxonEngine) Application.getInstance().getComponent("SaxonEngine")).transformDocumentToString(
+                ((SaxonEngine) Application.getInstance().getComponent("SaxonEngine")).transformToString(
                     experiments.getObject().getDocument()
                     , "preprocess-arrays-html.xsl"
                     , null
@@ -164,7 +164,7 @@ public class Experiments extends ApplicationComponent
             }
 
             PersistableString experimentTypesList = new PersistableString(
-                ((SaxonEngine) Application.getInstance().getComponent("SaxonEngine")).transformDocumentToString(
+                ((SaxonEngine) Application.getInstance().getComponent("SaxonEngine")).transformToString(
                     experiments.getObject().getDocument()
                     , "preprocess-exptypes-html.xsl"
                     , null
@@ -184,7 +184,7 @@ public class Experiments extends ApplicationComponent
     public void updateFiles()
     {
         log.info("Experiments: file info update requested");
-        Document doc = ((SaxonEngine) getComponent("SaxonEngine")).transformDocument(getExperiments(), "preprocess-experiment-files-xml.xsl", null);
+        XdmNode doc = ((SaxonEngine) getComponent("SaxonEngine")).transform(getExperiments(), "preprocess-experiment-files-xml.xsl", null);
         if (null != doc) {
             setExperiments(doc);
             log.info("Experiments: file info update completed");
@@ -202,7 +202,7 @@ public class Experiments extends ApplicationComponent
         }
     }
 
-    private synchronized void setExperiments( Document doc )
+    private synchronized void setExperiments( XdmNode doc )
     {
         if (null != doc ) {
             experiments.setObject(new PersistableDocumentContainer(doc));
@@ -212,14 +212,14 @@ public class Experiments extends ApplicationComponent
         }
     }
 
-    private Document loadExperimentsFromString( String xmlString )
+    private XdmNode loadExperimentsFromString( String xmlString )
     {
-        Document doc = ((SaxonEngine) getComponent("SaxonEngine")).transformStringToDocument(xmlString, "preprocess-experiments-xml.xsl", null);
+        XdmNode doc = ((SaxonEngine) getComponent("SaxonEngine")).transform(xmlString, "preprocess-experiments-xml.xsl", null);
         if (null == doc) {
             log.error("Transformation [preprocess-experiments-xml.xsl] returned an error, returning null");
             return null;
         }
-        doc = ((SaxonEngine) getComponent("SaxonEngine")).transformDocument(doc, "preprocess-experiment-files-xml.xsl", null);
+        doc = ((SaxonEngine) getComponent("SaxonEngine")).transform(doc, "preprocess-experiment-files-xml.xsl", null);
         if (null == doc) {
             log.error("Transformation [preprocess-experiment-files-xml.xsl] returned an error, returning null");
             return null;

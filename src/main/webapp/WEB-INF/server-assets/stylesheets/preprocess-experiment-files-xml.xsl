@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:helper="uk.ac.ebi.ae15.utils.AppXalanExtension"
-                extension-element-prefixes="helper"
-                exclude-result-prefixes="helper"
+                xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.AESaxonExtension"
+                extension-element-prefixes="ae"
+                exclude-result-prefixes="ae"
                 version="1.0">
     <xsl:output method="xml" encoding="ISO-8859-1" indent="no"/>
 
@@ -43,7 +43,7 @@
         <xsl:variable name="vRawDataformats">
             <xsl:call-template name="list-raw-dataformats"/>
         </xsl:variable>
-        <xsl:for-each select="helper:getFilesForAccession(accession)/file">
+        <xsl:for-each select="ae:getFilesForAccession(accession)/files/file">
             <xsl:element name="file">
                 <xsl:for-each select="@*">
                     <xsl:element name="{name()}"><xsl:value-of select="."/></xsl:element>
@@ -68,7 +68,7 @@
         </xsl:for-each>
         <xsl:for-each select="arraydesign">
             <xsl:variable name="vArrayAccession" select="accession"/>
-            <xsl:for-each select="helper:getFilesForAccession(accession)/file[@kind='adf']">
+            <xsl:for-each select="ae:getFilesForAccession(accession)/files/file[@kind='adf']">
                 <xsl:element name="file">
                     <xsl:for-each select="@*">
                         <xsl:element name="{name()}"><xsl:value-of select="."/></xsl:element>

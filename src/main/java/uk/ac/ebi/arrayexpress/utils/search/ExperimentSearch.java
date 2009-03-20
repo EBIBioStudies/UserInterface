@@ -1,10 +1,8 @@
 package uk.ac.ebi.arrayexpress.utils.search;
 
+import net.sf.saxon.s9api.XdmNode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import uk.ac.ebi.arrayexpress.utils.RegExpHelper;
 
 import java.util.ArrayList;
@@ -31,25 +29,24 @@ public class ExperimentSearch
         return expText.isEmpty();
     }
 
-    public void buildText( Document experiments )
+    public void buildText( XdmNode experiments )
     {
         if (null != experiments) {
             try {
-                if (experiments.hasChildNodes() && experiments.getDocumentElement().hasChildNodes()) {
-                    NodeList expList = experiments.getDocumentElement().getChildNodes();
-
-                    expText.clear();
-                    accessionIdx.clear();
-
-                    for ( int i = 0; i < expList.getLength(); ++i ) {
-                        Element expElt = (Element) expList.item(i);
-                        ExperimentText text = new ExperimentText().populateFromElement(expElt);
-                        expText.add(text);
-                        accessionIdx.put(text.accession, i);
-                        expElt.setAttribute("textIdx", Integer.toString(i));
-                    }
-
-                }
+                // if (experiments.hasChildNodes() && experiments.getDocumentElement().hasChildNodes()) {
+                //    NodeList expList = experiments.getDocumentElement().getChildNodes();
+                //
+                //    expText.clear();
+                //    accessionIdx.clear();
+                //
+                //    for ( int i = 0; i < expList.getLength(); ++i ) {
+                //        Element expElt = (Element) expList.item(i);
+                //        ExperimentText text = new ExperimentText().populateFromElement(expElt);
+                //        expText.add(text);
+                //        accessionIdx.put(text.accession, i);
+                //        expElt.setAttribute("textIdx", Integer.toString(i));
+                //    }
+                //}
             } catch ( Throwable x ) {
                 log.error("Caught an exception:", x);
             }

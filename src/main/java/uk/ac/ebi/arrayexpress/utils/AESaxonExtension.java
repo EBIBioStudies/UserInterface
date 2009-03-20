@@ -1,22 +1,23 @@
 package uk.ac.ebi.arrayexpress.utils;
 
+import net.sf.saxon.expr.XPathContext;
+import net.sf.saxon.om.NodeInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import uk.ac.ebi.arrayexpress.app.Application;
+import uk.ac.ebi.arrayexpress.components.DownloadableFilesRegistry;
 import uk.ac.ebi.arrayexpress.components.Experiments;
-import uk.ac.ebi.arrayexpress.utils.search.ExperimentSearch;
+import uk.ac.ebi.arrayexpress.components.SaxonEngine;
+import uk.ac.ebi.arrayexpress.utils.files.FtpFileEntry;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class AESaxonExtension
 {
     // logging machinery
     private static final Log log = LogFactory.getLog(AESaxonExtension.class);
-    // Application reference
-    private static Application application;
     // Accession RegExp filter
     private static final RegExpHelper accessionRegExp = new RegExpHelper("^E-\\w{4}-\\d+$", "i");
 
@@ -132,51 +133,50 @@ public class AESaxonExtension
 
     public static boolean isExperimentInWarehouse( String accession )
     {
-        return ((Experiments) application.getComponent("Experiments"))
+        return ((Experiments) Application.getAppComponent("Experiments"))
                 .isInWarehouse(accession);
     }
 
     public static boolean isExperimentAccessible( String accession, String userId )
     {
-        return ((Experiments) application.getComponent("Experiments"))
+        return ((Experiments) Application.getAppComponent("Experiments"))
                 .isAccessible(accession, userId);
     }
-/*
-    public static NodeSet getFilesForAccession( String accession ) throws InterruptedException
+
+    public static NodeInfo getFilesForAccession( String accession ) throws InterruptedException
     {
         try {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.newDocument();
-
-            DocumentFragment df = doc.createDocumentFragment();
-
-            List<FtpFileEntry> files = ((DownloadableFilesRegistry) application.getComponent("DownloadableFilesRegistry"))
+            List<FtpFileEntry> files = ((DownloadableFilesRegistry) Application.getAppComponent("DownloadableFilesRegistry"))
                     .getFilesMap()
                     .getEntriesByAccession(accession);
             if (null != files) {
+                StringBuilder sb = new StringBuilder("<files>");
                 for ( FtpFileEntry file : files ) {
-                    Element fileElt = doc.createElement("file");
-                    fileElt.setAttribute("kind", FtpFileEntry.getKind(file));
-                    fileElt.setAttribute("extension", FtpFileEntry.getExtension(file));
-                    fileElt.setAttribute("name", FtpFileEntry.getName(file));
-                    fileElt.setAttribute("size", String.valueOf(file.getSize()));
-                    fileElt.setAttribute("lastmodified", new SimpleDateFormat("d MMMMM yyyy, HH:mm").format(new Date(file.getLastModified())));
-                    df.appendChild(fileElt);
+                    sb.append("<file kind=\"")
+                            .append(FtpFileEntry.getKind(file))
+                            .append("\" extension=\"")
+                            .append(FtpFileEntry.getExtension(file))
+                            .append("\" name=\"")
+                            .append(FtpFileEntry.getName(file))
+                            .append("\" size=\"")
+                            .append(String.valueOf(file.getSize()))
+                            .append("\" lastmodified=\"")
+                            .append(new SimpleDateFormat("d MMMMM yyyy, HH:mm").format(new Date(file.getLastModified())))
+                            .append("\"/>");
+                    Thread.sleep(1);
                 }
+                sb.append("</files>");
+                return ((SaxonEngine)Application.getAppComponent("SaxonEngine")).buildDocument(sb.toString()).getUnderlyingNode();
             }
-            Thread.sleep(1);
-            return new NodeSet(df);
-
         } catch (InterruptedException x) {
             log.warn("Method interrupted");
             throw x;
         } catch ( Throwable x ) {
             log.error("Caught an exception:", x);
         }
-        return new NodeSet();
+        return null;
     }
-*/
+
     public static boolean testRegexp( String input, String pattern, String flags )
     {
         boolean result = false;
@@ -200,40 +200,49 @@ public class AESaxonExtension
         return (null != check && ( check.toLowerCase().equals("true") || check.toLowerCase().equals("on")));
     }
 
-    public static boolean testExperiment( NodeList nl, String userId, String keywords, String wholeWords, String species, String array, String experimentType, String inAtlas )
+    public static boolean testExperiment( XPathContext context, String userId, String keywords, String wholeWords, String species, String array, String experimentType, String inAtlas )
     {
+        //TODO
+        final int textIdxFPrint = context.getNamePool().getFingerprint("", "textidx");
+        final int loadedInAtlasFPrint = context.getNamePool().getFingerprint("", "loadedinatlas");
         try {
-            if (null != nl && 0 < nl.getLength()) {
-                Element elt = (Element) nl.item(0);
+            if (null != context) {
+                NodeInfo node = (NodeInfo)context.getContextItem();
+                if (null != node) {
+                    String textIdx = node.getAttributeValue(loadedInAtlasFPrint);
+                    if (null != textIdx) {
+                        return true;
+                    }
+                }
+                //String loadedInAtlas = ((ElementImpl)ni).getAttributeValue("", "loadedinatals");
 
-                if (testCheckbox(inAtlas) && elt.getAttribute("loadedinatlas").equals(""))
-                    return false;
+                //if (testCheckbox(inAtlas) && null != loadedInAtlas && loadedInAtlas.equals(""))
+                //    return false;
 
-                String textIdx = elt.getAttribute("textIdx");
-                ExperimentSearch search = ((Experiments) application.getComponent("Experiments")).getSearch();
-
-                if (!userId.equals("0") && !search.matchUser(textIdx, userId))
-                    return false;
-
-                if (accessionRegExp.test(keywords) && !search.matchAccession(textIdx, keywords))
-                    return false;
-
-                if (!keywords.equals("") && !search.matchText(textIdx, keywords, testCheckbox(wholeWords)))
-                    return false;
-
-                if (!species.equals("") && !search.matchSpecies(textIdx, species))
-                    return false;
-
-                if (!array.equals("") && !search.matchArray(textIdx, array))
-                    return false;
-
-                return  experimentType.equals("") || search.matchExperimentType(textIdx, experimentType);
+                //ExperimentSearch search = ((Experiments) Application.getAppComponent("Experiments")).getSearch();
+            //
+            //    if (!userId.equals("0") && !search.matchUser(textIdx, userId))
+            //        return false;
+            //
+            //    if (accessionRegExp.test(keywords) && !search.matchAccession(textIdx, keywords))
+            //        return false;
+            //
+            //    if (!keywords.equals("") && !search.matchText(textIdx, keywords, testCheckbox(wholeWords)))
+            //        return false;
+            //
+            //    if (!species.equals("") && !search.matchSpecies(textIdx, species))
+            //        return false;
+            //
+            //    if (!array.equals("") && !search.matchArray(textIdx, array))
+            //        return false;
+            //
+            //    return  experimentType.equals("") || search.matchExperimentType(textIdx, experimentType);
             }
 
         } catch ( Throwable x ) {
             log.error("Caught an exception:", x);
         }
-        return false;
+        return true;
     }
 
     private static RegExpHelper removeDupeMarkers1RegExp = new RegExpHelper("\u00ab([^\u00ab\u00bb]*)\u00ab", "ig");
@@ -276,7 +285,7 @@ public class AESaxonExtension
 
         return result;
     }
-/*
+/* TODO
     public static void logInfo( XSLProcessorContext c, ElemExtensionCall extElt )
     {
         try {
@@ -295,8 +304,4 @@ public class AESaxonExtension
         }
     }
 */
-    public static void setApplication( Application app )
-    {
-        application = app;
-    }
 }

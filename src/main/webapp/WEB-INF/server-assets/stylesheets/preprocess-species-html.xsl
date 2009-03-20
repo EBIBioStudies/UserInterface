@@ -2,20 +2,20 @@
 <xsl:stylesheet
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
         xmlns:html="http://www.w3.org/1999/xhtml"
-        xmlns:helper="uk.ac.ebi.ae15.utils.AppXalanExtension"
-        extension-element-prefixes="helper html"
-        exclude-result-prefixes="helper html"
+        xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.AESaxonExtension"
+        extension-element-prefixes="ae html"
+        exclude-result-prefixes="ae html"
         version="1.0">
 
     <xsl:output omit-xml-declaration="yes" method="html"/>
-    <xsl:key name="distinct-species" match="species" use="helper:normalizeSpecies(text())"/>
+    <xsl:key name="distinct-species" match="species" use="ae:normalizeSpecies(text())"/>
 
     <xsl:template match="/experiments">
         <option value="">Any species</option>
-        <xsl:for-each select=".//species[generate-id(key('distinct-species',helper:normalizeSpecies(text())))=generate-id()]">
-            <xsl:sort select="helper:normalizeSpecies(text())"/>
-            <option value="{helper:normalizeSpecies(text())}">
-                <xsl:value-of select="helper:normalizeSpecies(text())"/>
+        <xsl:for-each select=".//species[generate-id(key('distinct-species',ae:normalizeSpecies(text())))=generate-id()]">
+            <xsl:sort select="ae:normalizeSpecies(text())"/>
+            <option value="{ae:normalizeSpecies(text())}">
+                <xsl:value-of select="ae:normalizeSpecies(text())"/>
             </option>
         </xsl:for-each>
     </xsl:template>

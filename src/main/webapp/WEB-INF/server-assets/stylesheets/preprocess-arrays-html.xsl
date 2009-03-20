@@ -3,9 +3,9 @@
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:helper="uk.ac.ebi.ae15.utils.AppXalanExtension"
-    extension-element-prefixes="helper html"
-    exclude-result-prefixes="helper html"
+    xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.AESaxonExtension"
+    extension-element-prefixes="ae html"
+    exclude-result-prefixes="ae html"
     version="1.0">
 
     <xsl:output omit-xml-declaration="yes" method="html"/>
@@ -105,7 +105,7 @@
             </optgroup>
 
             <optgroup label="Other arrays">
-                <xsl:apply-templates select=".//arraydesign[generate-id(key('distinct-array',name))=generate-id()][not(helper:testRegexp(name/text(),'Affy|Agilent|Amersham|BuG@S|CATMA|EMBL|ILSI|MIT|Sanger|SMD|TIGR|Utrecht|Yale','i'))]">
+                <xsl:apply-templates select=".//arraydesign[generate-id(key('distinct-array',name))=generate-id()][not(ae:testRegexp(name/text(),'Affy|Agilent|Amersham|BuG@S|CATMA|EMBL|ILSI|MIT|Sanger|SMD|TIGR|Utrecht|Yale','i'))]">
                     <xsl:sort select="name"/>
                 </xsl:apply-templates>
             </optgroup>
