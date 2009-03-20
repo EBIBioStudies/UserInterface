@@ -8,10 +8,10 @@ public class AEInterfaceApplication extends Application
     public AEInterfaceApplication()
     {
         super("arrayexpress");
-        addComponent(new SaxonEngine(this));
-        addComponent(new Experiments(this));
-        addComponent(new Users(this));
-        addComponent(new DownloadableFilesRegistry(this));
-        addComponent(new JobsController(this));
+        addComponent(new SaxonEngine());
+        addComponent(new Experiments());
+        addComponent(new Users());
+        addComponent(new DownloadableFilesRegistry());
+        addComponent(new JobsController());
     }
 }

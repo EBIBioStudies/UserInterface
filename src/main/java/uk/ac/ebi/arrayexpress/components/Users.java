@@ -1,6 +1,5 @@
 package uk.ac.ebi.arrayexpress.components;
 
-import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.utils.persistence.PersistableUserList;
 import uk.ac.ebi.arrayexpress.utils.persistence.TextFilePersistence;
@@ -13,9 +12,9 @@ public class Users extends ApplicationComponent
 {
     private TextFilePersistence<PersistableUserList> userList;
 
-    public Users( Application app )
+    public Users()
     {
-        super(app, "Users");
+        super("Users");
     }
 
     public void initialize()

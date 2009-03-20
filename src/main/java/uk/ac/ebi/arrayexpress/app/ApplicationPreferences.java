@@ -15,7 +15,7 @@ public class ApplicationPreferences extends ApplicationComponent
 
     public ApplicationPreferences( Application app, String fileName )
     {
-        super(app, "Preferences");
+        super("Preferences");
 
         propertiesFileName = fileName;
         properties = new Properties();
@@ -63,7 +63,7 @@ public class ApplicationPreferences extends ApplicationComponent
     {
         try {
             properties.load(
-                    getApplication().getResource(
+                    Application.getInstance().getResource(
                             "/WEB-INF/classes/" + propertiesFileName + ".properties"
                     ).openStream()
             );

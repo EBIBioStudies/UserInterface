@@ -8,15 +8,10 @@ abstract public class ApplicationComponent
     // logging machinery
     private final Log log = LogFactory.getLog(getClass());
 
-    private Application application;
     private String componentName;
 
-    public ApplicationComponent( Application app, String name )
+    public ApplicationComponent( String name )
     {
-        if (null == app) {
-            log.error("Null application reference just passed to the component, expect problems down the road");
-        }
-        application = app;
         componentName = name;
     }
 
@@ -25,19 +20,14 @@ abstract public class ApplicationComponent
         return componentName;
     }
 
-    public Application getApplication()
-    {
-        return application;
-    }
-
     public ApplicationComponent getComponent( String name )
     {
-        return getApplication().getComponent(name);
+        return Application.getInstance().getComponent(name);
     }
 
     public ApplicationPreferences getPreferences()
     {
-        return getApplication().getPreferences();
+        return Application.getInstance().getPreferences();
     }
 
     public abstract void initialize();

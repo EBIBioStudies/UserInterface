@@ -7,6 +7,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobListener;
 import uk.ac.ebi.arrayexpress.app.Application;
+import uk.ac.ebi.arrayexpress.app.ApplicationJob;
 import uk.ac.ebi.arrayexpress.components.Experiments;
 import uk.ac.ebi.arrayexpress.components.JobsController;
 import uk.ac.ebi.arrayexpress.components.Users;
@@ -30,58 +31,57 @@ public class ReloadExperimentsJob extends ApplicationJob implements JobListener
     private int numThreadsCompleted;
     private int expsPerThread;
 
-    public void execute( Application app ) throws InterruptedException
+    public void execute() throws InterruptedException
     {
-        if (null != app) {
-            Long threads = app.getPreferences().getLong("ae.experiments.reload.threads");
-            if (null != threads) {
-                int numThreadsForRetrieval = threads.intValue();
-                numThreadsCompleted = 0;
-                xmlBuffer = new StringBuffer(20000000);
+        Application app = Application.getInstance();
+        Long threads = app.getPreferences().getLong("ae.experiments.reload.threads");
+        if (null != threads) {
+            int numThreadsForRetrieval = threads.intValue();
+            numThreadsCompleted = 0;
+            xmlBuffer = new StringBuffer(20000000);
 
-                String dsNames = ((Experiments) app.getComponent("Experiments")).getDataSource();
-                log.info("Reload of experiment data from [" + dsNames + "] requested");
+            String dsNames = ((Experiments) app.getComponent("Experiments")).getDataSource();
+            log.info("Reload of experiment data from [" + dsNames + "] requested");
 
-                ds = new DataSourceFinder().findDataSource(dsNames);
-                if (null != ds) {
-                    UserList userList = new UserListDatabaseRetriever(ds).getUserList();
-                    ((Users)app.getComponent("Users")).setUserList(userList);
-                    log.info("Reloaded the user list from the database");
-                    
-                    exps = new ExperimentListDatabaseRetriever(ds).getExperimentList();
-                    Thread.sleep(1);
+            ds = new DataSourceFinder().findDataSource(dsNames);
+            if (null != ds) {
+                UserList userList = new UserListDatabaseRetriever(ds).getUserList();
+                ((Users)app.getComponent("Users")).setUserList(userList);
+                log.info("Reloaded the user list from the database");
 
-                    log.info("Got [" + String.valueOf(exps.size()) + "] experiments listed in the database, scheduling retrieval");
-                    xmlBuffer.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><experiments total=\"").append(exps.size()).append("\">");
+                exps = new ExperimentListDatabaseRetriever(ds).getExperimentList();
+                Thread.sleep(1);
 
-                    ((JobsController) app.getComponent("JobsController")).setJobListener(this);
+                log.info("Got [" + String.valueOf(exps.size()) + "] experiments listed in the database, scheduling retrieval");
+                xmlBuffer.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><experiments total=\"").append(exps.size()).append("\">");
 
-                    if (0 < exps.size()) {
-                        if (exps.size() <= numThreadsForRetrieval) {
-                            numThreadsForRetrieval = 1;
-                        }
-                        // split list into several pieces
-                        expsPerThread = (int) Math.ceil(((double)exps.size()) / ((double)numThreadsForRetrieval));
-                        for ( int i = 0; i < numThreadsForRetrieval; ++i ) {
-                            ((JobsController) app.getComponent("JobsController")).executeJob("retrieve-xml", i);
-                            Thread.sleep(1);
-                        }
+                ((JobsController) app.getComponent("JobsController")).setJobListener(this);
 
-                        while ( numThreadsCompleted < numThreadsForRetrieval ) {
-                            Thread.sleep(1000);
-                        }
-
-                        ((JobsController) app.getComponent("JobsController")).setJobListener(null);
-                        xmlBuffer.append("</experiments>");
-                        ((Experiments) app.getComponent("Experiments")).reload(xmlBuffer.toString().replaceAll("[^\\p{Print}]", " "));
-                        log.info("Reload of experiment data completed");
-                        xmlBuffer = null;
-                    } else {
-                        log.warn("No experiments found, reload aborted");
+                if (0 < exps.size()) {
+                    if (exps.size() <= numThreadsForRetrieval) {
+                        numThreadsForRetrieval = 1;
                     }
+                    // split list into several pieces
+                    expsPerThread = (int) Math.ceil(((double)exps.size()) / ((double)numThreadsForRetrieval));
+                    for ( int i = 0; i < numThreadsForRetrieval; ++i ) {
+                        ((JobsController) app.getComponent("JobsController")).executeJob("retrieve-xml", i);
+                        Thread.sleep(1);
+                    }
+
+                    while ( numThreadsCompleted < numThreadsForRetrieval ) {
+                        Thread.sleep(1000);
+                    }
+
+                    ((JobsController) app.getComponent("JobsController")).setJobListener(null);
+                    xmlBuffer.append("</experiments>");
+                    ((Experiments) app.getComponent("Experiments")).reload(xmlBuffer.toString().replaceAll("[^\\p{Print}]", " "));
+                    log.info("Reload of experiment data completed");
+                    xmlBuffer = null;
                 } else {
-                    log.warn("No data sources available, reload aborted");
+                    log.warn("No experiments found, reload aborted");
                 }
+            } else {
+                log.warn("No data sources available, reload aborted");
             }
         }
     }

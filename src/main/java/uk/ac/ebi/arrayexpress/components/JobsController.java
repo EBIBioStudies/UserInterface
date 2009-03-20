@@ -4,7 +4,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
-import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.jobs.*;
 
@@ -22,9 +21,9 @@ public class JobsController extends ApplicationComponent
     // quartz scheduler
     private Scheduler scheduler;
 
-    public JobsController( Application app )
+    public JobsController()
     {
-        super(app, "JobsController");
+        super("JobsController");
     }
 
     public void initialize()
@@ -114,8 +113,6 @@ public class JobsController extends ApplicationComponent
     private void addJob( String name, Class c )
     {
         JobDetail j = new JobDetail(name, AE_JOBS_GROUP, c, true /* volatilily */, true /*durability */, false /* recover */);
-        j.getJobDataMap().put("application", getApplication());
-
         try {
             getScheduler().addJob(j, false);
         } catch ( Throwable x ) {

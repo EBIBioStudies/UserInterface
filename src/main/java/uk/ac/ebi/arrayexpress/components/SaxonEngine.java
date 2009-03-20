@@ -23,9 +23,9 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
 
     private TransformerFactory tFactory;
 
-    public SaxonEngine( Application app )
+    public SaxonEngine()
     {
-        super(app, "SaxonEngine");
+        super("SaxonEngine");
     }
 
     public void initialize()
@@ -41,7 +41,7 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
     {
         Source src;
         try {
-            URL resource = getApplication().getResource("/WEB-INF/server-assets/stylesheets/" + href);
+            URL resource = Application.getInstance().getResource("/WEB-INF/server-assets/stylesheets/" + href);
             if (null == resource) {
                 throw new TransformerException("Unable to locate stylesheet resource [" + href + "]");
             }

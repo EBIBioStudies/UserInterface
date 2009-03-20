@@ -2,7 +2,6 @@ package uk.ac.ebi.arrayexpress.components;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.utils.files.FtpFileEntry;
 import uk.ac.ebi.arrayexpress.utils.files.FtpFilesMap;
@@ -21,9 +20,9 @@ public class DownloadableFilesRegistry extends ApplicationComponent
     // filename->location map
     private TextFilePersistence<PersistableFilesMap> filesMap;
 
-    public DownloadableFilesRegistry( Application app )
+    public DownloadableFilesRegistry()
     {
-        super(app, "DownloadableFilesRegistry");
+        super("DownloadableFilesRegistry");
     }
 
     public void initialize()

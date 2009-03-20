@@ -28,9 +28,9 @@ public class Experiments extends ApplicationComponent
     private ExperimentSearch experimentSearch;
     private String dataSource;
 
-    public Experiments( Application app )
+    public Experiments()
     {
-        super(app, "Experiments");
+        super("Experiments");
     }
 
     public void initialize()
@@ -91,10 +91,8 @@ public class Experiments extends ApplicationComponent
 
     public boolean isAccessible( String accession, String userId )
     {
-        if (accession.toUpperCase().startsWith("A"))
-            return true; // TODO: ugly shortcut to bypass security for Array Designs
-        else
-            return getSearch().isAccessible(accession, userId);
+        // TODO: ugly shortcut to bypass security for Array Designs
+        return accession.toUpperCase().startsWith("A") || getSearch().isAccessible(accession, userId);
     }
 
     public boolean isInWarehouse( String accession )
@@ -138,7 +136,7 @@ public class Experiments extends ApplicationComponent
             setExperiments(doc);
 
             PersistableString speciesList = new PersistableString(
-                ((SaxonEngine) getApplication().getComponent("SaxonEngine")).transformDocumentToString(
+                ((SaxonEngine) Application.getInstance().getComponent("SaxonEngine")).transformDocumentToString(
                     experiments.getObject().getDocument()
                     , "preprocess-species-html.xsl"
                     , null
@@ -152,7 +150,7 @@ public class Experiments extends ApplicationComponent
             }
 
             PersistableString arraysList = new PersistableString(
-                ((SaxonEngine) getApplication().getComponent("SaxonEngine")).transformDocumentToString(
+                ((SaxonEngine) Application.getInstance().getComponent("SaxonEngine")).transformDocumentToString(
                     experiments.getObject().getDocument()
                     , "preprocess-arrays-html.xsl"
                     , null
@@ -166,7 +164,7 @@ public class Experiments extends ApplicationComponent
             }
 
             PersistableString experimentTypesList = new PersistableString(
-                ((SaxonEngine) getApplication().getComponent("SaxonEngine")).transformDocumentToString(
+                ((SaxonEngine) Application.getInstance().getComponent("SaxonEngine")).transformDocumentToString(
                     experiments.getObject().getDocument()
                     , "preprocess-exptypes-html.xsl"
                     , null
