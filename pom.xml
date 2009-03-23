@@ -43,6 +43,7 @@
         <interface.application.pref.files.rescan.interval>3600000</interface.application.pref.files.rescan.interval>
         <interface.application.google.analytics/>
         <interface.application.body.class/>
+        <interface.application.pref.files.prefix>ae</interface.application.pref.files.prefix>
     </properties>
     <profiles>
         <profile>
@@ -74,6 +75,33 @@
 
                 <interface.application.pref.files.rescan.interval>1800000</interface.application.pref.files.rescan.interval>
                 <interface.application.body.class>dev_preview</interface.application.body.class>
+                <interface.application.pref.files.prefix>ae-aepub1</interface.application.pref.files.prefix>
+            </properties>
+        </profile>
+        <profile>
+            <id>preproduction-aecur</id>
+            <properties>
+                <interface.application.link.www_domain_hack>http://www.embl-ebi.ac.uk</interface.application.link.www_domain_hack>
+                <interface.application.link.query_help>/microarray/doc/help/ae_help.html</interface.application.link.query_help>
+                <interface.application.link.browse_help>/microarray/doc/help/browse_results.html</interface.application.link.browse_help>
+                <interface.application.link.aer_old.base.url>${interface.application.link.www_domain_hack}/microarray-as/aer</interface.application.link.aer_old.base.url>
+                <interface.application.link.aew.base.url>${interface.application.link.www_domain_hack}/microarray-as/aew</interface.application.link.aew.base.url>
+                <interface.application.link.altas.base.url>${interface.application.link.www_domain_hack}/microarray-as/atlas</interface.application.link.altas.base.url>
+                <interface.application.link.atlas.exp_query.url>${interface.application.link.altas.base.url}/qrs?gprop_0=&amp;amp;gval_0=(all+genes)&amp;amp;fexp_0=UP_DOWN&amp;amp;fact_0=&amp;amp;specie_0=&amp;amp;view=hm&amp;amp;fval_0=</interface.application.link.atlas.exp_query.url>
+                <interface.application.link.atlas.species_options.url>atlas_list-species.html</interface.application.link.atlas.species_options.url>
+                <interface.application.link.atlas.stats.url>atlas_stats.txt</interface.application.link.atlas.stats.url>
+                <interface.application.link.solr_gene_stats.url>aew-gene-stats.xml</interface.application.link.solr_gene_stats.url>
+                <interface.application.link.solr_exp_stats.url>aew-exp-stats.xml</interface.application.link.solr_exp_stats.url>
+
+                <interface.application.link.news_xml.url>ae-news.xml</interface.application.link.news_xml.url>
+                <interface.application.link.links_xml.url>ae-links.xml</interface.application.link.links_xml.url>
+
+                <interface.application.pref.experiments.datasources>aecur</interface.application.pref.experiments.datasources>
+                <interface.application.pref.experiments.reload.schedule>0 0 0/1 * * ?</interface.application.pref.experiments.reload.schedule>
+
+                <interface.application.pref.files.rescan.interval>1800000</interface.application.pref.files.rescan.interval>
+                <interface.application.body.class>dev_preview</interface.application.body.class>
+                <interface.application.pref.files.prefix>ae-aecur</interface.application.pref.files.prefix>
             </properties>
         </profile>
         <profile>
@@ -177,7 +205,7 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
-        <finalName>${pom.artifactId}</finalName>
+        <finalName>${interface.application.pref.files.prefix}-interface</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>                
