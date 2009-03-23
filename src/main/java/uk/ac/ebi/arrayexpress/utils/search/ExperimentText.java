@@ -41,7 +41,7 @@ public class ExperimentText
         SaxonEngine saxon = (SaxonEngine) Application.getAppComponent("SaxonEngine");
         if (null != exp) {
             text = saxon.concatAllText(exp);
-            accession = saxon.evaluateXPathSingle(exp, "accession");
+            accession = saxon.evaluateXPathSingle(exp, "accession").toLowerCase();
             accessions = " ".concat(accession).concat(" ").concat(saxon.concatAllText(saxon.evaluateXPath(exp, "secondaryaccession"))).toLowerCase();
             species = saxon.concatAllText(saxon.evaluateXPath(exp, "species")).toLowerCase();
             array = saxon.concatAllText(saxon.evaluateXPath(exp, "arraydesign")).toLowerCase();

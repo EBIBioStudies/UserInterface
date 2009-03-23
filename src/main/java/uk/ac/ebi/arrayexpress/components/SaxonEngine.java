@@ -16,6 +16,7 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SaxonEngine extends ApplicationComponent implements URIResolver, ErrorListener
@@ -28,6 +29,8 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
     private DocumentBuilder docBuilder;
     private XsltCompiler xsltCompiler;
     private XPathCompiler xpathCompiler;
+
+    private Map<String,XsltExecutable> xsltExecCache = new HashMap<String,XsltExecutable>();
 
     private final String XML_STRING_ENCODING = "ISO-8859-1";
 
@@ -284,10 +287,18 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
     {
         boolean result = false;
         try {
-            // Open the stylesheet
-            Source xslSource = resolve(stylesheet, null);
+            XsltExecutable xsltExec;
+            if (!xsltExecCache.containsKey(stylesheet)) {
+                log.debug("Caching XSLT Executable for stylesheet [" + stylesheet + "]");
+                // Open the stylesheet
+                Source xslSource = resolve(stylesheet, null);
 
-            XsltExecutable xsltExec = xsltCompiler.compile(xslSource);
+                xsltExec = xsltCompiler.compile(xslSource);
+                xsltExecCache.put(stylesheet, xsltExec);
+            } else {
+                log.debug("Getting XSLT Executable for stylesheet [" + stylesheet + "] from the cache");
+                xsltExec = xsltExecCache.get(stylesheet);
+            }
             XsltTransformer xslt = xsltExec.load();
 
             // assign the parameters (if not null)
