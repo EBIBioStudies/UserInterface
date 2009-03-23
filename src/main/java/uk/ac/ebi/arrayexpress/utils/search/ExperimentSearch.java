@@ -56,38 +56,56 @@ public class ExperimentSearch
 
     public boolean matchText( String textIdx, String keywords, boolean wholeWords )
     {
-        int idx = Integer.parseInt(textIdx);
-        return matchString(expText.get(idx).text, keywords, wholeWords);
+        if (null == textIdx) {
+            return false;
+        }
+        Integer idx = Integer.parseInt(textIdx);
+        return (null != idx) && matchString(expText.get(idx).text, keywords, wholeWords);
     }
 
     public boolean matchAccession( String textIdx, String accession )
     {
-        int idx = Integer.parseInt(textIdx);
-        return expText.get(idx).accessions.contains(" ".concat(accession).concat(" ").toLowerCase());
+        if (null == textIdx) {
+            return false;
+        }
+        Integer idx = Integer.parseInt(textIdx);
+        return (null != idx) && expText.get(idx).accessions.contains(" ".concat(accession).concat(" ").toLowerCase());
     }
 
     public boolean matchSpecies( String textIdx, String species )
     {
-        int idx = Integer.parseInt(textIdx);
-        return expText.get(idx).species.contains(species.trim().toLowerCase());
+        if (null == textIdx) {
+            return false;
+        }
+        Integer idx = Integer.parseInt(textIdx);
+        return (null != idx) && expText.get(idx).species.contains(species.trim().toLowerCase());
     }
 
     public boolean matchArray( String textIdx, String array )
     {
-        int idx = Integer.parseInt(textIdx);
-        return expText.get(idx).array.contains(array.trim().toLowerCase());
+        if (null == textIdx) {
+            return false;
+        }
+        Integer idx = Integer.parseInt(textIdx);
+        return (null != idx) && expText.get(idx).array.contains(array.trim().toLowerCase());
     }
 
     public boolean matchExperimentType( String textIdx, String experimentType )
     {
-        int idx = Integer.parseInt(textIdx);
-        return expText.get(idx).experimentType.contains(experimentType.trim().toLowerCase());
+        if (null == textIdx) {
+            return false;
+        }
+        Integer idx = Integer.parseInt(textIdx);
+        return (null != idx) && expText.get(idx).experimentType.contains(experimentType.trim().toLowerCase());
     }
 
     public boolean matchUser( String textIdx, String user )
     {
-        int idx = Integer.parseInt(textIdx);
-        return expText.get(idx).users.contains(" ".concat(user).concat(" "));
+        if (null == textIdx) {
+            return false;
+        }
+        Integer idx = Integer.parseInt(textIdx);
+        return (null != idx) && expText.get(idx).users.contains(" ".concat(user).concat(" "));
     }
 
     public boolean isAccessible( String accession, String user )
