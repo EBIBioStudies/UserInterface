@@ -1,6 +1,9 @@
 package uk.ac.ebi.arrayexpress.components;
 
+import net.sf.saxon.om.AxisIterator;
+import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.s9api.*;
+import net.sf.saxon.type.Type;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
@@ -126,11 +129,11 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
         return document;
     }
 
-    public String evaluateXPath( XdmNode document, String xpath )
+    public String evaluateXPathSingle( XdmNode node, String xpath )
     {
         try {
             XPathSelector selector = xpathCompiler.compile(xpath).load();
-            selector.setContextItem(document);
+            selector.setContextItem(node);
             XdmItem result = selector.evaluateSingle();
 
             if (null != result) {
@@ -147,6 +150,73 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
         return null;
     }
     
+    public XdmValue evaluateXPath( XdmNode node, String xpath )
+    {
+        try {
+            XPathSelector selector = xpathCompiler.compile(xpath).load();
+            selector.setContextItem(node);
+            return selector.evaluate();
+        } catch (Throwable x) {
+            log.error("Caught an exception:", x);
+        }
+
+        return null;
+    }
+
+    public String concatAllText( XdmValue nodes )
+    {
+        StringBuilder buf = new StringBuilder();
+        if (null != nodes) {
+            for (XdmItem node : nodes) {
+                buf.append(concatAllText((XdmNode)node)).append(' ');
+            }
+        }
+        return buf.toString();
+    }
+
+    public String concatAllText( XdmNode node )
+    {
+        StringBuilder buf = new StringBuilder();
+
+        if (null != node) {
+            AxisIterator nodesItor = node.getUnderlyingNode().iterateAxis(net.sf.saxon.om.Axis.DESCENDANT_OR_SELF);
+            do {
+                NodeInfo next = (NodeInfo)nodesItor.next();
+
+                // if null there is no next
+                if (null == next) {
+                    break;
+                }
+
+                if ( Type.TEXT == next.getNodeKind()) {
+                    if (null != next.getStringValue() && 0 != next.getStringValue().length()) {
+                        buf.append(next.getStringValue()).append(' ');
+                    }
+                } else if (Type.ELEMENT == next.getNodeKind()) {
+                    // iterate over attributes and collect values from there
+                    AxisIterator attributesItor = next.iterateAxis(net.sf.saxon.om.Axis.ATTRIBUTE);
+                    do {
+                        NodeInfo nextAttr = (NodeInfo)attributesItor.next();
+
+                        // if null there is no next
+                        if (null == nextAttr) {
+                            break;
+                        }
+
+                        // append attribute value (if any)
+                        if (null == nextAttr.getStringValue() || 0 != nextAttr.getStringValue().length()) {
+                            buf.append(nextAttr.getStringValue()).append(' ');
+                        }
+
+                    } while (true);
+                }
+
+            } while (true);
+        }
+
+        return buf.toString();
+    }
+
     public boolean transformToWriter( XdmNode srcDocument, String stylesheet, Map<String,String> params, Writer dstWriter )
     {
         Serializer out = new Serializer();

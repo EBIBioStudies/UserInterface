@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:func="http://exslt.org/functions"
-                xmlns:ae="http://www.ebi.ac.uk/arrayexpress"
-                xmlns:helper="uk.ac.ebi.ae15.utils.AppXalanExtension"
+                xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.AESaxonExtension"
                 xmlns:html="http://www.w3.org/1999/xhtml"
-                extension-element-prefixes="func ae helper html"
-                exclude-result-prefixes="func ae helper html"
+                extension-element-prefixes="ae html"
+                exclude-result-prefixes="ae html"
                 version="1.0">
 
     <xsl:param name="accession"/>
@@ -18,7 +16,7 @@
 
     <xsl:variable name="vBaseUrl">http://<xsl:value-of select="$host"/><xsl:value-of select="$basepath"/></xsl:variable>   
     
-    <xsl:variable name="vAccession" select="helper:toUpperCase($accession)"/>
+    <xsl:variable name="vAccession" select="ae:toUpperCase($accession)"/>
 
     <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="ISO-8859-1" />
 
@@ -38,7 +36,9 @@
     </xsl:template>
 
     <xsl:template name="ae-contents">
+        <!-- TODO
         <helper:logInfo select="[browse-files-html] Parameters: accession [{$vAccession}], kind [{$kind}], userid [{$userid}]"/>
+        -->
 
         <xsl:variable name="vExperiment" select="experiment[accession=$vAccession]"/>
         <div class="ae_left_container_100pc assign_font">
@@ -46,7 +46,7 @@
                 <xsl:choose>
                     <xsl:when test="$vExperiment">
                         <xsl:choose>
-                            <xsl:when test="helper:isExperimentAccessible($vAccession, $userid)">
+                            <xsl:when test="ae:isExperimentAccessible($vAccession, $userid)">
                                 <div class="ae_accession">Experiment <xsl:value-of select="$vAccession"/></div>
                                 <div class="ae_title"><xsl:value-of select="$vExperiment/name"/></div>
                                 <xsl:call-template name="files-for-accession">
@@ -96,7 +96,7 @@
 
     <xsl:template name="files-for-accession">
         <xsl:param name="pAccession"/>
-        <xsl:variable name="vFiles" select="helper:getFilesForAccession($pAccession)"/>
+        <xsl:variable name="vFiles" select="ae:getFilesForAccession($pAccession)/files"/>
         <xsl:variable name="vKind"><xsl:if test="$kind!='all'"><xsl:value-of select="$kind"/></xsl:if></xsl:variable>
 
         <table class="ae_files_table" border="0" cellpadding="0" cellspacing="0">
@@ -105,13 +105,13 @@
                     <tr><td class="td_all" colspan="3"><div>No files</div></td></tr>
                 </xsl:if>
                 <xsl:for-each select="$vFiles/file[$vKind='' or @kind=$vKind]">
-                    <xsl:sort select="contains(helper:toUpperCase(@name), 'README')" order="descending"/>
+                    <xsl:sort select="contains(ae:toUpperCase(@name), 'README')" order="descending"/>
                     <xsl:sort select="@kind='raw' or @kind='fgem'" order="descending"/>
                     <xsl:sort select="@kind='adf' or @kind='idf' or @kind='sdrf'" order="descending"/>
                     <xsl:sort select="@name" order="ascending"/>
                     <tr>
                         <td class="td_name"><a href="{$vBaseUrl}/files/{$pAccession}/{@name}"><xsl:value-of select="@name"/></a></td>
-                        <td class="td_size"><xsl:value-of select="helper:fileSizeToString(@size)"/></td>
+                        <td class="td_size"><xsl:value-of select="ae:fileSizeToString(@size)"/></td>
                         <td class="td_date"><xsl:value-of select="@lastmodified"/></td>
                     </tr>
                 </xsl:for-each>

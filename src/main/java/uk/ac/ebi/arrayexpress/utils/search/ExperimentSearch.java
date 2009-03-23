@@ -1,8 +1,12 @@
 package uk.ac.ebi.arrayexpress.utils.search;
 
+import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XdmValue;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import uk.ac.ebi.arrayexpress.app.Application;
+import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 import uk.ac.ebi.arrayexpress.utils.RegExpHelper;
 
 import java.util.ArrayList;
@@ -31,22 +35,19 @@ public class ExperimentSearch
 
     public void buildText( XdmNode experiments )
     {
-        if (null != experiments) {
+        if (null != experiments && null != experiments.getUnderlyingNode()) {
             try {
-                // if (experiments.hasChildNodes() && experiments.getDocumentElement().hasChildNodes()) {
-                //    NodeList expList = experiments.getDocumentElement().getChildNodes();
-                //
-                //    expText.clear();
-                //    accessionIdx.clear();
-                //
-                //    for ( int i = 0; i < expList.getLength(); ++i ) {
-                //        Element expElt = (Element) expList.item(i);
-                //        ExperimentText text = new ExperimentText().populateFromElement(expElt);
-                //        expText.add(text);
-                //        accessionIdx.put(text.accession, i);
-                //        expElt.setAttribute("textIdx", Integer.toString(i));
-                //    }
-                //}
+                expText.clear();
+                accessionIdx.clear();
+
+                XdmValue exps = ((SaxonEngine)Application.getAppComponent("SaxonEngine")).evaluateXPath(experiments, "/experiments/experiment");
+                if (null != exps) {
+                    for (XdmItem expObj : exps) {
+                        ExperimentText text = new ExperimentText().populateFromExperiment((XdmNode)expObj);
+                        expText.add(text);
+                        accessionIdx.put(text.accession, expText.size() - 1);
+                    }
+                }
             } catch ( Throwable x ) {
                 log.error("Caught an exception:", x);
             }

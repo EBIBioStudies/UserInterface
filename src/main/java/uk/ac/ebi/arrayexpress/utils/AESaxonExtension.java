@@ -9,6 +9,7 @@ import uk.ac.ebi.arrayexpress.components.DownloadableFilesRegistry;
 import uk.ac.ebi.arrayexpress.components.Experiments;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 import uk.ac.ebi.arrayexpress.utils.files.FtpFileEntry;
+import uk.ac.ebi.arrayexpress.utils.search.ExperimentSearch;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -202,43 +203,34 @@ public class AESaxonExtension
 
     public static boolean testExperiment( XPathContext context, String userId, String keywords, String wholeWords, String species, String array, String experimentType, String inAtlas )
     {
-        //TODO
         final int textIdxFPrint = context.getNamePool().getFingerprint("", "textidx");
         final int loadedInAtlasFPrint = context.getNamePool().getFingerprint("", "loadedinatlas");
         try {
-            if (null != context) {
-                NodeInfo node = (NodeInfo)context.getContextItem();
-                if (null != node) {
-                    String textIdx = node.getAttributeValue(loadedInAtlasFPrint);
-                    if (null != textIdx) {
-                        return true;
-                    }
-                }
-                //String loadedInAtlas = ((ElementImpl)ni).getAttributeValue("", "loadedinatals");
+            NodeInfo node = (NodeInfo)context.getContextItem();
+            String textIdx = node.getAttributeValue(textIdxFPrint);
+            String loadedInAtlas = node.getAttributeValue(loadedInAtlasFPrint);
 
-                //if (testCheckbox(inAtlas) && null != loadedInAtlas && loadedInAtlas.equals(""))
-                //    return false;
+            if (testCheckbox(inAtlas) && null != loadedInAtlas && loadedInAtlas.equals(""))
+                return false;
 
-                //ExperimentSearch search = ((Experiments) Application.getAppComponent("Experiments")).getSearch();
-            //
-            //    if (!userId.equals("0") && !search.matchUser(textIdx, userId))
-            //        return false;
-            //
-            //    if (accessionRegExp.test(keywords) && !search.matchAccession(textIdx, keywords))
-            //        return false;
-            //
-            //    if (!keywords.equals("") && !search.matchText(textIdx, keywords, testCheckbox(wholeWords)))
-            //        return false;
-            //
-            //    if (!species.equals("") && !search.matchSpecies(textIdx, species))
-            //        return false;
-            //
-            //    if (!array.equals("") && !search.matchArray(textIdx, array))
-            //        return false;
-            //
-            //    return  experimentType.equals("") || search.matchExperimentType(textIdx, experimentType);
-            }
+            ExperimentSearch search = ((Experiments) Application.getAppComponent("Experiments")).getSearch();
 
+            if (!userId.equals("0") && !search.matchUser(textIdx, userId))
+                return false;
+
+            if (accessionRegExp.test(keywords) && !search.matchAccession(textIdx, keywords))
+                return false;
+
+            if (!keywords.equals("") && !search.matchText(textIdx, keywords, testCheckbox(wholeWords)))
+                return false;
+
+            if (!species.equals("") && !search.matchSpecies(textIdx, species))
+                return false;
+
+            if (!array.equals("") && !search.matchArray(textIdx, array))
+                return false;
+
+            return  experimentType.equals("") || search.matchExperimentType(textIdx, experimentType);
         } catch ( Throwable x ) {
             log.error("Caught an exception:", x);
         }

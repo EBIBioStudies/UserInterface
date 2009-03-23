@@ -6,7 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 
-
+// TODO: CHECK VERSION
 public class PersistableDocumentContainer implements Persistable
 {
     // logging machinery
@@ -53,7 +53,7 @@ public class PersistableDocumentContainer implements Persistable
         if (null == document)
             return true;
 
-        String total = ((SaxonEngine)Application.getAppComponent("SaxonEngine")).evaluateXPath(document, "/experiments/@total");
+        String total = ((SaxonEngine)Application.getAppComponent("SaxonEngine")).evaluateXPathSingle(document, "/experiments/@total");
 
         return (null == total || total.equals("0"));
     }

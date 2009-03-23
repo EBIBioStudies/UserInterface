@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:func="http://exslt.org/functions"
-                xmlns:ae="http://www.ebi.ac.uk/arrayexpress"
-                xmlns:helper="uk.ac.ebi.ae15.utils.AppXalanExtension"
+                xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.AESaxonExtension"
                 extension-element-prefixes="func ae helper"
                 exclude-result-prefixes="func ae helper"
                 version="1.0">
@@ -31,24 +28,26 @@
 
     <xsl:output omit-xml-declaration="yes" method="xml" encoding="ISO-8859-1"/>
 
-    <xsl:include href="ae-filter-experiments.xsl"/>
     <xsl:include href="ae-sort-experiments.xsl"/>
 
     <xsl:template match="/experiments">
+        <!-- TODO
         <helper:logInfo select="[experiments-rss-xml] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
         <helper:logInfo select="[experiments-rss-xml] Sort by: [{$sortby}], [{$sortorder}]"/>
-        <xsl:variable name="vFilteredExperiments" select="ae:filter-experiments($userid,$keywords,$wholewords,$species,$array,$exptype,$inatlas)"/>
+        -->
+        <xsl:variable name="vFilteredExperiments" select="experiment[ae:testExperiment($userid, $keywords, $wholewords, $species, $array, $exptype, $inatlas)]"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
 
+        <!-- TODO
         <helper:logInfo select="[experiments-rss-xml] Query filtered {$vTotal} experiments. Will output first {$pagesize} entries."/>
-
+        -->
         <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
             <channel>
-                <xsl:variable name="vCurrentDate" select="helper:dateToRfc822()"/>
+                <xsl:variable name="vCurrentDate" select="ae:dateToRfc822()"/>
                 <title>
                     <xsl:text>ArrayExpress Archive - Experiments</xsl:text>
                     <xsl:variable name="vArrayName" select="//arraydesign[id=$array]/name"/>
-                    <xsl:variable name="vQueryDesc" select="helper:describeQuery($keywords,$wholewords,$species,$vArrayName,$exptype,$inatlas)"/>
+                    <xsl:variable name="vQueryDesc" select="ae:describeQuery($keywords,$wholewords,$species,$vArrayName,$exptype,$inatlas)"/>
                     <xsl:if test="string-length($vQueryDesc)>0">
                         <xsl:text> </xsl:text><xsl:value-of select="$vQueryDesc"/>
                     </xsl:if>
@@ -146,7 +145,7 @@
                     </category>
                 </xsl:for-each>
                 <pubDate>
-                    <xsl:value-of select="helper:dateToRfc822(releasedate)"/>
+                    <xsl:value-of select="ae:dateToRfc822(releasedate)"/>
                 </pubDate>
             </item>
         </xsl:if>
