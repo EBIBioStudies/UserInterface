@@ -105,10 +105,10 @@
                     <tr><td class="td_all" colspan="3"><div>No files</div></td></tr>
                 </xsl:if>
                 <xsl:for-each select="$vFiles/file[$vKind='' or @kind=$vKind]">
-                    <xsl:sort select="contains(ae:toUpperCase(@name), 'README')" order="descending"/>
+                    <xsl:sort select="contains(ae:toLowerCase(@name), 'readme')" order="descending"/>
                     <xsl:sort select="@kind='raw' or @kind='fgem'" order="descending"/>
                     <xsl:sort select="@kind='adf' or @kind='idf' or @kind='sdrf'" order="descending"/>
-                    <xsl:sort select="@name" order="ascending"/>
+                    <xsl:sort select="ae:toLowerCase(@name)" order="ascending"/>
                     <tr>
                         <td class="td_name"><a href="{$vBaseUrl}/files/{$pAccession}/{@name}"><xsl:value-of select="@name"/></a></td>
                         <td class="td_size"><xsl:value-of select="ae:fileSizeToString(@size)"/></td>

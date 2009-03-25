@@ -71,21 +71,21 @@
                 
             </assays>
             <xsl:for-each select="sampleattribute[@category][generate-id() = generate-id(key('experiment-sampleattribute-by-category', concat(ancestor::experiment/@id, @category))[1])]">
-                <xsl:sort select="@category" order="ascending"/>
+                <xsl:sort select="ae:toLowerCase(@category)" order="ascending"/>
                 <sampleattribute>
                     <category><xsl:value-of select="@category"/></category>
                     <xsl:for-each select="key('experiment-sampleattribute-by-category', concat(ancestor::experiment/@id, @category))">
-                        <xsl:sort select="@value" order="ascending"/>
+                        <xsl:sort select="ae:toLowerCase(@value)" order="ascending"/>
                         <value><xsl:value-of select="@value"/></value>
 					</xsl:for-each>
                 </sampleattribute>
             </xsl:for-each>
             <xsl:for-each select="experimentalfactor[@name][generate-id() = generate-id(key('experiment-experimentalfactor-by-name', concat(ancestor::experiment/@id, @name))[1])]">
-                <xsl:sort select="@name" order="ascending"/>
+                <xsl:sort select="ae:toLowerCase(@name)" order="ascending"/>
                 <experimentalfactor>
                     <name><xsl:value-of select="@name"/></name>
                     <xsl:for-each select="key('experiment-experimentalfactor-by-name', concat(ancestor::experiment/@id, @name))">
-                        <xsl:sort select="@value" order="ascending"/>
+                        <xsl:sort select="ae:toLowerCase(@value)" order="ascending"/>
                         <value><xsl:value-of select="@value"/></value>
 					</xsl:for-each>
                 </experimentalfactor>

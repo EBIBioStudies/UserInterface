@@ -410,7 +410,7 @@
     <xsl:template name="providers">
         <xsl:for-each select="provider[not(contact=following-sibling::provider/contact) and role!='data_coder']">
             <xsl:sort select="role='submitter'" order="descending"/>
-            <xsl:sort select="contact"/>
+            <xsl:sort select="ae:toLowerCase(contact)"/>
             <xsl:choose>
                 <xsl:when test="role='submitter' and string-length(email) > 0">
                     <a href="mailto:{email}"><xsl:apply-templates select="contact" mode="highlight"/> &lt;<xsl:apply-templates select="email" mode="highlight"/>&gt;</a>
@@ -605,7 +605,7 @@
                 <td class="attr_value">
                     <xsl:for-each select="file[kind = 'raw' or kind = 'fgem']">
                         <xsl:sort select="kind"/>
-                        <xsl:sort select="name"/>
+                        <xsl:sort select="ae:toLowerCase(name)"/>
                         <a href="{$vBaseUrl}/{relativepath}">
                             <xsl:value-of select="name"/>
                         </a>
@@ -661,7 +661,7 @@
                 <td class="attr_name">Experiment Design Images</td>
                 <td class="attr_value">
                     <xsl:for-each select="file[kind = 'biosamples' and (extension = 'png' or extension = 'svg')]">
-                        <xsl:sort select="extension"/>
+                        <xsl:sort select="ae:toLowerCase(extension)"/>
                         <a href="{$vBaseUrl}/{relativepath}"><xsl:value-of select="name"/></a>
                         <xsl:if test="position() != last()">
                             <xsl:text>, </xsl:text>
