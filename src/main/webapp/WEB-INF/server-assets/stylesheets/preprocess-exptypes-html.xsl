@@ -13,7 +13,7 @@
     <xsl:template match="/experiments">
         <option value="">Any experiment type</option>
         <xsl:for-each select=".//experimenttype[generate-id(key('distinct-exptypes',ae:toLowerCase(text())))=generate-id()]">
-            <xsl:sort select="text()"/>
+            <xsl:sort select="ae:toLowerCase(text())"/>
             <option value="{text()}">
                 <xsl:value-of select="text()"/>
             </option>

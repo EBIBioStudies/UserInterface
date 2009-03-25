@@ -8,107 +8,102 @@
     version="1.0">
 
     <xsl:output omit-xml-declaration="yes" method="html"/>
-    <xsl:key name="distinct-array" match="arraydesign" use="name"/>
+    <xsl:key name="distinct-array" match="arraydesign" use="ae:toLowerCase(name)"/>
 
     <xsl:template match="/experiments">
         <option value="">Any array</option>
-        <optgroup label="Affymetrix arrays">
-                <xsl:apply-templates
-                        select=".//arraydesign[generate-id(key('distinct-array',name))=generate-id()][contains(name,'Affy')]">
-                    <xsl:sort select="name"/>
-                </xsl:apply-templates>
-            </optgroup>
+        <xsl:call-template name="optgroup">
+            <xsl:with-param name="pGroupTitle" select="'Affymetrix'"/>
+            <xsl:with-param name="pGroupSignature" select="'affymetrix'"/>
+        </xsl:call-template>
 
-            <optgroup label="Agilent arrays">
-                <xsl:apply-templates
-                        select=".//arraydesign[generate-id(key('distinct-array',name))=generate-id()][contains(name,'Agilent')]">
-                    <xsl:sort select="name"/>
-                </xsl:apply-templates>
-            </optgroup>
+        <xsl:call-template name="optgroup">
+            <xsl:with-param name="pGroupTitle" select="'Agilent'"/>
+            <xsl:with-param name="pGroupSignature" select="'agilent'"/>
+        </xsl:call-template>
 
-            <optgroup label="Amersham arrays">
-                <xsl:apply-templates
-                        select=".//arraydesign[generate-id(key('distinct-array',name))=generate-id()][contains(name,'Amersham')]">
-                    <xsl:sort select="name"/>
-                </xsl:apply-templates>
-            </optgroup>
+        <xsl:call-template name="optgroup">
+            <xsl:with-param name="pGroupTitle" select="'Amersham'"/>
+            <xsl:with-param name="pGroupSignature" select="'amersham'"/>
+        </xsl:call-template>
 
-            <optgroup label="BuG@S arrays">
-                <xsl:apply-templates
-                        select=".//arraydesign[generate-id(key('distinct-array',name))=generate-id()][contains(name,'BuG@S')]">
-                    <xsl:sort select="name"/>
-                </xsl:apply-templates>
-            </optgroup>
+        <xsl:call-template name="optgroup">
+            <xsl:with-param name="pGroupTitle" select="'BuG@S'"/>
+            <xsl:with-param name="pGroupSignature" select="'bug@s'"/>
+        </xsl:call-template>
 
-            <optgroup label="CATMA arrays">
-                <xsl:apply-templates
-                        select=".//arraydesign[generate-id(key('distinct-array',name))=generate-id()][contains(name,'CATMA')]">
-                    <xsl:sort select="name"/>
-                </xsl:apply-templates>
-            </optgroup>
+        <xsl:call-template name="optgroup">
+            <xsl:with-param name="pGroupTitle" select="'CATMA'"/>
+            <xsl:with-param name="pGroupSignature" select="'catma'"/>
+        </xsl:call-template>
 
-            <optgroup label="EMBL arrays">
-                <xsl:apply-templates
-                        select=".//arraydesign[generate-id(key('distinct-array',name))=generate-id()][contains(name,'EMBL')]">
-                    <xsl:sort select="name"/>
-                </xsl:apply-templates>
-            </optgroup>
+        <xsl:call-template name="optgroup">
+            <xsl:with-param name="pGroupTitle" select="'EMBL'"/>
+            <xsl:with-param name="pGroupSignature" select="'embl'"/>
+        </xsl:call-template>
 
-            <optgroup label="ILSI arrays">
-                <xsl:apply-templates
-                        select=".//arraydesign[generate-id(key('distinct-array',name))=generate-id()][contains(name,'ILSI')]">
-                    <xsl:sort select="name"/>
-                </xsl:apply-templates>
-            </optgroup>
+        <xsl:call-template name="optgroup">
+            <xsl:with-param name="pGroupTitle" select="'Illumina'"/>
+            <xsl:with-param name="pGroupSignature" select="'illumina'"/>
+        </xsl:call-template>
 
-            <optgroup label="MIT arrays">
-                <xsl:apply-templates
-                        select=".//arraydesign[generate-id(key('distinct-array',name))=generate-id()][contains(name,'MIT')]">
-                    <xsl:sort select="name"/>
-                </xsl:apply-templates>
-            </optgroup>
+        <xsl:call-template name="optgroup">
+            <xsl:with-param name="pGroupTitle" select="'ILSI'"/>
+            <xsl:with-param name="pGroupSignature" select="'[ilsi]'"/>
+        </xsl:call-template>
 
-            <optgroup label="Sanger Institute arrays">
-                <xsl:apply-templates
-                        select=".//arraydesign[generate-id(key('distinct-array',name))=generate-id()][contains(name,'Sanger')]">
-                    <xsl:sort select="name"/>
-                </xsl:apply-templates>
-            </optgroup>
+        <xsl:call-template name="optgroup">
+            <xsl:with-param name="pGroupTitle" select="'MIT'"/>
+            <xsl:with-param name="pGroupSignature" select="'mit'"/>
+        </xsl:call-template>
 
-            <optgroup label="Stanford (SMD) arrays">
-                <xsl:apply-templates
-                        select=".//arraydesign[generate-id(key('distinct-array',name))=generate-id()][contains(name,'SMD')]">
-                    <xsl:sort select="name"/>
-                </xsl:apply-templates>
-            </optgroup>
+        <xsl:call-template name="optgroup">
+            <xsl:with-param name="pGroupTitle" select="'NimbleGen'"/>
+            <xsl:with-param name="pGroupSignature" select="'nimblegen'"/>
+        </xsl:call-template>
 
-            <optgroup label="TIGR arrays">
-                <xsl:apply-templates
-                        select=".//arraydesign[generate-id(key('distinct-array',name))=generate-id()][contains(name,'TIGR')]">
-                    <xsl:sort select="name"/>
-                </xsl:apply-templates>
-            </optgroup>
+        <xsl:call-template name="optgroup">
+            <xsl:with-param name="pGroupTitle" select="'Sanger Institute'"/>
+            <xsl:with-param name="pGroupSignature" select="'sanger'"/>
+        </xsl:call-template>
 
-            <optgroup label="Utrecht (UMC) arrays">
-                <xsl:apply-templates
-                        select=".//arraydesign[generate-id(key('distinct-array',name))=generate-id()][contains(name,'Utrecht')]">
-                    <xsl:sort select="name"/>
-                </xsl:apply-templates>
-            </optgroup>
+        <xsl:call-template name="optgroup">
+            <xsl:with-param name="pGroupTitle" select="'Stanford (SMD)'"/>
+            <xsl:with-param name="pGroupSignature" select="'smd'"/>
+        </xsl:call-template>
 
-            <optgroup label="Yale arrays">
-                <xsl:apply-templates
-                        select=".//arraydesign[generate-id(key('distinct-array',name))=generate-id()][contains(name,'Yale')]">
-                    <xsl:sort select="name"/>
-                </xsl:apply-templates>
-            </optgroup>
+        <xsl:call-template name="optgroup">
+            <xsl:with-param name="pGroupTitle" select="'TIGR'"/>
+            <xsl:with-param name="pGroupSignature" select="'tigr'"/>
+        </xsl:call-template>
 
-            <optgroup label="Other arrays">
-                <xsl:apply-templates select=".//arraydesign[generate-id(key('distinct-array',name))=generate-id()][not(ae:testRegexp(name/text(),'Affy|Agilent|Amersham|BuG@S|CATMA|EMBL|ILSI|MIT|Sanger|SMD|TIGR|Utrecht|Yale','i'))]">
-                    <xsl:sort select="name"/>
-                </xsl:apply-templates>
-            </optgroup>
+        <xsl:call-template name="optgroup">
+            <xsl:with-param name="pGroupTitle" select="'Utrecht (UMC)'"/>
+            <xsl:with-param name="pGroupSignature" select="'umc'"/>
+        </xsl:call-template>
 
+        <xsl:call-template name="optgroup">
+            <xsl:with-param name="pGroupTitle" select="'Yale'"/>
+            <xsl:with-param name="pGroupSignature" select="'yale'"/>
+        </xsl:call-template>
+
+        <optgroup label="Other arrays">
+            <xsl:apply-templates select=".//arraydesign[generate-id(key('distinct-array',ae:toLowerCase(name)))=generate-id()][not(ae:testRegexp(name/text(),'affymetrix|agilent|amersham|bug@s|catma|embl|illumina|ilsi|mit|nimblegen|sanger|smd|tigr|umc|yale','i'))]">
+                <xsl:sort select="ae:toLowerCase(name)"/>
+            </xsl:apply-templates>
+        </optgroup>
+
+    </xsl:template>
+
+    <xsl:template name="optgroup">
+        <xsl:param name="pGroupTitle"/>
+        <xsl:param name="pGroupSignature"/>
+        <optgroup label="{$pGroupTitle} arrays">
+            <xsl:apply-templates
+                    select=".//arraydesign[generate-id(key('distinct-array',ae:toLowerCase(name)))=generate-id()][contains(ae:toLowerCase(name), $pGroupSignature)]">
+                <xsl:sort select="ae:toLowerCase(name)"/>
+            </xsl:apply-templates>
+        </optgroup>
     </xsl:template>
 
     <xsl:template match="arraydesign">
