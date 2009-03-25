@@ -88,7 +88,7 @@
         </xsl:call-template>
 
         <optgroup label="Other arrays">
-            <xsl:apply-templates select=".//arraydesign[generate-id(key('distinct-array',ae:toLowerCase(name)))=generate-id()][not(ae:testRegexp(name/text(),'affymetrix|agilent|amersham|bug@s|catma|embl|illumina|ilsi|mit|nimblegen|sanger|smd|tigr|umc|yale','i'))]">
+            <xsl:apply-templates select=".//arraydesign[generate-id(key('distinct-array',ae:toLowerCase(name)))=generate-id()][not(ae:testRegexp(name,'affymetrix|agilent|amersham|bug@s|catma|embl|illumina|ilsi|mit|nimblegen|sanger|smd|tigr|umc|yale','i'))]">
                 <xsl:sort select="ae:toLowerCase(name)"/>
             </xsl:apply-templates>
         </optgroup>

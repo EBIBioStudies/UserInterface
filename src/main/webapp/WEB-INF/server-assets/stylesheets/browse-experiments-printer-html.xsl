@@ -27,7 +27,7 @@
     <xsl:variable name="vBaseUrl">http://<xsl:value-of select="$host"/><xsl:value-of select="$basepath"/></xsl:variable>
 
     <xsl:variable name="vArrayName" select="//arraydesign[id=$array]/name"/>
-    <xsl:variable name="vQueryDesc" select="ae:describeQuery($keywords,$wholewords,$species,$vArrayName,$exptype,$inatlas)"/>
+    <xsl:variable name="vQueryDesc" select="ae:describeQuery($keywords, $wholewords, $species, $vArrayName, $exptype, $inatlas)"/>
 
     <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="ISO-8859-1" />
 
@@ -60,8 +60,6 @@
 
         <xsl:variable name="vFilteredExperiments" select="experiment[ae:testExperiment($userid, $keywords, $wholewords, $species, $array, $exptype, $inatlas)]"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
-        <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments[samples/text()>0]/samples/text())"/>
-        <xsl:variable name="vTotalAssays" select="sum($vFilteredExperiments[assays/text()>0]/assays/text())"/>
 
         <aeext:log message="[browse-experiments-printer-html] Query filtered {$vTotal} experiments."/>
 
@@ -171,7 +169,7 @@
             <td class="col_accession">
                 <div>
                     <xsl:apply-templates select="accession" mode="highlight" />
-                    <xsl:if test="not(user/text()='1')">
+                    <xsl:if test="not(user = '1')">
                         <img src="{$basepath}/assets/images/silk_lock.gif" width="8" height="9"/>
                     </xsl:if>
                 </div>
@@ -244,6 +242,6 @@
     </xsl:template>
 
     <xsl:template match="*" mode="highlight">
-        <xsl:value-of select="text()"/>
+        <xsl:value-of select="."/>
     </xsl:template>
 </xsl:stylesheet>

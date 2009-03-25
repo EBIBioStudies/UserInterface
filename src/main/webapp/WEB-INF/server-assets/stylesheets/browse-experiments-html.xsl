@@ -43,8 +43,8 @@
 
         <xsl:variable name="vFilteredExperiments" select="experiment[ae:testExperiment($userid, $keywords, $wholewords, $species, $array, $exptype, $inatlas)]"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
-        <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments[samples/text()>0]/samples/text())"/>
-        <xsl:variable name="vTotalAssays" select="sum($vFilteredExperiments[assays/text()>0]/assays/text())"/>
+        <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments/samples)"/>
+        <xsl:variable name="vTotalAssays" select="sum($vFilteredExperiments/assays)"/>
 
         <xsl:variable name="vFrom">
             <xsl:choose>
@@ -115,7 +115,7 @@
                 <td class="{$vDetailedViewMainTdClass}"><div class="table_row_expand"/></td>
                 <td class="{$vDetailedViewMainTdClass}">
                     <div class="table_row_accession"><xsl:apply-templates select="accession" mode="highlight" /></div>
-                    <xsl:if test="not(user/text()='1')">
+                    <xsl:if test="not(user = '1')">
                         <div class="lock">&#160;</div>
                     </xsl:if>
                 </td>
@@ -154,13 +154,13 @@
                 <td colspan="9" class="td_ext">
                     <div class="tbl">
                         <table cellpadding="0" cellspacing="0" border="0">
-                            <xsl:if test="count(description[text/text()!='' and not(contains(text/text(),'Generated description'))]) > 0">
+                            <xsl:if test="count(description[string-length(text) > 0 and not(contains(text, 'Generated description'))]) > 0">
                                 <tr>
                                     <td class="name"><div>Description</div></td>
                                     <td class="value">
-                                        <xsl:for-each select="description[text/text()!='' and not(contains(text/text(),'Generated description'))]">
+                                        <xsl:for-each select="description[string-length(text) > 0 and not(contains(text, 'Generated description'))]">
                                             <xsl:call-template name="description">
-                                                <xsl:with-param name="text" select="text/text()"/>
+                                                <xsl:with-param name="text" select="text"/>
                                             </xsl:call-template>
                                         </xsl:for-each>
                                     </td>
@@ -363,14 +363,14 @@
     <xsl:template match="bibliography">
         <div>
             <xsl:variable name="publication_title">
-                <xsl:if test="title/text()!=''"><xsl:call-template name="highlight"><xsl:with-param name="pText" select="ae:trimTrailingDot(title)"/></xsl:call-template>. </xsl:if>
-                <xsl:if test="authors/text()!=''"><xsl:call-template name="highlight"><xsl:with-param name="pText" select="ae:trimTrailingDot(authors)"/></xsl:call-template>. </xsl:if>
+                <xsl:if test="string-length(title) > 0"><xsl:call-template name="highlight"><xsl:with-param name="pText" select="ae:trimTrailingDot(title)"/></xsl:call-template>. </xsl:if>
+                <xsl:if test="string-length(authors) > 0"><xsl:call-template name="highlight"><xsl:with-param name="pText" select="ae:trimTrailingDot(authors)"/></xsl:call-template>. </xsl:if>
             </xsl:variable>
             <xsl:variable name="publication_link_title">
-                <xsl:if test="publication/text()!=''"><em><xsl:apply-templates select="publication" mode="highlight"/></em>&#160;</xsl:if>
-                <xsl:if test="volume/text()!=''"><xsl:apply-templates select="volume" mode="highlight"/><xsl:if test="issue/text()!=''">(<xsl:apply-templates select="issue" mode="highlight"/>)</xsl:if></xsl:if>
-                <xsl:if test="pages/text()!=''">:<xsl:apply-templates select="pages" mode="highlight"/></xsl:if>
-                <xsl:if test="year/text()!=''">&#160;(<xsl:apply-templates select="year" mode="highlight"/>)</xsl:if>
+                <xsl:if test="string-length(publication) > 0"><em><xsl:apply-templates select="publication" mode="highlight"/></em>&#160;</xsl:if>
+                <xsl:if test="string-length(volume) > 0"><xsl:apply-templates select="volume" mode="highlight"/><xsl:if test="string-length(issue) > 0">(<xsl:apply-templates select="issue" mode="highlight"/>)</xsl:if></xsl:if>
+                <xsl:if test="string-length(pages) > 0">:<xsl:apply-templates select="pages" mode="highlight"/></xsl:if>
+                <xsl:if test="string-length(year) > 0">&#160;(<xsl:apply-templates select="year" mode="highlight"/>)</xsl:if>
             </xsl:variable>
             <xsl:choose>
                 <xsl:when test="uri[starts-with(., 'http')]">
@@ -380,7 +380,7 @@
                 <xsl:otherwise>
                     <xsl:copy-of select="$publication_title"/>
                     <xsl:copy-of select="$publication_link_title"/>
-                    <xsl:if test="uri/text()!=''"> (<xsl:apply-templates select="uri" mode="highlight"/>)</xsl:if>
+                    <xsl:if test="string-length(uri) > 0"> (<xsl:apply-templates select="uri" mode="highlight"/>)</xsl:if>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:if test="accession">
@@ -392,18 +392,18 @@
     <xsl:template name="secondaryaccession">
         <xsl:for-each select="secondaryaccession">
             <xsl:choose>
-                <xsl:when test="string-length(text())=0"/>
-                <xsl:when test="substring(text(), 1, 3)='GSE' or substring(text(), 1, 3)='GDS'">
-                    <a href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc={text()}">GEO - <xsl:apply-templates select="." mode="highlight" /></a>
+                <xsl:when test="string-length(.) = 0"/>
+                <xsl:when test="substring(., 1, 3)='GSE' or substring(., 1, 3)='GDS'">
+                    <a href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc={.}">GEO - <xsl:apply-templates select="." mode="highlight" /></a>
                 </xsl:when>
-                <xsl:when test="substring(text(), 1, 2)='E-' and substring(text(), 7, 1)='-'">
-                    <a href="{$basepath}/experiments/{text()}">ArrayExpress - <xsl:apply-templates select="." mode="highlight" /></a>
+                <xsl:when test="substring(., 1, 2)='E-' and substring(., 7, 1)='-'">
+                    <a href="{$basepath}/experiments/{.}">ArrayExpress - <xsl:apply-templates select="." mode="highlight" /></a>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select="." mode="highlight" />
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:if test="position()!=last() and string-length(text()) > 0">, </xsl:if>
+            <xsl:if test="position() != last() and string-length(.) > 0">, </xsl:if>
         </xsl:for-each>
     </xsl:template>
 
@@ -445,7 +445,7 @@
     </xsl:template>
 
     <xsl:template match="*" mode="highlight">
-        <xsl:variable name="vText" select="normalize-space(text())"/>
+        <xsl:variable name="vText" select="normalize-space(.)"/>
         <xsl:choose>
             <xsl:when test="string-length($vText)!=0">
                 <xsl:variable name="markedtext" select="ae:markKeywords($vText,$keywords,$wholewords)"/>

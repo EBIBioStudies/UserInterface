@@ -46,8 +46,8 @@
                 <title>
                     <xsl:text>ArrayExpress Archive - Experiments</xsl:text>
                     <xsl:variable name="vArrayName" select="//arraydesign[id=$array]/name"/>
-                    <xsl:variable name="vQueryDesc" select="ae:describeQuery($keywords,$wholewords,$species,$vArrayName,$exptype,$inatlas)"/>
-                    <xsl:if test="string-length($vQueryDesc)>0">
+                    <xsl:variable name="vQueryDesc" select="ae:describeQuery($keywords, $wholewords, $species, $vArrayName, $exptype, $inatlas)"/>
+                    <xsl:if test="string-length($vQueryDesc) > 0">
                         <xsl:text> </xsl:text><xsl:value-of select="$vQueryDesc"/>
                     </xsl:if>
                     <xsl:if test="$pagesize &lt; $vTotal">
@@ -105,7 +105,7 @@
                     <xsl:value-of select="accession"/>
                     <xsl:text> - </xsl:text>
                     <xsl:choose>
-                        <xsl:when test="string-length(name/text())&gt;0">
+                        <xsl:when test="string-length(name) > 0">
                             <xsl:value-of select="name"/>
                         </xsl:when>
                         <xsl:otherwise>
@@ -122,18 +122,18 @@
                 </guid>
 
                 <description>
-                    <xsl:for-each select="description[contains(text/text(),'Generated description')]">
-                        <xsl:value-of select="substring(text/text(),25)"/>
-                        <xsl:if test="position()!=last()">
+                    <xsl:for-each select="description[contains(text, 'Generated description')]">
+                        <xsl:value-of select="substring(text, 25)"/>
+                        <xsl:if test="position() != last()">
                             <xsl:text>&lt;br/&gt;</xsl:text>
                         </xsl:if>
                     </xsl:for-each>
-                    <xsl:if test="(count(description[contains(text/text(),'Generated description')])&gt;0) and (1 = 1)">
+                    <xsl:if test="(count(description[contains(text, 'Generated description')]) > 0)">
                         <xsl:text>&lt;br/&gt;&lt;br/&gt;</xsl:text>
                     </xsl:if>
-                    <xsl:for-each select="description[text/text()!='' and not(contains(text/text(),'Generated description'))]">
-                        <xsl:copy-of select="text/text()"/>
-                        <xsl:if test="position()!=last()">
+                    <xsl:for-each select="description[string-length(text) > 0 and not(contains(text, 'Generated description'))]">
+                        <xsl:copy-of select="text"/>
+                        <xsl:if test="position() != last()">
                             <xsl:text>&lt;br/&gt;</xsl:text>
                         </xsl:if>
                     </xsl:for-each>

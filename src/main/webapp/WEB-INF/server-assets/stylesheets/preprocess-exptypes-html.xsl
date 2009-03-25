@@ -8,14 +8,14 @@
         version="1.0">
 
     <xsl:output omit-xml-declaration="yes" method="html"/>
-    <xsl:key name="distinct-exptypes" match="experimenttype" use="ae:toLowerCase(text())"/>
+    <xsl:key name="distinct-exptypes" match="experimenttype" use="ae:toLowerCase(.)"/>
 
     <xsl:template match="/experiments">
         <option value="">Any experiment type</option>
-        <xsl:for-each select=".//experimenttype[generate-id(key('distinct-exptypes',ae:toLowerCase(text())))=generate-id()]">
-            <xsl:sort select="ae:toLowerCase(text())"/>
-            <option value="{text()}">
-                <xsl:value-of select="text()"/>
+        <xsl:for-each select=".//experimenttype[generate-id(key('distinct-exptypes', ae:toLowerCase(.)))=generate-id()]">
+            <xsl:sort select="ae:toLowerCase(.)"/>
+            <option value="{.}">
+                <xsl:value-of select="."/>
             </option>
         </xsl:for-each>
     </xsl:template>

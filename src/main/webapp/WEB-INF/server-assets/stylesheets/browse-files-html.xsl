@@ -58,7 +58,7 @@
                                             <xsl:text>Due to the large amount of data there are multiple archive files for download.</xsl:text>
                                         </div>
                                     </xsl:if>
-                                    <xsl:if test="($vExperiment/user/text() = '1') and (count($vExperiment/file[size>2048000000])>0)">
+                                    <xsl:if test="($vExperiment/user = '1') and (count($vExperiment/file[size>2048000000])>0)">
                                         <div>
                                             <xsl:text>Some files are larger that 2 GB, please use </xsl:text>
                                             <a href="ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/experiment/{substring($vAccession, 3, 4)}/{$vAccession}">ArrayExpress FTP</a>

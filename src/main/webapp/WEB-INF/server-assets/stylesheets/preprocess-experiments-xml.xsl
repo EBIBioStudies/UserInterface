@@ -24,6 +24,9 @@
 
     <xsl:template match="experiment">
         <experiment textidx="{position() - 1}">
+            <xsl:variable name="vSamplesFromDescription" select="substring-before(substring-after(description[contains(., '(Generated description)')], 'using '), ' samples')"/>
+            <xsl:variable name="vAssaysFromDescription" select="substring-before( substring-after(description[contains(., '(Generated description)')], 'with '), ' hybridizations')"/>
+
             <xsl:if test="ae:isExperimentInWarehouse(@accession)">
                 <xsl:attribute name="loadedinatlas">true</xsl:attribute>
             </xsl:if>
@@ -37,10 +40,35 @@
                 <species><xsl:value-of select="@value"/></species>
             </xsl:for-each>
             <samples>
-                <xsl:value-of select="substring-before(substring-after(description[contains(., '(Generated description)')], 'using '), ' samples')"/>
+                <xsl:choose>
+                    <xsl:when test="string-length($vSamplesFromDescription) > 0">
+                        <xsl:value-of select="$vSamplesFromDescription"/>
+                    </xsl:when>
+                    <xsl:otherwise>0</xsl:otherwise>
+                </xsl:choose>
             </samples>
             <assays>
-                <xsl:value-of select="substring-before( substring-after(description[contains(., '(Generated description)')], 'with '), ' hybridizations')"/>
+                <xsl:choose>
+                    <xsl:when test="string-length($vAssaysFromDescription) > 0">
+                        <xsl:value-of select="$vAssaysFromDescription"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:choose>
+                            <xsl:when test="bioassaydatagroup[@isderived = '1']">
+                                <xsl:value-of select="sum(bioassaydatagroup[@isderived = '1']/@bioassays)"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:choose>
+                                    <xsl:when test="bioassaydatagroup[@isderived = '0']">
+                                        <xsl:value-of select="sum(bioassaydatagroup[@isderived = '0']/@bioassays)"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>0</xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:otherwise>
+                </xsl:choose>
+                
             </assays>
             <xsl:for-each select="sampleattribute[@category][generate-id() = generate-id(key('experiment-sampleattribute-by-category', concat(ancestor::experiment/@id, @category))[1])]">
                 <xsl:sort select="@category" order="ascending"/>
@@ -68,10 +96,10 @@
 
     <xsl:template match="secondaryaccession" mode="copy">
         <xsl:choose>
-            <xsl:when test="string-length(text()) = 0"/>
-            <xsl:when test="contains(text(), ';GDS')">
+            <xsl:when test="string-length(.) = 0"/>
+            <xsl:when test="contains(., ';GDS')">
                 <xsl:call-template name="split-string-to-elements">
-                    <xsl:with-param name="str" select="text()"/>
+                    <xsl:with-param name="str" select="."/>
                     <xsl:with-param name="separator" select="';'"/>
                     <xsl:with-param name="element" select="'secondaryaccession'"/>
                 </xsl:call-template>
@@ -82,7 +110,7 @@
 
     <xsl:template match="experimentdesign" mode="copy">
         <xsl:call-template name="split-string-to-elements">
-            <xsl:with-param name="str" select="text()"/>
+            <xsl:with-param name="str" select="."/>
             <xsl:with-param name="separator" select="','"/>
             <xsl:with-param name="element" select="'experimentdesign'"/>
         </xsl:call-template>
@@ -90,7 +118,7 @@
     
     <xsl:template match="experimenttype" mode="copy">
         <xsl:call-template name="split-string-to-elements">
-            <xsl:with-param name="str" select="text()"/>
+            <xsl:with-param name="str" select="."/>
             <xsl:with-param name="separator" select="','"/>
             <xsl:with-param name="element" select="'experimenttype'"/>
         </xsl:call-template>
@@ -108,27 +136,28 @@
             </overallscore>
         </miamescores>
     </xsl:template>
-<!-- TODO
+
     <xsl:template match="bibliography" mode="copy">
         <xsl:copy>
             <xsl:for-each select="@*">
                 <xsl:variable name="vAttrName" select="ae:toLowerCase(name())"/>
+                <xsl:variable name="vAttrValue" select="."/>
                 <xsl:choose>
-                    <xsl:when test="$vAttrName = 'pages' and (text() = '' or text = '-')"/>
+                    <xsl:when test="$vAttrName = 'pages' and ($vAttrValue = '' or $vAttrValue = '-')"/>
                     <xsl:otherwise>
                         <xsl:element name="{$vAttrName}">
-                            <xsl:value-of select="." />
+                            <xsl:value-of select="$vAttrValue" />
                         </xsl:element>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:for-each>
         </xsl:copy>
     </xsl:template>
--->
+
     <xsl:template match="description" mode="copy">
         <description>
             <id><xsl:value-of select="@id"/></id>
-            <text><xsl:value-of select="text()"/></text>
+            <text><xsl:value-of select="."/></text>
         </description>
     </xsl:template>
 
