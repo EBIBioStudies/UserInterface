@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.AESaxonExtension"
+                xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
+                xmlns:aeext="java:/uk.ac.ebi.arrayexpress.utils.saxon.ExtElements"  
                 xmlns:html="http://www.w3.org/1999/xhtml"
-                extension-element-prefixes="ae html"
-                exclude-result-prefixes="ae html"
+                extension-element-prefixes="ae aeext html"
+                exclude-result-prefixes="ae aeext html"
                 version="1.0">
 
     <xsl:param name="page">1</xsl:param>
@@ -36,10 +37,10 @@
     <xsl:variable name="vDetailedViewMainTdClass">td_main<xsl:if test="'true'=$detailedview"> td_expanded</xsl:if></xsl:variable>
 
     <xsl:template match="/experiments">
-        <!-- TODO
-        <xsl:value-of select="[browse-experiments-html] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
-        <xsl:value-of select="[browse-experiments-html] Sort by: [{$sortby}], [{$sortorder}]"/>
-        -->
+
+        <aeext:log message="[browse-experiments-html] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
+        <aeext:log message="[browse-experiments-html] Sort by: [{$sortby}], [{$sortorder}]"/>
+
         <xsl:variable name="vFilteredExperiments" select="experiment[ae:testExperiment($userid, $keywords, $wholewords, $species, $array, $exptype, $inatlas)]"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
         <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments[samples/text()>0]/samples/text())"/>
@@ -59,8 +60,8 @@
             </xsl:choose>
         </xsl:variable>
 
-        <!-- TODO
-        <xsl:value-of select="[browse-experiments-html] Query filtered {$vTotal} experiments. Will output from {$vFrom} to {$vTo}."/> -->
+
+        <aeext:log message="[browse-experiments-html] Query filtered {$vTotal} experiments. Will output from {$vFrom} to {$vTo}."/>
 
         <tr id="ae_results_summary_info">
             <td colspan="9">

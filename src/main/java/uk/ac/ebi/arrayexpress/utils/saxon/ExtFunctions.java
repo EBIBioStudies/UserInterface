@@ -1,4 +1,4 @@
-package uk.ac.ebi.arrayexpress.utils;
+package uk.ac.ebi.arrayexpress.utils.saxon;
 
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.om.NodeInfo;
@@ -8,6 +8,7 @@ import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.components.DownloadableFilesRegistry;
 import uk.ac.ebi.arrayexpress.components.Experiments;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
+import uk.ac.ebi.arrayexpress.utils.RegExpHelper;
 import uk.ac.ebi.arrayexpress.utils.files.FtpFileEntry;
 import uk.ac.ebi.arrayexpress.utils.search.ExperimentSearch;
 
@@ -15,10 +16,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class AESaxonExtension
+public class ExtFunctions
 {
     // logging machinery
-    private static final Log log = LogFactory.getLog(AESaxonExtension.class);
+    private static final Log log = LogFactory.getLog(ExtFunctions.class);
     // Accession RegExp filter
     private static final RegExpHelper accessionRegExp = new RegExpHelper("^E-\\w{4}-\\d+$", "i");
 
@@ -277,23 +278,4 @@ public class AESaxonExtension
 
         return result;
     }
-/* TODO
-    public static void logInfo( XSLProcessorContext c, ElemExtensionCall extElt )
-    {
-        try {
-            log.info(extElt.getAttribute("select", c.getContextNode(), c.getTransformer()));
-        } catch ( TransformerException e ) {
-            log.debug("Caught an exception:", e);
-        }
-    }
-
-    public static void logDebug( XSLProcessorContext c, ElemExtensionCall extElt )
-    {
-        try {
-            log.debug(extElt.getAttribute("select", c.getContextNode(), c.getTransformer()));
-        } catch ( TransformerException e ) {
-            log.debug("Caught an exception:", e);
-        }
-    }
-*/
 }

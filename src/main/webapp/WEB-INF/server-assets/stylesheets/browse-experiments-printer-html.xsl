@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.AESaxonExtension"
+                xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
+                xmlns:aeext="java:/uk.ac.ebi.arrayexpress.utils.saxon.ExtElements"
                 xmlns:html="http://www.w3.org/1999/xhtml"
-                extension-element-prefixes="ae html"
-                exclude-result-prefixes="ae html"
+                extension-element-prefixes="ae aeext html"
+                exclude-result-prefixes="ae aeext html"
                 version="1.0">
 
     <xsl:param name="sortby">releasedate</xsl:param>
@@ -53,19 +54,16 @@
     </xsl:template>
 
     <xsl:template name="ae-contents">
-        <!-- TODO
-        <helper:logInfo select="[browse-experiments-printer-html] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
-        <helper:logInfo select="[browse-experiments-printer-html] Sort by: [{$sortby}], [{$sortorder}]"/>
-        -->
+
+        <aeext:log message="[browse-experiments-printer-html] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
+        <aeext:log message="[browse-experiments-printer-html] Sort by: [{$sortby}], [{$sortorder}]"/>
 
         <xsl:variable name="vFilteredExperiments" select="experiment[ae:testExperiment($userid, $keywords, $wholewords, $species, $array, $exptype, $inatlas)]"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
         <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments[samples/text()>0]/samples/text())"/>
         <xsl:variable name="vTotalAssays" select="sum($vFilteredExperiments[assays/text()>0]/assays/text())"/>
 
-        <!-- TODO
-        <helper:logInfo select="[browse-experiments-printer-html] Query filtered {$vTotal} experiments."/>
-        -->
+        <aeext:log message="[browse-experiments-printer-html] Query filtered {$vTotal} experiments."/>
 
         <div class="ae_left_container_100pc assign_font">
             <div id="ae_header"><img src="assets/images/ae_header.gif" alt="ArrayExpress"/></div>

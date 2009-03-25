@@ -2,7 +2,7 @@
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.AESaxonExtension"
+    xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
     extension-element-prefixes="ae html"
     exclude-result-prefixes="ae html"
     version="1.0">

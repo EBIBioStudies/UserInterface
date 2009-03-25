@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.AESaxonExtension"
+                xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
+                xmlns:aeext="java:/uk.ac.ebi.arrayexpress.utils.saxon.ExtElements"
                 xmlns:html="http://www.w3.org/1999/xhtml"
-                extension-element-prefixes="ae html"
-                exclude-result-prefixes="ae html"
+                extension-element-prefixes="ae aeext html"
+                exclude-result-prefixes="ae aeext html"
                 version="1.0">
 
     <xsl:param name="accession"/>
@@ -36,9 +37,8 @@
     </xsl:template>
 
     <xsl:template name="ae-contents">
-        <!-- TODO
-        <helper:logInfo select="[browse-files-html] Parameters: accession [{$vAccession}], kind [{$kind}], userid [{$userid}]"/>
-        -->
+
+        <aeext:log message="[browse-files-html] Parameters: accession [{$vAccession}], kind [{$kind}], userid [{$userid}]"/>
 
         <xsl:variable name="vExperiment" select="experiment[accession=$vAccession]"/>
         <div class="ae_left_container_100pc assign_font">
