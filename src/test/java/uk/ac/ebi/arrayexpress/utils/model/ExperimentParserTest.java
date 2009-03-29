@@ -57,10 +57,10 @@ public class ExperimentParserTest
     {
         ExperimentParser parser = new ExperimentParser();
         ExperimentBean experiment = parser.parse(EXPERIMENT_TEST_XML);
-        assertEquals("192008314", experiment.getId());
-        assertEquals("E-MEXP-31", experiment.getAccession());
-        assertEquals("Transcription profiling of mammalian male germ cells undergoing mitotic growth, meiosis and gametogenesis in highly enriched cell populations", experiment.getName());
-        assertEquals("2004-11-25", experiment.getReleaseDate());
+        assertEquals("1711258082", experiment.getId());
+        assertEquals("E-GEOD-9914", experiment.getAccession());
+        assertEquals("Transcription profiling of mouse knock in mutant model for spinocerebellar ataxia type 1 and type 7 - symptomatic Sca1154Q/2Q and Sca7266Q/5Q cerebellum", experiment.getName());
+        assertEquals("2009-01-08", experiment.getReleaseDate());
         assertEquals(null, experiment.getMiameGold());
     }
 }
