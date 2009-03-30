@@ -5,8 +5,8 @@ import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.core.CoreContainer;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.model.ExperimentBean;
 
@@ -47,7 +47,9 @@ public class SearchEngine extends ApplicationComponent
 
     public void terminate()
     {
-        cores.shutdown();
+        if (null != cores) {
+            cores.shutdown();
+        }
     }
 
     public void addToIndex(ExperimentBean experiment)
