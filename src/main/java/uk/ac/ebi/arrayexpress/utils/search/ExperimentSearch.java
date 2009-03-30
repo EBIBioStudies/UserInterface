@@ -3,8 +3,8 @@ package uk.ac.ebi.arrayexpress.utils.search;
 import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmValue;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 import uk.ac.ebi.arrayexpress.utils.RegExpHelper;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class ExperimentSearch
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     // array of ExperimentText objects in the same order they exist in the document
     private List<ExperimentText> expText = new ArrayList<ExperimentText>();
@@ -49,7 +49,7 @@ public class ExperimentSearch
                     }
                 }
             } catch ( Throwable x ) {
-                log.error("Caught an exception:", x);
+                logger.error("Caught an exception:", x);
             }
         }
     }

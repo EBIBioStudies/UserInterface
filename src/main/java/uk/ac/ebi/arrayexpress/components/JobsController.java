@@ -1,7 +1,5 @@
 package uk.ac.ebi.arrayexpress.components;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;

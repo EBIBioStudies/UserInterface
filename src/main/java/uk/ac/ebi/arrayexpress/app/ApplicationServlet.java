@@ -1,7 +1,7 @@
 package uk.ac.ebi.arrayexpress.app;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ApplicationServlet extends HttpServlet
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public Application getApplication()
     {
@@ -28,11 +28,8 @@ public class ApplicationServlet extends HttpServlet
 
     protected void logRequest(HttpServletRequest request)
     {
-        log.info(
-                new StringBuilder("Processing request: ")
-                        .append(request.getRequestURL())
-                        .append(null != request.getQueryString() ? "?" + request.getQueryString() : "")
-                        .toString()
-        );
+        logger.info("Processing request: {}{}",
+            request.getRequestURL()
+            , null != request.getQueryString() ? "?" + request.getQueryString() : "");
     }
 }

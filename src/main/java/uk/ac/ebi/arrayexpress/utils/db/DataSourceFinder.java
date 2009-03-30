@@ -1,7 +1,7 @@
 package uk.ac.ebi.arrayexpress.utils.db;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -12,7 +12,7 @@ import java.sql.Connection;
 public class DataSourceFinder
 {
     // logging facility
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public DataSource findDataSource( String dsNames )
     {
@@ -20,13 +20,13 @@ public class DataSourceFinder
         if (null != dsNames) {
             String[] dsList = dsNames.trim().split("\\s*,\\s*");
             for ( String dsName : dsList ) {
-                log.info("Checking data source [" + dsName + "]");
+                logger.info("Checking data source [{}]", dsName);
                 result = getDataSource(dsName);
                 if (isDataSourceAvailable(result)) {
-                    log.info("Will use available data source [" + dsName + "]");
+                    logger.info("Will use available data source [{}]", dsName);
                     break;
                 } else {
-                    log.warn("Data source [" + dsName + "] is unavailable");
+                    logger.warn("Data source [{}] is unavailable", dsName);
                     result = null;
                 }
             }
@@ -37,16 +37,16 @@ public class DataSourceFinder
     private DataSource getDataSource( String dsName )
     {
         DataSource ds = null;
-        log.info("Looking up data source [" + dsName + "]");
+        logger.info("Looking up data source [{}]", dsName);
         try {
             Context initContext = new InitialContext();
             Context envContext = (Context) initContext.lookup("java:/comp/env");
 
             ds = (DataSource) envContext.lookup("jdbc/" + dsName.toLowerCase());
         } catch ( NameNotFoundException x ) {
-            log.error("Data source [" + dsName + "] is not regsitered with application, check your context.xml");
+            logger.error("Data source [{}] is not regsitered with application, check your context.xml", dsName);
         } catch ( Throwable x ) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
 
         return ds;
@@ -63,13 +63,13 @@ public class DataSourceFinder
                 conn = null;
                 result = true;
             } catch ( Throwable x ) {
-                log.debug("Caught an exception [" + x.getMessage() + "]");
+                logger.debug("Caught an exception [{}]", x.getMessage());
             } finally {
                 if (null != conn) {
                     try {
                         conn.close();
                     } catch ( Throwable x ) {
-                        log.error("Caught an exception:", x);
+                        logger.error("Caught an exception:", x);
                     }
                 }
             }

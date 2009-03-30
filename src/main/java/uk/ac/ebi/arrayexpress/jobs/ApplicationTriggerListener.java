@@ -1,16 +1,16 @@
 package uk.ac.ebi.arrayexpress.jobs;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.quartz.JobExecutionContext;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ApplicationTriggerListener implements TriggerListener
 {
    // logging facitlity
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private String runningJob = "";
 
@@ -31,7 +31,7 @@ public class ApplicationTriggerListener implements TriggerListener
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException x) {
-                    log.debug("Job has been interrupted while waiting", x);
+                    logger.debug("Job has been interrupted while waiting", x);
                     return true;
                 }
             }
@@ -41,7 +41,7 @@ public class ApplicationTriggerListener implements TriggerListener
         try {
             isShuttingDown = context.getScheduler().isInStandbyMode();
         } catch (SchedulerException x) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
         
         return isShuttingDown;

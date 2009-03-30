@@ -1,14 +1,14 @@
 package uk.ac.ebi.arrayexpress.app;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
 public class ApplicationPreferences extends ApplicationComponent
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private String propertiesFileName;
     private Properties properties;
@@ -45,9 +45,9 @@ public class ApplicationPreferences extends ApplicationComponent
             if (null != strVal)
                 value = Long.valueOf(strVal);
         } catch ( NumberFormatException x ) {
-            log.error("Value [" + strVal + "] of preference [" + key + "] is expected to be a number");
+            logger.error("Value [{}] of preference [{}] is expected to be a number", strVal, key);
         } catch ( Throwable x ) {
-            log.error("Caught an exception while converting value [" + properties.getProperty(key) + "] of preference [" + key + "] to Long:", x);
+            logger.error("Caught an exception while converting value [" + properties.getProperty(key) + "] of preference [" + key + "] to Long:", x);
         }
 
         return value;
@@ -68,7 +68,7 @@ public class ApplicationPreferences extends ApplicationComponent
                     ).openStream()
             );
         } catch ( Throwable e ) {
-            log.error("Caught an exception:", e);
+            logger.error("Caught an exception:", e);
         }
     }
 }

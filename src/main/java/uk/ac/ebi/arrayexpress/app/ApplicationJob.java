@@ -1,13 +1,13 @@
 package uk.ac.ebi.arrayexpress.app;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.quartz.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 abstract public class ApplicationJob implements InterruptableJob, StatefulJob
 {
     // logging facitlity
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     // worker thread object
     private Thread myThread;
 
@@ -17,7 +17,7 @@ abstract public class ApplicationJob implements InterruptableJob, StatefulJob
         try {
             execute();
         } catch ( InterruptedException x ) {
-            log.debug("Job [" + jec.getJobDetail().getFullName() + "] was interrupted");
+            logger.debug("Job [{}] was interrupted", jec.getJobDetail().getFullName());
         }
         myThread = null;
     }
@@ -26,7 +26,7 @@ abstract public class ApplicationJob implements InterruptableJob, StatefulJob
 
     public void interrupt() throws UnableToInterruptJobException
     {
-        log.debug("Attempting to interrupt job");
+        logger.debug("Attempting to interrupt job");
         if (null != myThread)
             myThread.interrupt();
     }

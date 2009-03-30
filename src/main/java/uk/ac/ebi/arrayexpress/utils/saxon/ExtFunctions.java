@@ -2,8 +2,8 @@ package uk.ac.ebi.arrayexpress.utils.saxon;
 
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.om.NodeInfo;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.components.DownloadableFilesRegistry;
 import uk.ac.ebi.arrayexpress.components.Experiments;
@@ -19,7 +19,7 @@ import java.util.List;
 public class ExtFunctions
 {
     // logging machinery
-    private static final Log log = LogFactory.getLog(ExtFunctions.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExtFunctions.class);
     // Accession RegExp filter
     private static final RegExpHelper accessionRegExp = new RegExpHelper("^E-\\w{4}-\\d+$", "i");
 
@@ -124,7 +124,7 @@ public class ExtFunctions
                 Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
                 dateString = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(date);
             } catch ( Throwable x ) {
-                log.debug("Caught an exception:", x);
+                logger.debug("Caught an exception:", x);
             }
         } else {
             dateString = "";
@@ -171,10 +171,10 @@ public class ExtFunctions
                 return ((SaxonEngine)Application.getAppComponent("SaxonEngine")).buildDocument(sb.toString()).getUnderlyingNode();
             }
         } catch (InterruptedException x) {
-            log.warn("Method interrupted");
+            logger.warn("Method interrupted");
             throw x;
         } catch ( Throwable x ) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
         return null;
     }
@@ -186,7 +186,7 @@ public class ExtFunctions
         try {
             return new RegExpHelper(pattern, flags).test(input);
         } catch ( Throwable t ) {
-            log.debug("Caught an exception:", t);
+            logger.debug("Caught an exception:", t);
         }
 
         return result;
@@ -233,7 +233,7 @@ public class ExtFunctions
 
             return  experimentType.equals("") || search.matchExperimentType(textIdx, experimentType);
         } catch ( Throwable x ) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
         return true;
     }
@@ -273,7 +273,7 @@ public class ExtFunctions
                 result = newResult;
             }
         } catch ( Throwable x ) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
 
         return result;

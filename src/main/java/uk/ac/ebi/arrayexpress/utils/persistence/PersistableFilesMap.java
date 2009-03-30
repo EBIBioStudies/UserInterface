@@ -1,7 +1,5 @@
 package uk.ac.ebi.arrayexpress.utils.persistence;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import uk.ac.ebi.arrayexpress.utils.files.FtpFileEntry;
 import uk.ac.ebi.arrayexpress.utils.files.FtpFilesMap;
 

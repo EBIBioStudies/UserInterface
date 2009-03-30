@@ -1,8 +1,6 @@
 package uk.ac.ebi.arrayexpress.utils.search;
 
 import net.sf.saxon.s9api.XdmNode;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 
@@ -13,9 +11,6 @@ import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 
 public class ExperimentText
 {
-    // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
-
     // all text, concatenated
     public String text;
 

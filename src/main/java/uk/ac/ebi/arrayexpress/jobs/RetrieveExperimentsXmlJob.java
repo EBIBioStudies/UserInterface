@@ -1,8 +1,8 @@
 package uk.ac.ebi.arrayexpress.jobs;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.quartz.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.utils.db.ExperimentXmlDatabaseRetriever;
 
 import javax.sql.DataSource;
@@ -11,7 +11,7 @@ import java.util.List;
 public class RetrieveExperimentsXmlJob implements InterruptableJob
 {
     // logging facitlity
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     // worker thread object
     private Thread myThread;
 
@@ -29,14 +29,14 @@ public class RetrieveExperimentsXmlJob implements InterruptableJob
                             exps).getExperimentXml()
             );
         } catch ( InterruptedException x ) {
-            log.debug("Job [" + jec.getJobDetail().getFullName() + "] was interrupted");
+            logger.debug("Job [{}] was interrupted", jec.getJobDetail().getFullName());
         }
         myThread = null;
     }
 
     public void interrupt() throws UnableToInterruptJobException
     {
-        log.debug("Attempting to interrupt job");
+        logger.debug("Attempting to interrupt job");
         if (null != myThread)
             myThread.interrupt();
     }

@@ -1,7 +1,7 @@
 package uk.ac.ebi.arrayexpress.utils.db;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.io.BufferedReader;
@@ -15,7 +15,7 @@ import java.util.List;
 public class ExperimentXmlDatabaseRetriever extends SqlStatementExecutor
 {
     // logging facility
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     // sql code
     private final static String getExperimentXmlSql = "select XmlElement( \"experiment\"" +
             " , XmlAttributes( e.id as \"id\", i.identifier as \"accession\", nvt_name.value as \"name\", nvt_releasedate.value as \"releasedate\", nvt_miamegold.value as \"miamegold\" )" +
@@ -63,7 +63,7 @@ public class ExperimentXmlDatabaseRetriever extends SqlStatementExecutor
 
     public String getExperimentXml() throws InterruptedException
     {
-        log.debug("Retrieving experiment data for [" + experimentList.size() + "] experiments");
+        logger.debug("Retrieving experiment data for [{}] experiments", experimentList.size());
         try {
             for ( Object exp : experimentList ) {
                 experimentId = (Long) exp;
@@ -73,9 +73,9 @@ public class ExperimentXmlDatabaseRetriever extends SqlStatementExecutor
                 }
                 Thread.sleep(1);
             }
-            log.debug("Retrieval completed");
+            logger.debug("Retrieval completed");
         } catch ( InterruptedException x ) {
-            log.debug("Retrieval aborted");
+            logger.debug("Retrieval aborted");
         } finally {
             closeConnection();
         }
@@ -108,7 +108,7 @@ public class ExperimentXmlDatabaseRetriever extends SqlStatementExecutor
             while ( (aux = br.readLine()) != null )
                 strOut.append(aux);
         } catch ( IOException x ) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
             strOut = new StringBuilder();
         }
 

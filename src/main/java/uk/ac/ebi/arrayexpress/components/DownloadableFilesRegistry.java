@@ -1,7 +1,7 @@
 package uk.ac.ebi.arrayexpress.components;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.utils.files.FtpFileEntry;
 import uk.ac.ebi.arrayexpress.utils.files.FtpFilesMap;
@@ -14,7 +14,7 @@ import java.util.List;
 public class DownloadableFilesRegistry extends ApplicationComponent
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     // rootFolder folder location (in local file system terms)
     private String rootFolder;
     // filename->location map
@@ -49,7 +49,7 @@ public class DownloadableFilesRegistry extends ApplicationComponent
                 rootFolder = folder + File.separator;
             }
         } else {
-            log.error("setRootFolder called with null or empty parameter, expect probilems down the road");
+            logger.error("setRootFolder called with null or empty parameter, expect probilems down the road");
         }
     }
 
@@ -67,9 +67,9 @@ public class DownloadableFilesRegistry extends ApplicationComponent
         if (null != getRootFolder()) {
             File root = new File(getRootFolder());
             if (!root.exists()) {
-                log.error("Rescan problem: root folder [" + getRootFolder() + "] is inaccessible");
+                logger.error("Rescan problem: root folder [{}] is inaccessible", getRootFolder());
             } else if (!root.isDirectory()) {
-                log.error("Rescan problem: root folder [" + getRootFolder() + "] is not a directory");
+                logger.error("Rescan problem: root folder [{}] is not a directory", getRootFolder());
             } else {
                 try {
                     log.info("Rescan of downloadable files from [" + getRootFolder() + "] requested");

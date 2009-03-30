@@ -1,7 +1,7 @@
 package uk.ac.ebi.arrayexpress.jobs;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationJob;
 import uk.ac.ebi.arrayexpress.components.Experiments;
@@ -14,7 +14,7 @@ import java.util.List;
 public class RetrieveExperimentsListFromWarehouseJob  extends ApplicationJob
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public void execute() throws InterruptedException
     {
@@ -23,18 +23,18 @@ public class RetrieveExperimentsListFromWarehouseJob  extends ApplicationJob
 
         Application app = Application.getInstance();
         String dsNames = app.getPreferences().getString("ae.warehouseexperiments.datasources");
-        log.info("Reload of warehouse experiment data from [" + dsNames + "] requested");
+        logger.info("Reload of warehouse experiment data from [{}] requested", dsNames);
 
         ds = new DataSourceFinder().findDataSource(dsNames);
         if (null != ds) {
             exps = new ExperimentListInWarehouseDatabaseRetriever(ds).getExperimentList();
             Thread.sleep(1);
 
-            log.info("Got [" + String.valueOf(exps.size()) + "] experiments listed in the warehouse");
+            logger.info("Got [{}] experiments listed in the warehouse", exps.size());
             ((Experiments) app.getComponent("Experiments")).setExperimentsInWarehouse(exps);
-            log.info("Reload of warehouse experiment data completed");
+            logger.info("Reload of warehouse experiment data completed");
         } else {
-            log.warn("No data sources available, reload aborted");
+            logger.warn("No data sources available, reload aborted");
         }
     }
 }

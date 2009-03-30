@@ -1,7 +1,7 @@
 package uk.ac.ebi.arrayexpress.utils.users;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.utils.CookieCustomBase64Encoder;
 
 import java.security.MessageDigest;
@@ -9,7 +9,7 @@ import java.security.MessageDigest;
 public class UserRecord
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private Long     id;
     private String   name;
@@ -49,7 +49,7 @@ public class UserRecord
             byte[] hashBytes = digest.digest(password.concat(suffix).getBytes());
             hash = new String(CookieCustomBase64Encoder.encode(hashBytes));
         } catch ( Throwable x ) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
         return hash;
     }

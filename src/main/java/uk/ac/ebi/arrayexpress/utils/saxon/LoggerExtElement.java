@@ -8,8 +8,8 @@ import net.sf.saxon.instruct.Executable;
 import net.sf.saxon.om.Item;
 import net.sf.saxon.style.ExtensionInstruction;
 import net.sf.saxon.trans.XPathException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LoggerExtElement extends ExtensionInstruction
 {
@@ -47,7 +47,7 @@ public class LoggerExtElement extends ExtensionInstruction
     private static class LogInstruction extends SimpleExpression
     {
         // logging machinery
-        private final Log log = LogFactory.getLog(getClass());
+        private final Logger logger = LoggerFactory.getLogger(getClass());
 
         public LogInstruction(Expression expression) {
             Expression[] sub = {expression};
@@ -72,7 +72,7 @@ public class LoggerExtElement extends ExtensionInstruction
 
         public void process( XPathContext context) throws XPathException {
             Item item = this.arguments[0].evaluateItem(context);
-            log.info(item.getStringValue());
+            logger.info(item.getStringValue());
         }
     }
 }

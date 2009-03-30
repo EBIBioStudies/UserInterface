@@ -1,13 +1,7 @@
 package uk.ac.ebi.arrayexpress.app;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 abstract public class ApplicationComponent
 {
-    // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
-
     private String componentName;
 
     public ApplicationComponent( String name )

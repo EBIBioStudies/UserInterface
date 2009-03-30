@@ -1,7 +1,7 @@
 package uk.ac.ebi.arrayexpress.servlets;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationServlet;
 import uk.ac.ebi.arrayexpress.components.DownloadableFilesRegistry;
 import uk.ac.ebi.arrayexpress.components.Experiments;
@@ -22,7 +22,7 @@ import java.io.IOException;
 public class DownloadServlet extends ApplicationServlet
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     // buffer size
     private final int TRANSFER_BUFFER_SIZE = 8 * 1024 * 1024;

@@ -1,8 +1,5 @@
 package uk.ac.ebi.arrayexpress.utils.persistence;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.io.*;
 
 public class TextFilePersistence<Object extends Persistable>

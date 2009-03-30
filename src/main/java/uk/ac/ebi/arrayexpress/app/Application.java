@@ -1,23 +1,19 @@
 package uk.ac.ebi.arrayexpress.app;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Application implements ServletContextListener
+public abstract class Application
 {
     // logging machinery
-    private static final Log log = LogFactory.getLog(Application.class);
+    private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
     private String name;
-    private ServletContext servletContext;
     private Map<String, ApplicationComponent> components;
 
     public Application( String appName )
@@ -35,15 +31,12 @@ public class Application implements ServletContextListener
         return name;
     }
 
-    public URL getResource(String path) throws MalformedURLException
-    {
-        return null != servletContext ? servletContext.getResource(path) : null;
-    }
+    public abstract URL getResource(String path) throws MalformedURLException;
 
     public void addComponent( ApplicationComponent component )
     {
         if (components.containsKey(component.getName())) {
-            log.error("The component [" + component.getName() + "] has already been added to the application");
+            logger.error("The component [{}] has already been added to the application", component.getName());
         } else {
             components.put(component.getName(), component);
         }
@@ -62,62 +55,45 @@ public class Application implements ServletContextListener
         return (ApplicationPreferences) getComponent("Preferences");
     }
 
-    public synchronized void contextInitialized( ServletContextEvent sce )
+    public void initialize()
     {
-        servletContext = sce.getServletContext();
-        log.info("****************************************************************************************************************************");
-        log.info("*");
-        log.info("*  " + servletContext.getServletContextName());
-        log.info("*");
-        log.info("****************************************************************************************************************************");
-
-        initialize();
-    }
-
-    public synchronized void contextDestroyed( ServletContextEvent sce )
-    {
-        terminate();
-        appInstance = null;
-        servletContext = null;
-        log.info("****************************************************************************************************************************\n\n");
-    }
-
-    private void initialize()
-    {
-        log.debug("Initializing the application...");
+        logger.debug("Initializing the application...");
         for ( ApplicationComponent c : components.values() ) {
-            log.info("Initializing component [" + c.getName() + "]");
+            logger.info("Initializing component [{}]", c.getName());
             try {
                 c.initialize();
             } catch ( Throwable x ) {
-                log.error("Caught an exception while initializing[" + c.getName() + "]:", x);
+                logger.error("Caught an exception while initializing [" + c.getName() + "]:", x);
             }
         }
     }
 
-    private void terminate()
+    public void terminate()
     {
-        log.debug("Terminating the application...");
+        logger.debug("Terminating the application...");
         ApplicationComponent[] compArray = components.values().toArray(new ApplicationComponent[components.size()]);
 
         for ( int i = compArray.length - 1; i >= 0; --i ) {
             ApplicationComponent c = compArray[i];
-            log.info("Terminating component [" + c.getName() + "]");
+            logger.info("Terminating component [{}]", c.getName());
             try {
                 c.terminate();
             } catch ( Throwable x ) {
-                log.error("Caught an exception while terminating [" + c.getName() + "]:", x);
+                logger.error("Caught an exception while terminating [" + c.getName() + "]:", x);
             }
         }
         // release references to application components
         components.clear();
         components = null;
+
+        // remove reference to self
+        appInstance = null;
     }
 
     public static Application getInstance()
     {
         if (null == appInstance) {
-            log.error("Attempted to obtain application instance before initialization or after destruction");
+            logger.error("Attempted to obtain application instance before initialization or after destruction");
         }
         return appInstance;
     }
