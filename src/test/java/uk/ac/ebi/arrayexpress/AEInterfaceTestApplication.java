@@ -1,7 +1,5 @@
 package uk.ac.ebi.arrayexpress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.components.*;
 
@@ -10,9 +8,6 @@ import java.net.URL;
 
 public class AEInterfaceTestApplication extends Application
 {
-    // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
-
     public AEInterfaceTestApplication()
     {
         super("arrayexpress");

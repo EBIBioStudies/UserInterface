@@ -3,12 +3,14 @@ package uk.ac.ebi.arrayexpress.utils.persistence;
 import net.sf.saxon.s9api.XdmNode;
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: CHECK VERSION
 public class PersistableDocumentContainer implements Persistable
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     // document storage
     private XdmNode document;
@@ -61,7 +63,7 @@ public class PersistableDocumentContainer implements Persistable
         document = ((SaxonEngine)Application.getAppComponent("SaxonEngine")).buildDocument("<?xml version=\"1.0\"?><experiments total=\"0\"></experiments>");
 
         if (null == document) {
-            log.error("The document WAS NOT created, expect problems down the road");
+            logger.error("The document WAS NOT created, expect problems down the road");
         }
 
     }

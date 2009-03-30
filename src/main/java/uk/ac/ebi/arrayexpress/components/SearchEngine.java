@@ -5,6 +5,8 @@ import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.core.CoreContainer;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.model.ExperimentBean;
 
@@ -14,7 +16,7 @@ import java.util.List;
 public class SearchEngine extends ApplicationComponent
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private CoreContainer cores;
     private SolrServer server;
@@ -39,7 +41,7 @@ public class SearchEngine extends ApplicationComponent
             server = new EmbeddedSolrServer(cores, "experiments");
 
         } catch (Throwable x) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
     }
 
@@ -55,13 +57,14 @@ public class SearchEngine extends ApplicationComponent
             // not sure if we need it here?
             server.commit();
         } catch (Throwable x) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
     }
 
     public void queryIndex(String queryString)
     {
         SolrQuery query = new SolrQuery();
+        query.setQuery(queryString);
         query.addHighlightField("name");
 
         try {
@@ -69,11 +72,11 @@ public class SearchEngine extends ApplicationComponent
             List<ExperimentBean> experiments = rsp.getBeans(ExperimentBean.class);
 
             for (ExperimentBean experiment : experiments) {
-                log.info(experiment.getAccession());
+                logger.info(experiment.getAccession());
             }
 
         } catch (Throwable x) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
     }
 }

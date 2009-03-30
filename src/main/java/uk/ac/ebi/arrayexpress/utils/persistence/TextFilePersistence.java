@@ -1,11 +1,14 @@
 package uk.ac.ebi.arrayexpress.utils.persistence;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+
 import java.io.*;
 
 public class TextFilePersistence<Object extends Persistable>
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     // persistence file handle
     private File persistenceFile;
@@ -43,7 +46,7 @@ public class TextFilePersistence<Object extends Persistable>
 
     private String load()
     {
-        log.debug("Retrieving persistable object [" + object.getClass().toString() + "] from [" + persistenceFile.getName() + "]");
+        logger.debug("Retrieving persistable object [{}] from [{}]", object.getClass().toString(), persistenceFile.getName());
 
         StringBuilder result = new StringBuilder();
         try {
@@ -58,27 +61,27 @@ public class TextFilePersistence<Object extends Persistable>
                         break;
                     }
                 }
-                log.debug("Object successfully retrieved");
+                logger.debug("Object successfully retrieved");
             } else {
-                log.warn("Persistence file [" + persistenceFile.getAbsolutePath() + "] not found");
+                logger.warn("Persistence file [{}] not found", persistenceFile.getAbsolutePath());
             }
         } catch ( Throwable x ) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
         return result.toString();
     }
 
     private void save( String objectString )
     {
-        log.debug("Saving persistable object [" + object.getClass().toString() + "] to [" + persistenceFile.getName() + "]");
+        logger.debug("Saving persistable object [{}] to [{}]", object.getClass().toString(), persistenceFile.getName());
         try {
             BufferedWriter w = new BufferedWriter(new FileWriter(persistenceFile));
             w.write(objectString);
             w.close();
-            log.debug("Object successfully saved");
+            logger.debug("Object successfully saved");
 
         } catch ( Throwable x ) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
     }
 }

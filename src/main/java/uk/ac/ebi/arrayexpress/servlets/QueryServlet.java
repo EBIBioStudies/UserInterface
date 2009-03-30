@@ -17,10 +17,13 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class QueryServlet extends ApplicationServlet
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     // Respond to HTTP GET requests from browsers.
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
@@ -93,7 +96,7 @@ public class QueryServlet extends ApplicationServlet
                 if (users.verifyLogin(user, passwordHash, request.getRemoteAddr().concat(request.getHeader("User-Agent")))) {
                     params.put("userid", String.valueOf(users.getUserRecord(user).getId()));
                 } else {
-                    log.warn("Removing invalid session cookie for user [" + user + "]");
+                    logger.warn("Removing invalid session cookie for user [{}]", user);
                     // resetting cookies
                     Cookie userCookie = new Cookie("AeLoggedUser", "");
                     userCookie.setPath("/");

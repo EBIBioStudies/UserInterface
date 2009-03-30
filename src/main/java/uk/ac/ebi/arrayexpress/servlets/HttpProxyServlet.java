@@ -3,6 +3,8 @@ package uk.ac.ebi.arrayexpress.servlets;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationServlet;
 import uk.ac.ebi.arrayexpress.utils.RegExpHelper;
 
@@ -17,7 +19,7 @@ import java.io.InputStreamReader;
 public class HttpProxyServlet extends ApplicationServlet
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     // Respond to HTTP GET requests from browsers.
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
@@ -31,7 +33,7 @@ public class HttpProxyServlet extends ApplicationServlet
         if (0 < path.length()) {
 
             String url = new StringBuilder("http://www.ebi.ac.uk/").append(path).append(null != queryString ? "?" + queryString : "").toString();
-            log.debug("Will access [" + url + "]");
+            logger.debug("Will access [{}]", url);
 
             HttpClient httpClient = new HttpClient();
             GetMethod getMethod = new GetMethod(url);
@@ -45,7 +47,7 @@ public class HttpProxyServlet extends ApplicationServlet
                 int responseStatus = getMethod.getStatusCode();
                 Header contentLength = getMethod.getResponseHeader("Content-Length");
 
-                log.debug("Response: http status [" + String.valueOf(responseStatus) + "], length [" + (null != contentLength ? contentLength.getValue() : "null") + "]");
+                logger.debug("Response: http status [{}], length [{}]", String.valueOf(responseStatus), null != contentLength ? contentLength.getValue() : "null");
 
                 if (null != contentLength && 0 < Long.parseLong(contentLength.getValue()) && 200 == responseStatus) {
 
@@ -68,11 +70,11 @@ public class HttpProxyServlet extends ApplicationServlet
                     out.close();
                 } else {
                     String err = "Response from [" + url + "] was invalid: http status [" + String.valueOf(responseStatus) + "], length [" + (null == contentLength ? "null" : contentLength.getValue())  + "]";
-                    log.error(err);
+                    logger.error(err);
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, err);
                 }
             } catch ( Throwable x ) {
-                log.error("Caught an exception:", x);
+                logger.error("Caught an exception:", x);
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, x.getMessage());
             } finally {
                 getMethod.releaseConnection();

@@ -72,21 +72,21 @@ public class DownloadableFilesRegistry extends ApplicationComponent
                 logger.error("Rescan problem: root folder [{}] is not a directory", getRootFolder());
             } else {
                 try {
-                    log.info("Rescan of downloadable files from [" + getRootFolder() + "] requested");
+                    logger.info("Rescan of downloadable files from [{}] requested", getRootFolder());
                     PersistableFilesMap newMap = new PersistableFilesMap();
                     rescanFolder(root, newMap);
                     setFilesMap(newMap);
                     ((Experiments) getComponent("Experiments")).updateFiles();
 
-                    log.info("Rescan of downloadable files completed");
+                    logger.info("Rescan of downloadable files completed");
                 } catch ( InterruptedException x ) {
                     throw x;
                 } catch ( Throwable x ) {
-                    log.error("Caught an exception:", x);
+                    logger.error("Caught an exception:", x);
                 }
             }
         } else {
-            log.error("Rescan problem: root folder has not been set");
+            logger.error("Rescan problem: root folder has not been set");
         }
     }
 
@@ -117,7 +117,7 @@ public class DownloadableFilesRegistry extends ApplicationComponent
                 if (1 == entries.size()) {
                     result = entries.get(0).getLocation();
                 } else {
-                    log.error("Multiple entries found for file [" + name + "], cannot offer a definitive download");
+                    logger.error("Multiple entries found for file [{}], cannot offer a definitive download", name);
                 }
             }
         }
@@ -142,7 +142,7 @@ public class DownloadableFilesRegistry extends ApplicationComponent
                     String location = f.getAbsolutePath();
 
                     if (!f.canRead()) {
-                        log.warn("Rescan found non-readable file [" + location + "]");
+                        logger.warn("Rescan found non-readable file [{}]", location);
                     } else if (!name.startsWith(".")) {
                         map.putEntry(new FtpFileEntry(f));
                     }
@@ -157,7 +157,7 @@ public class DownloadableFilesRegistry extends ApplicationComponent
                 }
             }
         } else {
-            log.warn("Rescan found non-readable folder [" + folder.getAbsolutePath() + File.separator + "]");
+            logger.warn("Rescan found non-readable folder [{}{}]", folder.getAbsolutePath(), File.separator);
         }
     }
 

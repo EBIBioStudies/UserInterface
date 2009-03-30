@@ -1,5 +1,8 @@
 package uk.ac.ebi.arrayexpress.utils.db;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,7 +13,7 @@ import java.util.List;
 public class ExperimentListInWarehouseDatabaseRetriever extends SqlStatementExecutor
 {
     // logging facility
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     // sql to get a list of experiments from the warehouse database
     private final static String getExperimentListSql =
             "select e.experiment_identifier from atlas a, ae1__experiment__main e\n" +
@@ -28,7 +31,7 @@ public class ExperimentListInWarehouseDatabaseRetriever extends SqlStatementExec
     public List<String> getExperimentList()
     {
         if (!execute(false)) {
-            log.error("There was a problem retrieving the list of experiments, check log for errors or exceptions");
+            logger.error("There was a problem retrieving the list of experiments, check log for errors or exceptions");
         }
         return experimentList;
     }

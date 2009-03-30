@@ -2,6 +2,8 @@ package uk.ac.ebi.arrayexpress.components;
 
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.jobs.*;
 
@@ -11,7 +13,7 @@ import java.util.List;
 public class JobsController extends ApplicationComponent
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     // jobs group
     private final String AE_JOBS_GROUP = "ae-jobs";
@@ -42,7 +44,7 @@ public class JobsController extends ApplicationComponent
         try {
             getScheduler().start();
         } catch ( SchedulerException x ) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
     }
 
@@ -56,7 +58,7 @@ public class JobsController extends ApplicationComponent
         try {
             getScheduler().triggerJob(name, AE_JOBS_GROUP);
         } catch ( Throwable x ) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
 
     }
@@ -68,7 +70,7 @@ public class JobsController extends ApplicationComponent
             map.put("index", index);
             getScheduler().triggerJob(name, AE_JOBS_GROUP, map);
         } catch ( Throwable x ) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
 
     }
@@ -82,7 +84,7 @@ public class JobsController extends ApplicationComponent
                 getScheduler().removeGlobalJobListener("job-listener");
             }
         } catch ( Throwable x ) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
     }
 
@@ -93,7 +95,7 @@ public class JobsController extends ApplicationComponent
                 // Retrieve a scheduler from schedule factory
                 scheduler = new StdSchedulerFactory().getScheduler();
             } catch ( Throwable x ) {
-                log.error("Caught an exception:", x);
+                logger.error("Caught an exception:", x);
             }
         }
         return scheduler;
@@ -104,7 +106,7 @@ public class JobsController extends ApplicationComponent
         try {
             getScheduler().addGlobalTriggerListener(tl);
         } catch (Throwable x ) {
-            log.error("Caught an exception:", x);                
+            logger.error("Caught an exception:", x);
         }
     }
     
@@ -114,7 +116,7 @@ public class JobsController extends ApplicationComponent
         try {
             getScheduler().addJob(j, false);
         } catch ( Throwable x ) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
     }
 
@@ -136,7 +138,7 @@ public class JobsController extends ApplicationComponent
                 // schedule a job with JobDetail and Trigger
                 getScheduler().scheduleJob(cronTrigger);
             } catch ( Throwable x ) {
-                log.error("Caught an exception:", x);
+                logger.error("Caught an exception:", x);
             }
         }
 
@@ -152,7 +154,7 @@ public class JobsController extends ApplicationComponent
                 getScheduler().scheduleJob(intervalTrigger);
                 hasScheduledInterval = true;
             } catch ( Throwable x ) {
-                log.error("Caught an exception:", x);
+                logger.error("Caught an exception:", x);
             }
         }
 
@@ -165,7 +167,7 @@ public class JobsController extends ApplicationComponent
             try {
                 getScheduler().scheduleJob(intervalTrigger);
             } catch ( Throwable x ) {
-                log.error("Caught an exception:", x);
+                logger.error("Caught an exception:", x);
             }
         }
     }
@@ -185,7 +187,7 @@ public class JobsController extends ApplicationComponent
             getScheduler().shutdown(true);
 
         } catch ( Throwable x ) {
-            log.error("Caught an exception:", x);
+            logger.error("Caught an exception:", x);
         }
     }
 }

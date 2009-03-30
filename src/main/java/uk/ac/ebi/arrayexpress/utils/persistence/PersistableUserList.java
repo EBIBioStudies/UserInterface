@@ -5,10 +5,13 @@ import uk.ac.ebi.arrayexpress.utils.users.UserRecord;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PersistableUserList extends UserList implements Persistable
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public PersistableUserList()
     {
@@ -56,7 +59,7 @@ public class PersistableUserList extends UserList implements Persistable
                             , Boolean.parseBoolean(fields[5])
                 ));
             } else {
-                log.warn("No enough TABs found while parsing persistence string, line from [" + beginIndex + "] to [" + eolIndex + "]");
+                logger.warn("No enough TABs found while parsing persistence string, line from [{}] to [{}]", beginIndex, eolIndex);
             }
             beginIndex = eolIndex + 1;
             eolIndex = str.indexOf(EOL, beginIndex);

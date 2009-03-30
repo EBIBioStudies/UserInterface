@@ -48,15 +48,15 @@ public class DownloadServlet extends ApplicationServlet
             if (null != name) {
                 sendFile(accession, name, request, response);
             } else {
-                log.error("Unable to get a filename from [" + request.getRequestURL() + "]");
+                logger.error("Unable to get a filename from [{}]", request.getRequestURL());
                 throw (new Exception());
             }
         } catch ( Throwable x ) {
             if (x.getClass().getName().equals("org.apache.catalina.connector.ClientAbortException")) {
                 // generate log entry for client abortion
-                log.warn("Download aborted");
+                logger.warn("Download aborted");
             } else {
-                log.debug("Caught an exception:", x);
+                logger.debug("Caught an exception:", x);
                 if (!response.isCommitted())
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
@@ -65,7 +65,7 @@ public class DownloadServlet extends ApplicationServlet
 
     private void sendFile( String accession, String name, HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
-        log.info("Requested download of [" + name + "]" + (null != accession ? ", accession [" + accession + "]" : ""));
+        logger.info("Requested download of [{}], accession[{}]", name, accession);
         DownloadableFilesRegistry filesRegistry = (DownloadableFilesRegistry) getComponent("DownloadableFilesRegistry");
         Experiments experiments = (Experiments) getComponent("Experiments");
 
@@ -78,7 +78,7 @@ public class DownloadServlet extends ApplicationServlet
             if (users.verifyLogin(user, passwordHash, request.getRemoteAddr().concat(request.getHeader("User-Agent")))) {
                 userId = String.valueOf(users.getUserRecord(user).getId());
             } else {
-                log.warn("Removing invalid session cookie for user [" + user + "]");
+                logger.warn("Removing invalid session cookie for user [{}]", user);
                 // resetting cookies
                 Cookie userCookie = new Cookie("AeLoggedUser", "");
                 userCookie.setPath("/");
@@ -91,25 +91,25 @@ public class DownloadServlet extends ApplicationServlet
 
 
         if (!filesRegistry.doesExist(accession, name)) {
-            log.error("File [" + name + "]" + (null != accession ? ", accession [" + accession + "]" : "") + " is not in files registry");
+            logger.error("File [{}], accession [{}] is not in files registry", name, accession);
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         } else {
             String fileLocation = filesRegistry.getLocation(accession, name);
             String contentType = getServletContext().getMimeType(fileLocation);
             if (null != contentType) {
-                log.debug("Setting content type to [" + contentType + "]");
+                logger.debug("Setting content type to [{}]", contentType);
                 response.setContentType(contentType);
             } else {
-                log.warn("Download servlet was unable to determine content type for [" + fileLocation + "]");
+                logger.warn("Download servlet was unable to determine content type for [{}]", fileLocation);
             }
 
-            log.debug("Checking file [" + fileLocation + "]");
+            logger.debug("Checking file [{}]", fileLocation);
             File file = new File(fileLocation);
             if (!file.exists()) {
-                log.error("File [" + fileLocation + "] does not exist");
+                logger.error("File [{}] does not exist", fileLocation);
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
             } else if (!experiments.isAccessible(FtpFileEntry.getAccession(new FtpFileEntry(fileLocation, null, null)), userId)) {
-                log.error("Attempting to download file for the experiment that is not present in the index");
+                logger.error("Attempting to download file for the experiment that is not present in the index");
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             } else {
                 FileInputStream fileInputStream = null;
@@ -130,7 +130,7 @@ public class DownloadServlet extends ApplicationServlet
                         servletOutStream.write(buffer, 0, bytesRead);
                         servletOutStream.flush();
                     }
-                    log.info("Download of [" + name + "] completed, sent [" + size + "] bytes");
+                    logger.info("Download of [{}] completed, sent [{}] bytes", name, size);
                 } finally {
                     if (null != fileInputStream)
                         fileInputStream.close();

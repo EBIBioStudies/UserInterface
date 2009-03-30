@@ -2,11 +2,13 @@ package uk.ac.ebi.arrayexpress.utils.persistence;
 
 import uk.ac.ebi.arrayexpress.utils.files.FtpFileEntry;
 import uk.ac.ebi.arrayexpress.utils.files.FtpFilesMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PersistableFilesMap extends FtpFilesMap implements Persistable
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public String toPersistence()
     {
@@ -39,7 +41,7 @@ public class PersistableFilesMap extends FtpFilesMap implements Persistable
                                 , Long.parseLong(fields[2])
                         ));
             } else {
-                log.warn("No enough TABs found while parsing persistence string, line from [" + beginIndex + "] to [" + eolIndex + "]");
+                logger.warn("No enough TABs found while parsing persistence string, line from [{}] to [{}]", beginIndex, eolIndex);
             }
             beginIndex = eolIndex + 1;
             eolIndex = str.indexOf(EOL, beginIndex);

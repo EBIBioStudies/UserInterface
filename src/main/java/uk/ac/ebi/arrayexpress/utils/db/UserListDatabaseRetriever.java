@@ -8,10 +8,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+
 public class UserListDatabaseRetriever extends SqlStatementExecutor
 {
     // logging facility
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     // sql to get a list of experiments from the database
     // (the parameter is either 0 for all experiments and 1 for public only)
     private final static String getUserListSql = "select distinct id, name, password, email, priviledge" +
@@ -32,7 +35,7 @@ public class UserListDatabaseRetriever extends SqlStatementExecutor
     public UserList getUserList()
     {
         if (!execute(false)) {
-            log.error("There was a problem retrieving the list of experiments, check log for errors or exceptions");
+            logger.error("There was a problem retrieving the list of experiments, check log for errors or exceptions");
         }
         return userList;
     }

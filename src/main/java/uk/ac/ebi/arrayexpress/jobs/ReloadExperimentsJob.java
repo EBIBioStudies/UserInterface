@@ -4,6 +4,8 @@ import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationJob;
 import uk.ac.ebi.arrayexpress.components.Experiments;
@@ -20,7 +22,7 @@ import java.util.List;
 public class ReloadExperimentsJob extends ApplicationJob implements JobListener
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private List<Long> exps;
     private DataSource ds;
@@ -39,18 +41,18 @@ public class ReloadExperimentsJob extends ApplicationJob implements JobListener
             xmlBuffer = new StringBuffer(20000000);
 
             String dsNames = ((Experiments) app.getComponent("Experiments")).getDataSource();
-            log.info("Reload of experiment data from [" + dsNames + "] requested");
+            logger.info("Reload of experiment data from [{}] requested", dsNames);
 
             ds = new DataSourceFinder().findDataSource(dsNames);
             if (null != ds) {
                 UserList userList = new UserListDatabaseRetriever(ds).getUserList();
                 ((Users)app.getComponent("Users")).setUserList(userList);
-                log.info("Reloaded the user list from the database");
+                logger.info("Reloaded the user list from the database");
 
                 exps = new ExperimentListDatabaseRetriever(ds).getExperimentList();
                 Thread.sleep(1);
 
-                log.info("Got [" + String.valueOf(exps.size()) + "] experiments listed in the database, scheduling retrieval");
+                logger.info("Got [{}] experiments listed in the database, scheduling retrieval", exps.size());
                 xmlBuffer.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><experiments total=\"").append(exps.size()).append("\">");
 
                 ((JobsController) app.getComponent("JobsController")).setJobListener(this);
@@ -73,13 +75,13 @@ public class ReloadExperimentsJob extends ApplicationJob implements JobListener
                     ((JobsController) app.getComponent("JobsController")).setJobListener(null);
                     xmlBuffer.append("</experiments>");
                     ((Experiments) app.getComponent("Experiments")).reload(xmlBuffer.toString().replaceAll("[^\\p{Print}]", " "));
-                    log.info("Reload of experiment data completed");
+                    logger.info("Reload of experiment data completed");
                     xmlBuffer = null;
                 } else {
-                    log.warn("No experiments found, reload aborted");
+                    logger.warn("No experiments found, reload aborted");
                 }
             } else {
-                log.warn("No data sources available, reload aborted");
+                logger.warn("No data sources available, reload aborted");
             }
         }
     }
@@ -107,7 +109,7 @@ public class ReloadExperimentsJob extends ApplicationJob implements JobListener
             try {
                 interrupt();
             } catch ( Throwable x ) {
-                log.error("Caught an exception:", x);
+                logger.error("Caught an exception:", x);
             }
         }
     }

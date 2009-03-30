@@ -12,10 +12,13 @@ import uk.ac.ebi.arrayexpress.utils.search.ExperimentSearch;
 import java.io.File;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Experiments extends ApplicationComponent
 {
     // logging machinery
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private TextFilePersistence<PersistableDocumentContainer> experiments;
     private TextFilePersistence<PersistableStringList> experimentsInWarehouse;
@@ -144,7 +147,7 @@ public class Experiments extends ApplicationComponent
             if (null != speciesList.get()) {
                 species.setObject(speciesList);
             } else {
-                log.error("Species list NOT updated, NULL string passed");
+                logger.error("Species list NOT updated, NULL string passed");
             }
 
             PersistableString arraysList = new PersistableString(
@@ -158,7 +161,7 @@ public class Experiments extends ApplicationComponent
             if (null != arraysList.get()) {
                 arrays.setObject(arraysList);
             } else {
-                log.error("Arrays list NOT updated, NULL string passed");
+                logger.error("Arrays list NOT updated, NULL string passed");
             }
 
             PersistableString experimentTypesList = new PersistableString(
@@ -172,22 +175,22 @@ public class Experiments extends ApplicationComponent
             if (null != experimentTypesList.get()) {
                 experimentTypes.setObject(experimentTypesList);
             } else {
-                log.error("Experiment Types list NOT updated, NULL string passed");
+                logger.error("Experiment Types list NOT updated, NULL string passed");
             }
         } else {
-            log.error("Experiments NOT updated, NULL document passed");
+            logger.error("Experiments NOT updated, NULL document passed");
         }
     }
 
     public void updateFiles()
     {
-        log.info("Experiments: file info update requested");
+        logger.info("Experiments: file info update requested");
         XdmNode doc = ((SaxonEngine) getComponent("SaxonEngine")).transform(getExperiments(), "preprocess-experiment-files-xml.xsl", null);
         if (null != doc) {
             setExperiments(doc);
-            log.info("Experiments: file info update completed");
+            logger.info("Experiments: file info update completed");
         } else {
-            log.error("Transformation [preprocess-experiment-files-xml.xsl] returned an error, experiments NOT updated");
+            logger.error("Transformation [preprocess-experiment-files-xml.xsl] returned an error, experiments NOT updated");
         }
     }
 
@@ -196,7 +199,7 @@ public class Experiments extends ApplicationComponent
         if (null != expList && 0 < expList.size()) {
             experimentsInWarehouse.setObject(new PersistableStringList(expList));
         } else {
-            log.error("List of warehouse experiments NOT updated, attempted to assign NULL or EMPTY list");
+            logger.error("List of warehouse experiments NOT updated, attempted to assign NULL or EMPTY list");
         }
     }
 
@@ -206,7 +209,7 @@ public class Experiments extends ApplicationComponent
             experiments.setObject(new PersistableDocumentContainer(doc));
             experimentSearch.buildText(doc);
         } else {
-            log.error("Experiments NOT updated, NULL document passed");
+            logger.error("Experiments NOT updated, NULL document passed");
         }
     }
 
@@ -214,12 +217,12 @@ public class Experiments extends ApplicationComponent
     {
         XdmNode doc = ((SaxonEngine) getComponent("SaxonEngine")).transform(xmlString, "preprocess-experiments-xml.xsl", null);
         if (null == doc) {
-            log.error("Transformation [preprocess-experiments-xml.xsl] returned an error, returning null");
+            logger.error("Transformation [preprocess-experiments-xml.xsl] returned an error, returning null");
             return null;
         }
         doc = ((SaxonEngine) getComponent("SaxonEngine")).transform(doc, "preprocess-experiment-files-xml.xsl", null);
         if (null == doc) {
-            log.error("Transformation [preprocess-experiment-files-xml.xsl] returned an error, returning null");
+            logger.error("Transformation [preprocess-experiment-files-xml.xsl] returned an error, returning null");
             return null;
         }
         return doc;

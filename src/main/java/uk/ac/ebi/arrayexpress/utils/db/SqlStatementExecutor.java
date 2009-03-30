@@ -1,5 +1,8 @@
 package uk.ac.ebi.arrayexpress.utils.db;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +12,7 @@ import java.sql.SQLException;
 public abstract class SqlStatementExecutor
 {
     // logging facility
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     // statement
     private PreparedStatement statement;
@@ -32,13 +35,13 @@ public abstract class SqlStatementExecutor
                 processResultSet(rs);
                 result = true;
             } catch ( Throwable x ) {
-                log.error("Caught an exception:", x);
+                logger.error("Caught an exception:", x);
             } finally {
                 if (null != rs) {
                     try {
                         rs.close();
                     } catch ( SQLException x ) {
-                        log.error("Caught an exception:", x);
+                        logger.error("Caught an exception:", x);
                     }
                 }
 
@@ -47,7 +50,7 @@ public abstract class SqlStatementExecutor
                 }
             }
         } else {
-            log.error("Statement is null, please check the log for possible exceptions");
+            logger.error("Statement is null, please check the log for possible exceptions");
         }
         return result;
     }
@@ -66,7 +69,7 @@ public abstract class SqlStatementExecutor
                 Connection conn = ds.getConnection();
                 stmt = conn.prepareStatement(sql);
             } catch ( SQLException x ) {
-                log.error("Caught an exception:", x);
+                logger.error("Caught an exception:", x);
             }
         }
 
@@ -79,7 +82,7 @@ public abstract class SqlStatementExecutor
             try {
                 statement.getConnection().close();
             } catch ( SQLException x ) {
-                log.error("Caught an exception:", x);
+                logger.error("Caught an exception:", x);
             }
             statement = null;
         }
