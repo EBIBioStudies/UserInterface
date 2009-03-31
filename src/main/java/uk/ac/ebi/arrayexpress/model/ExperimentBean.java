@@ -16,7 +16,7 @@ public class ExperimentBean
     private String samples;
     private String assays;
     private String miameGold;
-    private MiameScoresBean miameScores;
+    private List<MiameScoreBean> miameScore;
     private List<String> secondaryAccession;
     private List<DescriptionBean> description;
     private List<ArrayDesignBean> arrayDesign;
@@ -27,6 +27,10 @@ public class ExperimentBean
     private List<ProviderBean> provider;
     private List<String> experimentDesign;
     private List<String> experimentType;
+
+    public ExperimentBean()
+    {
+    }
 
     public void setAttributes(String id, String accession, String name, String releaseDate, String miameGold)
     {
@@ -60,23 +64,153 @@ public class ExperimentBean
         }
         boolean didAppendToExistingCategory = false;
 
-        for (SampleAttributeBean sampleAttribute : this.sampleAttribute) {
-            if (sampleAttribute.getCategory().equals(category)) {
-                if (!sampleAttribute.getValue().contains(value)) {
-                    sampleAttribute.getValue().add(value);
+        for (SampleAttributeBean item : this.sampleAttribute) {
+            if (item.getCategory().equals(category)) {
+                if (!item.getValue().contains(value)) {
+                    item.getValue().add(value);
                 }
                 didAppendToExistingCategory = true;
                 break;
             }
         }
         if (!didAppendToExistingCategory) {
-            SampleAttributeBean sampleAttribute = new SampleAttributeBean();
-            sampleAttribute.setCategory(category);
+            SampleAttributeBean item = new SampleAttributeBean();
+            item.setCategory(category);
             List<String> valueList = new ArrayList<String>(1);
             valueList.add(value);
-            sampleAttribute.setValue(valueList);
-            this.sampleAttribute.add(sampleAttribute);
+            item.setValue(valueList);
+            this.sampleAttribute.add(item);
         }
+    }
+
+    public void addExperimentalFactor(String name, String value)
+    {
+        if (null == this.experimentalFactor) {
+            this.experimentalFactor = new ArrayList<ExperimentalFactorBean>(1);
+        }
+        boolean didAppendToExistingName = false;
+
+        for (ExperimentalFactorBean item : this.experimentalFactor) {
+            if (item.getName().equals(name)) {
+                if (!item.getValue().contains(value)) {
+                    item.getValue().add(value);
+                }
+                didAppendToExistingName = true;
+                break;
+            }
+        }
+        if (!didAppendToExistingName) {
+            ExperimentalFactorBean item = new ExperimentalFactorBean();
+            item.setName(name);
+            List<String> valueList = new ArrayList<String>(1);
+            valueList.add(value);
+            item.setValue(valueList);
+            this.experimentalFactor.add(item);
+        }
+    }
+
+    public void addMiameScore(String name, String value)
+    {
+        if (null == this.miameScore) {
+            this.miameScore = new ArrayList<MiameScoreBean>(1);
+        }
+
+        MiameScoreBean item = new MiameScoreBean();
+        item.setName(name);
+        item.setValue(value);
+        this.miameScore.add(item);
+    }
+
+    public void addArrayDesign(String id, String accession, String name, String count)
+    {
+        if (null == this.arrayDesign) {
+            this.arrayDesign = new ArrayList<ArrayDesignBean>(1);
+        }
+
+        ArrayDesignBean item = new ArrayDesignBean();
+        item.setId(id);
+        item.setAccession(accession);
+        item.setName(name);
+        item.setCount(count);
+        this.arrayDesign.add(item);
+    }
+
+    public void addBioAssayDataGroup(String id, String name, String bioAssayDataCubes, String arrayDesignProvider, String dataFormat, String bioAssays, String isDerived)
+    {
+        if (null == this.bioAssayDataGroup) {
+            this.bioAssayDataGroup = new ArrayList<BioAssayDataGroupBean>(1);
+        }
+
+        BioAssayDataGroupBean item = new BioAssayDataGroupBean();
+        item.setId(id);
+        item.setName(name);
+        item.setBioAssayDataCubes(bioAssayDataCubes);
+        item.setArrayDesignProvider(arrayDesignProvider);
+        item.setDataFormat(dataFormat);
+        item.setBioAssays(bioAssays);
+        item.setIsDerived(isDerived);
+        this.bioAssayDataGroup.add(item);
+    }
+
+
+    public void addBibliography(String accession, String publication, String authors, String title, String year, String volume, String issue, String pages, String uri)
+    {
+        if (null == this.bibliography) {
+            this.bibliography = new ArrayList<BibliographyBean>(1);
+        }
+
+        BibliographyBean item = new BibliographyBean();
+        item.setAccession(accession);
+        item.setPublication(publication);
+        item.setAuthors(authors);
+        item.setTitle(title);
+        item.setYear(year);
+        item.setVolume(volume);
+        item.setIssue(issue);
+        item.setPages(pages);
+        item.setUri(uri);
+        this.bibliography.add(item);
+    }
+
+    public void addProvider(String contact, String email, String role)
+    {
+        if (null == this.provider) {
+            this.provider = new ArrayList<ProviderBean>(1);
+        }
+
+        ProviderBean item = new ProviderBean();
+        item.setContact(contact);
+        item.setEmail(email);
+        item.setRole(role);
+        this.provider.add(item);
+    }
+
+    public void addExperimentDesign(String experimentDesign)
+    {
+        if (null == this.experimentDesign) {
+            this.experimentDesign = new ArrayList<String>(1);
+        }
+        this.experimentDesign.add(experimentDesign);
+    }
+
+    public void addExperimentType(String experimentType)
+    {
+        if (null == this.experimentType) {
+            this.experimentType = new ArrayList<String>(1);
+        }
+        this.experimentType.add(experimentType);
+    }
+
+    public void addDescription(String id, String text)
+    {
+        if (null == this.description) {
+            this.description = new ArrayList<DescriptionBean>(1);
+        }
+
+        DescriptionBean item = new DescriptionBean();
+        item.setId(id);
+        item.setText(text);
+        this.description.add(item);
     }
 
     // bean getters and setters
@@ -225,6 +359,76 @@ public class ExperimentBean
     public void setBioAssayDataGroup(List<BioAssayDataGroupBean> bioAssayDataGroup)
     {
         this.bioAssayDataGroup = bioAssayDataGroup;
+    }
+
+    public List<MiameScoreBean> getMiameScore()
+    {
+        return miameScore;
+    }
+
+    public void setMiameScore(List<MiameScoreBean> miameScore)
+    {
+        this.miameScore = miameScore;
+    }
+
+    public List<DescriptionBean> getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription(List<DescriptionBean> description)
+    {
+        this.description = description;
+    }
+
+    public List<ArrayDesignBean> getArrayDesign()
+    {
+        return arrayDesign;
+    }
+
+    public void setArrayDesign(List<ArrayDesignBean> arrayDesign)
+    {
+        this.arrayDesign = arrayDesign;
+    }
+
+    public List<BibliographyBean> getBibliography()
+    {
+        return bibliography;
+    }
+
+    public void setBibliography(List<BibliographyBean> bibliography)
+    {
+        this.bibliography = bibliography;
+    }
+
+    public List<ProviderBean> getProvider()
+    {
+        return provider;
+    }
+
+    public void setProvider(List<ProviderBean> provider)
+    {
+        this.provider = provider;
+    }
+
+    public List<String> getExperimentDesign()
+    {
+        return experimentDesign;
+    }
+
+    public void setExperimentDesign(List<String> experimentDesign)
+    {
+        this.experimentDesign = experimentDesign;
+    }
+
+    public List<String> getExperimentType()
+    {
+        return experimentType;
+    }
+
+    public void setExperimentType(List<String> experimentType)
+    {
+        this.experimentType = experimentType;
     }
 }
 

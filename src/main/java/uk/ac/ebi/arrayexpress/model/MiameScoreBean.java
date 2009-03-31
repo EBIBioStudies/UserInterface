@@ -1,11 +1,9 @@
 package uk.ac.ebi.arrayexpress.model;
 
-import java.util.List;
-
-public class ExperimentalFactorBean
+public class MiameScoreBean
 {
     private String name;
-    private List<String> value;
+    private String value;
 
     public String getName()
     {
@@ -17,12 +15,12 @@ public class ExperimentalFactorBean
         this.name = name;
     }
 
-    public List<String> getValue()
+    public String getValue()
     {
         return value;
     }
 
-    public void setValue(List<String> value)
+    public void setValue(String value)
     {
         this.value = value;
     }

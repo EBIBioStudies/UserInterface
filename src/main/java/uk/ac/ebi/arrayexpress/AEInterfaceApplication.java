@@ -57,7 +57,7 @@ public class AEInterfaceApplication extends Application implements ServletContex
     {
         terminate();
 
-        // restor java.util.logging calls to the original state
+        // restore java.util.logging calls to the original state
         SLF4JBridgeHandler.uninstall();
         
         servletContext = null;

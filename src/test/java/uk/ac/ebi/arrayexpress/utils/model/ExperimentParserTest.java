@@ -38,13 +38,11 @@ public class ExperimentParserTest
         "<experimentalfactor name=\"Genotype\" value=\"SCA7 wild-type\"/>" +
         "<experimentalfactor name=\"Genotype\" value=\"SCA1 wild type\"/>" +
         "<experimentalfactor name=\"AGE\" value=\"9\"/>" +
-        "<miamescore>" +
-        "<score name=\"ReporterSequenceScore\" value=\"1\"/>" +
-        "<score name=\"FactorValueScore\" value=\"1\"/>" +
-        "<score name=\"MeasuredBioAssayDataScore\" value=\"1\"/>" +
-        "<score name=\"ProtocolScore\" value=\"1\"/>" +
-        "<score name=\"DerivedBioAssayDataScore\" value=\"1\"/>" +
-        "</miamescore>" +
+        "<miamescore name=\"ReporterSequenceScore\" value=\"1\"/>" +
+        "<miamescore name=\"FactorValueScore\" value=\"1\"/>" +
+        "<miamescore name=\"MeasuredBioAssayDataScore\" value=\"1\"/>" +
+        "<miamescore name=\"ProtocolScore\" value=\"1\"/>" +
+        "<miamescore name=\"DerivedBioAssayDataScore\" value=\"1\"/>" +
         "<arraydesign id=\"447429329\" accession=\"A-AFFY-36\" name=\"Affymetrix GeneChip&#xAE; Mouse Genome 430A 2.0 [Mouse430A_2]\" count=\"22\"/>" +
         "<bioassaydatagroup id=\"1711258109\" name=\"Affymetrix:FeatureDimension:MOE430A\" bioassaydatacubes=\"12\" arraydesignprovider=\"AFFY\" dataformat=\"CELv4\" bioassays=\"12\" isderived=\"0\"/>" +
         "<bioassaydatagroup id=\"1711258110\" name=\"Affymetrix:FeatureDimension:Mouse430_2\" bioassaydatacubes=\"10\" arraydesignprovider=\"AFFY\" dataformat=\"CELv4\" bioassays=\"10\" isderived=\"0\"/>" +
