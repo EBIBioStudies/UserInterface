@@ -2936,7 +2936,7 @@ function bindReady(){
 			jQuery.ready();
 		}, false );
 
-	// If IE event uk.ac.ebi.arrayexpress.utils.model is used
+	// If IE event model is used
 	} else if ( document.attachEvent ) {
 		// ensure firing before onload,
 		// maybe late but safe also for iframes
@@ -2983,12 +2983,12 @@ jQuery.each( ("blur,focus,load,resize,scroll,unload,click,dblclick," +
 // Prevent memory leaks in IE
 // And prevent errors on refresh with events like mouseover in other browsers
 // Window isn't included so as not to unbind existing unload events
-jQuery( window ).bind( 'unload', function(){ 
+jQuery( window ).bind( 'unload', function(){
 	for ( var id in jQuery.cache )
 		// Skip the window
 		if ( id != 1 && jQuery.cache[ id ].handle )
 			jQuery.event.remove( jQuery.cache[ id ].handle.elem );
-}); 
+});
 (function(){
 
 	jQuery.support = {};
@@ -3012,32 +3012,32 @@ jQuery( window ).bind( 'unload', function(){
 	jQuery.support = {
 		// IE strips leading whitespace when .innerHTML is used
 		leadingWhitespace: div.firstChild.nodeType == 3,
-		
+
 		// Make sure that tbody elements aren't automatically inserted
 		// IE will insert them into empty tables
 		tbody: !div.getElementsByTagName("tbody").length,
-		
+
 		// Make sure that you can get all elements in an <object> element
 		// IE 7 always returns no results
 		objectAll: !!div.getElementsByTagName("object")[0]
 			.getElementsByTagName("*").length,
-		
+
 		// Make sure that link elements get serialized correctly by innerHTML
 		// This requires a wrapper element in IE
 		htmlSerialize: !!div.getElementsByTagName("link").length,
-		
+
 		// Get the style information from getAttribute
 		// (IE uses .cssText insted)
 		style: /red/.test( a.getAttribute("style") ),
-		
+
 		// Make sure that URLs aren't manipulated
 		// (IE normalizes it by default)
 		hrefNormalized: a.getAttribute("href") === "/a",
-		
+
 		// Make sure that element opacity exists
 		// (IE uses filter instead)
 		opacity: a.style.opacity === "0.5",
-		
+
 		// Verify style float existence
 		// (IE uses styleFloat instead of cssFloat)
 		cssFloat: !!a.style.cssFloat,
@@ -3047,14 +3047,14 @@ jQuery( window ).bind( 'unload', function(){
 		noCloneEvent: true,
 		boxModel: null
 	};
-	
+
 	script.type = "text/javascript";
 	try {
 		script.appendChild( document.createTextNode( "window." + id + "=1;" ) );
 	} catch(e){}
 
 	root.insertBefore( script, root.firstChild );
-	
+
 	// Make sure that the execution of code works by injecting a script
 	// tag with appendChild/createTextNode
 	// (IE doesn't support this, fails, and uses .text instead)
@@ -3075,7 +3075,7 @@ jQuery( window ).bind( 'unload', function(){
 		div.cloneNode(true).fireEvent("onclick");
 	}
 
-	// Figure out if the W3C box uk.ac.ebi.arrayexpress.utils.model works as expected
+	// Figure out if the W3C box model works as expected
 	// document.body must exist before we can do this
 	jQuery(function(){
 		var div = document.createElement("div");
