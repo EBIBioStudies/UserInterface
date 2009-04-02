@@ -65,7 +65,7 @@ public class ExperimentBean
         boolean didAppendToExistingCategory = false;
 
         for (SampleAttributeBean item : this.sampleAttribute) {
-            if (item.getCategory().equals(category)) {
+            if ((null == item.getCategory() && null == category) || null != item.getCategory() && item.getCategory().equals(category)) {
                 if (!item.getValue().contains(value)) {
                     item.getValue().add(value);
                 }
@@ -91,7 +91,7 @@ public class ExperimentBean
         boolean didAppendToExistingName = false;
 
         for (ExperimentalFactorBean item : this.experimentalFactor) {
-            if (item.getName().equals(name)) {
+            if ((null == item.getName() && null == name) || null != item.getName() && item.getName().equals(name)) {
                 if (!item.getValue().contains(value)) {
                     item.getValue().add(value);
                 }

@@ -1,9 +1,9 @@
 package uk.ac.ebi.arrayexpress.utils.persistence;
 
-import uk.ac.ebi.arrayexpress.utils.files.FtpFileEntry;
-import uk.ac.ebi.arrayexpress.utils.files.FtpFilesMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.arrayexpress.utils.files.FtpFileEntry;
+import uk.ac.ebi.arrayexpress.utils.files.FtpFilesMap;
 
 public class PersistableFilesMap extends FtpFilesMap implements Persistable
 {
@@ -48,7 +48,7 @@ public class PersistableFilesMap extends FtpFilesMap implements Persistable
         }
     }
 
-    public boolean shouldLoadFromPersistence()
+    public boolean isEmpty()
     {
         return (0 == this.entries.size());
     }

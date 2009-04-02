@@ -1,10 +1,10 @@
 package uk.ac.ebi.arrayexpress.utils.persistence;
 
 import net.sf.saxon.s9api.XdmNode;
-import uk.ac.ebi.arrayexpress.app.Application;
-import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.arrayexpress.app.Application;
+import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 
 // TODO: CHECK VERSION
 public class PersistableDocumentContainer implements Persistable
@@ -48,7 +48,7 @@ public class PersistableDocumentContainer implements Persistable
         }
     }
 
-    public boolean shouldLoadFromPersistence()
+    public boolean isEmpty()
     {
         if (null == document)
             return true;

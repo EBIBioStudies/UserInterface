@@ -34,7 +34,7 @@ public class PersistableString implements Persistable
         string = str;
     }
 
-    public boolean shouldLoadFromPersistence()
+    public boolean isEmpty()
     {
         return (0 == string.length());
     }

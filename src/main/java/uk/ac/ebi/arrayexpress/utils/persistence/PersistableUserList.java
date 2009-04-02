@@ -1,12 +1,11 @@
 package uk.ac.ebi.arrayexpress.utils.persistence;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.utils.users.UserList;
 import uk.ac.ebi.arrayexpress.utils.users.UserRecord;
 
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PersistableUserList extends UserList implements Persistable
 {
@@ -66,7 +65,7 @@ public class PersistableUserList extends UserList implements Persistable
         }
     }
 
-    public boolean shouldLoadFromPersistence()
+    public boolean isEmpty()
     {
         return (0 == this.size());
     }

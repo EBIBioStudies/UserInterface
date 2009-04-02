@@ -32,7 +32,7 @@ public class PersistableStringList extends ArrayList<String> implements Persista
         this.addAll(Arrays.asList(str.split("" + EOL)));
     }
 
-    public boolean shouldLoadFromPersistence()
+    public boolean isEmpty()
     {
         return (0 == this.size());
     }

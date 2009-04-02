@@ -14,7 +14,7 @@ public interface Persistable
 
     public void fromPersistence( String str );
 
-    public boolean shouldLoadFromPersistence();
+    public boolean isEmpty();
 
     // our internal representation of EOL
     public final char EOL = '\n';

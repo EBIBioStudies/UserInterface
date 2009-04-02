@@ -1,7 +1,7 @@
 package uk.ac.ebi.arrayexpress.utils.persistence;
 
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
@@ -26,7 +26,7 @@ public class TextFilePersistence<Object extends Persistable>
     public Object getObject()
     {
         if (null != object) {
-            if (object.shouldLoadFromPersistence()) {
+            if (object.isEmpty()) {
                 loadObject();
             }
         }

@@ -10,7 +10,6 @@ import uk.ac.ebi.arrayexpress.components.Experiments;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 import uk.ac.ebi.arrayexpress.utils.RegExpHelper;
 import uk.ac.ebi.arrayexpress.utils.files.FtpFileEntry;
-import uk.ac.ebi.arrayexpress.utils.search.ExperimentSearch;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -214,24 +213,24 @@ public class ExtFunctions
             if (testCheckbox(inAtlas) && null != loadedInAtlas && loadedInAtlas.equals(""))
                 return false;
 
-            ExperimentSearch search = ((Experiments) Application.getAppComponent("Experiments")).getSearch();
-
-            if (!userId.equals("0") && !search.matchUser(textIdx, userId))
-                return false;
-
-            if (accessionRegExp.test(keywords) && !search.matchAccession(textIdx, keywords))
-                return false;
-
-            if (!keywords.equals("") && !search.matchText(textIdx, keywords, testCheckbox(wholeWords)))
-                return false;
-
-            if (!species.equals("") && !search.matchSpecies(textIdx, species))
-                return false;
-
-            if (!array.equals("") && !search.matchArray(textIdx, array))
-                return false;
-
-            return  experimentType.equals("") || search.matchExperimentType(textIdx, experimentType);
+//            ExperimentSearch search = ((Experiments) Application.getAppComponent("Experiments")).getSearch();
+//
+//            if (!userId.equals("0") && !search.matchUser(textIdx, userId))
+//                return false;
+//
+//            if (accessionRegExp.test(keywords) && !search.matchAccession(textIdx, keywords))
+//                return false;
+//
+//            if (!keywords.equals("") && !search.matchText(textIdx, keywords, testCheckbox(wholeWords)))
+//                return false;
+//
+//            if (!species.equals("") && !search.matchSpecies(textIdx, species))
+//                return false;
+//
+//            if (!array.equals("") && !search.matchArray(textIdx, array))
+//                return false;
+//
+//            return  experimentType.equals("") || search.matchExperimentType(textIdx, experimentType);
         } catch ( Throwable x ) {
             logger.error("Caught an exception:", x);
         }
