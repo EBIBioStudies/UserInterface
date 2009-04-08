@@ -22,37 +22,23 @@
 
         <interface.application.base.path>/microarray-as/ae</interface.application.base.path>
         <interface.application.link.www_domain/>
-        <interface.application.link.query_help>${interface.application.link.www_domain}/microarray/doc/help/ae_help.html
-        </interface.application.link.query_help>
-        <interface.application.link.browse_help>
-            ${interface.application.link.www_domain}/microarray/doc/help/browse_results.html
-        </interface.application.link.browse_help>
+        <interface.application.link.query_help>${interface.application.link.www_domain}/microarray/doc/help/ae_help.html</interface.application.link.query_help>
+        <interface.application.link.browse_help>${interface.application.link.www_domain}/microarray/doc/help/browse_results.html</interface.application.link.browse_help>
         <interface.application.link.aer_old.base.url>/microarray-as/aer</interface.application.link.aer_old.base.url>
         <interface.application.link.aew.base.url>/microarray-as/aew</interface.application.link.aew.base.url>
         <interface.application.link.altas.base.url>/microarray-as/atlas</interface.application.link.altas.base.url>
-        <interface.application.link.atlas.species_options.url>
-            ${interface.application.link.altas.base.url}/list-species.jsp
-        </interface.application.link.atlas.species_options.url>
-        <interface.application.link.atlas.stats.url>${interface.application.link.altas.base.url}/stats.jsp
-        </interface.application.link.atlas.stats.url>
+        <interface.application.link.atlas.species_options.url>${interface.application.link.altas.base.url}/list-species.jsp</interface.application.link.atlas.species_options.url>
+        <interface.application.link.atlas.stats.url>${interface.application.link.altas.base.url}/stats.jsp</interface.application.link.atlas.stats.url>
         <interface.application.link.atlas.exp_query.url>${interface.application.link.altas.base.url}/qrs?gprop_0=&amp;amp;gval_0=(all+genes)&amp;amp;fexp_0=UP_DOWN&amp;amp;fact_0=&amp;amp;specie_0=&amp;amp;view=hm&amp;amp;fval_0=</interface.application.link.atlas.exp_query.url>
-        <interface.application.link.aer_old.experiment_link.style/>
-        <interface.application.link.solr_gene_stats.url>/microarray-as/solr_gene/admin/stats.jsp
-        </interface.application.link.solr_gene_stats.url>
-        <interface.application.link.solr_exp_stats.url>/microarray-as/solr_exp/admin/stats.jsp
-        </interface.application.link.solr_exp_stats.url>
+        <interface.application.link.aer_old.experiment_link.style/><interface.application.link.solr_gene_stats.url>/microarray-as/solr_gene/admin/stats.jsp</interface.application.link.solr_gene_stats.url>
+        <interface.application.link.solr_exp_stats.url>/microarray-as/solr_exp/admin/stats.jsp</interface.application.link.solr_exp_stats.url>
 
-        <interface.application.link.news_xml.url>/microarray-srv/ae/ae-main-news.xml
-        </interface.application.link.news_xml.url>
-        <interface.application.link.links_xml.url>/microarray-srv/ae/ae-main-links.xml
-        </interface.application.link.links_xml.url>
+        <interface.application.link.news_xml.url>/microarray-srv/ae/ae-main-news.xml</interface.application.link.news_xml.url>
+        <interface.application.link.links_xml.url>/microarray-srv/ae/ae-main-links.xml</interface.application.link.links_xml.url>
 
-        <interface.application.pref.experiments.datasources>aepub3,aepub2
-        </interface.application.pref.experiments.datasources>
-        <interface.application.pref.experiments.reload.schedule>0 0 6 * * ?
-        </interface.application.pref.experiments.reload.schedule>
-        <interface.application.pref.files.root.location>/ebi/ArrayExpress-ftp
-        </interface.application.pref.files.root.location>
+        <interface.application.pref.experiments.datasources>aepub3,aepub2</interface.application.pref.experiments.datasources>
+        <interface.application.pref.experiments.reload.schedule>0 0 6 * * ?</interface.application.pref.experiments.reload.schedule>
+        <interface.application.pref.files.root.location>/ebi/ArrayExpress-ftp</interface.application.pref.files.root.location>
         <interface.application.pref.files.rescan.interval>3600000</interface.application.pref.files.rescan.interval>
         <interface.application.google.analytics/>
         <interface.application.body.class/>
@@ -68,41 +54,25 @@
         <profile>
             <id>preproduction</id>
             <properties>
-                <interface.application.link.www_domain_hack>http://www.embl-ebi.ac.uk
-                </interface.application.link.www_domain_hack>
-                <interface.application.link.query_help>/microarray/doc/help/ae_help.html
-                </interface.application.link.query_help>
-                <interface.application.link.browse_help>/microarray/doc/help/browse_results.html
-                </interface.application.link.browse_help>
-                <interface.application.link.aer_old.base.url>
-                    ${interface.application.link.www_domain_hack}/microarray-as/aer
-                </interface.application.link.aer_old.base.url>
-                <interface.application.link.aew.base.url>${interface.application.link.www_domain_hack}/microarray-as/aew
-                </interface.application.link.aew.base.url>
-                <interface.application.link.altas.base.url>
-                    ${interface.application.link.www_domain_hack}/microarray-as/atlas
-                </interface.application.link.altas.base.url>
-                <interface.application.link.atlas.exp_query.url>
-                    ${interface.application.link.altas.base.url}/qrs?gprop_0=&amp;amp;gval_0=(all+genes)&amp;amp;fexp_0=UP_DOWN&amp;amp;fact_0=&amp;amp;specie_0=&amp;amp;view=hm&amp;amp;fval_0=
-                </interface.application.link.atlas.exp_query.url>
-                <interface.application.link.atlas.species_options.url>atlas_list-species.html
-                </interface.application.link.atlas.species_options.url>
+                <interface.application.link.www_domain_hack>http://www.embl-ebi.ac.uk</interface.application.link.www_domain_hack>
+                <interface.application.link.query_help>/microarray/doc/help/ae_help.html</interface.application.link.query_help>
+                <interface.application.link.browse_help>/microarray/doc/help/browse_results.html</interface.application.link.browse_help>
+                <interface.application.link.aer_old.base.url>${interface.application.link.www_domain_hack}/microarray-as/aer</interface.application.link.aer_old.base.url>
+                <interface.application.link.aew.base.url>${interface.application.link.www_domain_hack}/microarray-as/aew</interface.application.link.aew.base.url>
+                <interface.application.link.altas.base.url>${interface.application.link.www_domain_hack}/microarray-as/atlas</interface.application.link.altas.base.url>
+                <interface.application.link.atlas.exp_query.url>${interface.application.link.altas.base.url}/qrs?gprop_0=&amp;amp;gval_0=(all+genes)&amp;amp;fexp_0=UP_DOWN&amp;amp;fact_0=&amp;amp;specie_0=&amp;amp;view=hm&amp;amp;fval_0=</interface.application.link.atlas.exp_query.url>
+                <interface.application.link.atlas.species_options.url>atlas_list-species.html</interface.application.link.atlas.species_options.url>
                 <interface.application.link.atlas.stats.url>atlas_stats.txt</interface.application.link.atlas.stats.url>
-                <interface.application.link.solr_gene_stats.url>aew-gene-stats.xml
-                </interface.application.link.solr_gene_stats.url>
-                <interface.application.link.solr_exp_stats.url>aew-exp-stats.xml
-                </interface.application.link.solr_exp_stats.url>
+                <interface.application.link.solr_gene_stats.url>aew-gene-stats.xml</interface.application.link.solr_gene_stats.url>
+                <interface.application.link.solr_exp_stats.url>aew-exp-stats.xml</interface.application.link.solr_exp_stats.url>
 
                 <interface.application.link.news_xml.url>ae-news.xml</interface.application.link.news_xml.url>
                 <interface.application.link.links_xml.url>ae-links.xml</interface.application.link.links_xml.url>
 
-                <interface.application.pref.experiments.datasources>aepub1
-                </interface.application.pref.experiments.datasources>
-                <interface.application.pref.experiments.reload.schedule>0 0 0/1 * * ?
-                </interface.application.pref.experiments.reload.schedule>
+                <interface.application.pref.experiments.datasources>aepub1</interface.application.pref.experiments.datasources>
+                <interface.application.pref.experiments.reload.schedule>0 0 0/1 * * ?</interface.application.pref.experiments.reload.schedule>
 
-                <interface.application.pref.files.rescan.interval>1800000
-                </interface.application.pref.files.rescan.interval>
+                <interface.application.pref.files.rescan.interval>1800000</interface.application.pref.files.rescan.interval>
                 <interface.application.body.class>dev_preview</interface.application.body.class>
                 <interface.application.pref.files.prefix>ae-aepub1</interface.application.pref.files.prefix>
             </properties>
@@ -110,41 +80,25 @@
         <profile>
             <id>preproduction-aecur</id>
             <properties>
-                <interface.application.link.www_domain_hack>http://www.embl-ebi.ac.uk
-                </interface.application.link.www_domain_hack>
-                <interface.application.link.query_help>/microarray/doc/help/ae_help.html
-                </interface.application.link.query_help>
-                <interface.application.link.browse_help>/microarray/doc/help/browse_results.html
-                </interface.application.link.browse_help>
-                <interface.application.link.aer_old.base.url>
-                    ${interface.application.link.www_domain_hack}/microarray-as/aer
-                </interface.application.link.aer_old.base.url>
-                <interface.application.link.aew.base.url>${interface.application.link.www_domain_hack}/microarray-as/aew
-                </interface.application.link.aew.base.url>
-                <interface.application.link.altas.base.url>
-                    ${interface.application.link.www_domain_hack}/microarray-as/atlas
-                </interface.application.link.altas.base.url>
-                <interface.application.link.atlas.exp_query.url>
-                    ${interface.application.link.altas.base.url}/qrs?gprop_0=&amp;amp;gval_0=(all+genes)&amp;amp;fexp_0=UP_DOWN&amp;amp;fact_0=&amp;amp;specie_0=&amp;amp;view=hm&amp;amp;fval_0=
-                </interface.application.link.atlas.exp_query.url>
-                <interface.application.link.atlas.species_options.url>atlas_list-species.html
-                </interface.application.link.atlas.species_options.url>
+                <interface.application.link.www_domain_hack>http://www.embl-ebi.ac.uk</interface.application.link.www_domain_hack>
+                <interface.application.link.query_help>/microarray/doc/help/ae_help.html</interface.application.link.query_help>
+                <interface.application.link.browse_help>/microarray/doc/help/browse_results.html</interface.application.link.browse_help>
+                <interface.application.link.aer_old.base.url>${interface.application.link.www_domain_hack}/microarray-as/aer</interface.application.link.aer_old.base.url>
+                <interface.application.link.aew.base.url>${interface.application.link.www_domain_hack}/microarray-as/aew</interface.application.link.aew.base.url>
+                <interface.application.link.altas.base.url>${interface.application.link.www_domain_hack}/microarray-as/atlas</interface.application.link.altas.base.url>
+                <interface.application.link.atlas.exp_query.url>${interface.application.link.altas.base.url}/qrs?gprop_0=&amp;amp;gval_0=(all+genes)&amp;amp;fexp_0=UP_DOWN&amp;amp;fact_0=&amp;amp;specie_0=&amp;amp;view=hm&amp;amp;fval_0=</interface.application.link.atlas.exp_query.url>
+                <interface.application.link.atlas.species_options.url>atlas_list-species.html</interface.application.link.atlas.species_options.url>
                 <interface.application.link.atlas.stats.url>atlas_stats.txt</interface.application.link.atlas.stats.url>
-                <interface.application.link.solr_gene_stats.url>aew-gene-stats.xml
-                </interface.application.link.solr_gene_stats.url>
-                <interface.application.link.solr_exp_stats.url>aew-exp-stats.xml
-                </interface.application.link.solr_exp_stats.url>
+                <interface.application.link.solr_gene_stats.url>aew-gene-stats.xml</interface.application.link.solr_gene_stats.url>
+                <interface.application.link.solr_exp_stats.url>aew-exp-stats.xml</interface.application.link.solr_exp_stats.url>
 
                 <interface.application.link.news_xml.url>ae-news.xml</interface.application.link.news_xml.url>
                 <interface.application.link.links_xml.url>ae-links.xml</interface.application.link.links_xml.url>
 
-                <interface.application.pref.experiments.datasources>aecur
-                </interface.application.pref.experiments.datasources>
-                <interface.application.pref.experiments.reload.schedule>0 0 0/1 * * ?
-                </interface.application.pref.experiments.reload.schedule>
+                <interface.application.pref.experiments.datasources>aecur</interface.application.pref.experiments.datasources>
+                <interface.application.pref.experiments.reload.schedule>0 0 0/1 * * ?</interface.application.pref.experiments.reload.schedule>
 
-                <interface.application.pref.files.rescan.interval>1800000
-                </interface.application.pref.files.rescan.interval>
+                <interface.application.pref.files.rescan.interval>1800000</interface.application.pref.files.rescan.interval>
                 <interface.application.body.class>dev_preview</interface.application.body.class>
                 <interface.application.pref.files.prefix>ae-aecur</interface.application.pref.files.prefix>
             </properties>
@@ -176,30 +130,24 @@
                 <interface.application.base.path>/ae11</interface.application.base.path>
 
                 <interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
-                <interface.application.link.browse_help>
-                    ${interface.application.link.www_domain}/microarray/doc/help/browse_results.html
-                </interface.application.link.browse_help>
+                <interface.application.link.browse_help>${interface.application.link.www_domain}/microarray/doc/help/browse_results.html</interface.application.link.browse_help>
                 <interface.application.link.aer_old.base.url>/arrayexpress</interface.application.link.aer_old.base.url>
-                <interface.application.link.atlas.exp_query.url>
-                    ${interface.application.link.www_domain}/microarray-as/atlas/qr?view=table&amp;amp;q_expt=aer_txt_expaccession%3A
-                </interface.application.link.atlas.exp_query.url>
+                <interface.application.link.altas.base.url>${interface.application.link.www_domain}/microarray-as/atlas</interface.application.link.altas.base.url>
+                <interface.application.link.atlas.exp_query.url>${interface.application.link.atlas.base.path}/qrs?gprop_0=&amp;amp;gval_0=(all+genes)&amp;amp;fexp_0=UP_DOWN&amp;amp;fact_0=&amp;amp;specie_0=&amp;amp;view=hm&amp;amp;fval_0=               </interface.application.link.atlas.exp_query.url>
+                <interface.application.link.atlas.species_options.url>${interface.application.link.altas.base.url}/list-species.jsp</interface.application.link.atlas.species_options.url>
+                <interface.application.link.atlas.stats.url>${interface.application.link.altas.base.url}/stats.jsp</interface.application.link.atlas.stats.url>
                 <interface.application.link.aer_old.experiment_link.style/>
                 <interface.application.link.aew.base.url>/arrayexpress-aew</interface.application.link.aew.base.url>
 
-                <interface.application.link.solr_gene_stats.url>/solr_gene/admin/stats.jsp
-                </interface.application.link.solr_gene_stats.url>
-                <interface.application.link.solr_exp_stats.url>/solr_exp/admin/stats.jsp
-                </interface.application.link.solr_exp_stats.url>
+                <interface.application.link.solr_gene_stats.url>/solr_gene/admin/stats.jsp</interface.application.link.solr_gene_stats.url>
+                <interface.application.link.solr_exp_stats.url>/solr_exp/admin/stats.jsp</interface.application.link.solr_exp_stats.url>
                 <interface.application.link.news_xml.url>test/ae_news.xml</interface.application.link.news_xml.url>
                 <interface.application.link.links_xml.url>test/ae_links.xml</interface.application.link.links_xml.url>
 
-                <interface.application.pref.experiments.datasources>aepub1
-                </interface.application.pref.experiments.datasources>
-                <interface.application.pref.experiments.reload.schedule>0 0 0/1 * * ?
-                </interface.application.pref.experiments.reload.schedule>
+                <interface.application.pref.experiments.datasources>aepub1</interface.application.pref.experiments.datasources>
+                <interface.application.pref.experiments.reload.schedule>0 0 0/1 * * ?</interface.application.pref.experiments.reload.schedule>
 
-                <interface.application.pref.files.rescan.interval>900000
-                </interface.application.pref.files.rescan.interval>
+                <interface.application.pref.files.rescan.interval>900000</interface.application.pref.files.rescan.interval>
             </properties>
         </profile>
         <profile>
@@ -398,14 +346,15 @@
         </dependency>
         <dependency>
             <groupId>net.sf.saxon</groupId>
-            <artifactId>saxon9-s9api</artifactId>
-            <version>9.1.0.6</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.saxon</groupId>
             <artifactId>saxon9-xpath</artifactId>
             <version>9.1.0.6</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>2.4.1</version>
+        </dependency>
+<!--
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon9-dom</artifactId>
@@ -427,6 +376,7 @@
             <version>2.9.1</version>
             <scope>runtime</scope>
         </dependency>
+-->
     </dependencies>
 </project>
 

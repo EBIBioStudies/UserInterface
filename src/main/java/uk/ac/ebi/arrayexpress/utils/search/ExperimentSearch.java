@@ -1,12 +1,8 @@
 package uk.ac.ebi.arrayexpress.utils.search;
 
-import net.sf.saxon.s9api.XdmItem;
-import net.sf.saxon.s9api.XdmNode;
-import net.sf.saxon.s9api.XdmValue;
+import net.sf.saxon.om.DocumentInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.arrayexpress.app.Application;
-import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 import uk.ac.ebi.arrayexpress.utils.RegExpHelper;
 
 import java.util.ArrayList;
@@ -33,21 +29,21 @@ public class ExperimentSearch
         return expText.isEmpty();
     }
 
-    public void buildText( XdmNode experiments )
+    public void buildText( DocumentInfo experiments )
     {
-        if (null != experiments && null != experiments.getUnderlyingNode()) {
+        if (null != experiments) {
             try {
                 expText.clear();
                 accessionIdx.clear();
-
-                XdmValue exps = ((SaxonEngine)Application.getAppComponent("SaxonEngine")).evaluateXPath(experiments, "/experiments/experiment");
-                if (null != exps) {
-                    for (XdmItem expObj : exps) {
-                        ExperimentText text = new ExperimentText().populateFromExperiment((XdmNode)expObj);
-                        expText.add(text);
-                        accessionIdx.put(text.accession, expText.size() - 1);
-                    }
-                }
+// TODO - commented
+//                XdmValue exps = ((SaxonEngine)Application.getAppComponent("SaxonEngine")).evaluateXPath(experiments, "/experiments/experiment");
+//                if (null != exps) {
+//                    for (XdmItem expObj : exps) {
+//                        ExperimentText text = new ExperimentText().populateFromExperiment((XdmNode)expObj);
+//                        expText.add(text);
+//                        accessionIdx.put(text.accession, expText.size() - 1);
+//                    }
+//                }
             } catch ( Throwable x ) {
                 logger.error("Caught an exception:", x);
             }

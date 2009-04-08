@@ -1,8 +1,6 @@
 package uk.ac.ebi.arrayexpress.utils.search;
 
-import net.sf.saxon.s9api.XdmNode;
-import uk.ac.ebi.arrayexpress.app.Application;
-import uk.ac.ebi.arrayexpress.components.SaxonEngine;
+import net.sf.saxon.om.NodeInfo;
 
 /**
  * A transitional class holding text that will be matched when searching for experiments.
@@ -31,19 +29,20 @@ public class ExperimentText
     // user ids, concatenated
     public String users;
 
-    public ExperimentText populateFromExperiment( XdmNode exp )
+    public ExperimentText populateFromExperiment( NodeInfo exp )
     {
-        SaxonEngine saxon = (SaxonEngine) Application.getAppComponent("SaxonEngine");
-        if (null != exp) {
-            text = saxon.concatAllText(exp);
-            accession = saxon.evaluateXPathSingle(exp, "accession").toLowerCase();
-            accessions = " ".concat(accession).concat(" ").concat(saxon.concatAllText(saxon.evaluateXPath(exp, "secondaryaccession"))).toLowerCase();
-            species = saxon.concatAllText(saxon.evaluateXPath(exp, "species")).toLowerCase();
-            array = saxon.concatAllText(saxon.evaluateXPath(exp, "arraydesign")).toLowerCase();
-            experimentType = saxon.concatAllText(saxon.evaluateXPath(exp, "experimenttype")).toLowerCase();
-            users = " ".concat(saxon.concatAllText(saxon.evaluateXPath(exp, "user")));
-        }
-
+// TODO - commented
+//        SaxonEngine saxon = (SaxonEngine) Application.getAppComponent("SaxonEngine");
+//        if (null != exp) {
+//            text = saxon.concatAllText(exp);
+//            accession = saxon.evaluateXPathSingle(exp, "accession").toLowerCase();
+//            accessions = " ".concat(accession).concat(" ").concat(saxon.concatAllText(saxon.evaluateXPath(exp, "secondaryaccession"))).toLowerCase();
+//            species = saxon.concatAllText(saxon.evaluateXPath(exp, "species")).toLowerCase();
+//            array = saxon.concatAllText(saxon.evaluateXPath(exp, "arraydesign")).toLowerCase();
+//            experimentType = saxon.concatAllText(saxon.evaluateXPath(exp, "experimenttype")).toLowerCase();
+//            users = " ".concat(saxon.concatAllText(saxon.evaluateXPath(exp, "user")));
+//        }
+//
         return this;
     }
 }

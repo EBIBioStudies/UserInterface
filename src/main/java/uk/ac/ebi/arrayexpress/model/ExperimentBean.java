@@ -1,6 +1,6 @@
 package uk.ac.ebi.arrayexpress.model;
 
-import org.apache.solr.client.solrj.beans.Field;
+//import org.apache.solr.client.solrj.beans.Field;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -220,7 +220,7 @@ public class ExperimentBean
         return id;
     }
 
-    @Field
+//    @Field
     public void setId(String id)
     {
         this.id = id;
@@ -231,7 +231,7 @@ public class ExperimentBean
         return accession;
     }
 
-    @Field
+//    @Field
     public void setAccession(String accession)
     {
         this.accession = accession;
@@ -242,7 +242,7 @@ public class ExperimentBean
         return name;
     }
 
-    @Field
+//    @Field
     public void setName(String name)
     {
         this.name = name;
@@ -253,7 +253,7 @@ public class ExperimentBean
         return releaseDate;
     }
 
-    @Field
+//    @Field
     public void setReleaseDate(String releaseDate)
     {
         this.releaseDate = releaseDate;
@@ -264,7 +264,7 @@ public class ExperimentBean
         return miameGold;
     }
 
-    @Field
+//    @Field
     public void setMiameGold(String miameGold)
     {
         this.miameGold = miameGold;
@@ -275,7 +275,7 @@ public class ExperimentBean
         return samples;
     }
 
-    @Field
+//    @Field
     public void setSamples(String samples)
     {
         this.samples = samples;
@@ -286,7 +286,7 @@ public class ExperimentBean
         return assays;
     }
 
-    @Field
+//    @Field
     public void setAssays(String assays)
     {
         this.assays = assays;
@@ -297,7 +297,7 @@ public class ExperimentBean
         return species;
     }
 
-    @Field
+//    @Field
     public void setSpecies(List<String> species)
     {
         this.species = species;
@@ -308,7 +308,7 @@ public class ExperimentBean
         return user;
     }
 
-    @Field
+//    @Field
     public void setUser(List<String> user)
     {
         this.user = user;
@@ -319,7 +319,7 @@ public class ExperimentBean
         return secondaryAccession;
     }
 
-    @Field
+//    @Field
     public void setSecondaryAccession(List<String> secondaryAccession)
     {
         this.secondaryAccession = secondaryAccession;
@@ -330,7 +330,7 @@ public class ExperimentBean
         return sampleAttribute;
     }
 
-    @Field
+//    @Field
     public void setSampleAttribute(List sampleAttribute)
     {
         this.sampleAttribute = new ArrayList<SampleAttributeBean>(sampleAttribute.size());
@@ -344,7 +344,7 @@ public class ExperimentBean
         return experimentalFactor;
     }
 
-    @Field
+//    @Field
     public void setExperimentalFactor(List<ExperimentalFactorBean> experimentalFactor)
     {
         this.experimentalFactor = experimentalFactor;
@@ -355,7 +355,7 @@ public class ExperimentBean
         return bioAssayDataGroup;
     }
 
-    @Field
+//    @Field
     public void setBioAssayDataGroup(List<BioAssayDataGroupBean> bioAssayDataGroup)
     {
         this.bioAssayDataGroup = bioAssayDataGroup;

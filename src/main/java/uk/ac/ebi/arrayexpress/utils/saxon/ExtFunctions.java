@@ -2,6 +2,7 @@ package uk.ac.ebi.arrayexpress.utils.saxon;
 
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.om.NodeInfo;
+import net.sf.saxon.om.SequenceIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
@@ -167,7 +168,7 @@ public class ExtFunctions
                     Thread.sleep(1);
                 }
                 sb.append("</files>");
-                return ((SaxonEngine)Application.getAppComponent("SaxonEngine")).buildDocument(sb.toString()).getUnderlyingNode();
+                return ((SaxonEngine)Application.getAppComponent("SaxonEngine")).buildDocument(sb.toString());
             }
         } catch (InterruptedException x) {
             logger.warn("Method interrupted");
@@ -199,6 +200,12 @@ public class ExtFunctions
     private static boolean testCheckbox( String check )
     {
         return (null != check && ( check.toLowerCase().equals("true") || check.toLowerCase().equals("on")));
+    }
+
+    public static SequenceIterator allExperiments()
+    {
+        Experiments experiments = ((Experiments) Application.getAppComponent("Experiments"));
+        return experiments.getSequenceIterator();    
     }
 
     public static boolean testExperiment( XPathContext context, String userId, String keywords, String wholeWords, String species, String array, String experimentType, String inAtlas )
