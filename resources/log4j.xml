@@ -26,6 +26,11 @@
         <appender-ref ref="${interface.application.log.appender.ref}"/>
     </logger>
 
+    <logger name="javax.management" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="${interface.application.log.appender.ref}"/>
+    </logger>
+
     <logger name="org.tuckey.web.filters" additivity="false">
         <level value="INFO"/>
         <appender-ref ref="${interface.application.log.appender.ref}"/>
