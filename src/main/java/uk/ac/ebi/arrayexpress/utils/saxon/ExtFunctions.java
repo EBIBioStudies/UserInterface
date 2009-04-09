@@ -133,6 +133,22 @@ public class ExtFunctions
         return dateString;
     }
 
+    public static int createIndexDocument(XPathContext context)
+    {
+        logger.debug("createIndexDocument called");
+        return 0;
+    }
+
+    public static void addIndexField(XPathContext context, int documentId, String fieldName, String value, int flags)
+    {
+        logger.debug("addIndexField called");
+    }
+
+    public static void addDocumentToIndex(XPathContext context, int documentId)
+    {
+        logger.debug("addDocumentToIndex");
+    }
+
     public static boolean isExperimentInWarehouse( String accession )
     {
         return ((Experiments) Application.getAppComponent("Experiments"))
