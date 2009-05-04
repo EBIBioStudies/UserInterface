@@ -41,7 +41,7 @@
         <aeext:log message="[browse-experiments-html] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
         <aeext:log message="[browse-experiments-html] Sort by: [{$sortby}], [{$sortorder}]"/>
 
-        <xsl:variable name="vFilteredExperiments" select="ae:allExperiments()"/>
+        <xsl:variable name="vFilteredExperiments" select="ae:searchIndex($keywords)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
         <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments/samples)"/>
         <xsl:variable name="vTotalAssays" select="sum($vFilteredExperiments/assays)"/>

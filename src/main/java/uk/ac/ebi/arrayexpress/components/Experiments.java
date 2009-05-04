@@ -62,6 +62,7 @@ public class Experiments extends ApplicationComponent
                 }
             }
         }
+        indexExperiments();
         
 //        experimentsXml = new TextFilePersistence<PersistableString>(
 //            new PersistableString()
@@ -368,4 +369,8 @@ public class Experiments extends ApplicationComponent
         return doc;
     }
 
+    private void indexExperiments()
+    {
+        ((SaxonEngine) getComponent("SaxonEngine")).transform(experiments.getObject().getDocument(), "index-experiments.xsl", null);    
+    }
 }

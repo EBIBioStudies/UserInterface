@@ -1,18 +1,39 @@
 package uk.ac.ebi.arrayexpress.components;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
+import net.sf.saxon.om.NodeInfo;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.WhitespaceAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.RAMDirectory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
-import uk.ac.ebi.arrayexpress.model.ExperimentBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SearchEngine extends ApplicationComponent
 {
     // logging machinery
-//    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
-//    private CoreContainer cores;
-//    private SolrServer server;
+    private Analyzer analyzer;
+    private Directory directory;
+
+    private IndexWriter iwriter;
+    private Document document;
+
+    private IndexSearcher isearcher;
+    private List<NodeInfo> contextNodes = new ArrayList<NodeInfo>();
 
     public SearchEngine()
     {
@@ -21,57 +42,115 @@ public class SearchEngine extends ApplicationComponent
 
     public void initialize()
     {
-//        try {
-//            String tmpDir = System.getProperty("java.io.tmpdir");
-//            File configFile = new File(System.getProperty("java.io.tmpdir"), "ae-solr-index/ae-solr-index.xml");
-//            cores =
-//                new CoreContainer(
-//                    new File(
-//                        tmpDir
-//                        , getPreferences().getString("ae.solr.index.directory")).getAbsolutePath()
-//                    , configFile
-//                );
-//            server = new EmbeddedSolrServer(cores, "experiments");
-//
-//        } catch (Throwable x) {
-//            logger.error("Caught an exception:", x);
-//        }
+        analyzer = new WhitespaceAnalyzer();
+        directory = new RAMDirectory();
     }
 
     public void terminate()
     {
-//        if (null != cores) {
-//            cores.shutdown();
-//        }
+        try {
+            if (null != isearcher) {
+                isearcher.close();
+            }
+
+            if (null != directory) {
+                directory.close();
+            }
+
+        } catch (Throwable x) {
+            logger.error("Caught an exception:", x);
+        }
     }
 
-    public void addToIndex(ExperimentBean experiment)
+    public void createIndex()
     {
-//        try {
-//            server.addBean(experiment);
-//            // not sure if we need it here?
-//            server.commit();
-//        } catch (Throwable x) {
-//            logger.error("Caught an exception:", x);
-//        }
+        if (null == iwriter) {
+            try {
+                iwriter = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
+            } catch (Throwable x) {
+                logger.error("Caught an exception", x);
+            }
+        } else {
+            logger.error("Index writer has already been created!");
+        }
     }
 
-    public void queryIndex(String queryString)
+    public void newIndexDocument(NodeInfo contextNode)
     {
-//        SolrQuery query = new SolrQuery();
-//        query.setQuery(queryString);
-//        query.addHighlightField("name");
-//
-//        try {
-//            QueryResponse rsp = server.query(query);
-//            List<ExperimentBean> experiments = rsp.getBeans(ExperimentBean.class);
-//
-//            for (ExperimentBean experiment : experiments) {
-//                logger.info(experiment.getAccession());
-//            }
-//
-//        } catch (Throwable x) {
-//            logger.error("Caught an exception:", x);
-//        }
+        if (null == document) {
+            document = new Document();
+            contextNodes.add(contextNode);
+            document.add(new Field("_id", String.valueOf(contextNodes.size() - 1), Field.Store.YES, Field.Index.NO));
+        } else {
+            logger.error("Index document has already been created!");
+        }
+    }
+
+    public void addIndexField(String name, String value, int flags)
+    {
+        if (null != document) {
+            document.add(new Field(name, value, Field.Store.NO, Field.Index.ANALYZED));
+        } else {
+            logger.error("Create document first!");
+        }
+    }
+
+    public void addIndexDocument()
+    {
+        if (null != iwriter) {
+            if (null != document) {
+                try {
+                    iwriter.addDocument(document);
+                    document = null;
+                } catch (Throwable x) {
+                    logger.error("Caught an exception:", x);
+                }
+            } else {
+                logger.error("Create document first!");
+            }
+        } else {
+            logger.error("Create index writer first!");
+        }
+    }
+
+    public void commitIndex()
+    {
+        if (null != iwriter) {
+            try {
+                iwriter.optimize();
+                iwriter.commit();
+                iwriter.close();
+                iwriter = null;
+
+                try {
+                    isearcher = new IndexSearcher(directory);
+                } catch (Throwable x) {
+                    logger.error("Caught an exception:", x);
+                }
+            } catch (Throwable x) {
+                logger.error("Caught an exception:", x);
+            }
+        } else {
+            logger.error("Create index writer first!");
+        }
+    }
+
+    public List<NodeInfo> queryIndex(String queryString)
+    {
+        List<NodeInfo> results = null;
+        try {
+            QueryParser parser = new QueryParser("text", analyzer);
+            parser.setDefaultOperator(QueryParser.Operator.AND);
+            Query query = parser.parse(queryString);
+            TopDocs hits = isearcher.search(query, 99999);
+
+            results = new ArrayList<NodeInfo>(hits.totalHits);
+            for (ScoreDoc d : hits.scoreDocs) {
+                results.add(contextNodes.get(Integer.parseInt(isearcher.doc(d.doc).getField("_id").stringValue())));
+            }
+        } catch (Throwable x) {
+            logger.error("Caught an exception:", x);
+        }
+        return results;
     }
 }

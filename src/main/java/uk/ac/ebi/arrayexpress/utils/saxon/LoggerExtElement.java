@@ -39,7 +39,7 @@ public class LoggerExtElement extends ExtensionInstruction
         messageExpression = typeCheck(MESSAGE_ATTRIBUTE, messageExpression);
     }
 
-    public Expression compile( Executable exec) throws XPathException
+    public Expression compile(Executable exec) throws XPathException
     {
         return new LogInstruction(messageExpression);
     }
@@ -49,28 +49,34 @@ public class LoggerExtElement extends ExtensionInstruction
         // logging machinery
         private final Logger logger = LoggerFactory.getLogger(getClass());
 
-        public LogInstruction(Expression expression) {
+        public LogInstruction(Expression expression)
+        {
             Expression[] sub = {expression};
             setArguments(sub);
         }
+
         /**
          * A subclass must provide one of the methods evaluateItem(), iterate(), or process().
          * This method indicates which of the three is provided.
          */
 
-        public int getImplementationMethod() {
+        public int getImplementationMethod()
+        {
             return Expression.PROCESS_METHOD;
         }
 
-        public String getExpressionType() {
+        public String getExpressionType()
+        {
             return "aeext:log";
         }
 
-        public int computeCardinality() {
+        public int computeCardinality()
+        {
             return StaticProperty.EMPTY;
         }
 
-        public void process( XPathContext context) throws XPathException {
+        public void process(XPathContext context) throws XPathException
+        {
             Item item = this.arguments[0].evaluateItem(context);
             logger.info(item.getStringValue());
         }
