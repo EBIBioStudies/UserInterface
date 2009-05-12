@@ -7,7 +7,7 @@
     <xsl:output method="xml" encoding="ISO-8859-1" indent="no"/>
 
     <xsl:template match="/experiments">
-        <xsl:variable name="index" as="java:java.lang.Object">
+        <xsl:variable name="index" as="java:java.lang.Object" xmlns:java="http://saxon.sf.net/java-type">
             <lucene:create/>
         </xsl:variable>
         <xsl:for-each select="experiment">

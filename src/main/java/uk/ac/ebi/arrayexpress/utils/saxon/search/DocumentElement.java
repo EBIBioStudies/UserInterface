@@ -8,10 +8,10 @@ import net.sf.saxon.instruct.Executable;
 import net.sf.saxon.style.ExtensionInstruction;
 import net.sf.saxon.trans.XPathException;
 
-public class IndexElement extends ExtensionInstruction
+public class DocumentElement extends ExtensionInstruction
 {
 
-    public IndexElement()
+    public DocumentElement()
     {
     }
 
@@ -26,12 +26,12 @@ public class IndexElement extends ExtensionInstruction
 
     public Expression compile(Executable exec) throws XPathException
     {
-        return new IndexInstruction();
+        return new DocumentInstruction();
     }
 
-    private static class IndexInstruction extends SimpleExpression
+    private static class DocumentInstruction extends SimpleExpression
     {
-        public IndexInstruction()
+        public DocumentInstruction()
         {
         }
 
