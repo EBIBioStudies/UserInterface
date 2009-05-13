@@ -10,7 +10,7 @@
         <xsl:variable name="index" as="java:java.lang.Object" xmlns:java="http://saxon.sf.net/java-type">
             <lucene:create>
                 <xsl:fallback>
-                    <xsl:message terminate="yes" select="count(experiment)"/>
+                    <xsl:message terminate="yes">Lucene extension is not installed</xsl:message>
                 </xsl:fallback>
             </lucene:create>
         </xsl:variable>
