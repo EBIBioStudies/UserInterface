@@ -8,12 +8,11 @@ import net.sf.saxon.instruct.Executable;
 import net.sf.saxon.om.Item;
 import net.sf.saxon.style.ExtensionInstruction;
 import net.sf.saxon.trans.XPathException;
-import net.sf.saxon.value.ObjectValue;
 
-public class CreateElement extends ExtensionInstruction
+public class CommitElement extends ExtensionInstruction
 {
 
-    public CreateElement()
+    public CommitElement()
     {
     }
 
@@ -28,12 +27,12 @@ public class CreateElement extends ExtensionInstruction
 
     public Expression compile(Executable exec) throws XPathException
     {
-        return new CreateInstruction();
+        return new CommitInstruction();
     }
 
-    private static class CreateInstruction extends SimpleExpression
+    private static class CommitInstruction extends SimpleExpression
     {
-        public CreateInstruction()
+        public CommitInstruction()
         {
         }
 
@@ -47,21 +46,20 @@ public class CreateElement extends ExtensionInstruction
             return Expression.EVALUATE_METHOD;
         }
 
-        public int computeCardinality()
-        {
-            return StaticProperty.EXACTLY_ONE;
-        }
-
         public String getExpressionType()
         {
-            return "lucene:create";
+            return "lucene:commit";
+        }
+
+        public int computeCardinality()
+        {
+            return StaticProperty.EMPTY;
         }
 
         public Item evaluateItem(XPathContext context) throws XPathException
         {
             // do something here today
-            return new ObjectValue(new Object());
+            return null;
         }
     }
 }
-

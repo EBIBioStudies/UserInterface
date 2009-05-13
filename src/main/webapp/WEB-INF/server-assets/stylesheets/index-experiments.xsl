@@ -8,14 +8,23 @@
 
     <xsl:template match="/experiments">
         <xsl:variable name="index" as="java:java.lang.Object" xmlns:java="http://saxon.sf.net/java-type">
-            <lucene:create/>
+            <lucene:create>
+                <xsl:fallback>
+                    <xsl:message terminate="yes" select="count(experiment)"/>
+                </xsl:fallback>
+            </lucene:create>
         </xsl:variable>
-        <xsl:for-each select="experiment">
-            <lucene:document index="$index" select=".">
-                <lucene:field name="text" select="." analyzed="true"/>
-            </lucene:document>
-        </xsl:for-each>
+        <xsl:apply-templates select="experiment">
+            <xsl:with-param name="index" select="$index"/>
+        </xsl:apply-templates>
         <lucene:commit index="$index"/>
+    </xsl:template>
+
+    <xsl:template match="experiment">
+        <xsl:param name="index"/>
+        <lucene:document index="$index" select=".">
+            <lucene:field name="text" select="." analyzed="true"/>
+        </lucene:document>
     </xsl:template>
 
 </xsl:stylesheet>

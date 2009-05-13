@@ -1,8 +1,12 @@
 package uk.ac.ebi.arrayexpress.components;
 
 import net.sf.saxon.Configuration;
+import net.sf.saxon.Controller;
 import net.sf.saxon.TransformerFactoryImpl;
+import net.sf.saxon.event.SequenceWriter;
+import net.sf.saxon.instruct.TerminationException;
 import net.sf.saxon.om.DocumentInfo;
+import net.sf.saxon.om.Item;
 import net.sf.saxon.tinytree.TinyBuilder;
 import net.sf.saxon.xpath.XPathEvaluator;
 import org.slf4j.Logger;
@@ -24,6 +28,9 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
 {
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    // logging writer for the transformations
+    private LoggerWriter loggerWriter;
 
     TransformerFactoryImpl trFactory;
     private Map<String,Templates> templatesCache = new HashMap<String,Templates>();
@@ -48,6 +55,7 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
             
             trFactory.setErrorListener(this);
             trFactory.setURIResolver(this);
+            loggerWriter = new LoggerWriter(logger);
         } catch (Throwable x) {
             logger.error("Caught an exception:", x);
         }
@@ -55,6 +63,7 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
 
     public void terminate()
     {
+        loggerWriter = null;
     }
 
     // implements URIResolver.resolve
@@ -286,6 +295,9 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
             }
             Transformer xslt = templates.newTransformer();
 
+            // redirect all messages to logger
+            ((Controller)xslt).setMessageEmitter(loggerWriter);
+
             // assign the parameters (if not null)
             if (null != params) {
                 for ( Map.Entry<String, String> param : params.entrySet() ) {
@@ -299,14 +311,30 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
             logger.debug("transformer.transform() completed");
 
             result = true;
+        } catch (TerminationException x ) {
+            logger.error("Transformation has been terminated by xsl instruction, please inspect log for details");
         } catch ( Throwable x ) {
             if (x.getMessage().contains("java.lang.InterruptedException")) {
                 logger.error("Transformation has been interruped");
-
             } else {
                 logger.error("Caught an exception transforming [" + stylesheet + "]:", x);
             }
         }
         return result;
+    }
+
+    class LoggerWriter extends SequenceWriter
+    {
+        private Logger logger;
+
+        public LoggerWriter(Logger logger)
+        {
+            this.logger = logger;
+        }
+
+        public void write(Item item)
+        {
+            logger.info("[xsl:message] {}", item.getStringValue());
+        }
     }
 }
