@@ -42,8 +42,9 @@ public class ApplicationPreferences extends ApplicationComponent
         String strVal = null;
         try {
             strVal = properties.getProperty(key);
-            if (null != strVal)
+            if (null != strVal && !strVal.trim().equals("")) {
                 value = Long.valueOf(strVal);
+            }
         } catch ( NumberFormatException x ) {
             logger.error("Value [{}] of preference [{}] is expected to be a number", strVal, key);
         } catch ( Throwable x ) {
