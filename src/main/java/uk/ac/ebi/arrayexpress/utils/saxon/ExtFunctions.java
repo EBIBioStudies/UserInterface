@@ -243,12 +243,6 @@ public class ExtFunctions
         return (null != check && (check.toLowerCase().equals("true") || check.toLowerCase().equals("on")));
     }
 
-    public static SequenceIterator allExperiments()
-    {
-        Experiments experiments = ((Experiments)Application.getAppComponent("Experiments"));
-        return experiments.getSequenceIterator();
-    }
-
     public static boolean testExperiment(XPathContext context, String userId, String keywords, String wholeWords, String species, String array, String experimentType, String inAtlas)
     {
         final int textIdxFPrint = context.getNamePool().getFingerprint("", "textidx");

@@ -125,6 +125,24 @@
             </properties>
         </profile>
         <profile>
+            <id>ci</id>
+            <properties>
+                <interface.application.base.path>/ae</interface.application.base.path>
+                <interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
+                <interface.application.link.query_help>${interface.application.link.www_domain}/microarray/doc/help/ae_help.html</interface.application.link.query_help>
+                <interface.application.link.browse_help>${interface.application.link.www_domain}/microarray/doc/help/browse_results.html</interface.application.link.browse_help>
+                <interface.application.link.aew.base.url>${interface.application.link.www_domain}/microarray-as/aew</interface.application.link.aew.base.url>
+                <interface.application.link.atlas.base.url>${interface.application.link.www_domain}/microarray-as/atlas</interface.application.link.atlas.base.url>
+                <interface.application.link.atlas.exp_query.url>${interface.application.link.altas.base.url}/qrs?gprop_0=&amp;amp;gval_0=(all+genes)&amp;amp;fexp_0=UP_DOWN&amp;amp;fact_0=&amp;amp;specie_0=&amp;amp;view=hm&amp;amp;fval_0=</interface.application.link.atlas.exp_query.url>
+                <interface.application.link.atlas.species_options.url>atlas_list-species.html</interface.application.link.atlas.species_options.url>
+                <interface.application.link.atlas.stats.url>atlas_stats.txt</interface.application.link.atlas.stats.url>
+                <interface.application.link.news_xml.url>ae-news.xml</interface.application.link.news_xml.url>
+                <interface.application.link.links_xml.url>ae-links.xml</interface.application.link.links_xml.url>
+                <interface.application.link.solr_gene_stats.url>aew-gene-stats.xml</interface.application.link.solr_gene_stats.url>
+                <interface.application.link.solr_exp_stats.url>aew-exp-stats.xml</interface.application.link.solr_exp_stats.url>
+            </properties>
+        </profile>
+        <profile>
             <id>curators</id>
             <properties>
                 <interface.application.base.path>/ae11</interface.application.base.path>

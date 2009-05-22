@@ -137,6 +137,10 @@ public class SearchEngine extends ApplicationComponent
 
     public List<NodeInfo> queryIndex(String queryString)
     {
+        // empty query returns everything
+        if (null != queryString && queryString.trim().equals(""))
+            return contextNodes;
+
         List<NodeInfo> results = null;
         try {
             QueryParser parser = new QueryParser("text", analyzer);
