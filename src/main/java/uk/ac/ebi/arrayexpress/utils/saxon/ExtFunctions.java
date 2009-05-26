@@ -1,9 +1,7 @@
 package uk.ac.ebi.arrayexpress.utils.saxon;
 
 import net.sf.saxon.expr.XPathContext;
-import net.sf.saxon.om.NodeInfo;
-import net.sf.saxon.om.NodeListIterator;
-import net.sf.saxon.om.SequenceIterator;
+import net.sf.saxon.om.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
@@ -153,9 +151,28 @@ public class ExtFunctions
         return 0;
     }
 
-    public static void addIndexField(XPathContext context, int documentId, String fieldName, String value, int flags)
+    public static void addIndexField(XPathContext context, int documentId, String fieldName, SequenceIterator value, int flags)
     {
-        ((SearchEngine)Application.getAppComponent("SearchEngine")).addIndexField(fieldName, value, flags);
+        FastStringBuffer sb = new FastStringBuffer(1024);
+        try {
+            boolean first = true;
+            String sep = " ";
+            while (true) {
+                Item item = value.next();
+                if (null == item) {
+                    break;
+                }
+                if (!first) {
+                    sb.append(sep);
+                }
+                first = false;
+                sb.append(item.getStringValueCS());
+            }
+        } catch (Throwable x) {
+            logger.error("Caught an exception:", x);
+        }
+
+        ((SearchEngine)Application.getAppComponent("SearchEngine")).addIndexField(fieldName, sb.toString(), flags);
     }
 
     public static void addDocumentToIndex(XPathContext context, int documentId)
