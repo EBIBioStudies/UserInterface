@@ -6,11 +6,9 @@ import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.slf4j.Logger;
@@ -89,7 +87,7 @@ public class SearchEngine extends ApplicationComponent
     public void addIndexField(String name, String value, int flags)
     {
         if (null != document) {
-            document.add(new Field(name, value, Field.Store.NO, Field.Index.ANALYZED));
+            document.add(new Field(name, value, Field.Store.NO, 1 == flags ? Field.Index.ANALYZED : Field.Index.NOT_ANALYZED));
         } else {
             logger.error("Create document first!");
         }
@@ -135,18 +133,31 @@ public class SearchEngine extends ApplicationComponent
         }
     }
 
-    public List<NodeInfo> queryIndex(String queryString)
+    public List<NodeInfo> queryIndex(String userId, String queryString, String species)
     {
         // empty query returns everything
-        if (null != queryString && queryString.trim().equals(""))
-            return contextNodes;
+        //if (null != queryString && queryString.trim().equals(""))
+        //    return contextNodes;
 
         List<NodeInfo> results = null;
         try {
             QueryParser parser = new QueryParser("text", analyzer);
             parser.setDefaultOperator(QueryParser.Operator.AND);
-            Query query = parser.parse(queryString);
-            TopDocs hits = isearcher.search(query, 99999);
+            BooleanQuery query = new BooleanQuery();
+            if (null != queryString && !queryString.trim().equals("")) {
+                query.add(parser.parse(queryString), BooleanClause.Occur.MUST);
+            }
+            // additional constraint 
+            if (null != userId && !userId.equals("0")) {
+                query.add(new TermQuery(new Term("users", userId)), BooleanClause.Occur.MUST);
+            }
+            // empty query returns everything
+            if (query.clauses().isEmpty()) {
+                return contextNodes;
+            }
+
+            // to show _all_ available experiments
+            TopDocs hits = isearcher.search(query, contextNodes.size());
 
             results = new ArrayList<NodeInfo>(hits.totalHits);
             for (ScoreDoc d : hits.scoreDocs) {

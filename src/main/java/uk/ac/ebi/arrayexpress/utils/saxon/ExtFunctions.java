@@ -180,9 +180,9 @@ public class ExtFunctions
         ((SearchEngine)Application.getAppComponent("SearchEngine")).addIndexDocument();
     }
 
-    public static SequenceIterator searchIndex(XPathContext context, String queryString)
+    public static SequenceIterator searchIndex(XPathContext context, String userId, String queryString, String species)
     {
-        List<NodeInfo> nodes = ((SearchEngine)Application.getAppComponent("SearchEngine")).queryIndex(queryString);
+        List<NodeInfo> nodes = ((SearchEngine)Application.getAppComponent("SearchEngine")).queryIndex(userId, queryString, species);
         if (null != nodes) {
             return new NodeListIterator(nodes);
         }
