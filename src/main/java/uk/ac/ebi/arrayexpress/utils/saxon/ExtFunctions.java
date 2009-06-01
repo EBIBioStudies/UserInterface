@@ -151,28 +151,42 @@ public class ExtFunctions
         return 0;
     }
 
-    public static void addIndexField(XPathContext context, int documentId, String fieldName, SequenceIterator value, int flags)
+    public static void addIndexField(XPathContext context, int documentId, String fieldName, SequenceIterator value, boolean shouldConcatenate, boolean shouldAnalyze, boolean shouldStore)
     {
-        FastStringBuffer sb = new FastStringBuffer(1024);
-        try {
-            boolean first = true;
-            String sep = " ";
-            while (true) {
-                Item item = value.next();
-                if (null == item) {
-                    break;
+        if (shouldConcatenate) {
+            FastStringBuffer sb = new FastStringBuffer(1024);
+            try {
+                boolean first = true;
+                String sep = " ";
+                while (true) {
+                    Item item = value.next();
+                    if (null == item) {
+                        break;
+                    }
+                    if (!first) {
+                        sb.append(sep);
+                    }
+                    first = false;
+                    sb.append(item.getStringValueCS());
                 }
-                if (!first) {
-                    sb.append(sep);
-                }
-                first = false;
-                sb.append(item.getStringValueCS());
+            } catch (Throwable x) {
+                logger.error("Caught an exception:", x);
             }
-        } catch (Throwable x) {
-            logger.error("Caught an exception:", x);
-        }
 
-        ((SearchEngine)Application.getAppComponent("SearchEngine")).addIndexField(fieldName, sb.toString(), flags);
+            ((SearchEngine)Application.getAppComponent("SearchEngine")).addIndexField(fieldName, sb.toString(), shouldAnalyze, shouldStore);
+        } else {
+            try {
+                while (true) {
+                    Item item = value.next();
+                    if (null == item) {
+                        break;
+                    }
+                    ((SearchEngine)Application.getAppComponent("SearchEngine")).addIndexField(fieldName, item.getStringValue(), shouldAnalyze, shouldStore);
+                }
+            } catch (Throwable x) {
+                logger.error("Caught an exception:", x);
+            }
+        }
     }
 
     public static void addDocumentToIndex(XPathContext context, int documentId)
@@ -180,9 +194,9 @@ public class ExtFunctions
         ((SearchEngine)Application.getAppComponent("SearchEngine")).addIndexDocument();
     }
 
-    public static SequenceIterator searchIndex(XPathContext context, String userId, String queryString, String species)
+    public static SequenceIterator searchIndex(XPathContext context, String userId, String queryString, String species, String arrayId, String expType)
     {
-        List<NodeInfo> nodes = ((SearchEngine)Application.getAppComponent("SearchEngine")).queryIndex(userId, queryString, species);
+        List<NodeInfo> nodes = ((SearchEngine)Application.getAppComponent("SearchEngine")).queryIndex(userId, queryString, species, arrayId, expType);
         if (null != nodes) {
             return new NodeListIterator(nodes);
         }
