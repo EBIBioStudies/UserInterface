@@ -14,7 +14,7 @@
 
     <xsl:template match="experiment">
         <xsl:variable name="vIndexDocId" select="ae:createIndexDocument()"/>
-        <xsl:value-of select="ae:addIndexField($vIndexDocId, 'text', .//*, true(), true(), false())"/>
+        <xsl:value-of select="ae:addIndexField($vIndexDocId, 'text', .//text(), true(), true(), false())"/>
         <xsl:for-each select="species">
             <xsl:value-of select="ae:addIndexField($vIndexDocId, 'species', ae:normalizeSpecies(.), false(), false(), false())"/>
         </xsl:for-each>

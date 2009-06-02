@@ -315,7 +315,9 @@ public class ExtFunctions
 
     public static String markKeywords(String input, String keywords, String wholeWords)
     {
-        String result = input;
+        return ((SearchEngine)Application.getAppComponent("SearchEngine")).highlightQuery(keywords, input);
+    }
+/*        String result = input;
 
         try {
             if (null != keywords && 0 < keywords.length()) {
@@ -350,4 +352,5 @@ public class ExtFunctions
 
         return result;
     }
+*/
 }

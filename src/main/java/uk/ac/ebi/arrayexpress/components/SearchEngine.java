@@ -2,7 +2,7 @@ package uk.ac.ebi.arrayexpress.components;
 
 import net.sf.saxon.om.NodeInfo;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
@@ -10,13 +10,19 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.*;
+import org.apache.lucene.search.highlight.Highlighter;
+import org.apache.lucene.search.highlight.NullFragmenter;
+import org.apache.lucene.search.highlight.QueryScorer;
+import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class SearchEngine extends ApplicationComponent
@@ -33,6 +39,10 @@ public class SearchEngine extends ApplicationComponent
     private IndexReader ireader;
     private List<NodeInfo> contextNodes = new ArrayList<NodeInfo>();
 
+    // query cache
+    private final int QUERY_CACHE_SIZE = 25;
+    private Map<String,Query> queryCache = new HashMap<String,Query>(QUERY_CACHE_SIZE);
+
     public SearchEngine()
     {
         super("SearchEngine");
@@ -43,7 +53,7 @@ public class SearchEngine extends ApplicationComponent
         String tmpDir = System.getProperty("java.io.tmpdir");
         indexDirectory = new File(tmpDir, "index");
 
-        analyzer = new WhitespaceAnalyzer();
+        analyzer = new SimpleAnalyzer();
     }
 
     public void terminate()
@@ -139,11 +149,21 @@ public class SearchEngine extends ApplicationComponent
     {
         List<NodeInfo> results = null;
         try {
-            QueryParser parser = new QueryParser("text", analyzer);
-            parser.setDefaultOperator(QueryParser.Operator.AND);
             BooleanQuery query = new BooleanQuery();
             if (null != queryString && !queryString.trim().equals("")) {
-                query.add(parser.parse(queryString), BooleanClause.Occur.MUST);
+                queryString = queryString.trim();
+                Query q = null;
+                if (queryCache.containsKey(queryString)) {
+                    q = queryCache.get(queryString);
+                } else {
+                    QueryParser parser = new QueryParser("text", analyzer);
+                    parser.setDefaultOperator(QueryParser.Operator.AND);
+                    q = parser.parse(queryString).rewrite(ireader);
+                    logger.info("Query [{}] was rewritten to [{}]", queryString, q.toString());
+                    queryCache.put(queryString, q);
+                }
+                //
+                query.add(q, BooleanClause.Occur.MUST);
             }
             // additional constraint 
             if (null != userId && !userId.equals("0")) {
@@ -179,5 +199,24 @@ public class SearchEngine extends ApplicationComponent
             logger.error("Caught an exception:", x);
         }
         return results;
+    }
+
+    public String highlightQuery(String queryString, String text)
+    {
+        if (null != queryString && !queryString.trim().equals("")) {
+            try {
+                Query q = queryCache.get(queryString);
+
+                SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter("\u00ab", "\u00bb");
+                Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(q));
+                highlighter.setTextFragmenter(new NullFragmenter());
+
+                String str = highlighter.getBestFragment(analyzer, "text", text);
+                return null != str ? str : text;
+            } catch (Throwable x) {
+                logger.error("Caught an exception:", x);
+            }
+        }
+        return text;
     }
 }
