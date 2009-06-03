@@ -198,7 +198,7 @@
     <repositories>
         <repository>
             <id>artifactory-repo</id>
-            <url>http://dukkha.ebi.ac.uk:8081/artifactory/repo</url>
+            <url>http://bar.ebi.ac.uk:8081/artifactory/repo/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
@@ -208,7 +208,7 @@
     <pluginRepositories>
         <pluginRepository>
             <id>artifactory-repo</id>
-            <url>http://dukkha.ebi.ac.uk:8081/artifactory/repo</url>
+            <url>http://bar.ebi.ac.uk:8081/artifactory/repo/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
