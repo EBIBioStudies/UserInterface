@@ -2,7 +2,6 @@ package uk.ac.ebi.arrayexpress.components;
 
 import net.sf.saxon.om.NodeInfo;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
@@ -17,6 +16,7 @@ import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
+import uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class SearchEngine extends ApplicationComponent
         String tmpDir = System.getProperty("java.io.tmpdir");
         indexDirectory = new File(tmpDir, "index");
 
-        analyzer = new SimpleAnalyzer();
+        analyzer = new ExperimentTextAnalyzer();
     }
 
     public void terminate()

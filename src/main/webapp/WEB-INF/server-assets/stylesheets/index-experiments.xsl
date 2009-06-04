@@ -24,7 +24,7 @@
         <xsl:value-of select="ae:addDocumentToIndex($vIndexDocId)"/>
     </xsl:template>
 
-<!--
+<!-- this is how we think this should be working :)
     <xsl:template match="/experiments">
         <xsl:variable name="expIndex" as="java:java.lang.Object" xmlns:java="http://saxon.sf.net/java-type">
             <lucene:create name="experiments" storage="memory">
