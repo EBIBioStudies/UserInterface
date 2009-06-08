@@ -19,7 +19,7 @@ public final class ExperimentTextAnalyzer extends Analyzer
 
         protected boolean isTokenChar(char c)
         {
-            return Character.isLetter(c) | Character.isDigit(c) | ('-' == c) | ('"' == c);
+            return Character.isLetter(c) | Character.isDigit(c) | ('-' == c);
         }
 
         protected char normalize(char c)
