@@ -1,4 +1,4 @@
-package uk.ac.ebi.arrayexpress.app;
+package uk.ac.ebi.microarray.app;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public abstract class Application
     {
         name = appName;
         components = new LinkedHashMap<String, ApplicationComponent>();
-        addComponent(new ApplicationPreferences(this, getName()));
+        addComponent(new ApplicationPreferences(getName()));
 
         // setting applivation instance for whoever wants us
         appInstance = this;

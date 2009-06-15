@@ -1,4 +1,4 @@
-package uk.ac.ebi.arrayexpress.app;
+package uk.ac.ebi.microarray.app;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,7 @@ public class ApplicationPreferences extends ApplicationComponent
     private String propertiesFileName;
     private Properties properties;
 
-    public ApplicationPreferences( Application app, String fileName )
+    public ApplicationPreferences( String fileName )
     {
         super("Preferences");
 
@@ -62,6 +62,7 @@ public class ApplicationPreferences extends ApplicationComponent
 
     private void load()
     {
+        // TODO: what to do if file is not there? must be a clear error message + shutdown
         try {
             properties.load(
                     Application.getInstance().getResource(
