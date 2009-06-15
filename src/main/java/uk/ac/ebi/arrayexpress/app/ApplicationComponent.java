@@ -1,4 +1,4 @@
-package uk.ac.ebi.microarray.app;
+package uk.ac.ebi.arrayexpress.app;
 
 abstract public class ApplicationComponent
 {

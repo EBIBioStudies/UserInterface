@@ -1,5 +1,7 @@
 package uk.ac.ebi.arrayexpress.servlets;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationServlet;
 import uk.ac.ebi.arrayexpress.components.Experiments;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
@@ -17,9 +19,6 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class QueryServlet extends ApplicationServlet
 {
     // logging machinery
@@ -28,7 +27,7 @@ public class QueryServlet extends ApplicationServlet
     // Respond to HTTP GET requests from browsers.
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
-        logRequest(request);
+        logRequest(logger, request);
 
         String type = "xml";
         String stylesheet = "default";

@@ -1,4 +1,4 @@
-package uk.ac.ebi.microarray.app;
+package uk.ac.ebi.arrayexpress.app;
 
 import org.quartz.*;
 import org.slf4j.Logger;

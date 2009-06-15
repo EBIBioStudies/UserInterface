@@ -1,7 +1,6 @@
-package uk.ac.ebi.microarray.app;
+package uk.ac.ebi.arrayexpress.app;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

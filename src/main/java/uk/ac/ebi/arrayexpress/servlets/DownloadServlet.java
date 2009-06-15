@@ -30,7 +30,7 @@ public class DownloadServlet extends ApplicationServlet
     // Respond to HTTP GET requests from browsers.
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
-        logRequest(request);
+        logRequest(logger, request);
 
         String accession = null;
         String name = null;

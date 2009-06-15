@@ -1,5 +1,7 @@
 package uk.ac.ebi.arrayexpress.servlets;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationServlet;
 import uk.ac.ebi.arrayexpress.components.DownloadableFilesRegistry;
 import uk.ac.ebi.arrayexpress.components.Experiments;
@@ -15,10 +17,13 @@ import java.io.PrintWriter;
 
 public class ControlServlet extends ApplicationServlet
 {
+    // logging machinery
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    
     // Respond to HTTP GET requests from browsers.
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
-        logRequest(request);
+        logRequest(logger, request);
 
         String command = "";
         String params = "";
