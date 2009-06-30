@@ -5,6 +5,12 @@ import org.junit.Test;
 
 public class AuthenticationHelperTest
 {
+    private final String testUsername = "curator";
+
+    private final String testPassword = "mySuperPassword";
+
+    private final String testSuffix = "";
+
     @Before
     public void intializeApplication()
     {
@@ -13,5 +19,11 @@ public class AuthenticationHelperTest
     @Test
     public void testVerifyHash()
     {
+    }
+
+    @Test
+    public void testGenerateHash()
+    {
+
     }
 }

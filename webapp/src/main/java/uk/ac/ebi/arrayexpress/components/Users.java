@@ -5,12 +5,14 @@ import uk.ac.ebi.arrayexpress.utils.persistence.PersistableUserList;
 import uk.ac.ebi.arrayexpress.utils.persistence.TextFilePersistence;
 import uk.ac.ebi.arrayexpress.utils.users.UserList;
 import uk.ac.ebi.arrayexpress.utils.users.UserRecord;
+import uk.ac.ebi.microarray.arrayexpress.shared.auth.AuthenticationHelper;
 
 import java.io.File;
 
 public class Users extends ApplicationComponent
 {
     private TextFilePersistence<PersistableUserList> userList;
+    private AuthenticationHelper authHelper;
 
     public Users()
     {
@@ -26,6 +28,8 @@ public class Users extends ApplicationComponent
                         , getPreferences().getString("ae.users.cache.filename")
                 )
         );
+
+        authHelper = new AuthenticationHelper();
     }
 
     public void terminate()
@@ -43,7 +47,7 @@ public class Users extends ApplicationComponent
                 && userList.getObject().containsKey(username) ) {
             UserRecord user = userList.getObject().get(username);
             if ( user.getPassword().equals(password) ) {
-                return user.getPasswordHash(suffix);
+                return authHelper.generateHash(username, password, suffix);
             }
         }
         // otherwise
@@ -55,7 +59,7 @@ public class Users extends ApplicationComponent
         if ( null != username && null != hash && null != suffix
                 && userList.getObject().containsKey(username) ) {
             UserRecord user = userList.getObject().get(username);
-            return user.getPasswordHash(suffix).equals(hash);
+            return authHelper.verifyHash(hash, username, user.getPassword(), suffix);
         }
         return false;
     }

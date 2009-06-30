@@ -32,8 +32,14 @@
             </roles>
         </developer>
     </developers>
-
+    <distributionManagement>
+        <repository>
+            <id>artifactory-local-repo</id>
+            <url>http://bar.ebi.ac.uk:8081/artifactory/local-repo/</url>
+        </repository>
+    </distributionManagement>
     <build>
+        <finalName>ae-interface-${pom.artifactId}-${pom.version}</finalName>
     </build>
     <dependencies>
         <dependency>
