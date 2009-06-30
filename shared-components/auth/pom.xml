@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>uk.ac.ebi.microarray.arrayexpress-interface.shared-components</groupId>
+    <artifactId>auth</artifactId>
+    <name>ArrayExpress Interface Authentication Helper</name>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+    <parent>
+        <groupId>uk.ac.ebi.microarray.arrayexpress-interface</groupId>
+        <artifactId>shared-components</artifactId>
+        <version>1.0</version>
+    </parent>
+    <url>http://www.ebi.ac.uk/arrayexpress</url>
+
+    <developers>
+        <developer>
+            <id>kolais</id>
+            <name>Nikolay Kolesnikov</name>
+            <email>kolais@ebi.ac.uk</email>
+            <roles>
+                <role>Software Engineer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>ugis</id>
+            <name>Ugis Sarkans</name>
+            <email>ugis@ebi.ac.uk</email>
+            <roles>
+                <role>Team Leader</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <build>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
+
