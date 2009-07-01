@@ -2,17 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>uk.ac.ebi.microarray.arrayexpress-interface</groupId>
-    <artifactId>webapp</artifactId>
+    <groupId>uk.ac.ebi.microarray</groupId>
+    <artifactId>ae-interface-webapp</artifactId>
     <name>ArrayExpress Interface Web Application</name>
     <version>2.0</version>
     <packaging>war</packaging>
-    <parent>
-        <groupId>uk.ac.ebi.microarray</groupId>
-        <artifactId>arrayexpress-interface</artifactId>
-        <version>2.0</version>
-    </parent>
     <url>http://www.ebi.ac.uk/arrayexpress</url>
+
+    <scm>
+        <connection>scm:svn:svn://dukkha.ebi.ac.uk/trunk/arrayexpress-interface/webapp</connection>
+        <developerConnection>scm:svn:svn://dukkha.ebi.ac.uk/trunk/arrayexpress-interface/webapp</developerConnection>
+        <url>svn://dukkha.ebi.ac.uk/trunk/arrayexpress-interface/webapp</url>
+    </scm>
 
     <!-- default values for repository related properties -->
     <properties>
@@ -289,80 +290,97 @@
             </plugin>
         </plugins>
     </build>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <version>4.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.tuckey</groupId>
             <artifactId>urlrewritefilter</artifactId>
+            <version>3.0.4</version>
             <scope>runtime</scope>
         </dependency>
         <dependency> <!-- tomcat 5.5 implements servlet api 2.4 -->
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
+            <version>2.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jul-to-slf4j</artifactId>
+            <version>1.5.6</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+            <version>1.5.6</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
+            <version>1.5.6</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
+            <version>1.2.14</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
+            <version>1.1.1</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>opensymphony</groupId>
             <artifactId>quartz</artifactId>
+            <version>1.6.0</version>
         </dependency>
         <dependency> <!-- required by quartz 1.6.0 -->
             <groupId>javax.transaction</groupId>
             <artifactId>transaction-api</artifactId>
+            <version>1.1</version>
         </dependency>
         <dependency> <!-- required by quartz 1.6.0 -->
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
         </dependency>
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
         </dependency>
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon9</artifactId>
+            <version>9.1.0.6</version>
         </dependency>
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon9-xpath</artifactId>
+            <version>9.1.0.6</version>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
+            <version>2.4.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-highlighter</artifactId>
+            <version>2.4.1</version>
         </dependency>
         <dependency>
-            <groupId>${pom.groupId}.shared-components</groupId>
-            <artifactId>auth</artifactId>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>ae-interface-auth</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

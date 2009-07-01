@@ -34,12 +34,21 @@
         </repository>
     </distributionManagement>
     <build>
-        <finalName>ae-interface-${pom.artifactId}-${pom.version}</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <version>4.5</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
