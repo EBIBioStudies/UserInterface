@@ -27,6 +27,17 @@
             </roles>
         </developer>
     </developers>
+    <!-- if you see 401 error deploying this artifact, please add the following to ~/.m2/settings.xml:
+        <settings>
+            <servers>
+                <server>
+                    <id>artifactory-local-repo</id>
+                    <username>admin</username>
+                    <password>password</password>
+                </server>
+            </servers>
+        </settings>
+    -->
     <distributionManagement>
         <repository>
             <id>artifactory-local-repo</id>
