@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.microarray</groupId>
-    <artifactId>arrayexpress-interface</artifactId>
+    <artifactId>ae-interface</artifactId>
     <name>ArrayExpress Interface</name>
     <version>2.0</version>
     <packaging>pom</packaging>
@@ -177,7 +177,7 @@
         </dependencies>
     </dependencyManagement>
     <modules>
-        <module>shared-components</module>
+        <module>components</module>
         <module>webapp</module>
     </modules>
 </project>
