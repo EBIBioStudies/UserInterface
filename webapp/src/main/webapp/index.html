@@ -18,7 +18,7 @@
     <script src="assets/scripts/jquery-1.3.1.min.js" type="text/javascript"></script>
     <script src="assets/scripts/jsdeferred.jquery.js" type="text/javascript"></script>
     <script src="assets/scripts/jquery.cookie-1.0.js" type="text/javascript"></script>
-    <script src="assets/scripts/ae_index-1.3.js" type="text/javascript"></script>
+    <script src="assets/scripts/ae_index-1.4.js" type="text/javascript"></script>
     <link rel="alternate" href="rss/experiments"
               type="application/rss+xml" title="ArrayExpress Experiments Feed"/>    
 </head>
@@ -49,26 +49,12 @@
                         <div id="ae_logo"><img src="assets/images/ae_logo.gif" alt="ArrayExpress Logo"/></div>
                         <div id="ae_header"><img src="assets/images/ae_header.gif" alt="ArrayExpress"/></div>
                         <div id="ae_intro_text">
-                            <div>ArrayExpress is a public archive for <strong>transcriptomics data</strong>,
-                                which is aimed at storing <a href="http://www.mged.org/Workgroups/MIAME/miame.html">MIAME</a>-
-                                and <a href="http://www.mged.org/minseqe">MINSEQE</a>-
+                            <div>ArrayExpress is a public archive for <strong>functional genomics data</strong>
+                                compliant with <a href="http://www.mged.org/Workgroups/MIAME/miame.html">MIAME</a>-
+                                and <a href="http://www.mged.org/minseqe">MINSEQE</a> requirements in accordance with
                                 compliant data in accordance with <a href="http://www.mged.org/">MGED</a> recommendations.
-                                The ArrayExpress Warehouse stores gene-indexed <strong>expression profiles</strong> from a curated subset of experiments
-                                in the archive.</div>
-
-                            <div class="ae_intro_more" style="display: none;">
-                                <div>Public data in ArrayExpress are made available for browsing and querying on experiment
-                                    properties, submitter, species, etc. Queries return summaries of experiments and
-                                    complete data, or subsets can be retrieved.</div>
-
-                                <div>A subset of the public data are re-annotated to update the array design annotation and curated
-                                    for consistency. These data are stored in the ArrayExpress
-                                    Warehouse and can be queried on gene, sample, and experiment attributes.
-                                    Results return graphed gene expression profiles, one graph per experiment.</div>
-                                    <a class="ae_intro_more_toggle" href="javascript:aeMoreLess()">&#171; Less Info</a>
-                            </div>
-                            <div class="ae_intro_more"><a class="ae_intro_more_toggle" href="javascript:aeMoreLess()">&#187; More Info</a>
-                        </div>
+                                The Gene Expression Atlas uses curated, re-annotated subset of data from the Archive to provide information about <strong>gene expression</strong>
+                                under various biological conditions.</div>
                     </div></div></div></div></div></div></div></div></div></div></div>
                 </div>
                 <div class="ie_clear"><img src="assets/images/empty.gif" width="1" height="1" alt=""/></div>
@@ -108,35 +94,11 @@
                             <div id="aer_login_info"><img src="assets/images/mini_user.gif" width="16" height="16" alt="Logged in as"><strong>user</strong> [<a href="javascript:aeDoLogout(true)">log out</a>]</div>
                         </div></div></div></div></div></div></div></div></div></div>
                     </div>
-                    <div id="ae_warehouse_box" class="ae_right_box" style="display:none">
-                        <div class="form_outer"><div class="form_top"><div class="form_bottom"><div class="form_left"><div class="form_right"><div class="form_bottom_left"><div class="form_bottom_right"><div class="form_top_left"><div class="form_top_right"><div class="form_inner">
-                            <div class="ae_box_title"><img src="assets/images/ae_genes_header.gif" alt="Expression Profiles"></div>
-                            <div id="aew_avail_info">Retrieving data, please wait...</div>
-                            <form id="aew_query_form" method="get" action="${interface.application.link.aew.base.url}/DW">
-                                <fieldset id="aew_gene_fset">
-                                    <label for="aew_query_field">Genes</label>
-                                    <input id="aew_query_field" name="gene_query" maxlength="60" class="assign_font">
-                                </fieldset>
-                                <fieldset id="aew_exps_fset">
-                                    <label for="aew_experiments_field">Experiment and sample annotations</label>
-                                    <input id="aew_experiments_field" name="exp_query" maxlength="120" class="assign_font">
-                                </fieldset>
-                                <input id="aew_query_submit" type="submit" value="Query">
-                                <fieldset id="aew_species_fset">
-                                    <select id="aew_species_field" name="species" class="assign_font" disabled="true"><option value="">Any species (loading options)</option></select>
-                                </fieldset>
-                                <input type="hidden" name="queryFor" value="gene">
-                            </form>
-                            <div id="aew_browse_link"><a href="${interface.application.link.aew.base.url}">Advanced query interface</a></div>
-                        </div></div></div></div></div></div></div></div></div></div>
-                    </div>
-                    <div id="ae_switch_to_atlas_box"><a href="javascript:aeSwitchToAtlas()" title="Click here to try ArrayExpress Atlas &#151; new meta-analytical tool for searching gene expression profiles in ArrayExpress"><img src="assets/images/empty.gif" width="48" height="48"></a></div>
                     <div id="ae_atlas_box" class="ae_right_box">
                         <div class="form_outer"><div class="form_top"><div class="form_bottom"><div class="form_left"><div class="form_right"><div class="form_bottom_left"><div class="form_bottom_right"><div class="form_top_left"><div class="form_top_right"><div class="form_inner">
-                            <div id="atlas_release_notice"><img src="assets/images/10_released.gif" alt="ArrayExpress Atlas 1.0 Released!" width="77" height="78"></div>
-                            <div class="ae_box_title"><img src="assets/images/ae_atlas_header.gif" alt="Altas of Gene Expression"></div>
+                            <div class="ae_box_title"><img src="assets/images/ae_atlas_header.gif" alt="Gene Expression Atlas"></div>
                             <div id="atlas_avail_info">Retrieving data, please wait...</div>
-                            <form id="atlas_query_form" method="get" action="${interface.application.link.www_domain}/microarray-as/atlas/qrs">
+                            <form id="atlas_query_form" method="get" action="${interface.application.link.atlas.base.url}/qrs">
                                 <input type="hidden" name="gprop_0" value="">
                                 <fieldset id="atlas_gene_fset">
                                     <label for="atlas_query_field">Genes</label>
@@ -160,9 +122,9 @@
                                     <select id="atlas_species_field" name="specie_0" class="assign_font" disabled><option value="">Any species (loading options)</option></select>
                                 </fieldset>
                                 <input type="hidden" name="view" value="hm">
+                                <input type="hidden" name="ref" value="aehome">
                             </form>
-                            <div id="atlas_browse_link"><a href="${interface.application.link.altas.base.url}">ArrayExpress Atlas Home</a></div>
-                            <div id="atlas_switch_to_aew"><a href="javascript:aeSwitchToAew()">Query ArrayExpress Warehouse</a></div>
+                            <div id="atlas_browse_link"><a href="${interface.application.link.atlas.base.url}/">Gene Expression Atlas Home</a></div>
                         </div></div></div></div></div></div></div></div></div></div>
                     </div>
                 </div>

@@ -144,7 +144,7 @@
                 <td class="td_main_img align_center {$vDetailedViewMainTdClass}">
                     <div>
                         <xsl:choose>
-                            <xsl:when test="@loadedinatlas"><a href="${interface.application.link.atlas.exp_query.url}{accession}"><img src="{$basepath}/assets/images/silk_tick.gif" width="16" height="16" alt="*"/></a></xsl:when>
+                            <xsl:when test="@loadedinatlas"><a href="${interface.application.link.atlas.exp_query.url}{accession}&amp;ref=aebrowse"><img src="{$basepath}/assets/images/silk_tick.gif" width="16" height="16" alt="*"/></a></xsl:when>
                             <xsl:otherwise><img src="{$basepath}/assets/images/silk_data_unavail.gif" width="16" height="16" alt="-"/></xsl:otherwise>
                         </xsl:choose>
                     </div>
@@ -202,12 +202,7 @@
                                 <td class="name"><div>Links</div></td>
                                 <td class="value">
                                     <xsl:if test="@loadedinatlas">
-                                        <div>
-
-                                            <a href="${interface.application.link.atlas.exp_query.url}{accession}">Query ArrayExpress Atlas</a>
-                                            <xsl:text> </xsl:text>
-                                            <img src="{$basepath}/assets/images/silk_new.gif" width="16" height="13" alt="new!"/>
-                                        </div>
+                                        <div><a href="${interface.application.link.atlas.exp_query.url}{accession}&amp;ref=aebrowse">Query Gene Expression Atlas</a></div>
                                     </xsl:if>
                                     <div>
                                         <xsl:if test="count(secondaryaccession) > 0">

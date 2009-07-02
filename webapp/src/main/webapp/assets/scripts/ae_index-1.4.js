@@ -1,30 +1,8 @@
 //
-//  AE Index Page Scripting Support. Requires jQuery 1.2.3 and JSDefeered.jQuery 0.2.1
+//  AE Index Page Scripting Support. Requires jQuery 1.3.1 and JSDefeered.jQuery 0.2.1
 //
 
 var user = "";
-
-function
-aeMoreLess()
-{
-    $("div.ae_intro_more").toggle();
-}
-
-function
-aeSwitchToAtlas()
-{
-    $("#ae_warehouse_box").hide();
-    $("#ae_atlas_box").show();
-    $.cookie("AeAtlasOption", "atlas", { expires: 365, path: '/' });
-}
-
-function
-aeSwitchToAew()
-{
-    $("#ae_atlas_box").hide();
-    $("#ae_warehouse_box").show();
-    $.cookie("AeAtlasOption", "warehouse", {path: '/' });
-}
 
 function
 aeShowLoginForm()
@@ -74,7 +52,7 @@ aeDoLoginNext(text)
         if ( $("#aer_login_remember").attr("checked") ) {
             loginExpiration = 365;
         }
-        
+
         $.cookie("AeLoggedUser", user, {expires: loginExpiration, path: '/'});
         $.cookie("AeLoginToken", text, {expires: loginExpiration, path: '/'});
 
@@ -82,7 +60,7 @@ aeDoLoginNext(text)
         $("#aer_login_info").show();
         $("#aer_help_link").show();
         $("#aer_avail_info").text("Updating data, please wait...");
-        $.get("ae-stats.xml").next(updateAerStats);        
+        $.get("ae-stats.xml").next(updateAerStats);
     } else {
         user = "";
         $("#aer_login_status").text("Incorrect user name or password. Please try again.");
@@ -141,7 +119,6 @@ $(document).ready(function()
 
     // populate species from atlas
     $.get("${interface.application.link.atlas.species_options.url}").next( function(data) {
-        $("#aew_species_field").html(data).removeAttr("disabled");
         $("#atlas_species_field").html(data).removeAttr("disabled");
     });
 
@@ -150,11 +127,6 @@ $(document).ready(function()
         data = String(data).replace(/\nAtlas Data Release \d+\.\d+: /, "");
         $("#atlas_avail_info").text(data);
     });
-
-    var atlas = $.cookie("AeAtlasOption");
-    if ( "warehouse" == atlas ) {
-        aeSwitchToAew();
-    }
 
     var _user = $.cookie("AeLoggedUser");
     var _token = $.cookie("AeLoginToken");
@@ -176,16 +148,6 @@ $(document).ready(function()
 
     // gets aer stats and updates the page
     $.get("ae-stats.xml").next(updateAerStats);
-
-    // gets aew stats and updates the page
-    Deferred.parallel([
-        $.get("${interface.application.link.solr_gene_stats.url}").next(getNumDocsFromSolrStats),
-        $.get("${interface.application.link.solr_exp_stats.url}").next(getNumDocsFromSolrStats)
-    ]).next(function (values)
-    {
-        var aew_avail_info = values[1] + " experiments, " + values[0] + " genes";
-        $("#aew_avail_info").text(aew_avail_info);
-    });
 
     // loads news page
     $("#ae_news").load("${interface.application.link.news_xml.url} div ul");
