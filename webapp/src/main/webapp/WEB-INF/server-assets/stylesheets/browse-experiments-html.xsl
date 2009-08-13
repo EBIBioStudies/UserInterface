@@ -394,6 +394,13 @@
                 <xsl:when test="substring(., 1, 2)='E-' and substring(., 7, 1)='-'">
                     <a href="{$basepath}/experiments/{.}">ArrayExpress - <xsl:apply-templates select="." mode="highlight" /></a>
                 </xsl:when>
+                <xsl:when test="substring(., 1, 3)='SRP'">
+                    <a href="ftp://ftp.ncbi.nlm.nih.gov/sra/Studies/{substring(.,1,6)}/{.}/">NCBI SRA - <xsl:apply-templates select="." mode="highlight" /></a>
+                </xsl:when>
+                <xsl:when test="substring(., 1, 3)='ERA'">
+                    <a href="ftp://ftp.era.ebi.ac.uk/vol1/{substring(.,1,6)}/{.}/">EBI SRA Data - <xsl:apply-templates select="." mode="highlight" /></a>,
+                    <a href="ftp://ftp.era-xml.ebi.ac.uk/{substring(.,1,6)}/{.}/">EBI SRA Meta-data - <xsl:apply-templates select="." mode="highlight" /></a>
+                </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select="." mode="highlight" />
                 </xsl:otherwise>
