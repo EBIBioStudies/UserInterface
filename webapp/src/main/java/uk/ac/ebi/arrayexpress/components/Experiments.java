@@ -115,6 +115,8 @@ public class Experiments extends ApplicationComponent
         DocumentInfo doc = loadExperimentsFromString(xmlString);
         if (null != doc) {
             setExperiments(doc);
+            
+            indexExperiments();
         }
     }
 
