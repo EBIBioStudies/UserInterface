@@ -76,6 +76,7 @@ public class SearchEngine extends ApplicationComponent
     {
         if (null == iwriter) {
             try {
+                contextNodes.clear();
                 iwriter = new IndexWriter(indexDirectory, analyzer, true, IndexWriter.MaxFieldLength.UNLIMITED);
             } catch (Throwable x) {
                 logger.error("Caught an exception", x);
