@@ -22,7 +22,7 @@ public abstract class Application
         components = new LinkedHashMap<String, ApplicationComponent>();
         addComponent(new ApplicationPreferences(getName()));
 
-        // setting applivation instance for whoever wants us
+        // setting application instance available to whoever wants it
         appInstance = this;
     }
 
@@ -31,7 +31,7 @@ public abstract class Application
         return name;
     }
 
-    public abstract URL getResource(String path) throws MalformedURLException;
+    public abstract URL getResource( String path ) throws MalformedURLException;
 
     public void addComponent( ApplicationComponent component )
     {
@@ -52,17 +52,17 @@ public abstract class Application
 
     public ApplicationPreferences getPreferences()
     {
-        return (ApplicationPreferences) getComponent("Preferences");
+        return (ApplicationPreferences)getComponent("Preferences");
     }
 
     public void initialize()
     {
         logger.debug("Initializing the application...");
-        for ( ApplicationComponent c : components.values() ) {
+        for (ApplicationComponent c : components.values()) {
             logger.info("Initializing component [{}]", c.getName());
             try {
                 c.initialize();
-            } catch ( Throwable x ) {
+            } catch (Throwable x) {
                 logger.error("Caught an exception while initializing [" + c.getName() + "]:", x);
             }
         }
@@ -73,12 +73,12 @@ public abstract class Application
         logger.debug("Terminating the application...");
         ApplicationComponent[] compArray = components.values().toArray(new ApplicationComponent[components.size()]);
 
-        for ( int i = compArray.length - 1; i >= 0; --i ) {
+        for (int i = compArray.length - 1; i >= 0; --i) {
             ApplicationComponent c = compArray[i];
             logger.info("Terminating component [{}]", c.getName());
             try {
                 c.terminate();
-            } catch ( Throwable x ) {
+            } catch (Throwable x) {
                 logger.error("Caught an exception while terminating [" + c.getName() + "]:", x);
             }
         }
@@ -98,7 +98,7 @@ public abstract class Application
         return appInstance;
     }
 
-    public static ApplicationComponent getAppComponent(String name)
+    public static ApplicationComponent getAppComponent( String name )
     {
         return getInstance().getComponent(name);
     }
