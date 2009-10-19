@@ -23,22 +23,22 @@ public class ExtFunctions
     // Accession RegExp filter
     private static final RegExpHelper accessionRegExp = new RegExpHelper("^E-\\w{4}-\\d+$", "i");
 
-    public static String toUpperCase(String str)
+    public static String toUpperCase( String str )
     {
         return str.toUpperCase();
     }
 
-    public static String toLowerCase(String str)
+    public static String toLowerCase( String str )
     {
         return str.toLowerCase();
     }
 
-    public static String capitalize(String str)
+    public static String capitalize( String str )
     {
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
-    public static String fileSizeToString(long size)
+    public static String fileSizeToString( long size )
     {
         StringBuilder str = new StringBuilder();
         if (922L > size) {
@@ -53,7 +53,7 @@ public class ExtFunctions
         return str.toString();
     }
 
-    public static String describeQuery(String keywords, String wholeWords, String species, String array, String experimentType, String inAtlas)
+    public static String describeQuery( String keywords, String wholeWords, String species, String array, String experimentType, String inAtlas )
     {
         StringBuilder desc = new StringBuilder();
         if (!keywords.trim().equals("")) {
@@ -91,7 +91,7 @@ public class ExtFunctions
         return desc.toString();
     }
 
-    public static String normalizeSpecies(String species)
+    public static String normalizeSpecies( String species )
     {
         // if more than one word: "First second", otherwise "First"
         String[] spArray = species.trim().split("\\s");
@@ -104,7 +104,7 @@ public class ExtFunctions
         }
     }
 
-    public static String trimTrailingDot(String str)
+    public static String trimTrailingDot( String str )
     {
         if (str.endsWith(".")) {
             return str.substring(0, str.length() - 2);
@@ -117,7 +117,7 @@ public class ExtFunctions
         return new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(new Date());
     }
 
-    public static String dateToRfc822(String dateString)
+    public static String dateToRfc822( String dateString )
     {
         if (null != dateString && 0 < dateString.length()) {
             try {
@@ -133,68 +133,45 @@ public class ExtFunctions
         return dateString;
     }
 
-    public static void createIndex(XPathContext context)
+    public static void createIndex( XPathContext context )
     {
         logger.debug("About to create index");
         ((SearchEngine)Application.getAppComponent("SearchEngine")).createIndex();
     }
 
-    public static void commitIndex(XPathContext context)
+    public static void commitIndex( XPathContext context )
     {
         logger.debug("Done creating index");
         ((SearchEngine)Application.getAppComponent("SearchEngine")).commitIndex();
     }
 
-    public static int createIndexDocument(XPathContext context)
+    public static int createIndexDocument( XPathContext context )
     {
         ((SearchEngine)Application.getAppComponent("SearchEngine")).newIndexDocument((NodeInfo)context.getContextItem());
         return 0;
     }
 
-    public static void addIndexField(XPathContext context, int documentId, String fieldName, SequenceIterator value, boolean shouldConcatenate, boolean shouldAnalyze, boolean shouldStore)
+    public static void addIndexField( XPathContext context, int documentId, String fieldName, SequenceIterator value, boolean shouldAnalyze, boolean shouldStore )
     {
-        if (shouldConcatenate) {
-            FastStringBuffer sb = new FastStringBuffer(1024);
-            try {
-                boolean first = true;
-                String sep = " ";
-                while (true) {
-                    Item item = value.next();
-                    if (null == item) {
-                        break;
-                    }
-                    if (!first) {
-                        sb.append(sep);
-                    }
-                    first = false;
-                    sb.append(item.getStringValueCS());
+        try {
+            while (true) {
+                Item item = value.next();
+                if (null == item) {
+                    break;
                 }
-            } catch (Throwable x) {
-                logger.error("Caught an exception:", x);
+                ((SearchEngine)Application.getAppComponent("SearchEngine")).addIndexField(fieldName, item.getStringValue(), shouldAnalyze, shouldStore);
             }
-
-            ((SearchEngine)Application.getAppComponent("SearchEngine")).addIndexField(fieldName, sb.toString(), shouldAnalyze, shouldStore);
-        } else {
-            try {
-                while (true) {
-                    Item item = value.next();
-                    if (null == item) {
-                        break;
-                    }
-                    ((SearchEngine)Application.getAppComponent("SearchEngine")).addIndexField(fieldName, item.getStringValue(), shouldAnalyze, shouldStore);
-                }
-            } catch (Throwable x) {
-                logger.error("Caught an exception:", x);
-            }
+        } catch (Throwable x) {
+            logger.error("Caught an exception:", x);
         }
     }
 
-    public static void addDocumentToIndex(XPathContext context, int documentId)
+    public static void addDocumentToIndex( XPathContext context, int documentId )
     {
         ((SearchEngine)Application.getAppComponent("SearchEngine")).addIndexDocument();
     }
 
-    public static SequenceIterator searchIndex(XPathContext context, String userId, String queryString, String species, String arrayId, String expType)
+    public static SequenceIterator searchIndex( XPathContext context, String userId, String queryString, String species, String arrayId, String expType )
     {
         List<NodeInfo> nodes = ((SearchEngine)Application.getAppComponent("SearchEngine")).queryIndex(userId, queryString, species, arrayId, expType);
         if (null != nodes) {
@@ -205,38 +182,38 @@ public class ExtFunctions
     }
 
     /* ***************************************************** */
-    public static boolean isExperimentInWarehouse(String accession)
+    public static boolean isExperimentInWarehouse( String accession )
     {
         return ((Experiments)Application.getAppComponent("Experiments"))
-            .isInWarehouse(accession);
+                .isInWarehouse(accession);
     }
 
-    public static boolean isExperimentAccessible(String accession, String userId)
+    public static boolean isExperimentAccessible( String accession, String userId )
     {
         return ((Experiments)Application.getAppComponent("Experiments"))
-            .isAccessible(accession, userId);
+                .isAccessible(accession, userId);
     }
 
-    public static NodeInfo getFilesForAccession(String accession) throws InterruptedException
+    public static NodeInfo getFilesForAccession( String accession ) throws InterruptedException
     {
         try {
             List<FtpFileEntry> files = ((DownloadableFilesRegistry)Application.getAppComponent("DownloadableFilesRegistry"))
-                .getFilesMap()
-                .getEntriesByAccession(accession);
+                    .getFilesMap()
+                    .getEntriesByAccession(accession);
             if (null != files) {
                 StringBuilder sb = new StringBuilder("<files>");
                 for (FtpFileEntry file : files) {
                     sb.append("<file kind=\"")
-                        .append(FtpFileEntry.getKind(file))
-                        .append("\" extension=\"")
-                        .append(FtpFileEntry.getExtension(file))
-                        .append("\" name=\"")
-                        .append(FtpFileEntry.getName(file))
-                        .append("\" size=\"")
-                        .append(String.valueOf(file.getSize()))
-                        .append("\" lastmodified=\"")
-                        .append(new SimpleDateFormat("d MMMMM yyyy, HH:mm").format(new Date(file.getLastModified())))
-                        .append("\"/>");
+                            .append(FtpFileEntry.getKind(file))
+                            .append("\" extension=\"")
+                            .append(FtpFileEntry.getExtension(file))
+                            .append("\" name=\"")
+                            .append(FtpFileEntry.getName(file))
+                            .append("\" size=\"")
+                            .append(String.valueOf(file.getSize()))
+                            .append("\" lastmodified=\"")
+                            .append(new SimpleDateFormat("d MMMMM yyyy, HH:mm").format(new Date(file.getLastModified())))
+                            .append("\"/>");
                     Thread.sleep(1);
                 }
                 sb.append("</files>");
@@ -251,7 +228,7 @@ public class ExtFunctions
         return null;
     }
 
-    public static boolean testRegexp(String input, String pattern, String flags)
+    public static boolean testRegexp( String input, String pattern, String flags )
     {
         boolean result = false;
 
@@ -264,17 +241,17 @@ public class ExtFunctions
         return result;
     }
 
-    private static String keywordToPattern(String keyword, boolean wholeWord)
+    private static String keywordToPattern( String keyword, boolean wholeWord )
     {
         return (wholeWord ? "\\b\\Q" + keyword + "\\E\\b" : "\\Q" + keyword + "\\E");
     }
 
-    private static boolean testCheckbox(String check)
+    private static boolean testCheckbox( String check )
     {
         return (null != check && (check.toLowerCase().equals("true") || check.toLowerCase().equals("on")));
     }
 
-    public static boolean testExperiment(XPathContext context, String userId, String keywords, String wholeWords, String species, String array, String experimentType, String inAtlas)
+    public static boolean testExperiment( XPathContext context, String userId, String keywords, String wholeWords, String species, String array, String experimentType, String inAtlas )
     {
         final int textIdxFPrint = context.getNamePool().getFingerprint("", "textidx");
         final int loadedInAtlasFPrint = context.getNamePool().getFingerprint("", "loadedinatlas");
@@ -313,7 +290,7 @@ public class ExtFunctions
     private static RegExpHelper removeDupeMarkers1RegExp = new RegExpHelper("\u00ab([^\u00ab\u00bb]*)\u00ab", "ig");
     private static RegExpHelper removeDupeMarkers2RegExp = new RegExpHelper("\u00bb([^\u00ab\u00bb]*)\u00bb", "ig");
 
-    public static String markKeywords(String input, String keywords, String wholeWords)
+    public static String markKeywords( String input, String keywords, String wholeWords )
     {
         return ((SearchEngine)Application.getAppComponent("SearchEngine")).highlightQuery(keywords, input);
     }
