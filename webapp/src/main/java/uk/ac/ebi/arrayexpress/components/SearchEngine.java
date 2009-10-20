@@ -16,13 +16,16 @@ import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
+import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.Configuration;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.net.MalformedURLException;
 
 
 public class SearchEngine extends ApplicationComponent

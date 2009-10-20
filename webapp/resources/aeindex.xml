@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <index id="experiments">
+        <document path="/experiments/experiment">
+            <field name="keywords" path="string-join(.//text(), ' ')" analyse="true" store="false" />
+            <field name="species" path="" analyse="false" store="false" />
+        </document>
+    </index>
+    <index id="protocols">
+        <document path="/protocols/protocol">
+            <field name="keywords" path="string-join(.//text(), ' ')" analyse="true" store="false" />
+        </document>
+    </index>
+    <index id="arrays">
+        <document path="/arrays/array">
+            <field name="keywords" path="string-join(.//text(), ' ')" analyse="true" store="false" />
+        </document>
+    </index>
+</configuration>

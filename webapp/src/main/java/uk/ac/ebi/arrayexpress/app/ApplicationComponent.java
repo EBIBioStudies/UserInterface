@@ -14,6 +14,11 @@ abstract public class ApplicationComponent
         return componentName;
     }
 
+    public Application getApplication()
+    {
+        return Application.getInstance();
+    }
+
     public ApplicationComponent getComponent( String name )
     {
         return Application.getInstance().getComponent(name);

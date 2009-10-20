@@ -32,7 +32,7 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
     // logging writer for the transformations
     private LoggerWriter loggerWriter;
 
-    TransformerFactoryImpl trFactory;
+    public TransformerFactoryImpl trFactory;
     private Map<String,Templates> templatesCache = new HashMap<String,Templates>();
 
     private final String XML_STRING_ENCODING = "ISO-8859-1";
@@ -45,7 +45,9 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
     public void initialize()
     {
         try {
-            // this is to make sure we don't depend on rutime configuration much
+            // this is to make sure we don't depend on runtime configuration much
+            // TODO: this, in fact, proved to be a disaster as the other apps in the container
+            // TODO: do see that change, and, well, behave :(  
             System.setProperty(
                 "javax.xml.transform.TransformerFactory"
                 , "net.sf.saxon.TransformerFactoryImpl"

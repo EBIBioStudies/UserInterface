@@ -8,6 +8,7 @@ import uk.ac.ebi.arrayexpress.utils.persistence.PersistableExperimentsContainer;
 import uk.ac.ebi.arrayexpress.utils.persistence.PersistableString;
 import uk.ac.ebi.arrayexpress.utils.persistence.PersistableStringList;
 import uk.ac.ebi.arrayexpress.utils.persistence.TextFilePersistence;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.Controller;
 
 import java.io.File;
 import java.util.List;
@@ -149,6 +150,14 @@ public class Experiments extends ApplicationComponent
 
     private void indexExperiments()
     {
+        try {
+            Controller c = Controller.getController(getApplication().getResource("/WEB-INF/classes/aeindex.xml"));
+            c.index("experiments", experiments.getObject().getDocument());
+        } catch (Throwable x) {
+            logger.error("Caught an exception:", x);
+        }
+
+
         ((SaxonEngine) getComponent("SaxonEngine")).transform(experiments.getObject().getDocument(), "index-experiments.xsl", null);    
     }
 }
