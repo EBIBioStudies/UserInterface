@@ -7,6 +7,8 @@ import net.sf.saxon.xpath.XPathEvaluator;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.slf4j.Logger;
@@ -39,7 +41,7 @@ public class Indexer
         // 3. read fields xpath and add fields, applying results to the document
         // 4. commit the index and return
 
-        List<NodeInfo> indexedNodes;
+        List<NodeInfo> indexedNodes = null;
 
         HierarchicalConfiguration indexConfig = this.config.getIndexConfig(indexId);
         if ( null != indexConfig ) {
@@ -51,8 +53,23 @@ public class Indexer
                 List documentNodes = (List)xpe.evaluate(document, XPathConstants.NODESET);
                 indexedNodes = new ArrayList<NodeInfo>(documentNodes.size());
                 if (null != documentNodes) {
+                    List fieldsConfig = indexConfig.configurationsAt("document.field");
+
+                    // prepare xpath expressions to save some time
+                    Map<String,XPathExpression> fieldsXPath = new HashMap<String,XPathExpression>();
+                    for (Object fieldConfig : fieldsConfig) {
+                        fieldsXPath.put(
+                            ((HierarchicalConfiguration)fieldConfig).getString("[@name]")
+                            , xp.compile(((HierarchicalConfiguration)fieldConfig).getString("[@path]")));
+                    }
+
                     for (Object node : documentNodes) {
                         // get all the fields taken care of
+                        for (Object fieldConfig : fieldsConfig) {
+                            String fieldName = ((HierarchicalConfiguration)fieldConfig).getString("[@name]");
+                            Object fieldValue = fieldsXPath.get(fieldName).evaluate(node);
+                        }
+                        // append node to the list
                         indexedNodes.add((NodeInfo)node);
                     }
                 }
@@ -61,6 +78,6 @@ public class Indexer
             }
             
         }
-        return null;
+        return indexedNodes;
     }
 }

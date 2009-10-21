@@ -19,6 +19,8 @@ public class Configuration
     public Configuration( URL configResource )
     {
         try {
+            // set list delimiter to bogus value to disable list parsing in configuration values
+            XMLConfiguration.setDefaultListDelimiter('\uffff');
             XMLConfiguration xmlConfig = new XMLConfiguration(configResource);
             List indexList = xmlConfig.configurationsAt("index");
 

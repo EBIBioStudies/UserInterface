@@ -3,7 +3,10 @@
     <index id="experiments">
         <document path="/experiments/experiment">
             <field name="keywords" path="string-join(.//text(), ' ')" analyse="true" store="false" />
-            <field name="species" path="" analyse="false" store="false" />
+            <field name="species" path="species" analyse="false" store="false" />
+            <field name="array" path="arraydesign/id" analyse="false" store="false" />
+            <field name="exptype" path="experimenttype" analyse="false" store="false" />
+            <field name="user" path="user" analyse="false" store="false" />
         </document>
     </index>
     <index id="protocols">
