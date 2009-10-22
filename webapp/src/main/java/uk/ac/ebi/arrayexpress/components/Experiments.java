@@ -157,7 +157,7 @@ public class Experiments extends ApplicationComponent
             logger.error("Caught an exception:", x);
         }
 
-
-        ((SaxonEngine) getComponent("SaxonEngine")).transform(experiments.getObject().getDocument(), "index-experiments.xsl", null);    
+        /// this has to retire today
+        ///((SaxonEngine) getComponent("SaxonEngine")).transform(experiments.getObject().getDocument(), "index-experiments.xsl", null);
     }
 }

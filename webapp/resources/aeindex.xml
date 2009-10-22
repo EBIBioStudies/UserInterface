@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
-    <index id="experiments">
+    <index id="experiments" location="${sys:java.io.tmpdir}/index" analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer">
         <document path="/experiments/experiment">
             <field name="keywords" path="string-join(.//text(), ' ')" analyze="true" store="false" />
-            <field name="species" path="species" analyze="false" store="false" />
-            <field name="array" path="arraydesign/id" analyze="false" store="false" />
-            <field name="exptype" path="experimenttype" analyze="false" store="false" />
-            <field name="user" path="user" analyze="false" store="false" />
+            <field name="species" path="species" analyze="false" store="true" />
+            <field name="array" path="arraydesign/id" analyze="false" store="true" />
+            <field name="exptype" path="experimenttype" analyze="false" store="true" />
+            <field name="expdesign" path="experimentdesign" analyze="false" store="true" />
+            <field name="expfactor" path="experimentalfactor/value" analyze="false" store="true" />
+            <field name="sampleattr" path="sampleattribute/value" analyze="false" store="true" />
+            <field name="user" path="user" analyze="false" store="true" />
+            <field name="isinatlas" path="@loadedinatlas" analyze="false" store="true" />
         </document>
     </index>
     <index id="protocols">

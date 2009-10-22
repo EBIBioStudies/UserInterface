@@ -7,13 +7,10 @@ import net.sf.saxon.xpath.XPathEvaluator;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 import java.io.File;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.analysis.Analyzer;
@@ -92,8 +89,10 @@ public class Indexer
                         );
                     }
 
-                    String tmpDir = System.getProperty("java.io.tmpdir");
-                    IndexWriter w = createIndex(new File(tmpDir, "index-" + indexId), new ExperimentTextAnalyzer());
+                    String indexBaseLocation = indexConfig.getString("[@location]");
+                    String indexAnalyzer = indexConfig.getString("[@analyzer]");
+                    Analyzer a = (Analyzer)Class.forName(indexAnalyzer).newInstance();
+                    IndexWriter w = createIndex(new File(indexBaseLocation, indexId), a);
 
                     for (Object node : documentNodes) {
                         Document d = new Document();
@@ -101,8 +100,19 @@ public class Indexer
 
                         // get all the fields taken care of
                         for (FieldInfo field : fields) {
-                            String fieldValue = field.xpe.evaluate(node);
-                            addIndexField(d, field.name, fieldValue, field.shouldAnalyze, field.shouldStore);
+                            List values = (List)field.xpe.evaluate(node, XPathConstants.NODESET);
+                            for (Object v : values) {
+                                String fieldValue = "";
+                                if (v instanceof String) {
+                                    fieldValue = (String)v;
+                                } else if (v instanceof NodeInfo) {
+                                    fieldValue = ((NodeInfo)v).getStringValue();
+                                } else {
+                                    fieldValue = v.toString();
+                                    logger.warn("Not sure if I handle the value of [{}] correctly, relying on Object.toString()", v.getClass().getName());
+                                }
+                                addIndexField(d, field.name, fieldValue, field.shouldAnalyze, field.shouldStore);
+                            }
                         }
                         addIndexDocument(w, d);
                         // append node to the list
@@ -110,10 +120,10 @@ public class Indexer
                     }
                     commitIndex(w);
                 }
-            } catch (XPathExpressionException x) {
+            } catch (Throwable x) {
                 logger.error("Caught an exception:", x);
             }
-            
+
         }
         return indexedNodes;
     }
