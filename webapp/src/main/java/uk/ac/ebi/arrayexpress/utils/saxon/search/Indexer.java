@@ -9,8 +9,14 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.io.File;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.analysis.Analyzer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +24,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathConstants;
+
+import uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer;
 
 public class Indexer
 {
@@ -31,6 +39,22 @@ public class Indexer
     public Indexer( Configuration config )
     {
         this.config = config;
+    }
+
+    private class FieldInfo
+    {
+        public String name;
+        public XPathExpression xpe;
+        public boolean shouldAnalyze;
+        public boolean shouldStore;
+
+        public FieldInfo(String name, XPathExpression xpe, boolean shouldAnalyze, boolean shouldStore)
+        {
+            this.name = name;
+            this.xpe = xpe;
+            this.shouldAnalyze = shouldAnalyze;
+            this.shouldStore = shouldStore;
+        }
     }
 
     public List<NodeInfo> index( String indexId, DocumentInfo document )
@@ -56,22 +80,35 @@ public class Indexer
                     List fieldsConfig = indexConfig.configurationsAt("document.field");
 
                     // prepare xpath expressions to save some time
-                    Map<String,XPathExpression> fieldsXPath = new HashMap<String,XPathExpression>();
+                    List<FieldInfo> fields = new ArrayList<FieldInfo>();
                     for (Object fieldConfig : fieldsConfig) {
-                        fieldsXPath.put(
-                            ((HierarchicalConfiguration)fieldConfig).getString("[@name]")
-                            , xp.compile(((HierarchicalConfiguration)fieldConfig).getString("[@path]")));
+                        fields.add(
+                            new FieldInfo(
+                                ((HierarchicalConfiguration)fieldConfig).getString("[@name]")
+                                , xp.compile(((HierarchicalConfiguration)fieldConfig).getString("[@path]"))
+                                , ((HierarchicalConfiguration)fieldConfig).getBoolean("[@analyze]")
+                                , ((HierarchicalConfiguration)fieldConfig).getBoolean("[@store]")
+                            )
+                        );
                     }
 
+                    String tmpDir = System.getProperty("java.io.tmpdir");
+                    IndexWriter w = createIndex(new File(tmpDir, "index-" + indexId), new ExperimentTextAnalyzer());
+
                     for (Object node : documentNodes) {
+                        Document d = new Document();
+                        addIndexField(d, "_node_id", String.valueOf(indexedNodes.size()), false, true);
+
                         // get all the fields taken care of
-                        for (Object fieldConfig : fieldsConfig) {
-                            String fieldName = ((HierarchicalConfiguration)fieldConfig).getString("[@name]");
-                            Object fieldValue = fieldsXPath.get(fieldName).evaluate(node);
+                        for (FieldInfo field : fields) {
+                            String fieldValue = field.xpe.evaluate(node);
+                            addIndexField(d, field.name, fieldValue, field.shouldAnalyze, field.shouldStore);
                         }
+                        addIndexDocument(w, d);
                         // append node to the list
                         indexedNodes.add((NodeInfo)node);
                     }
+                    commitIndex(w);
                 }
             } catch (XPathExpressionException x) {
                 logger.error("Caught an exception:", x);
@@ -79,5 +116,43 @@ public class Indexer
             
         }
         return indexedNodes;
+    }
+
+
+    private IndexWriter createIndex(File indexDirectory, Analyzer analyzer)
+    {
+        IndexWriter iwriter = null;
+        try {
+            iwriter = new IndexWriter(indexDirectory, analyzer, true, IndexWriter.MaxFieldLength.UNLIMITED);
+        } catch (Throwable x) {
+            logger.error("Caught an exception:", x);
+        }
+
+        return iwriter;
+    }
+
+    private void addIndexField(Document document, String name, String value, boolean shouldAnalyze, boolean shouldStore)
+    {
+        document.add(new Field(name, value, shouldStore ? Field.Store.YES : Field.Store.NO, shouldAnalyze ? Field.Index.ANALYZED : Field.Index.NOT_ANALYZED));
+    }
+
+    private void addIndexDocument(IndexWriter iwriter, Document document)
+    {
+        try {
+            iwriter.addDocument(document);
+        } catch (Throwable x) {
+            logger.error("Caught an exception:", x);
+        }
+    }
+
+    private void commitIndex(IndexWriter iwriter)
+    {
+        try {
+            iwriter.optimize();
+            iwriter.commit();
+            iwriter.close();
+        } catch (Throwable x) {
+            logger.error("Caught an exception:", x);
+        }
     }
 }
