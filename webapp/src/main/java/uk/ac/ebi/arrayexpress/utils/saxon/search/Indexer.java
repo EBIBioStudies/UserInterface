@@ -31,8 +31,6 @@ public class Indexer
 
     private Configuration config;
 
-    private TransformerFactoryImpl trFactory;
-
     public Indexer( Configuration config )
     {
         this.config = config;
@@ -45,7 +43,7 @@ public class Indexer
         public boolean shouldAnalyze;
         public boolean shouldStore;
 
-        public FieldInfo(String name, XPathExpression xpe, boolean shouldAnalyze, boolean shouldStore)
+        public FieldInfo( String name, XPathExpression xpe, boolean shouldAnalyze, boolean shouldStore )
         {
             this.name = name;
             this.xpe = xpe;
@@ -65,7 +63,7 @@ public class Indexer
         List<NodeInfo> indexedNodes = null;
 
         HierarchicalConfiguration indexConfig = this.config.getIndexConfig(indexId);
-        if ( null != indexConfig ) {
+        if (null != indexConfig) {
             String documentPath = indexConfig.getString("document[@path]");
 
             try {
@@ -80,12 +78,12 @@ public class Indexer
                     List<FieldInfo> fields = new ArrayList<FieldInfo>();
                     for (Object fieldConfig : fieldsConfig) {
                         fields.add(
-                            new FieldInfo(
-                                ((HierarchicalConfiguration)fieldConfig).getString("[@name]")
-                                , xp.compile(((HierarchicalConfiguration)fieldConfig).getString("[@path]"))
-                                , ((HierarchicalConfiguration)fieldConfig).getBoolean("[@analyze]")
-                                , ((HierarchicalConfiguration)fieldConfig).getBoolean("[@store]")
-                            )
+                                new FieldInfo(
+                                        ((HierarchicalConfiguration)fieldConfig).getString("[@name]")
+                                        , xp.compile(((HierarchicalConfiguration)fieldConfig).getString("[@path]"))
+                                        , ((HierarchicalConfiguration)fieldConfig).getBoolean("[@analyze]")
+                                        , ((HierarchicalConfiguration)fieldConfig).getBoolean("[@store]")
+                                )
                         );
                     }
 
@@ -129,7 +127,7 @@ public class Indexer
     }
 
 
-    private IndexWriter createIndex(File indexDirectory, Analyzer analyzer)
+    private IndexWriter createIndex( File indexDirectory, Analyzer analyzer )
     {
         IndexWriter iwriter = null;
         try {
@@ -141,12 +139,12 @@ public class Indexer
         return iwriter;
     }
 
-    private void addIndexField(Document document, String name, String value, boolean shouldAnalyze, boolean shouldStore)
+    private void addIndexField( Document document, String name, String value, boolean shouldAnalyze, boolean shouldStore )
     {
         document.add(new Field(name, value, shouldStore ? Field.Store.YES : Field.Store.NO, shouldAnalyze ? Field.Index.ANALYZED : Field.Index.NOT_ANALYZED));
     }
 
-    private void addIndexDocument(IndexWriter iwriter, Document document)
+    private void addIndexDocument( IndexWriter iwriter, Document document )
     {
         try {
             iwriter.addDocument(document);
@@ -155,7 +153,7 @@ public class Indexer
         }
     }
 
-    private void commitIndex(IndexWriter iwriter)
+    private void commitIndex( IndexWriter iwriter )
     {
         try {
             iwriter.optimize();

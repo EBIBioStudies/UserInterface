@@ -25,6 +25,8 @@ public class Experiments extends ApplicationComponent
     private TextFilePersistence<PersistableString> arrays;
     private TextFilePersistence<PersistableString> experimentTypes;
 
+    private Controller indexController;
+
     public Experiments()
     {
         super("Experiments");
@@ -58,6 +60,12 @@ public class Experiments extends ApplicationComponent
                 new PersistableString()
                 , new File(tmpDir, getPreferences().getString("ae.exptypes.cache.filename"))
         );
+
+        try {
+            indexController = Controller.getController(getApplication().getResource("/WEB-INF/classes/aeindex.xml"));
+        } catch (Throwable x) {
+            logger.error("Caught an exception:", x);
+        }
 
         indexExperiments();
     }
@@ -151,13 +159,11 @@ public class Experiments extends ApplicationComponent
     private void indexExperiments()
     {
         try {
-            Controller c = Controller.getController(getApplication().getResource("/WEB-INF/classes/aeindex.xml"));
-            c.index("experiments", experiments.getObject().getDocument());
+            indexController.index("experiments", experiments.getObject().getDocument());
+            List<String> species = indexController.getTerms("experiments", "species");
+            logger.debug("Retrieved species terms, size [{}]", species.size());
         } catch (Throwable x) {
             logger.error("Caught an exception:", x);
         }
-
-        /// this has to retire today
-        ///((SaxonEngine) getComponent("SaxonEngine")).transform(experiments.getObject().getDocument(), "index-experiments.xsl", null);
     }
 }

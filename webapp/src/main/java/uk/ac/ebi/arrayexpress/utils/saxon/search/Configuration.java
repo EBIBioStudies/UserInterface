@@ -24,9 +24,8 @@ public class Configuration
             XMLConfiguration xmlConfig = new XMLConfiguration(configResource);
             List indexList = xmlConfig.configurationsAt("index");
 
-            for ( Iterator it = indexList.iterator(); it.hasNext();)
-            {
-                HierarchicalConfiguration indexConfig = (HierarchicalConfiguration) it.next();
+            for (Iterator it = indexList.iterator(); it.hasNext();) {
+                HierarchicalConfiguration indexConfig = (HierarchicalConfiguration)it.next();
                 String indexId = indexConfig.getString("[@id]");
                 this.indicesConfig.put(indexId, indexConfig);
             }
@@ -37,10 +36,10 @@ public class Configuration
 
     public HierarchicalConfiguration getIndexConfig( String indexId )
     {
-        if ( indicesConfig.containsKey(indexId)) {
+        if (indicesConfig.containsKey(indexId)) {
             return indicesConfig.get(indexId);
         }
-        
+
         return null;
     }
 }
