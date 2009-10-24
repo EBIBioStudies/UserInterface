@@ -13,19 +13,18 @@ import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.NullFragmenter;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
-import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.Configuration;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.net.MalformedURLException;
 
 
 public class SearchEngine extends ApplicationComponent
@@ -34,7 +33,7 @@ public class SearchEngine extends ApplicationComponent
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private Analyzer analyzer;
-    private File indexDirectory;
+    private Directory indexDirectory;
 
     private IndexWriter iwriter;
     private Document document;
@@ -54,7 +53,12 @@ public class SearchEngine extends ApplicationComponent
     public void initialize()
     {
         String tmpDir = System.getProperty("java.io.tmpdir");
-        indexDirectory = new File(tmpDir, "index");
+        try {
+            indexDirectory = FSDirectory.open(new File(tmpDir + "/index", "experiments"));
+            ireader = IndexReader.open(indexDirectory, true);
+        } catch (Throwable x) {
+            logger.error("Caught an exception:", x);
+        }
 
         analyzer = new ExperimentTextAnalyzer();
     }
@@ -160,7 +164,7 @@ public class SearchEngine extends ApplicationComponent
                 if (queryCache.containsKey(queryString)) {
                     q = queryCache.get(queryString);
                 } else {
-                    QueryParser parser = new QueryParser("text", analyzer);
+                    QueryParser parser = new QueryParser("keywords", analyzer);
                     parser.setDefaultOperator(QueryParser.Operator.AND);
                     q = parser.parse(queryString).rewrite(ireader);
                     logger.info("Query [{}] was rewritten to [{}]", queryString, q.toString());
@@ -179,11 +183,11 @@ public class SearchEngine extends ApplicationComponent
             }
 
             if (null != arrayId && !arrayId.trim().equals("")) {
-                query.add(new TermQuery(new Term("array_id", arrayId)), BooleanClause.Occur.MUST);
+                query.add(new TermQuery(new Term("array", arrayId)), BooleanClause.Occur.MUST);
             }
 
             if (null != expType && !expType.trim().equals("")) {
-                query.add(new TermQuery(new Term("exp_type", expType)), BooleanClause.Occur.MUST);
+                query.add(new TermQuery(new Term("exptype", expType)), BooleanClause.Occur.MUST);
             }
 
             // empty query returns everything
@@ -193,11 +197,11 @@ public class SearchEngine extends ApplicationComponent
 
             // to show _all_ available experiments
             IndexSearcher isearcher = new IndexSearcher(ireader);
-            TopDocs hits = isearcher.search(query, contextNodes.size());
+            TopDocs hits = isearcher.search(query, 10000);
 
             results = new ArrayList<NodeInfo>(hits.totalHits);
             for (ScoreDoc d : hits.scoreDocs) {
-                results.add(contextNodes.get(Integer.parseInt(isearcher.doc(d.doc).getField("_id").stringValue())));
+                results.add(contextNodes.get(d.doc));
             }
         } catch (Throwable x) {
             logger.error("Caught an exception:", x);

@@ -1,6 +1,7 @@
 package uk.ac.ebi.arrayexpress.components;
 
 import net.sf.saxon.om.DocumentInfo;
+import net.sf.saxon.om.NodeInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
@@ -77,6 +78,16 @@ public class Experiments extends ApplicationComponent
     public synchronized DocumentInfo getExperiments()
     {
         return experiments.getObject().getDocument();
+    }
+
+    public List<NodeInfo> queryExperiments(String queryString)
+    {
+        return indexController.queryIndex("experiments", queryString);   
+    }
+
+    public String highlightQuery(String queryString, String text)
+    {
+        return indexController.highlightQuery("experiments", queryString, text);
     }
 
     public boolean isAccessible( String accession, String userId )
@@ -160,8 +171,8 @@ public class Experiments extends ApplicationComponent
     {
         try {
             indexController.index("experiments", experiments.getObject().getDocument());
-            List<String> species = indexController.getTerms("experiments", "species");
-            logger.debug("Retrieved species terms, size [{}]", species.size());
+            List<String> expDesign = indexController.getTerms("experiments", "expdesign");
+            logger.debug("Retrieved experiment design list, size [{}]", expDesign.size());
         } catch (Throwable x) {
             logger.error("Caught an exception:", x);
         }

@@ -1,14 +1,15 @@
 package uk.ac.ebi.arrayexpress.utils.saxon;
 
 import net.sf.saxon.expr.XPathContext;
-import net.sf.saxon.om.*;
+import net.sf.saxon.om.NodeInfo;
+import net.sf.saxon.om.NodeListIterator;
+import net.sf.saxon.om.SequenceIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.components.DownloadableFilesRegistry;
 import uk.ac.ebi.arrayexpress.components.Experiments;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
-import uk.ac.ebi.arrayexpress.components.SearchEngine;
 import uk.ac.ebi.arrayexpress.utils.RegExpHelper;
 import uk.ac.ebi.arrayexpress.utils.files.FtpFileEntry;
 
@@ -132,7 +133,7 @@ public class ExtFunctions
 
         return dateString;
     }
-
+/**
     public static void createIndex( XPathContext context )
     {
         logger.debug("About to create index");
@@ -170,10 +171,10 @@ public class ExtFunctions
     {
         ((SearchEngine)Application.getAppComponent("SearchEngine")).addIndexDocument();
     }
-
+**/
     public static SequenceIterator searchIndex( XPathContext context, String userId, String queryString, String species, String arrayId, String expType )
     {
-        List<NodeInfo> nodes = ((SearchEngine)Application.getAppComponent("SearchEngine")).queryIndex(userId, queryString, species, arrayId, expType);
+        List<NodeInfo> nodes = ((Experiments)Application.getAppComponent("Experiments")).queryExperiments(queryString);
         if (null != nodes) {
             return new NodeListIterator(nodes);
         }
@@ -292,7 +293,7 @@ public class ExtFunctions
 
     public static String markKeywords( String input, String keywords, String wholeWords )
     {
-        return ((SearchEngine)Application.getAppComponent("SearchEngine")).highlightQuery(keywords, input);
+        return ((Experiments)Application.getAppComponent("Experiments")).highlightQuery(keywords, input);
     }
 /*        String result = input;
 
