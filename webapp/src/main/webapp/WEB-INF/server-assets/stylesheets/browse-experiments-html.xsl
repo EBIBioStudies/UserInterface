@@ -7,6 +7,7 @@
                 exclude-result-prefixes="ae aeext html"
                 version="1.0">
 
+    <xsl:param name="querykey"/>
     <xsl:param name="page">1</xsl:param>
     <xsl:param name="pagesize">25</xsl:param>
     <xsl:param name="sortby">releasedate</xsl:param>
@@ -41,7 +42,7 @@
         <aeext:log message="[browse-experiments-html] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
         <aeext:log message="[browse-experiments-html] Sort by: [{$sortby}], [{$sortorder}]"/>
 
-        <xsl:variable name="vFilteredExperiments" select="ae:searchIndex($userid, $keywords, $species, $array, $exptype)"/>
+        <xsl:variable name="vFilteredExperiments" select="ae:searchIndex($querykey)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
         <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments/samples)"/>
         <xsl:variable name="vTotalAssays" select="sum($vFilteredExperiments/assays)"/>
@@ -429,7 +430,7 @@
             <xsl:when test="contains($text, '&lt;br&gt;')">
                 <div>
                     <xsl:call-template name="add_highlight_element">
-                        <xsl:with-param name="text" select="ae:markKeywords(substring-before($text, '&lt;br&gt;'),$keywords,$wholewords)"/>
+                        <xsl:with-param name="text" select="ae:markKeywords(substring-before($text, '&lt;br&gt;'),$keywords)"/>
                     </xsl:call-template>
                 </div>
                 <xsl:call-template name="description">
@@ -439,7 +440,7 @@
             <xsl:otherwise>
                 <div>
                     <xsl:call-template name="add_highlight_element">
-                        <xsl:with-param name="text" select="ae:markKeywords($text,$keywords,$wholewords)"/>
+                        <xsl:with-param name="text" select="ae:markKeywords($text,$keywords)"/>
                     </xsl:call-template>
                 </div>
             </xsl:otherwise>
@@ -450,7 +451,7 @@
         <xsl:variable name="vText" select="normalize-space(.)"/>
         <xsl:choose>
             <xsl:when test="string-length($vText)!=0">
-                <xsl:variable name="markedtext" select="ae:markKeywords($vText,$keywords,$wholewords)"/>
+                <xsl:variable name="markedtext" select="ae:markKeywords($vText,$keywords)"/>
                 <xsl:call-template name="add_highlight_element">
                     <xsl:with-param name="text" select="$markedtext"/>
                 </xsl:call-template>
@@ -464,7 +465,7 @@
         <xsl:variable name="vText" select="normalize-space($pText)"/>
         <xsl:choose>
             <xsl:when test="string-length($vText)!=0">
-                <xsl:variable name="markedtext" select="ae:markKeywords($vText,$keywords,$wholewords)"/>
+                <xsl:variable name="markedtext" select="ae:markKeywords($vText,$keywords)"/>
                 <xsl:call-template name="add_highlight_element">
                     <xsl:with-param name="text" select="$markedtext"/>
                 </xsl:call-template>

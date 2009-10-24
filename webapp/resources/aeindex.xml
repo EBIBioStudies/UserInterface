@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
-    <index id="experiments" location="${sys:java.io.tmpdir}/index" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer">
+    <index id="experiments" location="${sys:java.io.tmpdir}/index" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.LowercaseAnalyzer">
         <document path="/experiments/experiment">
-            <field name="keywords" path="string-join(.//text(), ' ')" analyze="true" store="false" />
-            <field name="accession" path="accession | secondaryaccession" analyze="true" analyzer="uk.ac.ebi.arrayexpress.utils.search.AccessionAnalyzer" store="true" />
-            <field name="species" path="species" analyze="false" store="false" />
-            <field name="array" path="arraydesign/id | arraydesign/accession | arraydesign/name" analyze="false" store="true" />
-            <field name="exptype" path="experimenttype" analyze="false" store="true" />
-            <field name="expdesign" path="experimentdesign" analyze="false" store="true" />
-            <field name="efv" path="experimentalfactor/value" analyze="false" store="true" />
-            <field name="sa" path="sampleattribute/value" analyze="false" store="true" />
+            <field name="keywords" path="string-join(.//text(), ' ')" analyze="true" analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer" store="false" />
+            <field name="accession" path="accession | secondaryaccession" analyze="true" store="false" />
+            <field name="species" path="species" analyze="true" store="false" />
+            <field name="array" path="arraydesign/id | arraydesign/accession | arraydesign/name" analyze="true" store="true" />
+            <field name="exptype" path="experimenttype" analyze="true" store="false" />
+            <field name="expdesign" path="experimentdesign" analyze="true" store="false" />
+            <field name="efv" path="experimentalfactor/value" analyze="true" store="false" />
+            <field name="sa" path="sampleattribute/value" analyze="true" store="false" />
             <field name="pmid" path="bibliography/accession" analyze="false" store="false" />
-            <field name="user" path="user" analyze="false" store="true" />
-            <field name="atlas" path="@loadedinatlas" analyze="false" store="true" />
+            <field name="user" path="user" analyze="false" store="false" />
+            <field name="atlas" path="@loadedinatlas" analyze="false" store="false" />
         </document>
     </index>
     <index id="protocols">

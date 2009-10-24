@@ -23,9 +23,9 @@ public class Querier
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private Controller.IndexEnvironment env;
+    private IndexEnvironment env;
 
-    public Querier( Controller.IndexEnvironment env )
+    public Querier( IndexEnvironment env )
     {
         this.env = env;
     }
@@ -54,43 +54,27 @@ public class Querier
         return termsList;
     }
 
-    public List<NodeInfo> queryIndex( String queryString )
+    public List<NodeInfo> query( BooleanQuery query )
     {
         List<NodeInfo> result = null;
         try {
             IndexReader ir = IndexReader.open(this.env.indexDirectory, true);
 
-            BooleanQuery query = new BooleanQuery();
-
-            if (null != queryString && !queryString.trim().equals("")) {
-                queryString = queryString.trim();
-                Query q;
-
-
-                QueryParser parser = new QueryParser("keywords", this.env.indexAnalyzer);
-                parser.setDefaultOperator(QueryParser.Operator.AND);
-                q = parser.parse(queryString).rewrite(ir);
-                logger.info("Query [{}] was rewritten to [{}]", queryString, q.toString());
-                //
-                query.add(q, BooleanClause.Occur.MUST);
-
-
-                // empty query returns everything
-                if (query.clauses().isEmpty()) {
-                    return this.env.documentNodes;
-                }
-
-                // to show _all_ available experiments
-                IndexSearcher isearcher = new IndexSearcher(ir);
-                TopDocs hits = isearcher.search(query, this.env.documentNodes.size());
-
-                result = new ArrayList<NodeInfo>(hits.totalHits);
-                for (ScoreDoc d : hits.scoreDocs) {
-                    result.add(this.env.documentNodes.get(d.doc));
-                }
-
-                isearcher.close();
+            // empty query returns everything
+            if (query.clauses().isEmpty()) {
+                return this.env.documentNodes;
             }
+
+            // to show _all_ available experiments
+            IndexSearcher isearcher = new IndexSearcher(ir);
+            TopDocs hits = isearcher.search(query, this.env.documentNodes.size());
+
+            result = new ArrayList<NodeInfo>(hits.totalHits);
+            for (ScoreDoc d : hits.scoreDocs) {
+                result.add(this.env.documentNodes.get(d.doc));
+            }
+
+            isearcher.close();
             ir.close();
         } catch (Throwable x) {
             logger.error("Caught an exception:", x);
@@ -105,13 +89,14 @@ public class Querier
 
     public String highlightQuery(String queryString, String text)
     {
+        String fieldName = "keywords";
         if (null != queryString && !queryString.trim().equals("")) {
             try {
                 Query q;
                 if (queryCache.containsKey(queryString)) {
                     q = queryCache.get(queryString);
                 } else {
-                    QueryParser parser = new QueryParser("keywords", this.env.indexAnalyzer);
+                    QueryParser parser = new QueryParser(fieldName, this.env.indexAnalyzer);
                     parser.setDefaultOperator(QueryParser.Operator.AND);
                     q = parser.parse(queryString);
                     logger.info("Query [{}] was parsed to [{}]", queryString, q.toString());
@@ -119,10 +104,10 @@ public class Querier
                 }
                 
                 SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter("\u00ab", "\u00bb");
-                Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(q));
+                Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(q, fieldName));
                 highlighter.setTextFragmenter(new NullFragmenter());
 
-                String str = highlighter.getBestFragment(this.env.indexAnalyzer, "keywords", text);
+                String str = highlighter.getBestFragment(this.env.indexAnalyzer, fieldName, text);
                 return null != str ? str : text;
             } catch (Throwable x) {
                 logger.error("Caught an exception:", x);

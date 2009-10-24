@@ -25,11 +25,11 @@ public class Indexer
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private Controller.IndexEnvironment env;
+    private IndexEnvironment env;
 
     private Map<String,XPathExpression> fieldXpe = new HashMap<String,XPathExpression>();
 
-    public Indexer( Controller.IndexEnvironment env )
+    public Indexer( IndexEnvironment env )
     {
         this.env = env;
     }
@@ -44,7 +44,7 @@ public class Indexer
             List documentNodes = (List)xpe.evaluate(document, XPathConstants.NODESET);
             indexedNodes = new ArrayList<NodeInfo>(documentNodes.size());
 
-            for (Controller.IndexEnvironment.FieldInfo field : this.env.fields) {
+            for (IndexEnvironment.FieldInfo field : this.env.fields.values()) {
                  fieldXpe.put( field.name, xp.compile(field.path));
                 }
 
@@ -54,7 +54,7 @@ public class Indexer
                 Document d = new Document();
 
                 // get all the fields taken care of
-                for (Controller.IndexEnvironment.FieldInfo field : this.env.fields) {
+                for (IndexEnvironment.FieldInfo field : this.env.fields.values()) {
                     List values = (List)fieldXpe.get(field.name).evaluate(node, XPathConstants.NODESET);
                     for (Object v : values) {
                         String fieldValue;

@@ -80,9 +80,9 @@ public class Experiments extends ApplicationComponent
         return experiments.getObject().getDocument();
     }
 
-    public List<NodeInfo> queryExperiments(String queryString)
+    public List<NodeInfo> queryExperiments(Integer queryKey)
     {
-        return indexController.queryIndex("experiments", queryString);   
+        return indexController.queryIndex("experiments", queryKey);   
     }
 
     public String highlightQuery(String queryString, String text)

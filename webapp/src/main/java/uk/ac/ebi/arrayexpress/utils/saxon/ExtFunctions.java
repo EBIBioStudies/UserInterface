@@ -172,9 +172,9 @@ public class ExtFunctions
         ((SearchEngine)Application.getAppComponent("SearchEngine")).addIndexDocument();
     }
 **/
-    public static SequenceIterator searchIndex( XPathContext context, String userId, String queryString, String species, String arrayId, String expType )
+    public static SequenceIterator searchIndex( XPathContext context, String queryKey)
     {
-        List<NodeInfo> nodes = ((Experiments)Application.getAppComponent("Experiments")).queryExperiments(queryString);
+        List<NodeInfo> nodes = ((Experiments)Application.getAppComponent("Experiments")).queryExperiments(Integer.decode(queryKey));
         if (null != nodes) {
             return new NodeListIterator(nodes);
         }
@@ -288,47 +288,9 @@ public class ExtFunctions
         return true;
     }
 
-    private static RegExpHelper removeDupeMarkers1RegExp = new RegExpHelper("\u00ab([^\u00ab\u00bb]*)\u00ab", "ig");
-    private static RegExpHelper removeDupeMarkers2RegExp = new RegExpHelper("\u00bb([^\u00ab\u00bb]*)\u00bb", "ig");
-
-    public static String markKeywords( String input, String keywords, String wholeWords )
+    public static String markKeywords( String input, String keywords )
     {
         return ((Experiments)Application.getAppComponent("Experiments")).highlightQuery(keywords, input);
     }
-/*        String result = input;
 
-        try {
-            if (null != keywords && 0 < keywords.length()) {
-                if (2 < keywords.length() && '"' == keywords.charAt(0) && '"' == keywords.charAt(keywords.length() - 1)) {
-                    // if keywords are adorned with double-quotes we do phrase matching
-                    result = new RegExpHelper("(" + keywordToPattern(keywords.substring(1, keywords.length() - 1), true) + ")", "ig").replace(result, "\u00ab$1\u00bb");
-                } else {
-
-                    String[] kwdArray = keywords.split("\\s+");
-                    for (String keyword : kwdArray) {
-                        result = new RegExpHelper("(" + keywordToPattern(keyword, testCheckbox(wholeWords)) + ")", "ig").replace(result, "\u00ab$1\u00bb");
-                    }
-                }
-            }
-            boolean shouldRemoveExtraMarkers = true;
-            String newResult;
-
-            while (shouldRemoveExtraMarkers) {
-                newResult = removeDupeMarkers1RegExp.replace(result, "\u00ab$1");
-                shouldRemoveExtraMarkers = !newResult.equals(result);
-                result = newResult;
-            }
-            shouldRemoveExtraMarkers = true;
-            while (shouldRemoveExtraMarkers) {
-                newResult = removeDupeMarkers2RegExp.replace(result, "$1\u00bb");
-                shouldRemoveExtraMarkers = !newResult.equals(result);
-                result = newResult;
-            }
-        } catch (Throwable x) {
-            logger.error("Caught an exception:", x);
-        }
-
-        return result;
-    }
-*/
 }
