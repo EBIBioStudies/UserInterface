@@ -37,10 +37,10 @@
     <xsl:variable name="vDetailedViewMainTdClass">td_main<xsl:if test="'true'=$detailedview"> td_expanded</xsl:if></xsl:variable>
 
     <xsl:template match="/experiments">
-
+<!--
         <aeext:log message="[browse-experiments-html] Parameters: keywords [{$keywords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
         <aeext:log message="[browse-experiments-html] Sort by: [{$sortby}], [{$sortorder}]"/>
-
+-->
         <xsl:variable name="vFilteredExperiments" select="search:queryIndex('experiments', $queryid)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
         <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments/samples)"/>
@@ -59,9 +59,9 @@
                 <xsl:otherwise><xsl:value-of select="$vFrom + number($pagesize) - 1"/></xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-
+<!--
         <aeext:log message="[browse-experiments-html] Query filtered {$vTotal} experiments. Will output from {$vFrom} to {$vTo}."/>
-
+-->
         <tr id="ae_results_summary_info">
             <td colspan="9">
                 <div id="ae_results_total"><xsl:value-of select="$vTotal"/></div>
@@ -93,7 +93,7 @@
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:variable name="vArrayName" select="//arraydesign[id=$array]/name"/>
-                                <div>There are no experiments <strong><xsl:value-of select="ae:describeQuery($keywords, $species,$vArrayName,$exptype,$inatlas)"/></strong> found in ArrayExpress Archive.</div>
+                                <div>There are no experiments <strong><xsl:value-of select="ae:describeQuery($queryid)"/></strong> found in ArrayExpress Archive.</div>
                                 <div>Try shortening the query term e.g. 'embryo' will match embryo, embryoid, embryonic across all annotation fields.</div>
                                 <div>Note that '*' is <strong>not</strong> supported as a wild card. More information available in <a href="${interface.application.link.query_help}">ArrayExpress Query Help</a>.</div>
                             </xsl:otherwise>
