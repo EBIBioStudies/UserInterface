@@ -30,6 +30,7 @@
 
     <modules>
         <module>ae-interface-auth</module>
+        <module>ae-saxon-exts</module>
     </modules>
 </project>
 
