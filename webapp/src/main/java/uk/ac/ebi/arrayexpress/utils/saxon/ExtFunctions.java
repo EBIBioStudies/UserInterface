@@ -1,9 +1,6 @@
 package uk.ac.ebi.arrayexpress.utils.saxon;
 
-import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.om.NodeInfo;
-import net.sf.saxon.om.NodeListIterator;
-import net.sf.saxon.om.SequenceIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
@@ -21,18 +18,6 @@ public class ExtFunctions
 {
     // logging machinery
     private static final Logger logger = LoggerFactory.getLogger(ExtFunctions.class);
-    // Accession RegExp filter
-    private static final RegExpHelper accessionRegExp = new RegExpHelper("^E-\\w{4}-\\d+$", "i");
-
-    public static String toUpperCase( String str )
-    {
-        return str.toUpperCase();
-    }
-
-    public static String toLowerCase( String str )
-    {
-        return str.toLowerCase();
-    }
 
     public static String capitalize( String str )
     {
@@ -54,9 +39,15 @@ public class ExtFunctions
         return str.toString();
     }
 
-    public static String describeQuery( String keywords, String species, String array, String experimentType, String inAtlas )
+    private static boolean testCheckbox( String check )
+    {
+        return (null != check && (check.toLowerCase().equals("true") || check.toLowerCase().equals("on")));
+    }
+    
+    public static String describeQuery( String queryId )
     {
         StringBuilder desc = new StringBuilder();
+        /**
         if (!keywords.trim().equals("")) {
             desc.append("'").append(keywords).append("'");
         }
@@ -89,6 +80,7 @@ public class ExtFunctions
             }
             desc.append("present in ArrayExpress Atlas");
         }
+        **/
         return desc.toString();
     }
 
@@ -108,7 +100,7 @@ public class ExtFunctions
     public static String trimTrailingDot( String str )
     {
         if (str.endsWith(".")) {
-            return str.substring(0, str.length() - 2);
+            return str.substring(0, str.length() - 1);
         } else
             return str;
     }
@@ -132,54 +124,6 @@ public class ExtFunctions
         }
 
         return dateString;
-    }
-/**
-    public static void createIndex( XPathContext context )
-    {
-        logger.debug("About to create index");
-        ((SearchEngine)Application.getAppComponent("SearchEngine")).createIndex();
-    }
-
-    public static void commitIndex( XPathContext context )
-    {
-        logger.debug("Done creating index");
-        ((SearchEngine)Application.getAppComponent("SearchEngine")).commitIndex();
-    }
-
-    public static int createIndexDocument( XPathContext context )
-    {
-        ((SearchEngine)Application.getAppComponent("SearchEngine")).newIndexDocument((NodeInfo)context.getContextItem());
-        return 0;
-    }
-
-    public static void addIndexField( XPathContext context, int documentId, String fieldName, SequenceIterator value, boolean shouldAnalyze, boolean shouldStore )
-    {
-        try {
-            while (true) {
-                Item item = value.next();
-                if (null == item) {
-                    break;
-                }
-                ((SearchEngine)Application.getAppComponent("SearchEngine")).addIndexField(fieldName, item.getStringValue(), shouldAnalyze, shouldStore);
-            }
-        } catch (Throwable x) {
-            logger.error("Caught an exception:", x);
-        }
-    }
-
-    public static void addDocumentToIndex( XPathContext context, int documentId )
-    {
-        ((SearchEngine)Application.getAppComponent("SearchEngine")).addIndexDocument();
-    }
-**/
-    public static SequenceIterator searchIndex( XPathContext context, String queryId)
-    {
-        List<NodeInfo> nodes = ((Experiments)Application.getAppComponent("Experiments")).queryExperiments(Integer.decode(queryId));
-        if (null != nodes) {
-            return new NodeListIterator(nodes);
-        }
-
-        return null;
     }
 
     /* ***************************************************** */
@@ -241,56 +185,4 @@ public class ExtFunctions
 
         return result;
     }
-
-    private static String keywordToPattern( String keyword, boolean wholeWord )
-    {
-        return (wholeWord ? "\\b\\Q" + keyword + "\\E\\b" : "\\Q" + keyword + "\\E");
-    }
-
-    private static boolean testCheckbox( String check )
-    {
-        return (null != check && (check.toLowerCase().equals("true") || check.toLowerCase().equals("on")));
-    }
-
-    public static boolean testExperiment( XPathContext context, String userId, String keywords, String wholeWords, String species, String array, String experimentType, String inAtlas )
-    {
-        final int textIdxFPrint = context.getNamePool().getFingerprint("", "textidx");
-        final int loadedInAtlasFPrint = context.getNamePool().getFingerprint("", "loadedinatlas");
-        try {
-            NodeInfo node = (NodeInfo)context.getContextItem();
-            String textIdx = node.getAttributeValue(textIdxFPrint);
-            String loadedInAtlas = node.getAttributeValue(loadedInAtlasFPrint);
-
-            if (testCheckbox(inAtlas) && null != loadedInAtlas && loadedInAtlas.equals(""))
-                return false;
-
-//            ExperimentSearch search = ((Experiments) Application.getAppComponent("Experiments")).getSearch();
-//
-//            if (!userId.equals("0") && !search.matchUser(textIdx, userId))
-//                return false;
-//
-//            if (accessionRegExp.test(keywords) && !search.matchAccession(textIdx, keywords))
-//                return false;
-//
-//            if (!keywords.equals("") && !search.matchText(textIdx, keywords, testCheckbox(wholeWords)))
-//                return false;
-//
-//            if (!species.equals("") && !search.matchSpecies(textIdx, species))
-//                return false;
-//
-//            if (!array.equals("") && !search.matchArray(textIdx, array))
-//                return false;
-//
-//            return  experimentType.equals("") || search.matchExperimentType(textIdx, experimentType);
-        } catch (Throwable x) {
-            logger.error("Caught an exception:", x);
-        }
-        return true;
-    }
-
-    public static String markKeywords( String queryId, String input )
-    {
-        return ((Experiments)Application.getAppComponent("Experiments")).highlightQuery(Integer.decode(queryId), input);
-    }
-
 }

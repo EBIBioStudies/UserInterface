@@ -59,7 +59,7 @@ public class Controller
         return new QueryConstructor(getEnvironment(indexId)).construct(querySource);
     }
 
-    public Integer addQuery( String indexId, Map<String,String> queryParams )
+    public Integer addQuery( String indexId, Map<String, String> queryParams )
     {
         return queryPool.addQuery(indexId, queryParams);
     }
@@ -69,9 +69,9 @@ public class Controller
         return new Querier(getEnvironment(indexId)).query(queryPool.getQueryInfo(queryId).parsedQuery);
     }
 
-    public String highlightQuery( String indexId, Integer queryId, String text )
+    public String highlightQuery( String indexId, Integer queryId, String text, String openMark, String closeMark )
     {
-        return new Querier(getEnvironment(indexId)).highlightQuery(queryPool.getQueryInfo(queryId).parsedQuery, text);
+        return new Querier(getEnvironment(indexId)).highlightQuery(queryPool.getQueryInfo(queryId).parsedQuery, text, openMark, closeMark);
     }
 
     public static Controller getController( URL configFile )

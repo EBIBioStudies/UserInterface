@@ -1,13 +1,7 @@
 package uk.ac.ebi.arrayexpress.utils.saxon;
 
-import net.sf.saxon.expr.XPathContext;
-import net.sf.saxon.om.Axis;
-import net.sf.saxon.om.NodeInfo;
-import net.sf.saxon.om.NodeListIterator;
-import net.sf.saxon.om.SequenceIterator;
 import uk.ac.ebi.arrayexpress.utils.RegExpHelper;
 
-import javax.xml.transform.TransformerException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -38,42 +32,9 @@ public class ExtFunctions
         return (null != check && (check.toLowerCase().equals("true") || check.toLowerCase().equals("on")));
     }
 
-    public static String describeQuery(String keywords, String species, String array, String experimentType, String inAtlas)
+    public static String describeQuery( String queryId )
     {
-        StringBuilder desc = new StringBuilder();
-        if (!keywords.trim().equals("")) {
-            desc.append("'").append(keywords).append("'");
-        }
-        if (!species.trim().equals("")) {
-            if (0 != desc.length()) {
-                desc.append(" and ");
-            }
-            desc.append("species '").append(species).append("'");
-        }
-        if (!array.trim().equals("")) {
-            if (0 != desc.length()) {
-                desc.append(" and ");
-            }
-            desc.append("array '").append(array).append("'");
-        }
-        if (!experimentType.trim().equals("")) {
-            if (0 != desc.length()) {
-                desc.append(" and ");
-            }
-            desc.append("experiment type '").append(experimentType).append("'");
-        }
-
-        if (0 != desc.length()) {
-            desc.insert(0, "matching ");
-        }
-
-        if (testCheckbox(inAtlas)) {
-            if (0 != desc.length()) {
-                desc.append(" and ");
-            }
-            desc.append("present in ArrayExpress Atlas");
-        }
-        return desc.toString();
+        return "Query Description is here :)";
     }
 
     public static String normalizeSpecies(String species)
@@ -137,10 +98,6 @@ public class ExtFunctions
         return dateString;
     }
 
-    public static SequenceIterator searchIndex(XPathContext context, String queryId)
-    {
-        return ((NodeInfo)context.getContextItem()).iterateAxis(Axis.CHILD);
-    }
 
     /* ***************************************************** */
     public static boolean isExperimentInWarehouse(String accession)
@@ -165,10 +122,5 @@ public class ExtFunctions
 
         return result;
 
-    }
-
-    public static String markKeywords(String queryId, String input)
-    {
-        return input;
     }
 }

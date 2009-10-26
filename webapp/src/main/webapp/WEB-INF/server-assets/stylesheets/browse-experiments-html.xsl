@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
-                xmlns:aeext="java:/uk.ac.ebi.arrayexpress.utils.saxon.ExtElements"  
+                xmlns:search="java:uk.ac.ebi.arrayexpress.utils.saxon.search.SearchExtension"
+                xmlns:aeext="java:/uk.ac.ebi.arrayexpress.utils.saxon.ExtElements"
                 xmlns:html="http://www.w3.org/1999/xhtml"
-                extension-element-prefixes="ae aeext html"
-                exclude-result-prefixes="ae aeext html"
+                extension-element-prefixes="ae aeext search html"
+                exclude-result-prefixes="ae aeext search html"
                 version="2.0">
 
     <xsl:param name="queryid" />
@@ -40,7 +41,7 @@
         <aeext:log message="[browse-experiments-html] Parameters: keywords [{$keywords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
         <aeext:log message="[browse-experiments-html] Sort by: [{$sortby}], [{$sortorder}]"/>
 
-        <xsl:variable name="vFilteredExperiments" select="ae:searchIndex($queryid)"/>
+        <xsl:variable name="vFilteredExperiments" select="search:queryIndex('experiments', $queryid)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
         <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments/samples)"/>
         <xsl:variable name="vTotalAssays" select="sum($vFilteredExperiments/assays)"/>
@@ -427,7 +428,7 @@
             <xsl:when test="contains($text, '&lt;br&gt;')">
                 <div>
                     <xsl:call-template name="add_highlight_element">
-                        <xsl:with-param name="text" select="ae:markKeywords($queryid, substring-before($text, '&lt;br&gt;'))"/>
+                        <xsl:with-param name="text" select="search:highlightQuery('experiments', $queryid, substring-before($text, '&lt;br&gt;'), '&#171;', '&#187;')"/>
                     </xsl:call-template>
                 </div>
                 <xsl:call-template name="description">
@@ -437,7 +438,7 @@
             <xsl:otherwise>
                 <div>
                     <xsl:call-template name="add_highlight_element">
-                        <xsl:with-param name="text" select="ae:markKeywords($queryid, $text)"/>
+                        <xsl:with-param name="text" select="search:highlightQuery('experiments', $queryid, $text, '&#171;', '&#187;')"/>
                     </xsl:call-template>
                 </div>
             </xsl:otherwise>
@@ -448,7 +449,7 @@
         <xsl:variable name="vText" select="normalize-space(.)"/>
         <xsl:choose>
             <xsl:when test="string-length($vText)!=0">
-                <xsl:variable name="markedtext" select="ae:markKeywords($queryid, $vText)"/>
+                <xsl:variable name="markedtext" select="search:highlightQuery('experiments', $queryid, $vText, '&#171;', '&#187;')"/>
                 <xsl:call-template name="add_highlight_element">
                     <xsl:with-param name="text" select="$markedtext"/>
                 </xsl:call-template>
@@ -462,7 +463,7 @@
         <xsl:variable name="vText" select="normalize-space($pText)"/>
         <xsl:choose>
             <xsl:when test="string-length($vText)!=0">
-                <xsl:variable name="markedtext" select="ae:markKeywords($queryid, $vText)"/>
+                <xsl:variable name="markedtext" select="search:highlightQuery('experiments', $queryid, $vText, '&#171;', '&#187;')"/>
                 <xsl:call-template name="add_highlight_element">
                     <xsl:with-param name="text" select="$markedtext"/>
                 </xsl:call-template>

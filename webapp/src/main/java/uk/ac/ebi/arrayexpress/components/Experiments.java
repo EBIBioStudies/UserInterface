@@ -1,7 +1,6 @@
 package uk.ac.ebi.arrayexpress.components;
 
 import net.sf.saxon.om.DocumentInfo;
-import net.sf.saxon.om.NodeInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
@@ -84,16 +83,6 @@ public class Experiments extends ApplicationComponent
     public Integer addQuery( Map<String,String> params)
     {
         return indexController.addQuery("experiments", params);   
-    }
-
-    public List<NodeInfo> doQuery(Integer queryId)
-    {
-        return indexController.queryIndex("experiments", queryId);   
-    }
-
-    public String highlightQuery(Integer queryId, String text)
-    {
-        return indexController.highlightQuery("experiments", queryId, text);
     }
 
     public boolean isAccessible( String accession, String userId )

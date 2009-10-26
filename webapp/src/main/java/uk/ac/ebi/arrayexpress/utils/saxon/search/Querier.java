@@ -13,9 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Querier
 {
@@ -82,15 +80,11 @@ public class Querier
     return result;
     }
 
-    // query cache
-    private final static int QUERY_CACHE_SIZE = 25;
-    private static Map<String,Query> queryCache = new HashMap<String,Query>(QUERY_CACHE_SIZE);
-
-    public String highlightQuery(BooleanQuery query, String text)
+    public String highlightQuery(Query query, String text, String openMark, String closeMark)
     {
         String fieldName = "keywords";
         try {
-            SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter("\u00ab", "\u00bb");
+            SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(openMark, closeMark);
             Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query, fieldName));
             highlighter.setTextFragmenter(new NullFragmenter());
 

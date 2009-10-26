@@ -1,6 +1,5 @@
 package uk.ac.ebi.arrayexpress.utils.saxon.search;
 
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
@@ -24,20 +23,16 @@ public class QueryConstructor
 
     public BooleanQuery construct( Map<String, String> querySource )
     {
-        //BooleanQuery.setMaxClauseCount(Integer.MAX_VALUE);
         BooleanQuery result = new BooleanQuery();
         try {
-            IndexReader ir = IndexReader.open(this.env.indexDirectory, true);
             for ( Map.Entry<String, String> queryItem : querySource.entrySet() ) {
                 if (env.fields.containsKey(queryItem.getKey()) && !"".equals(queryItem.getValue().trim())) {
                     QueryParser parser = new QueryParser(queryItem.getKey(), this.env.indexAnalyzer);
                     parser.setDefaultOperator(QueryParser.Operator.AND);
-                    //parser.setMultiTermRewriteMethod(MultiTermQuery.SCORING_BOOLEAN_QUERY_REWRITE);
                     Query q = parser.parse(queryItem.getValue());
                     result.add(q, BooleanClause.Occur.MUST);
                 }
             }
-            ir.close();
         } catch (Throwable x) {
             logger.error("Caught an exception:", x);
         }
