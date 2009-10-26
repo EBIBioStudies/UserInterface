@@ -5,7 +5,6 @@ import net.sf.saxon.om.NodeInfo;
 import org.apache.lucene.search.BooleanQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.arrayexpress.utils.search.QueryPool;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -21,12 +20,14 @@ public class Controller
     private static Controller self;
 
     private Configuration config;
+    private QueryPool queryPool;
 
     private Map<String, IndexEnvironment> environment = new HashMap<String, IndexEnvironment>();
 
     private Controller( URL configFile )
     {
         this.config = new Configuration(configFile);
+        this.queryPool = new QueryPool();
     }
 
     public IndexEnvironment getEnvironment( String indexId )
@@ -58,14 +59,19 @@ public class Controller
         return new QueryConstructor(getEnvironment(indexId)).construct(querySource);
     }
 
-    public List<NodeInfo> queryIndex( String indexId, Integer queryKey )
+    public Integer addQuery( String indexId, Map<String,String> queryParams )
     {
-        return new Querier(getEnvironment(indexId)).query(QueryPool.getInstance().getQueryInfo(queryKey).parsedQuery);
+        return queryPool.addQuery(indexId, queryParams);
     }
 
-    public String highlightQuery( String indexId, String queryString, String text )
+    public List<NodeInfo> queryIndex( String indexId, Integer queryId )
     {
-        return new Querier(getEnvironment(indexId)).highlightQuery(queryString, text);
+        return new Querier(getEnvironment(indexId)).query(queryPool.getQueryInfo(queryId).parsedQuery);
+    }
+
+    public String highlightQuery( String indexId, Integer queryId, String text )
+    {
+        return new Querier(getEnvironment(indexId)).highlightQuery(queryPool.getQueryInfo(queryId).parsedQuery, text);
     }
 
     public static Controller getController( URL configFile )
@@ -77,7 +83,7 @@ public class Controller
         return self;
     }
 
-    public static Controller getController()
+    public static Controller getInstance()
     {
         return self;
     }

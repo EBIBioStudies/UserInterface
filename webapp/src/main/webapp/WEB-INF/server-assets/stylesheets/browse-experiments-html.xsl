@@ -5,21 +5,19 @@
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 extension-element-prefixes="ae aeext html"
                 exclude-result-prefixes="ae aeext html"
-                version="1.0">
+                version="2.0">
 
-    <xsl:param name="querykey"/>
+    <xsl:param name="queryid" />
     <xsl:param name="page">1</xsl:param>
     <xsl:param name="pagesize">25</xsl:param>
     <xsl:param name="sortby">releasedate</xsl:param>
     <xsl:param name="sortorder">descending</xsl:param>
 
-    <xsl:param name="species"/>
-    <xsl:param name="array"/>
-    <xsl:param name="keywords"/>
-    <xsl:param name="wholewords"/>
-    <xsl:param name="exptype"/>
-    <xsl:param name="inatlas"/>
-    <xsl:param name="userid"/>
+    <xsl:param name="species" />
+    <xsl:param name="array" />
+    <xsl:param name="keywords" />
+    <xsl:param name="exptype" />
+    <xsl:param name="inatlas" />
 
     <xsl:param name="detailedview"/>
 
@@ -39,28 +37,27 @@
 
     <xsl:template match="/experiments">
 
-        <aeext:log message="[browse-experiments-html] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
+        <aeext:log message="[browse-experiments-html] Parameters: keywords [{$keywords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
         <aeext:log message="[browse-experiments-html] Sort by: [{$sortby}], [{$sortorder}]"/>
 
-        <xsl:variable name="vFilteredExperiments" select="ae:searchIndex($querykey)"/>
+        <xsl:variable name="vFilteredExperiments" select="ae:searchIndex($queryid)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
         <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments/samples)"/>
         <xsl:variable name="vTotalAssays" select="sum($vFilteredExperiments/assays)"/>
 
         <xsl:variable name="vFrom">
             <xsl:choose>
-                <xsl:when test="$page > 0"><xsl:value-of select="1 + ( $page - 1 ) * $pagesize"/></xsl:when>
+                <xsl:when test="number($page) > 0"><xsl:value-of select="1 + ( number($page) - 1 ) * number($pagesize)"/></xsl:when>
                 <xsl:when test="$vTotal = 0">0</xsl:when>
                 <xsl:otherwise>1</xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="vTo">
             <xsl:choose>
-                <xsl:when test="( $vFrom + $pagesize - 1 ) > $vTotal"><xsl:value-of select="$vTotal"/></xsl:when>
-                <xsl:otherwise><xsl:value-of select="$vFrom + $pagesize - 1"/></xsl:otherwise>
+                <xsl:when test="( $vFrom + number($pagesize) - 1 ) > $vTotal"><xsl:value-of select="$vTotal"/></xsl:when>
+                <xsl:otherwise><xsl:value-of select="$vFrom + number($pagesize) - 1"/></xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-
 
         <aeext:log message="[browse-experiments-html] Query filtered {$vTotal} experiments. Will output from {$vFrom} to {$vTo}."/>
 
@@ -95,7 +92,7 @@
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:variable name="vArrayName" select="//arraydesign[id=$array]/name"/>
-                                <div>There are no experiments <strong><xsl:value-of select="ae:describeQuery($keywords,$wholewords,$species,$vArrayName,$exptype,$inatlas)"/></strong> found in ArrayExpress Archive.</div>
+                                <div>There are no experiments <strong><xsl:value-of select="ae:describeQuery($keywords, $species,$vArrayName,$exptype,$inatlas)"/></strong> found in ArrayExpress Archive.</div>
                                 <div>Try shortening the query term e.g. 'embryo' will match embryo, embryoid, embryonic across all annotation fields.</div>
                                 <div>Note that '*' is <strong>not</strong> supported as a wild card. More information available in <a href="${interface.application.link.query_help}">ArrayExpress Query Help</a>.</div>
                             </xsl:otherwise>
@@ -413,7 +410,7 @@
     <xsl:template name="providers">
         <xsl:for-each select="provider[not(contact=following-sibling::provider/contact) and role!='data_coder']">
             <xsl:sort select="role='submitter'" order="descending"/>
-            <xsl:sort select="ae:toLowerCase(contact)"/>
+            <xsl:sort select="lower-case(contact)"/>
             <xsl:choose>
                 <xsl:when test="role='submitter' and string-length(email) > 0">
                     <a href="mailto:{email}"><xsl:apply-templates select="contact" mode="highlight"/> &lt;<xsl:apply-templates select="email" mode="highlight"/>&gt;</a>
@@ -430,7 +427,7 @@
             <xsl:when test="contains($text, '&lt;br&gt;')">
                 <div>
                     <xsl:call-template name="add_highlight_element">
-                        <xsl:with-param name="text" select="ae:markKeywords(substring-before($text, '&lt;br&gt;'),$keywords)"/>
+                        <xsl:with-param name="text" select="ae:markKeywords($queryid, substring-before($text, '&lt;br&gt;'))"/>
                     </xsl:call-template>
                 </div>
                 <xsl:call-template name="description">
@@ -440,7 +437,7 @@
             <xsl:otherwise>
                 <div>
                     <xsl:call-template name="add_highlight_element">
-                        <xsl:with-param name="text" select="ae:markKeywords($text,$keywords)"/>
+                        <xsl:with-param name="text" select="ae:markKeywords($queryid, $text)"/>
                     </xsl:call-template>
                 </div>
             </xsl:otherwise>
@@ -451,7 +448,7 @@
         <xsl:variable name="vText" select="normalize-space(.)"/>
         <xsl:choose>
             <xsl:when test="string-length($vText)!=0">
-                <xsl:variable name="markedtext" select="ae:markKeywords($vText,$keywords)"/>
+                <xsl:variable name="markedtext" select="ae:markKeywords($queryid, $vText)"/>
                 <xsl:call-template name="add_highlight_element">
                     <xsl:with-param name="text" select="$markedtext"/>
                 </xsl:call-template>
@@ -465,7 +462,7 @@
         <xsl:variable name="vText" select="normalize-space($pText)"/>
         <xsl:choose>
             <xsl:when test="string-length($vText)!=0">
-                <xsl:variable name="markedtext" select="ae:markKeywords($vText,$keywords)"/>
+                <xsl:variable name="markedtext" select="ae:markKeywords($queryid, $vText)"/>
                 <xsl:call-template name="add_highlight_element">
                     <xsl:with-param name="text" select="$markedtext"/>
                 </xsl:call-template>
@@ -608,7 +605,7 @@
                 <td class="attr_value">
                     <xsl:for-each select="file[kind = 'raw' or kind = 'fgem']">
                         <xsl:sort select="kind"/>
-                        <xsl:sort select="ae:toLowerCase(name)"/>
+                        <xsl:sort select="lower-case(name)"/>
                         <a href="{$vBaseUrl}/{relativepath}">
                             <xsl:value-of select="name"/>
                         </a>
@@ -664,7 +661,7 @@
                 <td class="attr_name">Experiment Design Images</td>
                 <td class="attr_value">
                     <xsl:for-each select="file[kind = 'biosamples' and (extension = 'png' or extension = 'svg')]">
-                        <xsl:sort select="ae:toLowerCase(extension)"/>
+                        <xsl:sort select="lower-case(extension)"/>
                         <a href="{$vBaseUrl}/{relativepath}"><xsl:value-of select="name"/></a>
                         <xsl:if test="position() != last()">
                             <xsl:text>, </xsl:text>

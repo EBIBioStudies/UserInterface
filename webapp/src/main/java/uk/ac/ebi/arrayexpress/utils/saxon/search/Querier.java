@@ -4,7 +4,6 @@ import net.sf.saxon.om.NodeInfo;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermEnum;
-import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.*;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.NullFragmenter;
@@ -87,31 +86,18 @@ public class Querier
     private final static int QUERY_CACHE_SIZE = 25;
     private static Map<String,Query> queryCache = new HashMap<String,Query>(QUERY_CACHE_SIZE);
 
-    public String highlightQuery(String queryString, String text)
+    public String highlightQuery(BooleanQuery query, String text)
     {
         String fieldName = "keywords";
-        if (null != queryString && !queryString.trim().equals("")) {
-            try {
-                Query q;
-                if (queryCache.containsKey(queryString)) {
-                    q = queryCache.get(queryString);
-                } else {
-                    QueryParser parser = new QueryParser(fieldName, this.env.indexAnalyzer);
-                    parser.setDefaultOperator(QueryParser.Operator.AND);
-                    q = parser.parse(queryString);
-                    logger.info("Query [{}] was parsed to [{}]", queryString, q.toString());
-                    queryCache.put(queryString, q);
-                }
-                
-                SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter("\u00ab", "\u00bb");
-                Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(q, fieldName));
-                highlighter.setTextFragmenter(new NullFragmenter());
+        try {
+            SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter("\u00ab", "\u00bb");
+            Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query, fieldName));
+            highlighter.setTextFragmenter(new NullFragmenter());
 
-                String str = highlighter.getBestFragment(this.env.indexAnalyzer, fieldName, text);
-                return null != str ? str : text;
-            } catch (Throwable x) {
-                logger.error("Caught an exception:", x);
-            }
+            String str = highlighter.getBestFragment(this.env.indexAnalyzer, fieldName, text);
+            return null != str ? str : text;
+        } catch (Throwable x) {
+            logger.error("Caught an exception:", x);
         }
         return text;
     }

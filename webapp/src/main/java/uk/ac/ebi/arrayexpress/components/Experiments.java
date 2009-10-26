@@ -13,6 +13,7 @@ import uk.ac.ebi.arrayexpress.utils.saxon.search.Controller;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 public class Experiments extends ApplicationComponent
 {
@@ -80,14 +81,19 @@ public class Experiments extends ApplicationComponent
         return experiments.getObject().getDocument();
     }
 
-    public List<NodeInfo> queryExperiments(Integer queryKey)
+    public Integer addQuery( Map<String,String> params)
     {
-        return indexController.queryIndex("experiments", queryKey);   
+        return indexController.addQuery("experiments", params);   
     }
 
-    public String highlightQuery(String queryString, String text)
+    public List<NodeInfo> doQuery(Integer queryId)
     {
-        return indexController.highlightQuery("experiments", queryString, text);
+        return indexController.queryIndex("experiments", queryId);   
+    }
+
+    public String highlightQuery(Integer queryId, String text)
+    {
+        return indexController.highlightQuery("experiments", queryId, text);
     }
 
     public boolean isAccessible( String accession, String userId )

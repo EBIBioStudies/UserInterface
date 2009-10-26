@@ -3,7 +3,7 @@
                 xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
                 extension-element-prefixes="ae"
                 exclude-result-prefixes="ae"
-                version="1.0">
+                version="2.0">
 
     <xsl:template name="ae-sort-experiments">
         <xsl:param name="pExperiments"/>
@@ -24,7 +24,7 @@
             </xsl:when>
             <xsl:when test="$pSortBy='name'">
                 <xsl:apply-templates select="$pExperiments">
-                    <xsl:sort select="ae:toLowerCase(name)" order="{$pSortOrder}"/>
+                    <xsl:sort select="lower-case(name)" order="{$pSortOrder}"/>
                     <!-- then sort by accession -->
                     <xsl:sort select="substring(accession, 3, 4)" order="{$pSortOrder}"/>
                     <!-- sort by experiment 4-letter code -->

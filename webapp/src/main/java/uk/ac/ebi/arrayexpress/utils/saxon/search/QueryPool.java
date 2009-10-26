@@ -1,10 +1,9 @@
-package uk.ac.ebi.arrayexpress.utils.search;
+package uk.ac.ebi.arrayexpress.utils.saxon.search;
 
 import org.apache.lucene.search.BooleanQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.utils.LRUMap;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.Controller;
 
 import java.util.Collections;
 import java.util.Map;
@@ -12,13 +11,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class QueryPool
 {
-    // there should be a single instance of QueryPool in the runtime environment
-    private static QueryPool self;
-
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private AtomicInteger queryKey;
+    private AtomicInteger queryId;
 
     public class QueryInfo
     {
@@ -33,36 +29,28 @@ public class QueryPool
 
     private Map<Integer, QueryInfo> queries = Collections.synchronizedMap(new LRUMap<Integer, QueryInfo>(50));
 
-    private QueryPool()
+    public QueryPool()
     {
-        this.queryKey = new AtomicInteger(0);
+        this.queryId = new AtomicInteger(0);
     }
 
     public Integer addQuery( String indexId, Map<String, String> queryParams )
     {
         QueryInfo info = new QueryInfo(queryParams);
-        info.parsedQuery = Controller.getController().constructQuery(indexId, queryParams);
-        this.queries.put(this.queryKey.addAndGet(1), info);
+        info.parsedQuery = Controller.getInstance().constructQuery(indexId, queryParams);
+        this.queries.put(this.queryId.addAndGet(1), info);
 
-        return this.queryKey.get();
+        return this.queryId.get();
     }
 
-    public QueryInfo getQueryInfo( Integer queryKey )
+    public QueryInfo getQueryInfo( Integer queryId )
     {
         QueryInfo info = null;
 
-        if (queries.containsKey(queryKey)) {
-            info = queries.get(queryKey);
+        if (queries.containsKey(queryId)) {
+            info = queries.get(queryId);
         }
 
         return info;
-    }
-
-    public static QueryPool getInstance()
-    {
-        if (null == self) {
-            self = new QueryPool();
-        }
-        return self;
     }
 }

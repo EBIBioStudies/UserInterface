@@ -54,7 +54,7 @@ public class ExtFunctions
         return str.toString();
     }
 
-    public static String describeQuery( String keywords, String wholeWords, String species, String array, String experimentType, String inAtlas )
+    public static String describeQuery( String keywords, String species, String array, String experimentType, String inAtlas )
     {
         StringBuilder desc = new StringBuilder();
         if (!keywords.trim().equals("")) {
@@ -172,9 +172,9 @@ public class ExtFunctions
         ((SearchEngine)Application.getAppComponent("SearchEngine")).addIndexDocument();
     }
 **/
-    public static SequenceIterator searchIndex( XPathContext context, String queryKey)
+    public static SequenceIterator searchIndex( XPathContext context, String queryId)
     {
-        List<NodeInfo> nodes = ((Experiments)Application.getAppComponent("Experiments")).queryExperiments(Integer.decode(queryKey));
+        List<NodeInfo> nodes = ((Experiments)Application.getAppComponent("Experiments")).queryExperiments(Integer.decode(queryId));
         if (null != nodes) {
             return new NodeListIterator(nodes);
         }
@@ -288,9 +288,9 @@ public class ExtFunctions
         return true;
     }
 
-    public static String markKeywords( String input, String keywords )
+    public static String markKeywords( String queryId, String input )
     {
-        return ((Experiments)Application.getAppComponent("Experiments")).highlightQuery(keywords, input);
+        return ((Experiments)Application.getAppComponent("Experiments")).highlightQuery(Integer.decode(queryId), input);
     }
 
 }

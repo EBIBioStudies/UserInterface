@@ -9,7 +9,6 @@ import uk.ac.ebi.arrayexpress.components.Users;
 import uk.ac.ebi.arrayexpress.utils.CookieMap;
 import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
 import uk.ac.ebi.arrayexpress.utils.RegExpHelper;
-import uk.ac.ebi.arrayexpress.utils.search.QueryPool;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -106,9 +105,8 @@ public class QueryServlet extends ApplicationServlet
                 }
             }
 
-            QueryPool pool = QueryPool.getInstance();
-            Integer queryKey = pool.addQuery("experiments", params);
-            params.put("querykey", String.valueOf(queryKey));
+            Integer queryId = experiments.addQuery(params);
+            params.put("queryid", String.valueOf(queryId));
 
             SaxonEngine saxonEngine = (SaxonEngine) getComponent("SaxonEngine");
             if (!saxonEngine.transformToWriter(
