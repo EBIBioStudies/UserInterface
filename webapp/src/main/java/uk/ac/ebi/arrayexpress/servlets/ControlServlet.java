@@ -35,7 +35,7 @@ public class ControlServlet extends ApplicationServlet
             params = requestArgs[1];
         }
 
-        if (command.equals("reload-warehouse-info")) {
+        if (command.equals("reload-atlas-info")) {
             ((JobsController) getComponent("JobsController")).executeJob(command);
         } else if (command.equals("reload-xml")) {
             if (0 < params.length()) {

@@ -8,11 +8,9 @@ import uk.ac.ebi.arrayexpress.utils.persistence.PersistableExperimentsContainer;
 import uk.ac.ebi.arrayexpress.utils.persistence.PersistableString;
 import uk.ac.ebi.arrayexpress.utils.persistence.PersistableStringList;
 import uk.ac.ebi.arrayexpress.utils.persistence.TextFilePersistence;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.Controller;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 
 public class Experiments extends ApplicationComponent
 {
@@ -21,12 +19,10 @@ public class Experiments extends ApplicationComponent
 
     private String dataSource;
     private TextFilePersistence<PersistableExperimentsContainer> experiments;
-    private TextFilePersistence<PersistableStringList> experimentsInWarehouse;
+    private TextFilePersistence<PersistableStringList> experimentsInAtlas;
     private TextFilePersistence<PersistableString> species;
     private TextFilePersistence<PersistableString> arrays;
     private TextFilePersistence<PersistableString> experimentTypes;
-
-    private Controller indexController;
 
     public Experiments()
     {
@@ -36,37 +32,31 @@ public class Experiments extends ApplicationComponent
     public void initialize()
     {
         String tmpDir = System.getProperty("java.io.tmpdir");
-        experiments = new TextFilePersistence<PersistableExperimentsContainer>(
+        this.experiments = new TextFilePersistence<PersistableExperimentsContainer>(
                 new PersistableExperimentsContainer()
                 , new File(tmpDir, getPreferences().getString("ae.experiments.cache.filename"))
         );
 
-        experimentsInWarehouse = new TextFilePersistence<PersistableStringList>(
+        this.experimentsInAtlas = new TextFilePersistence<PersistableStringList>(
                 new PersistableStringList()
-                , new File(tmpDir, getPreferences().getString("ae.warehouseexperiments.cache.filename"))
+                , new File(tmpDir, getPreferences().getString("ae.atlasexperiments.cache.filename"))
         );
 
-        species = new TextFilePersistence<PersistableString>(
+        this.species = new TextFilePersistence<PersistableString>(
                 new PersistableString()
                 , new File(tmpDir, getPreferences().getString("ae.species.cache.filename"))
 
         );
 
-        arrays = new TextFilePersistence<PersistableString>(
+        this.arrays = new TextFilePersistence<PersistableString>(
                 new PersistableString()
                 , new File(tmpDir, getPreferences().getString("ae.arrays.cache.filename"))
         );
 
-        experimentTypes = new TextFilePersistence<PersistableString>(
+        this.experimentTypes = new TextFilePersistence<PersistableString>(
                 new PersistableString()
                 , new File(tmpDir, getPreferences().getString("ae.exptypes.cache.filename"))
         );
-
-        try {
-            indexController = Controller.getController(getApplication().getResource("/WEB-INF/classes/aeindex.xml"));
-        } catch (Throwable x) {
-            logger.error("Caught an exception:", x);
-        }
 
         indexExperiments();
     }
@@ -77,12 +67,7 @@ public class Experiments extends ApplicationComponent
 
     public synchronized DocumentInfo getExperiments()
     {
-        return experiments.getObject().getDocument();
-    }
-
-    public Integer addQuery( Map<String,String> params)
-    {
-        return indexController.addQuery("experiments", params);   
+        return this.experiments.getObject().getDocument();
     }
 
     public boolean isAccessible( String accession, String userId )
@@ -90,39 +75,39 @@ public class Experiments extends ApplicationComponent
         return false;
     }
 
-    public boolean isInWarehouse( String accession )
+    public boolean isInAtlas( String accession )
     {
-        return experimentsInWarehouse.getObject().contains(accession);
+        return this.experimentsInAtlas.getObject().contains(accession);
     }
 
     public String getSpecies()
     {
-        return species.getObject().get();
+        return this.species.getObject().get();
     }
 
     public String getArrays()
     {
-        return arrays.getObject().get();
+        return this.arrays.getObject().get();
     }
 
     public String getExperimentTypes()
     {
-        return experimentTypes.getObject().get();
+        return this.experimentTypes.getObject().get();
     }
 
 
     public String getDataSource()
     {
-        if (null == dataSource) {
-            dataSource = getPreferences().getString("ae.experiments.datasources");
+        if (null == this.dataSource) {
+            this.dataSource = getPreferences().getString("ae.experiments.datasources");
         }
 
-        return dataSource;
+        return this.dataSource;
     }
 
-    public void setDataSource( String ds )
+    public void setDataSource( String dataSource )
     {
-        dataSource = ds;
+        this.dataSource = dataSource;
     }
 
     public void reload( String xmlString )
@@ -130,7 +115,7 @@ public class Experiments extends ApplicationComponent
         DocumentInfo doc = loadExperimentsFromString(xmlString);
         if (null != doc) {
             setExperiments(doc);
-            
+            buildSpeciesArraysExpTypes(doc);
             indexExperiments();
         }
     }
@@ -139,24 +124,25 @@ public class Experiments extends ApplicationComponent
     {
     }
 
-    public void setExperimentsInWarehouse( List<String> expList )
+    public void setExperimentsInAtlas( List<String> expList )
     {
+        this.experimentsInAtlas.setObject(new PersistableStringList(expList));
     }
 
     private synchronized void setExperiments( DocumentInfo doc )
     {
-        if (null != doc ) {
-            experiments.setObject(new PersistableExperimentsContainer(doc));
+        if (null != doc) {
+            this.experiments.setObject(new PersistableExperimentsContainer(doc));
         } else {
-            logger.error("Experiments NOT updated, NULL document passed");
+            this.logger.error("Experiments NOT updated, NULL document passed");
         }
     }
 
     private DocumentInfo loadExperimentsFromString( String xmlString )
     {
-        DocumentInfo doc = ((SaxonEngine) getComponent("SaxonEngine")).transform(xmlString, "preprocess-experiments-xml.xsl", null);
+        DocumentInfo doc = ((SaxonEngine)getComponent("SaxonEngine")).transform(xmlString, "preprocess-experiments-xml.xsl", null);
         if (null == doc) {
-            logger.error("Transformation [preprocess-experiments-xml.xsl] returned an error, returning null");
+            this.logger.error("Transformation [preprocess-experiments-xml.xsl] returned an error, returning null");
             return null;
         }
         return doc;
@@ -165,11 +151,23 @@ public class Experiments extends ApplicationComponent
     private void indexExperiments()
     {
         try {
-            indexController.index("experiments", experiments.getObject().getDocument());
-            List<String> expDesign = indexController.getTerms("experiments", "expdesign");
-            logger.debug("Retrieved experiment design list, size [{}]", expDesign.size());
+            ((SearchEngine)getComponent("SearchEngine")).getController().index("experiments", experiments.getObject().getDocument());
+            //List<String> expDesign = Controller.getInstance().getTerms("experiments", "expdesign");
+            //logger.debug("Retrieved experiment design list, size [{}]", expDesign.size());
         } catch (Throwable x) {
-            logger.error("Caught an exception:", x);
+            this.logger.error("Caught an exception:", x);
         }
+    }
+
+    private void buildSpeciesArraysExpTypes( DocumentInfo doc )
+    {
+        String speciesString = ((SaxonEngine)getComponent("SaxonEngine")).transformToString(doc, "build-species-list-html.xsl", null);
+        this.species.setObject(new PersistableString(speciesString));
+
+        String arraysString = ((SaxonEngine)getComponent("SaxonEngine")).transformToString(doc, "build-arrays-list-html.xsl", null);
+        this.arrays.setObject(new PersistableString(arraysString));
+
+        String expTypesString = ((SaxonEngine)getComponent("SaxonEngine")).transformToString(doc, "build-exptypes-list-html.xsl", null);
+        this.experimentTypes.setObject(new PersistableString(expTypesString));
     }
 }

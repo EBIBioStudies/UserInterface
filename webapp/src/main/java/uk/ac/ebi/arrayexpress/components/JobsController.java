@@ -32,10 +32,10 @@ public class JobsController extends ApplicationComponent
         addJob("rescan-files", RescanFilesJob.class);
         addJob("reload-xml", ReloadExperimentsJob.class);
         addJob("retrieve-xml", RetrieveExperimentsXmlJob.class);
-        addJob("reload-warehouse-info", RetrieveExperimentsListFromWarehouseJob.class);
+        addJob("reload-atlas-info", RetrieveExperimentsListFromAtlasJob.class);
         scheduleJob("rescan-files", "ae.files.rescan");
         scheduleJob("reload-xml", "ae.experiments.reload");
-        scheduleJob("reload-warehouse-info", "ae.warehouseexperiments.reload");
+        scheduleJob("reload-atlas-info", "ae.atlasexperiments.reload");
         startScheduler();
     }
 

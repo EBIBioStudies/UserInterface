@@ -45,18 +45,11 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
     public void initialize()
     {
         try {
-            // this is to make sure we don't depend on runtime configuration much
-            // TODO: this, in fact, proved to be a disaster as the other apps in the container
-            // TODO: do see that change, and, well, behave :(  
-            System.setProperty(
-                "javax.xml.transform.TransformerFactory"
-                , "net.sf.saxon.TransformerFactoryImpl"
-            );
-            
-            trFactory = (TransformerFactoryImpl)TransformerFactory.newInstance();
-            
+            // This is so we make sure we use Saxon and not anything else 
+            trFactory = (TransformerFactoryImpl)TransformerFactoryImpl.newInstance();
             trFactory.setErrorListener(this);
             trFactory.setURIResolver(this);
+
             loggerWriter = new LoggerWriter(logger);
         } catch (Throwable x) {
             logger.error("Caught an exception:", x);
@@ -156,74 +149,7 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
 
         return null;
     }
-//
-//    public XdmValue evaluateXPath( XdmNode node, String xpath )
-//    {
-//        try {
-//            XPathSelector selector = xpathCompiler.compile(xpath).load();
-//            selector.setContextItem(node);
-//            return selector.evaluate();
-//        } catch (Throwable x) {
-//            logger.error("Caught an exception:", x);
-//        }
-//
-//        return null;
-//    }
-//
-//    public String concatAllText( XdmValue nodes )
-//    {
-//        StringBuilder buf = new StringBuilder();
-//        if (null != nodes) {
-//            for (XdmItem node : nodes) {
-//                buf.append(concatAllText((XdmNode)node)).append(' ');
-//            }
-//        }
-//        return buf.toString();
-//    }
-//
-//    public String concatAllText( XdmNode node )
-//    {
-//        StringBuilder buf = new StringBuilder();
-//
-//        if (null != node) {
-//            AxisIterator nodesItor = node.getUnderlyingNode().iterateAxis(net.sf.saxon.om.Axis.DESCENDANT_OR_SELF);
-//            do {
-//                NodeInfo next = (NodeInfo)nodesItor.next();
-//
-//                // if null there is no next
-//                if (null == next) {
-//                    break;
-//                }
-//
-//                if ( Type.TEXT == next.getNodeKind()) {
-//                    if (null != next.getStringValue() && 0 != next.getStringValue().length()) {
-//                        buf.append(next.getStringValue()).append(' ');
-//                    }
-//                } else if (Type.ELEMENT == next.getNodeKind()) {
-//                    // iterate over attributes and collect values from there
-//                    AxisIterator attributesItor = next.iterateAxis(net.sf.saxon.om.Axis.ATTRIBUTE);
-//                    do {
-//                        NodeInfo nextAttr = (NodeInfo)attributesItor.next();
-//
-//                        // if null there is no next
-//                        if (null == nextAttr) {
-//                            break;
-//                        }
-//
-//                        // append attribute value (if any)
-//                        if (null == nextAttr.getStringValue() || 0 != nextAttr.getStringValue().length()) {
-//                            buf.append(nextAttr.getStringValue()).append(' ');
-//                        }
-//
-//                    } while (true);
-//                }
-//
-//            } while (true);
-//        }
-//
-//        return buf.toString();
-//    }
-//
+
     public boolean transformToWriter( DocumentInfo srcDocument, String stylesheet, Map<String,String> params, Writer dstWriter )
     {
         return transform(srcDocument, stylesheet, params, new StreamResult(dstWriter));
@@ -239,7 +165,7 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
         String str = null;
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
-        if (transform(srcDocument, stylesheet, params, new StreamResult(str))) {
+        if (transform(srcDocument, stylesheet, params, new StreamResult(outStream))) {
             try {
                 str = outStream.toString(XML_STRING_ENCODING);
             } catch (Throwable x) {

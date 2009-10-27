@@ -74,7 +74,7 @@ public class Controller
         return new Querier(getEnvironment(indexId)).highlightQuery(queryPool.getQueryInfo(queryId).parsedQuery, text, openMark, closeMark);
     }
 
-    public static Controller getController( URL configFile )
+    public static Controller initController( URL configFile )
     {
         if (null == self) {
             self = new Controller(configFile);

@@ -2,13 +2,11 @@
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
-    extension-element-prefixes="ae html"
-    exclude-result-prefixes="ae html"
-    version="1.0">
+    extension-element-prefixes="html"
+    exclude-result-prefixes="html"
+    version="2.0">
 
     <xsl:output omit-xml-declaration="yes" method="html"/>
-    <xsl:key name="distinct-array" match="arraydesign" use="ae:toLowerCase(name)"/>
 
     <xsl:template match="/experiments">
         <option value="">Any array</option>
@@ -88,9 +86,13 @@
         </xsl:call-template>
 
         <optgroup label="Other arrays">
-            <xsl:apply-templates select=".//arraydesign[generate-id(key('distinct-array',ae:toLowerCase(name)))=generate-id()][not(ae:testRegexp(name,'affymetrix|agilent|amersham|bug@s|catma|embl|illumina|ilsi|mit|nimblegen|sanger|smd|tigr|umc|yale','i'))]">
-                <xsl:sort select="ae:toLowerCase(name)"/>
-            </xsl:apply-templates>
+            <xsl:for-each-group select="experiment/arraydesign[not(matches(name, 'affymetrix|agilent|amersham|bug@s|catma|embl|illumina|ilsi|mit|nimblegen|sanger|smd|tigr|umc|yale','i'))]" group-by="id">
+                <xsl:sort select="lower-case(name)"/>
+                <option>
+                    <xsl:attribute name="value" select="id"/>
+                    <xsl:value-of select="name"/>
+                </option>                
+            </xsl:for-each-group>
         </optgroup>
 
     </xsl:template>
@@ -99,16 +101,14 @@
         <xsl:param name="pGroupTitle"/>
         <xsl:param name="pGroupSignature"/>
         <optgroup label="{$pGroupTitle} arrays">
-            <xsl:apply-templates
-                    select=".//arraydesign[generate-id(key('distinct-array',ae:toLowerCase(name)))=generate-id()][contains(ae:toLowerCase(name), $pGroupSignature)]">
-                <xsl:sort select="ae:toLowerCase(name)"/>
-            </xsl:apply-templates>
+            <xsl:for-each-group select="experiment/arraydesign[contains(lower-case(name), $pGroupSignature)]" group-by="id">
+                <xsl:sort select="lower-case(name)"/>
+                <option>
+                    <xsl:attribute name="value" select="id"/>
+                    <xsl:value-of select="name"/>
+                </option>                
+            </xsl:for-each-group>
         </optgroup>
     </xsl:template>
 
-    <xsl:template match="arraydesign">
-        <option value="{id}">
-            <xsl:value-of select="name"/>
-        </option>
-    </xsl:template>
 </xsl:stylesheet>

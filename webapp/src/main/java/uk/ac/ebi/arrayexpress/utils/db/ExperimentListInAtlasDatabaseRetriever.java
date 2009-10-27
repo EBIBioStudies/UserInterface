@@ -10,11 +10,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExperimentListInWarehouseDatabaseRetriever extends SqlStatementExecutor
+public class ExperimentListInAtlasDatabaseRetriever extends SqlStatementExecutor
 {
     // logging facility
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    // sql to get a list of experiments from the warehouse database
+    // sql to get a list of experiments from the atlas database
     private final static String getExperimentListSql =
             "select e.experiment_identifier from atlas a, ae1__experiment__main e\n" +
             "where a.experiment_id_key = e.experiment_id_key group by e.experiment_identifier having count(updn) > 0";
@@ -22,7 +22,7 @@ public class ExperimentListInWarehouseDatabaseRetriever extends SqlStatementExec
     // experiment list
     private List<String> experimentList;
 
-    public ExperimentListInWarehouseDatabaseRetriever( DataSource ds )
+    public ExperimentListInAtlasDatabaseRetriever( DataSource ds )
     {
         super(ds, getExperimentListSql);
         experimentList = new ArrayList<String>();

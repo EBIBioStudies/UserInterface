@@ -3,7 +3,7 @@
                 xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
                 extension-element-prefixes="ae"
                 exclude-result-prefixes="ae"
-                version="1.0">
+                version="2.0">
     <xsl:output method="xml" encoding="ISO-8859-1" indent="no"/>
 
     <xsl:key name="experiment-species-by-name" match="sampleattribute[@category = 'Organism']" use="concat(ancestor::experiment/@id, @value)"/>
@@ -23,15 +23,16 @@
     </xsl:template>
 
     <xsl:template match="experiment">
-        <experiment textidx="{position() - 1}">
-            <xsl:variable name="vSamplesFromDescription" select="substring-before(substring-after(description[contains(., '(Generated description)')], 'using '), ' samples')"/>
-            <xsl:variable name="vAssaysFromDescription" select="substring-before( substring-after(description[contains(., '(Generated description)')], 'with '), ' hybridizations')"/>
+        <experiment>
+            <xsl:variable name="vGeneratedDescription" select="description[contains(., '(Generated description)')][1]"/>
+            <xsl:variable name="vSamplesFromDescription" select="substring-before(substring-after($vGeneratedDescription, 'using '), ' samples')"/>
+            <xsl:variable name="vAssaysFromDescription" select="substring-before( substring-after($vGeneratedDescription, 'with '), ' hybridizations')"/>
 
-            <xsl:if test="ae:isExperimentInWarehouse(@accession)">
+            <xsl:if test="ae:isExperimentInAtlas(@accession)">
                 <xsl:attribute name="loadedinatlas">true</xsl:attribute>
             </xsl:if>
             <xsl:for-each select="@*">
-                <xsl:element name="{ae:toLowerCase(name())}">
+                <xsl:element name="{lower-case(name())}">
                     <xsl:value-of select="." />
                 </xsl:element>
             </xsl:for-each>
@@ -71,21 +72,21 @@
                 
             </assays>
             <xsl:for-each select="sampleattribute[@category][generate-id() = generate-id(key('experiment-sampleattribute-by-category', concat(ancestor::experiment/@id, @category))[1])]">
-                <xsl:sort select="ae:toLowerCase(@category)" order="ascending"/>
+                <xsl:sort select="lower-case(@category)" order="ascending"/>
                 <sampleattribute>
                     <category><xsl:value-of select="@category"/></category>
                     <xsl:for-each select="key('experiment-sampleattribute-by-category', concat(ancestor::experiment/@id, @category))">
-                        <xsl:sort select="ae:toLowerCase(@value)" order="ascending"/>
+                        <xsl:sort select="lower-case(@value)" order="ascending"/>
                         <value><xsl:value-of select="@value"/></value>
 					</xsl:for-each>
                 </sampleattribute>
             </xsl:for-each>
             <xsl:for-each select="experimentalfactor[@name][generate-id() = generate-id(key('experiment-experimentalfactor-by-name', concat(ancestor::experiment/@id, @name))[1])]">
-                <xsl:sort select="ae:toLowerCase(@name)" order="ascending"/>
+                <xsl:sort select="lower-case(@name)" order="ascending"/>
                 <experimentalfactor>
                     <name><xsl:value-of select="@name"/></name>
                     <xsl:for-each select="key('experiment-experimentalfactor-by-name', concat(ancestor::experiment/@id, @name))">
-                        <xsl:sort select="ae:toLowerCase(@value)" order="ascending"/>
+                        <xsl:sort select="lower-case(@value)" order="ascending"/>
                         <value><xsl:value-of select="@value"/></value>
 					</xsl:for-each>
                 </experimentalfactor>
@@ -127,7 +128,7 @@
     <xsl:template match="miamescore" mode="copy">
         <miamescores>
             <xsl:for-each select="score">
-                <xsl:element name="{ae:toLowerCase(@name)}">
+                <xsl:element name="{lower-case(@name)}">
                     <xsl:value-of select="@value"/>
                 </xsl:element>
             </xsl:for-each>
@@ -140,7 +141,7 @@
     <xsl:template match="bibliography" mode="copy">
         <xsl:copy>
             <xsl:for-each select="@*">
-                <xsl:variable name="vAttrName" select="ae:toLowerCase(name())"/>
+                <xsl:variable name="vAttrName" select="lower-case(name())"/>
                 <xsl:variable name="vAttrValue" select="."/>
                 <xsl:choose>
                     <xsl:when test="$vAttrName = 'pages' and ($vAttrValue = '' or $vAttrValue = '-')"/>
@@ -165,7 +166,7 @@
         <xsl:copy>
             <xsl:if test="@*">
                 <xsl:for-each select="@*">
-                    <xsl:element name="{ae:toLowerCase(name())}">
+                    <xsl:element name="{lower-case(name())}">
                         <xsl:value-of select="." />
                     </xsl:element>
                 </xsl:for-each>

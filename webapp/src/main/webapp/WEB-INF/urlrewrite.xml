@@ -125,7 +125,7 @@
     <!-- control links -->
     <rule>
         <from>^/reload-atlas-info</from>
-        <to type="forward">/servlets/control/reload-warehouse-info</to>
+        <to type="forward">/servlets/control/reload-atlas-info</to>
     </rule>
     <rule>
         <from>^/reload-xml</from>

@@ -28,7 +28,7 @@
         <interface.application.link.atlas.base.url>/gxa</interface.application.link.atlas.base.url>
         <interface.application.link.atlas.species_options.url>${interface.application.link.atlas.base.url}/list-species.jsp</interface.application.link.atlas.species_options.url>
         <interface.application.link.atlas.stats.url>${interface.application.link.atlas.base.url}/stats.jsp</interface.application.link.atlas.stats.url>
-        <interface.application.link.atlas.exp_query.url>${interface.application.link.atlas.base.url}/qrs?gprop_0=&amp;amp;gval_0=(all+genes)&amp;amp;fexp_0=UP_DOWN&amp;amp;fact_0=&amp;amp;specie_0=&amp;amp;view=hm&amp;amp;fval_0=</interface.application.link.atlas.exp_query.url>
+        <interface.application.link.atlas.exp_query.url>${interface.application.link.atlas.base.url}/experiment</interface.application.link.atlas.exp_query.url>
         <interface.application.link.aer_old.experiment_link.style/>
 
         <interface.application.link.news_xml.url>/microarray-srv/ae/ae-main-news.xml</interface.application.link.news_xml.url>

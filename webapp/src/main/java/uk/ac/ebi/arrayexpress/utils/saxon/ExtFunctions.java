@@ -19,11 +19,6 @@ public class ExtFunctions
     // logging machinery
     private static final Logger logger = LoggerFactory.getLogger(ExtFunctions.class);
 
-    public static String capitalize( String str )
-    {
-        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
-    }
-
     public static String fileSizeToString( long size )
     {
         StringBuilder str = new StringBuilder();
@@ -84,19 +79,6 @@ public class ExtFunctions
         return desc.toString();
     }
 
-    public static String normalizeSpecies( String species )
-    {
-        // if more than one word: "First second", otherwise "First"
-        String[] spArray = species.trim().split("\\s");
-        if (0 == spArray.length) {
-            return "";
-        } else if (1 == spArray.length) {
-            return capitalize(spArray[0]);
-        } else {
-            return capitalize(spArray[0] + ' ' + spArray[1]);
-        }
-    }
-
     public static String trimTrailingDot( String str )
     {
         if (str.endsWith(".")) {
@@ -127,10 +109,10 @@ public class ExtFunctions
     }
 
     /* ***************************************************** */
-    public static boolean isExperimentInWarehouse( String accession )
+    public static boolean isExperimentInAtlas( String accession )
     {
         return ((Experiments)Application.getAppComponent("Experiments"))
-                .isInWarehouse(accession);
+                .isInAtlas(accession);
     }
 
     public static boolean isExperimentAccessible( String accession, String userId )

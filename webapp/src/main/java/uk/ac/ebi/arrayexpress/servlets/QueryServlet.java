@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationServlet;
 import uk.ac.ebi.arrayexpress.components.Experiments;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
+import uk.ac.ebi.arrayexpress.components.SearchEngine;
 import uk.ac.ebi.arrayexpress.components.Users;
 import uk.ac.ebi.arrayexpress.utils.CookieMap;
 import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
@@ -69,7 +70,7 @@ public class QueryServlet extends ApplicationServlet
 
         // Output goes to the response PrintWriter.
         PrintWriter out = response.getWriter();
-        Experiments experiments = (Experiments) getComponent("Experiments");
+        Experiments experiments = (Experiments)getComponent("Experiments");
         if (stylesheet.equals("arrays-select")) {
             out.print(experiments.getArrays());
         } else if (stylesheet.equals("species-select")) {
@@ -86,10 +87,10 @@ public class QueryServlet extends ApplicationServlet
             // adding "host" request header so we can dynamically create FQDN URLs
             params.put("host", request.getHeader("host"));
             params.put("basepath", request.getContextPath());
-            
+
             CookieMap cookies = new CookieMap(request.getCookies());
             if (cookies.containsKey("AeLoggedUser") && cookies.containsKey("AeLoginToken")) {
-                Users users = (Users) getComponent("Users");
+                Users users = (Users)getComponent("Users");
                 String user = cookies.get("AeLoggedUser").getValue();
                 String passwordHash = cookies.get("AeLoginToken").getValue();
                 if (users.verifyLogin(user, passwordHash, request.getRemoteAddr().concat(request.getHeader("User-Agent")))) {
@@ -105,10 +106,10 @@ public class QueryServlet extends ApplicationServlet
                 }
             }
 
-            Integer queryId = experiments.addQuery(params);
+            Integer queryId = ((SearchEngine)getComponent("SearchEngine")).getController().addQuery("experiments", params);
             params.put("queryid", String.valueOf(queryId));
 
-            SaxonEngine saxonEngine = (SaxonEngine) getComponent("SaxonEngine");
+            SaxonEngine saxonEngine = (SaxonEngine)getComponent("SaxonEngine");
             if (!saxonEngine.transformToWriter(
                     experiments.getExperiments(),
                     stylesheetName,
