@@ -94,7 +94,11 @@ public class QueryServlet extends ApplicationServlet
                 String user = cookies.get("AeLoggedUser").getValue();
                 String passwordHash = cookies.get("AeLoginToken").getValue();
                 if (users.verifyLogin(user, passwordHash, request.getRemoteAddr().concat(request.getHeader("User-Agent")))) {
-                    params.put("userid", String.valueOf(users.getUserRecord(user).getId()));
+                    if (0 != users.getUserRecord(user).getId()) { // 0 - curator (superuser) -> remove user restriction
+                        params.put("userid", String.valueOf(users.getUserRecord(user).getId()));
+                    } else {
+                        params.remove("userid");
+                    }
                 } else {
                     logger.warn("Removing invalid session cookie for user [{}]", user);
                     // resetting cookies
