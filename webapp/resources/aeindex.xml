@@ -12,7 +12,7 @@
             <field name="sa" path="sampleattribute/value" analyze="true" store="false" />
             <field name="pmid" path="bibliography/accession" analyze="false" store="false" />
             <field name="user" path="user" analyze="false" store="false" />
-            <field name="atlas" path="@loadedinatlas" analyze="false" store="false" />
+            <field name="gxa" path="@loadedinatlas" analyze="false" store="false" />
         </document>
     </index>
     <index id="protocols">
