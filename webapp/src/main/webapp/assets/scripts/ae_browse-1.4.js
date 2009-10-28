@@ -11,8 +11,6 @@ function
 aeClearKeywords()
 {
     $("#ae_keywords").val("");
-    $("#ae_wholewords").removeAttr("checked");
-    $("#ae_inatlas").removeAttr("checked");
 }
 
 function
@@ -194,24 +192,28 @@ $(document).ready( function() {
             }
         );
 
-    // legacy support: we honor accnum and pass it as a keywords
-    query.keywords = getQueryStringParam("accnum");
-    if ("" != query.keywords) {
+    query.accession = getQueryStringParam("accnum");
+    query.accession = getQueryStringParam("accession");
+    if ("" != query.accession) {
         query.detailedview = true;
     } else {
         query.keywords = getQueryStringParam("keywords");
+        query.expandefo = getQueryBooleanParam("expandefo");
+        query.species = getQueryStringParam("species");
+        query.array = getQueryStringParam("array");
+        query.exptype = getQueryStringParam("exptype");
+        query.expdesign = getQueryStringParam("expdesign");
+        query.efv = getQueryStringParam("efv");
+        query.sa = getQueryStringParam("sa");
+        query.pmid = getQueryStringParam("pmid");
+        query.gxa = getQueryStringParam("gxa");
+        query.page = getQueryStringParam("page");
+        query.pagesize = getQueryStringParam("pagesize", "25");
+        query.sortby = getQueryStringParam("sortby", "releasedate");
+        query.sortorder = getQueryStringParam("sortorder", "descending");
+        query.detailedview = getQueryBooleanParam("detailedview");
     }
-    query.wholewords = getQueryBooleanParam("wholewords");
-    query.species = getQueryStringParam("species");
-    query.array = getQueryStringParam("array");
-    query.exptype = getQueryStringParam("exptype");
-    query.inatlas = getQueryBooleanParam("inatlas");
-    query.page = getQueryStringParam("page");
-    query.pagesize = getQueryStringParam("pagesize", "25");
-    query.sortby = getQueryStringParam("sortby", "releasedate");
-    query.sortorder = getQueryStringParam("sortorder", "descending");
-    query.detailedview = getQueryBooleanParam("detailedview");
-
+    
     initControls();
 
     $("#ae_results_body_inner").ajaxError(onQueryError);
@@ -333,15 +335,14 @@ initControls()
 {
     // keywords
     $("#ae_keywords").val(query.keywords);
-    if (query.wholewords)
-        $("#ae_wholewords").attr("checked","true");
-    if (query.inatlas)
-        $("#ae_inatlas").attr("checked","true");
+    if (query.expandefo)
+        $("#ae_expandefo").attr("checked", "true");
+    
     $("#ae_sortby").val(query.sortby);
     $("#ae_sortorder").val(query.sortorder);
     $("#ae_pagesize").val(query.pagesize);
     if (query.detailedview)
-        $("#ae_detailedview").attr("checked","true");
+        $("#ae_detailedview").attr("checked", "true");
 
     $.get("species-list.html").next( function(data) {
         $("#ae_species").html(data).removeAttr("disabled").val(query.species);
