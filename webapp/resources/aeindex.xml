@@ -8,6 +8,7 @@
             <field name="array" path="arraydesign/id | arraydesign/accession | arraydesign/name" analyze="true" store="false" />
             <field name="exptype" path="experimenttype" analyze="true" store="false" />
             <field name="expdesign" path="experimentdesign" analyze="true" store="false" />
+            <field name="ef" path="experimentalfactor/name" analyze="true" store="false" />
             <field name="efv" path="experimentalfactor/value" analyze="true" store="false" />
             <field name="sa" path="sampleattribute/value" analyze="true" store="false" />
             <field name="pmid" path="bibliography/accession" analyze="false" store="false" />

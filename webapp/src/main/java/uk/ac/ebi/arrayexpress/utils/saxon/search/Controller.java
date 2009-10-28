@@ -2,7 +2,6 @@ package uk.ac.ebi.arrayexpress.utils.saxon.search;
 
 import net.sf.saxon.om.DocumentInfo;
 import net.sf.saxon.om.NodeInfo;
-import org.apache.lucene.search.BooleanQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,15 +15,12 @@ public class Controller
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    // there should be a single instance of Controller in the runtime environment
-    private static Controller self;
-
     private Configuration config;
     private QueryPool queryPool;
 
     private Map<String, IndexEnvironment> environment = new HashMap<String, IndexEnvironment>();
 
-    private Controller( URL configFile )
+    public Controller( URL configFile )
     {
         this.config = new Configuration(configFile);
         this.queryPool = new QueryPool();
@@ -54,14 +50,9 @@ public class Controller
         return new Querier(getEnvironment(indexId)).getTerms(fieldName);
     }
 
-    public BooleanQuery constructQuery( String indexId, Map<String, String> querySource )
-    {
-        return new QueryConstructor(getEnvironment(indexId)).construct(querySource);
-    }
-
     public Integer addQuery( String indexId, Map<String, String> queryParams )
     {
-        return queryPool.addQuery(indexId, queryParams);
+        return queryPool.addQuery(new QueryConstructor(getEnvironment(indexId)), queryParams);
     }
 
     public List<NodeInfo> queryIndex( String indexId, Integer queryId )
@@ -72,19 +63,5 @@ public class Controller
     public String highlightQuery( String indexId, Integer queryId, String text, String openMark, String closeMark )
     {
         return new Querier(getEnvironment(indexId)).highlightQuery(queryPool.getQueryInfo(queryId).parsedQuery, text, openMark, closeMark);
-    }
-
-    public static Controller initController( URL configFile )
-    {
-        if (null == self) {
-            self = new Controller(configFile);
-        }
-
-        return self;
-    }
-
-    public static Controller getInstance()
-    {
-        return self;
     }
 }

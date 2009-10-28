@@ -4,7 +4,7 @@ import net.sf.saxon.om.DocumentInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
-import uk.ac.ebi.arrayexpress.utils.persistence.PersistableExperimentsContainer;
+import uk.ac.ebi.arrayexpress.utils.persistence.PersistableDocumentContainer;
 import uk.ac.ebi.arrayexpress.utils.persistence.PersistableString;
 import uk.ac.ebi.arrayexpress.utils.persistence.PersistableStringList;
 import uk.ac.ebi.arrayexpress.utils.persistence.TextFilePersistence;
@@ -18,7 +18,7 @@ public class Experiments extends ApplicationComponent
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private String dataSource;
-    private TextFilePersistence<PersistableExperimentsContainer> experiments;
+    private TextFilePersistence<PersistableDocumentContainer> experiments;
     private TextFilePersistence<PersistableStringList> experimentsInAtlas;
     private TextFilePersistence<PersistableString> species;
     private TextFilePersistence<PersistableString> arrays;
@@ -32,8 +32,8 @@ public class Experiments extends ApplicationComponent
     public void initialize()
     {
         String tmpDir = System.getProperty("java.io.tmpdir");
-        this.experiments = new TextFilePersistence<PersistableExperimentsContainer>(
-                new PersistableExperimentsContainer()
+        this.experiments = new TextFilePersistence<PersistableDocumentContainer>(
+                new PersistableDocumentContainer()
                 , new File(tmpDir, getPreferences().getString("ae.experiments.cache.filename"))
         );
 
@@ -132,7 +132,7 @@ public class Experiments extends ApplicationComponent
     private synchronized void setExperiments( DocumentInfo doc )
     {
         if (null != doc) {
-            this.experiments.setObject(new PersistableExperimentsContainer(doc));
+            this.experiments.setObject(new PersistableDocumentContainer(doc));
         } else {
             this.logger.error("Experiments NOT updated, NULL document passed");
         }

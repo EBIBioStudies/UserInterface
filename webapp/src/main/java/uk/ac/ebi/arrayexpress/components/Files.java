@@ -4,31 +4,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.utils.files.FtpFileEntry;
-import uk.ac.ebi.arrayexpress.utils.files.FtpFilesMap;
+import uk.ac.ebi.arrayexpress.utils.persistence.PersistableDocumentContainer;
 import uk.ac.ebi.arrayexpress.utils.persistence.PersistableFilesMap;
 import uk.ac.ebi.arrayexpress.utils.persistence.TextFilePersistence;
 
 import java.io.File;
-import java.util.List;
 
-public class DownloadableFilesRegistry extends ApplicationComponent
+public class Files extends ApplicationComponent
 {
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    // rootFolder folder location (in local file system terms)
-    private String rootFolder;
-    // filename->location map
-    private TextFilePersistence<PersistableFilesMap> filesMap;
 
-    public DownloadableFilesRegistry()
+    private String rootFolder;
+    private TextFilePersistence<PersistableDocumentContainer> files;
+
+    public Files()
     {
-        super("DownloadableFilesRegistry");
+        super("Files");
     }
 
     public void initialize()
     {
-        filesMap = new TextFilePersistence<PersistableFilesMap>(
-                new PersistableFilesMap(),
+        files = new TextFilePersistence<PersistableDocumentContainer>(
+                new PersistableDocumentContainer(),
                 new File(
                         System.getProperty("java.io.tmpdir"),
                         getPreferences().getString("ae.files.cache.filename")
@@ -75,7 +73,7 @@ public class DownloadableFilesRegistry extends ApplicationComponent
                     logger.info("Rescan of downloadable files from [{}] requested", getRootFolder());
                     PersistableFilesMap newMap = new PersistableFilesMap();
                     rescanFolder(root, newMap);
-                    setFilesMap(newMap);
+                    //setFilesMap(newMap);
                     ((Experiments) getComponent("Experiments")).updateFiles();
 
                     logger.info("Rescan of downloadable files completed");
@@ -93,18 +91,21 @@ public class DownloadableFilesRegistry extends ApplicationComponent
     // returns true is file is registered in the registry
     public synchronized boolean doesExist( String accession, String name )
     {
+        /*
         if (null != accession && !accession.equals("")) {
             return filesMap.getObject().doesExist(accession, name);
         } else {
             return filesMap.getObject().doesNameExist(name);
         }
+        */
+        return true;
     }
 
     // returns absolute file location (if file exists, null otherwise) in local filesystem
     public synchronized String getLocation( String accession, String name )
     {
-        String result = null;
-
+        String result = "";
+        /*
         if (null != accession && !accession.equals("")) {
             FtpFileEntry entry = filesMap.getObject().getEntry(accession, name);
             if (null != entry) {
@@ -121,13 +122,14 @@ public class DownloadableFilesRegistry extends ApplicationComponent
                 }
             }
         }
+        */
         return result;
     }
 
-    public synchronized FtpFilesMap getFilesMap()
-    {
-        return filesMap.getObject();
-    }
+///    public synchronized FtpFilesMap getFilesMap()
+///    {
+///        return filesMap.getObject();
+///    }
 
     private void rescanFolder( File folder, PersistableFilesMap map ) throws InterruptedException
     {
@@ -161,8 +163,8 @@ public class DownloadableFilesRegistry extends ApplicationComponent
         }
     }
 
-    private synchronized void setFilesMap( PersistableFilesMap newMap )
-    {
-        filesMap.setObject(newMap);
-    }
+///    private synchronized void setFilesMap( PersistableFilesMap newMap )
+///    {
+///        filesMap.setObject(newMap);
+///    }
 }

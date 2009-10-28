@@ -3,8 +3,8 @@ package uk.ac.ebi.arrayexpress.servlets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationServlet;
-import uk.ac.ebi.arrayexpress.components.DownloadableFilesRegistry;
 import uk.ac.ebi.arrayexpress.components.Experiments;
+import uk.ac.ebi.arrayexpress.components.Files;
 import uk.ac.ebi.arrayexpress.components.JobsController;
 import uk.ac.ebi.arrayexpress.components.Users;
 import uk.ac.ebi.arrayexpress.utils.RegExpHelper;
@@ -44,7 +44,7 @@ public class ControlServlet extends ApplicationServlet
             ((JobsController) getComponent("JobsController")).executeJob(command);
         } else if (command.equals("rescan-files")) {
             if (0 < params.length()) {
-                ((DownloadableFilesRegistry) getComponent("DownloadableFilesRegistry")).setRootFolder(params);
+                ((Files) getComponent("Files")).setRootFolder(params);
             }
             ((JobsController) getComponent("JobsController")).executeJob(command);
         } else if (command.equals("verify-login")) {

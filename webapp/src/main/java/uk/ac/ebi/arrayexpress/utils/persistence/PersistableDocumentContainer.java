@@ -5,21 +5,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
-import uk.ac.ebi.arrayexpress.utils.saxon.ExperimentsContainer;
+import uk.ac.ebi.arrayexpress.utils.saxon.DocumentContainer;
 
 // TODO - check XML version on persistence events
 
-public class PersistableExperimentsContainer extends ExperimentsContainer implements Persistable
+public class PersistableDocumentContainer extends DocumentContainer implements Persistable
 {
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public PersistableExperimentsContainer()
+    public PersistableDocumentContainer()
     {
         createDocument();
     }
 
-    public PersistableExperimentsContainer( DocumentInfo doc )
+    public PersistableDocumentContainer( DocumentInfo doc )
     {
         if (null == doc) {
             createDocument();

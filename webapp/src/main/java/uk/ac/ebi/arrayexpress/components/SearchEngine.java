@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.Controller;
-
+import uk.ac.ebi.arrayexpress.utils.saxon.search.SearchExtension;
 
 public class SearchEngine extends ApplicationComponent
 {
@@ -18,24 +18,24 @@ public class SearchEngine extends ApplicationComponent
         super("SearchEngine");
     }
 
-    @Override
     public void initialize()
     {
         try {
-            controller = Controller.initController(getApplication().getResource("/WEB-INF/classes/aeindex.xml"));
+            this.controller = new Controller(getApplication().getResource("/WEB-INF/classes/aeindex.xml"));
+            SearchExtension.setController(getController());
         } catch (Throwable x) {
             logger.error("Caught an exception:", x);
         }
 
     }
 
-    @Override
     public void terminate()
     {
+        SearchExtension.setController(null);
     }
 
     public Controller getController()
     {
-        return controller;
+        return this.controller;
     }
 }

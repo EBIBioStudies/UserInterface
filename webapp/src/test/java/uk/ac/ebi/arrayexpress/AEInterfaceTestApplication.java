@@ -20,7 +20,7 @@ public class AEInterfaceTestApplication extends Application
         addComponent(new SearchEngine());
         addComponent(new Experiments());
         addComponent(new Users());
-        addComponent(new DownloadableFilesRegistry());
+        addComponent(new Files());
         addComponent(new JobsController());
 
         initialize();

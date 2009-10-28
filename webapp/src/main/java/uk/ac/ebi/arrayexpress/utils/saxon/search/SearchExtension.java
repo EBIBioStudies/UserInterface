@@ -13,9 +13,11 @@ public final class SearchExtension
     // logging machinery
     private static final Logger logger = LoggerFactory.getLogger(SearchExtension.class);
 
+    private static Controller controller;
+
     public static SequenceIterator queryIndex( String indexId, String queryId )
     {
-        List<NodeInfo> nodes = Controller.getInstance().queryIndex(indexId, Integer.decode(queryId));
+        List<NodeInfo> nodes = getController().queryIndex(indexId, Integer.decode(queryId));
         if (null != nodes) {
             return new NodeListIterator(nodes);
         }
@@ -25,6 +27,16 @@ public final class SearchExtension
 
     public static String highlightQuery( String indexId, String queryId, String text, String openMark, String closeMark)
     {
-        return Controller.getInstance().highlightQuery(indexId, Integer.decode(queryId), text, openMark, closeMark);
+        return getController().highlightQuery(indexId, Integer.decode(queryId), text, openMark, closeMark);
+    }
+
+    public static void setController( Controller ctrl )
+    {
+        controller = ctrl;
+    }
+
+    public static Controller getController()
+    {
+        return controller;
     }
 }

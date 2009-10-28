@@ -34,10 +34,10 @@ public class QueryPool
         this.queryId = new AtomicInteger(0);
     }
 
-    public Integer addQuery( String indexId, Map<String, String> queryParams )
+    public Integer addQuery( QueryConstructor queryConstructor, Map<String, String> queryParams )
     {
         QueryInfo info = new QueryInfo(queryParams);
-        info.parsedQuery = Controller.getInstance().constructQuery(indexId, queryParams);
+        info.parsedQuery = queryConstructor.construct(queryParams);
         this.queries.put(this.queryId.addAndGet(1), info);
 
         return this.queryId.get();

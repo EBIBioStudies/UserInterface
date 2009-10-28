@@ -3,8 +3,8 @@ package uk.ac.ebi.arrayexpress.servlets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationServlet;
-import uk.ac.ebi.arrayexpress.components.DownloadableFilesRegistry;
 import uk.ac.ebi.arrayexpress.components.Experiments;
+import uk.ac.ebi.arrayexpress.components.Files;
 import uk.ac.ebi.arrayexpress.components.Users;
 import uk.ac.ebi.arrayexpress.utils.CookieMap;
 import uk.ac.ebi.arrayexpress.utils.RegExpHelper;
@@ -66,7 +66,7 @@ public class DownloadServlet extends ApplicationServlet
     private void sendFile( String accession, String name, HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
         logger.info("Requested download of [{}], accession[{}]", name, accession);
-        DownloadableFilesRegistry filesRegistry = (DownloadableFilesRegistry) getComponent("DownloadableFilesRegistry");
+        Files filesRegistry = (Files) getComponent("Files");
         Experiments experiments = (Experiments) getComponent("Experiments");
 
         String userId = "1";

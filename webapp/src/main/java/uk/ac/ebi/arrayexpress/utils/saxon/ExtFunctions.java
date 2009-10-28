@@ -4,15 +4,11 @@ import net.sf.saxon.om.NodeInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
-import uk.ac.ebi.arrayexpress.components.DownloadableFilesRegistry;
 import uk.ac.ebi.arrayexpress.components.Experiments;
-import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 import uk.ac.ebi.arrayexpress.utils.RegExpHelper;
-import uk.ac.ebi.arrayexpress.utils.files.FtpFileEntry;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 public class ExtFunctions
 {
@@ -123,8 +119,9 @@ public class ExtFunctions
 
     public static NodeInfo getFilesForAccession( String accession ) throws InterruptedException
     {
+        /**
         try {
-            List<FtpFileEntry> files = ((DownloadableFilesRegistry)Application.getAppComponent("DownloadableFilesRegistry"))
+            List<FtpFileEntry> files = ((Files)Application.getAppComponent("Files"))
                     .getFilesMap()
                     .getEntriesByAccession(accession);
             if (null != files) {
@@ -152,6 +149,7 @@ public class ExtFunctions
         } catch (Throwable x) {
             logger.error("Caught an exception:", x);
         }
+        **/
         return null;
     }
 
