@@ -5,7 +5,10 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
-import uk.ac.ebi.arrayexpress.jobs.*;
+import uk.ac.ebi.arrayexpress.jobs.ReloadExperimentsJob;
+import uk.ac.ebi.arrayexpress.jobs.RescanFilesJob;
+import uk.ac.ebi.arrayexpress.jobs.RetrieveExperimentsListFromAtlasJob;
+import uk.ac.ebi.arrayexpress.jobs.RetrieveExperimentsXmlJob;
 
 import java.util.List;
 
@@ -28,7 +31,7 @@ public class JobsController extends ApplicationComponent
 
     public void initialize()
     {
-        addTriggerListener(new ApplicationTriggerListener());
+        //addTriggerListener(new ApplicationTriggerListener());
         addJob("rescan-files", RescanFilesJob.class);
         addJob("reload-xml", ReloadExperimentsJob.class);
         addJob("retrieve-xml", RetrieveExperimentsXmlJob.class);
