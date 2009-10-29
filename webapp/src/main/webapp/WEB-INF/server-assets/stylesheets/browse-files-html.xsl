@@ -49,7 +49,7 @@
                     <xsl:when test="$vExperiment">
                         <xsl:variable name="vUserMatch" select="$vExperiment/user[text() = $userid]"/>
                         <xsl:choose>
-                            <xsl:when test="$userid = '0' or $vUserMatch">
+                            <xsl:when test="not($userid) or $vUserMatch">
                                 <div class="ae_accession">Experiment <xsl:value-of select="$vAccession"/></div>
                                 <div class="ae_title"><xsl:value-of select="$vExperiment/name"/></div>
                                 <xsl:variable name="vExperimentFiles" select="$vFilesDoc/files/folder[@accession = $vAccession]/file"/>
