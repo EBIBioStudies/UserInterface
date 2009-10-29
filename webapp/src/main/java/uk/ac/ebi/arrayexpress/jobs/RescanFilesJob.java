@@ -69,7 +69,7 @@ public class RescanFilesJob extends ApplicationJob
             for ( File f : files ) {
                 Thread.sleep(1);
                 if (f.isDirectory() && !f.getName().startsWith(".")) {
-                    xmlString.append("<folder location=\"").append(folder.getAbsolutePath()).append("\">");
+                    xmlString.append("<folder location=\"").append(f.getAbsolutePath()).append("\">");
                     rescanFolder(f, xmlString);
                     xmlString.append("</folder>");
                 }
