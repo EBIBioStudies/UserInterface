@@ -120,10 +120,6 @@ public class Experiments extends ApplicationComponent
         }
     }
 
-    public void updateFiles()
-    {
-    }
-
     public void setExperimentsInAtlas( List<String> expList )
     {
         this.experimentsInAtlas.setObject(new PersistableStringList(expList));
