@@ -27,6 +27,7 @@
     <xsl:param name="basepath"/>
 
     <xsl:variable name="vBaseUrl">http://<xsl:value-of select="$host"/><xsl:value-of select="$basepath"/></xsl:variable>
+    <xsl:variable name="vFilesDoc" select="doc('files.xml')"/>
 
     <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="ISO-8859-1" />
 
@@ -675,7 +676,8 @@
 
     <xsl:template name="data-files-main">
         <xsl:param name="pKind"/>
-        <xsl:variable name="vFiles" select="file[kind = $pKind]"/>
+        <xsl:variable name="vAccession" select="string(accession)"/>
+        <xsl:variable name="vFiles" select="$vFilesDoc//folder[@accession = $vAccession]/file[@kind = $pKind]"/>
         <xsl:variable name="vImg">
             <xsl:choose>
                 <xsl:when test="$pKind = 'raw' and contains($vFiles[1]/dataformat, 'CEL')">
@@ -695,14 +697,16 @@
                 <xsl:when test="count($vFiles) > 1">
                     <xsl:value-of select="$basepath"/>
                     <xsl:text>/files/</xsl:text>
-                    <xsl:value-of select="accession"/>
+                    <xsl:value-of select="$vAccession"/>
                     <xsl:text>?kind=</xsl:text>
                     <xsl:value-of select="$pKind"/>
                 </xsl:when>
                 <xsl:when test="$vFiles">
                     <xsl:value-of select="$vBaseUrl"/>
                     <xsl:text>/</xsl:text>
-                    <xsl:value-of select="$vFiles/relativepath"/>
+                    <xsl:value-of select="$vAccession"/>
+                    <xsl:text>/</xsl:text>
+                    <xsl:value-of select="$vFiles/@name"/>
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
