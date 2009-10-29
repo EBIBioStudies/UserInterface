@@ -8,11 +8,12 @@ import uk.ac.ebi.arrayexpress.utils.persistence.PersistableDocumentContainer;
 import uk.ac.ebi.arrayexpress.utils.persistence.PersistableString;
 import uk.ac.ebi.arrayexpress.utils.persistence.PersistableStringList;
 import uk.ac.ebi.arrayexpress.utils.persistence.TextFilePersistence;
+import uk.ac.ebi.arrayexpress.utils.saxon.DocumentSource;
 
 import java.io.File;
 import java.util.List;
 
-public class Experiments extends ApplicationComponent
+public class Experiments extends ApplicationComponent implements DocumentSource
 {
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -59,13 +60,21 @@ public class Experiments extends ApplicationComponent
         );
 
         indexExperiments();
+        ((SaxonEngine)getComponent("SaxonEngine")).registerDocumentSource(this);
     }
 
     public void terminate()
     {
     }
 
-    public synchronized DocumentInfo getExperiments()
+    // implementation of DocumentSource.getDocument()
+    public String getDocumentURI()
+    {
+        return "experiments.xml";
+    }
+
+    // implementation of DocumentSource.getDocument()
+    public synchronized DocumentInfo getDocument()
     {
         return this.experiments.getObject().getDocument();
     }

@@ -115,7 +115,7 @@ public class QueryServlet extends ApplicationServlet
 
             SaxonEngine saxonEngine = (SaxonEngine)getComponent("SaxonEngine");
             if (!saxonEngine.transformToWriter(
-                    experiments.getExperiments(),
+                    experiments.getDocument(),
                     stylesheetName,
                     params,
                     out)) {

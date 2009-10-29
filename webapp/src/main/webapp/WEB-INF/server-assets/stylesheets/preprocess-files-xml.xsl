@@ -3,8 +3,6 @@
                 version="2.0">
     <xsl:output method="xml" version="1.0" encoding="UTF8" indent="yes"/>
 
-    <xsl:variable name="vRoot" select="/files/@root"/>
-    
     <xsl:template match="/files">
         <files root="{@root}">
             <xsl:apply-templates/>

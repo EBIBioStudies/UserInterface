@@ -6,10 +6,11 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.utils.persistence.PersistableDocumentContainer;
 import uk.ac.ebi.arrayexpress.utils.persistence.TextFilePersistence;
+import uk.ac.ebi.arrayexpress.utils.saxon.DocumentSource;
 
 import java.io.File;
 
-public class Files extends ApplicationComponent
+public class Files extends ApplicationComponent implements DocumentSource
 {
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -31,13 +32,22 @@ public class Files extends ApplicationComponent
                         getPreferences().getString("ae.files.cache.filename")
                 )
         );
+        
+        ((SaxonEngine)getComponent("SaxonEngine")).registerDocumentSource(this);
     }
 
     public void terminate()
     {
     }
 
-    public synchronized DocumentInfo getFiles()
+    // implementation of DocumentSource.getDocument()
+    public String getDocumentURI()
+    {
+        return "files.xml";
+    }
+
+    // implementation of DocumentSource.getDocument()
+    public synchronized DocumentInfo getDocument()
     {
         return this.files.getObject().getDocument();
     }

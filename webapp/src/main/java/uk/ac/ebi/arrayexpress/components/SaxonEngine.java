@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
+import uk.ac.ebi.arrayexpress.utils.saxon.DocumentSource;
 
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
@@ -33,7 +34,8 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
     private LoggerWriter loggerWriter;
 
     public TransformerFactoryImpl trFactory;
-    private Map<String,Templates> templatesCache = new HashMap<String,Templates>();
+    private Map<String, Templates> templatesCache = new HashMap<String, Templates>();
+    private Map<String, DocumentSource> documentSources = new HashMap<String, DocumentSource>();
 
     private final String XML_STRING_ENCODING = "ISO-8859-1";
 
@@ -61,20 +63,30 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
         loggerWriter = null;
     }
 
+    public void registerDocumentSource(DocumentSource documentSource)
+    {
+        this.documentSources.put(documentSource.getDocumentURI(), documentSource);
+    }
+
     // implements URIResolver.resolve
     public Source resolve( String href, String base ) throws TransformerException
     {
         Source src;
         try {
-            URL resource = Application.getInstance().getResource("/WEB-INF/server-assets/stylesheets/" + href);
-            if (null == resource) {
-                throw new TransformerException("Unable to locate stylesheet resource [" + href + "]");
+            // try document sources first
+            if (documentSources.containsKey(href)) {
+                return documentSources.get(href).getDocument();    
+            } else {
+                URL resource = Application.getInstance().getResource("/WEB-INF/server-assets/stylesheets/" + href);
+                if (null == resource) {
+                    throw new TransformerException("Unable to locate stylesheet resource [" + href + "]");
+                }
+                InputStream input = resource.openStream();
+                if (null == input) {
+                    throw new TransformerException("Unable to open stream for resource [" + resource + "]");
+                }
+                src = new StreamSource(input);
             }
-            InputStream input = resource.openStream();
-            if (null == input) {
-                throw new TransformerException("Unable to open stream for resource [" + resource + "]");
-            }
-            src = new StreamSource(input);
         } catch ( TransformerException x ) {
             throw x;
         } catch ( Exception x ) {
