@@ -109,7 +109,8 @@
     <xsl:template match="experiment">
         <xsl:param name="pFrom"/>
         <xsl:param name="pTo"/>
-        <xsl:variable name="vExpId" select="id"/>
+        <xsl:variable name="vExpId" select="string(id)"/>
+        <xsl:variable name="vAccession" select="string(accession)"/>
         <xsl:if test="position() >= $pFrom and not(position() > $pTo)">
             <tr id="{$vExpId}_main" class="{$vDetailedViewMainTrClass}">
                 <td class="{$vDetailedViewMainTdClass}"><div class="table_row_expand"/></td>
@@ -144,7 +145,7 @@
                 <td class="td_main_img align_center {$vDetailedViewMainTdClass}">
                     <div>
                         <xsl:choose>
-                            <xsl:when test="@loadedinatlas"><a href="${interface.application.link.atlas.exp_query.url}{accession}&amp;ref=aebrowse"><img src="{$basepath}/assets/images/silk_tick.gif" width="16" height="16" alt="*"/></a></xsl:when>
+                            <xsl:when test="@loadedinatlas"><a href="${interface.application.link.atlas.exp_query.url}{$vAccession}&amp;ref=aebrowse"><img src="{$basepath}/assets/images/silk_tick.gif" width="16" height="16" alt="*"/></a></xsl:when>
                             <xsl:otherwise><img src="{$basepath}/assets/images/silk_data_unavail.gif" width="16" height="16" alt="-"/></xsl:otherwise>
                         </xsl:choose>
                     </div>
@@ -202,7 +203,7 @@
                                 <td class="name"><div>Links</div></td>
                                 <td class="value">
                                     <xsl:if test="@loadedinatlas">
-                                        <div><a href="${interface.application.link.atlas.exp_query.url}{accession}&amp;ref=aebrowse">Query Gene Expression Atlas</a></div>
+                                        <div><a href="${interface.application.link.atlas.exp_query.url}{$vAccession}&amp;ref=aebrowse">Query Gene Expression Atlas</a></div>
                                     </xsl:if>
                                     <div>
                                         <xsl:if test="count(secondaryaccession) > 0">
@@ -227,7 +228,7 @@
                                         </a>
                                     </div>
                                     <div>
-                                        <a href="${interface.application.link.aer_old.base.url}/result?queryFor=Experiment&amp;eAccession={accession}">ArrayExpress Advanced Interface</a>
+                                        <a href="${interface.application.link.aer_old.base.url}/result?queryFor=Experiment&amp;eAccession={$vAccession}">ArrayExpress Advanced Interface</a>
 
                                     </div>
                                 </td>
@@ -236,7 +237,7 @@
                             <tr>
                                 <td class="name"><div>Files</div></td>
                                 <xsl:choose>
-                                    <xsl:when test="file[kind='raw' or kind='fgem' or kind='adf' or kind='idf' or kind='sdrf' or kind='biosamples']">
+                                    <xsl:when test="$vFilesDoc/files/folder[@accession = $vAccession]/file[@kind='raw' or @kind='fgem' or @kind='adf' or @kind='idf' or @kind='sdrf' or @kind='biosamples']">
 
                                         <td class="attrs">
                                             <div>
@@ -250,7 +251,7 @@
                                                 </table>
                                             </div>
                                             <div>
-                                                <a href="{$basepath}/files/{accession}">
+                                                <a href="{$basepath}/files/{$vAccession}">
                                                     <img src="{$basepath}/assets/images/silk_ftp.gif" width="16" height="16" alt=""/>
                                                     <xsl:text>Browse all available files</xsl:text>
                                                 </a>
@@ -261,7 +262,7 @@
                                     <xsl:otherwise>
                                         <td class="value">
                                             <div>
-                                                <a href="{$basepath}/files/{accession}">
+                                                <a href="{$basepath}/files/{$vAccession}">
                                                     <img src="{$basepath}/assets/images/silk_ftp.gif" width="16" height="16" alt=""/>
                                                     <xsl:text>Browse all available files</xsl:text>
                                                 </a>
@@ -600,16 +601,17 @@
     </xsl:template>
 
     <xsl:template name="data-files">
-        <xsl:variable name="vAccession" select="accession"/>
-        <xsl:if test="file[kind = 'raw' or kind = 'fgem']">
+        <xsl:variable name="vAccession" select="string(accession)"/>
+        <xsl:variable name="vFiles" select="$vFilesDoc/files/folder[@accession = $vAccession]/file[@kind = 'raw' or @kind = 'fgem']"/>
+        <xsl:if test="$vFiles">
             <tr>
                 <td class="attr_name">Data Archives</td>
                 <td class="attr_value">
-                    <xsl:for-each select="file[kind = 'raw' or kind = 'fgem']">
-                        <xsl:sort select="kind"/>
-                        <xsl:sort select="lower-case(name)"/>
-                        <a href="{$vBaseUrl}/{relativepath}">
-                            <xsl:value-of select="name"/>
+                    <xsl:for-each select="$vFiles">
+                        <xsl:sort select="@kind"/>
+                        <xsl:sort select="lower-case(@name)"/>
+                        <a href="{$vBaseUrl}/{@vAccession}/{@name}">
+                            <xsl:value-of select="@name"/>
                         </a>
                         <xsl:if test="position() != last()">
                             <xsl:text>, </xsl:text>
@@ -621,32 +623,33 @@
     </xsl:template>
 
     <xsl:template name="magetab-files">
-        <xsl:variable name="vAccession" select="accession"/>
-        <xsl:for-each select="file[extension = 'txt' and (kind = 'idf' or kind = 'sdrf')]">
+        <xsl:variable name="vAccession" select="string(accession)"/>
+        <xsl:for-each select="$vFilesDoc/files/folder[@accession = $vAccession]/file[@extension = 'txt' and (@kind = 'idf' or @kind = 'sdrf')]">
             <xsl:sort select="kind"/>
             <tr>
                 <td class="attr_name">
                     <xsl:choose>
-                        <xsl:when test="kind = 'idf'">Investigation Description</xsl:when>
-                        <xsl:when test="kind = 'sdrf'">Sample and Data Relationship</xsl:when>
+                        <xsl:when test="@kind = 'idf'">Investigation Description</xsl:when>
+                        <xsl:when test="@kind = 'sdrf'">Sample and Data Relationship</xsl:when>
                     </xsl:choose>
                 </td>
                 <td class="attr_value">
-                    <a href="{$vBaseUrl}/{relativepath}"><xsl:value-of select="name"/></a>
+                    <a href="{$vBaseUrl}/{@vAccession}/{@name}"><xsl:value-of select="@name"/></a>
                 </td>
             </tr>
         </xsl:for-each>
     </xsl:template>
 
     <xsl:template name="magetab-files-array">
-        <xsl:variable name="vAccession" select="accession"/>
-        <xsl:if test="file[extension = 'txt' and kind = 'adf']">
+        <xsl:variable name="vArrayAccession" select="distinct-values(arraydesign/accession)"/>
+        <xsl:variable name="vFiles" select="$vFilesDoc/files/folder[@accession = $vArrayAccession]/file[@extension = 'txt' and @kind = 'adf']"/>
+        <xsl:if test="$vFiles">
             <tr>
                 <td class="attr_name">Array Design</td>
                 <td class="attr_value">
-                    <xsl:for-each select="file[extension = 'txt' and kind = 'adf']">
-                        <xsl:sort select="name"/>
-                        <a href="{$vBaseUrl}/{relativepath}"><xsl:value-of select="name"/></a>
+                    <xsl:for-each select="$vFiles">
+                        <xsl:sort select="@name"/>
+                        <a href="{$vBaseUrl}/{@vArrayAccession}/{@name}"><xsl:value-of select="@name"/></a>
                         <xsl:if test="position() != last()">
                             <xsl:text>, </xsl:text>
                         </xsl:if>
@@ -657,14 +660,15 @@
     </xsl:template>
 
     <xsl:template name="image-files">
-        <xsl:variable name="vAccession" select="accession"/>
-        <xsl:if test="file[kind = 'biosamples' and (extension = 'png' or extension = 'svg')]">
+        <xsl:variable name="vAccession" select="string(accession)"/>
+        <xsl:variable name="vFiles" select="$vFilesDoc/files/folder[@accession = $vAccession]/file[@kind = 'biosamples' and (@extension = 'png' or @extension = 'svg')]"/>
+        <xsl:if test="$vFiles">
             <tr>
                 <td class="attr_name">Experiment Design Images</td>
                 <td class="attr_value">
-                    <xsl:for-each select="file[kind = 'biosamples' and (extension = 'png' or extension = 'svg')]">
-                        <xsl:sort select="lower-case(extension)"/>
-                        <a href="{$vBaseUrl}/{relativepath}"><xsl:value-of select="name"/></a>
+                    <xsl:for-each select="$vFiles">
+                        <xsl:sort select="lower-case(@extension)"/>
+                        <a href="{$vBaseUrl}/{@vAccession}/{@name}"><xsl:value-of select="@name"/></a>
                         <xsl:if test="position() != last()">
                             <xsl:text>, </xsl:text>
                         </xsl:if>
@@ -677,10 +681,10 @@
     <xsl:template name="data-files-main">
         <xsl:param name="pKind"/>
         <xsl:variable name="vAccession" select="string(accession)"/>
-        <xsl:variable name="vFiles" select="$vFilesDoc//folder[@accession = $vAccession]/file[@kind = $pKind]"/>
+        <xsl:variable name="vFiles" select="$vFilesDoc/files/folder[@accession = $vAccession]/file[@kind = $pKind]"/>
         <xsl:variable name="vImg">
             <xsl:choose>
-                <xsl:when test="$pKind = 'raw' and contains($vFiles[1]/dataformat, 'CEL')">
+                <xsl:when test="$pKind = 'raw' and contains($vFiles[1]/@dataformat, 'CEL')">
                     <img src="{$basepath}/assets/images/silk_data_save_affy.gif" width="16" height="16" alt="Click to download Affymetrix data"/>
                 </xsl:when>
                 <xsl:when test="$pKind = 'raw'">
