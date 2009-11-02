@@ -6,7 +6,6 @@
                 version="2.0">
     <xsl:output method="xml" encoding="ISO-8859-1" indent="no"/>
 
-    <xsl:key name="experiment-species-by-name" match="sampleattribute[@category = 'Organism']" use="concat(ancestor::experiment/@id, @value)"/>
     <xsl:key name="experiment-sampleattribute-by-category" match="sampleattribute" use="concat(ancestor::experiment/@id, @category)"/>
     <xsl:key name="experiment-experimentalfactor-by-name" match="experimentalfactor" use="concat(ancestor::experiment/@id, @name)"/>
     
@@ -37,9 +36,21 @@
                 </xsl:element>
             </xsl:for-each>
 
-            <xsl:for-each select="sampleattribute[@category = 'Organism'][generate-id() = generate-id(key('experiment-species-by-name',concat(ancestor::experiment/@id, @value))[1])]">
-                <species><xsl:value-of select="@value"/></species>
+            <xsl:for-each select="distinct-values(sampleattribute[@category = 'Organism']/@value, 'http://saxon.sf.net/collation?ignore-case=yes')">
+                <species><xsl:value-of select="."/></species>
             </xsl:for-each>
+
+            <miamescores>
+                <xsl:for-each select="miamescore">
+                    <xsl:element name="{lower-case(@name)}">
+                        <xsl:value-of select="@value"/>
+                    </xsl:element>
+                </xsl:for-each>
+                <overallscore>
+                    <xsl:value-of select="sum(miamescore/@value)"/>
+                </overallscore>
+            </miamescores>
+            
             <samples>
                 <xsl:choose>
                     <xsl:when test="string-length($vSamplesFromDescription) > 0">
@@ -91,9 +102,12 @@
 					</xsl:for-each>
                 </experimentalfactor>
             </xsl:for-each>
-            <xsl:apply-templates select="*[name() != 'sampleattribute' and name() != 'experimentalfactor']" mode="copy" />
+            <xsl:apply-templates select="*" mode="copy" />
         </experiment>
     </xsl:template>
+
+    <!-- this template prohibits default copying of these elements -->
+    <xsl:template match="sampleattribute | experimentalfactor | miamescore" mode="copy"/>
 
     <xsl:template match="secondaryaccession" mode="copy">
         <xsl:choose>
@@ -123,19 +137,6 @@
             <xsl:with-param name="separator" select="','"/>
             <xsl:with-param name="element" select="'experimenttype'"/>
         </xsl:call-template>
-    </xsl:template>
-
-    <xsl:template match="miamescore" mode="copy">
-        <miamescores>
-            <xsl:for-each select="score">
-                <xsl:element name="{lower-case(@name)}">
-                    <xsl:value-of select="@value"/>
-                </xsl:element>
-            </xsl:for-each>
-            <overallscore>
-                <xsl:value-of select="sum(score/@value)"/>
-            </overallscore>
-        </miamescores>
     </xsl:template>
 
     <xsl:template match="bibliography" mode="copy">

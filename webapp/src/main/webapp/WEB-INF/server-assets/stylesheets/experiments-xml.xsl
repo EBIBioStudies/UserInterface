@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
+                xmlns:search="java:uk.ac.ebi.arrayexpress.utils.saxon.search.SearchExtension"
                 xmlns:aeext="java:/uk.ac.ebi.arrayexpress.utils.saxon.ExtElements"
-                extension-element-prefixes="ae aeext"
-                exclude-result-prefixes="ae aeext"
+                extension-element-prefixes="ae aeext search"
+                exclude-result-prefixes="ae aeext search"
                 version="1.0">
 
     <xsl:param name="sortby">releasedate</xsl:param>
     <xsl:param name="sortorder">descending</xsl:param>
 
-    <xsl:param name="species"/>
-    <xsl:param name="array"/>
-    <xsl:param name="keywords"/>
-    <xsl:param name="wholewords"/>
-    <xsl:param name="exptype"/>
-    <xsl:param name="inatlas"/>
-    <xsl:param name="userid"/>
+    <xsl:param name="queryid"/>
 
     <!-- dynamically set by QueryServlet: host name (as seen from client) and base context path of webapp -->
     <xsl:param name="host"/>
@@ -29,10 +24,7 @@
 
     <xsl:template match="/experiments">
 
-        <aeext:log message="[experiments-xml] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}]"/>
-        <aeext:log message="[experiments-xml] Sort by: [{$sortby}], [{$sortorder}]"/>
-
-        <xsl:variable name="vFilteredExperiments" select="experiment[ae:testExperiment($userid, $keywords, $wholewords, $species, $array, $exptype, $inatlas)]"/>
+        <xsl:variable name="vFilteredExperiments" select="search:queryIndex('experiments', $queryid)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
 
         <aeext:log message="[experiments-xml] Query filtered [{$vTotal}] experiments."/>
@@ -53,12 +45,7 @@
 
     <xsl:template match="experiment">
         <experiment>
-            <xsl:copy-of select="*[not(name() = 'user') and not(name() = 'file') and not(name() = 'arraydesign')]"/>
-            <xsl:for-each select="arraydesign">
-                <arraydesign>
-                    <xsl:copy-of select="*[not(name() = 'file')]"/>
-                </arraydesign>
-            </xsl:for-each>
+            <xsl:copy-of select="*[not(name() = 'user')]"/>
             <files>
                 <xsl:comment>
 This section is deprecated and unsupported.

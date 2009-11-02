@@ -88,7 +88,7 @@
                 <tr class="ae_results_tr_error">
                     <td colspan="9">
                         <xsl:choose>
-                            <xsl:when test="ae:testRegexp($keywords,'^E-.+-\d+$','i')">
+                            <xsl:when test="matches($keywords,'^E-.+-\d+$','i')">
                                 <div><strong>The experiment with accession number '<xsl:value-of select="$keywords"/>' is not available.</strong></div>
                                 <div>If you believe this is an error, please do not hesitate to drop us a line to <strong>arrayexpress(at)ebi.ac.uk</strong> or use <a href="${interface.application.link.www_domain}/support/" title="EBI Support">EBI Support Feedback</a> form.</div>
                             </xsl:when>
