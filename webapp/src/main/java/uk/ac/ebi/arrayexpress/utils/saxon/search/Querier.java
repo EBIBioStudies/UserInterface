@@ -59,12 +59,16 @@ public class Querier
 
             // empty query returns everything
             if (query.clauses().isEmpty()) {
+                logger.info("Empty search, returned all [{}] documents", this.env.documentNodes.size());
                 return this.env.documentNodes;
             }
 
-            // to show _all_ available experiments
+            // to show _all_ available nodes
             IndexSearcher isearcher = new IndexSearcher(ir);
+            logger.info("Will search index [{}], query [{}]", this.env.indexId, query.toString());
+
             TopDocs hits = isearcher.search(query, this.env.documentNodes.size());
+            logger.info("Search returned [{}] hits", hits.totalHits);
 
             result = new ArrayList<NodeInfo>(hits.totalHits);
             for (ScoreDoc d : hits.scoreDocs) {

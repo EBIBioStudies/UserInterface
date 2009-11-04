@@ -2,9 +2,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
                 xmlns:search="java:uk.ac.ebi.arrayexpress.utils.saxon.search.SearchExtension"
-                xmlns:aeext="java:/uk.ac.ebi.arrayexpress.utils.saxon.ExtElements"
-                extension-element-prefixes="ae aeext search"
-                exclude-result-prefixes="ae aeext search"
+                extension-element-prefixes="ae search"
+                exclude-result-prefixes="ae search"
                 version="1.0">
 
     <xsl:param name="sortby">releasedate</xsl:param>
@@ -26,8 +25,6 @@
 
         <xsl:variable name="vFilteredExperiments" select="search:queryIndex('experiments', $queryid)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
-
-        <aeext:log message="[experiments-xml] Query filtered [{$vTotal}] experiments."/>
 
         <experiments version="1.1" revision="080925"
                      total="{$vTotal}"

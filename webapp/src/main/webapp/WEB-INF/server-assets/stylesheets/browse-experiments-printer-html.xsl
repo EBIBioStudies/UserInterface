@@ -1,24 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
-                xmlns:aeext="java:/uk.ac.ebi.arrayexpress.utils.saxon.ExtElements"
+                xmlns:search="java:uk.ac.ebi.arrayexpress.utils.saxon.search.SearchExtension"
                 xmlns:html="http://www.w3.org/1999/xhtml"
-                extension-element-prefixes="ae aeext html"
-                exclude-result-prefixes="ae aeext html"
-                version="1.0">
+                extension-element-prefixes="ae search html"
+                exclude-result-prefixes="ae search html"
+                version="2.0">
 
     <xsl:param name="sortby">releasedate</xsl:param>
     <xsl:param name="sortorder">descending</xsl:param>
 
-    <xsl:param name="species"/>
-    <xsl:param name="array"/>
-    <xsl:param name="keywords"/>
-    <xsl:param name="wholewords"/>
-    <xsl:param name="exptype"/>
-    <xsl:param name="inatlas"/>
-    <xsl:param name="userid"/>
-
-    <xsl:param name="detailedview"/>
+    <xsl:param name="queryid"/>
 
     <!-- dynamically set by QueryServlet: host name (as seen from client) and base context path of webapp -->
     <xsl:param name="host"/>
@@ -26,8 +18,7 @@
 
     <xsl:variable name="vBaseUrl">http://<xsl:value-of select="$host"/><xsl:value-of select="$basepath"/></xsl:variable>
 
-    <xsl:variable name="vArrayName" select="//arraydesign[id=$array]/name"/>
-    <xsl:variable name="vQueryDesc" select="ae:describeQuery($keywords, $wholewords, $species, $vArrayName, $exptype, $inatlas)"/>
+    <xsl:variable name="vQueryDesc" select="ae:describeQuery($queryid)"/>
 
     <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="ISO-8859-1" />
 
@@ -44,8 +35,8 @@
                     </xsl:if>
                 </xsl:with-param>
                 <xsl:with-param name="pExtraCode">
-                    <link rel="stylesheet" href="assets/stylesheets/ae_common-1.3.css" type="text/css"/>
-                    <link rel="stylesheet" href="assets/stylesheets/ae_browse_printer-1.3.css" type="text/css"/>
+                    <link rel="stylesheet" href="assets/stylesheets/ae_common-1.4.css" type="text/css"/>
+                    <link rel="stylesheet" href="assets/stylesheets/ae_browse_printer-1.4.css" type="text/css"/>
                     <script src="assets/scripts/jquery-1.3.1.min.js" type="text/javascript"/>
                 </xsl:with-param>
             </xsl:call-template>
@@ -55,13 +46,8 @@
 
     <xsl:template name="ae-contents">
 
-        <aeext:log message="[browse-experiments-printer-html] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
-        <aeext:log message="[browse-experiments-printer-html] Sort by: [{$sortby}], [{$sortorder}]"/>
-
-        <xsl:variable name="vFilteredExperiments" select="experiment[ae:testExperiment($userid, $keywords, $wholewords, $species, $array, $exptype, $inatlas)]"/>
+        <xsl:variable name="vFilteredExperiments" select="search:queryIndex('experiments', $queryid)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
-
-        <aeext:log message="[browse-experiments-printer-html] Query filtered {$vTotal} experiments."/>
 
         <div class="ae_left_container_100pc assign_font">
             <div id="ae_header"><img src="assets/images/ae_header.gif" alt="ArrayExpress"/></div>
@@ -149,14 +135,7 @@
                 </xsl:when>
                 <xsl:otherwise>
                     <div id="ae_infotext">
-                        <xsl:choose>
-                            <xsl:when test="ae:testRegexp($keywords,'^E-.+-\d+$','i')">
-                                <div><strong>The experiment with accession number '<xsl:value-of select="$keywords"/>' is not available.</strong></div>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <div>There are no experiments <strong><xsl:value-of select="$vQueryDesc"/></strong> found in ArrayExpress Archive.</div>
-                            </xsl:otherwise>
-                        </xsl:choose>
+                        <div>There are no experiments <strong><xsl:value-of select="$vQueryDesc"/></strong> found in ArrayExpress Archive.</div>
                     </div>
                 </xsl:otherwise>
             </xsl:choose>

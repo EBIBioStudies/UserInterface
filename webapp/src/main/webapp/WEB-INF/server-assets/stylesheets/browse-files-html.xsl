@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
-                xmlns:ae2="http://www.ebi.ac.uk/arrayexpress"
-                xmlns:aeext="java:/uk.ac.ebi.arrayexpress.utils.saxon.ExtElements"
+                xmlns:ae="http://www.ebi.ac.uk/arrayexpress"
                 xmlns:html="http://www.w3.org/1999/xhtml"
-                extension-element-prefixes="ae ae2 aeext html"
-                exclude-result-prefixes="ae ae2 aeext html"
+                extension-element-prefixes="ae html"
+                exclude-result-prefixes="ae html"
                 version="2.0">
 
     <xsl:param name="accession"/>
@@ -39,9 +37,6 @@
     </xsl:template>
 
     <xsl:template name="ae-contents">
-
-        <!-- <aeext:log message="[browse-files-html] Parameters: accession [{$vAccession}], kind [{$kind}], userid [{$userid}]"/> -->
-
         <xsl:variable name="vExperiment" select="experiment[accession=$vAccession]"/>
         <div class="ae_left_container_100pc assign_font">
             <div id="ae_files_content">
@@ -118,11 +113,19 @@
                     <xsl:sort select="lower-case(@name)" order="ascending"/>
                     <tr>
                         <td class="td_name"><a href="{$vBaseUrl}/files/{$pAccession}/{@name}"><xsl:value-of select="@name"/></a></td>
-                        <td class="td_size"><xsl:value-of select="ae:fileSizeToString(@size)"/></td>
+                        <td class="td_size"><xsl:value-of select="ae:filesize2string(@size)"/></td>
                         <td class="td_date"><xsl:value-of select="@lastmodified"/></td>
                     </tr>
                 </xsl:for-each>
             </tbody>
         </table>
     </xsl:template>
+
+    <xsl:function name="ae:filesize2string">
+        <xsl:param name="pSize"/>
+        <xsl:choose>
+            <xsl:when test="$pSize &lt; 922"><xsl:value-of select="string($pSize)"/> B</xsl:when>
+            <xsl:otherwise><xsl:value-of select="'Unknown'"/></xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
 </xsl:stylesheet>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <index id="experiments" location="${sys:java.io.tmpdir}/index" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.LowercaseAnalyzer">
         <document path="/experiments/experiment">

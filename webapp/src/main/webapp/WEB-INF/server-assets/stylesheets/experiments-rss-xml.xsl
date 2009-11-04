@@ -1,24 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
-                xmlns:aeext="java:/uk.ac.ebi.arrayexpress.utils.saxon.ExtElements"
-                extension-element-prefixes="ae aeext"
-                exclude-result-prefixes="ae aeext"
-                version="1.0">
+                xmlns:search="java:uk.ac.ebi.arrayexpress.utils.saxon.search.SearchExtension"
+                extension-element-prefixes="ae search"
+                exclude-result-prefixes="ae search"
+                version="2.0">
 
     <xsl:param name="pagesize">25</xsl:param>
     <xsl:param name="sortby">releasedate</xsl:param>
     <xsl:param name="sortorder">descending</xsl:param>
 
-    <xsl:param name="species"/>
-    <xsl:param name="array"/>
-    <xsl:param name="keywords"/>
-    <xsl:param name="wholewords"/>
-    <xsl:param name="exptype"/>
-    <xsl:param name="inatlas"/>
-    <xsl:param name="userid"/>
-
-    <xsl:param name="detailedview"/>
+    <xsl:param name="queryid"/>
 
     <!-- dynamically set by QueryServlet: host name (as seen from client) and base context path of webapp -->
     <xsl:param name="host"/>
@@ -32,21 +24,15 @@
 
     <xsl:template match="/experiments">
 
-        <aeext:log message="[experiments-rss-xml] Parameters: userid [{$userid}], keywords [{$keywords}], wholewords [{$wholewords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
-        <aeext:log message="[experiments-rss-xml] Sort by: [{$sortby}], [{$sortorder}]"/>
-
-        <xsl:variable name="vFilteredExperiments" select="experiment[ae:testExperiment($userid, $keywords, $wholewords, $species, $array, $exptype, $inatlas)]"/>
+        <xsl:variable name="vFilteredExperiments" select="search:queryIndex('experiments', $queryid)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
-
-        <aeext:log message="[experiments-rss-xml] Query filtered {$vTotal} experiments. Will output first {$pagesize} entries."/>
 
         <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
             <channel>
                 <xsl:variable name="vCurrentDate" select="ae:dateToRfc822()"/>
                 <title>
                     <xsl:text>ArrayExpress Archive - Experiments</xsl:text>
-                    <xsl:variable name="vArrayName" select="//arraydesign[id=$array]/name"/>
-                    <xsl:variable name="vQueryDesc" select="ae:describeQuery($keywords, $wholewords, $species, $vArrayName, $exptype, $inatlas)"/>
+                    <xsl:variable name="vQueryDesc" select="ae:describeQuery($queryid)"/>
                     <xsl:if test="string-length($vQueryDesc) > 0">
                         <xsl:text> </xsl:text><xsl:value-of select="$vQueryDesc"/>
                     </xsl:if>
@@ -60,19 +46,8 @@
                 </title>
                 <link>
                     <xsl:value-of select="$vBaseUrl"/>
-                    <xsl:if test="(string-length($keywords)&gt;0) or (string-length($species)&gt;0) or (string-length($array)&gt;0)">
-                        <xsl:text>/browse.html?keywords=</xsl:text>
-                        <xsl:value-of select="$keywords"/>
-                        <xsl:if test="'true'=$wholewords">
-                            <xsl:text>&amp;wholewords=on</xsl:text>
-                        </xsl:if>
-                        <xsl:text>&amp;species=</xsl:text>
-                        <xsl:value-of select="$species"/>
-                        <xsl:text>&amp;array=</xsl:text>
-                        <xsl:value-of select="$array"/>
-                        <xsl:text>&amp;pagesize=</xsl:text>
-                        <xsl:value-of select="$pagesize"/>
-                    </xsl:if>
+                    <xsl:text>/browse.html?</xsl:text>
+                    <xsl:value-of select="ae:getQueryString($queryid)"/>
                </link>
                 <description><xsl:text>ArrayExpress is a public repository for transcriptomics data, which is aimed at storing MIAME- and MINSEQE- compliant data in accordance with MGED recommendations.</xsl:text></description>
                 <language><xsl:text>en</xsl:text></language>
