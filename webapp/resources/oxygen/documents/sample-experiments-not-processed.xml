@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<experiments total="1">
+	<experiment id="192008314" accession="E-MEXP-31" name="Transcription profiling of mammalian male germ cells undergoing mitotic growth, meiosis and gametogenesis in highly enriched cell populations" releasedate="2004-11-25">
+		<user>1</user>
+		<sampleattribute category="Age" value="20"/>
+		<sampleattribute category="Age" value="9"/>
+		<sampleattribute category="Age" value="90"/>
+		<sampleattribute category="DevelopmentalStage" value="adult"/>
+		<sampleattribute category="Organism" value="Rattus norvegicus"/>
+		<sampleattribute category="Sex" value="male"/>
+		<sampleattribute category="TargetedCellType" value="Sertoli cells"/>
+		<sampleattribute category="TargetedCellType" value="spermatocytes"/>
+		<sampleattribute category="TargetedCellType" value="total testis"/>
+		<sampleattribute category="TimeUnit" value="days"/>
+		<sampleattribute category="TargetedCellType" value="spermatogonia"/>
+		<sampleattribute category="TargetedCellType" value="spermatides"/>
+		<sampleattribute category="StrainOrLine" value="Sprague Dawley"/>
+		<sampleattribute category="OrganismPart" value="testis"/>
+		<sampleattribute category="DevelopmentalStage" value="pre-puberty"/>
+		<sampleattribute category="BioSourceType" value="cells"/>
+		<experimentalfactor name="targeted cell type" value=" "/>
+		<miamescore name="ReporterSequenceScore" value="1"/>
+		<miamescore name="FactorValueScore" value="0"/>
+		<miamescore name="MeasuredBioAssayDataScore" value="1"/>
+		<miamescore name="ProtocolScore" value="1"/>
+		<miamescore name="DerivedBioAssayDataScore" value="1"/>
+		<arraydesign id="114147931" accession="A-AFFY-18" name="Affymetrix GeneChip Rat Genome U34A [RG_U34A]" count="10"/>
+		<arraydesign id="117287910" accession="A-AFFY-19" name="Affymetrix GeneChip Rat Genome U34B [RG_U34B]" count="10"/>
+		<bioassaydatagroup id="1341914585" name="Affymetrix:FeatureDimension:RG_U34A" bioassaydatacubes="10" arraydesignprovider="AFFY" dataformat="CELv3" bioassays="10" isderived="0"/>
+		<bioassaydatagroup id="1341914583" name="Affymetrix:FeatureDimension:RG_U34B" bioassaydatacubes="10" arraydesignprovider="AFFY" dataformat="CELv3" bioassays="10" isderived="0"/>
+		<bioassaydatagroup id="1341914582" name="Affymetrix:CompositeSequenceDimension:RG_U34A" bioassaydatacubes="10" arraydesignprovider="AFFY" dataformat="tab delimited" bioassays="10" isderived="1"/>
+		<bioassaydatagroup id="1341914584" name="Affymetrix:CompositeSequenceDimension:RG_U34B" bioassaydatacubes="10" arraydesignprovider="AFFY" dataformat="tab delimited" bioassays="10" isderived="1"/>
+		<bibliography accession="14718556" publication="Mol Biol Cell" authors="Ulrich Schlecht, Philippe Demougin, Reinhold Koch, Leandro Hermida, Christa Wiederkehr, Patrick Descombes, Charles Pinneau, Bernard Jegou, Michael Primig" title="Expression profiling of mammalian male meiosis and gamete development identifies novel candidate genes for roles in the regulation of fertility" year="2004" volume="15" issue="3" pages="1031-1043" uri="http://www.molbiolcell.org/cgi/reprint/15/3/1031?maxtoshow=&amp;HITS=10&amp;hits=10&amp;RESULTFORMAT=&amp;author1=primig&amp;andorexactfulltext=and&amp;searchid=1&amp;FIRSTINDEX=0&amp;sortspec=relevance&amp;volume=15&amp;resourcetype=HWCIT"/>
+		<provider contact="Michael Primig" email="michael.primig@rennes.inserm.fr" role="submitter"/>
+		<experimentdesign>cell type comparison</experimentdesign>
+		<experimentdesign>development or differentiation</experimentdesign>
+		<experimenttype>transcription profiling</experimenttype>
+		<description id="192008316"/>
+		<description id="192008315">We report a comprehensive large-scale expression profiling analysis of mammalian male germ cells undergoing mitotic growth, meiosis and gametogenesis using High Density Oligonucleotide Microarrays and highly enriched cell populations. Among 11955 rat loci investigated, 1268 were identified as differentially transcribed in germ cells at subsequent developmental stages as compared to total testis, somatic Sertoli cells as well as brain and skeletal muscle controls. The loci were organized into four expression clusters that correspond to somatic, mitotic, meiotic and post-meiotic cell types. This work provides information about expression patterns of approximately 200 genes known to be important during male germ cell development. Approximately 40 of those are included in a group of 121 transcripts for which we report germ cell expression and lack of transcription in three somatic control cell types. Moreover, we demonstrate the testicular expression and transcriptional induction in mitotic, meiotic and/or post-meiotic germ cells of 293 as yet uncharacterized transcripts some of which are likely to encode factors involved in spermatogenesis and fertility. This group also contains numerous potential germ cell specific targets for innovative contraceptives. A graphical display of the data is conveniently accessible through the GermOnline database at http://www.germonline.org.</description>
+		<description id="1341914608">(Generated description) Experiment with 20 hybridizations, using 10 samples of species [Rattus norvegicus], using 20 arrays of array design [Affymetrix GeneChip  Rat Genome U34A [RG_U34A], Affymetrix GeneChip  Rat Genome U34B [RG_U34B]], producing 20 raw data files and 20 transformed and/or normalized data files.</description>
+	</experiment>
+</experiments>

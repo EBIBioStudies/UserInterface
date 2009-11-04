@@ -100,7 +100,7 @@ public class ExtFunctions
 
 
     /* ***************************************************** */
-    public static boolean isExperimentInWarehouse(String accession)
+    public static boolean isExperimentInAtlas(String accession)
     {
         return true;
     }
