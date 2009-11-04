@@ -24,7 +24,7 @@ public class HttpProxyServlet extends ApplicationServlet
     // Respond to HTTP GET requests from browsers.
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
-        logRequest(logger, request);
+        logRequest(logger, request, RequestType.GET);
 
         String path = new RegExpHelper("servlets/proxy/(.+)", "i")
                 .matchFirst(request.getRequestURL().toString());

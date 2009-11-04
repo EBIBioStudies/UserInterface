@@ -28,7 +28,7 @@ public class QueryServlet extends ApplicationServlet
     // Respond to HTTP GET requests from browsers.
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
-        logRequest(logger, request);
+        logRequest(logger, request, RequestType.GET);
 
         String type = "xml";
         String stylesheet = "default";

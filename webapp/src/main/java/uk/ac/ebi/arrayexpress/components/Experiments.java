@@ -25,6 +25,8 @@ public class Experiments extends ApplicationComponent implements DocumentSource
     private TextFilePersistence<PersistableString> arrays;
     private TextFilePersistence<PersistableString> experimentTypes;
 
+    private SaxonEngine saxon;
+
     public Experiments()
     {
         super("Experiments");
@@ -32,6 +34,8 @@ public class Experiments extends ApplicationComponent implements DocumentSource
 
     public void initialize()
     {
+        saxon = (SaxonEngine)getComponent("SaxonEngine");
+
         String tmpDir = System.getProperty("java.io.tmpdir");
         this.experiments = new TextFilePersistence<PersistableDocumentContainer>(
                 new PersistableDocumentContainer()
@@ -60,11 +64,12 @@ public class Experiments extends ApplicationComponent implements DocumentSource
         );
 
         indexExperiments();
-        ((SaxonEngine)getComponent("SaxonEngine")).registerDocumentSource(this);
+        saxon.registerDocumentSource(this);
     }
 
     public void terminate()
     {
+        saxon = null;
     }
 
     // implementation of DocumentSource.getDocument()
@@ -81,7 +86,16 @@ public class Experiments extends ApplicationComponent implements DocumentSource
 
     public boolean isAccessible( String accession, String userId )
     {
-        return false;
+        if ("0".equals(userId)) {
+            return true;
+        } else {
+            return Boolean.parseBoolean(
+                saxon.evaluateXPathSingle(
+                        getDocument()
+                        , "exists(//experiment[accession = '" + accession + "' and user = '" + userId + "'])"
+                )
+            );
+        }
     }
 
     public boolean isInAtlas( String accession )
@@ -145,7 +159,7 @@ public class Experiments extends ApplicationComponent implements DocumentSource
 
     private DocumentInfo loadExperimentsFromString( String xmlString )
     {
-        DocumentInfo doc = ((SaxonEngine)getComponent("SaxonEngine")).transform(xmlString, "preprocess-experiments-xml.xsl", null);
+        DocumentInfo doc = saxon.transform(xmlString, "preprocess-experiments-xml.xsl", null);
         if (null == doc) {
             this.logger.error("Transformation [preprocess-experiments-xml.xsl] returned an error, returning null");
             return null;
@@ -166,13 +180,13 @@ public class Experiments extends ApplicationComponent implements DocumentSource
 
     private void buildSpeciesArraysExpTypes( DocumentInfo doc )
     {
-        String speciesString = ((SaxonEngine)getComponent("SaxonEngine")).transformToString(doc, "build-species-list-html.xsl", null);
+        String speciesString = saxon.transformToString(doc, "build-species-list-html.xsl", null);
         this.species.setObject(new PersistableString(speciesString));
 
-        String arraysString = ((SaxonEngine)getComponent("SaxonEngine")).transformToString(doc, "build-arrays-list-html.xsl", null);
+        String arraysString = saxon.transformToString(doc, "build-arrays-list-html.xsl", null);
         this.arrays.setObject(new PersistableString(arraysString));
 
-        String expTypesString = ((SaxonEngine)getComponent("SaxonEngine")).transformToString(doc, "build-exptypes-list-html.xsl", null);
+        String expTypesString = saxon.transformToString(doc, "build-exptypes-list-html.xsl", null);
         this.experimentTypes.setObject(new PersistableString(expTypesString));
     }
 }

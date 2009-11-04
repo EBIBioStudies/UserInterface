@@ -22,10 +22,26 @@ public class ApplicationServlet extends HttpServlet
         return getApplication().getPreferences();
     }
 
-    protected void logRequest(Logger logger, HttpServletRequest request)
+    protected enum RequestType {
+        HEAD, GET, POST;
+
+        public String toString() {
+            switch (this) {
+                case HEAD:  return "HEAD";
+                case GET:   return "GET";
+                case POST:  return "POST";
+            }
+            throw new AssertionError("Unknown type: " + this);
+        }
+    }
+
+    protected void logRequest(Logger logger, HttpServletRequest request, RequestType requestType)
     {
-        logger.info("Processing request: {}{}",
-            request.getRequestURL()
-            , null != request.getQueryString() ? "?" + request.getQueryString() : "");
+        logger.info("Processing {} request: {}"
+                , requestType.toString()
+                , request.getRequestURL().append(
+                        null != request.getQueryString() ? "?" + request.getQueryString() : ""
+                )
+        );
     }
 }

@@ -4,6 +4,7 @@ import net.sf.saxon.om.DocumentInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
+import uk.ac.ebi.arrayexpress.utils.RegExpHelper;
 import uk.ac.ebi.arrayexpress.utils.persistence.PersistableDocumentContainer;
 import uk.ac.ebi.arrayexpress.utils.persistence.TextFilePersistence;
 import uk.ac.ebi.arrayexpress.utils.saxon.DocumentSource;
@@ -17,6 +18,7 @@ public class Files extends ApplicationComponent implements DocumentSource
 
     private String rootFolder;
     private TextFilePersistence<PersistableDocumentContainer> files;
+    private SaxonEngine saxon;
 
     public Files()
     {
@@ -25,6 +27,8 @@ public class Files extends ApplicationComponent implements DocumentSource
 
     public void initialize()
     {
+        saxon = (SaxonEngine)getComponent("SaxonEngine");
+
         files = new TextFilePersistence<PersistableDocumentContainer>(
                 new PersistableDocumentContainer(),
                 new File(
@@ -33,11 +37,12 @@ public class Files extends ApplicationComponent implements DocumentSource
                 )
         );
         
-        ((SaxonEngine)getComponent("SaxonEngine")).registerDocumentSource(this);
+        saxon.registerDocumentSource(this);
     }
 
     public void terminate()
     {
+        saxon = null;
     }
 
     // implementation of DocumentSource.getDocument()
@@ -71,7 +76,7 @@ public class Files extends ApplicationComponent implements DocumentSource
 
     private DocumentInfo loadFilesFromString( String xmlString )
     {
-        DocumentInfo doc = ((SaxonEngine)getComponent("SaxonEngine")).transform(xmlString, "preprocess-files-xml.xsl", null);
+        DocumentInfo doc = saxon.transform(xmlString, "preprocess-files-xml.xsl", null);
         if (null == doc) {
             this.logger.error("Transformation [preprocess-files-xml.xsl] returned an error, returning null");
             return null;
@@ -101,40 +106,61 @@ public class Files extends ApplicationComponent implements DocumentSource
     }
 
     // returns true is file is registered in the registry
-    public synchronized boolean doesExist( String accession, String name )
+    public boolean doesExist( String accession, String name )
     {
-        /*
-        if (null != accession && !accession.equals("")) {
-            return filesMap.getObject().doesExist(accession, name);
+        if (!"".equals(accession)) {
+            return Boolean.parseBoolean(
+                    saxon.evaluateXPathSingle(
+                            getDocument()
+                            , "exists(//folder[@accession = '" + accession + "']/file[@name = '" + name + "'])"
+                    )
+            );
         } else {
-            return filesMap.getObject().doesNameExist(name);
+            return Boolean.parseBoolean(
+                    saxon.evaluateXPathSingle(
+                            getDocument()
+                            , "exists(//file[@name = '" + name + "'])"
+                    )
+            );
         }
-        */
-        return true;
     }
 
     // returns absolute file location (if file exists, null otherwise) in local filesystem
-    public synchronized String getLocation( String accession, String name )
+    public String getLocation( String accession, String name )
     {
-        String result = "";
-        /*
-        if (null != accession && !accession.equals("")) {
-            FtpFileEntry entry = filesMap.getObject().getEntry(accession, name);
-            if (null != entry) {
-                result = entry.getLocation();
-            }
-        } else {
-            List<FtpFileEntry> entries = filesMap.getObject().getEntriesByName(name);
+        String folderLocation;
 
-            if (null != entries) {
-                if (1 == entries.size()) {
-                    result = entries.get(0).getLocation();
-                } else {
-                    logger.error("Multiple entries found for file [{}], cannot offer a definitive download", name);
-                }
-            }
+        if (!"".equals(accession)) {
+            folderLocation = saxon.evaluateXPathSingle(
+                    getDocument()
+                    , "//folder[@accession = '" + accession + "' and file/@name = '" + name + "']/@location"
+            );
+        } else {
+            folderLocation = saxon.evaluateXPathSingle(
+                    getDocument()
+                    , "//folder[file/@name = '" + name + "']/@location"
+            );
         }
-        */
-        return result;
+
+        if (!"".equals(folderLocation)) {
+            return folderLocation + File.separator + name;
+        } else {
+            return null;
+        }
+    }
+
+    public String getAccession( String fileLocation )
+    {
+        String[] nameFolder = new RegExpHelper("^(.+)/([^/]+)$", "i")
+                .match(fileLocation);
+        if (null == nameFolder || 2 != nameFolder.length) {
+            logger.error("Unable to parse the location [{}]", fileLocation);
+            return null;
+        }
+
+        return saxon.evaluateXPathSingle(
+                getDocument()
+                , "//folder[file/@name = '" + nameFolder[1] + "' and @location = '" + nameFolder[0] + "']/@accession"
+            );
     }
 }
