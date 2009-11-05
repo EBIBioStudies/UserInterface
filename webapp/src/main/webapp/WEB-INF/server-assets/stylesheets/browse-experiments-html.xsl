@@ -610,7 +610,7 @@
                     <xsl:for-each select="$vFiles">
                         <xsl:sort select="@kind"/>
                         <xsl:sort select="lower-case(@name)"/>
-                        <a href="{$vBaseUrl}/{@vAccession}/{@name}">
+                        <a href="{$vBaseUrl}/files/{$vAccession}/{@name}">
                             <xsl:value-of select="@name"/>
                         </a>
                         <xsl:if test="position() != last()">
@@ -634,7 +634,7 @@
                     </xsl:choose>
                 </td>
                 <td class="attr_value">
-                    <a href="{$vBaseUrl}/{@vAccession}/{@name}"><xsl:value-of select="@name"/></a>
+                    <a href="{$vBaseUrl}/files/{$vAccession}/{@name}"><xsl:value-of select="@name"/></a>
                 </td>
             </tr>
         </xsl:for-each>
@@ -649,7 +649,7 @@
                 <td class="attr_value">
                     <xsl:for-each select="$vFiles">
                         <xsl:sort select="@name"/>
-                        <a href="{$vBaseUrl}/{@vArrayAccession}/{@name}"><xsl:value-of select="@name"/></a>
+                        <a href="{$vBaseUrl}/files/{$vArrayAccession}/{@name}"><xsl:value-of select="@name"/></a>
                         <xsl:if test="position() != last()">
                             <xsl:text>, </xsl:text>
                         </xsl:if>
@@ -668,7 +668,7 @@
                 <td class="attr_value">
                     <xsl:for-each select="$vFiles">
                         <xsl:sort select="lower-case(@extension)"/>
-                        <a href="{$vBaseUrl}/{@vAccession}/{@name}"><xsl:value-of select="@name"/></a>
+                        <a href="{$vBaseUrl}/files/{$vAccession}/{@name}"><xsl:value-of select="@name"/></a>
                         <xsl:if test="position() != last()">
                             <xsl:text>, </xsl:text>
                         </xsl:if>
@@ -707,7 +707,7 @@
                 </xsl:when>
                 <xsl:when test="$vFiles">
                     <xsl:value-of select="$vBaseUrl"/>
-                    <xsl:text>/</xsl:text>
+                    <xsl:text>/files/</xsl:text>
                     <xsl:value-of select="$vAccession"/>
                     <xsl:text>/</xsl:text>
                     <xsl:value-of select="$vFiles/@name"/>
