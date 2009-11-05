@@ -6,6 +6,7 @@ import net.sf.saxon.xpath.XPathEvaluator;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.NumericField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
 import org.slf4j.Logger;
@@ -66,7 +67,11 @@ public class Indexer
                             fieldValue = v.toString();
                             logger.warn("Not sure if I handle the value of [{}] correctly, relying on Object.toString()", v.getClass().getName());
                         }
-                        addIndexField(d, field.name, fieldValue, field.shouldAnalyze, field.shouldStore);
+                        if ("integer".equals(field.type)) {
+                            addIntIndexField(d, field.name, fieldValue);
+                        } else {
+                            addIndexField(d, field.name, fieldValue, field.shouldAnalyze, field.shouldStore);
+                        }
                     }
                 }
 
@@ -99,6 +104,11 @@ public class Indexer
     private void addIndexField( Document document, String name, String value, boolean shouldAnalyze, boolean shouldStore )
     {
         document.add(new Field(name, value, shouldStore ? Field.Store.YES : Field.Store.NO, shouldAnalyze ? Field.Index.ANALYZED : Field.Index.NOT_ANALYZED));
+    }
+
+    private void addIntIndexField( Document document, String name, String value )
+    {
+        document.add(new NumericField(name).setIntValue(Integer.parseInt(value)));
     }
 
     private void addIndexDocument( IndexWriter iwriter, Document document )

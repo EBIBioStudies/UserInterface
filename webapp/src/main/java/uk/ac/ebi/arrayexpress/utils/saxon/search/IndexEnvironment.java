@@ -34,6 +34,7 @@ public class IndexEnvironment
     public class FieldInfo
     {
         public String name;
+        public String type;
         public String path;
         public boolean shouldAnalyze;
         public String analyzer;
@@ -42,6 +43,7 @@ public class IndexEnvironment
         public FieldInfo(HierarchicalConfiguration fieldConfig)
         {
             this.name = fieldConfig.getString("[@name]");
+            this.type = fieldConfig.getString("[@type]");
             this.path = fieldConfig.getString("[@path]");
             this.shouldAnalyze = fieldConfig.getBoolean("[@analyze]");
             this.analyzer = fieldConfig.getString("[@analyzer]");
