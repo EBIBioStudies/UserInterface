@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,13 +58,17 @@ public class Indexer
 
                 // get all the fields taken care of
                 for (IndexEnvironment.FieldInfo field : this.env.fields.values()) {
-                    List values = (List)fieldXpe.get(field.name).evaluate(node, XPathConstants.NODESET);
-                    for (Object v : values) {
-                        if ("integer".equals(field.type)) {
-                            addIntIndexField(d, field.name, v);
-                        } else {
-                            addIndexField(d, field.name, v, field.shouldAnalyze, field.shouldStore);
+                    try {
+                        List values = (List)fieldXpe.get(field.name).evaluate(node, XPathConstants.NODESET);
+                        for (Object v : values) {
+                            if ("integer".equals(field.type)) {
+                                addIntIndexField(d, field.name, v);
+                            } else {
+                                addIndexField(d, field.name, v, field.shouldAnalyze, field.shouldStore);
+                            }
                         }
+                    } catch (XPathExpressionException x) {
+                        logger.error("Caught an exception [" + x.getMessage() + "] while indexing expression [{}] for document [{}...]", field.path, ((NodeInfo)node).getStringValue().substring(0, 20));    
                     }
                 }
 

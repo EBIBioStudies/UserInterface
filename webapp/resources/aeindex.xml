@@ -6,16 +6,23 @@
             <field name="accession" type="string" path="accession | secondaryaccession" analyze="true" store="false" />
             <field name="species" type="string" path="species" analyze="true" store="false" />
             <field name="array" type="string" path="arraydesign/id | arraydesign/accession | arraydesign/name" analyze="true" store="false" />
+            <field name="array" type="string" path="arraydesign/id | arraydesign/accession | arraydesign/name" analyze="true" store="false" />
             <field name="exptype" type="string" path="experimenttype" analyze="true" store="false" />
             <field name="expdesign" type="string" path="experimentdesign" analyze="true" store="false" />
             <field name="ef" type="string" path="experimentalfactor/name" analyze="true" store="false" />
-            <field name="efcount" type="integer" path="count(distinct-values(experimentalfactor/name, 'http://saxon.sf.net/collation?ignore-case=yes'))" />
             <field name="efv" type="string" path="experimentalfactor/value" analyze="true" store="false" />
             <field name="sa" type="string" path="sampleattribute/value" analyze="true" store="false" />
-            <field name="sacount" type="integer" path="count(distinct-values(sampleattribute/category, 'http://saxon.sf.net/collation?ignore-case=yes'))" />
             <field name="pmid" type="string" path="bibliography/accession" analyze="false" store="false" />
             <field name="userid" type="string" path="user" analyze="false" store="false" />
             <field name="gxa" type="string" path="@loadedinatlas" analyze="false" store="false" />
+            <!-- numeric fields -->
+            <field name="assaycount" type="integer" path="(if (assays) then assays else 0) cast as xs:integer" />
+            <field name="samplecount" type="integer" path="((if (samples) then samples else 0) cast as xs:integer)" />
+            <field name="rawcount" type="integer" path="((if (rawdatafiles) then rawdatafiles else 0) cast as xs:integer)" />
+            <field name="fgemcount" type="integer" path="((if (fgemdatafiles) then fgemdatafiles else 0) cast as xs:integer)" />
+            <field name="efcount" type="integer" path="count(distinct-values(experimentalfactor/name, 'http://saxon.sf.net/collation?ignore-case=yes'))" />
+            <field name="sacount" type="integer" path="count(distinct-values(sampleattribute/category, 'http://saxon.sf.net/collation?ignore-case=yes'))" />
+
         </document>
     </index>
     <index id="protocols">

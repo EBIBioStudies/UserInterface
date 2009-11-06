@@ -34,18 +34,16 @@
                         <xsl:message>[ERROR] No generated descriptions found for [<xsl:value-of select="$vAccession"/>]</xsl:message>
                         <hybs>0</hybs>
                         <samples>0</samples>
-                        <arrays>0</arrays>
                         <rawdatafiles>0</rawdatafiles>
                         <fgemdatafiles>0</fgemdatafiles>
                     </xsl:when>
                 </xsl:choose>
-                <xsl:analyze-string select="string($vGenDescriptionRaw[1])" regex="with (\d+) hybridizations.+using (\d+) samples.+using (\d+) arrays.+producing (\d+) raw.+and (\d+) transformed" flags="i">
+                <xsl:analyze-string select="string($vGenDescriptionRaw[1])" regex="with\s(\d+)\shybridizations.+using\s(\d*)\s*samples.+producing\s(\d+)\sraw.+and\s(\d+)\stransformed" flags="i">
                     <xsl:matching-substring>
                         <hybs><xsl:value-of select="regex-group(1)"/></hybs>
                         <samples><xsl:value-of select="regex-group(2)"/></samples>
-                        <arrays><xsl:value-of select="regex-group(3)"/></arrays>
-                        <rawdatafiles><xsl:value-of select="regex-group(4)"/></rawdatafiles>
-                        <fgemdatafiles><xsl:value-of select="regex-group(5)"/></fgemdatafiles>
+                        <rawdatafiles><xsl:value-of select="regex-group(3)"/></rawdatafiles>
+                        <fgemdatafiles><xsl:value-of select="regex-group(4)"/></fgemdatafiles>
                     </xsl:matching-substring>
                 </xsl:analyze-string>
             </xsl:variable>
@@ -97,9 +95,6 @@
             <samples>
                 <xsl:value-of select="$vGenDescription/samples"/>
             </samples>
-            <arrays>
-                <xsl:value-of select="$vGenDescription/arrays"/>
-            </arrays>
             <rawdatafiles>
                 <xsl:value-of select="$vGenDescription/rawdatafiles"/>
             </rawdatafiles>
