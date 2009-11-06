@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,19 +59,10 @@ public class Indexer
                 for (IndexEnvironment.FieldInfo field : this.env.fields.values()) {
                     List values = (List)fieldXpe.get(field.name).evaluate(node, XPathConstants.NODESET);
                     for (Object v : values) {
-                        String fieldValue;
-                        if (v instanceof String) {
-                            fieldValue = (String)v;
-                        } else if (v instanceof NodeInfo) {
-                            fieldValue = ((NodeInfo)v).getStringValue();
-                        } else {
-                            fieldValue = v.toString();
-                            logger.warn("Not sure if I handle the value of [{}] correctly, relying on Object.toString()", v.getClass().getName());
-                        }
                         if ("integer".equals(field.type)) {
-                            addIntIndexField(d, field.name, fieldValue);
+                            addIntIndexField(d, field.name, v);
                         } else {
-                            addIndexField(d, field.name, fieldValue, field.shouldAnalyze, field.shouldStore);
+                            addIndexField(d, field.name, v, field.shouldAnalyze, field.shouldStore);
                         }
                     }
                 }
@@ -101,14 +93,37 @@ public class Indexer
         return iwriter;
     }
 
-    private void addIndexField( Document document, String name, String value, boolean shouldAnalyze, boolean shouldStore )
+    private void addIndexField( Document document, String name, Object value, boolean shouldAnalyze, boolean shouldStore )
     {
-        document.add(new Field(name, value, shouldStore ? Field.Store.YES : Field.Store.NO, shouldAnalyze ? Field.Index.ANALYZED : Field.Index.NOT_ANALYZED));
+        String stringValue;
+        if (value instanceof String) {
+            stringValue = (String)value;
+        } else if (value instanceof NodeInfo) {
+            stringValue = ((NodeInfo)value).getStringValue();
+        } else {
+            stringValue = value.toString();
+            logger.warn("Not sure if I handle string value of [{}] for the field [{}] correctly, relying on Object.toString()", value.getClass().getName(), name);
+        }
+
+        document.add(new Field(name, stringValue, shouldStore ? Field.Store.YES : Field.Store.NO, shouldAnalyze ? Field.Index.ANALYZED : Field.Index.NOT_ANALYZED));
     }
 
-    private void addIntIndexField( Document document, String name, String value )
+    private void addIntIndexField( Document document, String name, Object value )
     {
-        document.add(new NumericField(name).setIntValue(Integer.parseInt(value)));
+        Long longValue;
+        if (value instanceof BigInteger) {
+            longValue = ((BigInteger)value).longValue();
+        } else if (value instanceof NodeInfo) {
+            longValue = Long.parseLong(((NodeInfo)value).getStringValue());
+        } else {
+            longValue = Long.parseLong(value.toString());
+            logger.warn("Not sure if I handle long value of [{}] for the field [{}] correctly, relying on Object.toString()", value.getClass().getName(), name);
+        }
+        if (null != longValue) {
+            document.add(new NumericField(name).setLongValue(longValue));
+        } else {
+            logger.warn("Long value of the field [{}] was null", name);
+        }
     }
 
     private void addIndexDocument( IndexWriter iwriter, Document document )

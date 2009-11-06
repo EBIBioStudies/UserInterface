@@ -27,7 +27,7 @@ public class QueryConstructor
         try {
             for ( Map.Entry<String, String> queryItem : querySource.entrySet() ) {
                 if (env.fields.containsKey(queryItem.getKey()) && !"".equals(queryItem.getValue().trim())) {
-                    QueryParser parser = new QueryParser(queryItem.getKey(), this.env.indexAnalyzer);
+                    QueryParser parser = new NumericRangeQueryParser(env, queryItem.getKey(), this.env.indexAnalyzer);
                     parser.setDefaultOperator(QueryParser.Operator.AND);
                     Query q = parser.parse(queryItem.getValue());
                     result.add(q, BooleanClause.Occur.MUST);

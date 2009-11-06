@@ -347,9 +347,17 @@
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-memory</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+
+<!-- have to use modified version until NumericRangeQuery is supported
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-highlighter</artifactId>
             <version>2.9.0</version>
         </dependency>
+-->
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>ae-interface-auth</artifactId>

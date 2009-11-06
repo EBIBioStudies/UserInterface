@@ -45,9 +45,11 @@ public class IndexEnvironment
             this.name = fieldConfig.getString("[@name]");
             this.type = fieldConfig.getString("[@type]");
             this.path = fieldConfig.getString("[@path]");
-            this.shouldAnalyze = fieldConfig.getBoolean("[@analyze]");
-            this.analyzer = fieldConfig.getString("[@analyzer]");
-            this.shouldStore = fieldConfig.getBoolean("[@store]");
+            if ("string".equals(this.type)) {
+                this.shouldAnalyze = fieldConfig.getBoolean("[@analyze]");
+                this.analyzer = fieldConfig.getString("[@analyzer]");
+                this.shouldStore = fieldConfig.getBoolean("[@store]");
+            }
         }
     }
 
