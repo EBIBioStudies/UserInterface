@@ -16,10 +16,10 @@
             <field name="userid" type="string" path="user" analyze="false" store="false" />
             <field name="gxa" type="string" path="@loadedinatlas" analyze="false" store="false" />
             <!-- numeric fields -->
-            <field name="assaycount" type="integer" path="(if (assays) then assays else 0) cast as xs:integer" />
-            <field name="samplecount" type="integer" path="((if (samples) then samples else 0) cast as xs:integer)" />
-            <field name="rawcount" type="integer" path="((if (rawdatafiles) then rawdatafiles else 0) cast as xs:integer)" />
-            <field name="fgemcount" type="integer" path="((if (fgemdatafiles) then fgemdatafiles else 0) cast as xs:integer)" />
+            <field name="assaycount" type="integer" path="(if (assays castable as xs:integer) then assays else 0) cast as xs:integer" />
+            <field name="samplecount" type="integer" path="(if (samples castable as xs:integer) then samples else 0) cast as xs:integer" />
+            <field name="rawcount" type="integer" path="(if (rawdatafiles castable as xs:integer) then rawdatafiles else 0) cast as xs:integer" />
+            <field name="fgemcount" type="integer" path="(if (fgemdatafiles castable as xs:integer) then fgemdatafiles else 0) cast as xs:integer" />
             <field name="efcount" type="integer" path="count(distinct-values(experimentalfactor/name, 'http://saxon.sf.net/collation?ignore-case=yes'))" />
             <field name="sacount" type="integer" path="count(distinct-values(sampleattribute/category, 'http://saxon.sf.net/collation?ignore-case=yes'))" />
 

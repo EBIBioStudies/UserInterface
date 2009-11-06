@@ -93,7 +93,12 @@
                 </xsl:choose>
             </assays>
             <samples>
-                <xsl:value-of select="$vGenDescription/samples"/>
+                <xsl:choose>
+                    <xsl:when test="number($vGenDescription/samples) > 0">
+                        <xsl:value-of select="$vGenDescription/samples"/>
+                    </xsl:when>
+                    <xsl:otherwise>0</xsl:otherwise>    
+                </xsl:choose>
             </samples>
             <rawdatafiles>
                 <xsl:value-of select="$vGenDescription/rawdatafiles"/>
