@@ -15,14 +15,14 @@ abstract public class ApplicationJob implements InterruptableJob, StatefulJob
     {
         myThread = Thread.currentThread();
         try {
-            execute();
+            doExecute(jec);
         } catch ( InterruptedException x ) {
             logger.debug("Job [{}] was interrupted", jec.getJobDetail().getFullName());
         }
         myThread = null;
     }
 
-    public abstract void execute() throws InterruptedException;
+    public abstract void doExecute( JobExecutionContext jec ) throws InterruptedException;
 
     public void interrupt() throws UnableToInterruptJobException
     {

@@ -31,7 +31,7 @@ public class ReloadExperimentsJob extends ApplicationJob implements JobListener
     private int numThreadsCompleted;
     private int expsPerThread;
 
-    public void execute() throws InterruptedException
+    public void doExecute( JobExecutionContext jec ) throws InterruptedException
     {
         Application app = Application.getInstance();
         Long threads = app.getPreferences().getLong("ae.experiments.reload.threads");
@@ -40,7 +40,11 @@ public class ReloadExperimentsJob extends ApplicationJob implements JobListener
             numThreadsCompleted = 0;
             xmlBuffer = new StringBuffer(20000000);
 
-            String dsNames = ((Experiments) app.getComponent("Experiments")).getDataSource();
+            JobDataMap jdm = jec.getMergedJobDataMap();
+            String dsNames = jdm.getString("param");
+            if ("".equals(dsNames)) {
+                dsNames = ((Experiments) app.getComponent("Experiments")).getDataSource();
+            }
             logger.info("Reload of experiment data from [{}] requested", dsNames);
 
             ds = new DataSourceFinder().findDataSource(dsNames);
@@ -64,7 +68,7 @@ public class ReloadExperimentsJob extends ApplicationJob implements JobListener
                     // split list into several pieces
                     expsPerThread = (int) Math.ceil(((double)exps.size()) / ((double)numThreadsForRetrieval));
                     for ( int i = 0; i < numThreadsForRetrieval; ++i ) {
-                        ((JobsController) app.getComponent("JobsController")).executeJob("retrieve-xml", i);
+                        ((JobsController) app.getComponent("JobsController")).executeJobWithParam("retrieve-xml", String.valueOf(i));
                         Thread.sleep(1);
                     }
 
@@ -96,7 +100,7 @@ public class ReloadExperimentsJob extends ApplicationJob implements JobListener
     {
         if (jec.getJobDetail().getName().equals("retrieve-xml")) {
             JobDataMap jdm = jec.getMergedJobDataMap();
-            int index = jdm.getInt("index");
+            int index = Integer.parseInt(jdm.getString("param"));
             jdm.put("xmlBuffer", xmlBuffer);
             jdm.put("ds", ds);
             jdm.put("exps", exps.subList(index * expsPerThread, Math.min(((index + 1) * expsPerThread), exps.size())));

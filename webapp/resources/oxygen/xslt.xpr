@@ -865,8 +865,6 @@
             <file
                 name="../../src/main/webapp/WEB-INF/server-assets/stylesheets/files-xml.xsl"/>
             <file
-                name="../../src/main/webapp/WEB-INF/server-assets/stylesheets/preprocess-experiment-files-xml.xsl"/>
-            <file
                 name="../../src/main/webapp/WEB-INF/server-assets/stylesheets/preprocess-experiments-xml.xsl"/>
             <file
                 name="../../src/main/webapp/WEB-INF/server-assets/stylesheets/preprocess-files-xml.xsl"/>

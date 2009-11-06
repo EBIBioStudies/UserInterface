@@ -1,5 +1,6 @@
 package uk.ac.ebi.arrayexpress.jobs;
 
+import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
@@ -16,7 +17,7 @@ public class RescanFilesJob extends ApplicationJob
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
     
-    public void execute() throws InterruptedException
+    public void doExecute( JobExecutionContext jec ) throws InterruptedException
     {
         StringBuilder xmlString = new StringBuilder(20000000);
         Application app = Application.getInstance();

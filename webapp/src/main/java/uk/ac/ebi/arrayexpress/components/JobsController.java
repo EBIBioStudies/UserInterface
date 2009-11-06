@@ -63,20 +63,19 @@ public class JobsController extends ApplicationComponent
         } catch ( Throwable x ) {
             logger.error("Caught an exception:", x);
         }
-
     }
 
-    public void executeJob( String name, Integer index )
+    public void executeJobWithParam( String name, String param )
     {
         try {
             JobDataMap map = new JobDataMap();
-            map.put("index", index);
+            map.put("param", param);
             getScheduler().triggerJob(name, AE_JOBS_GROUP, map);
         } catch ( Throwable x ) {
             logger.error("Caught an exception:", x);
         }
-
     }
+
 
     public void setJobListener( JobListener jl )
     {

@@ -3,7 +3,6 @@ package uk.ac.ebi.arrayexpress.servlets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationServlet;
-import uk.ac.ebi.arrayexpress.components.Experiments;
 import uk.ac.ebi.arrayexpress.components.Files;
 import uk.ac.ebi.arrayexpress.components.JobsController;
 import uk.ac.ebi.arrayexpress.components.Users;
@@ -38,10 +37,7 @@ public class ControlServlet extends ApplicationServlet
         if (command.equals("reload-atlas-info")) {
             ((JobsController) getComponent("JobsController")).executeJob(command);
         } else if (command.equals("reload-xml")) {
-            if (0 < params.length()) {
-                ((Experiments) getComponent("Experiments")).setDataSource(params);
-            }
-            ((JobsController) getComponent("JobsController")).executeJob(command);
+            ((JobsController) getComponent("JobsController")).executeJobWithParam(command, params);
         } else if (command.equals("rescan-files")) {
             if (0 < params.length()) {
                 ((Files) getComponent("Files")).setRootFolder(params);

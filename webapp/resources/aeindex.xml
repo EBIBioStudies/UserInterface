@@ -12,6 +12,7 @@
             <field name="efcount" type="integer" path="count(distinct-values(experimentalfactor/name, 'http://saxon.sf.net/collation?ignore-case=yes'))" />
             <field name="efv" type="string" path="experimentalfactor/value" analyze="true" store="false" />
             <field name="sa" type="string" path="sampleattribute/value" analyze="true" store="false" />
+            <field name="sacount" type="integer" path="count(distinct-values(sampleattribute/category, 'http://saxon.sf.net/collation?ignore-case=yes'))" />
             <field name="pmid" type="string" path="bibliography/accession" analyze="false" store="false" />
             <field name="userid" type="string" path="user" analyze="false" store="false" />
             <field name="gxa" type="string" path="@loadedinatlas" analyze="false" store="false" />

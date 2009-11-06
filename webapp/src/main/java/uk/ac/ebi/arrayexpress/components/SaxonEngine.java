@@ -274,7 +274,7 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
 
         public void write(Item item)
         {
-            logger.info("[xsl:message] {}", item.getStringValue());
+            logger.debug("[xsl:message] {}", item.getStringValue());
         }
     }
 }

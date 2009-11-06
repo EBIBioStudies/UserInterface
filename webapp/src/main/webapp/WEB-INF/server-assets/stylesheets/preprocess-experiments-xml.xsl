@@ -23,10 +23,32 @@
 
     <xsl:template match="experiment">
         <experiment>
-            <xsl:variable name="vGeneratedDescription" select="description[contains(., '(Generated description)')][1]"/>
-            <xsl:variable name="vSamplesFromDescription" select="substring-before(substring-after($vGeneratedDescription, 'using '), ' samples')"/>
-            <xsl:variable name="vAssaysFromDescription" select="substring-before( substring-after($vGeneratedDescription, 'with '), ' hybridizations')"/>
-
+            <xsl:variable name="vAccession" select="@accession"/>
+            <xsl:variable name="vGenDescription">
+                <xsl:variable name="vGenDescriptionRaw" select="description[starts-with(text(), '(Generated description)')]"/>
+                <xsl:choose>
+                    <xsl:when test="count($vGenDescriptionRaw) > 1">
+                        <xsl:message>[WARN] Multiple generated descriptions found for [<xsl:value-of select="$vAccession"/>]</xsl:message>
+                    </xsl:when>
+                    <xsl:when test="count($vGenDescriptionRaw) = 0">
+                        <xsl:message>[ERROR] No generated descriptions found for [<xsl:value-of select="$vAccession"/>]</xsl:message>
+                        <hybs>0</hybs>
+                        <samples>0</samples>
+                        <arrays>0</arrays>
+                        <rawdatafiles>0</rawdatafiles>
+                        <fgemdatafiles>0</fgemdatafiles>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:analyze-string select="string($vGenDescriptionRaw[1])" regex="with (\d+) hybridizations.+using (\d+) samples.+using (\d+) arrays.+producing (\d+) raw.+and (\d+) transformed" flags="i">
+                    <xsl:matching-substring>
+                        <hybs><xsl:value-of select="regex-group(1)"/></hybs>
+                        <samples><xsl:value-of select="regex-group(2)"/></samples>
+                        <arrays><xsl:value-of select="regex-group(3)"/></arrays>
+                        <rawdatafiles><xsl:value-of select="regex-group(4)"/></rawdatafiles>
+                        <fgemdatafiles><xsl:value-of select="regex-group(5)"/></fgemdatafiles>
+                    </xsl:matching-substring>
+                </xsl:analyze-string>
+            </xsl:variable>
             <xsl:if test="ae:isExperimentInAtlas(@accession)">
                 <xsl:attribute name="loadedinatlas">true</xsl:attribute>
             </xsl:if>
@@ -50,19 +72,10 @@
                     <xsl:value-of select="sum(miamescore/@value)"/>
                 </overallscore>
             </miamescores>
-            
-            <samples>
-                <xsl:choose>
-                    <xsl:when test="string-length($vSamplesFromDescription) > 0">
-                        <xsl:value-of select="$vSamplesFromDescription"/>
-                    </xsl:when>
-                    <xsl:otherwise>0</xsl:otherwise>
-                </xsl:choose>
-            </samples>
             <assays>
                 <xsl:choose>
-                    <xsl:when test="string-length($vAssaysFromDescription) > 0">
-                        <xsl:value-of select="$vAssaysFromDescription"/>
+                    <xsl:when test="$vGenDescription/hybs > 0">
+                        <xsl:value-of select="$vGenDescription/hybs"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:choose>
@@ -80,8 +93,19 @@
                         </xsl:choose>
                     </xsl:otherwise>
                 </xsl:choose>
-                
             </assays>
+            <samples>
+                <xsl:value-of select="$vGenDescription/samples"/>
+            </samples>
+            <arrays>
+                <xsl:value-of select="$vGenDescription/arrays"/>
+            </arrays>
+            <rawdatafiles>
+                <xsl:value-of select="$vGenDescription/rawdatafiles"/>
+            </rawdatafiles>
+            <fgemdatafiles>
+                <xsl:value-of select="$vGenDescription/fgemdatafiles"/>    
+            </fgemdatafiles>
             <xsl:for-each select="sampleattribute[@category][generate-id() = generate-id(key('experiment-sampleattribute-by-category', concat(ancestor::experiment/@id, @category))[1])]">
                 <xsl:sort select="lower-case(@category)" order="ascending"/>
                 <sampleattribute>

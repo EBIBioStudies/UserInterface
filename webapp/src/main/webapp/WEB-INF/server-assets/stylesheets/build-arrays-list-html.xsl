@@ -86,7 +86,7 @@
         </xsl:call-template>
 
         <optgroup label="Other arrays">
-            <xsl:for-each-group select="experiment/arraydesign[not(matches(name, 'affymetrix|agilent|amersham|bug@s|catma|embl|illumina|ilsi|mit|nimblegen|sanger|smd|tigr|umc|yale','i'))]" group-by="id">
+            <xsl:for-each-group select="experiment/arraydesign[name and not(matches(name, 'affymetrix|agilent|amersham|bug@s|catma|embl|illumina|ilsi|mit|nimblegen|sanger|smd|tigr|umc|yale','i'))]" group-by="id">
                 <xsl:sort select="lower-case(name)"/>
                 <option>
                     <xsl:attribute name="value" select="id"/>
