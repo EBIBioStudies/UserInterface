@@ -25,9 +25,9 @@ public final class SearchExtension
         return null;
     }
 
-    public static String highlightQuery( String indexId, String queryId, String text, String openMark, String closeMark)
+    public static String highlightQuery( String indexId, String queryId, String fieldName, String text, String openMark, String closeMark)
     {
-        return getController().highlightQuery(indexId, Integer.decode(queryId), text, openMark, closeMark);
+        return getController().highlightQuery(indexId, Integer.decode(queryId), fieldName, text, openMark, closeMark);
     }
 
     public static void setController( Controller ctrl )

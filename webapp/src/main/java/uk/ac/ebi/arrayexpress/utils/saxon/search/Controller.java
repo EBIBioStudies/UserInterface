@@ -60,8 +60,8 @@ public class Controller
         return new Querier(getEnvironment(indexId)).query(queryPool.getQueryInfo(queryId).parsedQuery);
     }
 
-    public String highlightQuery( String indexId, Integer queryId, String text, String openMark, String closeMark )
+    public String highlightQuery( String indexId, Integer queryId, String fieldName, String text, String openMark, String closeMark )
     {
-        return new Querier(getEnvironment(indexId)).highlightQuery(queryPool.getQueryInfo(queryId).parsedQuery, text, openMark, closeMark);
+        return new Querier(getEnvironment(indexId)).highlightQuery(queryPool.getQueryInfo(queryId).parsedQuery, fieldName, text, openMark, closeMark);
     }
 }
