@@ -6,7 +6,6 @@
             <field name="accession" type="string" path="accession | secondaryaccession" analyze="true" store="false" />
             <field name="species" type="string" path="species" analyze="true" store="false" />
             <field name="array" type="string" path="arraydesign/id | arraydesign/accession | arraydesign/name" analyze="true" store="false" />
-            <field name="array" type="string" path="arraydesign/id | arraydesign/accession | arraydesign/name" analyze="true" store="false" />
             <field name="exptype" type="string" path="experimenttype" analyze="true" store="false" />
             <field name="expdesign" type="string" path="experimentdesign" analyze="true" store="false" />
             <field name="ef" type="string" path="experimentalfactor/name" analyze="true" store="false" />
