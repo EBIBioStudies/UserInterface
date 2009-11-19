@@ -28,6 +28,7 @@ public class QueryHighlighter
             highlighter.setTextFragmenter(new NullFragmenter());
 
             String str = highlighter.getBestFragment(this.env.indexAnalyzer, fieldName, text);
+
             return null != str ? str : text;
         } catch (Throwable x) {
             logger.error("Caught an exception:", x);
