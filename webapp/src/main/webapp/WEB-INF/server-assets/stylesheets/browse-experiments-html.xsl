@@ -2,10 +2,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:ae="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
                 xmlns:search="java:uk.ac.ebi.arrayexpress.utils.saxon.search.SearchExtension"
-                xmlns:aeext="java:/uk.ac.ebi.arrayexpress.utils.saxon.ExtElements"
                 xmlns:html="http://www.w3.org/1999/xhtml"
-                extension-element-prefixes="ae aeext search html"
-                exclude-result-prefixes="ae aeext search html"
+                extension-element-prefixes="ae search html"
+                exclude-result-prefixes="ae search html"
                 version="2.0">
 
     <xsl:param name="queryid" />
@@ -32,16 +31,13 @@
     <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="ISO-8859-1" />
 
     <xsl:include href="ae-sort-experiments.xsl"/>
+    <xsl:include href="ae-highlight.xsl"/>
 
-    <xsl:variable name="vDetailedViewMainTrClass">tr_main<xsl:if test="'true'=$detailedview"> exp_expanded</xsl:if></xsl:variable>
-    <xsl:variable name="vDetailedViewExtStyle"><xsl:if test="'true'!=$detailedview">display:none</xsl:if></xsl:variable>
-    <xsl:variable name="vDetailedViewMainTdClass">td_main<xsl:if test="'true'=$detailedview"> td_expanded</xsl:if></xsl:variable>
+    <xsl:variable name="vDetailedViewMainTrClass">tr_main<xsl:if test="'true' = $detailedview"> exp_expanded</xsl:if></xsl:variable>
+    <xsl:variable name="vDetailedViewExtStyle"><xsl:if test="'true' != $detailedview">display:none</xsl:if></xsl:variable>
+    <xsl:variable name="vDetailedViewMainTdClass">td_main<xsl:if test="'true' = $detailedview"> td_expanded</xsl:if></xsl:variable>
 
     <xsl:template match="/experiments">
-<!--
-        <aeext:log message="[browse-experiments-html] Parameters: keywords [{$keywords}], array [{$array}], species [{$species}], exptype [{$exptype}], inatlas [{$inatlas}], detailedview [{$detailedview}]"/>
-        <aeext:log message="[browse-experiments-html] Sort by: [{$sortby}], [{$sortorder}]"/>
--->
         <xsl:variable name="vFilteredExperiments" select="search:queryIndex('experiments', $queryid)"/>
         <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
         <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments/samples)"/>
@@ -60,9 +56,7 @@
                 <xsl:otherwise><xsl:value-of select="$vFrom + number($pagesize) - 1"/></xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-<!--
-        <aeext:log message="[browse-experiments-html] Query filtered {$vTotal} experiments. Will output from {$vFrom} to {$vTo}."/>
--->
+
         <tr id="ae_results_summary_info">
             <td colspan="9">
                 <div id="ae_results_total"><xsl:value-of select="$vTotal"/></div>
@@ -115,31 +109,58 @@
             <tr id="{$vExpId}_main" class="{$vDetailedViewMainTrClass}">
                 <td class="{$vDetailedViewMainTdClass}"><div class="table_row_expand"/></td>
                 <td class="{$vDetailedViewMainTdClass}">
-                    <div class="table_row_accession"><xsl:apply-templates select="accession" mode="highlight" /></div>
+                    <div class="table_row_accession">
+                        <xsl:call-template name="highlight">
+                            <xsl:with-param name="pText" select="accession" />
+                            <xsl:with-param name="pFieldName" select="'accession'" />
+                        </xsl:call-template>
+                    </div>
                     <xsl:if test="not(user = '1')">
                         <div class="lock">&#160;</div>
                     </xsl:if>
                 </td>
-                <td class="{$vDetailedViewMainTdClass}"><div><xsl:apply-templates select="name" mode="highlight" /><xsl:if test="count(name)=0">&#160;</xsl:if></div></td>
-                <td class="align_right {$vDetailedViewMainTdClass}">
-                    <div><xsl:apply-templates select="assays" mode="highlight" /><xsl:if test="count(assays)=0">&#160;</xsl:if></div>
-                </td>
-                <td class="{$vDetailedViewMainTdClass}"><div>
-                    <xsl:for-each select="species">
-                        <xsl:apply-templates select="." mode="highlight" />
-                        <xsl:if test="position() != last()">, </xsl:if>
-                    </xsl:for-each>
-                    <xsl:if test="count(species) = 0"><xsl:text>&#160;</xsl:text></xsl:if>
-                </div></td>
-                <td class="{$vDetailedViewMainTdClass}"><div><xsl:apply-templates select="releasedate" mode="highlight" /></div><xsl:if test="count(releasedate)=0">&#160;</xsl:if></td>
-                <td class="td_main_img align_center {$vDetailedViewMainTdClass}">
+                <td class="{$vDetailedViewMainTdClass}">
                     <div>
-                        <xsl:call-template name="data-files-main"><xsl:with-param name="pKind" select="'fgem'"/></xsl:call-template>
+                        <xsl:call-template name="highlight">
+                            <xsl:with-param name="pText" select="name"/>
+                        </xsl:call-template>
+                    </div>
+                </td>
+                <td class="align_right {$vDetailedViewMainTdClass}">
+                    <div>
+                        <xsl:call-template name="highlight">
+                            <xsl:with-param name="pText" select="assays"/>
+                            <xsl:with-param name="pFieldName" select="'assaycount'"/>
+                        </xsl:call-template>
+                    </div>
+                </td>
+                <td class="{$vDetailedViewMainTdClass}">
+                    <div>
+                        <xsl:call-template name="highlight">
+                            <xsl:with-param name="pText" select="string-join(species, ', ')"/>
+                            <xsl:with-param name="pFieldName" select="'species'"/>
+                        </xsl:call-template>
+                    </div>
+                </td>
+                <td class="{$vDetailedViewMainTdClass}">
+                    <div>
+                        <xsl:call-template name="highlight">
+                            <xsl:with-param name="pText" select="releasedate"/>
+                        </xsl:call-template>
                     </div>
                 </td>
                 <td class="td_main_img align_center {$vDetailedViewMainTdClass}">
                     <div>
-                        <xsl:call-template name="data-files-main"><xsl:with-param name="pKind" select="'raw'"/></xsl:call-template>
+                        <xsl:call-template name="data-files-main">
+                            <xsl:with-param name="pKind" select="'fgem'"/>
+                        </xsl:call-template>
+                    </div>
+                </td>
+                <td class="td_main_img align_center {$vDetailedViewMainTdClass}">
+                    <div>
+                        <xsl:call-template name="data-files-main">
+                            <xsl:with-param name="pKind" select="'raw'"/>
+                        </xsl:call-template>
                     </div>
                 </td>
                 <td class="td_main_img align_center {$vDetailedViewMainTdClass}">
@@ -155,13 +176,14 @@
                 <td colspan="9" class="td_ext">
                     <div class="tbl">
                         <table cellpadding="0" cellspacing="0" border="0">
-                            <xsl:if test="count(description[string-length(text) > 0 and not(contains(text, 'Generated description'))]) > 0">
+                            <xsl:variable name="vDescription" select="description[string-length(text) > 0 and not(contains(text, 'Generated description'))]"/>
+                            <xsl:if test="$vDescription">
                                 <tr>
                                     <td class="name"><div>Description</div></td>
                                     <td class="value">
-                                        <xsl:for-each select="description[string-length(text) > 0 and not(contains(text, 'Generated description'))]">
+                                        <xsl:for-each select="$vDescription">
                                             <xsl:call-template name="description">
-                                                <xsl:with-param name="text" select="text"/>
+                                                <xsl:with-param name="pText" select="text"/>
                                             </xsl:call-template>
                                         </xsl:for-each>
                                     </td>
@@ -181,7 +203,7 @@
                                 </tr>
                             </xsl:if>
 
-                            <xsl:if test="count(provider[role!='data_coder']) > 0">
+                            <xsl:if test="provider[role!='data_coder']">
                                 <tr>
                                     <td class="name"><div>Contact<xsl:if test="count(provider[role!='data_coder']) > 1">s</xsl:if></div></td>
                                     <td class="value">
@@ -192,7 +214,7 @@
                                 </tr>
                             </xsl:if>
 
-                            <xsl:if test="count(bibliography/*) > 0">
+                            <xsl:if test="bibliography/*">
                                 <tr>
                                     <td class="name"><div>Citation<xsl:if test="count(bibliography/*) > 1">s</xsl:if></div></td>
                                     <td class="value"><xsl:apply-templates select="bibliography" /></td>
@@ -206,18 +228,19 @@
                                         <div><a href="${interface.application.link.atlas.exp_query.url}{$vAccession}&amp;ref=aebrowse">Query Gene Expression Atlas</a></div>
                                     </xsl:if>
                                     <div>
-                                        <xsl:if test="count(secondaryaccession) > 0">
+                                        <xsl:if test="secondaryaccession">
                                             <xsl:call-template name="secondaryaccession"/>
                                         </xsl:if>
                                     </div>
-                                    <xsl:if test="count(arraydesign) > 0">
+                                    <xsl:if test="arraydesign">
                                         <xsl:for-each select="arraydesign">
                                             <div>
                                                 <a href="${interface.application.link.aer_old.base.url}/result?queryFor=PhysicalArrayDesign&amp;aAccession={accession}">
                                                     <xsl:text>Array design </xsl:text>
-                                                    <xsl:apply-templates select="accession" mode="highlight"/>
-                                                    <xsl:text> - </xsl:text>
-                                                    <xsl:apply-templates select="name" mode="highlight" />
+                                                    <xsl:call-template name="highlight">
+                                                        <xsl:with-param name="pText" select="concat(accession, ' - ', name)"/>
+                                                        <xsl:with-param name="pFieldName" select="'array'"/>
+                                                    </xsl:call-template>
                                                 </a>
                                             </div>
                                         </xsl:for-each>
@@ -271,24 +294,28 @@
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </tr>
-                            <xsl:if test="(count(experimenttype) + count(experimentdesign)) > 0">
+                            <xsl:variable name="vExpTypeAndDesign" select="experimenttype | experimentdesign"/>
+                            <xsl:if test="$vExpTypeAndDesign">
                                 <tr>
-                                    <td class="name"><div>Experiment type<xsl:if test="(count(experimenttype) + count(experimentdesign)) > 1">s</xsl:if></div></td>
-                                    <td class="value"><div>
-                                        <xsl:for-each select="experimenttype">
-                                            <xsl:apply-templates select="." mode="highlight"/>
-                                            <xsl:if test="position()!=last()">, </xsl:if>
-                                        </xsl:for-each>
-                                        <xsl:if test="count(experimenttype) > 0 and count(experimentdesign) > 0">, </xsl:if>
-                                        <xsl:for-each select="experimentdesign">
-                                            <xsl:apply-templates select="." mode="highlight"/>
-                                            <xsl:if test="position()!=last()">, </xsl:if>
-                                        </xsl:for-each></div>
+
+                                    <td class="name"><div>Experiment type<xsl:if test="count($vExpTypeAndDesign) > 1">s</xsl:if></div></td>
+                                    <td class="value">
+                                        <div>
+                                            <xsl:call-template name="highlight">
+                                                <xsl:with-param name="pText" select="string-join(experimenttype, ', ')"/>
+                                                <xsl:with-param name="pFieldName" select="'exptype'"/>
+                                            </xsl:call-template>
+                                            <xsl:if test="count(experimenttype) > 0 and count(experimentdesign) > 0">, </xsl:if>
+                                            <xsl:call-template name="highlight">
+                                                <xsl:with-param name="pText" select="string-join(experimentdesign, ', ')"/>
+                                                <xsl:with-param name="pFieldName" select="'expdesign'"/>
+                                            </xsl:call-template>
+                                        </div>
                                     </td>
                                 </tr>
                             </xsl:if>
 
-                            <xsl:if test="count(experimentalfactor/name) > 0">
+                            <xsl:if test="experimentalfactor/name">
                                 <tr>
                                     <td class="name"><div>Experimental factors</div></td>
                                     <td class="attrs"><div>
@@ -303,13 +330,16 @@
                                                 <xsl:for-each select="experimentalfactor">
                                                     <tr>
                                                         <td class="attr_name">
-                                                            <xsl:apply-templates select="name" mode="highlight"/>
+                                                            <xsl:call-template name="highlight">
+                                                                <xsl:with-param name="pText" select="name"/>
+                                                                <xsl:with-param name="pFieldName" select="'ef'"/>
+                                                            </xsl:call-template>
                                                         </td>
                                                         <td class="attr_value">
-                                                            <xsl:for-each select="value">
-                                                                <xsl:apply-templates select="." mode="highlight"/>
-                                                                <xsl:if test="position()!=last()">, </xsl:if>
-                                                            </xsl:for-each>
+                                                            <xsl:call-template name="highlight">
+                                                                <xsl:with-param name="pText" select="string-join(value, ', ')"/>
+                                                                <xsl:with-param name="pFieldName" select="'efv'"/>
+                                                            </xsl:call-template>
                                                         </td>
                                                     </tr>
                                                 </xsl:for-each>
@@ -319,7 +349,7 @@
                                 </tr>
                             </xsl:if>
 
-                            <xsl:if test="count(sampleattribute/category) > 0">
+                            <xsl:if test="sampleattribute/category">
                                 <tr>
                                     <td class="name"><div>Sample attributes</div></td>
                                     <td class="attrs"><div>
@@ -334,13 +364,15 @@
                                                 <xsl:for-each select="sampleattribute">
                                                     <tr>
                                                         <td class="attr_name">
-                                                            <xsl:apply-templates select="category" mode="highlight"/>
+                                                            <xsl:call-template name="highlight">
+                                                                <xsl:with-param name="pText" select="category"/>
+                                                            </xsl:call-template>
                                                         </td>
                                                         <td class="attr_value">
-                                                            <xsl:for-each select="value">
-                                                                <xsl:apply-templates select="." mode="highlight"/>
-                                                                <xsl:if test="position()!=last()">, </xsl:if>
-                                                            </xsl:for-each>
+                                                            <xsl:call-template name="highlight">
+                                                                <xsl:with-param name="pText" select="string-join(value, ', ')"/>
+                                                                <xsl:with-param name="pFieldName" select="'sa'"/>
+                                                            </xsl:call-template>
                                                         </td>
                                                     </tr>
                                                 </xsl:for-each>
@@ -363,10 +395,37 @@
                 <xsl:if test="string-length(authors) > 0"><xsl:call-template name="highlight"><xsl:with-param name="pText" select="ae:trimTrailingDot(authors)"/></xsl:call-template>. </xsl:if>
             </xsl:variable>
             <xsl:variable name="publication_link_title">
-                <xsl:if test="string-length(publication) > 0"><em><xsl:apply-templates select="publication" mode="highlight"/></em>&#160;</xsl:if>
-                <xsl:if test="string-length(volume) > 0"><xsl:apply-templates select="volume" mode="highlight"/><xsl:if test="string-length(issue) > 0">(<xsl:apply-templates select="issue" mode="highlight"/>)</xsl:if></xsl:if>
-                <xsl:if test="string-length(pages) > 0">:<xsl:apply-templates select="pages" mode="highlight"/></xsl:if>
-                <xsl:if test="string-length(year) > 0">&#160;(<xsl:apply-templates select="year" mode="highlight"/>)</xsl:if>
+                <xsl:if test="string-length(publication) > 0">
+                    <em>
+                        <xsl:call-template name="highlight">
+                            <xsl:with-param name="pText" select="publication"/>
+                        </xsl:call-template>
+                    </em><xsl:text>&#160;</xsl:text></xsl:if>
+                <xsl:if test="string-length(volume) > 0">
+                    <xsl:call-template name="highlight">
+                        <xsl:with-param name="pText" select="volume"/>
+                    </xsl:call-template>
+                    <xsl:if test="string-length(issue) > 0">
+                        <xsl:text>(</xsl:text>
+                        <xsl:call-template name="highlight">
+                            <xsl:with-param name="pText" select="issue"/>
+                        </xsl:call-template>
+                        <xsl:text>)</xsl:text>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="string-length(pages) > 0">
+                    <xsl:text>:</xsl:text>
+                    <xsl:call-template name="highlight">
+                        <xsl:with-param name="pText" select="pages"/>
+                    </xsl:call-template>
+                </xsl:if>
+                <xsl:if test="string-length(year) > 0">
+                    <xsl:text>&#160;(</xsl:text>
+                    <xsl:call-template name="highlight">
+                        <xsl:with-param name="pText" select="publication"/>
+                    </xsl:call-template>
+                    <xsl:text>)</xsl:text>
+                </xsl:if>
             </xsl:variable>
             <xsl:choose>
                 <xsl:when test="uri[starts-with(., 'http')]">
@@ -376,13 +435,26 @@
                 <xsl:otherwise>
                     <xsl:copy-of select="$publication_title"/>
                     <xsl:copy-of select="$publication_link_title"/>
-                    <xsl:if test="string-length(uri) > 0"> (<xsl:apply-templates select="uri" mode="highlight"/>)</xsl:if>
+                    <xsl:if test="string-length(uri) > 0">
+                        <xsl:text> (</xsl:text>
+                        <xsl:call-template name="highlight">
+                            <xsl:with-param name="pText" select="uri"/>
+                        </xsl:call-template>
+                        <xsl:text>)</xsl:text>
+                    </xsl:if>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:if test="accession">
-                <xsl:if test="number(accession)>0">, <a href="http://www.ncbi.nlm.nih.gov/pubmed/{accession}">PubMed <xsl:call-template name="highlight">
-                    <xsl:with-param name="pText" select="accession"/>
-                    <xsl:with-param name="pFieldName" select="'pmid'"/></xsl:call-template></a></xsl:if>
+                <xsl:if test="number(accession) > 0">
+                    <xsl:text>, </xsl:text>
+                    <a href="http://www.ncbi.nlm.nih.gov/pubmed/{accession}">
+                        <xsl:text>PubMed </xsl:text>
+                        <xsl:call-template name="highlight">
+                            <xsl:with-param name="pText" select="accession"/>
+                            <xsl:with-param name="pFieldName" select="'pmid'"/>
+                        </xsl:call-template>
+                    </a>
+                </xsl:if>
             </xsl:if>
         </div>
     </xsl:template>
@@ -392,20 +464,54 @@
             <xsl:choose>
                 <xsl:when test="string-length(.) = 0"/>
                 <xsl:when test="substring(., 1, 3)='GSE' or substring(., 1, 3)='GDS'">
-                    <a href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc={.}">GEO - <xsl:apply-templates select="." mode="highlight" /></a>
+                    <a href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc={.}">
+                        <xsl:text>GEO - </xsl:text>
+                        <xsl:call-template name="highlight">
+                            <xsl:with-param name="pText" select="."/>
+                            <xsl:with-param name="pFieldName" select="'accession'"/>
+                        </xsl:call-template>
+                    </a>
                 </xsl:when>
                 <xsl:when test="substring(., 1, 2)='E-' and substring(., 7, 1)='-'">
-                    <a href="{$basepath}/experiments/{.}">ArrayExpress - <xsl:apply-templates select="." mode="highlight" /></a>
+                    <a href="{$basepath}/experiments/{.}">
+                        <xsl:text>ArrayExpress - </xsl:text>
+                        <xsl:call-template name="highlight">
+                            <xsl:with-param name="pText" select="."/>
+                            <xsl:with-param name="pFieldName" select="'accession'"/>
+                        </xsl:call-template>
+                    </a>
                 </xsl:when>
                 <xsl:when test="substring(., 1, 3)='SRP'">
-                    <a href="ftp://ftp.ncbi.nlm.nih.gov/sra/Studies/{substring(.,1,6)}/{.}/">NCBI SRA - <xsl:apply-templates select="." mode="highlight" /></a>
+                    <a href="ftp://ftp.ncbi.nlm.nih.gov/sra/Studies/{substring(.,1,6)}/{.}/">
+                        <xsl:text>NCBI SRA - </xsl:text>
+                        <xsl:call-template name="highlight">
+                            <xsl:with-param name="pText" select="."/>
+                            <xsl:with-param name="pFieldName" select="'accession'"/>
+                        </xsl:call-template>
+                    </a>
                 </xsl:when>
                 <xsl:when test="substring(., 1, 3)='ERA'">
-                    <a href="ftp://ftp.era.ebi.ac.uk/vol1/{substring(.,1,6)}/{.}/">EBI SRA Data - <xsl:apply-templates select="." mode="highlight" /></a>,
-                    <a href="ftp://ftp.era-xml.ebi.ac.uk/{substring(.,1,6)}/{.}/">EBI SRA Meta-data - <xsl:apply-templates select="." mode="highlight" /></a>
+                    <a href="ftp://ftp.era.ebi.ac.uk/vol1/{substring(.,1,6)}/{.}/">
+                        <xsl:text>EBI SRA Data - </xsl:text>
+                        <xsl:call-template name="highlight">
+                            <xsl:with-param name="pText" select="."/>
+                            <xsl:with-param name="pFieldName" select="'accession'"/>
+                        </xsl:call-template>
+                    </a>
+                    <xsl:text>, </xsl:text>
+                    <a href="ftp://ftp.era-xml.ebi.ac.uk/{substring(.,1,6)}/{.}/">
+                        <xsl:text>EBI SRA Meta-data - </xsl:text>
+                        <xsl:call-template name="highlight">
+                            <xsl:with-param name="pText" select="."/>
+                            <xsl:with-param name="pFieldName" select="'accession'"/>
+                        </xsl:call-template>
+                    </a>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="highlight" />
+                    <xsl:call-template name="highlight">
+                        <xsl:with-param name="pText" select="."/>
+                        <xsl:with-param name="pFieldName" select="'accession'"/>
+                    </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:if test="position() != last() and string-length(.) > 0">, </xsl:if>
@@ -418,86 +524,44 @@
             <xsl:sort select="lower-case(contact)"/>
             <xsl:choose>
                 <xsl:when test="role='submitter' and string-length(email) > 0">
-                    <a href="mailto:{email}"><xsl:apply-templates select="contact" mode="highlight"/> &lt;<xsl:apply-templates select="email" mode="highlight"/>&gt;</a>
+                    <a href="mailto:{email}">
+                        <xsl:call-template name="highlight">
+                            <xsl:with-param name="pText" select="concat(contact, ' &lt;', email, '&gt;')"/>
+                        </xsl:call-template>
+                    </a>
                 </xsl:when>
-                <xsl:otherwise><xsl:apply-templates select="contact" mode="highlight"/></xsl:otherwise>
+                <xsl:otherwise>
+                    <xsl:call-template name="highlight">
+                        <xsl:with-param name="pText" select="contact"/>
+                    </xsl:call-template>
+                </xsl:otherwise>
             </xsl:choose>
             <xsl:if test="position()!=last()">, </xsl:if>
         </xsl:for-each>
     </xsl:template>
 
     <xsl:template name="description">
-        <xsl:param name="text"/>
+        <xsl:param name="pText"/>
         <xsl:choose>
-            <xsl:when test="contains($text, '&lt;br&gt;')">
+            <xsl:when test="contains($pText, '&lt;br&gt;')">
                 <div>
-                    <xsl:call-template name="add_highlight_element">
-                        <xsl:with-param name="text" select="search:highlightQuery('experiments', $queryid, 'keywords', substring-before($text, '&lt;br&gt;'), '&#171;', '&#187;')"/>
+                    <xsl:call-template name="highlight">
+                        <xsl:with-param name="pText" select="substring-before($pText, '&lt;br&gt;')"/>
                     </xsl:call-template>
                 </div>
                 <xsl:call-template name="description">
-                    <xsl:with-param name="text" select="substring-after($text,'&lt;br&gt;')"/>
+                    <xsl:with-param name="pText" select="substring-after($pText,'&lt;br&gt;')"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
                 <div>
-                    <xsl:call-template name="add_highlight_element">
-                        <xsl:with-param name="text" select="search:highlightQuery('experiments', $queryid, 'keywords', $text, '&#171;', '&#187;')"/>
+                    <xsl:call-template name="highlight">
+                        <xsl:with-param name="pText" select="$pText"/>
                     </xsl:call-template>
                 </div>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
-    <xsl:template match="*" mode="highlight">
-        <xsl:variable name="vText" select="normalize-space(.)"/>
-        <xsl:variable name="vFieldName">
-            <xsl:choose>
-                <xsl:when test="name() = 'species'">species</xsl:when>
-                <xsl:otherwise>keywords</xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:choose>
-            <xsl:when test="string-length($vText)!=0">
-                <xsl:variable name="markedtext" select="search:highlightQuery('experiments', $queryid, $vFieldName, $vText, '&#171;', '&#187;')"/>
-                <xsl:call-template name="add_highlight_element">
-                    <xsl:with-param name="text" select="$markedtext"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>&#160;</xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
-    <xsl:template name="highlight">
-        <xsl:param name="pText"/>
-        <xsl:param name="pFieldName"/>
-        <xsl:variable name="vText" select="normalize-space($pText)"/>
-        <xsl:choose>
-            <xsl:when test="string-length($vText)!=0">
-                <xsl:variable name="markedtext" select="search:highlightQuery('experiments', $queryid, $pFieldName, $vText, '&#171;', '&#187;')"/>
-                <xsl:call-template name="add_highlight_element">
-                    <xsl:with-param name="text" select="$markedtext"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>&#160;</xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
-    <xsl:template name="add_highlight_element">
-        <xsl:param name="text"/>
-        <xsl:choose>
-            <xsl:when test="contains($text,'&#171;') and contains($text,'&#187;')">
-                <xsl:value-of select="substring-before($text,'&#171;')"/>
-                <span class="ae_text_highlight"><xsl:value-of select="substring-after(substring-before($text,'&#187;'),'&#171;')"/></span>
-                <xsl:call-template name="add_highlight_element">
-                    <xsl:with-param name="text" select="substring-after($text,'&#187;')"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$text"/>
-            </xsl:otherwise>
-       </xsl:choose>
-   </xsl:template>
 
     <xsl:template name="miame-star">
         <xsl:param name="stars" />

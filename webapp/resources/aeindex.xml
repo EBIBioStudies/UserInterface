@@ -21,6 +21,7 @@
             <field name="fgemcount" type="integer" path="(if (fgemdatafiles castable as xs:integer) then fgemdatafiles else 0) cast as xs:integer" />
             <field name="efcount" type="integer" path="count(distinct-values(experimentalfactor/name, 'http://saxon.sf.net/collation?ignore-case=yes'))" />
             <field name="sacount" type="integer" path="count(distinct-values(sampleattribute/category, 'http://saxon.sf.net/collation?ignore-case=yes'))" />
+            <field name="miamescore" type="integer" path="(if (miamescores/overallscore castable as xs:integer) then miamescores/overallscore else 0) cast as xs:integer" /> 
 
         </document>
     </index>
