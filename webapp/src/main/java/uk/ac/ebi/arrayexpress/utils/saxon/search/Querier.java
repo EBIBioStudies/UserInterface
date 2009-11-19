@@ -4,11 +4,10 @@ import net.sf.saxon.om.NodeInfo;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermEnum;
-import org.apache.lucene.search.*;
-import org.apache.lucene.search.highlight.Highlighter;
-import org.apache.lucene.search.highlight.NullFragmenter;
-import org.apache.lucene.search.highlight.QueryScorer;
-import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,20 +81,5 @@ public class Querier
         }
 
     return result;
-    }
-
-    public String highlightQuery(Query query, String fieldName, String text, String openMark, String closeMark)
-    {
-        try {
-            SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(openMark, closeMark);
-            Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query, fieldName, this.env.defaultField));
-            highlighter.setTextFragmenter(new NullFragmenter());
-
-            String str = highlighter.getBestFragment(this.env.indexAnalyzer, fieldName, text);
-            return null != str ? str : text;
-        } catch (Throwable x) {
-            logger.error("Caught an exception:", x);
-        }
-        return text;
     }
 }
