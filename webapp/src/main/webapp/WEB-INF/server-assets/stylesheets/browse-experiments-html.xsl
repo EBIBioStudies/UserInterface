@@ -380,7 +380,9 @@
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:if test="accession">
-                <xsl:if test="number(accession)>0">, <a href="http://www.ncbi.nlm.nih.gov/pubmed/{accession}">PubMed <xsl:apply-templates select="accession" mode="highlight"/></a></xsl:if>
+                <xsl:if test="number(accession)>0">, <a href="http://www.ncbi.nlm.nih.gov/pubmed/{accession}">PubMed <xsl:call-template name="highlight">
+                    <xsl:with-param name="pText" select="accession"/>
+                    <xsl:with-param name="pFieldName" select="'pmid'"/></xsl:call-template></a></xsl:if>
             </xsl:if>
         </div>
     </xsl:template>
@@ -430,7 +432,7 @@
             <xsl:when test="contains($text, '&lt;br&gt;')">
                 <div>
                     <xsl:call-template name="add_highlight_element">
-                        <xsl:with-param name="text" select="search:highlightQuery('experiments', $queryid, substring-before($text, '&lt;br&gt;'), '&#171;', '&#187;')"/>
+                        <xsl:with-param name="text" select="search:highlightQuery('experiments', $queryid, 'keywords', substring-before($text, '&lt;br&gt;'), '&#171;', '&#187;')"/>
                     </xsl:call-template>
                 </div>
                 <xsl:call-template name="description">
@@ -440,7 +442,7 @@
             <xsl:otherwise>
                 <div>
                     <xsl:call-template name="add_highlight_element">
-                        <xsl:with-param name="text" select="search:highlightQuery('experiments', $queryid, $text, '&#171;', '&#187;')"/>
+                        <xsl:with-param name="text" select="search:highlightQuery('experiments', $queryid, 'keywords', $text, '&#171;', '&#187;')"/>
                     </xsl:call-template>
                 </div>
             </xsl:otherwise>
@@ -449,9 +451,15 @@
 
     <xsl:template match="*" mode="highlight">
         <xsl:variable name="vText" select="normalize-space(.)"/>
+        <xsl:variable name="vFieldName">
+            <xsl:choose>
+                <xsl:when test="name() = 'species'">species</xsl:when>
+                <xsl:otherwise>keywords</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:choose>
             <xsl:when test="string-length($vText)!=0">
-                <xsl:variable name="markedtext" select="search:highlightQuery('experiments', $queryid, $vText, '&#171;', '&#187;')"/>
+                <xsl:variable name="markedtext" select="search:highlightQuery('experiments', $queryid, $vFieldName, $vText, '&#171;', '&#187;')"/>
                 <xsl:call-template name="add_highlight_element">
                     <xsl:with-param name="text" select="$markedtext"/>
                 </xsl:call-template>
@@ -462,10 +470,11 @@
 
     <xsl:template name="highlight">
         <xsl:param name="pText"/>
+        <xsl:param name="pFieldName"/>
         <xsl:variable name="vText" select="normalize-space($pText)"/>
         <xsl:choose>
             <xsl:when test="string-length($vText)!=0">
-                <xsl:variable name="markedtext" select="search:highlightQuery('experiments', $queryid, $vText, '&#171;', '&#187;')"/>
+                <xsl:variable name="markedtext" select="search:highlightQuery('experiments', $queryid, $pFieldName, $vText, '&#171;', '&#187;')"/>
                 <xsl:call-template name="add_highlight_element">
                     <xsl:with-param name="text" select="$markedtext"/>
                 </xsl:call-template>
