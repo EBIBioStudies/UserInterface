@@ -62,6 +62,6 @@ public class Controller
 
     public String highlightQuery( String indexId, Integer queryId, String fieldName, String text, String openMark, String closeMark )
     {
-        return new Querier(getEnvironment(indexId)).highlightQuery(queryPool.getQueryInfo(queryId).parsedQuery, fieldName, text, openMark, closeMark);
+        return new QueryHighlighter(getEnvironment(indexId)).highlightQuery(queryPool.getQueryInfo(queryId).parsedQuery, fieldName, text, openMark, closeMark);
     }
 }

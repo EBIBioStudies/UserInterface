@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <index id="experiments" location="${sys:java.io.tmpdir}/index" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.LowercaseAnalyzer">
-        <document path="/experiments/experiment">
+        <document path="/experiments/experiment" defaultField="keywords">
             <field name="keywords" type="string" path="string-join(.//text(), ' ')" analyze="true" analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer" store="false" />
             <field name="accession" type="string" path="accession | secondaryaccession" analyze="true" store="false" />
             <field name="species" type="string" path="species" analyze="true" store="false" />

@@ -26,6 +26,7 @@ public class IndexEnvironment
     public String indexId;
     public Directory indexDirectory;
     public PerFieldAnalyzerWrapper indexAnalyzer;
+    public String defaultField;
 
     // index document xpath
     public String indexDocumentPath;
@@ -84,6 +85,8 @@ public class IndexEnvironment
             this.indexAnalyzer = new PerFieldAnalyzerWrapper(a);
 
             this.indexDocumentPath = indexConfig.getString("document[@path]");
+
+            this.defaultField = indexConfig.getString("document[@defaultField]");
 
             List fieldsConfig = indexConfig.configurationsAt("document.field");
 

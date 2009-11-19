@@ -88,7 +88,7 @@ public class Querier
     {
         try {
             SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(openMark, closeMark);
-            Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query, fieldName, "keywords"));
+            Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query, fieldName, this.env.defaultField));
             highlighter.setTextFragmenter(new NullFragmenter());
 
             String str = highlighter.getBestFragment(this.env.indexAnalyzer, fieldName, text);
