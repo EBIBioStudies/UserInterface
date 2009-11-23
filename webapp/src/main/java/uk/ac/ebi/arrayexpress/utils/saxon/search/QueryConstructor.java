@@ -13,7 +13,7 @@ public class QueryConstructor
 {
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    
+
     private IndexEnvironment env;
 
     public QueryConstructor( IndexEnvironment env )
@@ -21,11 +21,11 @@ public class QueryConstructor
         this.env = env;
     }
 
-    public BooleanQuery construct( Map<String, String> querySource )
+    public Query construct( Map<String, String> querySource )
     {
         BooleanQuery result = new BooleanQuery();
         try {
-            for ( Map.Entry<String, String> queryItem : querySource.entrySet() ) {
+            for (Map.Entry<String, String> queryItem : querySource.entrySet()) {
                 if (env.fields.containsKey(queryItem.getKey()) && !"".equals(queryItem.getValue().trim())) {
                     QueryParser parser = new NumericRangeQueryParser(env, queryItem.getKey(), this.env.indexAnalyzer);
                     parser.setDefaultOperator(QueryParser.Operator.AND);
@@ -36,6 +36,6 @@ public class QueryConstructor
         } catch (Throwable x) {
             logger.error("Caught an exception:", x);
         }
-        return result;    
+        return result;
     }
 }

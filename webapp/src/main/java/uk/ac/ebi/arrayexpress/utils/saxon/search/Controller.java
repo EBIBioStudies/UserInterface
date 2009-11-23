@@ -17,6 +17,7 @@ public class Controller
 
     private Configuration config;
     private QueryPool queryPool;
+    private IQueryExpander queryExpander;
 
     private Map<String, IndexEnvironment> environment = new HashMap<String, IndexEnvironment>();
 
@@ -24,6 +25,11 @@ public class Controller
     {
         this.config = new Configuration(configFile);
         this.queryPool = new QueryPool();
+    }
+
+    public void setQueryExpander( IQueryExpander queryExpander )
+    {
+        this.queryExpander = queryExpander;
     }
 
     public IndexEnvironment getEnvironment( String indexId )
@@ -52,7 +58,7 @@ public class Controller
 
     public Integer addQuery( String indexId, Map<String, String> queryParams )
     {
-        return queryPool.addQuery(new QueryConstructor(getEnvironment(indexId)), queryParams);
+        return queryPool.addQuery(new QueryConstructor(getEnvironment(indexId)), queryParams, queryExpander);
     }
 
     public List<NodeInfo> queryIndex( String indexId, Integer queryId )

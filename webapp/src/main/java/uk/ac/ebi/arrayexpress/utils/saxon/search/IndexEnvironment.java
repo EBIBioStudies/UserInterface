@@ -41,7 +41,7 @@ public class IndexEnvironment
         public String analyzer;
         public boolean shouldStore;
 
-        public FieldInfo(HierarchicalConfiguration fieldConfig)
+        public FieldInfo( HierarchicalConfiguration fieldConfig )
         {
             this.name = fieldConfig.getString("[@name]");
             this.type = fieldConfig.getString("[@type]");
@@ -60,13 +60,13 @@ public class IndexEnvironment
     public int documentHashCode;
     public List<NodeInfo> documentNodes;
 
-    public IndexEnvironment(HierarchicalConfiguration indexConfig)
+    public IndexEnvironment( HierarchicalConfiguration indexConfig )
     {
         this.indexConfig = indexConfig;
         populateIndexConfiguration();
     }
 
-    public void putDocumentInfo(int documentHashCode, List<NodeInfo> documentNodes)
+    public void putDocumentInfo( int documentHashCode, List<NodeInfo> documentNodes )
     {
         this.documentHashCode = documentHashCode;
         this.documentNodes = documentNodes;
@@ -81,7 +81,7 @@ public class IndexEnvironment
             this.indexDirectory = FSDirectory.open(new File(indexBaseLocation, this.indexId));
 
             String indexAnalyzer = this.indexConfig.getString("[@defaultAnalyzer]");
-            Analyzer a = (Analyzer) Class.forName(indexAnalyzer).newInstance();
+            Analyzer a = (Analyzer)Class.forName(indexAnalyzer).newInstance();
             this.indexAnalyzer = new PerFieldAnalyzerWrapper(a);
 
             this.indexDocumentPath = indexConfig.getString("document[@path]");
@@ -90,12 +90,12 @@ public class IndexEnvironment
 
             List fieldsConfig = indexConfig.configurationsAt("document.field");
 
-            this.fields = new HashMap<String,FieldInfo>();
+            this.fields = new HashMap<String, FieldInfo>();
             for (Object fieldConfig : fieldsConfig) {
-                FieldInfo fieldInfo = new FieldInfo((HierarchicalConfiguration) fieldConfig);
+                FieldInfo fieldInfo = new FieldInfo((HierarchicalConfiguration)fieldConfig);
                 fields.put(fieldInfo.name, fieldInfo);
                 if (null != fieldInfo.analyzer) {
-                    Analyzer fa = (Analyzer) Class.forName(fieldInfo.analyzer).newInstance();
+                    Analyzer fa = (Analyzer)Class.forName(fieldInfo.analyzer).newInstance();
                     this.indexAnalyzer.addAnalyzer(fieldInfo.name, fa);
                 }
             }

@@ -20,7 +20,7 @@ public class QueryHighlighter
         this.env = env;
     }
 
-    public String highlightQuery( Query query, String fieldName, String text, String openMark, String closeMark)
+    public String highlightQuery( Query query, String fieldName, String text, String openMark, String closeMark )
     {
         try {
             SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(openMark, closeMark);

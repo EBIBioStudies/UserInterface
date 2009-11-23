@@ -356,6 +356,11 @@
             <version>1.0</version>
         </dependency>
         <dependency>
+            <groupId>efo-query</groupId>
+            <artifactId>efo-query</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>commons-configuration</groupId>
             <artifactId>commons-configuration</artifactId>
             <version>1.6</version>

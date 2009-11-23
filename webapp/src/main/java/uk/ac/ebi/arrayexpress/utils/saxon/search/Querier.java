@@ -4,10 +4,7 @@ import net.sf.saxon.om.NodeInfo;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermEnum;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +26,7 @@ public class Querier
     public List<String> getTerms( String fieldName )
     {
         List<String> termsList = null;
-        
+
         try {
             IndexReader ir = IndexReader.open(this.env.indexDirectory, true);
             TermEnum terms = ir.terms(new Term(fieldName, ""));
@@ -38,8 +35,8 @@ public class Querier
                     termsList = new ArrayList<String>();
 
                 termsList.add(terms.term().text());
-            if (!terms.next())
-                break;
+                if (!terms.next())
+                    break;
             }
             // TODO: this should go to 'finally' clause
             terms.close();
@@ -50,14 +47,14 @@ public class Querier
         return termsList;
     }
 
-    public List<NodeInfo> query( BooleanQuery query )
+    public List<NodeInfo> query( Query query )
     {
         List<NodeInfo> result = null;
         try {
             IndexReader ir = IndexReader.open(this.env.indexDirectory, true);
 
             // empty query returns everything
-            if (query.clauses().isEmpty()) {
+            if (query instanceof BooleanQuery && ((BooleanQuery)query).clauses().isEmpty()) {
                 logger.info("Empty search, returned all [{}] documents", this.env.documentNodes.size());
                 return this.env.documentNodes;
             }
@@ -80,6 +77,6 @@ public class Querier
             logger.error("Caught an exception:", x);
         }
 
-    return result;
+        return result;
     }
 }

@@ -30,7 +30,7 @@ public class Indexer
 
     private IndexEnvironment env;
 
-    private Map<String,XPathExpression> fieldXpe = new HashMap<String,XPathExpression>();
+    private Map<String, XPathExpression> fieldXpe = new HashMap<String, XPathExpression>();
 
     public Indexer( IndexEnvironment env )
     {
@@ -48,8 +48,8 @@ public class Indexer
             indexedNodes = new ArrayList<NodeInfo>(documentNodes.size());
 
             for (IndexEnvironment.FieldInfo field : this.env.fields.values()) {
-                 fieldXpe.put( field.name, xp.compile(field.path));
-                }
+                fieldXpe.put(field.name, xp.compile(field.path));
+            }
 
             IndexWriter w = createIndex(this.env.indexDirectory, this.env.indexAnalyzer);
 
@@ -71,7 +71,7 @@ public class Indexer
                             }
                         }
                     } catch (XPathExpressionException x) {
-                        logger.error("Caught an exception while indexing expression [" + field.path + "] for document [" + ((NodeInfo)node).getStringValue().substring(0, 20) + "...]", x);    
+                        logger.error("Caught an exception while indexing expression [" + field.path + "] for document [" + ((NodeInfo)node).getStringValue().substring(0, 20) + "...]", x);
                     }
                 }
 

@@ -46,8 +46,14 @@
         <appender-ref ref="${interface.application.log.appender.ref}"/>
     </logger>
 
-    <logger name="org.apache.solr" additivity="false">
-        <level value="WARN"/>
+    <!-- EFO-related frameworks -->
+    <logger name="org.mindswap.pellet" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="${interface.application.log.appender.ref}"/>
+    </logger>
+
+    <logger name="org.coode.owl.rdfxml.parser.OWLRDFConsumer" additivity="false">
+        <level value="INFO"/>
         <appender-ref ref="${interface.application.log.appender.ref}"/>
     </logger>
 

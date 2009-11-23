@@ -29,9 +29,10 @@ public class AEInterfaceApplication extends Application implements ServletContex
         addComponent(new Users());
         addComponent(new Files());
         addComponent(new JobsController());
+        addComponent(new Ontologies());
     }
 
-    public URL getResource(String path) throws MalformedURLException
+    public URL getResource( String path ) throws MalformedURLException
     {
         return null != servletContext ? servletContext.getResource(path) : null;
     }
@@ -43,7 +44,7 @@ public class AEInterfaceApplication extends Application implements ServletContex
 
         logger.info("****************************************************************************************************************************");
         logger.info("*");
-        logger.info("*  {}",  servletContext.getServletContextName());
+        logger.info("*  {}", servletContext.getServletContextName());
         logger.info("*");
         logger.info("****************************************************************************************************************************");
 
@@ -59,7 +60,7 @@ public class AEInterfaceApplication extends Application implements ServletContex
 
         // restore java.util.logging calls to the original state
         SLF4JBridgeHandler.uninstall();
-        
+
         servletContext = null;
 
         logger.info("****************************************************************************************************************************\n\n");

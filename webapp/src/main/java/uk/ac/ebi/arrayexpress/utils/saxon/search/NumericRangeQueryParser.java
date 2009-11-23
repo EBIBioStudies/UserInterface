@@ -6,6 +6,7 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermRangeQuery;
+import org.apache.lucene.util.Version;
 
 public class NumericRangeQueryParser extends QueryParser
 {
@@ -13,10 +14,10 @@ public class NumericRangeQueryParser extends QueryParser
 
     public NumericRangeQueryParser( IndexEnvironment env, String f, Analyzer a )
     {
-        super(f, a);
+        super(Version.LUCENE_29, f, a);
         this.env = env;
     }
-    
+
     public Query getRangeQuery( String field,
                                 String part1,
                                 String part2,
