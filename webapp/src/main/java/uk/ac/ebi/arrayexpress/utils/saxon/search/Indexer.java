@@ -63,6 +63,9 @@ public class Indexer
                         for (Object v : values) {
                             if ("integer".equals(field.type)) {
                                 addIntIndexField(d, field.name, v);
+                            } else if ("date".equals(field.type)) {
+                                // todo: addDateIndexField(d, field.name, v);
+                                logger.error("Date fields are not supported yet, field [{}] will not be created", field.name);
                             } else {
                                 addIndexField(d, field.name, v, field.shouldAnalyze, field.shouldStore);
                             }

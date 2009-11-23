@@ -14,9 +14,9 @@
             version="{@version}" total="{count(experiment)}">
 
             <xsl:apply-templates select="experiment">
-                <xsl:sort order="descending" select="substring-before(@releasedate, '-')" data-type="number"/>
-                <xsl:sort order="descending" select="substring-before(substring-after(@releasedate, '-'), '-')" data-type="number"/>
-                <xsl:sort order="descending" select="substring-after(substring-after(@releasedate, '-'), '-')" data-type="number"/>
+                <xsl:sort order="descending" select="year-from-date(@releasedate)" data-type="number"/>
+                <xsl:sort order="descending" select="month-from-date(@releasedate)" data-type="number"/>
+                <xsl:sort order="descending" select="day-from-date(@releasedate)" data-type="number"/>
             </xsl:apply-templates>
         </experiments>
     </xsl:template>
