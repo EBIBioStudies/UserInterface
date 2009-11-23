@@ -10,7 +10,8 @@ import java.util.*;
 /**
  * @author Anna Zhukova
  */
-public class EFOOntologyHelper {
+public class EFOOntologyHelper
+{
 
     private Map<String, EFONode> efoMap = new HashMap<String, EFONode>();
     private Map<String, Set<String>> nameToPartsMap = new HashMap<String, Set<String>>();
@@ -26,7 +27,8 @@ public class EFOOntologyHelper {
      *
      * @return Map to fully expand every ontology term
      */
-    public Map<String, Set<String>> getFullOntologyExpansionMap() {
+    public Map<String, Set<String>> getFullOntologyExpansionMap()
+    {
         Map<String, Set<String>> result = new HashMap<String, Set<String>>();
         for (String id : efoMap.keySet()) {
             String name = normalizeString(getTermNameById(id));
@@ -47,7 +49,8 @@ public class EFOOntologyHelper {
      *
      * @return Map ontology term id -> name.
      */
-    public Map<String, String> getId2NameMap() {
+    public Map<String, String> getId2NameMap()
+    {
         Map<String, String> result = new HashMap<String, String>();
         for (String id : efoMap.keySet()) {
             String name = normalizeString(getTermNameById(id));
@@ -65,7 +68,8 @@ public class EFOOntologyHelper {
      *
      * @return Map to expand ontology term
      */
-    public Map<String, Set<String>> getOntologyExpansionMap() {
+    public Map<String, Set<String>> getOntologyExpansionMap()
+    {
         Map<String, Set<String>> result = new HashMap<String, Set<String>>();
         for (String id : efoMap.keySet()) {
             String name = normalizeString(getTermNameById(id));
@@ -81,15 +85,18 @@ public class EFOOntologyHelper {
         return result;
     }
 
-    private void addChildrenRecursively(Set<String> synonyms, String id) {
+    private void addChildrenRecursively( Set<String> synonyms, String id )
+    {
         synonyms.addAll(getAllChildrenNames(id));
     }
 
-    private void addChildren(Set<String> synonyms, String id) {
+    private void addChildren( Set<String> synonyms, String id )
+    {
         synonyms.addAll(getChildrenIds(id));
     }
 
-    private void addPartsRecursively(Set<String> synonyms, Set<String> parts) {
+    private void addPartsRecursively( Set<String> synonyms, Set<String> parts )
+    {
         if (parts != null && parts.size() > 0) {
             synonyms.addAll(parts);
             for (String part : parts) {
@@ -98,18 +105,21 @@ public class EFOOntologyHelper {
         }
     }
 
-    private void addParts(Set<String> synonyms, Set<String> parts) {
+    private void addParts( Set<String> synonyms, Set<String> parts )
+    {
         if (parts != null && parts.size() > 0) {
             synonyms.addAll(parts);
         }
     }
 
 
-    public Map<String, Set<String>> getSynonymMap() {
+    public Map<String, Set<String>> getSynonymMap()
+    {
         return nameToAlternativesMap;
     }
 
-    public Map<String, Set<String>> getPartOfExpansionMap() {
+    public Map<String, Set<String>> getPartOfExpansionMap()
+    {
         return nameToPartsMap;
     }
 
@@ -120,7 +130,8 @@ public class EFOOntologyHelper {
      * @param node internal node to make it from
      * @return external term object
      */
-    private EFOTerm newTerm(EFONode node) {
+    private EFOTerm newTerm( EFONode node )
+    {
         return new EFOTerm(node, roots.contains(node));
     }
 
@@ -131,15 +142,18 @@ public class EFOOntologyHelper {
      * @param depth required depth
      * @return external term object
      */
-    private EFOTerm newTerm(EFONode node, int depth) {
+    private EFOTerm newTerm( EFONode node, int depth )
+    {
         return new EFOTerm(node, depth, roots.contains(node));
     }
 
     /**
      * Constructor loading ontology data.
+     *
      * @param ontologyStream InputStream with ontology.
      */
-    public EFOOntologyHelper(InputStream ontologyStream) {
+    public EFOOntologyHelper( InputStream ontologyStream )
+    {
         OntologyLoader<EFONode> loader = new OntologyLoader<EFONode>(ontologyStream);
         this.efoMap = loader.load(new EFOClassAnnotationVisitor(this.nameToAlternativesMap),
                 new EFOPartOfPropertyVisitor(this.nameToPartsMap, this.idToPartIdsMap));
@@ -156,7 +170,8 @@ public class EFOOntologyHelper {
      * @param id term id
      * @return term string
      */
-    public String getTermNameById(String id) {
+    public String getTermNameById( String id )
+    {
         EFONode node = efoMap.get(id);
         return node == null ? null : node.getTerm();
     }
@@ -167,7 +182,8 @@ public class EFOOntologyHelper {
      * @param id term id
      * @return true if yes
      */
-    public boolean hasTerm(String id) {
+    public boolean hasTerm( String id )
+    {
         EFONode node = efoMap.get(id);
         return node != null;
     }
@@ -178,19 +194,22 @@ public class EFOOntologyHelper {
      * @param id term id
      * @return external term representation if found in ontology, null otherwise
      */
-    public EFOTerm getTermById(String id) {
+    public EFOTerm getTermById( String id )
+    {
         EFONode node = efoMap.get(id);
         return node == null ? null : newTerm(node);
     }
 
-    private void collectChildren(Collection<String> result, EFONode node) {
+    private void collectChildren( Collection<String> result, EFONode node )
+    {
         for (EFONode n : node.getChildren()) {
             result.add(n.getId());
             collectChildren(result, n);
         }
     }
 
-    private void collectChildrenNames(Collection<String> result, EFONode node) {
+    private void collectChildrenNames( Collection<String> result, EFONode node )
+    {
         for (EFONode n : node.getChildren()) {
             String name = normalizeString(n.getTerm());
             if (!isStopWord(name)) {
@@ -206,7 +225,8 @@ public class EFOOntologyHelper {
      * @param id term id
      * @return collection of IDs, empty if term is not found
      */
-    public Collection<String> getTermAndAllChildrenIds(String id) {
+    public Collection<String> getTermAndAllChildrenIds( String id )
+    {
         EFONode node = efoMap.get(id);
         List<String> ids = new ArrayList<String>(node == null ? 0 : node.getChildren().size());
         if (node != null) {
@@ -222,7 +242,8 @@ public class EFOOntologyHelper {
      * @param id term id
      * @return collection of names, empty if term is not found
      */
-    public Collection<String> getTermAndAllChildrenNames(String id) {
+    public Collection<String> getTermAndAllChildrenNames( String id )
+    {
         EFONode node = efoMap.get(id);
         Set<String> names = new HashSet<String>(node == null ? 0 : node.getChildren().size());
         if (node != null) {
@@ -235,7 +256,8 @@ public class EFOOntologyHelper {
         return names;
     }
 
-    public Collection<String> getAllChildrenNames(String id) {
+    public Collection<String> getAllChildrenNames( String id )
+    {
         EFONode node = efoMap.get(id);
         Set<String> ids = new HashSet<String>(node == null ? 0 : node.getChildren().size());
         Set<String> names = new HashSet<String>(node == null ? 0 : node.getChildren().size());
@@ -254,7 +276,8 @@ public class EFOOntologyHelper {
      * @param id term id
      * @return collection of terms, null if term is not found
      */
-    public Collection<EFOTerm> getTermChildren(String id) {
+    public Collection<EFOTerm> getTermChildren( String id )
+    {
         EFONode node = efoMap.get(id);
         if (node == null)
             return null;
@@ -272,7 +295,8 @@ public class EFOOntologyHelper {
      * @param id term id
      * @return collection of names, null if term is not found
      */
-    public Collection<String> getChildrenNames(String id) {
+    public Collection<String> getChildrenNames( String id )
+    {
         EFONode node = efoMap.get(id);
         if (node == null)
             return null;
@@ -290,7 +314,8 @@ public class EFOOntologyHelper {
      * @param id term id
      * @return collection of ids, null if term is not found
      */
-    public Collection<String> getChildrenIds(String id) {
+    public Collection<String> getChildrenIds( String id )
+    {
         EFONode node = efoMap.get(id);
         if (node == null)
             return null;
@@ -308,7 +333,8 @@ public class EFOOntologyHelper {
      *
      * @return collection of all terms
      */
-    public Collection<EFOTerm> getAllTerms() {
+    public Collection<EFOTerm> getAllTerms()
+    {
         List<EFOTerm> result = new ArrayList<EFOTerm>(efoMap.size());
         for (EFONode n : efoMap.values())
             result.add(newTerm(n));
@@ -320,7 +346,8 @@ public class EFOOntologyHelper {
      *
      * @return set of all term IDs
      */
-    public Set<String> getAllTermIds() {
+    public Set<String> getAllTermIds()
+    {
         return new HashSet<String>(efoMap.keySet());
     }
 
@@ -330,7 +357,8 @@ public class EFOOntologyHelper {
      * @param prefix prefix to search
      * @return set of string IDs
      */
-    public Set<String> searchTermPrefix(String prefix) {
+    public Set<String> searchTermPrefix( String prefix )
+    {
         String lprefix = prefix.toLowerCase();
         Set<String> result = new HashSet<String>();
         for (EFONode n : efoMap.values())
@@ -346,7 +374,8 @@ public class EFOOntologyHelper {
      * @param text words to search
      * @return collection of terms
      */
-    public Collection<EFOTerm> searchTerm(String text) {
+    public Collection<EFOTerm> searchTerm( String text )
+    {
         final String ltext = text.trim().toLowerCase();
         String regex = ".*\\b\\Q" + ltext.replace("\\E", "").replaceAll("\\s+", "\\\\E\\\\b\\\\s+\\\\b\\\\Q") + "\\E\\b.*";
         List<EFOTerm> result = new ArrayList<EFOTerm>(efoMap.size());
@@ -359,7 +388,8 @@ public class EFOOntologyHelper {
         return result;
     }
 
-    private void collectPaths(EFONode node, Collection<List<EFOTerm>> result, List<EFOTerm> current, boolean stopOnBranchRoot) {
+    private void collectPaths( EFONode node, Collection<List<EFOTerm>> result, List<EFOTerm> current, boolean stopOnBranchRoot )
+    {
         for (EFONode p : node.getParents()) {
             List<EFOTerm> next = new ArrayList<EFOTerm>(current);
             next.add(newTerm(p));
@@ -379,7 +409,8 @@ public class EFOOntologyHelper {
      * @param stopOnBranchRoot if true, stops on branch root, not going to real root
      * @return list of lists of EFOTerm's
      */
-    public List<List<EFOTerm>> getTermParentPaths(String id, boolean stopOnBranchRoot) {
+    public List<List<EFOTerm>> getTermParentPaths( String id, boolean stopOnBranchRoot )
+    {
         EFONode node = efoMap.get(id);
         if (node == null)
             return null;
@@ -396,7 +427,8 @@ public class EFOOntologyHelper {
      * @param stopOnBranchRoot if true, stops on branch root, not going to real root
      * @return list of lists of EFOTerm's
      */
-    public List<List<EFOTerm>> getTermParentPaths(EFOTerm term, boolean stopOnBranchRoot) {
+    public List<List<EFOTerm>> getTermParentPaths( EFOTerm term, boolean stopOnBranchRoot )
+    {
         return getTermParentPaths(term.getId(), stopOnBranchRoot);
     }
 
@@ -406,7 +438,8 @@ public class EFOOntologyHelper {
      * @param id term id
      * @return set of string IDs
      */
-    public Set<String> getTermFirstParents(String id) {
+    public Set<String> getTermFirstParents( String id )
+    {
         EFONode node = efoMap.get(id);
         if (node == null)
             return null;
@@ -423,7 +456,8 @@ public class EFOOntologyHelper {
      * @param stopOnBranchRoot if true, stops on branch root, not going to real root
      * @return set of string IDs
      */
-    public Set<String> getTermParents(String id, boolean stopOnBranchRoot) {
+    public Set<String> getTermParents( String id, boolean stopOnBranchRoot )
+    {
         EFONode node = efoMap.get(id);
         if (node == null)
             return null;
@@ -432,7 +466,8 @@ public class EFOOntologyHelper {
         return parents;
     }
 
-    private void collectParents(EFONode node, Set<String> parents, boolean stopOnBranchRoot) {
+    private void collectParents( EFONode node, Set<String> parents, boolean stopOnBranchRoot )
+    {
         for (EFONode p : node.getParents()) {
             parents.add(p.getId());
             if (!stopOnBranchRoot || !p.isBranchRoot())
@@ -440,7 +475,8 @@ public class EFOOntologyHelper {
         }
     }
 
-    private void collectSubTree(EFONode currentNode, List<EFOTerm> result, Set<String> allNodes, Set<String> visited, int depth, boolean printing) {
+    private void collectSubTree( EFONode currentNode, List<EFOTerm> result, Set<String> allNodes, Set<String> visited, int depth, boolean printing )
+    {
         if (printing && !allNodes.contains(currentNode.getId()))
             return;
 
@@ -465,7 +501,8 @@ public class EFOOntologyHelper {
      * @param ids marked IDs
      * @return list of EFOTerm's
      */
-    public List<EFOTerm> getSubTree(Set<String> ids) {
+    public List<EFOTerm> getSubTree( Set<String> ids )
+    {
         List<EFOTerm> result = new ArrayList<EFOTerm>();
 
         Set<String> visited = new HashSet<String>();
@@ -475,7 +512,8 @@ public class EFOOntologyHelper {
         return result;
     }
 
-    private void collectTreeDownTo(Iterable<EFONode> nodes, Stack<EFONode> path, List<EFOTerm> result, int depth) {
+    private void collectTreeDownTo( Iterable<EFONode> nodes, Stack<EFONode> path, List<EFOTerm> result, int depth )
+    {
         EFONode next = path.pop();
         for (EFONode n : nodes) {
             result.add(newTerm(n, depth));
@@ -491,7 +529,8 @@ public class EFOOntologyHelper {
      * @param id term id
      * @return list of EFOTerm's
      */
-    public List<EFOTerm> getTreeDownTo(String id) {
+    public List<EFOTerm> getTreeDownTo( String id )
+    {
         List<EFOTerm> result = new ArrayList<EFOTerm>();
 
         Stack<EFONode> path = new Stack<EFONode>();
@@ -512,7 +551,8 @@ public class EFOOntologyHelper {
      *
      * @return set of root node IDs
      */
-    public Set<String> getRootIds() {
+    public Set<String> getRootIds()
+    {
         Set<String> result = new HashSet<String>();
         for (EFONode n : roots) {
             result.add(n.getId());
@@ -525,7 +565,8 @@ public class EFOOntologyHelper {
      *
      * @return list of terms
      */
-    public List<EFOTerm> getRoots() {
+    public List<EFOTerm> getRoots()
+    {
         List<EFOTerm> result = new ArrayList<EFOTerm>(roots.size());
         for (EFONode n : roots)
             result.add(newTerm(n));
@@ -539,7 +580,8 @@ public class EFOOntologyHelper {
      *
      * @return set of branch root IDs
      */
-    public Set<String> getBranchRootIds() {
+    public Set<String> getBranchRootIds()
+    {
         Set<String> result = new HashSet<String>();
         for (EFONode n : efoMap.values())
             if (n.isBranchRoot())
@@ -549,9 +591,11 @@ public class EFOOntologyHelper {
 
     /**
      * Getter for map id -> set of parts ids map.
+     *
      * @return Map id -> set of parts ids map.
      */
-    public Map<String, Set<String>> getIdToPartIdsMap() {
+    public Map<String, Set<String>> getIdToPartIdsMap()
+    {
         return Collections.unmodifiableMap(idToPartIdsMap);
     }
 }

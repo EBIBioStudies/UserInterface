@@ -14,25 +14,30 @@ import java.util.*;
 
 /**
  * @author Anna Zhukova
- * Processes OWL file and creates internal ontology map (node id to node).
+ *         Processes OWL file and creates internal ontology map (node id to node).
  */
-public class OntologyLoader<N extends IOntologyNode> {
+public class OntologyLoader<N extends IOntologyNode>
+{
     private OWLOntology ontology;
     private OWLReasoner reasoner;
 
     /**
      * Create an instance with ontology read from the given InputStream.
+     *
      * @param ontologyStream InputStream with ontology
      */
-    public OntologyLoader(InputStream ontologyStream) {
+    public OntologyLoader( InputStream ontologyStream )
+    {
         this(new StreamInputSource(ontologyStream));
     }
 
     /**
      * Create an instance with ontology read from the given StreamInputSource.
+     *
      * @param ontologyInput StreamInputSource with ontology
      */
-    public OntologyLoader(StreamInputSource ontologyInput) {
+    public OntologyLoader( StreamInputSource ontologyInput )
+    {
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
         try {
             ontology = manager.loadOntology(ontologyInput);
@@ -45,12 +50,14 @@ public class OntologyLoader<N extends IOntologyNode> {
 
     /**
      * Loads ontology into Map id -> internal node implementation.
+     *
      * @param annotationVisitor To visit annotations.
      * @param propertyVisitors  To visit properties.
      * @return Map ontology's been loaded into.
      */
-    public Map<String, N> load(IClassAnnotationVisitor<N> annotationVisitor,
-                     IPropertyVisitor<N>... propertyVisitors) {
+    public Map<String, N> load( IClassAnnotationVisitor<N> annotationVisitor,
+                                IPropertyVisitor<N>... propertyVisitors )
+    {
         Map<String, N> ontologyMap = new HashMap<String, N>();
         ReasonerSession session = OWLUtils.getReasonerSession(ontology);
         try {
@@ -73,7 +80,8 @@ public class OntologyLoader<N extends IOntologyNode> {
      * Finds all classes with the relationship induced by the property the given visitor is interested in
      * and gives them to the visitor
      */
-    private void loadProperties(IPropertyVisitor<N> visitor, Map<String, N> ontologyMap) {
+    private void loadProperties( IPropertyVisitor<N> visitor, Map<String, N> ontologyMap )
+    {
         OWLObjectProperty property = getProperty(visitor.getPropertyName());
         if (property != null) {
             for (OWLClass clazz : ontology.getReferencedClasses()) {
@@ -99,10 +107,12 @@ public class OntologyLoader<N extends IOntologyNode> {
 
     /**
      * Finds OWLObjectProperty by name.
+     *
      * @param propertyName Name of the property.
      * @return OWLObjectProperty with the specified name.
      */
-    public OWLObjectProperty getProperty(String propertyName) {
+    public OWLObjectProperty getProperty( String propertyName )
+    {
         for (OWLObjectProperty prpt : ontology.getReferencedObjectProperties()) {
             if (prpt.toString().equals(propertyName)) {
                 return prpt;
@@ -113,10 +123,12 @@ public class OntologyLoader<N extends IOntologyNode> {
 
     /**
      * Returns class id with special symbols ^*./ removed.
+     *
      * @param cls Class that id is looked for.
      * @return Id of the specified class.
      */
-    public String getId(OWLClass cls) {
+    public String getId( OWLClass cls )
+    {
         return cls.getURI().getPath().replaceAll("^.*/", "");
     }
 
@@ -130,9 +142,10 @@ public class OntologyLoader<N extends IOntologyNode> {
      * @param ontologyMap Map id -> internal node implementation.
      * @throws OWLReasonerException  If operations with the reasoner fail.
      */
-    private Collection<N> loadClass(OWLClass clazz, IClassAnnotationVisitor<N> annotationVisitor,
-                                   Map<String, N> ontologyMap)
-            throws OWLReasonerException {
+    private Collection<N> loadClass( OWLClass clazz, IClassAnnotationVisitor<N> annotationVisitor,
+                                     Map<String, N> ontologyMap )
+            throws OWLReasonerException
+    {
         if (reasoner.isSatisfiable(clazz)) {
             String id = getId(clazz);
             N node = ontologyMap.get(id);

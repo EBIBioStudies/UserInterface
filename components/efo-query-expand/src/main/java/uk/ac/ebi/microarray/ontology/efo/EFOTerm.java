@@ -2,9 +2,10 @@ package uk.ac.ebi.microarray.ontology.efo;
 
 /**
  * @author Anna Zhukova
- * External view for EFO node class.
+ *         External view for EFO node class.
  */
-public class EFOTerm {
+public class EFOTerm
+{
     private String id;
     private String term;
     private boolean isExpandable;
@@ -12,7 +13,8 @@ public class EFOTerm {
     private boolean isRoot;
     private int depth;
 
-    protected EFOTerm(EFONode node, boolean isRoot) {
+    protected EFOTerm( EFONode node, boolean isRoot )
+    {
         this(node, 0, isRoot);
     }
 
@@ -22,7 +24,8 @@ public class EFOTerm {
      * @param other original node to clone
      * @param depth depth to set (we can have depth relative to something, not from real root all the time)
      */
-    public EFOTerm(EFOTerm other, int depth) {
+    public EFOTerm( EFOTerm other, int depth )
+    {
         this.id = other.getId();
         this.term = other.getTerm();
         this.isExpandable = other.isExpandable();
@@ -34,11 +37,12 @@ public class EFOTerm {
     /**
      * Constructor to create term from internal node
      *
-     * @param node  original node
-     * @param depth required depth
-     * @param isRoot  true if this node is root
+     * @param node   original node
+     * @param depth  required depth
+     * @param isRoot true if this node is root
      */
-    protected EFOTerm(EFONode node, int depth, boolean isRoot) {
+    protected EFOTerm( EFONode node, int depth, boolean isRoot )
+    {
         this.id = node.getId();
         this.term = node.getTerm();
         this.isExpandable = !node.getChildren().isEmpty();
@@ -52,7 +56,8 @@ public class EFOTerm {
      *
      * @return id of the term
      */
-    public String getId() {
+    public String getId()
+    {
         return id;
     }
 
@@ -61,7 +66,8 @@ public class EFOTerm {
      *
      * @return term description string of the term
      */
-    public String getTerm() {
+    public String getTerm()
+    {
         return term;
     }
 
@@ -70,7 +76,8 @@ public class EFOTerm {
      *
      * @return if node is expandable (contains children)
      */
-    public boolean isExpandable() {
+    public boolean isExpandable()
+    {
         return isExpandable;
     }
 
@@ -79,7 +86,8 @@ public class EFOTerm {
      *
      * @return if node is branch root node
      */
-    public boolean isBranchRoot() {
+    public boolean isBranchRoot()
+    {
         return isBranchRoot;
     }
 
@@ -88,7 +96,8 @@ public class EFOTerm {
      *
      * @return if node is root node
      */
-    public boolean isRoot() {
+    public boolean isRoot()
+    {
         return isRoot;
     }
 
@@ -97,7 +106,8 @@ public class EFOTerm {
      *
      * @return node depth
      */
-    public int getDepth() {
+    public int getDepth()
+    {
         return depth;
     }
 
@@ -108,10 +118,11 @@ public class EFOTerm {
      * @return true if equal
      */
     @Override
-    public boolean equals(Object o) {
+    public boolean equals( Object o )
+    {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EFOTerm term = (EFOTerm) o;
+        EFOTerm term = (EFOTerm)o;
         return !(id != null ? !id.equals(term.id) : term.id != null);
     }
 
@@ -121,7 +132,8 @@ public class EFOTerm {
      * @return hash code
      */
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return id != null ? id.hashCode() : 0;
     }
 
@@ -131,7 +143,8 @@ public class EFOTerm {
      * @return printable string
      */
     @Override
-    public String toString() {
+    public String toString()
+    {
         return id + "(" + term + ")";
     }
 }

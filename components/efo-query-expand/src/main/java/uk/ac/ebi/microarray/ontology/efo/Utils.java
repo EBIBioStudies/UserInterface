@@ -7,15 +7,18 @@ import java.util.regex.Pattern;
 
 /**
  * @author Anna Zhukova
- * Class providing methods of string normalization and map format conversion.
+ *         Class providing methods of string normalization and map format conversion.
  */
-public final class Utils {
+public final class Utils
+{
     /**
      * Checks if the given string is null, empty or of 1 char length.
+     *
      * @param str String to check.
      * @return true if the given string is null, empty or of 1 char length.
      */
-    public static boolean isStopWord(String str) {
+    public static boolean isStopWord( String str )
+    {
         return str == null || str.length() < 2;
     }
 
@@ -23,12 +26,14 @@ public final class Utils {
      * For null string returns an empty one,
      * for not null strings returns its lowercased copy
      * with leading and trailing white spaces removed.
+     *
      * @param str String to normalize.
      * @return an empty string if the given one was null,
-     *      lowercased copy of the given one
-     *      with leading and trailing white spaces removed otherwise.
+     *         lowercased copy of the given one
+     *         with leading and trailing white spaces removed otherwise.
      */
-    public static String normalizeString(String str) {
+    public static String normalizeString( String str )
+    {
         return str == null ? "" : str.trim().toLowerCase();
     }
 
@@ -40,15 +45,17 @@ public final class Utils {
      * and all not-letter not-digit not-whitespace not '/' not '-' characters
      * replaced with whitespace ' '.
      * Example: "   Hello my [dear] {nice} () world! Yours, Anna-Maria/Mary\\\4u " -->
-     *       "hello my    world  yours  anna-maria/mary   4u"
+     * "hello my    world  yours  anna-maria/mary   4u"
+     *
      * @param str String to normalize.
      * @return an empty string if the given one was null,
-     *      otherwise lowercased copy of the given one
-     *      with leading and trailing white spaces and everything in braces removed
-     *      and all not-letter not-digit not-whitespace not '/' not '-' characters
-     *      replaced with whitespace ' '.
+     *         otherwise lowercased copy of the given one
+     *         with leading and trailing white spaces and everything in braces removed
+     *         and all not-letter not-digit not-whitespace not '/' not '-' characters
+     *         replaced with whitespace ' '.
      */
-    public static String totallyNormalizeString(String str) {
+    public static String totallyNormalizeString( String str )
+    {
         if (str == null) {
             return "";
         }
@@ -64,10 +71,12 @@ public final class Utils {
     /**
      * Converts Map&lt;String, String[]&gt; to Map&lt;String[], String[][]&gt;
      * by splitting each value into words aroung whitespaces.
+     *
      * @param from Map&lt;String, String[]&gt; to convert.
      * @return converted Map&lt;String[], String[][]&gt;.
      */
-    public static Map<String[], String[][]> string2ArrayOfStringMapToArrayOfString2ArrayOfArrayOfStringMap(Map<String, String[]> from) {
+    public static Map<String[], String[][]> string2ArrayOfStringMapToArrayOfString2ArrayOfArrayOfStringMap( Map<String, String[]> from )
+    {
         Map<String[], String[][]> result = new HashMap<String[], String[][]>();
         for (Map.Entry<String, String[]> entry : from.entrySet()) {
             String[] value = entry.getValue();
@@ -85,12 +94,14 @@ public final class Utils {
      * Converts Map&lt;T, ? extends Collection&lt;S&gt;&gt;
      * to Map&lt;T[], S[]&gt;
      * by converting values from Collection type to Array.
-     * @param from Map&lt;T, ? extends Collection&lt;S&gt;&gt; to convert.
+     *
+     * @param from              Map&lt;T, ? extends Collection&lt;S&gt;&gt; to convert.
      * @param sampleOfArrayType Parameter used only for deriving proper array type
-     *      of resulting map values.
+     *                          of resulting map values.
      * @return converted Map&lt;T[], S[]&gt;.
      */
-    public static <T, S> Map<T, S[]> a2CollectionOfBMapToA2ArrayOfBMap(Map<T, ? extends Collection<S>> from, S[] sampleOfArrayType) {
+    public static <T, S> Map<T, S[]> a2CollectionOfBMapToA2ArrayOfBMap( Map<T, ? extends Collection<S>> from, S[] sampleOfArrayType )
+    {
         Map<T, S[]> result = new HashMap<T, S[]>();
         for (Map.Entry<T, ? extends Collection<S>> elements : from.entrySet()) {
             S[] value = elements.getValue().toArray(sampleOfArrayType);
