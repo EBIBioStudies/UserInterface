@@ -146,6 +146,7 @@
                     <div>
                         <xsl:call-template name="highlight">
                             <xsl:with-param name="pText" select="releasedate"/>
+                            <xsl:with-param name="pFieldName" select="'date'"/>
                         </xsl:call-template>
                     </div>
                 </td>
