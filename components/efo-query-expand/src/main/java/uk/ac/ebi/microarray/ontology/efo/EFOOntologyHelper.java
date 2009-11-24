@@ -33,11 +33,11 @@ public class EFOOntologyHelper
         for (String id : efoMap.keySet()) {
             String name = normalizeString(getTermNameById(id));
             if (!isStopWord(name)) {
-                Set<String> synonyms = new LinkedHashSet<String>();
-                addPartsRecursively(synonyms, nameToPartsMap.get(name));
-                addChildrenRecursively(synonyms, id);
-                if (!synonyms.isEmpty()) {
-                    result.put(name, synonyms);
+                Set<String> expansionSet = new LinkedHashSet<String>();
+                addPartsRecursively(expansionSet, nameToPartsMap.get(name));
+                addChildrenRecursively(expansionSet, id);
+                if (!expansionSet.isEmpty()) {
+                    result.put(name, expansionSet);
                 }
             }
         }
@@ -74,41 +74,41 @@ public class EFOOntologyHelper
         for (String id : efoMap.keySet()) {
             String name = normalizeString(getTermNameById(id));
             if (!isStopWord(name)) {
-                Set<String> synonyms = new LinkedHashSet<String>();
-                addParts(synonyms, getIdToPartIdsMap().get(id));
-                addChildren(synonyms, id);
-                if (!synonyms.isEmpty()) {
-                    result.put(id, synonyms);
+                Set<String> expansionSet = new LinkedHashSet<String>();
+                addParts(expansionSet, getIdToPartIdsMap().get(id));
+                addChildren(expansionSet, id);
+                if (!expansionSet.isEmpty()) {
+                    result.put(id, expansionSet);
                 }
             }
         }
         return result;
     }
 
-    private void addChildrenRecursively( Set<String> synonyms, String id )
+    private void addChildrenRecursively( Set<String> expansionSet, String id )
     {
-        synonyms.addAll(getAllChildrenNames(id));
+        expansionSet.addAll(getAllChildrenNames(id));
     }
 
-    private void addChildren( Set<String> synonyms, String id )
+    private void addChildren( Set<String> expansionSet, String id )
     {
-        synonyms.addAll(getChildrenIds(id));
+        expansionSet.addAll(getChildrenIds(id));
     }
 
-    private void addPartsRecursively( Set<String> synonyms, Set<String> parts )
+    private void addPartsRecursively( Set<String> expansionSet, Set<String> parts )
     {
         if (parts != null && parts.size() > 0) {
-            synonyms.addAll(parts);
+            expansionSet.addAll(parts);
             for (String part : parts) {
-                addPartsRecursively(synonyms, nameToPartsMap.get(part));
+                addPartsRecursively(expansionSet, nameToPartsMap.get(part));
             }
         }
     }
 
-    private void addParts( Set<String> synonyms, Set<String> parts )
+    private void addParts( Set<String> expansionSet, Set<String> parts )
     {
         if (parts != null && parts.size() > 0) {
-            synonyms.addAll(parts);
+            expansionSet.addAll(parts);
         }
     }
 
