@@ -31,10 +31,7 @@ public class Files extends ApplicationComponent implements DocumentSource
 
         files = new TextFilePersistence<PersistableDocumentContainer>(
                 new PersistableDocumentContainer(),
-                new File(
-                        System.getProperty("java.io.tmpdir"),
-                        getPreferences().getString("ae.files.cache.filename")
-                )
+                new File(getPreferences().getString("ae.files.persistence.file.location"))
         );
         
         saxon.registerDocumentSource(this);
@@ -108,7 +105,7 @@ public class Files extends ApplicationComponent implements DocumentSource
     // returns true is file is registered in the registry
     public boolean doesExist( String accession, String name )
     {
-        if (!"".equals(accession)) {
+        if (null != accession && accession.length() > 0) {
             return Boolean.parseBoolean(
                     saxon.evaluateXPathSingle(
                             getDocument()
@@ -130,7 +127,7 @@ public class Files extends ApplicationComponent implements DocumentSource
     {
         String folderLocation;
 
-        if (!"".equals(accession)) {
+        if (null != accession && accession.length() > 0) {
             folderLocation = saxon.evaluateXPathSingle(
                     getDocument()
                     , "//folder[@accession = '" + accession + "' and file/@name = '" + name + "']/@location"
@@ -142,7 +139,7 @@ public class Files extends ApplicationComponent implements DocumentSource
             );
         }
 
-        if (!"".equals(folderLocation)) {
+        if (null != folderLocation && folderLocation.length() > 0) {
             return folderLocation + File.separator + name;
         } else {
             return null;

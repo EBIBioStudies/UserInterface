@@ -42,7 +42,7 @@ public class ReloadExperimentsJob extends ApplicationJob implements JobListener
 
             JobDataMap jdm = jec.getMergedJobDataMap();
             String dsNames = jdm.getString("param");
-            if ("".equals(dsNames)) {
+            if (null == dsNames || 0 == dsNames.length()) {
                 dsNames = ((Experiments) app.getComponent("Experiments")).getDataSource();
             }
             logger.info("Reload of experiment data from [{}] requested", dsNames);
@@ -61,7 +61,7 @@ public class ReloadExperimentsJob extends ApplicationJob implements JobListener
 
                 ((JobsController) app.getComponent("JobsController")).setJobListener(this);
 
-                if (0 < exps.size()) {
+                if (exps.size() > 0) {
                     if (exps.size() <= numThreadsForRetrieval) {
                         numThreadsForRetrieval = 1;
                     }

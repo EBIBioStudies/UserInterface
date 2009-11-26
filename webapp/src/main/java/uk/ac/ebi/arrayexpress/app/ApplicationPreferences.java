@@ -1,24 +1,27 @@
 package uk.ac.ebi.arrayexpress.app;
 
+import org.apache.commons.configuration.ConversionException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Properties;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.NoSuchElementException;
 
 public class ApplicationPreferences extends ApplicationComponent
 {
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private String propertiesFileName;
-    private Properties properties;
+    private String prefsFileName;
+    private PropertiesConfiguration prefs;
 
     public ApplicationPreferences( String fileName )
     {
         super("Preferences");
 
-        propertiesFileName = fileName;
-        properties = new Properties();
+        this.prefsFileName = fileName;
     }
 
     public void initialize()
@@ -28,49 +31,66 @@ public class ApplicationPreferences extends ApplicationComponent
 
     public void terminate()
     {
-        properties = null;
+        if (null != prefs) {
+            prefs = null;
+        }
     }
 
     public String getString( String key )
     {
-        return properties.getProperty(key);
+        return prefs.getString(key);
     }
 
     public Long getLong( String key )
     {
         Long value = null;
-        String strVal = null;
         try {
-            strVal = properties.getProperty(key);
-            if (null != strVal && !strVal.trim().equals("")) {
-                value = Long.valueOf(strVal);
-            }
-        } catch ( NumberFormatException x ) {
-            logger.error("Value [{}] of preference [{}] is expected to be a number", strVal, key);
-        } catch ( Throwable x ) {
-            logger.error("Caught an exception while converting value [" + properties.getProperty(key) + "] of preference [" + key + "] to Long:", x);
+            value = prefs.getLong(key);
+        } catch (ConversionException x) {
+            logger.error(x.getMessage());
+        } catch (NoSuchElementException x) {
+            logger.error(x.getMessage());            
+        } catch (Throwable x) {
+            logger.error("Caught an exception:", x);
+        }
+        return value;
+    }
+
+    public Boolean getBoolean( String key )
+    {
+        Boolean value = null;
+        try {
+            value = prefs.getBoolean(key);
+        } catch (NoSuchElementException x) {
+            logger.error(x.getMessage());
+        } catch (Throwable x) {
+            logger.error("Caught an exception:", x);
         }
 
         return value;
     }
 
-    public boolean getBoolean( String key )
-    {
-        String value = properties.getProperty(key);
-        return (null != value && value.toLowerCase().equals("true"));
-    }
-
     private void load()
     {
-        // TODO: what to do if file is not there? must be a clear error message + shutdown
+        // todo: what to do if file is not there? must be a clear error message + shutdown
+        InputStream prefsStream = null;
         try {
-            properties.load(
-                    Application.getInstance().getResource(
-                            "/WEB-INF/classes/" + propertiesFileName + ".properties"
-                    ).openStream()
-            );
-        } catch ( Throwable e ) {
-            logger.error("Caught an exception:", e);
+            prefs = new PropertiesConfiguration();
+            prefsStream = Application.getInstance().getResource(
+                    "/WEB-INF/classes/" + prefsFileName + ".properties"
+            ).openStream();
+
+            prefs.load(prefsStream);
+        } catch (Throwable x) {
+            logger.error("Caught an exception:", x);
+        } finally {
+            if (null != prefsStream) {
+                try {
+                    prefsStream.close();
+                } catch (IOException x) {
+                    logger.error("Caught an exception:", x);
+                }
+            }
         }
     }
 }

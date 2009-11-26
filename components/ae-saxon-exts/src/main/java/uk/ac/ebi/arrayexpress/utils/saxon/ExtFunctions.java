@@ -59,7 +59,7 @@ public class ExtFunctions
             StringBuilder authorString = new StringBuilder();
             String[] nameArray = author.trim().split("\\s");
             for (String name : nameArray) {
-                if (!"".equals(name)) {
+                if (name.length() > 0) {
                     authorString.append(capitalize(name)).append(" ");
                 }
             }

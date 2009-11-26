@@ -23,10 +23,7 @@ public class Users extends ApplicationComponent
     {
         userList = new TextFilePersistence<PersistableUserList>(
                 new PersistableUserList()
-                , new File(
-                        System.getProperty("java.io.tmpdir")
-                        , getPreferences().getString("ae.users.cache.filename")
-                )
+                , new File(getPreferences().getString("ae.users.file.location"))
         );
 
         authHelper = new AuthenticationHelper();

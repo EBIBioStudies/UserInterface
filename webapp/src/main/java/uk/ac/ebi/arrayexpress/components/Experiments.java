@@ -36,31 +36,30 @@ public class Experiments extends ApplicationComponent implements DocumentSource
     {
         saxon = (SaxonEngine)getComponent("SaxonEngine");
 
-        String tmpDir = System.getProperty("java.io.tmpdir");
         this.experiments = new TextFilePersistence<PersistableDocumentContainer>(
                 new PersistableDocumentContainer()
-                , new File(tmpDir, getPreferences().getString("ae.experiments.cache.filename"))
+                , new File(getPreferences().getString("ae.experiments.file.location"))
         );
 
         this.experimentsInAtlas = new TextFilePersistence<PersistableStringList>(
                 new PersistableStringList()
-                , new File(tmpDir, getPreferences().getString("ae.atlasexperiments.cache.filename"))
+                , new File(getPreferences().getString("ae.atlasexperiments.file.location"))
         );
 
         this.species = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File(tmpDir, getPreferences().getString("ae.species.cache.filename"))
+                , new File(getPreferences().getString("ae.species.file.location"))
 
         );
 
         this.arrays = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File(tmpDir, getPreferences().getString("ae.arrays.cache.filename"))
+                , new File(getPreferences().getString("ae.arrays.file.location"))
         );
 
         this.experimentTypes = new TextFilePersistence<PersistableString>(
                 new PersistableString()
-                , new File(tmpDir, getPreferences().getString("ae.exptypes.cache.filename"))
+                , new File(getPreferences().getString("ae.exptypes.file.location"))
         );
 
         indexExperiments();

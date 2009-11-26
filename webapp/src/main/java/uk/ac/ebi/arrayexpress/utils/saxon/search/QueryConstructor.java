@@ -26,7 +26,7 @@ public class QueryConstructor
         BooleanQuery result = new BooleanQuery();
         try {
             for (Map.Entry<String, String> queryItem : querySource.entrySet()) {
-                if (env.fields.containsKey(queryItem.getKey()) && !"".equals(queryItem.getValue().trim())) {
+                if (env.fields.containsKey(queryItem.getKey()) && queryItem.getValue().trim().length() > 0) {
                     QueryParser parser = new NumericRangeQueryParser(env, queryItem.getKey(), this.env.indexAnalyzer);
                     parser.setDefaultOperator(QueryParser.Operator.AND);
                     Query q = parser.parse(queryItem.getValue());
