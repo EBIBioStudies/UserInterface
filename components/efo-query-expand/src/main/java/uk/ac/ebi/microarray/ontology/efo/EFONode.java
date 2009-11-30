@@ -41,7 +41,7 @@ public class EFONode implements IOntologyNode
     public boolean equals( Object o )
     {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (null == o || getClass() != o.getClass()) return false;
         EFONode node = (EFONode)o;
         return !(getId() != null ? !getId().equals(node.getId()) : node.getId() != null);
     }
@@ -91,6 +91,7 @@ public class EFONode implements IOntologyNode
         this.isBranchRoot = isBranchRoot;
     }
 
+    @SuppressWarnings("unchecked")
     public SortedSet<EFONode> getChildren()
     {
         return children;

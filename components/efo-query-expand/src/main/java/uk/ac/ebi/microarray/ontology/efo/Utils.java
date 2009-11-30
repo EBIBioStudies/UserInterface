@@ -19,7 +19,7 @@ public final class Utils
      */
     public static boolean isStopWord( String str )
     {
-        return str == null || str.length() < 2;
+        return null == str || str.length() < 2;
     }
 
     /**
@@ -27,14 +27,14 @@ public final class Utils
      * for not null strings returns its lowercased copy
      * with leading and trailing white spaces removed.
      *
-     * @param str String to normalize.
+     * @param str String to trim and lowercase.
      * @return an empty string if the given one was null,
      *         lowercased copy of the given one
      *         with leading and trailing white spaces removed otherwise.
      */
-    public static String normalizeString( String str )
+    public static String trimLowercaseString( String str )
     {
-        return str == null ? "" : str.trim().toLowerCase();
+        return null == str ? "" : str.trim().toLowerCase();
     }
 
 
@@ -54,9 +54,9 @@ public final class Utils
      *         and all not-letter not-digit not-whitespace not '/' not '-' characters
      *         replaced with whitespace ' '.
      */
-    public static String totallyNormalizeString( String str )
+    public static String preprocessAlternativeTermString( String str )
     {
-        if (str == null) {
+        if (null == str) {
             return "";
         }
         // removing everything in braces: "lala (la) al {a} [lalal]" --> "lala al "
@@ -64,7 +64,7 @@ public final class Utils
         str = pattern.matcher(str).replaceAll("");
         // replacing all not-letter not-digit not-whitespace not '/' not '-' characters with whitespace
         pattern = Pattern.compile("[^(\\d\\w\\s'\\-/)]|( \\- )|( /)|(/ )");
-        str = pattern.matcher(str).replaceAll(" ").trim().toLowerCase();
+        str = pattern.matcher(str).replaceAll("").trim().toLowerCase();
         return str;
     }
 

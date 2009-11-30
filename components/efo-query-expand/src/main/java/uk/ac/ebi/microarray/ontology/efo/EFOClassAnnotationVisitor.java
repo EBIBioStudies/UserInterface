@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * @author Anna Zhukova
  *         Visits annotations of the EFO ontology class,
- *         stores usefull information and then is able to create appropriate node.
+ *         stores useful information and then is able to create appropriate node.
  */
 public class EFOClassAnnotationVisitor implements IClassAnnotationVisitor<EFONode>
 {
@@ -33,6 +33,18 @@ public class EFOClassAnnotationVisitor implements IClassAnnotationVisitor<EFONod
         this.nameToAlternativesMap = nameToAlternativesMap;
     }
 
+     /**
+     * Clears internal state before visiting a new node
+     *
+     */
+    public void newNode()
+    {
+        this.term = null;
+        this.isBranchRoot = false;
+        this.isOrganizational = false;
+        this.alternatives.clear();
+    }
+
     /**
      * Visits the given annotation. If it is label, "branch_class", "organizational_class",
      * "ArrayExpress_label" or "alternative_term" one, stores corresponding information.
@@ -43,16 +55,16 @@ public class EFOClassAnnotationVisitor implements IClassAnnotationVisitor<EFONod
     {
         if (annotation.isLabel()) {
             OWLConstant c = annotation.getAnnotationValue();
-            if (term == null)
-                term = c.getLiteral();
+            if (null == this.term)
+                this.term = c.getLiteral();
         } else if (annotation.getAnnotationURI().toString().contains("branch_class")) {
-            isBranchRoot = Boolean.valueOf(annotation.getAnnotationValue().getLiteral());
+            this.isBranchRoot = Boolean.valueOf(annotation.getAnnotationValue().getLiteral());
         } else if (annotation.getAnnotationURI().toString().contains("organizational_class")) {
-            isOrganizational = Boolean.valueOf(annotation.getAnnotationValue().getLiteral());
+            this.isOrganizational = Boolean.valueOf(annotation.getAnnotationValue().getLiteral());
         } else if (annotation.getAnnotationURI().toString().contains("ArrayExpress_label")) {
-            term = annotation.getAnnotationValue().getLiteral();
+            this.term = annotation.getAnnotationValue().getLiteral();
         } else if (annotation.getAnnotationURI().toString().contains("alternative_term")) {
-            alternatives.add(annotation.getAnnotationValue().getLiteral());
+            this.alternatives.add(preprocessAlternativeTermString(annotation.getAnnotationValue().getLiteral()));
         }
     }
 
@@ -72,7 +84,7 @@ public class EFOClassAnnotationVisitor implements IClassAnnotationVisitor<EFONod
      */
     public String getTerm()
     {
-        return term;
+        return this.term;
     }
 
     /**
@@ -82,7 +94,7 @@ public class EFOClassAnnotationVisitor implements IClassAnnotationVisitor<EFONod
      */
     public boolean isBranchRoot()
     {
-        return isBranchRoot;
+        return this.isBranchRoot;
     }
 
     /**
@@ -92,7 +104,7 @@ public class EFOClassAnnotationVisitor implements IClassAnnotationVisitor<EFONod
      */
     public boolean isOrganizational()
     {
-        return isOrganizational;
+        return this.isOrganizational;
     }
 
     /**
@@ -102,7 +114,7 @@ public class EFOClassAnnotationVisitor implements IClassAnnotationVisitor<EFONod
      */
     public Set<String> getAlternatives()
     {
-        return alternatives;
+        return this.alternatives;
     }
 
     /**
@@ -115,7 +127,7 @@ public class EFOClassAnnotationVisitor implements IClassAnnotationVisitor<EFONod
     {
         EFONode node = new EFONode(id, getTerm(), isBranchRoot());
         if (!isOrganizational()) {
-            updateAlternativesMap(getTerm());
+            addAlternativesToMap(getTerm());
         }
         return node;
     }
@@ -144,32 +156,25 @@ public class EFOClassAnnotationVisitor implements IClassAnnotationVisitor<EFONod
      *
      * @param term Given term.
      */
-    private void updateAlternativesMap( String term )
+    private void addAlternativesToMap( String term )
     {
-        String loweredTerm = normalizeString(term);
-        if (!isStopWord(loweredTerm)) {
+        String lowerCaseTerm = trimLowercaseString(term);
+        if (!isStopWord(lowerCaseTerm)) {
             Set<String> alternatives = getAlternatives();
             if (!alternatives.isEmpty()) {
-                Set<String> existingAlternatives = nameToAlternativesMap.get(loweredTerm);
-                if (existingAlternatives == null) {
+                Set<String> existingAlternatives = getNameToAlternativesMap().get(lowerCaseTerm);
+                if (null == existingAlternatives) {
                     existingAlternatives = new HashSet<String>();
-                    nameToAlternativesMap.put(loweredTerm, existingAlternatives);
+                    this.nameToAlternativesMap.put(lowerCaseTerm, existingAlternatives);
                 }
                 for (String alternativeTerm : alternatives) {
-                    String loweredAlternativeTerm = totallyNormalizeString(alternativeTerm);
-                    if (isStopWord(loweredAlternativeTerm)) {
+                    if (isStopWord(alternativeTerm)) {
                         continue;
                     }
-                    if (loweredTerm.equals(loweredAlternativeTerm)) {
+                    if (lowerCaseTerm.equals(alternativeTerm)) {
                         continue;
                     }
-                    existingAlternatives.add(loweredAlternativeTerm);
-                    Set<String> alternativesToAlternative = nameToAlternativesMap.get(loweredAlternativeTerm);
-                    if (alternativesToAlternative == null) {
-                        alternativesToAlternative = new HashSet<String>();
-                        nameToAlternativesMap.put(loweredAlternativeTerm, alternativesToAlternative);
-                    }
-                    alternativesToAlternative.add(loweredTerm);
+                    existingAlternatives.add(alternativeTerm);
                 }
             }
         }

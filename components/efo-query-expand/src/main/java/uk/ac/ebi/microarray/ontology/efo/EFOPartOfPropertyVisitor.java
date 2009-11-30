@@ -2,7 +2,7 @@ package uk.ac.ebi.microarray.ontology.efo;
 
 import uk.ac.ebi.microarray.ontology.IPropertyVisitor;
 import static uk.ac.ebi.microarray.ontology.efo.Utils.isStopWord;
-import static uk.ac.ebi.microarray.ontology.efo.Utils.normalizeString;
+import static uk.ac.ebi.microarray.ontology.efo.Utils.trimLowercaseString;
 
 import java.util.*;
 
@@ -42,7 +42,7 @@ public class EFOPartOfPropertyVisitor implements IPropertyVisitor<EFONode>
      */
     public boolean isInterestedInNode( EFONode node )
     {
-        return node != null && isInterestedInNode(getName(node));
+        return null != node && isInterestedInNode(getName(node));
     }
 
     /**
@@ -58,7 +58,7 @@ public class EFOPartOfPropertyVisitor implements IPropertyVisitor<EFONode>
     }
 
     /**
-     * Process relationshid forsed by the part_of property.
+     * Process relationship forced by the part_of property.
      * If we are interested in both nodes given updating nameToPartsMap and idToPartIdsMap.
      *
      * @param node   First node.
@@ -68,16 +68,16 @@ public class EFOPartOfPropertyVisitor implements IPropertyVisitor<EFONode>
     {
         String nodeName = getName(node);
         String parentName = getName(friend);
-        if (friend == null || !isInterestedInNode(parentName) || parentName.equals(nodeName)) {
+        if (null == friend || !isInterestedInNode(parentName) || parentName.equals(nodeName)) {
             return;
         }
-        Set<String> parentParts = this.getNameToPartsMap().get(parentName);
-        Set<String> parentPartIds = this.getIdToPartIdsMap().get(friend.getId());
-        if (parentParts == null) {
+        Set<String> parentParts = this.nameToPartsMap.get(parentName);
+        Set<String> parentPartIds = this.idToPartIdsMap.get(friend.getId());
+        if (null == parentParts) {
             parentParts = new HashSet<String>();
             parentPartIds = new HashSet<String>();
-            this.getNameToPartsMap().put(parentName, parentParts);
-            this.getIdToPartIdsMap().put(friend.getId(), parentPartIds);
+            this.nameToPartsMap.put(parentName, parentParts);
+            this.idToPartIdsMap.put(friend.getId(), parentPartIds);
         }
         parentParts.add(nodeName);
         parentPartIds.add(node.getId());
@@ -101,7 +101,7 @@ public class EFOPartOfPropertyVisitor implements IPropertyVisitor<EFONode>
      */
     public String getName( EFONode node )
     {
-        return normalizeString(node.getTerm());
+        return trimLowercaseString(node.getTerm());
     }
 
     /**

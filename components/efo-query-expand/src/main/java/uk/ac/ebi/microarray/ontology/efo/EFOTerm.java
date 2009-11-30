@@ -121,9 +121,9 @@ public class EFOTerm
     public boolean equals( Object o )
     {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (null == o || getClass() != o.getClass()) return false;
         EFOTerm term = (EFOTerm)o;
-        return !(id != null ? !id.equals(term.id) : term.id != null);
+        return !(null != id ? !id.equals(term.id) : null != term.id);
     }
 
     /**
@@ -134,7 +134,7 @@ public class EFOTerm
     @Override
     public int hashCode()
     {
-        return id != null ? id.hashCode() : 0;
+        return null != id ? id.hashCode() : 0;
     }
 
     /**

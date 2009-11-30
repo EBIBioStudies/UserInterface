@@ -34,4 +34,10 @@ public interface IClassAnnotationVisitor<N extends IOntologyNode> extends OWLAnn
      * @param isNodeOrganizational If the given node is organizational.
      */
     void updateOntologyNode( N node, Collection<N> children, boolean isNodeOrganizational );
+
+
+    /**
+     * This needs to be called every time visitor is about to visit a new node.
+     */
+    void newNode();
 }

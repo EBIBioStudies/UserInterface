@@ -83,7 +83,7 @@ public class OntologyLoader<N extends IOntologyNode>
     private void loadProperties( IPropertyVisitor<N> visitor, Map<String, N> ontologyMap )
     {
         OWLObjectProperty property = getProperty(visitor.getPropertyName());
-        if (property != null) {
+        if (null != property) {
             for (OWLClass clazz : ontology.getReferencedClasses()) {
                 String id = getId(clazz);
                 N node = ontologyMap.get(id);
@@ -149,7 +149,9 @@ public class OntologyLoader<N extends IOntologyNode>
         if (reasoner.isSatisfiable(clazz)) {
             String id = getId(clazz);
             N node = ontologyMap.get(id);
-            if (node == null) {
+            if (null == node) {
+                annotationVisitor.newNode();
+
                 for (OWLAnnotation annotation : clazz.getAnnotations(ontology)) {
                     annotation.accept(annotationVisitor);
                 }
