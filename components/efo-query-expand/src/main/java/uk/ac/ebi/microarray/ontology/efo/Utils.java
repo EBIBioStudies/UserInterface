@@ -63,7 +63,7 @@ public final class Utils
         Pattern pattern = Pattern.compile("(\\[[^\\]]*\\])|(\\([^\\)]*\\))|(\\{[^\\}]*\\})");
         str = pattern.matcher(str).replaceAll("");
         // replacing all not-letter not-digit not-whitespace not '/' not '-' characters with whitespace
-        pattern = Pattern.compile("[^(\\d\\w\\s'\\-/)]|( \\- )|( /)|(/ )");
+        pattern = Pattern.compile("[^(\\d\\w\\s'\\-/)]|( \\- )|( /)|(/ )|(NOS)");
         str = pattern.matcher(str).replaceAll("").trim().toLowerCase();
         return str;
     }

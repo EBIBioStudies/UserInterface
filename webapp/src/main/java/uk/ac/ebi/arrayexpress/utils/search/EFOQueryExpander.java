@@ -1,7 +1,9 @@
 package uk.ac.ebi.arrayexpress.utils.search;
 
+import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IQueryExpander;
 
@@ -9,11 +11,11 @@ import java.util.Map;
 
 public final class EFOQueryExpander implements IQueryExpander
 {
+    private IEFOExpansionLookup lookup;
 
-    public final class QueryTag
+    public EFOQueryExpander(IEFOExpansionLookup lookup)
     {
-        public static final String SYNONYM = "Synonym";
-        public static final String EFO = "EFO";
+        this.lookup = lookup;
     }
 
     public Query expandQuery( Query originalQuery, Map<String, String> queryParams )
@@ -45,6 +47,8 @@ public final class EFOQueryExpander implements IQueryExpander
 
     private Query doExpand( Query query, boolean shouldExpandEfo )
     {
+        Query q = new PrefixQuery(new Term("term", "mus"));
+        lookup.getExpansionTerms(q, true);
         return query;
     }
 }
