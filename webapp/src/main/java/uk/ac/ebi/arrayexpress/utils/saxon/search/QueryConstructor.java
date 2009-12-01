@@ -1,5 +1,6 @@
 package uk.ac.ebi.arrayexpress.utils.saxon.search;
 
+import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
@@ -29,8 +30,12 @@ public class QueryConstructor
                 if (env.fields.containsKey(queryItem.getKey()) && queryItem.getValue().trim().length() > 0) {
                     QueryParser parser = new NumericRangeQueryParser(env, queryItem.getKey(), this.env.indexAnalyzer);
                     parser.setDefaultOperator(QueryParser.Operator.AND);
-                    Query q = parser.parse(queryItem.getValue());
-                    result.add(q, BooleanClause.Occur.MUST);
+                    try {
+                        Query q = parser.parse(queryItem.getValue());
+                        result.add(q, BooleanClause.Occur.MUST);
+                    } catch (ParseException x) {
+                        logger.error(x.getMessage()); //todo: this should be communicated to the user, will deal with this at a later stage
+                    }
                 }
             }
         } catch (Throwable x) {
