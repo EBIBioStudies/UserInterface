@@ -18,7 +18,7 @@ public class NumericRangeQueryParser extends QueryParser
         this.env = env;
     }
 
-    public Query getRangeQuery( String field,
+    protected Query getRangeQuery( String field,
                                 String part1,
                                 String part2,
                                 boolean inclusive )
@@ -30,10 +30,8 @@ public class NumericRangeQueryParser extends QueryParser
         if (env.fields.containsKey(field) && "integer".equals(env.fields.get(field).type)) {
             return NumericRangeQuery.newLongRange(
                     field,
-                    Long.parseLong(
-                            query.getLowerTerm()),
-                    Long.parseLong(
-                            query.getUpperTerm()),
+                    parseLong(query.getLowerTerm()),
+                    parseLong(query.getUpperTerm()),
                     query.includesLower(),
                     query.includesUpper());
         } else {
@@ -41,4 +39,46 @@ public class NumericRangeQueryParser extends QueryParser
         }
     }
 
+    protected Query getFieldQuery( String field, String queryText, int slop ) throws ParseException
+    {
+        Query query = super.getFieldQuery(field, queryText, slop);
+        if (env.fields.containsKey(field) && "integer".equals(env.fields.get(field).type)) {
+            return NumericRangeQuery.newLongRange(
+                    field,
+                    parseLong(queryText),
+                    parseLong(queryText),
+                    true,
+                    true);
+        } else {
+            return query;
+        }
+    }
+
+    protected Query getFieldQuery( String field, String queryText ) throws ParseException
+    {
+        Query query = super.getFieldQuery(field, queryText);
+        if (env.fields.containsKey(field) && "integer".equals(env.fields.get(field).type)) {
+            return NumericRangeQuery.newLongRange(
+                    field,
+                    parseLong(queryText),
+                    parseLong(queryText),
+                    true,
+                    true);
+        } else {
+            return query;
+        }
+    }
+
+    private Long parseLong( String text ) throws ParseException
+    {
+        Long value = null;
+
+        try {
+            value = Long.parseLong(text);
+        } catch (NumberFormatException x) {
+            throw new ParseException(x.getMessage());
+        }
+
+        return value;
+    }
 }
