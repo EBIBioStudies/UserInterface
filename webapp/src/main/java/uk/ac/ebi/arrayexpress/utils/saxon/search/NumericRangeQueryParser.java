@@ -19,9 +19,9 @@ public class NumericRangeQueryParser extends QueryParser
     }
 
     protected Query getRangeQuery( String field,
-                                String part1,
-                                String part2,
-                                boolean inclusive )
+                                   String part1,
+                                   String part2,
+                                   boolean inclusive )
             throws ParseException
     {
         TermRangeQuery query = (TermRangeQuery)
@@ -71,7 +71,7 @@ public class NumericRangeQueryParser extends QueryParser
 
     private Long parseLong( String text ) throws ParseException
     {
-        Long value = null;
+        Long value;
 
         try {
             value = Long.parseLong(text);
