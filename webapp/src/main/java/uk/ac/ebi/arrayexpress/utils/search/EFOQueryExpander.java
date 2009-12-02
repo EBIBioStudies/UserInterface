@@ -1,16 +1,21 @@
 package uk.ac.ebi.arrayexpress.utils.search;
 
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.PrefixQuery;
-import org.apache.lucene.search.Query;
+import org.apache.lucene.search.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IQueryExpander;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public final class EFOQueryExpander implements IQueryExpander
 {
+    // logging machinery
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    
     private IEFOExpansionLookup lookup;
 
     public EFOQueryExpander(IEFOExpansionLookup lookup)
@@ -47,8 +52,42 @@ public final class EFOQueryExpander implements IQueryExpander
 
     private Query doExpand( Query query, boolean shouldExpandEfo )
     {
-        Query q = new PrefixQuery(new Term("term", "mus"));
-        lookup.getExpansionTerms(q, true);
+        String field = getQueryField(query);
+        if (null != field && -1 != "keywords sa efv".indexOf(field)) {
+            List<Set<String>> expansionTerms = lookup.getExpansionTerms(query);
+        }
         return query;
+    }
+
+    private String getQueryField( Query query )
+    {
+        String field = null;
+        try {
+            if (query instanceof PrefixQuery) {
+                field = ((PrefixQuery)query).getPrefix().field();
+            } else if (query instanceof WildcardQuery) {
+                field = ((WildcardQuery)query).getTerm().field();
+            } else if (query instanceof TermRangeQuery) {
+                field = ((TermRangeQuery)query).getField();
+            } else if (query instanceof NumericRangeQuery) {
+                field = ((NumericRangeQuery)query).getField();
+            } else if (query instanceof FuzzyQuery) {
+                field = ((FuzzyQuery)query).getTerm().field();
+            } else {
+                Set<Term> terms = new HashSet<Term>();
+                query.extractTerms(terms);
+                if (terms.size() > 1) {
+                    logger.warn("More than one term found for query [{}]", query.toString());
+                } else if (0 == terms.size()) {
+                    logger.error("No terms found for query [{}]", query.toString());
+                    return null;
+                }
+                field = ((Term)terms.toArray()[0]).field();
+            }
+        } catch (UnsupportedOperationException x) {
+            logger.error("Query of [{}], class [{}] doesn't allow us to get its terms extracted", query.toString(), query.getClass().getCanonicalName());
+        }
+
+        return field;
     }
 }

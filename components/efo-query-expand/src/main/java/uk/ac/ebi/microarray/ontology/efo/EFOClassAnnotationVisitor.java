@@ -64,7 +64,13 @@ public class EFOClassAnnotationVisitor implements IClassAnnotationVisitor<EFONod
         } else if (annotation.getAnnotationURI().toString().contains("ArrayExpress_label")) {
             this.term = annotation.getAnnotationValue().getLiteral();
         } else if (annotation.getAnnotationURI().toString().contains("alternative_term")) {
-            this.alternatives.add(preprocessAlternativeTermString(annotation.getAnnotationValue().getLiteral()));
+            String alternativeTerm = annotation.getAnnotationValue().getLiteral();
+            if (-1 != alternativeTerm.indexOf("[accessedResource: CHEBI:")) {
+                alternativeTerm = preprocessChebiString(alternativeTerm);
+            } else {
+                alternativeTerm = preprocessAlternativeTermString(alternativeTerm);
+            }
+            this.alternatives.add(alternativeTerm);
         }
     }
 

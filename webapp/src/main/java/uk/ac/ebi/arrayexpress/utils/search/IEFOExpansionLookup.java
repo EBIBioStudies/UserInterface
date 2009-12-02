@@ -7,5 +7,5 @@ import java.util.Set;
 
 public interface IEFOExpansionLookup
 {
-    public List<Set<String>> getExpansionTerms( Query query, boolean shouldExpandEfo);
+    public List<Set<String>> getExpansionTerms( Query query );
 }

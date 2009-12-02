@@ -68,6 +68,18 @@ public final class Utils
         return str;
     }
 
+    public static String preprocessChebiString( String str )
+    {
+        if (null == str) {
+            return "";
+        }
+        // removing service
+        Pattern pattern = Pattern.compile("(\\[accessedResource:[^\\]]+\\])|(\\[accessDate:[^\\]]+\\])");
+        str = pattern.matcher(str).replaceAll("").trim().toLowerCase();
+        return str;
+        
+    }
+
     /**
      * Converts Map&lt;String, String[]&gt; to Map&lt;String[], String[][]&gt;
      * by splitting each value into words aroung whitespaces.

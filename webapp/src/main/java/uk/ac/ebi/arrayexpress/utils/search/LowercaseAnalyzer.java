@@ -24,7 +24,7 @@ public final class LowercaseAnalyzer extends Analyzer
 
         protected boolean isTokenChar(char c)
         {
-            return true;
+            return true || super.isTokenChar(c);
         }
     }
 
