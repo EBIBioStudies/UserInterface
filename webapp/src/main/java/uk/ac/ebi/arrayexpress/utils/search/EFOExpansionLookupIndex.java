@@ -89,7 +89,7 @@ public class EFOExpansionLookupIndex implements IEFOExpansionLookup
 
                 // to show _all_ available nodes
                 IndexSearcher isearcher = new IndexSearcher(ir);
-                Query q = overrideTermField(origQuery, "term");
+                Query q = overrideQueryField(origQuery, "term");
                 logger.debug("Looking up synonyms for query [{}]", q.toString());
 
                 TopDocs hits = isearcher.search(q, 128); // todo: WTF is this hardcoded?
@@ -150,7 +150,7 @@ public class EFOExpansionLookupIndex implements IEFOExpansionLookup
             }
         }
 
-        private Query overrideTermField( Query origQuery, String fieldName )
+        private Query overrideQueryField( Query origQuery, String fieldName )
         {
             Query query = new TermQuery(new Term(""));
 
