@@ -92,7 +92,7 @@ public class EFOExpansionLookupIndex implements IEFOExpansionLookup
                 Query q = overrideQueryField(origQuery, "term");
                 logger.debug("Looking up synonyms for query [{}]", q.toString());
 
-                TopDocs hits = isearcher.search(q, 128); // todo: WTF is this hardcoded?
+                TopDocs hits = isearcher.search(q, 128); // todo: wtf is this hardcoded?
                 logger.debug("Query returned [{}] hits", hits.totalHits);
 
                 for (ScoreDoc d : hits.scoreDocs) {
@@ -127,7 +127,14 @@ public class EFOExpansionLookupIndex implements IEFOExpansionLookup
 
         private void addIndexField( Document document, String name, String value, boolean shouldAnalyze, boolean shouldStore )
         {
-            document.add(new Field(name, value, shouldStore ? Field.Store.YES : Field.Store.NO, shouldAnalyze ? Field.Index.ANALYZED : Field.Index.NOT_ANALYZED));
+            document.add(
+                    new Field(
+                            name
+                            , value
+                            , shouldStore ? Field.Store.YES : Field.Store.NO
+                            , shouldAnalyze ? Field.Index.ANALYZED : Field.Index.NOT_ANALYZED
+                    )
+            );
         }
 
         private void addIndexDocument( IndexWriter iwriter, Document document )
