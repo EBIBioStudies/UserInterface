@@ -3,6 +3,7 @@ package uk.ac.ebi.arrayexpress.jobs;
 import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.utils.db.ExperimentXmlDatabaseRetriever;
 
 import javax.sql.DataSource;
@@ -30,6 +31,10 @@ public class RetrieveExperimentsXmlJob implements InterruptableJob
             );
         } catch ( InterruptedException x ) {
             logger.debug("Job [{}] was interrupted", jec.getJobDetail().getFullName());
+        } catch ( Error x ) {
+            logger.error("[SEVERE] Runtime error while executing job [" + jec.getJobDetail().getFullName() + "]:", x);
+            Application.getInstance().sendExceptionReport("[SEVERE] Runtime error while executing job [" + jec.getJobDetail().getFullName() + "]", x);
+            throw new JobExecutionException(x);
         }
         myThread = null;
     }

@@ -18,6 +18,10 @@ abstract public class ApplicationJob implements InterruptableJob, StatefulJob
             doExecute(jec);
         } catch ( InterruptedException x ) {
             logger.debug("Job [{}] was interrupted", jec.getJobDetail().getFullName());
+        } catch ( Error x ) {
+            logger.error("[SEVERE] Runtime error while executing job [" + jec.getJobDetail().getFullName() + "]:", x);
+            Application.getInstance().sendExceptionReport("[SEVERE] Runtime error while executing job [" + jec.getJobDetail().getFullName() + "]", x);
+            throw new JobExecutionException(x);
         }
         myThread = null;
     }

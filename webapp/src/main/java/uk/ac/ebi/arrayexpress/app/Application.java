@@ -64,7 +64,7 @@ public abstract class Application
     {
         logger.debug("Initializing the application...");
         prefs.initialize();
-        emailer = new EmailSender(getPreferences().getString("ae.reports.smtp.server"));
+        emailer = new EmailSender(getPreferences().getString("app.reports.smtp.server"));
 
         for (ApplicationComponent c : components.values()) {
             logger.info("Initializing component [{}]", c.getName());
@@ -105,10 +105,10 @@ public abstract class Application
     {
         try {
 
-            emailer.send(getPreferences().getStringArray("ae.reports.recipients")
+            emailer.send(getPreferences().getStringArray("app.reports.recipients")
                     , subject
                     , message
-                    , getPreferences().getString("ae.reports.originator")
+                    , getPreferences().getString("app.reports.originator")
             );
 
         } catch (Throwable x) {
@@ -118,8 +118,12 @@ public abstract class Application
 
     public void sendExceptionReport( String message, Throwable x )
     {
-        sendEmail("AE Interface Runtime Exception Report"
-                , message + ": " + x.getMessage() + "\n\n" + getStackTrace(x)
+        Thread currentThread = Thread.currentThread();
+
+        sendEmail("Application [" + getName() + "] Runtime Exception Report"
+                , message + ": " + x.getMessage()
+                        + "\n\nThread [" + currentThread.getName() + "]"
+                        + "\n" + getStackTrace(x)
         );
     }
 
