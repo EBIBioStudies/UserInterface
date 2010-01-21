@@ -53,7 +53,7 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
             trFactory.setURIResolver(this);
 
             loggerWriter = new LoggerWriter(logger);
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
     }
@@ -128,7 +128,7 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
 
             transformer.transform(document, new StreamResult(outStream));
             string = outStream.toString(XML_STRING_ENCODING);
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
 
@@ -142,7 +142,7 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
         try {
             Configuration config = trFactory.getConfiguration();
             document = config.buildDocument(new StreamSource(reader));
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
 
@@ -155,7 +155,7 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
             XPath xp = new XPathEvaluator(trFactory.getConfiguration());
             XPathExpression xpe = xp.compile(xpath);
             return xpe.evaluate(doc);
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
 
@@ -180,7 +180,7 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
         if (transform(srcDocument, stylesheet, params, new StreamResult(outStream))) {
             try {
                 str = outStream.toString(XML_STRING_ENCODING);
-            } catch (Throwable x) {
+            } catch (Exception x) {
                 logger.error("Caught an exception:", x);
             }
             return str;
@@ -197,7 +197,7 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
             if (transform(src, stylesheet, params, dstDocument)) {
                 return (DocumentInfo)dstDocument.getCurrentRoot();
             }
-        } catch ( Throwable x ) {
+        } catch ( Exception x ) {
             logger.error("Caught an exception:", x);
         }
         return null;
@@ -210,7 +210,7 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
             if (transform(srcDocument, stylesheet, params, dstDocument)) {
                 return (DocumentInfo)dstDocument.getCurrentRoot();
             }
-        } catch ( Throwable x ) {
+        } catch ( Exception x ) {
             logger.error("Caught an exceptiom:", x);
         }
 
@@ -253,7 +253,7 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
             result = true;
         } catch (TerminationException x ) {
             logger.error("Transformation has been terminated by xsl instruction, please inspect log for details");
-        } catch ( Throwable x ) {
+        } catch ( Exception x ) {
             if (x.getMessage().contains("java.lang.InterruptedException")) {
                 logger.error("Transformation has been interruped");
             } else {

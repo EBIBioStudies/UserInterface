@@ -21,17 +21,23 @@ public class HttpProxyServlet extends ApplicationServlet
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    // Respond to HTTP GET requests from browsers.
-    public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
+    protected boolean canAcceptRequest( HttpServletRequest request, RequestType requestType )
     {
-        logRequest(logger, request, RequestType.GET);
+        return (requestType == RequestType.GET);
+    }
+
+    // Respond to HTTP requests from browsers.
+    protected void doRequest( HttpServletRequest request, HttpServletResponse response, RequestType requestType )
+            throws ServletException, IOException
+    {
+        logRequest(logger, request, requestType);
 
         String path = new RegExpHelper("servlets/proxy/(.+)", "i")
                 .matchFirst(request.getRequestURL().toString());
         String queryString = request.getQueryString();
 
         if (0 < path.length()) {
-
+            // todo: wtf is this hardcoded?
             String url = new StringBuilder("http://www.ebi.ac.uk/").append(path).append(null != queryString ? "?" + queryString : "").toString();
             logger.debug("Will access [{}]", url);
 
@@ -73,7 +79,7 @@ public class HttpProxyServlet extends ApplicationServlet
                     logger.error(err);
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, err);
                 }
-            } catch ( Throwable x ) {
+            } catch ( Exception x ) {
                 logger.error("Caught an exception:", x);
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, x.getMessage());
             } finally {

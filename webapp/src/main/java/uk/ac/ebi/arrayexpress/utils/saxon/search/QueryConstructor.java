@@ -38,7 +38,7 @@ public class QueryConstructor
                     }
                 }
             }
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
         return result;

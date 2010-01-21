@@ -112,7 +112,7 @@ public class ReloadExperimentsJob extends ApplicationJob implements JobListener
         if (jec.getJobDetail().getName().equals("retrieve-xml")) {
             try {
                 interrupt();
-            } catch ( Throwable x ) {
+            } catch ( Exception x ) {
                 logger.error("Caught an exception:", x);
             }
         }

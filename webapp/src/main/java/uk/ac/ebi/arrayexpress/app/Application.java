@@ -2,7 +2,11 @@ package uk.ac.ebi.arrayexpress.app;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.arrayexpress.utils.EmailSender;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedHashMap;
@@ -14,14 +18,15 @@ public abstract class Application
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
     private String name;
+    private ApplicationPreferences prefs;
     private Map<String, ApplicationComponent> components;
+    private EmailSender emailer;
 
     public Application( String appName )
     {
         name = appName;
+        prefs = new ApplicationPreferences(getName());
         components = new LinkedHashMap<String, ApplicationComponent>();
-        addComponent(new ApplicationPreferences(getName()));
-
         // setting application instance available to whoever wants it
         appInstance = this;
     }
@@ -52,18 +57,24 @@ public abstract class Application
 
     public ApplicationPreferences getPreferences()
     {
-        return (ApplicationPreferences)getComponent("Preferences");
+        return prefs;
     }
 
     public void initialize()
     {
         logger.debug("Initializing the application...");
+        prefs.initialize();
+        emailer = new EmailSender(getPreferences().getString("ae.reports.smtp.server"));
+
         for (ApplicationComponent c : components.values()) {
             logger.info("Initializing component [{}]", c.getName());
             try {
                 c.initialize();
-            } catch (Throwable x) {
+            } catch (Exception x) {
                 logger.error("Caught an exception while initializing [" + c.getName() + "]:", x);
+            } catch (Error x) {
+                logger.error("[SEVERE] Caught an error while initializing [" + c.getName() + "]:", x);
+                sendExceptionReport("[SEVERE] Caught an error while initializing [" + c.getName() + "]", x);
             }
         }
     }
@@ -88,6 +99,36 @@ public abstract class Application
 
         // remove reference to self
         appInstance = null;
+    }
+
+    public void sendEmail( String subject, String message )
+    {
+        try {
+
+            emailer.send(getPreferences().getStringArray("ae.reports.recipients")
+                    , subject
+                    , message
+                    , getPreferences().getString("ae.reports.originator")
+            );
+
+        } catch (Throwable x) {
+            logger.error("[SEVERE] Cannot even send an email without an exception:", x);
+        }
+    }
+
+    public void sendExceptionReport( String message, Throwable x )
+    {
+        sendEmail("AE Interface Runtime Exception Report"
+                , message + ": " + x.getMessage() + "\n\n" + getStackTrace(x)
+        );
+    }
+
+    private String getStackTrace( Throwable x )
+    {
+        final Writer result = new StringWriter();
+        final PrintWriter printWriter = new PrintWriter(result);
+        x.printStackTrace(printWriter);
+        return result.toString();
     }
 
     public static Application getInstance()

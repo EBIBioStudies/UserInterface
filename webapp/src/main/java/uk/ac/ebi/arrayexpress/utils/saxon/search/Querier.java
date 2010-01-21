@@ -41,7 +41,7 @@ public class Querier
             // TODO: this should go to 'finally' clause
             terms.close();
             ir.close();
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
         return termsList;
@@ -73,7 +73,7 @@ public class Querier
 
             isearcher.close();
             ir.close();
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
 

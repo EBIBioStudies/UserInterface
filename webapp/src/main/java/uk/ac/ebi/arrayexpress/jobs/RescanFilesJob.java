@@ -40,7 +40,7 @@ public class RescanFilesJob extends ApplicationJob
                     this.logger.info("Rescan of downloadable files completed");
                 } catch ( InterruptedException x ) {
                     throw x;
-                } catch ( Throwable x ) {
+                } catch ( Exception x ) {
                     this.logger.error("Caught an exception:", x);
                 }
             }

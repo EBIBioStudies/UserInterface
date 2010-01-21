@@ -34,7 +34,7 @@ public class Ontologies extends ApplicationComponent
 
             ((SearchEngine)getComponent("SearchEngine")).getController().setQueryExpander(new EFOQueryExpander(ix));
 
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
     }

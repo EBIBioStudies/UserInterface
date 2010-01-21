@@ -172,7 +172,7 @@ public class Experiments extends ApplicationComponent implements DocumentSource
             ((SearchEngine)getComponent("SearchEngine")).getController().index("experiments", experiments.getObject().getDocument());
             //List<String> expDesign = Controller.getInstance().getTerms("experiments", "expdesign");
             //logger.debug("Retrieved experiment design list, size [{}]", expDesign.size());
-        } catch (Throwable x) {
+        } catch (Exception x) {
             this.logger.error("Caught an exception:", x);
         }
     }

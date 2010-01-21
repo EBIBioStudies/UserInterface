@@ -34,7 +34,7 @@ public abstract class SqlStatementExecutor
                 rs = statement.executeQuery();
                 processResultSet(rs);
                 result = true;
-            } catch ( Throwable x ) {
+            } catch ( Exception x ) {
                 logger.error("Caught an exception:", x);
             } finally {
                 if (null != rs) {

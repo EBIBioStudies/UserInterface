@@ -100,7 +100,7 @@ public class IndexEnvironment
                 }
             }
 
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
     }

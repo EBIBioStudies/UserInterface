@@ -75,7 +75,7 @@ public class EFOExpansionLookupIndex implements IEFOExpansionLookup
                 }
                 commitIndex(w);
 
-            } catch (Throwable x) {
+            } catch (Exception x) {
                 logger.error("Caught an exception:", x);
             }
         }
@@ -104,7 +104,7 @@ public class EFOExpansionLookupIndex implements IEFOExpansionLookup
 
                 isearcher.close();
                 ir.close();
-            } catch (Throwable x) {
+            } catch (Exception x) {
                 logger.error("Caught an exception:", x);
             }
 
@@ -118,7 +118,7 @@ public class EFOExpansionLookupIndex implements IEFOExpansionLookup
             IndexWriter iwriter = null;
             try {
                 iwriter = new IndexWriter(indexDirectory, analyzer, true, IndexWriter.MaxFieldLength.UNLIMITED);
-            } catch (Throwable x) {
+            } catch (Exception x) {
                 this.logger.error("Caught an exception:", x);
             }
 
@@ -141,7 +141,7 @@ public class EFOExpansionLookupIndex implements IEFOExpansionLookup
         {
             try {
                 iwriter.addDocument(document);
-            } catch (Throwable x) {
+            } catch (Exception x) {
                 this.logger.error("Caught an exception:", x);
             }
         }
@@ -152,7 +152,7 @@ public class EFOExpansionLookupIndex implements IEFOExpansionLookup
                 iwriter.optimize();
                 iwriter.commit();
                 iwriter.close();
-            } catch (Throwable x) {
+            } catch (Exception x) {
                 this.logger.error("Caught an exception:", x);
             }
         }
@@ -188,7 +188,7 @@ public class EFOExpansionLookupIndex implements IEFOExpansionLookup
                 } else {
                     logger.error("Unsupported query type [{}]", origQuery.getClass().getCanonicalName());
                 }
-            } catch (Throwable x) {
+            } catch (Exception x) {
                 logger.error("Caught an exception:", x);
             }
 

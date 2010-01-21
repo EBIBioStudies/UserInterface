@@ -65,7 +65,7 @@ public class TextFilePersistence<Object extends Persistable>
             } else {
                 logger.warn("Persistence file [{}] not found", persistenceFile.getAbsolutePath());
             }
-        } catch ( Throwable x ) {
+        } catch ( Exception x ) {
             logger.error("Caught an exception:", x);
         }
         return result.toString();
@@ -80,7 +80,7 @@ public class TextFilePersistence<Object extends Persistable>
             w.close();
             logger.debug("Object successfully saved");
 
-        } catch ( Throwable x ) {
+        } catch ( Exception x ) {
             logger.error("Caught an exception:", x);
         }
     }

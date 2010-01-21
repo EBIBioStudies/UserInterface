@@ -30,7 +30,7 @@ public class QueryHighlighter
             String str = highlighter.getBestFragment(this.env.indexAnalyzer, fieldName, text);
 
             return null != str ? str : text;
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
         return text;

@@ -19,10 +19,15 @@ public class ControlServlet extends ApplicationServlet
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
     
-    // Respond to HTTP GET requests from browsers.
-    public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
+    protected boolean canAcceptRequest( HttpServletRequest request, RequestType requestType )
     {
-        logRequest(logger, request, RequestType.GET);
+        return (requestType == RequestType.GET || requestType == RequestType.POST);
+    }
+
+    // Respond to HTTP requests from browsers.
+    protected void doRequest( HttpServletRequest request, HttpServletResponse response, RequestType requestType ) throws ServletException, IOException
+    {
+        logRequest(logger, request, requestType);
 
         String command = "";
         String params = "";

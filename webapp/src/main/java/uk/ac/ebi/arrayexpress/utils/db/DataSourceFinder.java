@@ -45,7 +45,7 @@ public class DataSourceFinder
             ds = (DataSource) envContext.lookup("jdbc/" + dsName.toLowerCase());
         } catch ( NameNotFoundException x ) {
             logger.error("Data source [{}] is not regsitered with application, check your context.xml", dsName);
-        } catch ( Throwable x ) {
+        } catch ( Exception x ) {
             logger.error("Caught an exception:", x);
         }
 
@@ -62,13 +62,13 @@ public class DataSourceFinder
                 conn.close();
                 conn = null;
                 result = true;
-            } catch ( Throwable x ) {
+            } catch ( Exception x ) {
                 logger.debug("Caught an exception [{}]", x.getMessage());
             } finally {
                 if (null != conn) {
                     try {
                         conn.close();
-                    } catch ( Throwable x ) {
+                    } catch ( Exception x ) {
                         logger.error("Caught an exception:", x);
                     }
                 }

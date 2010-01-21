@@ -38,28 +38,13 @@ public class DownloadServlet extends ApplicationServlet
         }
     }
 
-    // Respond to HTTP HEAD requests from browsers.
-    public void goHead( HttpServletRequest request, HttpServletResponse response )
-            throws ServletException, IOException
+    protected boolean canAcceptRequest( HttpServletRequest request, RequestType requestType )
     {
-        processRequest(request, response, RequestType.HEAD);
+        return true; // all requests are supported
     }
 
-    // Respond to HTTP GET requests from browsers.
-    public void doGet( HttpServletRequest request, HttpServletResponse response )
-            throws ServletException, IOException
-    {
-        processRequest(request, response, RequestType.GET);
-    }
-
-    // Respond to HTTP POST requests from browsers.
-    public void doPost( HttpServletRequest request, HttpServletResponse response )
-            throws ServletException, IOException
-    {
-        processRequest(request, response, RequestType.POST);
-    }
-
-    private void processRequest( HttpServletRequest request, HttpServletResponse response, RequestType requestType )
+    // Respond to HTTP requests from browsers.
+    protected void doRequest( HttpServletRequest request, HttpServletResponse response, RequestType requestType )
             throws ServletException, IOException
     {
         logRequest(logger, request, requestType);

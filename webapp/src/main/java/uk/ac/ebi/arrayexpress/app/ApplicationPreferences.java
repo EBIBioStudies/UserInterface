@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.NoSuchElementException;
 
-public class ApplicationPreferences extends ApplicationComponent
+public class ApplicationPreferences
 {
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -19,8 +19,6 @@ public class ApplicationPreferences extends ApplicationComponent
 
     public ApplicationPreferences( String fileName )
     {
-        super("Preferences");
-
         this.prefsFileName = fileName;
     }
 
@@ -41,6 +39,11 @@ public class ApplicationPreferences extends ApplicationComponent
         return prefs.getString(key);
     }
 
+    public String[] getStringArray( String key )
+    {
+        return prefs.getStringArray(key);
+    }
+
     public Long getLong( String key )
     {
         Long value = null;
@@ -50,7 +53,7 @@ public class ApplicationPreferences extends ApplicationComponent
             logger.error(x.getMessage());
         } catch (NoSuchElementException x) {
             logger.error(x.getMessage());            
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
         return value;
@@ -63,7 +66,7 @@ public class ApplicationPreferences extends ApplicationComponent
             value = prefs.getBoolean(key);
         } catch (NoSuchElementException x) {
             logger.error(x.getMessage());
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
 
@@ -81,7 +84,7 @@ public class ApplicationPreferences extends ApplicationComponent
             ).openStream();
 
             prefs.load(prefsStream);
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         } finally {
             if (null != prefsStream) {

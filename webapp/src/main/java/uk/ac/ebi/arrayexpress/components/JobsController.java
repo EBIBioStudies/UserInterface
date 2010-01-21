@@ -60,7 +60,7 @@ public class JobsController extends ApplicationComponent
     {
         try {
             getScheduler().triggerJob(name, AE_JOBS_GROUP);
-        } catch ( Throwable x ) {
+        } catch ( Exception x ) {
             logger.error("Caught an exception:", x);
         }
     }
@@ -71,7 +71,7 @@ public class JobsController extends ApplicationComponent
             JobDataMap map = new JobDataMap();
             map.put("param", param);
             getScheduler().triggerJob(name, AE_JOBS_GROUP, map);
-        } catch ( Throwable x ) {
+        } catch ( Exception x ) {
             logger.error("Caught an exception:", x);
         }
     }
@@ -85,7 +85,7 @@ public class JobsController extends ApplicationComponent
             } else {
                 getScheduler().removeGlobalJobListener("job-listener");
             }
-        } catch ( Throwable x ) {
+        } catch ( Exception x ) {
             logger.error("Caught an exception:", x);
         }
     }
@@ -96,7 +96,7 @@ public class JobsController extends ApplicationComponent
             try {
                 // Retrieve a scheduler from schedule factory
                 scheduler = new StdSchedulerFactory().getScheduler();
-            } catch ( Throwable x ) {
+            } catch ( Exception x ) {
                 logger.error("Caught an exception:", x);
             }
         }
@@ -107,7 +107,7 @@ public class JobsController extends ApplicationComponent
     {
         try {
             getScheduler().addGlobalTriggerListener(tl);
-        } catch (Throwable x ) {
+        } catch (Exception x ) {
             logger.error("Caught an exception:", x);
         }
     }
@@ -117,7 +117,7 @@ public class JobsController extends ApplicationComponent
         JobDetail j = new JobDetail(name, AE_JOBS_GROUP, c, true /* volatilily */, true /*durability */, false /* recover */);
         try {
             getScheduler().addJob(j, false);
-        } catch ( Throwable x ) {
+        } catch ( Exception x ) {
             logger.error("Caught an exception:", x);
         }
     }
@@ -139,7 +139,7 @@ public class JobsController extends ApplicationComponent
                 cronTrigger.setJobGroup(AE_JOBS_GROUP);
                 // schedule a job with JobDetail and Trigger
                 getScheduler().scheduleJob(cronTrigger);
-            } catch ( Throwable x ) {
+            } catch ( Exception x ) {
                 logger.error("Caught an exception:", x);
             }
         }
@@ -155,7 +155,7 @@ public class JobsController extends ApplicationComponent
             try {
                 getScheduler().scheduleJob(intervalTrigger);
                 hasScheduledInterval = true;
-            } catch ( Throwable x ) {
+            } catch ( Exception x ) {
                 logger.error("Caught an exception:", x);
             }
         }
@@ -168,7 +168,7 @@ public class JobsController extends ApplicationComponent
 
             try {
                 getScheduler().scheduleJob(intervalTrigger);
-            } catch ( Throwable x ) {
+            } catch ( Exception x ) {
                 logger.error("Caught an exception:", x);
             }
         }
@@ -188,7 +188,7 @@ public class JobsController extends ApplicationComponent
 
             getScheduler().shutdown(true);
 
-        } catch ( Throwable x ) {
+        } catch ( Exception x ) {
             logger.error("Caught an exception:", x);
         }
     }

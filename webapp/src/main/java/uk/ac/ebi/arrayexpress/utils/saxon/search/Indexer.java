@@ -81,7 +81,7 @@ public class Indexer
             }
             commitIndex(w);
 
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
 
@@ -94,7 +94,7 @@ public class Indexer
         IndexWriter iwriter = null;
         try {
             iwriter = new IndexWriter(indexDirectory, analyzer, true, IndexWriter.MaxFieldLength.UNLIMITED);
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
 
@@ -138,7 +138,7 @@ public class Indexer
     {
         try {
             iwriter.addDocument(document);
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
     }
@@ -149,7 +149,7 @@ public class Indexer
             iwriter.optimize();
             iwriter.commit();
             iwriter.close();
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
     }

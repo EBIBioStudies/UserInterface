@@ -94,7 +94,7 @@ public class ExtFunctions
             try {
                 Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
                 dateString = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(date);
-            } catch (Throwable x) {
+            } catch (Exception x) {
                 logger.debug("Caught an exception:", x);
             }
         } else {
@@ -146,7 +146,7 @@ public class ExtFunctions
         } catch (InterruptedException x) {
             logger.warn("Method interrupted");
             throw x;
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
         **/
@@ -159,7 +159,7 @@ public class ExtFunctions
 
         try {
             return new RegExpHelper(pattern, flags).test(input);
-        } catch (Throwable t) {
+        } catch (Exception t) {
             logger.debug("Caught an exception:", t);
         }
 

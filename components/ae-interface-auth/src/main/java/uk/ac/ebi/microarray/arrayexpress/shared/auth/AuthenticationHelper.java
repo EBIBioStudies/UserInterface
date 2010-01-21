@@ -27,7 +27,7 @@ public class AuthenticationHelper
                             .getBytes()
             );
             hash = new String(encoder.encode(hashBytes));
-        } catch ( Throwable x ) {
+        } catch ( Exception x ) {
             // nothing we do here, unfortunately
         }
         return hash;

@@ -23,7 +23,7 @@ public class SearchEngine extends ApplicationComponent
         try {
             this.controller = new Controller(getApplication().getResource("/WEB-INF/classes/aeindex.xml"));
             SearchExtension.setController(getController());
-        } catch (Throwable x) {
+        } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
 
