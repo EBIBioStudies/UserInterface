@@ -9,7 +9,7 @@
     <xsl:output omit-xml-declaration="yes" method="html"/>
 
     <xsl:template match="/experiments">
-        <option value="">Any array</option>
+        <option value="">All arrays</option>
         <xsl:call-template name="optgroup">
             <xsl:with-param name="pGroupTitle" select="'Affymetrix'"/>
             <xsl:with-param name="pGroupSignature" select="'affymetrix'"/>

@@ -8,7 +8,7 @@
 
     <xsl:output omit-xml-declaration="yes" method="html"/>
     <xsl:template match="/experiments">
-        <option value="">Any experiment type</option>
+        <option value="">All experiment types</option>
         <xsl:for-each-group select="experiment/experimenttype" group-by="text()" collation="http://saxon.sf.net/collation?ignore-case=yes">
             <xsl:sort select="lower-case(.)"/>
             <option value="{.}">
