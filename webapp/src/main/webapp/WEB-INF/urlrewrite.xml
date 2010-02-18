@@ -111,8 +111,12 @@
         <to type="forward">/servlets/query/arrays-select/html</to>
     </rule>
     <rule>
-        <from>^/exptypes-list.html</from>
-        <to type="forward">/servlets/query/exptypes-select/html</to>
+        <from>^/expdesign-list.html</from>
+        <to type="forward">/servlets/lookup/expdesign?q=%{parameter:q}</to>
+    </rule>
+    <rule>
+        <from>^/exptech-list.html</from>
+        <to type="forward">/servlets/lookup/exptech?q=%{parameter:q}</to>
     </rule>
     <rule>
         <from>^/ae-stats.xml</from>

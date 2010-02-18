@@ -80,8 +80,6 @@ public class QueryServlet extends ApplicationServlet
             out.print(experiments.getArrays());
         } else if (stylesheet.equals("species-select")) {
             out.print(experiments.getSpecies());
-        } else if (stylesheet.equals("exptypes-select")) {
-            out.print(experiments.getExperimentTypes());
         } else {
             String stylesheetName = new StringBuilder(stylesheet).append('-').append(type).append(".xsl").toString();
 
