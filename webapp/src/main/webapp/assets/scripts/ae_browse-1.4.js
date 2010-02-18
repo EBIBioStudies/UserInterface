@@ -18,7 +18,9 @@ aeResetFilters()
 {
     $("#ae_species").val("");
     $("#ae_array").val("");
-    $("#ae_exptype").val("");
+    $("#ae_expdesign").val("");
+    $("#ae_exptech").val("");
+
 }
 
 function
@@ -201,8 +203,8 @@ $(document).ready( function() {
         query.expandefo = getQueryBooleanParam("expandefo");
         query.species = getQueryStringParam("species");
         query.array = getQueryStringParam("array");
-        query.exptype = getQueryStringParam("exptype");
         query.expdesign = getQueryStringParam("expdesign");
+        query.exptech = getQueryStringParam("exptech");
         query.efv = getQueryStringParam("efv");
         query.sa = getQueryStringParam("sa");
         query.pmid = getQueryStringParam("pmid");
@@ -349,14 +351,39 @@ initControls()
         
     });
 
-    $.get("exptypes-list.html").next( function(data) {
-        $("#ae_exptype").html(data).removeAttr("disabled").val(query.exptype);
-
-    });
-
     $.get("arrays-list.html").next( function(data) {
         addHtmlToSelect("ae_array", data);
         $("#ae_array").removeAttr("disabled").val(query.array);
+    });
+
+    $("#ae_expdesign").change( function(e) {
+                    var selected = e.target.value;
+                    onExpDesignChange(selected);
+    });
+
+    $("#ae_exptech").change( function(e) {
+                    var selected = e.target.value;
+                    onExpTechChange(selected);
+    });
+
+
+    $.get("expdesign-list.html?q=").next( function(data) {
+        $("#ae_expdesign")
+                .html(data)
+                .removeAttr("disabled")
+                .val(query.expdesign);
+        if (query.expdesign > "")
+            onExpDesignChange(query.expdesign);
+    });
+
+
+    $.get("exptech-list.html?q=").next( function(data) {
+        $("#ae_exptech")
+                .html(data)
+                .removeAttr("disabled")
+                .val(query.exptech);
+        if (query.exptech > "")
+            onExpTechChange(query.exptech);
     });
 
     if ( "" != query.sortby ) {
@@ -372,6 +399,40 @@ initControls()
             }
         }
     }
+}
+
+function
+onExpDesignChange( value )
+{
+    $.get("exptech-list.html?q=" + String(value).replace(/ +/g, "+")).next( function(data) {
+                        var selector = $("#ae_exptech");
+                        var curValue = selector.val();
+                        var newValue = curValue;
+                        selector.html(data);
+                        if (0 == selector.find("option[value='" + curValue + "']").length) {
+                            newValue = selector.find("option")[0].val();
+                        }
+                        if (curValue != newValue) {
+                            onExpTechChange(selector.val());
+                        }
+                    });
+}
+
+function
+onExpTechChange( value )
+{
+    $.get("expdesign-list.html?q=" + String(value).replace(/ +/g, "+")).next( function(data) {
+                        var selector = $("#ae_expdesign");
+                        var curValue = selector.val();
+                        var newValue = curValue;
+                        selector.html(data);
+                        if (0 == selector.find("option[value='" + curValue + "']").length) {
+                            newValue = selector.find("option")[0].val();
+                        }
+                        if (curValue != newValue) {
+                            onExpDesignChange(selector.val());
+                        }
+                    });
 }
 
 function

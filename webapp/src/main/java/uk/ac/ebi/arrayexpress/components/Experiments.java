@@ -11,7 +11,9 @@ import uk.ac.ebi.arrayexpress.utils.persistence.TextFilePersistence;
 import uk.ac.ebi.arrayexpress.utils.saxon.DocumentSource;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Experiments extends ApplicationComponent implements DocumentSource
 {
@@ -23,7 +25,9 @@ public class Experiments extends ApplicationComponent implements DocumentSource
     private TextFilePersistence<PersistableStringList> experimentsInAtlas;
     private TextFilePersistence<PersistableString> species;
     private TextFilePersistence<PersistableString> arrays;
-    private TextFilePersistence<PersistableString> experimentTypes;
+    //private TextFilePersistence<PersistableString> experimentTypes;
+    private Map<String, String> assaysByMolecule;
+    private Map<String, String> assaysByInstrument;
 
     private SaxonEngine saxon;
 
@@ -57,10 +61,23 @@ public class Experiments extends ApplicationComponent implements DocumentSource
                 , new File(getPreferences().getString("ae.arrays.file.location"))
         );
 
-        this.experimentTypes = new TextFilePersistence<PersistableString>(
-                new PersistableString()
-                , new File(getPreferences().getString("ae.exptypes.file.location"))
-        );
+        //this.experimentTypes = new TextFilePersistence<PersistableString>(
+        //        new PersistableString()
+        //        , new File(getPreferences().getString("ae.exptypes.file.location"))
+        //);
+
+        this.assaysByMolecule = new HashMap<String, String>();
+        assaysByMolecule.put("", "<option value=\"\">All assays by molecule</option><option value=\"DNA assay\">DNA assay</option><option value=\"metabolomic profiling\">Metabolite assay</option><option value=\"protein assay\">Protein assay</option><option value=\"RNA assay\">RNA assay</option>");
+        assaysByMolecule.put("array assay", "<option value=\"\">All assays by molecule</option><option value=\"DNA assay\">DNA assay</option><option value=\"RNA assay\">RNA assay</option>");
+        assaysByMolecule.put("high throughput sequencing assay", "<option value=\"\">All assays by molecule</option><option value=\"DNA assay\">DNA assay</option><option value=\"RNA assay\">RNA assay</option>");
+        assaysByMolecule.put("proteomic profiling by mass spectrometer", "<option value=\"protein assay\">Protein assay</option>");
+
+        this.assaysByInstrument = new HashMap<String, String>();
+        assaysByInstrument.put("", "<option value=\"\">All technologies</option><option value=\"array assay\">Array</option><option value=\"high throughput sequencing assay\">High-throughput sequencing</option><option value=\"proteomic profiling by mass spectrometer\">Mass spectrometer</option>");
+        assaysByInstrument.put("DNA assay", "<option value=\"\">All technologies</option><option value=\"array assay\">Array</option><option value=\"high throughput sequencing assay\">High-throughput sequencing</option>");
+        assaysByInstrument.put("metabolomic profiling", "<option value=\"\">All technologies</option>");
+        assaysByInstrument.put("protein assay", "<option value=\"\">All technologies</option><option value=\"proteomic profiling by mass spectrometer\">Mass spectrometer</option>");
+        assaysByInstrument.put("RNA assay", "<option value=\"\">All technologies</option><option value=\"array assay\">Array</option><option value=\"high throughput sequencing assay\">High-throughput sequencing</option>");
 
         indexExperiments();
         saxon.registerDocumentSource(this);
@@ -112,11 +129,15 @@ public class Experiments extends ApplicationComponent implements DocumentSource
         return this.arrays.getObject().get();
     }
 
-    public String getExperimentTypes()
+    public String getAssaysByMolecule( String key )
     {
-        return this.experimentTypes.getObject().get();
+        return this.assaysByMolecule.get(key);
     }
 
+    public String getAssaysByInstrument( String key )
+    {
+        return this.assaysByInstrument.get(key);
+    }
 
     public String getDataSource()
     {
@@ -185,7 +206,7 @@ public class Experiments extends ApplicationComponent implements DocumentSource
         String arraysString = saxon.transformToString(doc, "build-arrays-list-html.xsl", null);
         this.arrays.setObject(new PersistableString(arraysString));
 
-        String expTypesString = saxon.transformToString(doc, "build-exptypes-list-html.xsl", null);
-        this.experimentTypes.setObject(new PersistableString(expTypesString));
+        //String expTypesString = saxon.transformToString(doc, "build-exptypes-list-html.xsl", null);
+        //this.experimentTypes.setObject(new PersistableString(expTypesString));
     }
 }

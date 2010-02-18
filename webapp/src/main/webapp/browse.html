@@ -48,16 +48,22 @@
                             <fieldset id="ae_keywords_box">
                                 <label for="ae_keywords">Experiment, citation, sample and factor annotations [<a href="javascript:aeClearKeywords()">clear</a>]</label>
                                 <input id="ae_keywords" name="keywords" maxlength="200">
+                                <!-- not yet
                                 <span>
                                     <input id="ae_expandefo" name="expandefo" type="checkbox" title="Search uses your term and searches for synonyms and child terms in the Experimental Factor Ontology e.g. cancer will be searched for synonyms for cancer and sub types of cancer">
                                     <label for="ae_expandefo" title="Search uses your term and searches for synonyms and child terms in the Experimental Factor Ontology e.g. cancer will be searched for synonyms for cancer and sub types of cancer">Expand search using <a href="${interface.application.link.www_domain}/efo/" target="_blank">Experimental Factor Ontology</a></label>
                                 </span>
+                                -->
                             </fieldset>
                             <fieldset id="ae_filters_box">
                                 <label for="ae_species">Filter on [<a href="javascript:aeResetFilters()">reset</a>]</label>
-                                <select id="ae_species" name="species" disabled="true"><option value="">Any species (loading options)</option></select>
-                                <select id="ae_array" name="array" disabled="true"><option value="">Any array (loading options)</option></select>
-                                <select id="ae_exptype" name="exptype" disabled="true"><option value="">Any experiment type (loading options)</option></select>
+                                <select id="ae_species" name="species" disabled="true"><option value="">All species (loading options)</option></select>
+                                <select id="ae_array" name="array" disabled="true"><option value="">All arrays (loading options)</option></select>
+                                <div id="ae_exptype_selector">
+                                    <select id="ae_expdesign" name="expdesign" disabled="true"><option value="">All assays by molecule (loading options)</option></select>
+                                    <span>by</span>
+                                    <select id="ae_exptech" name="exptech" disabled="true"><option value="">All technologies (loading options)</option></select>
+                                </div>
                             </fieldset>
                             <fieldset id="ae_options_box">
                                 <label>Display options [<a href="javascript:aeResetOptions()">reset</a>]</label>

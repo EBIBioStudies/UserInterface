@@ -1,4 +1,4 @@
-keywotbody {
+body {
     overflow-y: hidden;
 }
 
@@ -337,7 +337,8 @@ a:active .table_header_label {
 #ae_keywords,
 #ae_species,
 #ae_array,
-#ae_exptype,
+#ae_expdesign,
+#ae_exptech,
 #ae_pagesize,
 #ae_keyword_filters_submit {
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;    
@@ -357,12 +358,23 @@ a:active .table_header_label {
     font-size: 11px;
 }
 
-#ae_exptype {
-    margin: 3px 0 0 0;
+#ae_exptype_selector {
     width: 100%;
+    position: relative;
+}
+
+#ae_expdesign,
+#ae_exptech {
+    margin: 3px 0 0 0;
+    width: 47%;
     font-size: 11px;
 }
 
+#ae_exptech {
+    top: 0;
+    right: 0;
+    position: absolute;
+}
 #ae_pagesize {
     margin: 0;
     font-size: 11px;
