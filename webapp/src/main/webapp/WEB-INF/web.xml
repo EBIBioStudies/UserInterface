@@ -22,6 +22,11 @@
         <servlet-name>HttpProxyServlet</servlet-name>
         <servlet-class>uk.ac.ebi.arrayexpress.servlets.HttpProxyServlet</servlet-class>
     </servlet>
+    <servlet>
+        <description>ArrayExpress Data Lookup Servlet</description>
+        <servlet-name>LookupServlet</servlet-name>
+        <servlet-class>uk.ac.ebi.arrayexpress.servlets.LookupServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>QueryServlet</servlet-name>
         <url-pattern>/servlets/query/*</url-pattern>
@@ -37,6 +42,10 @@
     <servlet-mapping>
         <servlet-name>HttpProxyServlet</servlet-name>
         <url-pattern>/servlets/proxy/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LookupServlet</servlet-name>
+        <url-pattern>/servlets/lookup/*</url-pattern>
     </servlet-mapping>
     <!--
     <filter>
