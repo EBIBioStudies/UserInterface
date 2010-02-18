@@ -73,7 +73,7 @@ public abstract class ApplicationServlet extends HttpServlet
                 doRequest(request, response, requestType);
             } else {
                 logger.error("Request of type [{}] is unsupported", requestType.toString());
-                response.sendError(405, "The requested method HEAD is not allowed here");
+                response.sendError(405, "The request of type " + requestType.toString() + " is not allowed here");
             }
         } catch (Throwable x) {
             logger.error("[SEVERE] Runtime error while processing request:", x);
