@@ -28,10 +28,6 @@
     text-align: justify;
 }
 
-.ae_intro_more_toggle {
-    font-weight: bold;
-}
-
 /* ae query area */
 #ae_query_area {
     position: relative;
@@ -42,16 +38,6 @@
 #ae_query_area .form_top_right {
     padding: 8px 0;
 }
-#ae_warehouse_box .form_top_right {
-    background: url( ../images/try_atlas.gif ) 100% 0 no-repeat;    
-}
-
-#ae_switch_to_atlas_box {
-    position: absolute;
-    right: 1px;
-    top: 1px;
-    font-size: 1px;
-}
 
 #ae_query_area .form_inner {
     height: 184px;
@@ -60,14 +46,11 @@
 }
 
 #aer_query_form,
-#aew_query_form,
 #atlas_query_form {
     margin: 25px 0 10px 0;
 }
 
 #aer_query_form input,
-#aew_query_form input,
-#aew_query_form select,
 #atlas_query_form input,
 #atlas_query_form select {
     margin-top: 3px;
@@ -80,31 +63,9 @@
     padding: 0;
 }
 
-#aew_gene_fset {
-    width: 40%;
-    margin: 0 5px 0 0;
-    float: left;
-}
-
-#aew_exps_fset {
-    margin: 0;
-}
-
-#aew_species_fset {
-    width: 61%;
-    margin: 0;
-}
-
-#aer_query_field,
-#aew_query_field,
-#aew_experiments_field {
+#aer_query_field {
     width: 100%;
     border: 1px solid #5e9e9e;
-    font-size: 11px;
-}
-
-#aew_species_field {
-    width: 100%;
     font-size: 11px;
 }
 
@@ -186,8 +147,7 @@
 }
 
 #aer_query_submit,
-#aer_login_submit,
-#aew_query_submit {
+#aer_login_submit {
     float: right;
     font-size: 11px;
 }
@@ -239,17 +199,6 @@
 #atlas_query_submit {
     float: right;
     font-size: 11px;
-}
-
-#atlas_release_notice {
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-#atlas_switch_to_aew {
-    position: absolute;
-    bottom: 8px;
 }
 
 #aer_feed_link {
