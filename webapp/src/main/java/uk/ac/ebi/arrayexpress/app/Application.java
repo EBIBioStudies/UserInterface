@@ -70,11 +70,14 @@ public abstract class Application
             logger.info("Initializing component [{}]", c.getName());
             try {
                 c.initialize();
-            } catch (Exception x) {
-                logger.error("Caught an exception while initializing [" + c.getName() + "]:", x);
+            } catch (RuntimeException x) {
+                logger.error("[SEVERE] Caught a runtime exception while initializing [" + c.getName() + "]:", x);
+                sendExceptionReport("[SEVERE] Caught a runtime exception while initializing [" + c.getName() + "]", x);
             } catch (Error x) {
                 logger.error("[SEVERE] Caught an error while initializing [" + c.getName() + "]:", x);
                 sendExceptionReport("[SEVERE] Caught an error while initializing [" + c.getName() + "]", x);
+            } catch (Exception x) {
+                logger.error("Caught an exception while initializing [" + c.getName() + "]:", x);
             }
         }
     }
