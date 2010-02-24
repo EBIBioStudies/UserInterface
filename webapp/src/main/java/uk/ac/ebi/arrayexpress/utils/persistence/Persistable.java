@@ -16,6 +16,5 @@ public interface Persistable
 
     public boolean isEmpty();
 
-    // our internal representation of EOL
-    public final char EOL = '\n';
+    public final static String EOL = System.getProperty("line.separator");
 }

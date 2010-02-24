@@ -20,7 +20,7 @@ public class PersistableStringList extends ArrayList<String> implements Persista
         StringBuilder sb = new StringBuilder();
 
         for ( String entry : this ) {
-            sb.append(entry).append('\n');
+            sb.append(entry).append(EOL);
         }
 
         return sb.toString();

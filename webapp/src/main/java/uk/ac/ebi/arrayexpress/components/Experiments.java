@@ -142,7 +142,7 @@ public class Experiments extends ApplicationComponent implements DocumentSource
     public String getDataSource()
     {
         if (null == this.dataSource) {
-            this.dataSource = getPreferences().getString("ae.experiments.datasources");
+            this.dataSource = getPreferences().getString("ae.experiments.db.datasources");
         }
 
         return this.dataSource;
