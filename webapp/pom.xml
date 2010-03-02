@@ -236,6 +236,7 @@
                                 <include>WEB-INF/web.xml</include>
                                 <include>WEB-INF/urlrewrite.xml</include>
                                 <include>WEB-INF/server-assets/stylesheets/*.xsl</include>
+                                <include>META-INF/context.xml</include>
                             </includes>
                             <filtering>true</filtering>
                         </resource>
