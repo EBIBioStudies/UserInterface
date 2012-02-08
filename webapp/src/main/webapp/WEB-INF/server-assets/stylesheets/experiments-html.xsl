@@ -23,7 +23,7 @@
 
     <xsl:include href="ae-html-page.xsl"/>
 
-    <xsl:template match="/experiments">
+    <xsl:template match="/">
         <html lang="en">
             <xsl:call-template name="page-header">
                 <xsl:with-param name="pTitle">

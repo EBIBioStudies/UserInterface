@@ -17,8 +17,10 @@ package uk.ac.ebi.arrayexpress.components;
  *
  */
 
+import net.sf.saxon.Configuration;
 import net.sf.saxon.om.DocumentInfo;
 import net.sf.saxon.om.ValueRepresentation;
+import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.xpath.XPathEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,9 @@ import uk.ac.ebi.arrayexpress.utils.saxon.DocumentUpdater;
 import uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions;
 import uk.ac.ebi.arrayexpress.utils.saxon.IDocumentSource;
 import uk.ac.ebi.arrayexpress.utils.saxon.PersistableDocumentContainer;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.ExperimentsIndexEnvironment;
 
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
@@ -43,329 +47,422 @@ import java.io.File;
 import java.net.URL;
 import java.util.*;
 
-public class Experiments extends ApplicationComponent implements IDocumentSource
-{
-    // logging machinery
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+public class Experiments extends ApplicationComponent implements
+		IDocumentSource {
+	// logging machinery
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final RegexHelper ARRAY_ACCESSION_REGEX = new RegexHelper("^[aA]-\\w{4}-\\d+$", "");
+	private final RegexHelper ARRAY_ACCESSION_REGEX = new RegexHelper(
+			"^[aA]-\\w{4}-\\d+$", "");
 
-    private FilePersistence<PersistableDocumentContainer> document;
-    private FilePersistence<PersistableStringList> experimentsInAtlas;
-    private FilePersistence<PersistableString> species;
-    private FilePersistence<PersistableString> arrays;
-    private Map<String, String> assaysByMolecule;
-    private Map<String, String> assaysByInstrument;
+	// private FilePersistence<PersistableDocumentContainer> document;
+	private FilePersistence<PersistableStringList> experimentsInAtlas;
+	private FilePersistence<PersistableString> species;
+	private FilePersistence<PersistableString> arrays;
+	private Map<String, String> assaysByMolecule;
+	private Map<String, String> assaysByInstrument;
 
-    private SaxonEngine saxon;
-    private SearchEngine search;
-    private Events events;
-    private Autocompletion autocompletion;
+	private SaxonEngine saxon;
+	private SearchEngine search;
+	private Events events;
+	private Autocompletion autocompletion;
 
-    public final String INDEX_ID = "experiments";
+	/**
+	 * Keep the number of experiments
+	 */
+	private Long experimentsNumber;
+	/**
+	 * Keep the number of assays
+	 */
+	private Long assaysNumber;
 
-    public enum ExperimentSource
-    {
-        AE1, AE2;
+	public final String INDEX_ID = "experiments";
 
-        public String getStylesheetName()
-        {
-            switch (this) {
-                case AE1:   return "preprocess-experiments-ae1-xml.xsl";
-                case AE2:   return "preprocess-experiments-ae2-xml.xsl";
-            }
-            return null;
-        }
+	public enum ExperimentSource {
+		AE1, AE2;
 
-        public String toString()
-        {
-            switch (this) {
-                case AE1:   return "AE1";
-                case AE2:   return "AE2";
-            }
-            return null;
+		public String getStylesheetName() {
+			switch (this) {
+			case AE1:
+				return "preprocess-experiments-ae1-xml.xsl";
+			case AE2:
+				return "preprocess-experiments-ae2-xml.xsl";
+			}
+			return null;
+		}
 
-        }
-    }
+		public String toString() {
+			switch (this) {
+			case AE1:
+				return "AE1";
+			case AE2:
+				return "AE2";
+			}
+			return null;
 
-    public static class UpdateSourceInformation implements IEventInformation
-    {
-        private ExperimentSource source;
-        private String location = null;
-        private Long lastModified = null;
-        private boolean outcome;
+		}
+	}
 
-        public UpdateSourceInformation( ExperimentSource source, File sourceFile )
-        {
-            this.source = source;
-            if (null != sourceFile && sourceFile.exists()) {
-                this.location = sourceFile.getAbsolutePath();
-                this.lastModified = sourceFile.lastModified();
-            }
-        }
+	public Long getExperimentsNumber() {
+		return experimentsNumber;
+	}
 
-        public UpdateSourceInformation( ExperimentSource source, String location, Long lastModified )
-        {
-            this.source = source;
-            this.location = location;
-            this.lastModified = lastModified;
-        }
+	private void setExperimentsNumber(Long experimentsNumber) {
+		this.experimentsNumber = experimentsNumber;
+	}
 
-        public void setOutcome( boolean outcome )
-        {
-            this.outcome = outcome;
-        }
+	public Long getAssaysNumber() {
+		return assaysNumber;
+	}
 
-        public ExperimentSource getSource()
-        {
-            return this.source;
-        }
+	private void setAssaysNumber(Long assaysNumber) {
+		this.assaysNumber = assaysNumber;
+	}
 
-        public DocumentInfo getEventXML() throws Exception
-        {
-            String xml = "<?xml version=\"1.0\"?><event><category>experiments-update-"
-                            + this.source.toString().toLowerCase()
-                            + "</category><location>"
-                            + this.location + "</location><lastmodified>"
-                            + StringTools.longDateTimeToXSDDateTime(lastModified)
-                            + "</lastmodified><successful>"
-                            + (this.outcome ? "true" : "false")
-                            + "</successful></event>";
+	public static class UpdateSourceInformation implements IEventInformation {
+		private ExperimentSource source;
+		private String location = null;
+		private Long lastModified = null;
+		private boolean outcome;
 
-            return ((SaxonEngine) Application.getAppComponent("SaxonEngine")).buildDocument(xml);
-        }
-    }
+		public UpdateSourceInformation(ExperimentSource source, File sourceFile) {
+			this.source = source;
+			if (null != sourceFile && sourceFile.exists()) {
+				this.location = sourceFile.getAbsolutePath();
+				this.lastModified = sourceFile.lastModified();
+			}
+		}
 
-    public Experiments()
-    {
-    }
+		public UpdateSourceInformation(ExperimentSource source,
+				String location, Long lastModified) {
+			this.source = source;
+			this.location = location;
+			this.lastModified = lastModified;
+		}
 
-    public void initialize() throws Exception
-    {
-        this.saxon = (SaxonEngine) getComponent("SaxonEngine");
-        this.search = (SearchEngine) getComponent("SearchEngine");
-        this.events = (Events) getComponent("Events");
-        this.autocompletion = (Autocompletion) getComponent("Autocompletion");
+		public void setOutcome(boolean outcome) {
+			this.outcome = outcome;
+		}
 
-        this.document = new FilePersistence<PersistableDocumentContainer>(
-                new PersistableDocumentContainer("experiments")
-                , new File(getPreferences().getString("ae.experiments.persistence-location"))
-        );
+		public ExperimentSource getSource() {
+			return this.source;
+		}
 
-        this.experimentsInAtlas = new FilePersistence<PersistableStringList>(
-                new PersistableStringList()
-                , new File(getPreferences().getString("ae.atlasexperiments.persistence-location"))
-        );
+		public DocumentInfo getEventXML() throws Exception {
+			String xml = "<?xml version=\"1.0\"?><event><category>experiments-update-"
+					+ this.source.toString().toLowerCase()
+					+ "</category><location>"
+					+ this.location
+					+ "</location><lastmodified>"
+					+ StringTools.longDateTimeToXSDDateTime(lastModified)
+					+ "</lastmodified><successful>"
+					+ (this.outcome ? "true" : "false")
+					+ "</successful></event>";
 
-        this.species = new FilePersistence<PersistableString>(
-                new PersistableString()
-                , new File(getPreferences().getString("ae.species.dropdown-html-location"))
+			return ((SaxonEngine) Application.getAppComponent("SaxonEngine"))
+					.buildDocument(xml);
+		}
+	}
 
-        );
+	public Experiments() {
+	}
 
-        this.arrays = new FilePersistence<PersistableString>(
-                new PersistableString()
-                , new File(getPreferences().getString("ae.arrays.dropdown-html-location"))
-        );
+	public void initialize() throws Exception {
+		this.saxon = (SaxonEngine) getComponent("SaxonEngine");
+		this.search = (SearchEngine) getComponent("SearchEngine");
+		this.events = (Events) getComponent("Events");
+		this.autocompletion = (Autocompletion) getComponent("Autocompletion");
 
-        this.assaysByMolecule = new HashMap<String, String>();
-        this.assaysByMolecule.put("", "<option value=\"\">All assays by molecule</option><option value=\"&quot;DNA assay&quot;\">DNA assay</option><option value=\"&quot;metabolomic profiling&quot;\">Metabolite assay</option><option value=\"&quot;protein assay&quot;\">Protein assay</option><option value=\"&quot;RNA assay&quot;\">RNA assay</option>");
-        this.assaysByMolecule.put("array assay", "<option value=\"\">All assays by molecule</option><option value=\"&quot;DNA assay&quot;\">DNA assay</option><option value=\"&quot;RNA assay&quot;\">RNA assay</option>");
-        this.assaysByMolecule.put("high throughput sequencing assay", "<option value=\"\">All assays by molecule</option><option value=\"&quot;DNA assay&quot;\">DNA assay</option><option value=\"&quot;RNA assay&quot;\">RNA assay</option>");
-        this.assaysByMolecule.put("proteomic profiling by mass spectrometer", "<option value=\"&quot;protein assay&quot;\">Protein assay</option>");
+		// this.document = new FilePersistence<PersistableDocumentContainer>(
+		// new PersistableDocumentContainer("experiments"), new File(
+		// getPreferences().getString(
+		// "ae.experiments.persistence-location")));
 
-        this.assaysByInstrument = new HashMap<String, String>();
-        this.assaysByInstrument.put("", "<option value=\"\">All technologies</option><option value=\"&quot;array assay&quot;\">Array</option><option value=\"&quot;high throughput sequencing assay&quot;\">High-throughput sequencing</option><option value=\"&quot;proteomic profiling by mass spectrometer&quot;\">Mass spectrometer</option>");
-        this.assaysByInstrument.put("DNA assay", "<option value=\"\">All technologies</option><option value=\"&quot;array assay&quot;\">Array</option><option value=\"&quot;high throughput sequencing assay&quot;\">High-throughput sequencing</option>");
-        this.assaysByInstrument.put("metabolomic profiling", "<option value=\"\">All technologies</option>");
-        this.assaysByInstrument.put("protein assay", "<option value=\"\">All technologies</option><option value=\"&quot;proteomic profiling by mass spectrometer&quot;\">Mass spectrometer</option>");
-        this.assaysByInstrument.put("RNA assay", "<option value=\"\">All technologies</option><option value=\"&quot;array assay&quot;\">Array</option><option value=\"&quot;high throughput sequencing assay&quot;\">High-throughput sequencing</option>");
+		DocumentInfo docTemp = getXmlFromFile(new File(getPreferences()
+				.getString("ae.experiments.persistence-location")));
 
-        updateIndex();
-        updateAccelerators();
-        this.saxon.registerDocumentSource(this);
-    }
+		this.experimentsInAtlas = new FilePersistence<PersistableStringList>(
+				new PersistableStringList(), new File(getPreferences()
+						.getString("ae.atlasexperiments.persistence-location")));
 
-    public void terminate() throws Exception
-    {
-    }
+		this.species = new FilePersistence<PersistableString>(
+				new PersistableString(), new File(getPreferences().getString(
+						"ae.species.dropdown-html-location"))
 
-    // implementation of IDocumentSource.getDocumentURI()
-    public String getDocumentURI()
-    {
-        return "experiments.xml";
-    }
+		);
 
-    // implementation of IDocumentSource.getDocument()
-    public synchronized DocumentInfo getDocument() throws Exception
-    {
-        return this.document.getObject().getDocument();
-    }
+		this.arrays = new FilePersistence<PersistableString>(
+				new PersistableString(), new File(getPreferences().getString(
+						"ae.arrays.dropdown-html-location")));
 
-    // implementation of IDocumentSource.setDocument(DocumentInfo)
-    public synchronized void setDocument( DocumentInfo doc ) throws Exception
-    {
-        if (null != doc) {
-            this.document.setObject(new PersistableDocumentContainer("experiments", doc));
-            buildSpeciesArrays();
-            updateIndex();
-            updateAccelerators();
-        } else {
-            this.logger.error("Experiments NOT updated, NULL document passed");
-        }
-    }
+		this.assaysByMolecule = new HashMap<String, String>();
+		this.assaysByMolecule
+				.put("",
+						"<option value=\"\">All assays by molecule</option><option value=\"&quot;DNA assay&quot;\">DNA assay</option><option value=\"&quot;metabolomic profiling&quot;\">Metabolite assay</option><option value=\"&quot;protein assay&quot;\">Protein assay</option><option value=\"&quot;RNA assay&quot;\">RNA assay</option>");
+		this.assaysByMolecule
+				.put("array assay",
+						"<option value=\"\">All assays by molecule</option><option value=\"&quot;DNA assay&quot;\">DNA assay</option><option value=\"&quot;RNA assay&quot;\">RNA assay</option>");
+		this.assaysByMolecule
+				.put("high throughput sequencing assay",
+						"<option value=\"\">All assays by molecule</option><option value=\"&quot;DNA assay&quot;\">DNA assay</option><option value=\"&quot;RNA assay&quot;\">RNA assay</option>");
+		this.assaysByMolecule
+				.put("proteomic profiling by mass spectrometer",
+						"<option value=\"&quot;protein assay&quot;\">Protein assay</option>");
 
-    public boolean isAccessible( String accession, List<String> userIds ) throws Exception
-    {
-        for (String userId : userIds) {
-            if ( "0".equals(userId)                         // superuser
-                || ARRAY_ACCESSION_REGEX.test(accession)    // todo: check array accessions against arrays
-                || Boolean.parseBoolean(                    // tests document for access
-                    saxon.evaluateXPathSingle(              //
-                            getDocument()                   //
-                            , "exists(/experiments/experiment[accession = '" + accession + "' and user/@id = '" + userId + "'])"
-                    )
-                )
-            ) {
-                return true;
-            }
-        }
-        return false;
-    }
+		this.assaysByInstrument = new HashMap<String, String>();
+		this.assaysByInstrument
+				.put("",
+						"<option value=\"\">All technologies</option><option value=\"&quot;array assay&quot;\">Array</option><option value=\"&quot;high throughput sequencing assay&quot;\">High-throughput sequencing</option><option value=\"&quot;proteomic profiling by mass spectrometer&quot;\">Mass spectrometer</option>");
+		this.assaysByInstrument
+				.put("DNA assay",
+						"<option value=\"\">All technologies</option><option value=\"&quot;array assay&quot;\">Array</option><option value=\"&quot;high throughput sequencing assay&quot;\">High-throughput sequencing</option>");
+		this.assaysByInstrument.put("metabolomic profiling",
+				"<option value=\"\">All technologies</option>");
+		this.assaysByInstrument
+				.put("protein assay",
+						"<option value=\"\">All technologies</option><option value=\"&quot;proteomic profiling by mass spectrometer&quot;\">Mass spectrometer</option>");
+		this.assaysByInstrument
+				.put("RNA assay",
+						"<option value=\"\">All technologies</option><option value=\"&quot;array assay&quot;\">Array</option><option value=\"&quot;high throughput sequencing assay&quot;\">High-throughput sequencing</option>");
 
-    public String getSpecies() throws Exception
-    {
-        return this.species.getObject().get();
-    }
+		updateIndex(docTemp);
+//		TODO rpe
+//		updateAccelerators(docTemp);
+		this.saxon.registerDocumentSource(this);
+		updateExperimentsStats(docTemp);
+		
+		
+		docTemp = null;
+		//
+		// setExperimentsNumber(this.document.)
+	}
 
-    public String getArrays() throws Exception
-    {
-        return this.arrays.getObject().get();
-    }
+	public void terminate() throws Exception {
+	}
 
-    public String getAssaysByMolecule( String key )
-    {
-        return this.assaysByMolecule.get(key);
-    }
+	// implementation of IDocumentSource.getDocumentURI()
+	public String getDocumentURI() {
+		return "experiments.xml";
+	}
 
-    public String getAssaysByInstrument( String key )
-    {
-        return this.assaysByInstrument.get(key);
-    }
+	// implementation of IDocumentSource.getDocument()
+	// this is not the best way to do it ... but i dont know if in a near future
+	// we will create a staging area and all the xml files references will
+	// disappear, so
+	public synchronized DocumentInfo getDocument() throws Exception {
+		return getXmlFromFile(new File(getPreferences().getString(
+				"ae.experiments.persistence-location")));
+	}
 
-    public void update( String xmlString, UpdateSourceInformation sourceInformation ) throws Exception
-    {
-        boolean success = false;
-        try {
-            DocumentInfo updateDoc = this.saxon.transform(
-                    xmlString
-                    , sourceInformation.getSource().getStylesheetName()
-                    , null
-            );
-            if (null != updateDoc) {
-                new DocumentUpdater(this, updateDoc).update();
-                success = true;
-            }
-        } finally {
-            sourceInformation.setOutcome(success);
-            events.addEvent(sourceInformation);
-        }
-    }
+	// implementation of IDocumentSource.setDocument(DocumentInfo)
+	public synchronized void setDocument(DocumentInfo doc) throws Exception {
+		throw new UnsupportedOperationException("This is temporary situation, all Xml reference are being removed, and this methos wont be supported in the future!");
+	}
 
-    public void reloadExperimentsInAtlas( String sourceLocation ) throws Exception
-    {
-        URL source = new URL(sourceLocation);
-        String result = this.saxon.transformToString(source, "preprocess-atlas-experiments-txt.xsl", null);
-        if (null != result) {
-            String[] exps = result.split("\n");
-            if (exps.length > 0) {
-                this.experimentsInAtlas.setObject(new PersistableStringList(Arrays.asList(exps)));
-                updateAccelerators();
-                this.logger.info("Stored GXA info, [{}] experiments listed", exps.length);
-            } else {
-                this.logger.warn("Atlas returned [0] experiments listed, will NOT update our info");
-            }
-        }
-    }
+	public boolean isAccessible(String accession, List<String> userIds)
+			throws Exception {
+		for (String userId : userIds) {
+			if ("0".equals(userId) // superuser
+					|| ARRAY_ACCESSION_REGEX.test(accession) // todo: check
+																// array
+																// accessions
+																// against
+																// arrays
+					|| Boolean.parseBoolean( // tests document for access
+							saxon.evaluateXPathSingle(
+									//
+									getDocument() //
+									,
+									"exists(/experiments/experiment[accession = '"
+											+ accession + "' and user/@id = '"
+											+ userId + "'])"))) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    private void updateIndex()
-    {
-        try {
-            this.search.getController().index(INDEX_ID, this.getDocument());
-            this.autocompletion.rebuild();
-        } catch (Exception x) {
-            this.logger.error("Caught an exception:", x);
-        }
-    }
+	public String getSpecies() throws Exception {
+		return this.species.getObject().get();
+	}
 
-    private void updateAccelerators()
-    {
-        this.logger.debug("Updating accelerators for experiments");
+	public String getArrays() throws Exception {
+		return this.arrays.getObject().get();
+	}
 
-        ExtFunctions.clearAccelerator("is-in-atlas");
-        ExtFunctions.clearAccelerator("visible-experiments");
-        ExtFunctions.clearAccelerator("experiments-for-protocol");
-        ExtFunctions.clearAccelerator("experiments-for-array");
-        try {
-            for (String accession : this.experimentsInAtlas.getObject()) {
-                ExtFunctions.addAcceleratorValue("is-in-atlas", accession, "1");
-            }
+	public String getAssaysByMolecule(String key) {
+		return this.assaysByMolecule.get(key);
+	}
 
-            XPath xp = new XPathEvaluator(getDocument().getConfiguration());
-            XPathExpression xpe = xp.compile("/experiments/experiment[source/@visible = 'true']");
-            List documentNodes = (List) xpe.evaluate(getDocument(), XPathConstants.NODESET);
+	public String getAssaysByInstrument(String key) {
+		return this.assaysByInstrument.get(key);
+	}
 
-            XPathExpression accessionXpe = xp.compile("accession");
-            XPathExpression protocolIdsXpe = xp.compile("protocol/id");
-            XPathExpression arrayAccXpe = xp.compile("arraydesign/accession");
-            for (Object node : documentNodes) {
+	public void update(String xmlString,
+			UpdateSourceInformation sourceInformation) throws Exception {
+		boolean success = false;
+		try {
+			DocumentInfo updateDoc = this.saxon.transform(xmlString,
+					sourceInformation.getSource().getStylesheetName(), null);
+			if (null != updateDoc) {
+				new DocumentUpdater(this, updateDoc).update();
+				success = true;
+			}
+		} finally {
+			sourceInformation.setOutcome(success);
+			events.addEvent(sourceInformation);
+		}
+	}
 
-                try {
-                    // get all the expressions taken care of
-                    String accession = accessionXpe.evaluate(node);
-                    ExtFunctions.addAcceleratorValue("visible-experiments", accession, node);
-                    List protocolIds = (List)protocolIdsXpe.evaluate(node, XPathConstants.NODESET);
-                    if (null != protocolIds) {
-                        for (Object protocolId : protocolIds) {
-                            String id = ((ValueRepresentation)protocolId).getStringValue();
-                            Set<String> experimentsForProtocol = (Set<String>)ExtFunctions.getAcceleratorValue("experiments-for-protocol", id);
-                            if (null == experimentsForProtocol) {
-                                experimentsForProtocol = new HashSet<String>();
-                                ExtFunctions.addAcceleratorValue("experiments-for-protocol", id, experimentsForProtocol);
-                            }
-                            experimentsForProtocol.add(accession);
-                        }
-                    }
-                    List arrayAccessions = (List)arrayAccXpe.evaluate(node, XPathConstants.NODESET);
-                    if (null != arrayAccessions) {
-                        for (Object arrayAccession : arrayAccessions) {
-                            String arrayAcc = ((ValueRepresentation)arrayAccession).getStringValue();
-                            Set<String> experimentsForArray = (Set<String>)ExtFunctions.getAcceleratorValue("experiments-for-array", arrayAcc);
-                            if (null == experimentsForArray) {
-                                experimentsForArray = new HashSet<String>();
-                                ExtFunctions.addAcceleratorValue("experiments-for-array", arrayAcc, experimentsForArray);
-                            }
-                            experimentsForArray.add(accession);
-                        }
-                    }
-                } catch (XPathExpressionException x) {
-                    this.logger.error("Caught an exception:", x);
-                }
-            }
+	//TODO see when this is called (its called from a job)
+	public void reloadExperimentsInAtlas(String sourceLocation)
+			throws Exception {
+		URL source = new URL(sourceLocation);
+		String result = this.saxon.transformToString(source,
+				"preprocess-atlas-experiments-txt.xsl", null);
+		if (null != result) {
+			String[] exps = result.split("\n");
+			if (exps.length > 0) {
+				this.experimentsInAtlas.setObject(new PersistableStringList(
+						Arrays.asList(exps)));
+				updateAccelerators(this.getDocument());
+				this.logger.info("Stored GXA info, [{}] experiments listed",
+						exps.length);
+			} else {
+				this.logger
+						.warn("Atlas returned [0] experiments listed, will NOT update our info");
+			}
+		}
+	}
 
-            this.logger.debug("Accelerators updated");
-        } catch (Exception x) {
-            this.logger.error("Caught an exception:", x);
-        }
-    }
+	private void updateIndex(DocumentInfo doc) {
+		try {
+			
+			this.search.getController().index(INDEX_ID, doc);
+//			TODO review the autocompletion because of time it takes (maybe the problem is the xml field)
+			this.autocompletion.rebuild();
+		} catch (Exception x) {
+			this.logger.error("Caught an exception:", x);
+		}
+	}
 
-    private void buildSpeciesArrays() throws Exception
-    {
-        // todo: move this to a separate component (autocompletion?)
-        String speciesString = saxon.transformToString(this.getDocument(), "build-species-list-html.xsl", null);
-        this.species.setObject(new PersistableString(speciesString));
+	private void updateAccelerators(DocumentInfo docInfo) {
+		this.logger.debug("Updating accelerators for experiments");
 
-        String arraysString = saxon.transformToString(this.getDocument(), "build-arrays-list-html.xsl", null);
-        this.arrays.setObject(new PersistableString(arraysString));
-    }
+		ExtFunctions.clearAccelerator("is-in-atlas");
+		ExtFunctions.clearAccelerator("visible-experiments");
+		ExtFunctions.clearAccelerator("experiments-for-protocol");
+		ExtFunctions.clearAccelerator("experiments-for-array");
+		try {
+			for (String accession : this.experimentsInAtlas.getObject()) {
+				ExtFunctions.addAcceleratorValue("is-in-atlas", accession, "1");
+			}
+
+			XPath xp = new XPathEvaluator(docInfo.getConfiguration());
+			XPathExpression xpe = xp
+					.compile("/experiments/experiment[source/@visible = 'true']");
+			List documentNodes = (List) xpe.evaluate(docInfo,
+					XPathConstants.NODESET);
+
+			XPathExpression accessionXpe = xp.compile("accession");
+			XPathExpression protocolIdsXpe = xp.compile("protocol/id");
+			XPathExpression arrayAccXpe = xp.compile("arraydesign/accession");
+			for (Object node : documentNodes) {
+
+				try {
+					// get all the expressions taken care of
+					String accession = accessionXpe.evaluate(node);
+					ExtFunctions.addAcceleratorValue("visible-experiments",
+							accession, node);
+					List protocolIds = (List) protocolIdsXpe.evaluate(node,
+							XPathConstants.NODESET);
+					if (null != protocolIds) {
+						for (Object protocolId : protocolIds) {
+							String id = ((ValueRepresentation) protocolId)
+									.getStringValue();
+							Set<String> experimentsForProtocol = (Set<String>) ExtFunctions
+									.getAcceleratorValue(
+											"experiments-for-protocol", id);
+							if (null == experimentsForProtocol) {
+								experimentsForProtocol = new HashSet<String>();
+								ExtFunctions.addAcceleratorValue(
+										"experiments-for-protocol", id,
+										experimentsForProtocol);
+							}
+							experimentsForProtocol.add(accession);
+						}
+					}
+					List arrayAccessions = (List) arrayAccXpe.evaluate(node,
+							XPathConstants.NODESET);
+					if (null != arrayAccessions) {
+						for (Object arrayAccession : arrayAccessions) {
+							String arrayAcc = ((ValueRepresentation) arrayAccession)
+									.getStringValue();
+							Set<String> experimentsForArray = (Set<String>) ExtFunctions
+									.getAcceleratorValue(
+											"experiments-for-array", arrayAcc);
+							if (null == experimentsForArray) {
+								experimentsForArray = new HashSet<String>();
+								ExtFunctions.addAcceleratorValue(
+										"experiments-for-array", arrayAcc,
+										experimentsForArray);
+							}
+							experimentsForArray.add(accession);
+						}
+					}
+				} catch (XPathExpressionException x) {
+					this.logger.error("Caught an exception:", x);
+				}
+			}
+
+			this.logger.debug("Accelerators updated");
+		} catch (Exception x) {
+			this.logger.error("Caught an exception:", x);
+		}
+	}
+
+	private void buildSpeciesArrays() throws Exception {
+		// todo: move this to a separate component (autocompletion?)
+		String speciesString = saxon.transformToString(this.getDocument(),
+				"build-species-list-html.xsl", null);
+		this.species.setObject(new PersistableString(speciesString));
+
+		String arraysString = saxon.transformToString(this.getDocument(),
+				"build-arrays-list-html.xsl", null);
+		this.arrays.setObject(new PersistableString(arraysString));
+	}
+
+	public DocumentInfo getXmlFromFile(File file) throws Exception {
+
+		Configuration config = ((SaxonEngine) Application
+				.getAppComponent("SaxonEngine")).trFactory.getConfiguration();
+		DocumentInfo doc = null;
+		doc = config.buildDocument(new StreamSource(file));
+
+		return doc;
+	}
+
+	
+	public void updateExperimentsStats(DocumentInfo doc) throws Exception {
+		 Long totalExperiments = Long.parseLong(((SaxonEngine)Application.getAppComponent("SaxonEngine")).evaluateXPathSingle(doc, "count(//experiment[source/@visible = 'true' and user/@id = '1'])"));
+		 setExperimentsNumber(totalExperiments);
+		 System.out.println("Number of experiments->" + totalExperiments);
+		 //Long totalAssays = Long.parseLong(((SaxonEngine)Application.getAppComponent("SaxonEngine")).evaluateXPathSingle(doc, "sum((if(//experiment[source/@visible = 'true']/assays castable as xs:integer) then  //experiment[source/@visible]/assays else 0) cast as xs:integer)"));
+//		 Long totalAssays = Long.parseLong(((SaxonEngine)Application.getAppComponent("SaxonEngine")).evaluateXPathSingle(doc, "sum((if(//experiment[source/@visible = 'true' and user/@id = '1']/assays castable as xs:integer) then  //experiment[source/@visible = 'true' and user/@id = '1']/assays  else 0) cast as xs:integer)"));
+		 
+//		 TODO rpe
+		 //Long totalAssays = Long.parseLong(((SaxonEngine)Application.getAppComponent("SaxonEngine")).evaluateXPathSingle(doc, "sum(//experiment[source/@visible = 'true' and user/@id = '1']/assays)"));
+		 Long totalAssays=new Long(999);
+		 setAssaysNumber(totalAssays);
+		 //		 setAssaysNumber(totalAssays);
+//		 System.out.println("Number of assays->" + totalAssays);
+	
+		 ExperimentsIndexEnvironment indexExp=(ExperimentsIndexEnvironment)this.search.getController().getEnvironment("experiments");
+		 indexExp.setCountFiltered(totalExperiments.intValue());
+		 indexExp.setCountAssaysFiltered(totalAssays.intValue());
+//		 this.search.getController().getEnvironment(INDEX_ID).setCountFiltered(countFiltered)
+//		 (if (samples castable as xs:integer) then samples else 0) cast as xs:integer
+		
+	}
+	
 }

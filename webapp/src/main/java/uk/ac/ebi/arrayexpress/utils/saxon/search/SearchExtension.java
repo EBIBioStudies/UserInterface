@@ -21,6 +21,8 @@ import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.om.NodeListIterator;
 import net.sf.saxon.om.SequenceIterator;
 import net.sf.saxon.trans.XPathException;
+
+import org.apache.commons.lang.math.IEEE754rUtils;
 import org.apache.lucene.queryParser.ParseException;
 
 import java.io.IOException;
@@ -33,7 +35,9 @@ public final class SearchExtension
 
     private static Controller controller;
 
-    public static SequenceIterator queryIndex( String queryId ) throws IOException, XPathException
+    //it is used on files-html.xsl (i must understand why it works this way)
+   @Deprecated 
+    public static SequenceIterator queryIndexDEP( String queryId ) throws IOException, XPathException
     {
         Integer intQueryId;
         try {
@@ -49,6 +53,7 @@ public final class SearchExtension
         return null;
     }
 
+//    TODO: remove this reference from the xsl files (protocols-html.xsl)
     public static SequenceIterator queryIndex( String indexId, String queryString ) throws IOException, ParseException
     {
         List<NodeInfo> nodes = getController().queryIndex(indexId, queryString);
@@ -58,6 +63,7 @@ public final class SearchExtension
 
         return null;
     }
+    
 
     public static String highlightQuery( String queryId, String fieldName, String text )
     {
@@ -68,6 +74,21 @@ public final class SearchExtension
     {
         return getController().getQueryString(Integer.decode(queryId));
     }
+    
+    
+    
+    public static int getExperimentsNumber()
+    {
+    	ExperimentsIndexEnvironment indexExp=(ExperimentsIndexEnvironment)getController().getEnvironment("experiments");
+    	return indexExp.getCountFiltered();
+    }
+
+    public static int getAssaysNumber()
+    {
+    	ExperimentsIndexEnvironment indexExp=(ExperimentsIndexEnvironment)getController().getEnvironment("experiments");
+    	return indexExp.getCountAssaysFiltered();
+    }
+
 
     // get/set
     public static void setController( Controller ctrl )

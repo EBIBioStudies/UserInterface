@@ -3,7 +3,12 @@ package uk.ac.ebi.arrayexpress.servlets;
 import net.sf.saxon.Configuration;
 import net.sf.saxon.om.DocumentInfo;
 import org.apache.commons.lang.text.StrSubstitutor;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.TopDocs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
@@ -23,6 +28,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +51,7 @@ import java.util.Map;
  *
  */
 
-public class QueryServlet extends AuthAwareApplicationServlet
+public class QueryPageWriterServlet extends AuthAwareApplicationServlet
 {
     private static final long serialVersionUID = 6806580383145704364L;
 
@@ -153,32 +159,78 @@ public class QueryServlet extends AuthAwareApplicationServlet
                     Integer queryId = search.getController().addQuery(index, params, request.getQueryString());
                     params.put("queryid", String.valueOf(queryId));
                     
-                    
+                    TopDocs hits=search.getController().queryAllDocs(queryId,params);
                     //all the queries are now executes in this Servlet and not in the XSLT
-                    String xml = search.getController().queryIndexPaged(queryId,params);
 
-    				StringReader reader = new StringReader(xml);
-    				long xmlRead = System.currentTimeMillis();
-    				
-    				System.out.println("xml->" + xml);
-    				Configuration config = ((SaxonEngine) Application
-    						.getAppComponent("SaxonEngine")).trFactory
-    						.getConfiguration();
-    				source = config.buildDocument(new StreamSource(
-    						reader));
-    			
-                    
-                }
- 
-                if (!saxonEngine.transformToWriter(
-                        source
-                        , stylesheetName
-                        , params
-                        , out
-                    )) {                     // where to dump resulting text
-                    throw new Exception("Transformation returned an error");
-                }
-            } catch (ParseException x) {
+
+                    int pageSizeDefault=100;
+                    int pageSize = 25;
+//        			if (params.containsKey("pagesize")) {
+//        				int pagesize = Integer.parseInt(StringTools.arrayToString(
+//        						params.get("pagesize"), " "));
+//        			}
+                    //if the total hits is less then the page size I do all the work in one time or if the pagesize is defined
+                    if(hits.totalHits<=pageSizeDefault || params.containsKey("pagesize")){
+                    	
+                    	String xml = search.getController().queryPartialDocs(queryId, hits, 0, hits.totalHits,params);
+        				StringReader reader = new StringReader(xml);
+        				Configuration config = ((SaxonEngine) Application
+        						.getAppComponent("SaxonEngine")).trFactory
+        						.getConfiguration();
+        				source = config.buildDocument(new StreamSource(
+        						reader));
+//        			
+//        				  List<String> combinedTotal = new ArrayList<String>();
+//        		            combinedTotal.add(String.valueOf(hits.totalHits));
+//        		 
+//        		            
+//        		            params.put("total", combinedTotal.toArray(new String[combinedTotal.size()]));
+                        if (!saxonEngine.transformToWriter(
+                                source
+                                , stylesheetName
+                                , params
+                                , out
+                            )) {                     // where to dump resulting text
+                            throw new Exception("Transformation returned an error");
+                        }
+                    }
+                    //I WILL HAVE TO ITERATE THROUGHT THE TOPDOCS RETURNING THE PAGE SIZE EACH TIME 
+                    else{
+                    	int page=1;
+                    	while((page* pageSizeDefault)<=(hits.totalHits + pageSizeDefault -1)){
+                    		System.out.println("%%%%%%%%Paginacao->" + page);
+                    		if(page==1){
+                    			params.put("initial", "true");
+                    		}
+                    		else{
+                    			params.put("initial", "false");                  			
+                    		}
+                    			
+                    		String xml = search.getController().queryPartialDocs(queryId, hits, (page-1)*pageSizeDefault, (page*pageSizeDefault)-1,params);
+            				StringReader reader = new StringReader(xml);
+            				Configuration config = ((SaxonEngine) Application
+            						.getAppComponent("SaxonEngine")).trFactory
+            						.getConfiguration();
+            				source = config.buildDocument(new StreamSource(
+            						reader));
+//            		
+                            if (!saxonEngine.transformToWriter(
+                                    source
+                                    , stylesheetName
+                                    , params
+                                    , out
+                                )) {                     // where to dump resulting text
+                                throw new Exception("Transformation returned an error");
+                            }
+                    		
+                    		page++;
+                    	}
+                    	
+                    }
+               
+                 } 
+                
+            	}catch (ParseException x) {
                 logger.error("Caught lucene parse exception:", x);
                 reportQueryError(out, "query-syntax-error.txt", request.getParameter("keywords"));
             }

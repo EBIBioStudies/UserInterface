@@ -23,8 +23,11 @@ import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TopDocs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
 
 import java.io.IOException;
 import java.net.URL;
@@ -80,19 +83,32 @@ public class Controller
     public IndexEnvironment getEnvironment( String indexId )
     {
         if (!this.environment.containsKey(indexId)) {
-            this.environment.put(indexId, new IndexEnvironment(config.getIndexConfig(indexId)));
+            this.environment.put(indexId, IndexEnvironmentFactory.getIndexEnvironment(indexId, config.getIndexConfig(indexId)));
         }
-
         return this.environment.get(indexId);
     }
+    
+
+    public void setEnvironment( String indexId, IndexEnvironment indexEnv )
+    {
+        if (!this.environment.containsKey(indexId)) {
+            this.environment.put(indexId, indexEnv);
+        }
+        else{
+        	logger.info("This index [{}] already exists!",indexId);
+        }
+    }
+    
 
     public void index( String indexId, DocumentInfo document )
     {
         this.logger.info("Started indexing for index id [{}]", indexId);
-        getEnvironment(indexId).putDocumentInfo(
-                document.hashCode()
-                , new Indexer(getEnvironment(indexId)).index(document)
-        );
+//        getEnvironment(indexId).putDocumentInfo(
+//                document.hashCode()
+//                , new Indexer(getEnvironment(indexId)).index(document)
+//        );
+        new Indexer(getEnvironment(indexId)).index(document);
+        
         this.logger.info("Indexing for index id [{}] completed", indexId);
     }
 
@@ -142,6 +158,12 @@ public class Controller
         return (null != env && env.doesFieldExist(fieldName) ? env.fields.get(fieldName).type : null);        
     }
 
+    public Boolean isFieldAutoCompletion( String indexId, String fieldName )
+    {
+        IndexEnvironment env = getEnvironment(indexId);
+        return (null != env && env.doesFieldExist(fieldName) ? env.fields.get(fieldName).shouldAutoCompletion : false);        
+    }
+    
     public Integer addQuery( String indexId, Map<String, String[]> queryParams, String queryString )
             throws ParseException, IOException
     {
@@ -165,12 +187,57 @@ public class Controller
         return null != info ? info.getQueryString() : null;
     }
 
+    @Deprecated
     public List<NodeInfo> queryIndex( Integer queryId ) throws IOException
     {
         QueryInfo queryInfo = this.queryPool.getQueryInfo(queryId);
         return queryIndex(queryInfo.getIndexId(), queryInfo.getQuery());
     }
 
+    
+
+    public String queryIndexPaged( Integer queryId,HttpServletRequestParameterMap map) throws IOException
+    {
+        QueryInfo queryInfo = this.queryPool.getQueryInfo(queryId);
+
+        return queryIndexPaged(queryId, queryInfo, map);
+
+    }
+
+    public TopDocs queryAllDocs( Integer queryId,HttpServletRequestParameterMap map) throws IOException
+    {
+        QueryInfo queryInfo = this.queryPool.getQueryInfo(queryId);
+
+        return queryAllDocs(queryId, queryInfo, map);
+
+    }
+    
+    public String queryPartialDocs(int queryId, TopDocs hits, int initial, int end, HttpServletRequestParameterMap map) throws IOException
+    {
+    	QueryInfo queryInfo = this.queryPool.getQueryInfo(queryId);
+
+        return queryPartialDocs(queryInfo, hits, initial, end, map);
+		
+		
+    }
+
+	public String queryPartialDocs(QueryInfo query, TopDocs hits, int initial, int end, HttpServletRequestParameterMap map) throws IOException
+    {
+		return getEnvironment(query.getIndexId()).queryPartialDocs(hits,initial, end,map);
+		
+    }
+   
+    public TopDocs queryAllDocs( Integer queryId, QueryInfo query ,HttpServletRequestParameterMap map) throws IOException
+    {
+        return new Querier(getEnvironment(query.getIndexId())).queryAllDocs(queryId,query,map);
+    }
+    
+    
+    public String queryIndexPaged( Integer queryId, QueryInfo query ,HttpServletRequestParameterMap map) throws IOException
+    {
+        return new Querier(getEnvironment(query.getIndexId())).queryPaged(queryId,query,map);
+    }
+    
     public List<NodeInfo> queryIndex( String indexId, String queryString ) throws ParseException, IOException
     {
         return queryIndex(indexId, this.queryConstructor.construct(getEnvironment(indexId), queryString));

@@ -5,10 +5,9 @@
                 xmlns:search="java:uk.ac.ebi.arrayexpress.utils.saxon.search.SearchExtension"
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 extension-element-prefixes="xs aejava search html"
-                exclude-result-prefixes="xs aejava search html"
+                exclude-result-prefixes="xs aejava searchhtml"
                 version="2.0">
-
-    <xsl:param name="page"/>
+      <xsl:param name="page"/>
     <xsl:param name="pagesize"/>
 
     <xsl:variable name="vPage" select="if ($page) then $page cast as xs:integer else 1"/>
@@ -33,17 +32,21 @@
     <xsl:variable name="vBaseUrl">http://<xsl:value-of select="$host"/><xsl:value-of select="$basepath"/></xsl:variable>
 
     <xsl:variable name="vBrowseMode" select="not($accession) and not($id)"/>
+    
+    <xsl:param name="total"/>
+    
+    <xsl:variable name="vTotal" select="if ($total) then $total cast as xs:integer else -1"/> 
 
     <xsl:output omit-xml-declaration="yes" method="html"
                 indent="no" encoding="UTF-8" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"/>
 
-    <xsl:include href="ae-html-page.xsl"/>
-    <xsl:include href="ae-sort-protocols.xsl"/>
-    <xsl:include href="ae-highlight.xsl"/>
+   <xsl:include href="ae-html-page.xsl"/>
+    <xsl:include href="ae-highlight.xsl"/> 
 
     <xsl:template match="/">
         <html lang="en">
-            <xsl:call-template name="page-header">
+        <h2>Protocols</h2>
+           <xsl:call-template name="page-header">
                 <xsl:with-param name="pTitle">
                     <xsl:value-of select="if (not($vBrowseMode)) then (if (not($accession)) then concat('Protocol #', $id, ' | ') else concat(upper-case($accession), ' | ')) else ''"/>
                     <xsl:text>Protocols | ArrayExpress Archive | EBI</xsl:text>
@@ -57,15 +60,16 @@
                     <script src="{$basepath}/assets/scripts/ae_protocols_20.js" type="text/javascript"/>
                 </xsl:with-param>
             </xsl:call-template>
-            <xsl:call-template name="page-body"/>
+            <xsl:call-template name="page-body"/> 
         </html>
     </xsl:template>
 
-    <xsl:template name="ae-contents">
+    
+   <xsl:template name="ae-contents">
 
-        <xsl:variable name="vFilteredProtocols" select="search:queryIndex($queryid)"/>
+      <!--   <xsl:variable name="vFilteredProtocols" select="search:queryIndex($queryid)"/>
         <xsl:variable name="vTotal" select="count($vFilteredProtocols)"/>
-
+ -->
         <xsl:variable name="vFrom" as="xs:integer">
             <xsl:choose>
                 <xsl:when test="$vPage > 0"><xsl:value-of select="1 + ( $vPage - 1 ) * $vPageSize"/></xsl:when>
@@ -79,6 +83,7 @@
                 <xsl:otherwise><xsl:value-of select="$vFrom + $vPageSize - 1"/></xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+
 
         <div id="ae_contents_box_100pc">
             <div id="ae_content">
@@ -166,19 +171,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <xsl:call-template name="ae-sort-protocols">
+                                 <xsl:apply-templates select="//protocol">
+                                  <xsl:with-param name="pFrom" select="$vFrom"/>
+                                        <xsl:with-param name="pTo" select="$vTo"/>
+                                 </xsl:apply-templates>
+                                       <!--  <xsl:apply-templates></xsl:apply-templates> -->
+                                    <!-- <xsl:call-template name="ae-sort-protocols">
                                         <xsl:with-param name="pProtocols" select="$vFilteredProtocols"/>
                                         <xsl:with-param name="pFrom" select="$vFrom"/>
                                         <xsl:with-param name="pTo" select="$vTo"/>
                                         <xsl:with-param name="pSortBy" select="$vSortBy"/>
                                         <xsl:with-param name="pSortOrder" select="$vSortOrder"/>
-                                    </xsl:call-template>
+                                    </xsl:call-template> -->
                                 </tbody>
                             </table>
                         </div>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:call-template name="block-warning">
+                     <xsl:call-template name="block-warning">
                             <xsl:with-param name="pStyle" select="'ae_warn_area'"/>
                             <xsl:with-param name="pMessage">
                                 <xsl:text>There are no protocols matching your search criteria found in ArrayExpress Archive.</xsl:text>
@@ -188,6 +198,7 @@
                 </xsl:choose>
             </div>
         </div>
+
     </xsl:template>
 
     <xsl:template match="protocol">
@@ -237,7 +248,7 @@
             <tr>
                 <td class="col_detail" colspan="3">
                     <div class="detail_table">
-                        <xsl:call-template name="detail-table"/>
+                       <xsl:call-template name="detail-table"/>
 
                     </div>
                 </td>
@@ -246,7 +257,8 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template name="detail-table">
+ <!-- TODO: remove this reference to an external query .... but i really dont know how -->
+ <xsl:template name="detail-table">
         <xsl:variable name="vExpsWithProtocol" select="search:queryIndex('experiments', concat('visible:true protocol:', id, if ($userid) then concat(' userid:(', $userid, ')') else ''))"/>
 
         <table border="0" cellpadding="0" cellspacing="0">
@@ -308,7 +320,7 @@
             </tbody>
         </table>
 
-    </xsl:template>
+    </xsl:template> 
 
     <xsl:template name="detail-row">
         <xsl:param name="pName"/>
@@ -352,5 +364,7 @@
             </xsl:choose>
         </xsl:if>
     </xsl:template>
+    
+    
 
 </xsl:stylesheet>

@@ -1,9 +1,12 @@
 package uk.ac.ebi.arrayexpress.components;
 
+import net.sf.saxon.Configuration;
 import net.sf.saxon.om.DocumentInfo;
 import net.sf.saxon.xpath.XPathEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.utils.persistence.FilePersistence;
 import uk.ac.ebi.arrayexpress.utils.saxon.DocumentUpdater;
@@ -11,6 +14,7 @@ import uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions;
 import uk.ac.ebi.arrayexpress.utils.saxon.IDocumentSource;
 import uk.ac.ebi.arrayexpress.utils.saxon.PersistableDocumentContainer;
 
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
@@ -69,14 +73,19 @@ public class ArrayDesigns extends ApplicationComponent implements IDocumentSourc
         this.saxon = (SaxonEngine) getComponent("SaxonEngine");
         this.search = (SearchEngine) getComponent("SearchEngine");
         
-        this.document = new FilePersistence<PersistableDocumentContainer>(
-                new PersistableDocumentContainer("array_designs")
-                , new File(getPreferences().getString("ae.arrays.persistence-location"))
-        );
+//        this.document = new FilePersistence<PersistableDocumentContainer>(
+//                new PersistableDocumentContainer("array_designs")
+//                , new File(getPreferences().getString("ae.arrays.persistence-location"))
+//        );
 
-        updateIndex();
-        updateAccelerators();
+        
+        DocumentInfo docTemp = getXmlFromFile(new File(getPreferences()
+				.getString("ae.arrays.persistence-location")));
+
+        updateIndex(docTemp);
+        updateAccelerators(docTemp);
         this.saxon.registerDocumentSource(this);
+        docTemp=null;
     }
 
     public void terminate() throws Exception
@@ -89,24 +98,17 @@ public class ArrayDesigns extends ApplicationComponent implements IDocumentSourc
         return "arrays.xml";
     }
 
-    // implementation of IDocumentSource.getDocument()
-    public synchronized DocumentInfo getDocument() throws Exception
-    {
-        return this.document.getObject().getDocument();
-    }
-
-    // implementation of IDocumentSource.setDocument(DocumentInfo)
-    public synchronized void setDocument( DocumentInfo doc ) throws Exception
-    {
-        if (null != doc) {
-            this.document.setObject(new PersistableDocumentContainer("array_designs", doc));
-            updateIndex();
-            updateAccelerators();
-        } else {
-            this.logger.error("Array designs NOT updated, NULL document passed");
-        }
-    }
-
+    public synchronized DocumentInfo getDocument() throws Exception {
+ 		return getXmlFromFile(new File(getPreferences().getString(
+ 				"ae.arrays.persistence-location")));
+ 	}
+ 	
+	// implementation of IDocumentSource.setDocument(DocumentInfo)
+	public synchronized void setDocument(DocumentInfo doc) throws Exception {
+		throw new UnsupportedOperationException("This is temporary situation, all Xml reference are being removed, and this methos wont be supported in the future!");
+	}
+	
+	
     public void update( String xmlString, ArrayDesignSource source ) throws Exception
     {
         DocumentInfo updateDoc = this.saxon.transform(xmlString, source.getStylesheetName(), null);
@@ -115,24 +117,24 @@ public class ArrayDesigns extends ApplicationComponent implements IDocumentSourc
         }
     }
 
-    private void updateIndex()
+    private void updateIndex(DocumentInfo docInfo)
     {
         try {
-            this.search.getController().index(INDEX_ID, this.getDocument());
+            this.search.getController().index(INDEX_ID, docInfo);
         } catch (Exception x) {
             this.logger.error("Caught an exception:", x);
         }
     }
 
-    private void updateAccelerators()
+    private void updateAccelerators(DocumentInfo docInfo)
     {
         this.logger.debug("Updating accelerators for arrays");
 
         ExtFunctions.clearAccelerator("legacy-array-ids");
         try {
-            XPath xp = new XPathEvaluator(getDocument().getConfiguration());
+            XPath xp = new XPathEvaluator(docInfo.getConfiguration());
             XPathExpression xpe = xp.compile("/array_designs/array_design[@visible = 'true']");
-            List documentNodes = (List) xpe.evaluate(getDocument(), XPathConstants.NODESET);
+            List documentNodes = (List) xpe.evaluate(docInfo, XPathConstants.NODESET);
 
             XPathExpression accessionXpe = xp.compile("accession");
             XPathExpression legacyIdsXpe = xp.compile("legacy_id");
@@ -155,4 +157,18 @@ public class ArrayDesigns extends ApplicationComponent implements IDocumentSourc
             this.logger.error("Caught an exception:", x);
         }
     }
+    
+    
+    
+    //TODO put this method in aUtils Class
+    public DocumentInfo getXmlFromFile(File file) throws Exception {
+
+		Configuration config = ((SaxonEngine) Application
+				.getAppComponent("SaxonEngine")).trFactory.getConfiguration();
+		DocumentInfo doc = null;
+		doc = config.buildDocument(new StreamSource(file));
+
+		return doc;
+	}
+
 }

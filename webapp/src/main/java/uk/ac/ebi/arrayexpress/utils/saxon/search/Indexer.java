@@ -29,6 +29,7 @@ import org.apache.lucene.store.Directory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.utils.StringTools;
+import uk.ac.ebi.arrayexpress.utils.saxon.PrintUtils;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -55,23 +56,23 @@ public class Indexer
         this.env = env;
     }
 
-    public List<NodeInfo> index( DocumentInfo document )
+    public void index( DocumentInfo document )
     {
-        List<NodeInfo> indexedNodes = null;
-
+   
         try {
             XPath xp = new XPathEvaluator(document.getConfiguration());
             XPathExpression xpe = xp.compile(this.env.indexDocumentPath);
             List documentNodes = (List)xpe.evaluate(document, XPathConstants.NODESET);
-            indexedNodes = new ArrayList<NodeInfo>(documentNodes.size());
-
+   
             for (IndexEnvironment.FieldInfo field : this.env.fields.values()) {
                 fieldXpe.put(field.name, xp.compile(field.path));
             }
 
             IndexWriter w = createIndex(this.env.indexDirectory, this.env.indexAnalyzer);
 
+            int countNodes=0;
             for (Object node : documentNodes) {
+            	countNodes++;
                 Document d = new Document();
 
                 // get all the fields taken care of
@@ -80,14 +81,23 @@ public class Indexer
                         List values = (List)fieldXpe.get(field.name).evaluate(node, XPathConstants.NODESET);
                         for (Object v : values) {
                             if ("integer".equals(field.type)) {
-                                addIntIndexField(d, field.name, v);
+                                addIntIndexField(d, field.name, v, field.shouldStore,field.shouldSort);
                             } else if ("date".equals(field.type)) {
                                 // todo: addDateIndexField(d, field.name, v);
                                 logger.error("Date fields are not supported yet, field [{}] will not be created", field.name);
                             } else if ("boolean".equals(field.type)) {
-                               addBooleanIndexField(d, field.name, v);
+                               addBooleanIndexField(d, field.name, v,field.shouldSort);
                             } else {
-                                addIndexField(d, field.name, v, field.shouldAnalyze, field.shouldStore);
+                            	
+//                            	when i use "." i t means that i want to keep all the xml text as text
+                            	if(field.path.equalsIgnoreCase("/.")){
+                            		 String xml=PrintUtils.printNodeInfo((NodeInfo)node, document.getConfiguration());
+                                     xml=xml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
+                                     xml=xml.replace("\n", "");
+                                     v=xml;
+                     
+                            	}
+                                addIndexField(d, field.name, v, field.shouldAnalyze, field.shouldStore, field.shouldSort);
                             }
                         }
                     } catch (XPathExpressionException x) {
@@ -97,15 +107,17 @@ public class Indexer
 
                 addIndexDocument(w, d);
                 // append node to the list
-                indexedNodes.add((NodeInfo)node);
             }
+            //SET the number of nodes
+            this.env.setCount(countNodes);
+            
+            //TODO calculate this value
+//            this.env.setCountFiltered(this.env.calculateCountFiltered());
             commitIndex(w);
-
+            
         } catch (Exception x) {
             logger.error("Caught an exception:", x);
         }
-
-        return indexedNodes;
     }
 
 
@@ -121,7 +133,7 @@ public class Indexer
         return iwriter;
     }
 
-    private void addIndexField( Document document, String name, Object value, boolean shouldAnalyze, boolean shouldStore )
+    private void addIndexField( Document document, String name, Object value, boolean shouldAnalyze, boolean shouldStore, boolean sort )
     {
         String stringValue;
         if (value instanceof String) {
@@ -134,9 +146,15 @@ public class Indexer
         }
 
         document.add(new Field(name, stringValue, shouldStore ? Field.Store.YES : Field.Store.NO, shouldAnalyze ? Field.Index.ANALYZED : Field.Index.NOT_ANALYZED));
+//        ig Im indexing a String and the @sort=true I will always create a new field (fieldname+sort) 
+        if(sort){
+        	String newF=name + "sort";
+        	document.add(new Field(newF, stringValue, Field.Store.NO, Field.Index.NOT_ANALYZED));
+        }
+        
     }
 
-    private void addBooleanIndexField( Document document, String name, Object value )
+    private void addBooleanIndexField( Document document, String name, Object value, boolean sort )
     {
         Boolean boolValue = null;
         if (value instanceof Boolean) {
@@ -146,11 +164,18 @@ public class Indexer
             boolValue = StringTools.stringToBoolean(stringValue);
             logger.warn("Not sure if I handle string value [{}] for the field [{}] correctly, relying on Object.toString()", stringValue, name);
         }
-
-        document.add(new Field(name, null == boolValue ? "" : boolValue.toString(), Field.Store.NO, Field.Index.NOT_ANALYZED));
+        if(!sort){
+        	document.add(new Field(name, null == boolValue ? "" : boolValue.toString(), Field.Store.NO, Field.Index.NOT_ANALYZED));
+        }
+        else{
+        	document.add(new Field(name, null == boolValue ? "" : boolValue.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+        }
+        	
+        	
+        
     }
 
-    private void addIntIndexField( Document document, String name, Object value )
+    private void addIntIndexField( Document document, String name, Object value , boolean store, boolean sort)
     {
         Long longValue;
         if (value instanceof BigInteger) {
@@ -162,7 +187,19 @@ public class Indexer
             logger.warn("Not sure if I handle long value of [{}] for the field [{}] correctly, relying on Object.toString()", value.getClass().getName(), name);
         }
         if (null != longValue) {
-            document.add(new NumericField(name).setLongValue(longValue));
+        	//its more clear to divide the if statement in 3 parts
+            if(sort){
+            	document.add(new NumericField(name,Field.Store.YES, true).setIntValue(longValue.intValue()));
+            }
+            else{
+            	if(!store){
+            		document.add(new NumericField(name).setLongValue(longValue));
+            	}
+            	else{
+            		document.add(new NumericField(name,Field.Store.YES, true).setIntValue(longValue.intValue()));
+            	}
+            	
+            }
         } else {
             logger.warn("Long value of the field [{}] was null", name);
         }

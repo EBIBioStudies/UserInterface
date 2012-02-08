@@ -8,13 +8,11 @@
 
     <xsl:param name="queryid"/>
 
-    <xsl:template match="/">
-        <xsl:variable name="vExperiments" select="search:getExperimentsNumber()"/>
-         <xsl:variable name="vAssays" select="search:getAssaysNumber()"/>
-         
-        <experiments total="{$vExperiments}"
-                     total-samples="4"
-                     total-assays="{$vAssays}"/>
+    <xsl:template match="/experiments">
+        <xsl:variable name="vFilteredExperiments" select="search:queryIndex($queryid)"/>
+        <experiments total="{count($vFilteredExperiments)}"
+                     total-samples="{sum($vFilteredExperiments/samples)}"
+                     total-assays="{sum($vFilteredExperiments/assays)}"/>
     </xsl:template>
 
 </xsl:stylesheet>

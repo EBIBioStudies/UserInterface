@@ -7,7 +7,13 @@
                 exclude-result-prefixes="aejava fn search"
                 version="1.0">
 
+    <xsl:param name="sortby"/>
+    <xsl:param name="sortorder"/>
     
+    <xsl:variable name="vSortBy" select="if ($sortby) then $sortby else 'releasedate'"/>
+    <xsl:variable name="vSortOrder" select="if ($sortorder) then $sortorder else 'descending'"/>
+
+    <xsl:param name="queryid"/>
 
     <xsl:param name="host"/>
     <xsl:param name="basepath"/>
@@ -16,12 +22,12 @@
 
     <xsl:output method="text" indent="no" encoding="UTF-8"/>
 
- 
-	<xsl:param name="initial" />
+    <xsl:include href="ae-sort-experiments.xsl"/>
 
-    <xsl:template match="/">
+    <xsl:template match="/experiments">
 
-	<xsl:if test="'true' = $initial">
+        <xsl:variable name="vFilteredExperiments" select="search:queryIndex($queryid)"/>
+
         <xsl:text>Accession</xsl:text>
         <xsl:text>&#9;</xsl:text>
         <xsl:text>Title</xsl:text>
@@ -40,9 +46,13 @@
         <xsl:text>&#9;</xsl:text>
         <xsl:text>ArrayExpress URL</xsl:text>
         <xsl:text>&#10;</xsl:text>
-         </xsl:if>
- 		<xsl:apply-templates select="//experiment"/>
-      
+        <xsl:call-template name="ae-sort-experiments">
+            <xsl:with-param name="pExperiments" select="$vFilteredExperiments"/>
+            <xsl:with-param name="pFrom"/>
+            <xsl:with-param name="pTo"/>
+            <xsl:with-param name="pSortBy" select="$vSortBy"/>
+            <xsl:with-param name="pSortOrder" select="$vSortOrder"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="experiment">

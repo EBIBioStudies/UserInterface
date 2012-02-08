@@ -138,7 +138,7 @@
                         </div>
                         <xsl:choose>
                             <xsl:when test="not($userid)">
-                                <xsl:variable name="vFilteredFiles" select="search:queryIndexDEP($queryid)"/>
+                                <xsl:variable name="vFilteredFiles" select="search:queryIndex($queryid)"/>
                                 <xsl:variable name="vTotal" select="count($vFilteredFiles)"/>
 
                                 <xsl:variable name="vFrom" as="xs:integer">

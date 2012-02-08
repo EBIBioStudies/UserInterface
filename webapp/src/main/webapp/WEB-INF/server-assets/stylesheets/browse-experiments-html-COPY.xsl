@@ -27,34 +27,25 @@
 
     <xsl:param name="host"/>
     <xsl:param name="basepath"/>
-    
-    
-    <xsl:param name="total"/>
-    <xsl:param name="totalsamples"/>
-    <xsl:param name="totalassays"/>
-    
-    <xsl:variable name="vTotal" select="if ($total) then $total cast as xs:integer else -1"/>
-    <xsl:variable name="vTotalSamples" select="if ($totalsamples) then $totalsamples cast as xs:integer else -1"/>
-    <xsl:variable name="vTotalAssays" select="if ($totalassays) then $totalassays cast as xs:integer else -1"/>
-
-   
 
     <xsl:variable name="vBaseUrl">http://<xsl:value-of select="$host"/><xsl:value-of select="$basepath"/></xsl:variable>
 
     <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="UTF-8"/>
 
-
+    <xsl:include href="ae-sort-experiments.xsl"/>
     <xsl:include href="ae-highlight.xsl"/>
 
     <xsl:variable name="vDetailedViewMainTrClass">tr_main<xsl:if test="'true' = $detailedview"> exp_expanded</xsl:if></xsl:variable>
     <xsl:variable name="vDetailedViewExtStyle"><xsl:if test="'true' != $detailedview">display:none</xsl:if></xsl:variable>
     <xsl:variable name="vDetailedViewMainTdClass">td_main<xsl:if test="'true' = $detailedview"> td_expanded</xsl:if></xsl:variable>
 
-    <xsl:template match="/">
-   		<h1>Teste2</h1>
-      
-     
-       <xsl:variable name="vFrom" as="xs:integer">
+    <xsl:template match="/experiments">
+        <xsl:variable name="vFilteredExperiments" select="search:queryIndex($queryid)"/>
+        <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
+        <xsl:variable name="vTotalSamples" select="sum($vFilteredExperiments/samples)"/>
+        <xsl:variable name="vTotalAssays" select="sum($vFilteredExperiments/assays)"/>
+
+        <xsl:variable name="vFrom" as="xs:integer">
             <xsl:choose>
                 <xsl:when test="$vPage > 0"><xsl:value-of select="1 + ( $vPage - 1 ) * $vPageSize"/></xsl:when>
                 <xsl:when test="$vTotal = 0">0</xsl:when>
@@ -80,10 +71,15 @@
                 <div id="ae_results_pagesize"><xsl:value-of select="$vPageSize"/></div>
             </td>
         </tr>
-
         <xsl:choose>
             <xsl:when test="$vTotal > 0">
-            
+                <xsl:call-template name="ae-sort-experiments">
+                    <xsl:with-param name="pExperiments" select="$vFilteredExperiments"/>
+                    <xsl:with-param name="pFrom" select="$vFrom"/>
+                    <xsl:with-param name="pTo" select="$vTo"/>
+                    <xsl:with-param name="pSortBy" select="$vSortBy"/>
+                    <xsl:with-param name="pSortOrder" select="$vSortOrder"/>
+                </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
                 <tr class="ae_results_tr_error">
@@ -94,7 +90,6 @@
                 </tr>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:apply-templates></xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="experiment">
@@ -104,9 +99,8 @@
         <xsl:variable name="vAccession" select="string(accession)"/>
         <xsl:variable name="vFiles" select="aejava:getAcceleratorValueAsSequence('ftp-folder', $vAccession)"/>
 
-
-    <!--    <xsl:if test="position() >= $pFrom and not(position() > $pTo)"> -->
-             <tr id="{$vExpId}_main" class="{$vDetailedViewMainTrClass}">
+        <xsl:if test="position() >= $pFrom and not(position() > $pTo)">
+            <tr id="{$vExpId}_main" class="{$vDetailedViewMainTrClass}">
                 <td class="{$vDetailedViewMainTdClass}"><div class="table_row_expand"/></td>
                 <td class="{$vDetailedViewMainTdClass}">
                     <div class="acc">
@@ -513,8 +507,8 @@
                     </div>
                 </td>
             </tr>
-    <!--  </xsl:if> -->
-     </xsl:template>
+        </xsl:if>
+    </xsl:template>
 
     <xsl:template match="bibliography">
         <div>
@@ -904,8 +898,4 @@
             <xsl:otherwise><img src="{$basepath}/assets/images/silk_data_unavail.gif" width="16" height="16" alt="-"/></xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
-
-
-
 </xsl:stylesheet>

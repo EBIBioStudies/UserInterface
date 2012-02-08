@@ -29,23 +29,18 @@
     <xsl:variable name="vBaseUrl">http://<xsl:value-of select="$host"/><xsl:value-of select="$basepath"/></xsl:variable>
 
     <xsl:output name="xml" omit-xml-declaration="no" method="xml" encoding="UTF-8" indent="no"/>
-    
-    <xsl:param name="initial" />
-    
-     <xsl:param name="total"/>
 
-    
-  <!--   <xsl:variable name="vTotal" select="if ($total) then $total cast as xs:integer else -1"/> -->
-    <xsl:variable name="vTotal" select="100"/>
-
-<!--     <xsl:include href="ae-sort-experiments.xsl"/> -->
+    <xsl:include href="ae-sort-experiments.xsl"/>
 
     <xsl:function name="ae:dateTimeToRfc822">
         <xsl:param name="pDateTime"/>
         <xsl:value-of select="fn:format-dateTime($pDateTime, '[FNn,*-3], [D01] [MNn,*-3] [Y0001] [H01]:[m01]:[s01] +0000', 'en', (), ())"/>
     </xsl:function>
 
-    <xsl:template match="/">
+    <xsl:template match="/experiments">
+
+        <xsl:variable name="vFilteredExperiments" select="search:queryIndex($queryid)"/>
+        <xsl:variable name="vTotal" select="count($vFilteredExperiments)"/>
 
         <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
             <channel>
@@ -74,11 +69,13 @@
                 <managingEditor><xsl:text>arrayexpress@ebi.ac.uk (ArrayExpress Team)</xsl:text></managingEditor>
                 <webMaster><xsl:text>arrayexpress@ebi.ac.uk (ArrayExpress Team)</xsl:text></webMaster>
                 <atom:link href="{$vBaseUrl}/rss/experiments" rel="self" type="application/rss+xml" />
-                
-     						
-							<xsl:apply-templates select="//experiment">
-
-							</xsl:apply-templates>
+                <xsl:call-template name="ae-sort-experiments">
+                    <xsl:with-param name="pExperiments" select="$vFilteredExperiments"/>
+                    <xsl:with-param name="pFrom" select="1"/>
+                    <xsl:with-param name="pTo" select="$vPageSize"/>
+                    <xsl:with-param name="pSortBy" select="$vSortBy"/>
+                    <xsl:with-param name="pSortOrder" select="$vSortOrder"/>
+                </xsl:call-template>
 
             </channel>
         </rss>
@@ -86,6 +83,9 @@
     </xsl:template>
 
     <xsl:template match="experiment">
+        <xsl:param name="pFrom"/>
+        <xsl:param name="pTo"/>
+        <xsl:if test="position() &gt;= number($pFrom) and position() &lt;= number($pTo)">
             <item>
                 <title>
                     <xsl:value-of select="accession"/>
@@ -136,6 +136,7 @@
                     </pubDate>
                 </xsl:if>
             </item>
+        </xsl:if>
     </xsl:template>
 
 </xsl:stylesheet>

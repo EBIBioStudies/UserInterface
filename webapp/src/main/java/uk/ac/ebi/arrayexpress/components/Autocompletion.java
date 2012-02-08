@@ -111,7 +111,7 @@ public class Autocompletion extends ApplicationComponent
                 );
             }
             String fieldType = search.getController().getFieldType(experiments.INDEX_ID, field);
-            if (null != fieldType && !"integer".equals(fieldType)) {
+            if (null != fieldType && !"integer".equals(fieldType) && search.getController().isFieldAutoCompletion(experiments.INDEX_ID, field)) {
                 for (String term : search.getController().getTerms(experiments.INDEX_ID, field, "keywords".equals(field) ? 10 : 1)) {
                     getStore().addData(
                             new AutocompleteData(

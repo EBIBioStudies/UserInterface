@@ -17,9 +17,12 @@ package uk.ac.ebi.arrayexpress.components;
  *
  */
 
+import net.sf.saxon.Configuration;
 import net.sf.saxon.om.DocumentInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.utils.persistence.FilePersistence;
 import uk.ac.ebi.arrayexpress.utils.saxon.DocumentUpdater;
@@ -27,6 +30,8 @@ import uk.ac.ebi.arrayexpress.utils.saxon.IDocumentSource;
 import uk.ac.ebi.arrayexpress.utils.saxon.PersistableDocumentContainer;
 
 import java.io.File;
+
+import javax.xml.transform.stream.StreamSource;
 
 public class Protocols extends ApplicationComponent implements IDocumentSource
 {
@@ -62,13 +67,17 @@ public class Protocols extends ApplicationComponent implements IDocumentSource
         this.saxon = (SaxonEngine) getComponent("SaxonEngine");
         this.search = (SearchEngine) getComponent("SearchEngine");
 
-        this.document = new FilePersistence<PersistableDocumentContainer>(
-                new PersistableDocumentContainer("protocols")
-                , new File(getPreferences().getString("ae.protocols.persistence-location"))
-        );
+//        this.document = new FilePersistence<PersistableDocumentContainer>(
+//                new PersistableDocumentContainer("protocols")
+//                , new File(getPreferences().getString("ae.protocols.persistence-location"))
+//        );
+        
+        DocumentInfo docTemp = getXmlFromFile(new File(getPreferences()
+				.getString("ae.protocols.persistence-location")));
 
-        updateIndex();
+        updateIndex(docTemp);
         this.saxon.registerDocumentSource(this);
+        docTemp=null;
     }
 
     public void terminate() throws Exception
@@ -81,22 +90,19 @@ public class Protocols extends ApplicationComponent implements IDocumentSource
         return "protocols.xml";
     }
 
-    // implementation of IDocumentSource.getDocument()
-    public synchronized DocumentInfo getDocument() throws Exception
-    {
-        return this.document.getObject().getDocument();
-    }
-
-    // implementation of IDocumentSource.setDocument(DocumentInfo)
-    public synchronized void setDocument( DocumentInfo doc ) throws Exception
-    {
-        if (null != doc) {
-            this.document.setObject(new PersistableDocumentContainer("protocols", doc));
-            updateIndex();
-        } else {
-            this.logger.error("Protocols NOT updated, NULL document passed");
-        }
-    }
+ // implementation of IDocumentSource.getDocument()
+ 	// this is not the best way to do it ... but i dont know if in a near future
+ 	// we will create a staging area and all the xml files references will
+ 	// disappear, so
+ 	public synchronized DocumentInfo getDocument() throws Exception {
+ 		return getXmlFromFile(new File(getPreferences().getString(
+ 				"ae.protocols.persistence-location")));
+ 	}
+ 	
+	// implementation of IDocumentSource.setDocument(DocumentInfo)
+	public synchronized void setDocument(DocumentInfo doc) throws Exception {
+		throw new UnsupportedOperationException("This is temporary situation, all Xml reference are being removed, and this methos wont be supported in the future!");
+	}
 
     public void update( String xmlString, ProtocolsSource source ) throws Exception
     {
@@ -106,12 +112,24 @@ public class Protocols extends ApplicationComponent implements IDocumentSource
         }
     }
 
-    private void updateIndex()
+    private void updateIndex(DocumentInfo doc)
     {
         try {
-            this.search.getController().index(INDEX_ID, this.getDocument());
+            this.search.getController().index(INDEX_ID, doc);
         } catch (Exception x) {
             this.logger.error("Caught an exception:", x);
         }
     }
+    
+    //TODO put this method in aUtils Class
+    public DocumentInfo getXmlFromFile(File file) throws Exception {
+
+		Configuration config = ((SaxonEngine) Application
+				.getAppComponent("SaxonEngine")).trFactory.getConfiguration();
+		DocumentInfo doc = null;
+		doc = config.buildDocument(new StreamSource(file));
+
+		return doc;
+	}
+
 }
