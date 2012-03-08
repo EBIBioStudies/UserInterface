@@ -19,7 +19,7 @@ package uk.ac.ebi.arrayexpress.utils.saxon.search;
 
 public interface IQueryHighlighter
 {
-    public IQueryHighlighter setEnvironment( IndexEnvironment env );
+    public IQueryHighlighter setEnvironment( AbstractIndexEnvironment abstractIndexEnvironment );
 
     public String highlightQuery( QueryInfo queryInfo, String fieldName, String text );
 }

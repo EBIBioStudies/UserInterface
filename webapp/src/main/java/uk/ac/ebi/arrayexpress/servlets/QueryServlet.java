@@ -6,6 +6,8 @@ import org.apache.commons.lang.text.StrSubstitutor;
 import org.apache.lucene.queryParser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xmldb.api.base.ResourceSet;
+
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 import uk.ac.ebi.arrayexpress.components.SearchEngine;
@@ -63,7 +65,8 @@ public class QueryServlet extends AuthAwareApplicationServlet
             , List<String> authUserIDs
     ) throws ServletException, IOException
     {
-        RegexHelper PARSE_ARGUMENTS_REGEX = new RegexHelper("/([^/]+)/([^/]+)/([^/]+)$", "i");
+    	System.out.println("\n################### BEGIN #########################");
+    	RegexHelper PARSE_ARGUMENTS_REGEX = new RegexHelper("/([^/]+)/([^/]+)/([^/]+)$", "i");
 
         logRequest(logger, request, requestType);
 
@@ -78,7 +81,8 @@ public class QueryServlet extends AuthAwareApplicationServlet
         String stylesheet = requestArgs[1];
         String outputType = requestArgs[2];
 
-
+    	long time = System.nanoTime();
+		
         if (outputType.equals("xls")) {
             // special case for Excel docs
             // we actually send tab-delimited file but mimick it as XLS doc
@@ -152,6 +156,7 @@ public class QueryServlet extends AuthAwareApplicationServlet
 //                    source = saxonEngine.getRegisteredDocument(index + ".xml");
                     Integer queryId = search.getController().addQuery(index, params, request.getQueryString());
                     params.put("queryid", String.valueOf(queryId));
+                    params.put("querystring", search.getController().getQueryString(queryId));
                     
                     
                     //all the queries are now executes in this Servlet and not in the XSLT
@@ -160,7 +165,8 @@ public class QueryServlet extends AuthAwareApplicationServlet
     				StringReader reader = new StringReader(xml);
     				long xmlRead = System.currentTimeMillis();
     				
-    				System.out.println("xml->" + xml);
+//    				System.out.println("xml->" + xml);
+    				System.out.println("xml size->" + xml.length());
     				Configuration config = ((SaxonEngine) Application
     						.getAppComponent("SaxonEngine")).trFactory
     						.getConfiguration();
@@ -170,6 +176,7 @@ public class QueryServlet extends AuthAwareApplicationServlet
                     
                 }
  
+                logger.info("Transformation initial");
                 if (!saxonEngine.transformToWriter(
                         source
                         , stylesheetName
@@ -185,6 +192,9 @@ public class QueryServlet extends AuthAwareApplicationServlet
         } catch (Exception x) {
             throw new RuntimeException(x);
         }
+        double ms = (System.nanoTime() - time) / 1000000d;
+		System.out.println("\n\n############################REQUEST TOOK->" + ms + " 2ms");
+	     System.out.println("################### END #########################\n");     
         out.close();
     }
 

@@ -36,7 +36,8 @@ import uk.ac.ebi.arrayexpress.utils.saxon.DocumentUpdater;
 import uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions;
 import uk.ac.ebi.arrayexpress.utils.saxon.IDocumentSource;
 import uk.ac.ebi.arrayexpress.utils.saxon.PersistableDocumentContainer;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.ExperimentsIndexEnvironment;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.ExperimentsIndexEnvironment_22022012;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentExperiments;
 
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
@@ -103,21 +104,7 @@ public class Experiments extends ApplicationComponent implements
 		}
 	}
 
-	public Long getExperimentsNumber() {
-		return experimentsNumber;
-	}
-
-	private void setExperimentsNumber(Long experimentsNumber) {
-		this.experimentsNumber = experimentsNumber;
-	}
-
-	public Long getAssaysNumber() {
-		return assaysNumber;
-	}
-
-	private void setAssaysNumber(Long assaysNumber) {
-		this.assaysNumber = assaysNumber;
-	}
+	
 
 	public static class UpdateSourceInformation implements IEventInformation {
 		private ExperimentSource source;
@@ -225,12 +212,12 @@ public class Experiments extends ApplicationComponent implements
 				.put("RNA assay",
 						"<option value=\"\">All technologies</option><option value=\"&quot;array assay&quot;\">Array</option><option value=\"&quot;high throughput sequencing assay&quot;\">High-throughput sequencing</option>");
 
+		//int numberOfExperiments=calculateNumberOfExperiments(docTemp);
 		updateIndex(docTemp);
 //		TODO rpe
-//		updateAccelerators(docTemp);
+		//updateAccelerators(docTemp);
 		this.saxon.registerDocumentSource(this);
-		updateExperimentsStats(docTemp);
-		
+	
 		
 		docTemp = null;
 		//
@@ -432,6 +419,7 @@ public class Experiments extends ApplicationComponent implements
 		this.arrays.setObject(new PersistableString(arraysString));
 	}
 
+	//TODO move this to anoher place (i will not do now because i dont know from where I will read the xml source... maybe in the future I will not use the file!!
 	public DocumentInfo getXmlFromFile(File file) throws Exception {
 
 		Configuration config = ((SaxonEngine) Application
@@ -443,6 +431,19 @@ public class Experiments extends ApplicationComponent implements
 	}
 
 	
+	@Deprecated
+	private int calculateNumberOfExperiments(DocumentInfo doc) throws Exception {
+		 Long totalExperiments = Long.parseLong(((SaxonEngine)Application.getAppComponent("SaxonEngine")).evaluateXPathSingle(doc, "count(//experiment[source/@visible = 'true' and user/@id = '1'])"));
+		return totalExperiments.intValue();
+		
+	}
+
+	
+	
+	
+	
+	/*
+	//TODO: rPE
 	public void updateExperimentsStats(DocumentInfo doc) throws Exception {
 		 Long totalExperiments = Long.parseLong(((SaxonEngine)Application.getAppComponent("SaxonEngine")).evaluateXPathSingle(doc, "count(//experiment[source/@visible = 'true' and user/@id = '1'])"));
 		 setExperimentsNumber(totalExperiments);
@@ -457,12 +458,10 @@ public class Experiments extends ApplicationComponent implements
 		 //		 setAssaysNumber(totalAssays);
 //		 System.out.println("Number of assays->" + totalAssays);
 	
-		 ExperimentsIndexEnvironment indexExp=(ExperimentsIndexEnvironment)this.search.getController().getEnvironment("experiments");
-		 indexExp.setCountFiltered(totalExperiments.intValue());
-		 indexExp.setCountAssaysFiltered(totalAssays.intValue());
-//		 this.search.getController().getEnvironment(INDEX_ID).setCountFiltered(countFiltered)
-//		 (if (samples castable as xs:integer) then samples else 0) cast as xs:integer
+		 IndexEnvironmentExperiments indexExp=(IndexEnvironmentExperiments)this.search.getController().getEnvironment("experiments");
+		 indexExp.setCountDocuments(totalExperiments.intValue());
+
 		
 	}
-	
+	*/
 }

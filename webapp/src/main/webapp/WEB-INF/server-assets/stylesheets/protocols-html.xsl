@@ -5,9 +5,10 @@
                 xmlns:search="java:uk.ac.ebi.arrayexpress.utils.saxon.search.SearchExtension"
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 extension-element-prefixes="xs aejava search html"
-                exclude-result-prefixes="xs aejava searchhtml"
+                exclude-result-prefixes="xs aejava search html"
                 version="2.0">
-      <xsl:param name="page"/>
+
+    <xsl:param name="page"/>
     <xsl:param name="pagesize"/>
 
     <xsl:variable name="vPage" select="if ($page) then $page cast as xs:integer else 1"/>
@@ -30,23 +31,23 @@
     <xsl:param name="basepath"/>
 
     <xsl:variable name="vBaseUrl">http://<xsl:value-of select="$host"/><xsl:value-of select="$basepath"/></xsl:variable>
-
-    <xsl:variable name="vBrowseMode" select="not($accession) and not($id)"/>
     
     <xsl:param name="total"/>
     
-    <xsl:variable name="vTotal" select="if ($total) then $total cast as xs:integer else -1"/> 
+    <xsl:variable name="vTotal" select="if ($total) then $total cast as xs:integer else -1"/>
+    
+
+    <xsl:variable name="vBrowseMode" select="not($accession) and not($id)"/>
 
     <xsl:output omit-xml-declaration="yes" method="html"
                 indent="no" encoding="UTF-8" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"/>
 
-   <xsl:include href="ae-html-page.xsl"/>
-    <xsl:include href="ae-highlight.xsl"/> 
+    <xsl:include href="ae-html-page.xsl"/>
+    <xsl:include href="ae-highlight.xsl"/>
 
     <xsl:template match="/">
         <html lang="en">
-        <h2>Protocols</h2>
-           <xsl:call-template name="page-header">
+            <xsl:call-template name="page-header">
                 <xsl:with-param name="pTitle">
                     <xsl:value-of select="if (not($vBrowseMode)) then (if (not($accession)) then concat('Protocol #', $id, ' | ') else concat(upper-case($accession), ' | ')) else ''"/>
                     <xsl:text>Protocols | ArrayExpress Archive | EBI</xsl:text>
@@ -60,16 +61,15 @@
                     <script src="{$basepath}/assets/scripts/ae_protocols_20.js" type="text/javascript"/>
                 </xsl:with-param>
             </xsl:call-template>
-            <xsl:call-template name="page-body"/> 
+            <xsl:call-template name="page-body"/>
         </html>
     </xsl:template>
 
-    
-   <xsl:template name="ae-contents">
+    <xsl:template name="ae-contents">
 
-      <!--   <xsl:variable name="vFilteredProtocols" select="search:queryIndex($queryid)"/>
-        <xsl:variable name="vTotal" select="count($vFilteredProtocols)"/>
- -->
+        <xsl:variable name="vFilteredProtocols" select="//all/protocol"/>
+ 
+
         <xsl:variable name="vFrom" as="xs:integer">
             <xsl:choose>
                 <xsl:when test="$vPage > 0"><xsl:value-of select="1 + ( $vPage - 1 ) * $vPageSize"/></xsl:when>
@@ -83,7 +83,6 @@
                 <xsl:otherwise><xsl:value-of select="$vFrom + $vPageSize - 1"/></xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-
 
         <div id="ae_contents_box_100pc">
             <div id="ae_content">
@@ -171,11 +170,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                 <xsl:apply-templates select="//protocol">
-                                  <xsl:with-param name="pFrom" select="$vFrom"/>
-                                        <xsl:with-param name="pTo" select="$vTo"/>
-                                 </xsl:apply-templates>
-                                       <!--  <xsl:apply-templates></xsl:apply-templates> -->
                                     <!-- <xsl:call-template name="ae-sort-protocols">
                                         <xsl:with-param name="pProtocols" select="$vFilteredProtocols"/>
                                         <xsl:with-param name="pFrom" select="$vFrom"/>
@@ -183,12 +177,13 @@
                                         <xsl:with-param name="pSortBy" select="$vSortBy"/>
                                         <xsl:with-param name="pSortOrder" select="$vSortOrder"/>
                                     </xsl:call-template> -->
+                                   <xsl:apply-templates select="$vFilteredProtocols"></xsl:apply-templates>
                                 </tbody>
                             </table>
                         </div>
                     </xsl:when>
                     <xsl:otherwise>
-                     <xsl:call-template name="block-warning">
+                        <xsl:call-template name="block-warning">
                             <xsl:with-param name="pStyle" select="'ae_warn_area'"/>
                             <xsl:with-param name="pMessage">
                                 <xsl:text>There are no protocols matching your search criteria found in ArrayExpress Archive.</xsl:text>
@@ -198,13 +193,10 @@
                 </xsl:choose>
             </div>
         </div>
-
     </xsl:template>
 
+   
     <xsl:template match="protocol">
-        <xsl:param name="pFrom"/>
-        <xsl:param name="pTo"/>
-        <xsl:if test="position() >= $pFrom and not(position() > $pTo)">
             <tr>
                 <xsl:attribute name="class">
                     <xsl:text>main</xsl:text>
@@ -248,18 +240,19 @@
             <tr>
                 <td class="col_detail" colspan="3">
                     <div class="detail_table">
-                       <xsl:call-template name="detail-table"/>
+                        <xsl:call-template name="detail-table">
+                        <xsl:with-param name="pExperimentsWithProtocol" select="../experiment"></xsl:with-param>
+                        </xsl:call-template>
 
                     </div>
                 </td>
             </tr>
-            </xsl:if>
-        </xsl:if>
+           </xsl:if> 
     </xsl:template>
 
- <!-- TODO: remove this reference to an external query .... but i really dont know how -->
- <xsl:template name="detail-table">
-        <xsl:variable name="vExpsWithProtocol" select="search:queryIndex('experiments', concat('visible:true protocol:', id, if ($userid) then concat(' userid:(', $userid, ')') else ''))"/>
+    <xsl:template name="detail-table">
+    	<xsl:param name="pExperimentsWithProtocol"></xsl:param>
+        <!-- <xsl:variable name="vExpsWithProtocol" select="search:queryIndex('experiments', concat('visible:true protocol:', id, if ($userid) then concat(' userid:(', $userid, ')') else ''))"/> -->
 
         <table border="0" cellpadding="0" cellspacing="0">
             <tbody>
@@ -293,13 +286,13 @@
                     <xsl:with-param name="pName" select="'Links'"/>
                     <xsl:with-param name="pContent">
                         <xsl:choose>
-                            <xsl:when test="count($vExpsWithProtocol) > 10">
-                               <a href="{$basepath}/browse.html?keywords=protocol:{id}">All <xsl:value-of select="count($vExpsWithProtocol)"/> experiments using protocol <xsl:value-of select="accession"/></a>
+                            <xsl:when test="count($pExperimentsWithProtocol) > 10">
+                               <a href="{$basepath}/browse.html?keywords=protocol:{id}">All <xsl:value-of select="count($pExperimentsWithProtocol)"/> experiments using protocol <xsl:value-of select="accession"/></a>
                             </xsl:when>
-                            <xsl:when test="count($vExpsWithProtocol) > 1">
+                            <xsl:when test="count($pExperimentsWithProtocol) > 1">
                                 <a href="{$basepath}/browse.html?keywords=protocol:{id}">All experiments using protocol <xsl:value-of select="accession"/></a>
                                 <xsl:text>: (</xsl:text>
-                                    <xsl:for-each select="$vExpsWithProtocol">
+                                    <xsl:for-each select="$pExperimentsWithProtocol">
                                         <xsl:sort select="accession"/>
                                         <a href="{$vBaseUrl}/experiments/{accession}">
                                             <xsl:value-of select="accession"/>
@@ -308,9 +301,9 @@
                                     </xsl:for-each>
                                 <xsl:text>)</xsl:text>
                             </xsl:when>
-                            <xsl:when test="count($vExpsWithProtocol) = 1">
-                                <a href="{$vBaseUrl}/experiments/{$vExpsWithProtocol/accession}">
-                                    <xsl:text>Experiment </xsl:text><xsl:value-of select="$vExpsWithProtocol/accession"/>
+                            <xsl:when test="count($pExperimentsWithProtocol) = 1">
+                                <a href="{$vBaseUrl}/experiments/{$pExperimentsWithProtocol/accession}">
+                                    <xsl:text>Experiment </xsl:text><xsl:value-of select="$pExperimentsWithProtocol/accession"/>
                                 </a>
                             </xsl:when>
                             <xsl:otherwise/>
@@ -320,7 +313,7 @@
             </tbody>
         </table>
 
-    </xsl:template> 
+    </xsl:template>
 
     <xsl:template name="detail-row">
         <xsl:param name="pName"/>
@@ -364,7 +357,6 @@
             </xsl:choose>
         </xsl:if>
     </xsl:template>
-    
-    
-
+   
+   
 </xsl:stylesheet>

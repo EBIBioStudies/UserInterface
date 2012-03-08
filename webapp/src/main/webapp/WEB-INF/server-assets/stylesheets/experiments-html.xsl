@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:aejava="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
-                xmlns:search="java:uk.ac.ebi.arrayexpress.utils.saxon.search.SearchExtension"
                 xmlns:html="http://www.w3.org/1999/xhtml"
-                extension-element-prefixes="aejava search html"
-                exclude-result-prefixes="aejava search html"
+                extension-element-prefixes="aejava html"
+                exclude-result-prefixes="aejava html"
                 version="2.0">
 
     <xsl:param name="queryid"/>
@@ -46,8 +45,8 @@
 
     <xsl:template name="ae-contents">
 
-        <xsl:variable name="vExperiment" select="aejava:getAcceleratorValueAsSequence('visible-experiments', $vAccession)"/>
 
+	 <xsl:variable name="vExperiment" select="//experiment[accession=$vAccession]"/>
         <xsl:choose>
             <xsl:when test="exists($vExperiment)">
                 <xsl:choose>
@@ -111,8 +110,8 @@
     </xsl:template>
 
     <xsl:template match="experiment">
-        <xsl:variable name="vFiles" select="aejava:getAcceleratorValueAsSequence('ftp-folder', $vAccession)"/>
-
+<!--         <xsl:variable name="vFiles" select="aejava:getAcceleratorValueAsSequence('ftp-folder', $vAccession)"/>-->
+        <xsl:variable name="vFiles" select="../folder"/>
         <div id="ae_experiment_content">
             <div class="ae_detail">
                 <div class="tbl">

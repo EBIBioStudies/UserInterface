@@ -328,6 +328,7 @@ onExperimentQuery( tableHtml )
         var queryString = $.query.toString();
         // assign valid hrefs to print, save and rss feed elements
         $("#ae_results_print a").attr("href", "browse.printer.html" + queryString);
+//        $("#ae_results_print a").attr("href", "uk/ac/ebi/arrayexpress/utils/saxon/search/StripesTest.action" + queryString);
         $("#ae_results_save a").attr("href", "ArrayExpress-Experiments.txt" + queryString);
         $("#ae_results_save_xls a").attr("href", "ArrayExpress-Experiments.xls" + queryString);
         $("#ae_results_save_feed a").attr("href", "rss/v2/experiments" + queryString);

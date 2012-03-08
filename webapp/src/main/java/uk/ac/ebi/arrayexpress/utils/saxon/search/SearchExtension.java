@@ -35,6 +35,7 @@ public final class SearchExtension
 
     private static Controller controller;
 
+ /*
     //it is used on files-html.xsl (i must understand why it works this way)
    @Deprecated 
     public static SequenceIterator queryIndexDEP( String queryId ) throws IOException, XPathException
@@ -64,10 +65,11 @@ public final class SearchExtension
         return null;
     }
     
-
+*/
     public static String highlightQuery( String queryId, String fieldName, String text )
     {
-        return getController().highlightQuery(Integer.decode(queryId), fieldName, text);
+//    	return text;
+       return getController().highlightQuery(Integer.decode(queryId), fieldName, text);
     }
 
     public static String getQueryString( String queryId )
@@ -76,17 +78,17 @@ public final class SearchExtension
     }
     
     
-    
-    public static int getExperimentsNumber()
+ 
+    public static int getExperimentsNumber() throws Exception
     {
-    	ExperimentsIndexEnvironment indexExp=(ExperimentsIndexEnvironment)getController().getEnvironment("experiments");
-    	return indexExp.getCountFiltered();
+    	IndexEnvironmentExperiments indexExp=(IndexEnvironmentExperiments)getController().getEnvironment("experiments");
+    	return indexExp.getNumberOfExperiments();
     }
 
-    public static int getAssaysNumber()
+    public static int getAssaysNumber() throws Exception
     {
-    	ExperimentsIndexEnvironment indexExp=(ExperimentsIndexEnvironment)getController().getEnvironment("experiments");
-    	return indexExp.getCountAssaysFiltered();
+    	IndexEnvironmentExperiments indexExp=(IndexEnvironmentExperiments)getController().getEnvironment("experiments");
+    	return indexExp.getNumberOfAssays();
     }
 
 

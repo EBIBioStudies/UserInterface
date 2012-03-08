@@ -1,38 +1,39 @@
 package uk.ac.ebi.arrayexpress.servlets;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
+
 import net.sf.saxon.Configuration;
 import net.sf.saxon.om.DocumentInfo;
+
 import org.apache.commons.lang.text.StrSubstitutor;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.TopDocs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 import uk.ac.ebi.arrayexpress.components.SearchEngine;
 import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
 import uk.ac.ebi.arrayexpress.utils.RegexHelper;
 import uk.ac.ebi.arrayexpress.utils.StringTools;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.transform.stream.StreamSource;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringReader;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import uk.ac.ebi.tests.basex.jaxb.Experiments;
 
 /*
  * Copyright 2009-2011 European Molecular Biology Laboratory
@@ -69,7 +70,13 @@ public class QueryPageWriterServlet extends AuthAwareApplicationServlet
             , List<String> authUserIDs
     ) throws ServletException, IOException
     {
-        RegexHelper PARSE_ARGUMENTS_REGEX = new RegexHelper("/([^/]+)/([^/]+)/([^/]+)$", "i");
+       
+    	
+    	System.out.println("\n################### BEGIN QueryPageWriterServlet #########################");
+    
+
+    	
+    	RegexHelper PARSE_ARGUMENTS_REGEX = new RegexHelper("/([^/]+)/([^/]+)/([^/]+)$", "i");
 
         logRequest(logger, request, requestType);
 
@@ -83,7 +90,9 @@ public class QueryPageWriterServlet extends AuthAwareApplicationServlet
         String index = requestArgs[0];
         String stylesheet = requestArgs[1];
         String outputType = requestArgs[2];
-
+    	
+        long time = System.nanoTime();
+        
 
         if (outputType.equals("xls")) {
             // special case for Excel docs
@@ -162,15 +171,15 @@ public class QueryPageWriterServlet extends AuthAwareApplicationServlet
                     TopDocs hits=search.getController().queryAllDocs(queryId,params);
                     //all the queries are now executes in this Servlet and not in the XSLT
 
-
-                    int pageSizeDefault=100;
+                    System.out.println("Total Hits->" + hits.totalHits);
+                    int pageSizeDefault=1000;
                     int pageSize = 25;
 //        			if (params.containsKey("pagesize")) {
 //        				int pagesize = Integer.parseInt(StringTools.arrayToString(
 //        						params.get("pagesize"), " "));
 //        			}
                     //if the total hits is less then the page size I do all the work in one time or if the pagesize is defined
-                    if(hits.totalHits<=pageSizeDefault || params.containsKey("pagesize")){
+                    if(1==0 && ( hits.totalHits<=pageSizeDefault || params.containsKey("pagesize"))){
                     	
                     	String xml = search.getController().queryPartialDocs(queryId, hits, 0, hits.totalHits,params);
         				StringReader reader = new StringReader(xml);
@@ -205,24 +214,12 @@ public class QueryPageWriterServlet extends AuthAwareApplicationServlet
                     		else{
                     			params.put("initial", "false");                  			
                     		}
-                    			
-                    		String xml = search.getController().queryPartialDocs(queryId, hits, (page-1)*pageSizeDefault, (page*pageSizeDefault)-1,params);
-            				StringReader reader = new StringReader(xml);
-            				Configuration config = ((SaxonEngine) Application
-            						.getAppComponent("SaxonEngine")).trFactory
-            						.getConfiguration();
-            				source = config.buildDocument(new StreamSource(
-            						reader));
-//            		
-                            if (!saxonEngine.transformToWriter(
-                                    source
-                                    , stylesheetName
-                                    , params
-                                    , out
-                                )) {                     // where to dump resulting text
-                                throw new Exception("Transformation returned an error");
-                            }
                     		
+                    		//calculate the last hit 
+                    		int pageEnd=Math.min((page*pageSizeDefault)-1, hits.totalHits-1);
+                    			
+                    		String xml = search.getController().queryPartialDocs(queryId, hits, (page-1)*pageSizeDefault, pageEnd,params);
+            				transformJAXB(xml);          				
                     		page++;
                     	}
                     	
@@ -237,9 +234,36 @@ public class QueryPageWriterServlet extends AuthAwareApplicationServlet
         } catch (Exception x) {
             throw new RuntimeException(x);
         }
-        out.close();
+        double ms = (System.nanoTime() - time) / 1000000d;
+		System.out.println("\n\n############################REQUEST TOOK->" + ms + " 2ms");
+	     System.out.println("################### END QueryPageWriterServlet #########################\n");            out.close();
     }
 
+    
+    public static void transformJAXB(String xml){
+  	  
+		// get variables from our xml file, created before
+		System.out.println();
+		System.out.println("Output from our XML File: ");
+		Experiments exp;
+		try {
+			JAXBContext context = JAXBContext.newInstance(Experiments.class);
+			
+			Unmarshaller um = context.createUnmarshaller();
+			exp = (Experiments) um.unmarshal(new StringReader(xml));
+			for (int i = 0; i < exp.getAll().toArray().length; i++) {
+				System.out.println("Experiment " + (i + 1) + ": "
+						+ exp.getAll().get(i).getExperiment().getAccession());
+			}
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+	  
+  }
+    
     private void reportQueryError( PrintWriter out, String templateName, String query )
     {
         try {

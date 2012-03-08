@@ -35,6 +35,11 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,11 +52,11 @@ public class Indexer
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private IndexEnvironment env;
+    private AbstractIndexEnvironment env;
 
     private Map<String, XPathExpression> fieldXpe = new HashMap<String, XPathExpression>();
 
-    public Indexer( IndexEnvironment env )
+    public Indexer( AbstractIndexEnvironment env )
     {
         this.env = env;
     }
@@ -92,6 +97,23 @@ public class Indexer
 //                            	when i use "." i t means that i want to keep all the xml text as text
                             	if(field.path.equalsIgnoreCase("/.")){
                             		 String xml=PrintUtils.printNodeInfo((NodeInfo)node, document.getConfiguration());
+                            		 //TODO RPE:
+                            		 
+//                            		 try {
+//                            			 if (xml.indexOf("<experiment>")!=-1){
+//                            				 BufferedWriter out = new BufferedWriter(new FileWriter("/Users/rpslpereira/Apps/apache-tomcat-6.0.33/temp/individual/" + countNodes + ".xml"));
+//                                			 out.write(xml);
+//                                			 out.close();	 
+//                            			 }
+//                            			 
+//                            			 } 
+//                            			 catch (IOException e) 
+//                            			 { 
+//                            			 System.out.println("Exception ");
+//
+//                            			 }
+                            	
+                            		 
                                      xml=xml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
                                      xml=xml.replace("\n", "");
                                      v=xml;
@@ -109,7 +131,7 @@ public class Indexer
                 // append node to the list
             }
             //SET the number of nodes
-            this.env.setCount(countNodes);
+            this.env.setCountDocuments(countNodes);
             
             //TODO calculate this value
 //            this.env.setCountFiltered(this.env.calculateCountFiltered());

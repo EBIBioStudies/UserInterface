@@ -29,12 +29,12 @@ public class QueryHighlighter implements IQueryHighlighter
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private IndexEnvironment env;
+    private AbstractIndexEnvironment env;
 
     private static final String HIT_OPEN_MARK = "\u00ab";
     private static final String HIT_CLOSE_MARK = "\u00bb";
 
-    public IQueryHighlighter setEnvironment( IndexEnvironment env )
+    public IQueryHighlighter setEnvironment( AbstractIndexEnvironment env )
     {
         this.env = env;
         return this;

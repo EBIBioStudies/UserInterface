@@ -8,6 +8,7 @@ import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.utils.RegexHelper;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.AbstractIndexEnvironment;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IQueryHighlighter;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironment;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.QueryInfo;
@@ -34,7 +35,7 @@ public class EFOExpandedHighlighter implements IQueryHighlighter
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private IndexEnvironment env;
+    private AbstractIndexEnvironment env;
 
     private static final String HIT_OPEN_MARK = "\u00ab";
     private static final String HIT_CLOSE_MARK = "\u00bb";
@@ -47,7 +48,7 @@ public class EFOExpandedHighlighter implements IQueryHighlighter
     private final RegexHelper EFO_AND_SYN_REGEX = new RegexHelper(SYN_OPEN_MARK + EFO_OPEN_MARK + "([^" + EFO_CLOSE_MARK + SYN_CLOSE_MARK + "]+)" + EFO_CLOSE_MARK + SYN_CLOSE_MARK, "g");
     private final RegexHelper EFO_AND_HIT_REGEX = new RegexHelper(HIT_OPEN_MARK + EFO_OPEN_MARK + "([^" + EFO_CLOSE_MARK + HIT_CLOSE_MARK + "]+)" + EFO_CLOSE_MARK + HIT_CLOSE_MARK, "g");
 
-    public IQueryHighlighter setEnvironment( IndexEnvironment env )
+    public IQueryHighlighter setEnvironment( AbstractIndexEnvironment env )
     {
         this.env = env;
         return this;

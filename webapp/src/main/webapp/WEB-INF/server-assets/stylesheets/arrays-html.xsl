@@ -2,10 +2,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:aejava="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
-                xmlns:search="java:uk.ac.ebi.arrayexpress.utils.saxon.search.SearchExtension"
                 xmlns:html="http://www.w3.org/1999/xhtml"
-                extension-element-prefixes="xs aejava search html"
-                exclude-result-prefixes="xs aejava search html"
+                extension-element-prefixes="xs aejava html"
+                exclude-result-prefixes="xs aejava html"
                 version="2.0">
 
     <xsl:param name="page"/>
@@ -13,13 +12,13 @@
 
     <xsl:variable name="vPage" select="if ($page) then $page cast as xs:integer else 1"/>
     <xsl:variable name="vPageSize" select="if ($pagesize) then $pagesize cast as xs:integer else 25"/>
-    
+  
     <xsl:param name="sortby"/>
     <xsl:param name="sortorder"/>
 
     <xsl:variable name="vSortBy" select="if ($sortby) then $sortby else 'accession'"/>
     <xsl:variable name="vSortOrder" select="if ($sortorder) then $sortorder else 'ascending'"/>
-    
+      
     <xsl:param name="queryid"/>
     <xsl:param name="keywords"/>
     <xsl:param name="accession"/>
@@ -68,6 +67,7 @@
 <!--         <xsl:variable name="vFilteredArrays" select="search:queryIndex($queryid)"/>
         <xsl:variable name="vTotal" select="count($vFilteredArrays)"/>
  -->
+ 		<xsl:variable name="vFilteredArrays" select="//all/array_design"/>
         <xsl:variable name="vFrom" as="xs:integer">
             <xsl:choose>
                 <xsl:when test="$vPage > 0"><xsl:value-of select="1 + ( $vPage - 1 ) * $vPageSize"/></xsl:when>
@@ -163,8 +163,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-      							<xsl:apply-templates select="//array_design">
-                                 </xsl:apply-templates>
+      							<xsl:apply-templates select="$vFilteredArrays">
+                                </xsl:apply-templates>
                                 </tbody>
                             </table>
                         </div>
@@ -182,10 +182,8 @@
         </div>
     </xsl:template>
 
-    <xsl:template match="array_design">
-    
-      
-            <xsl:variable name="vArrFolder" select="aejava:getAcceleratorValueAsSequence('ftp-folder', accession)"/>
+ <xsl:template match="array_design">
+          <xsl:variable name="vArrFolder" select="../folder"/>
             <tr>
                 <xsl:if test="not($vBrowseMode)">
                     <xsl:attribute name="class">expanded</xsl:attribute>
@@ -223,7 +221,7 @@
                 </td>
                 <td class="col_files">
                     <div>
-                        <xsl:choose>
+                       <xsl:choose>
                             <xsl:when test="count($vArrFolder/file) > 0">
                                 <a href="{$basepath}/files/{accession}">
                                     <img src="{$basepath}/assets/images/basic_tick.gif" width="16" height="16"
@@ -234,7 +232,7 @@
                                 <img src="{$basepath}/assets/images/silk_data_unavail.gif" width="16" height="16"
                                  alt="-"/>
                             </xsl:otherwise>
-                        </xsl:choose>
+                        </xsl:choose> 
                     </div>
                 </td>
             </tr>
@@ -245,7 +243,8 @@
                         <xsl:call-template name="detail-table">
                             <xsl:with-param name="pAccession" select="accession"/>
                             <xsl:with-param name="pFiles" select="$vArrFolder"/>
-                        </xsl:call-template>
+                            <xsl:with-param name="pExperimentsWithArray" select="../experiment"></xsl:with-param>
+                        </xsl:call-template> 
 
                     </div>
                 </td>
@@ -254,10 +253,10 @@
   
     </xsl:template>
 
-    <xsl:template name="detail-table">
+  	<xsl:template name="detail-table">
         <xsl:param name="pAccession"/>
         <xsl:param name="pFiles"/>
-        <xsl:variable name="vExpsWithArray" select="search:queryIndex('experiments', concat('visible:true array:', $pAccession, if ($userid) then concat(' userid:(', $userid, ')') else ''))"/>
+        <xsl:param name="pExperimentsWithArray"></xsl:param>
 
         <table border="0" cellpadding="0" cellspacing="0">
             <tbody>
@@ -287,13 +286,13 @@
                     <xsl:with-param name="pName" select="'Links'"/>
                     <xsl:with-param name="pContent">
                         <xsl:choose>
-                            <xsl:when test="count($vExpsWithArray) > 10">
-                               <a href="{$basepath}/browse.html?array={$pAccession}">All <xsl:value-of select="count($vExpsWithArray)"/> experiments done using <xsl:value-of select="$pAccession"/></a>
+                            <xsl:when test="count($pExperimentsWithArray) > 10">
+                               <a href="{$basepath}/browse.html?array={$pAccession}">All <xsl:value-of select="count($pExperimentsWithArray)"/> experiments done using <xsl:value-of select="$pAccession"/></a>
                             </xsl:when>
-                            <xsl:when test="count($vExpsWithArray) > 1">
+                            <xsl:when test="count($pExperimentsWithArray) > 1">
                                 <a href="{$basepath}/browse.html?array={$pAccession}">All experiments done using <xsl:value-of select="$pAccession"/></a>
                                 <xsl:text>: (</xsl:text>
-                                    <xsl:for-each select="$vExpsWithArray">
+                                    <xsl:for-each select="$pExperimentsWithArray">
                                         <xsl:sort select="accession"/>
                                         <a href="{$vBaseUrl}/experiments/{accession}">
                                             <xsl:value-of select="accession"/>
@@ -302,15 +301,16 @@
                                     </xsl:for-each>
                                 <xsl:text>)</xsl:text>
                             </xsl:when>
-                            <xsl:when test="count($vExpsWithArray) = 1">
-                                <a href="{$vBaseUrl}/experiments/{$vExpsWithArray/accession}">
-                                    <xsl:text>Experiment </xsl:text><xsl:value-of select="$vExpsWithArray/accession"/>
+                            <xsl:when test="count($pExperimentsWithArray) = 1">
+                                <a href="{$vBaseUrl}/experiments/{$pExperimentsWithArray/accession}">
+                                    <xsl:text>Experiment </xsl:text><xsl:value-of select="$pExperimentsWithArray/accession"/>
                                 </a>
                             </xsl:when>
                             <xsl:otherwise/>
                         </xsl:choose>
                     </xsl:with-param>
                 </xsl:call-template>
+                
                 <xsl:if test="count($pFiles/file) > 0">
                 <xsl:call-template name="detail-section">
                     <xsl:with-param name="pName" select="'Files'"/>
@@ -347,7 +347,7 @@
                 </xsl:call-template>
                 </xsl:if>
             </tbody>
-        </table>
+        </table> 
 
     </xsl:template>
 
@@ -374,7 +374,7 @@
     <xsl:template name="detail-section">
         <xsl:param name="pName"/>
         <xsl:param name="pContent"/>
-        <tr>
+       <tr>
             <td class="detail_name">
                 <div class="outer"><xsl:value-of select="$pName"/></div>
             </td>
@@ -392,6 +392,7 @@
                 <xsl:otherwise><img src="{$basepath}/assets/images/mini_arrow_down.gif" width="12" height="16" alt="v"/></xsl:otherwise>
             </xsl:choose>
         </xsl:if>
-    </xsl:template>
+    </xsl:template> 
 
+   
 </xsl:stylesheet>

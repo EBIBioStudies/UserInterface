@@ -65,7 +65,7 @@ public class Files extends ApplicationComponent implements IDocumentSource
         );
 
         updateIndex();
-        updateAccelerators();
+//        updateAccelerators();
         this.saxon.registerDocumentSource(this);
     }
 

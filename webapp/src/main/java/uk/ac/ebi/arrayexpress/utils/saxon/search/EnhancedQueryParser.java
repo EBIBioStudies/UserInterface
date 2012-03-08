@@ -29,9 +29,9 @@ import org.apache.lucene.util.Version;
 
 public class EnhancedQueryParser extends QueryParser
 {
-    private IndexEnvironment env;
+    private AbstractIndexEnvironment env;
 
-    public EnhancedQueryParser( IndexEnvironment env, String f, Analyzer a )
+    public EnhancedQueryParser( AbstractIndexEnvironment env, String f, Analyzer a )
     {
         super(Version.LUCENE_30, f, a);
         this.env = env;

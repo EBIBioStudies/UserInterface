@@ -13,7 +13,7 @@ import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
  * @author rpslpereira
  *
  */
-public class ExperimentsIndexEnvironment extends IndexEnvironment {
+public class ExperimentsIndexEnvironment_22022012 extends IndexEnvironment {
 
 	/**
 	 * @param indexConfig
@@ -31,7 +31,7 @@ public class ExperimentsIndexEnvironment extends IndexEnvironment {
 		this.countAssaysFiltered = countAssaysFiltered;
 	}
 
-	public ExperimentsIndexEnvironment(HierarchicalConfiguration indexConfig) {
+	public ExperimentsIndexEnvironment_22022012(HierarchicalConfiguration indexConfig) {
 		super(indexConfig);
 		// TODO Auto-generated constructor stub
 	}

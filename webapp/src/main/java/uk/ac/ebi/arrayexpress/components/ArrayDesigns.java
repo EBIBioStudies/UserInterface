@@ -83,7 +83,7 @@ public class ArrayDesigns extends ApplicationComponent implements IDocumentSourc
 				.getString("ae.arrays.persistence-location")));
 
         updateIndex(docTemp);
-        updateAccelerators(docTemp);
+//        updateAccelerators(docTemp);
         this.saxon.registerDocumentSource(this);
         docTemp=null;
     }

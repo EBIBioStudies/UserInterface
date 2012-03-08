@@ -2,6 +2,49 @@
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     <display-name>${project.name} v${project.version}.r${buildNumber}</display-name>
+
+
+
+ <!-- Stripes -->
+<!-- 	<filter>
+		<display-name>Stripes Filter</display-name>
+		<filter-name>StripesFilter</filter-name>
+		<filter-class>net.sourceforge.stripes.controller.StripesFilter</filter-class>
+		<init-param>
+			<param-name>ActionResolver.Packages</param-name>
+			<param-value>uk.ac.ebi.arrayexpress.utils.saxon.search</param-value>
+		</init-param>
+ 	</filter> -->
+
+<filter>
+  <filter-name>performancemonitorfilter</filter-name>
+  <filter-class>uk.ac.ebi.arrayexpress.filters.PerformanceMonitorFilter</filter-class>
+</filter> 
+<filter-mapping>
+  <filter-name>performancemonitorfilter</filter-name>
+  <url-pattern>/*</url-pattern>
+</filter-mapping>
+
+<!-- 
+	<filter-mapping>
+		<filter-name>StripesFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>StripesFilter</filter-name>
+		<servlet-name>StripesDispatcher</servlet-name>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+	
+	<servlet>
+		<servlet-name>StripesDispatcher</servlet-name>
+		<servlet-class>net.sourceforge.stripes.controller.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet> -->
+	 <!-- Stripes -->
+	
     <servlet>
         <description>ArrayExpress Application Status Servlet</description>
         <servlet-name>StatusServlet</servlet-name>
@@ -52,6 +95,14 @@
         <servlet-name>LookupServlet</servlet-name>
         <servlet-class>uk.ac.ebi.arrayexpress.servlets.LookupServlet</servlet-class>
     </servlet>
+    
+    <!-- Stripes -->
+  <!--   <servlet-mapping>
+		<servlet-name>StripesDispatcher</servlet-name>
+		<url-pattern>*.action</url-pattern>
+	</servlet-mapping> -->
+      <!-- Stripes -->
+    
     <servlet-mapping>
         <servlet-name>StatusServlet</servlet-name>
         <url-pattern>/servlets/status</url-pattern>

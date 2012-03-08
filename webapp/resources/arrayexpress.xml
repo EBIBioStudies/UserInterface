@@ -148,7 +148,7 @@
         <index id="experiments" location="${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-index" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
             <document path="/experiments/experiment" defaultField="keywords">
                 <field name="keywords" type="string" path="string-join(.//text(), ' ')" analyze="true" analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer" autocompletion="true" store="false" escape="false"/>
-                <field name="accession" title="by Accession" type="string" path="accession | secondaryaccession" analyze="true" store="false" autocompletion="true" escape="false" sortfields="accessionsort1,accessionsort2"/>
+                <field name="accession" title="by Accession" type="string" path="accession | secondaryaccession" analyze="true" store="true" autocompletion="true" escape="false" sortfields="accessionsort1,accessionsort2"/>
                 <field name="name" title="by Experimental Factor" type="string" path="name" analyze="true" store="false" escape="false" autocompletion="true" sortfields="name,accessionsort1,accessionsort2"/>
                 <field name="releasedate" title="by Release Date" type="string" path="releasedate" analyze="true" store="false" escape="false" autocompletion="true" sortfields="releasedate,accessionsort1,accessionsort2"/>
                 <field name="species" title="by Species" type="string" path="species" analyze="true" store="false" escape="false" autocompletion="true" sortfields="species1,species2,species3,accessionsort1,accessionsort2"/>
@@ -182,7 +182,8 @@
                 <field name="rawcount" type="integer" path="(if (rawdatafiles castable as xs:integer) then rawdatafiles else 0) cast as xs:integer" store="true" />
                 <field name="raw" type="integer" path="count(seqdatauri)" sortfields="raw,rawcount,accessionsort1,accessionsort2"/>
                 
-               
+               <!-- fot the xml database access -->
+               <field name="id" title="Id" type="integer" path="id" analyze="false" store="true" escape="false"/>
                
                  <!--special sort fields using as second and third level of sort-->
                  <field name="accessionsort1" title="Accession sort1" type="string" path="substring(accession, 3, 4)" store="true" analyze="false" escape="false"/>
@@ -205,7 +206,7 @@
                    
                    
                 <!-- xml text content I use "." to mean that I want to keep all the xml content as text -->   
-                   <field name="xml" title="xml" type="string" path="/." analyze="false" store="true" escape="false" />
+                  <field name="xml" title="xml" type="string" path="/." analyze="false" store="true" escape="false" />
                    
                    <!-- HighLight evolution -->
                    <!-- <field name="xml" title="xml" type="string" path="/." analyze="true" analyzer="uk.ac.ebi.arrayexpress.rpereira.MyAnalyzer" store="true" escape="false"/> -->
@@ -227,8 +228,8 @@
         <index id="arrays" location="${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-index" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
             <document path="/array_designs/array_design" defaultField="keywords">
                 <field name="keywords" type="string" path="string-join(.//text(), ' ')" analyze="true" analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer" store="false" escape="false"/>
-                <field name="accession" title="by Accession" type="string" path="accession" analyze="true" store="false" escape="false" sortfields="accessionsort1,accessionsort2"/>
-                <field name="name" title="by Name" type="string" path="name" analyze="true" store="false" escape="false" sortfields="name,accessionsort1,accessionsort2"/>
+                <field name="accession" title="by Accession" type="string" path="accession" analyze="true" store="true" escape="false" sortfields="accessionsort1,accessionsort2"/>
+                <field name="name" title="by Name" type="string" path="lower-case(name)" analyze="true" store="false" escape="false" sortfields="name,accessionsort1,accessionsort2"/>
               	<field name="species" title="by Species" type="string" path="species" analyze="true" store="false" escape="false" sortfields="species1,species2,species3,accessionsort1,accessionsort2"/>
               	<field name="species1" title="by Species" type="string" path="species[0]" analyze="false" store="false" escape="false"/>
                 <field name="species2" title="by Species" type="string" path="species[1]" analyze="false" store="false" escape="false"/>
@@ -248,18 +249,13 @@
                  <field name="accessionsort1" title="Accession sort1" type="string" path="substring(accession, 3, 4)" store="true" analyze="false" escape="false"/>
                  <field name="accessionsort2" title="Accession sort2" type="integer" path="(if (substring(accession, 8) castable as xs:integer) then substring(accession, 8) else 0) cast as xs:integer" store="true" analyze="false"/>
                
-                 
-                 <!--special sort fields using as second and third level of sort-->
-                 <field name="accessionsort1" title="Accession sort1" type="string" path="substring(accession, 3, 4)" store="true" analyze="false" escape="false"/>
-                 <field name="accessionsort2" title="Accession sort2" type="integer" path="(if (substring(accession, 8) castable as xs:integer) then substring(accession, 8) else 0) cast as xs:integer" store="true" analyze="false"/>
-               
             </document>
         </index>
         <index id="protocols" location="${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-index" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
             <document path="/protocols/protocol" defaultField="keywords">
                 <field name="keywords" type="string" path="string-join(.//text(), ' ')" analyze="true" analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer" store="false" escape="false"/>
-                <field name="id" title="" type="string" path="id" analyze="true" store="false" escape="false"/>
-                <field name="accession" title="by Accession" type="string" path="lower-case(accession)" analyze="true" store="false" escape="false"  sortfields="accession"/>
+                <field name="id" title="" type="string" path="id" analyze="true" store="true" escape="false"/>
+                <field name="accession" title="by Accession" type="string" path="lower-case(accession)" analyze="true" store="true" escape="false"  sortfields="accession"/>
                 <field name="name" title="by Name" type="string" path="lower-case(name)" analyze="true" store="false" escape="false" sortfields="name"/>
                 <field name="experiment" title="by Experiment Association" type="string" path="experiment" analyze="true" store="false" escape="false"/>
                 <field name="type" title="by Type" type="string" path="type" analyze="true" store="false" escape="false" sortfields="type"/>
@@ -267,15 +263,21 @@
                 <field name="public" type="boolean" path="user/@id = '1'"/>
                 
                 <!-- xml text content I use "." to mean that I want to keep all the xml content as text -->   
-                <field name="xml" title="xml" type="string" path="/." analyze="false" store="true" escape="false" />
+               <!--  <field name="xml" title="xml" type="string" path="/." analyze="false" store="true" escape="false" /> -->
             </document>
         </index>
         <index id="files" location="${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-index" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
             <document path="/files/folder/file" defaultField="keywords">
                 <field name="keywords" type="string" path="string-join(.//@*, ' ')" analyze="true" analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer" store="false" escape="false"/>
-                <field name="name" title="" type="string" path="@name" analyze="true" store="false" escape="false"/>
+                <field name="name" title="" type="string" path="@name" analyze="true" store="true" escape="false" sortfields="namesort"/>
+                <field name="namesort" title="" type="string" path="lower-case(@name)" analyze="true" store="false" escape="false" sortfields="name"/>
+                <field name="size" title="" type="string" path="@size" analyze="true" store="false" escape="false" sortfields="size"/>
+                <field name="lastmodified" title="" type="string" path="@lastmodified" analyze="true" store="false" escape="false" sortfields="lastmodified"/>
                 <field name="kind" title="" type="string" path="@kind" analyze="true" store="false" escape="false"/>
+                 <field name="accession" title="by Accession" type="string" path="../@accession" analyze="true" store="true" escape="false"  sortfields="accession"/>
                 <field name="extension" title="" type="string" path="@extension" analyze="true" store="false" escape="false"/>
+                 <!-- TODO: review this!! this field is just here to allow empty searches -->
+                 <field name="visible" type="string" path="'true'" analyze="true" store="false" escape="false" />
             </document>
         </index>
         <index id="users" location="${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-index" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">

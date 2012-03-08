@@ -4,9 +4,8 @@
                 xmlns:ae="http://www.ebi.ac.uk/arrayexpress/XSLT/Extension"
                 xmlns:saxon="http://saxon.sf.net/"
                 xmlns:fn="http://www.w3.org/2005/xpath-functions"
-                xmlns:search="java:uk.ac.ebi.arrayexpress.utils.saxon.search.SearchExtension"
-                extension-element-prefixes="ae xs fn saxon search"
-                exclude-result-prefixes="ae xs fn saxon search"
+                extension-element-prefixes="ae xs fn saxon"
+                exclude-result-prefixes="ae xs fn saxon"
                 version="2.0">
 
     <xsl:param name="page"/>
@@ -22,6 +21,7 @@
     <xsl:variable name="vSortOrder" select="if ($sortorder) then $sortorder else 'descending'"/>
 
     <xsl:param name="queryid"/>
+    <xsl:param name="querystring"/>
 
     <xsl:param name="host"/>
     <xsl:param name="basepath"/>
@@ -35,8 +35,8 @@
      <xsl:param name="total"/>
 
     
-  <!--   <xsl:variable name="vTotal" select="if ($total) then $total cast as xs:integer else -1"/> -->
-    <xsl:variable name="vTotal" select="100"/>
+  <xsl:variable name="vTotal" select="if ($total) then $total cast as xs:integer else -1"/>
+<!--     <xsl:variable name="vTotal" select="100"/> -->
 
 <!--     <xsl:include href="ae-sort-experiments.xsl"/> -->
 
@@ -63,7 +63,7 @@
                 <link>
                     <xsl:value-of select="$vBaseUrl"/>
                     <xsl:text>/browse.html?</xsl:text>
-                    <xsl:value-of select="search:getQueryString($queryid)"/>
+                    <xsl:value-of select="$querystring"/>
                </link>
                 <description><xsl:text>The ArrayExpress Archive is a database of functional genomics experiments including gene expression where you can query and download data collected to MIAME and MINSEQE standards</xsl:text></description>
                 <language><xsl:text>en</xsl:text></language>

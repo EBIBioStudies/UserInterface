@@ -5,6 +5,7 @@ import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.*;
 import uk.ac.ebi.arrayexpress.utils.RegexHelper;
 import uk.ac.ebi.arrayexpress.utils.StringTools;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.AbstractIndexEnvironment;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IQueryConstructor;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironment;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.QueryConstructor;
@@ -39,7 +40,7 @@ public class BackwardsCompatibleQueryConstructor implements IQueryConstructor
         this.originalConstructor = new QueryConstructor();
     }
 
-    public Query construct( IndexEnvironment env, Map<String, String[]> querySource ) throws ParseException
+    public Query construct( AbstractIndexEnvironment env, Map<String, String[]> querySource ) throws ParseException
     {
         if ("1".equals(StringTools.arrayToString(querySource.get("queryversion"), ""))) {
             // preserving old stuff:
@@ -88,7 +89,7 @@ public class BackwardsCompatibleQueryConstructor implements IQueryConstructor
         }
     }
 
-    public Query construct( IndexEnvironment env, String queryString ) throws ParseException
+    public Query construct( AbstractIndexEnvironment env, String queryString ) throws ParseException
     {
         return this.originalConstructor.construct(env, queryString);
     }

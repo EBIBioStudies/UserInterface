@@ -124,7 +124,7 @@
     </rule>
     <rule>
         <from>^/files/([AE]-\w{4}-\d+)/?$</from>
-        <to type="forward">/servlets/query/-/files/html?accession=$1</to>
+        <to type="forward">/servlets/query/files/files/html?accession=$1</to>
     </rule>
     <rule>
         <from>^/files/([AE]-\w{4}-\d+)/index.html$</from>
@@ -168,7 +168,7 @@
     <!-- rss feeds support, current scheme -->
     <rule>
         <from>^/rss/v2/experiments$</from>
-        <to type="forward">/servlets/querypagewriter/experiments/experiments-rss/xml</to>
+        <to type="forward">/servlets/query/experiments/experiments-rss/xml</to>
     </rule>
 
     <!-- rest api support -->
@@ -285,17 +285,20 @@
     <!-- search results export in tab format -->
     <rule>
         <from>^/ArrayExpress-Experiments\.xls$</from>
-        <to type="forward">/servlets/querypagewriter/experiments/experiments/xls</to>
+        <!-- <to type="forward">/servlets/querypagewriter/experiments/experiments/xls</to> -->
+        <to type="forward">/filetab.jsp?type=xls</to>
     </rule>
     <rule>
         <from>^/ArrayExpress-Experiments\.txt$</from>
-        <to type="forward">/servlets/querypagewriter/experiments/experiments/tab</to>
+        <!-- <to type="forward">/servlets/querypagewriter/experiments/experiments/tab</to> -->
+        <to type="forward">/filetab.jsp</to>
     </rule>
 
     <!-- print-friendly layout for the experiments -->
     <rule>
         <from>^/browse\.printer\.html$</from>
-        <to type="forward">/servlets/querypagewriter/experiments/browse-experiments-printer/html</to>
+        <!-- <to type="forward">/servlets/querypagewriter/experiments/browse-experiments-printer/html</to> -->
+        <to type="forward">/printer.jsp</to>
     </rule>
 
     <!-- redirects to some pages at www.ebi.ac.uk (via proxy servlet) -->

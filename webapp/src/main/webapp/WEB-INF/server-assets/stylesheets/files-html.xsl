@@ -29,10 +29,13 @@
 
     <xsl:param name="host"/>
     <xsl:param name="basepath"/>
+    
+     <xsl:param name="total"/>
+    <xsl:variable name="vTotal" select="if ($total) then $total cast as xs:integer else -1"/>
+    
 
     <xsl:include href="ae-file-functions.xsl"/>
     <xsl:include href="ae-highlight.xsl"/>
-    <xsl:include href="ae-sort-files.xsl"/>
 
     <xsl:variable name="vBaseUrl">http://<xsl:value-of select="$host"/><xsl:value-of select="$basepath"/></xsl:variable>
     <xsl:variable name="vBrowseMode" select="not($accession)"/>
@@ -63,12 +66,13 @@
     </xsl:template>
 
     <xsl:template name="ae-contents">
-        <xsl:choose>
+    
+            <xsl:choose>
             <xsl:when test="not($vBrowseMode)">
                 <xsl:variable name="vAccession" select="upper-case($accession)"/>
-                <xsl:variable name="vFolder" select="aejava:getAcceleratorValueAsSequence('ftp-folder', $vAccession)"/>
+                <xsl:variable name="vFolder" select="//all/folder"/>
                 <xsl:variable name="vFolderKind" select="$vFolder/@kind"/>
-                <xsl:variable name="vMetaData" select="search:queryIndex(concat($vFolderKind, 's'), concat('visible:true accession:', $accession, if ($userid) then concat(' userid:(', $userid, ')') else ''))[accession = $vAccession]" />
+                <xsl:variable name="vMetaData" select="//all/metadata" />
                 <xsl:choose>
                     <xsl:when test="exists($vFolder) and exists($vMetaData)">
                         <div id="ae_contents_box_740px">
@@ -84,17 +88,17 @@
                                         <xsl:value-of select="upper-case($accession)"/>
                                     </a>
                                 </div>
-                                <xsl:call-template name="list-folder">
+                              <xsl:call-template name="list-folder">
                                     <xsl:with-param name="pFolder" select="$vFolder"/>
                                     <xsl:with-param name="pMetaData" select="$vMetaData"/>
-                                </xsl:call-template>
+                                </xsl:call-template> 
                                 <xsl:if test="$vFolderKind='experiment' and not($kind)">
-                                    <xsl:for-each select="$vMetaData/arraydesign">
+                                    <xsl:for-each select="$vMetaData/../arrayschilds/arraychild/arraydesign">
                                         <xsl:sort select="accession" order="ascending"/>
                                         <xsl:variable name="vArrAccession" select="string(accession)"/>
                                         <xsl:if test="matches($vArrAccession, '^[aA]-\w{4}-\d+$')">
-                                            <xsl:variable name="vArrFolder" select="aejava:getAcceleratorValueAsSequence('ftp-folder', $vArrAccession)"/>
-                                            <xsl:variable name="vArrMetaData" select="search:queryIndex('arrays', concat('visible:true accession:', $vArrAccession, if ($userid) then concat(' userid:(', $userid, ')') else ''))"/>
+                                            <xsl:variable name="vArrFolder" select="../folder"/>
+                                            <xsl:variable name="vArrMetaData" select="."/>
                                             <xsl:choose>
                                                 <xsl:when test="exists($vArrMetaData)">
                                                     <xsl:call-template name="list-folder">
@@ -117,6 +121,7 @@
                             </div>
                         </div>
                     </xsl:when>
+                 
                     <xsl:when test="exists($vFolder) and not(exists($vMetaData))">
                         <xsl:call-template name="block-access-restricted"/>
                     </xsl:when>
@@ -126,6 +131,7 @@
                 </xsl:choose>
 
             </xsl:when>
+             
             <xsl:otherwise>
                 <div id="ae_contents_box_100pc">
                     <div id="ae_content">
@@ -138,9 +144,8 @@
                         </div>
                         <xsl:choose>
                             <xsl:when test="not($userid)">
-                                <xsl:variable name="vFilteredFiles" select="search:queryIndexDEP($queryid)"/>
-                                <xsl:variable name="vTotal" select="count($vFilteredFiles)"/>
-
+                                <xsl:variable name="vFilteredFiles" select="//files/all"/>
+                                
                                 <xsl:variable name="vFrom" as="xs:integer">
                                     <xsl:choose>
                                         <xsl:when test="$vPage > 0"><xsl:value-of select="1 + ( $vPage - 1 ) * $vPageSize"/></xsl:when>
@@ -195,7 +200,7 @@
                                             <table id="ae_results_table" border="0" cellpadding="0" cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th class="col_accession sortable">
+                                                       <th class="col_accession sortable">
                                                             <xsl:text>Accession</xsl:text>
                                                             <xsl:call-template name="add-sort">
                                                                 <xsl:with-param name="pKind" select="'accession'"/>
@@ -218,17 +223,11 @@
                                                             <xsl:call-template name="add-sort">
                                                                 <xsl:with-param name="pKind" select="'lastmodified'"/>
                                                             </xsl:call-template>
-                                                        </th>
+                                                        </th> 
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <xsl:call-template name="ae-sort-files">
-                                                        <xsl:with-param name="pFiles" select="$vFilteredFiles"/>
-                                                        <xsl:with-param name="pFrom" select="$vFrom"/>
-                                                        <xsl:with-param name="pTo" select="$vTo"/>
-                                                        <xsl:with-param name="pSortBy" select="$vSortBy"/>
-                                                        <xsl:with-param name="pSortOrder" select="$vSortOrder"/>
-                                                    </xsl:call-template>
+                                                    <xsl:apply-templates select="//all"></xsl:apply-templates>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -271,13 +270,11 @@
                     </div>
                 </div>
             </xsl:otherwise>
-        </xsl:choose>
+           
+        </xsl:choose> 
     </xsl:template>
 
     <xsl:template match="file">
-        <xsl:param name="pFrom"/>
-        <xsl:param name="pTo"/>
-        <xsl:if test="position() >= $pFrom and not(position() > $pTo)">
             <tr>
                 <td class="col_accession">
                     <div>
@@ -313,7 +310,7 @@
                     </div>
                 </td>
             </tr>
-        </xsl:if>
+      
     </xsl:template>
     
     <xsl:template name="add-sort">
@@ -331,16 +328,16 @@
         <xsl:param name="pMetaData"/>
 
         <div class="ae_accession">
-            <a href="{$basepath}/{$pFolder/@kind}s/{$pMetaData/accession}">
+            <a href="{$basepath}/{$pFolder/@kind}s/{$pMetaData//accession}">
                 <xsl:value-of select="concat(upper-case(substring($pFolder/@kind, 1, 1)),substring($pFolder/@kind, 2))"/>
                 <xsl:text> </xsl:text>
-                <xsl:value-of select="$pMetaData/accession"/>
+                <xsl:value-of select="$pMetaData//accession"/>
             </a>
-            <xsl:if test="not($pMetaData/user/@id = '1')">
+            <xsl:if test="not($pMetaData//user/@id = '1')">
                 <img src="{$basepath}/assets/images/silk_lock.gif" alt="Access to the data is restricted" width="8" height="9"/>
             </xsl:if>
         </div>
-        <div class="ae_title"><xsl:value-of select="$pMetaData/name"/></div>
+        <div class="ae_title"><xsl:value-of select="$pMetaData//name"/></div>
         <xsl:call-template name="list-files">
             <xsl:with-param name="pFolder" select="$pFolder"/>
         </xsl:call-template>

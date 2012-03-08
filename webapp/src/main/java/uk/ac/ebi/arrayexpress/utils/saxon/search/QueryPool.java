@@ -40,7 +40,7 @@ public class QueryPool
     }
 
     public Integer addQuery(
-            IndexEnvironment env
+            AbstractIndexEnvironment abstractIndexEnvironment
             , IQueryConstructor queryConstructor
             , Map<String, String[]> queryParams
             , String queryString
@@ -55,10 +55,10 @@ public class QueryPool
             info = new QueryInfo();
         }
 
-        info.setIndexId(env.indexId);
+        info.setIndexId(abstractIndexEnvironment.indexId);
         info.setQueryString(queryString);
         info.setParams(queryParams);
-        info.setQuery(queryConstructor.construct(env, queryParams));
+        info.setQuery(queryConstructor.construct(abstractIndexEnvironment, queryParams));
         if (null != queryExpander) {
             info.setQuery(queryExpander.expandQuery(info));
         }

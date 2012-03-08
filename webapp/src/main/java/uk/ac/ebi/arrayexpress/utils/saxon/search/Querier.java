@@ -51,16 +51,16 @@ import uk.ac.ebi.arrayexpress.components.Experiments;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
 import uk.ac.ebi.arrayexpress.utils.StringTools;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironment.FieldInfo;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.AbstractIndexEnvironment.FieldInfo;
 
 public class Querier {
 	// logging machinery
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private IndexEnvironment env;
+	private AbstractIndexEnvironment env;
 
-	public Querier(IndexEnvironment env) {
-		this.env = env;
+	public Querier(AbstractIndexEnvironment env2) {
+		this.env = env2;
 	}
 
 	public List<String> getTerms(String fieldName, int minFreq)
@@ -131,7 +131,7 @@ public class Querier {
 			// documentNodes.size() value is 0
 			
 			TopDocs hits = isearcher.search(query,
-					env.getCount() + 1);
+					env.getCountDocuments() + 1);
 
 			count = hits.totalHits;
 		} catch (Exception x) {
@@ -146,7 +146,7 @@ public class Querier {
 		return count;
 	}
 
-
+/*
 	// TODO: I want to remove this references from the XSL
 	@Deprecated
 	public List<NodeInfo> query( Query query ) throws IOException
@@ -204,7 +204,7 @@ public class Querier {
 
         return result;
     }
-	
+*/		
 	
 	
 	
@@ -220,9 +220,9 @@ public class Querier {
            
         return env.queryAllDocs(queryId, info, map) ;
     }
+
 	
-	
-	
+/*	
 	public String queryPagedBAK( Integer queryId, QueryInfo info, HttpServletRequestParameterMap map) throws IOException
     {
         IndexReader ir = null;
@@ -396,4 +396,5 @@ public class Querier {
         totalRes.append("</content>");
         return totalRes.toString();
     }
+    */
 }

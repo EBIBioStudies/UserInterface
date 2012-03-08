@@ -22,6 +22,7 @@ import net.sf.saxon.om.NodeInfo;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.slf4j.Logger;
@@ -44,7 +45,7 @@ public class Controller
     private IQueryExpander queryExpander;
     private IQueryHighlighter queryHighlighter;
 
-    private Map<String, IndexEnvironment> environment = new HashMap<String, IndexEnvironment>();
+    private Map<String, AbstractIndexEnvironment> environment = new HashMap<String, AbstractIndexEnvironment>();
 
     public Controller( URL configFile )
     {
@@ -80,11 +81,11 @@ public class Controller
         return this.environment.containsKey(indexId);
     }
 
-    public IndexEnvironment getEnvironment( String indexId )
+    public AbstractIndexEnvironment getEnvironment( String indexId )
     {
-        if (!this.environment.containsKey(indexId)) {
-            this.environment.put(indexId, IndexEnvironmentFactory.getIndexEnvironment(indexId, config.getIndexConfig(indexId)));
-        }
+    	 if (!this.environment.containsKey(indexId)) {
+             this.environment.put(indexId, IndexEnvironmentFactory.getIndexEnvironment(indexId, config.getIndexConfig(indexId)));
+         }
         return this.environment.get(indexId);
     }
     
@@ -100,21 +101,21 @@ public class Controller
     }
     
 
-    public void index( String indexId, DocumentInfo document )
+    public void index( String indexId, DocumentInfo document)
     {
         this.logger.info("Started indexing for index id [{}]", indexId);
 //        getEnvironment(indexId).putDocumentInfo(
 //                document.hashCode()
 //                , new Indexer(getEnvironment(indexId)).index(document)
 //        );
-        new Indexer(getEnvironment(indexId)).index(document);
-        
+       
+        new Indexer(getEnvironment(indexId)).index(document);    
         this.logger.info("Indexing for index id [{}] completed", indexId);
     }
 
     public List<String> getTerms( String indexId, String fieldName, int minFreq ) throws IOException
     {
-        IndexEnvironment env = getEnvironment(indexId);
+    	AbstractIndexEnvironment env = getEnvironment(indexId);
         if (!env.doesFieldExist(fieldName)) {
             this.logger.error("Field [{}] for index id [{}] does not exist, returning empty list");
             return new ArrayList<String>();
@@ -125,7 +126,7 @@ public class Controller
 
     public Integer getDocCount( String indexId, Map<String, String[]> queryParams ) throws IOException, ParseException
     {
-        IndexEnvironment env = getEnvironment(indexId);
+    	AbstractIndexEnvironment env = getEnvironment(indexId);
 
         Query query = queryConstructor.construct(env, queryParams);
         return new Querier(env).getDocCount(query);
@@ -134,7 +135,7 @@ public class Controller
 
     public void dumpTerms( String indexId, String fieldName )
     {
-        IndexEnvironment env = getEnvironment(indexId);
+    	AbstractIndexEnvironment env = getEnvironment(indexId);
         if (env.doesFieldExist(fieldName)) {
             new Querier(env).dumpTerms(fieldName);
         }
@@ -142,25 +143,25 @@ public class Controller
 
     public Set<String> getFieldNames( String indexId )
     {
-        IndexEnvironment env = getEnvironment(indexId);
+    	AbstractIndexEnvironment env = getEnvironment(indexId);
         return (null != env ? env.fields.keySet() : null);
     }
 
     public String getFieldTitle( String indexId, String fieldName )
     {
-        IndexEnvironment env = getEnvironment(indexId);
+    	AbstractIndexEnvironment env = getEnvironment(indexId);
         return (null != env && env.doesFieldExist(fieldName) ? env.fields.get(fieldName).title : null);        
     }
 
     public String getFieldType( String indexId, String fieldName )
     {
-        IndexEnvironment env = getEnvironment(indexId);
+    	AbstractIndexEnvironment env = getEnvironment(indexId);
         return (null != env && env.doesFieldExist(fieldName) ? env.fields.get(fieldName).type : null);        
     }
 
     public Boolean isFieldAutoCompletion( String indexId, String fieldName )
     {
-        IndexEnvironment env = getEnvironment(indexId);
+    	AbstractIndexEnvironment env = getEnvironment(indexId);
         return (null != env && env.doesFieldExist(fieldName) ? env.fields.get(fieldName).shouldAutoCompletion : false);        
     }
     
@@ -187,13 +188,14 @@ public class Controller
         return null != info ? info.getQueryString() : null;
     }
 
+  /*
     @Deprecated
     public List<NodeInfo> queryIndex( Integer queryId ) throws IOException
     {
         QueryInfo queryInfo = this.queryPool.getQueryInfo(queryId);
         return queryIndex(queryInfo.getIndexId(), queryInfo.getQuery());
     }
-
+*/
     
 
     public String queryIndexPaged( Integer queryId,HttpServletRequestParameterMap map) throws IOException
@@ -212,20 +214,26 @@ public class Controller
 
     }
     
-    public String queryPartialDocs(int queryId, TopDocs hits, int initial, int end, HttpServletRequestParameterMap map) throws IOException
-    {
-    	QueryInfo queryInfo = this.queryPool.getQueryInfo(queryId);
+  public String queryDB(Integer queryId, TopDocs hits,
+			int initialExp, int finalExp, HttpServletRequestParameterMap map) throws Exception{
+	  QueryInfo queryInfo = this.queryPool.getQueryInfo(queryId);
+	  return getEnvironment(queryInfo.getIndexId()).queryDB(hits, initialExp, finalExp, map);
+  }
+    
+//    public String queryPartialDocs(int queryId, TopDocs hits, int initial, int end, HttpServletRequestParameterMap map) throws IOException
+//    {
+//    	QueryInfo queryInfo = this.queryPool.getQueryInfo(queryId);
+//
+//        return queryPartialDocs(queryInfo, hits, initial, end, map);
+//		
+//		
+//    }
 
-        return queryPartialDocs(queryInfo, hits, initial, end, map);
-		
-		
-    }
-
-	public String queryPartialDocs(QueryInfo query, TopDocs hits, int initial, int end, HttpServletRequestParameterMap map) throws IOException
-    {
-		return getEnvironment(query.getIndexId()).queryPartialDocs(hits,initial, end,map);
-		
-    }
+//	public String queryPartialDocs(QueryInfo query, TopDocs hits, int initial, int end, HttpServletRequestParameterMap map) throws IOException
+//    {
+//		return getEnvironment(query.getIndexId()).queryPartialDocs(hits,initial, end,map);
+//		
+//    }
    
     public TopDocs queryAllDocs( Integer queryId, QueryInfo query ,HttpServletRequestParameterMap map) throws IOException
     {
@@ -238,16 +246,18 @@ public class Controller
         return new Querier(getEnvironment(query.getIndexId())).queryPaged(queryId,query,map);
     }
     
+    /*
     public List<NodeInfo> queryIndex( String indexId, String queryString ) throws ParseException, IOException
     {
         return queryIndex(indexId, this.queryConstructor.construct(getEnvironment(indexId), queryString));
     }
 
+    
     public List<NodeInfo> queryIndex( String indexId, Query query ) throws IOException
     {
         return new Querier(getEnvironment(indexId)).query(query);
     }
-
+*/
     public String highlightQuery( Integer queryId, String fieldName, String text )
     {
         if (null == this.queryHighlighter) {

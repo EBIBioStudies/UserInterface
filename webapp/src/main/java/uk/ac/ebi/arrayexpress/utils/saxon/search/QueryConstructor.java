@@ -27,7 +27,7 @@ import java.util.Map;
 
 public class QueryConstructor implements IQueryConstructor
 {
-    public Query construct( IndexEnvironment env, Map<String, String[]> querySource ) throws ParseException
+    public Query construct( AbstractIndexEnvironment env, Map<String, String[]> querySource ) throws ParseException
     {
         BooleanQuery result = new BooleanQuery();
         for (Map.Entry<String, String[]> queryItem : querySource.entrySet()) {
@@ -48,7 +48,7 @@ public class QueryConstructor implements IQueryConstructor
         return result;
     }
 
-    public Query construct( IndexEnvironment env, String queryString ) throws ParseException
+    public Query construct( AbstractIndexEnvironment env, String queryString ) throws ParseException
     {
         QueryParser parser = new EnhancedQueryParser(env, env.defaultField, env.indexAnalyzer);
         parser.setDefaultOperator(QueryParser.Operator.AND);
