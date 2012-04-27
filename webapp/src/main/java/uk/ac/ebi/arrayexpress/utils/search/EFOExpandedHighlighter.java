@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.utils.RegexHelper;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.AbstractIndexEnvironment;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IQueryHighlighter;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironment;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.QueryInfo;
 
 /*

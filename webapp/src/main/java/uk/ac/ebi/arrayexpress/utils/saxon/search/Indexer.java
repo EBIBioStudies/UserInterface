@@ -17,233 +17,795 @@ package uk.ac.ebi.arrayexpress.utils.saxon.search;
  *
  */
 
-import net.sf.saxon.om.DocumentInfo;
-import net.sf.saxon.om.NodeInfo;
-import net.sf.saxon.xpath.XPathEvaluator;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.NumericField;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.store.Directory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import uk.ac.ebi.arrayexpress.utils.StringTools;
-import uk.ac.ebi.arrayexpress.utils.saxon.PrintUtils;
+import java.io.StringReader;
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import net.sf.saxon.Configuration;
+import net.sf.saxon.om.DocumentInfo;
+import net.sf.saxon.om.NodeInfo;
+import net.sf.saxon.xpath.XPathEvaluator;
+
+import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.NumericField;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.search.FieldCache;
+import org.apache.lucene.store.Directory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xmldb.api.DatabaseManager;
+import org.xmldb.api.base.Collection;
+import org.xmldb.api.base.Database;
+import org.xmldb.api.base.ResourceIterator;
+import org.xmldb.api.base.ResourceSet;
+import org.xmldb.api.base.XMLDBException;
+import org.xmldb.api.modules.XPathQueryService;
+
+import uk.ac.ebi.arrayexpress.app.Application;
+import uk.ac.ebi.arrayexpress.components.SaxonEngine;
+import uk.ac.ebi.arrayexpress.utils.StringTools;
+import uk.ac.ebi.arrayexpress.utils.saxon.PrintUtils;
+
+public class Indexer {
+	// logging machinery
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+
+	private AbstractIndexEnvironment env;
+
+	private Map<String, XPathExpression> fieldXpe = new HashMap<String, XPathExpression>();
+
+	public Indexer(AbstractIndexEnvironment env) {
+		this.env = env;
+	}
+
+	public void index(DocumentInfo document) {
+
+		try {
+
+			XPath xp = new XPathEvaluator(document.getConfiguration());
+			XPathExpression xpe = xp.compile(this.env.indexDocumentPath);
+			List documentNodes = (List) xpe.evaluate(document,
+					XPathConstants.NODESET);
+
+			for (FieldInfo field : this.env.fields.values()) {
+				fieldXpe.put(field.name, xp.compile(field.path));
+				logger.debug("Field Path->[{}]", field.path);
+			}
+
+			IndexWriter w = createIndex(this.env.indexDirectory,
+					this.env.indexAnalyzer);
+
+			int countNodes = 0;
+			for (Object node : documentNodes) {
+				countNodes++;
+				Document d = new Document();
+
+				// get all the fields taken care of
+				for (FieldInfo field : this.env.fields.values()) {
+					try {
+						List values = (List) fieldXpe.get(field.name).evaluate(
+								node, XPathConstants.NODESET);
+
+						// logger.debug("Field->[{}] values-> [{}]", field.name,
+						// values.toString());
+
+						for (Object v : values) {
+
+							if ("integer".equals(field.type)) {
+								addIntIndexField(d, field.name, v,
+										field.shouldStore, field.shouldSort);
+							} else if ("date".equals(field.type)) {
+								// todo: addDateIndexField(d, field.name, v);
+								logger.error(
+										"Date fields are not supported yet, field [{}] will not be created",
+										field.name);
+							} else if ("boolean".equals(field.type)) {
+								addBooleanIndexField(d, field.name, v,
+										field.shouldSort);
+							}
+
+							else {
+								// TODO rpe: remove this
+								// in this case I will put all the data
+								// processed
+								// in the index
+								if (field.name.equalsIgnoreCase("xml")) {
+									String acc = ((NodeInfo) v)
+											.getStringValue();
+
+									String connectionString = "xmldb:basex://localhost:1984/basexAE";
+									Class<?> c = Class
+											.forName("org.basex.api.xmldb.BXDatabase");
+
+									// Class<?> c =
+									// Class.forName("org.exist.xmldb.DatabaseImpl");
+									Database db = (Database) c.newInstance();
+									DatabaseManager.registerDatabase(db);
+									Collection coll = null;
+									try {
+										System.out.println("ZZZZZZ->" + acc);
+										coll = DatabaseManager
+												.getCollection(connectionString);
+										XPathQueryService service = (XPathQueryService) coll
+												.getService(
+														"XPathQueryService",
+														"1.0");
+
+										long time = System.nanoTime();
+										ResourceSet set = service
+												.query("for $x in ('"
+														+ acc
+														+ "')  let $y:= //folder[@accession=$x] return <all>{//experiment[accession=($x) and source/@visible!='false' and user/@id=1]} {$y}  </all>");
+										double ms = (System.nanoTime() - time) / 1000000d;
+										System.out
+												.println("\n\n" + ms + " 2ms");
+
+										ResourceIterator iter = set
+												.getIterator();
+
+										// Loop through all result items
+										while (iter.hasMoreResources()) {
+
+											v = iter.nextResource()
+													.getContent();
+											System.out.println("query result->"
+													+ v);
+										}
+									} catch (final XMLDBException ex) {
+										// Handle exceptions
+										System.err
+												.println("XML:DB Exception occured "
+														+ ex.errorCode);
+										ex.printStackTrace();
+									} finally {
+										if (coll != null) {
+											try {
+												coll.close();
+											} catch (XMLDBException e) {
+												// TODO Auto-generated catch
+												// block
+												e.printStackTrace();
+											}
+										}
+									}
+
+								}
+
+								// when i use "." i t means that i want to keep
+								// all the xml text as text
+								// if(field.path.equalsIgnoreCase("/.")){
+								// String
+								// xml=PrintUtils.printNodeInfo((NodeInfo)node,
+								// document.getConfiguration());
+								// //TODO RPE:
+								// xml=xml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+								// "");
+								// xml=xml.replace("\n", "");
+								// v=xml;
+								//
+								// }
+								addIndexField(d, field.name, v,
+										field.shouldAnalyze, field.shouldStore,
+										field.shouldSort);
+							}
+						}
+					} catch (XPathExpressionException x) {
+						logger.error(
+								"Caught an exception while indexing expression ["
+										+ field.path
+										+ "] for document ["
+										+ ((NodeInfo) node).getStringValue()
+												.substring(0, 20) + "...]", x);
+					}
+				}
+
+				addIndexDocument(w, d);
+				// append node to the list
+			}
+			// SET the number of nodes
+			this.env.setCountDocuments(countNodes);
+
+			// TODO calculate this value
+			// this.env.setCountFiltered(this.env.calculateCountFiltered());
+			// commitIndex(w);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("numberDocs", Integer.toString(countNodes));
+			map.put("date", Long.toString(System.nanoTime()));
+			map.put("keyValidator", "ZZZZZZZZ");
+			commitIndex(w, map);
+
+		} catch (Exception x) {
+			logger.error("Caught an exception:", x);
+		}
+	}
+
+	
+	
+	
+	// I will generate the Lucene Index based on a XmlDatabase
+		public void indexFromXmlDB() {
+			int countNodes = 0;
+			String driverXml = "";
+			String connectionString = "";
+			Database db;
+			Collection coll;
+			Class<?> c;
+			try {
+
+				HierarchicalConfiguration connsConf = (HierarchicalConfiguration) Application
+						.getInstance().getPreferences()
+						.getConfSubset("ae.xmldatabase");
+
+				if (null != connsConf) {
+					driverXml = connsConf.getString("driver");
+					connectionString = connsConf.getString("connectionstring");
+				} else {
+					logger.error("ae.xmldatabase Configuration is missing!!");
+				}
+
+				c = Class.forName(driverXml);
+
+				db = (Database) c.newInstance();
+				DatabaseManager.registerDatabase(db);
+				coll = DatabaseManager.getCollection(connectionString);
+				XPathQueryService service = (XPathQueryService) coll.getService(
+						"XPathQueryService", "1.0");
+
+				SaxonEngine saxonEngine = (SaxonEngine) Application.getInstance()
+						.getComponent("SaxonEngine");
+				DocumentInfo source = null;
+				// Loop through all result items
+
+				// collect all the fields data
+				Configuration config = ((SaxonEngine) Application
+						.getAppComponent("SaxonEngine")).trFactory
+						.getConfiguration();
+
+				XPath xp = new XPathEvaluator(config);
+				XPathExpression xpe = xp.compile(this.env.indexDocumentPath);
+
+				for (FieldInfo field : this.env.fields.values()) {
+					fieldXpe.put(field.name, xp.compile(field.path));
+					logger.debug("Field Path->[{}]", field.path);
+				}
+
+				// create the index
+				IndexWriter w = createIndex(this.env.indexDirectory,
+						this.env.indexAnalyzer);
+
+				// the xmldatabase is not very correct and have memory problem for
+				// queires with huge results, so its necessary to implement our own
+				// iteration mechanism
+
+				// I will collect all the results
+				ResourceSet set = service.query(this.env.indexDocumentPath);
+				logger.debug("Number of results->" + set.getSize());
+				long numberResults = set.getSize();
+				if (coll != null) {
+					try{
+						coll.close();
+					} catch (XMLDBException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				set = null;
+				db=null;
+				//c=null;
+				long pageSizeDefault = 1000;
+				long pageNumber = 1;
+
+				String xml = "";
+				while ((pageNumber * pageSizeDefault) <= (numberResults
+						+ pageSizeDefault - 1)) {
+
+					// calculate the last hit
+					long pageInit = (pageNumber - 1) * pageSizeDefault + 1;
+					long pageSize = (pageNumber * pageSizeDefault < numberResults) ? pageSizeDefault
+							: (numberResults - pageInit + 1);
+					
+					//c = Class.forName(driverXml);
+					db = (Database) c.newInstance();
+					DatabaseManager.registerDatabase(db);
+					coll = DatabaseManager.getCollection(connectionString);
+					service = (XPathQueryService) coll.getService(
+							"XPathQueryService", "1.0");
+
+					// xquery paging using subsequence function
+					set = service.query("subsequence(" + this.env.indexDocumentPath
+							+ "," + pageInit + "," + pageSize + ")");
+					logger.debug("Number of results of page->" + set.getSize());
+					ResourceIterator iter = set.getIterator();
+					XPath xp2;
+					XPathExpression xpe2;
+					List documentNodes;
+					StringReader reader;
+					while (iter.hasMoreResources()) {
+
+						xml = (String) iter.nextResource().getContent();
+						reader = new StringReader(xml);
+						source = config.buildDocument(new StreamSource(reader));
+
+						// logger.debug("XML DB->[{}]",
+						// PrintUtils.printNodeInfo((NodeInfo) source, config));
+						Document d = new Document();
+
+						xp2 = new XPathEvaluator(source.getConfiguration());
+						// TODO rpe: remove this reference tp SmapleGroup (I should
+						// test with /)
+
+						// I need to
+
+						int position = env.indexDocumentPath.lastIndexOf("/");
+						;
+						String pathRoot = "";
+						if (position != -1) {
+							pathRoot = env.indexDocumentPath.substring(position);
+						} else {
+							pathRoot = env.indexDocumentPath;
+						}
+						// logger.debug("PathRoot->[{}]",pathRoot);
+						xpe2 = xp2.compile(pathRoot);
+						documentNodes = (List) xpe2.evaluate(source,
+								XPathConstants.NODESET);
+
+						for (Object node : documentNodes) {
+							// logger.debug("XML£££££££££ DB->[{}]",PrintUtils.printNodeInfo((NodeInfo)node,config));
+							for (FieldInfo field : this.env.fields.values()) {
+								try {
+
+									// Configuration config=doc.getConfiguration();
+									// TODO: remove this test
+
+									if (!field.name.equalsIgnoreCase("order") && !field.name.equalsIgnoreCase("order3")) {
+
+										List values = (List) fieldXpe.get(
+												field.name).evaluate(node,
+												XPathConstants.NODESET);
+										// logger.debug("Field->[{}] values-> [{}]",
+										// field.name,
+										// values.toString());
+										for (Object v : values) {
+
+											if ("integer".equals(field.type)) {
+												addIntIndexField(d, field.name, v,
+														field.shouldStore,
+														field.shouldSort);
+											} else if ("date".equals(field.type)) {
+												// todo: addDateIndexField(d,
+												// field.name,
+												// v);
+												logger.error(
+														"Date fields are not supported yet, field [{}] will not be created",
+														field.name);
+											} else if ("boolean".equals(field.type)) {
+												addBooleanIndexField(d, field.name,
+														v, field.shouldSort);
+											} else {
+												addIndexField(d, field.name, v,
+														field.shouldAnalyze,
+														field.shouldStore,
+														field.shouldSort);
+											}
+										}
+
+									}
+									// TODO: remove this
+									else {
+										//new BigInteger(countNodes+""),
+										if(field.name.equalsIgnoreCase("order")){
+											addIntIndexField(d, field.name, new BigInteger(countNodes+""),
+													field.shouldStore, field.shouldSort);											
+										}
+										else{
+											addIndexField(d, field.name, countNodes, false,
+													field.shouldStore, field.shouldSort);
+										}
+									}
+								} catch (XPathExpressionException x) {
+									logger.error(
+											"Caught an exception while indexing expression ["
+													+ field.path
+													+ "] for document ["
+													+ ((NodeInfo) source)
+															.getStringValue()
+															.substring(0, 20)
+													+ "...]", x);
+								}
+							}
+						}
+
+						documentNodes = null;
+						source = null;
+						reader = null;
+						xml = null;
+						countNodes++;
+						// logger.debug("count->[{}]", countNodes);
+
+						// add document to lucene index
+						// TODO: rpe (an int just to make some tests);
+
+						addIndexDocument(w, d);
+//						//TODO: rpe - just for test
+//						addIndexDocument(w, d);
+//						addIndexDocument(w, d);
+//						addIndexDocument(w, d);
+//						addIndexDocument(w, d);
+					}
+
+					logger.debug("until now it were processed->[{}]",
+							pageNumber * 1000);
+					pageNumber++;
+					if (coll != null) {
+						try{
+							coll.close();
+						} catch (XMLDBException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					set=null;
+					db=null;
+					// TODO: rpe (review this)
+					// from 1000 to 1000 I will make a commit
+					//w.commit();
+
+				}
+
+				this.env.setCountDocuments(countNodes);
+				// add metadata to the lucene index
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("numberDocs", Integer.toString(countNodes));
+				map.put("date", Long.toString(System.nanoTime()));
+				map.put("keyValidator", "ZZZZZZZZ");
+				commitIndex(w, map);
+
+			} catch (Exception x) {
+				logger.error("Caught an exception:", x);
+			}
+		}
+	
+	
+	
+	
+	
+	public void indexReader() {
+		env.indexReader();
+	}
+
+	// //TODO RPE
+	// public void indexReader()
+	// {
+	//
+	// try {
+	//
+	// IndexReader ir = IndexReader.open(this.env.indexDirectory, true);
+	//
+	//
+	//
+	//
+	// Map<String, String> map= ir.getCommitUserData();
+	// System.out.println("numberDocs->" + map.get("numberDocs"));
+	// System.out.println("date->" + map.get("date"));
+	// System.out.println("keyValidator->" + map.get("keyValidator"));
+	// this.env.setCountDocuments(Integer.parseInt(map.get("numberDocs")));
+	//
+	// } catch (Exception x) {
+	// logger.error("Caught an exception:", x);
+	// }
+	// }
+	//
+
+	private IndexWriter createIndex(Directory indexDirectory, Analyzer analyzer) {
+		IndexWriter iwriter = null;
+		try {
+			iwriter = new IndexWriter(indexDirectory, analyzer, true,
+					IndexWriter.MaxFieldLength.UNLIMITED);
+			//TODO: just to check if it solves the slowly indexing indexes with more 
+			iwriter.setMaxBufferedDocs(100000);
+		} catch (Exception x) {
+			logger.error("Caught an exception:", x);
+		}
+
+		return iwriter;
+	}
+
+	private void addIndexField(Document document, String name, Object value,
+			boolean shouldAnalyze, boolean shouldStore, boolean sort) {
+		String stringValue;
+		if (value instanceof String) {
+			stringValue = (String) value;
+		} else if (value instanceof NodeInfo) {
+			stringValue = ((NodeInfo) value).getStringValue();
+		} else {
+			stringValue = value.toString();
+			logger.warn(
+					"Not sure if I handle string value of [{}] for the field [{}] correctly, relying on Object.toString()",
+					value.getClass().getName(), name);
+		}
+		// TODO
+		// logger.debug("value->[{}]", stringValue);
+		document.add(new Field(name, stringValue, shouldStore ? Field.Store.YES
+				: Field.Store.NO, shouldAnalyze ? Field.Index.ANALYZED
+				: Field.Index.NOT_ANALYZED));
+		// ig Im indexing a String and the @sort=true I will always create a new
+		// field (fieldname+sort)
+		if (sort) {
+			String newF = name + "sort";
+			document.add(new Field(newF, stringValue, Field.Store.NO,
+					Field.Index.NOT_ANALYZED));
+		}
+
+	}
+
+	private void addBooleanIndexField(Document document, String name,
+			Object value, boolean sort) {
+		Boolean boolValue = null;
+		if (value instanceof Boolean) {
+			boolValue = (Boolean) value;
+		} else if (null != value) {
+			String stringValue = value.toString();
+			boolValue = StringTools.stringToBoolean(stringValue);
+			logger.warn(
+					"Not sure if I handle string value [{}] for the field [{}] correctly, relying on Object.toString()",
+					stringValue, name);
+		}
+		// TODO
+		// logger.debug("value->[{}]", boolValue.toString());
+		if (!sort) {
+			document.add(new Field(name, null == boolValue ? "" : boolValue
+					.toString(), Field.Store.NO, Field.Index.NOT_ANALYZED));
+		} else {
+			document.add(new Field(name, null == boolValue ? "" : boolValue
+					.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+		}
+
+	}
+
+	private void addIntIndexField(Document document, String name, Object value,
+			boolean store, boolean sort) {
+		Long longValue=null;
+		if (value instanceof BigInteger) {
+			longValue = ((BigInteger) value).longValue();
+		} else if (value instanceof NodeInfo) {
+			longValue = Long.parseLong(((NodeInfo) value).getStringValue());
+		} else {
+
+			logger.warn(
+					"Not sure if I handle long value of [{}] for the field [{}] correctly, relying on Object.toString()",
+					value.getClass().getName(), name);
+		}
+		// TODO
+		// logger.debug("value->[{}]", longValue.toString());
+		if (null != longValue) {
+			// its more clear to divide the if statement in 3 parts
+			if (sort) {
+				document.add(new NumericField(name, Field.Store.YES, true)
+						.setIntValue(longValue.intValue()));
+			} else {
+				if (!store) {
+					document.add(new NumericField(name).setLongValue(longValue));
+				} else {
+					document.add(new NumericField(name, Field.Store.YES, true)
+							.setIntValue(longValue.intValue()));
+				}
+
+			}
+		} else {
+			logger.warn("Long value of the field [{}] was null", name);
+		}
+	}
+
+	private void addIndexDocument(IndexWriter iwriter, Document document) {
+		try {
+			iwriter.addDocument(document);
+		} catch (Exception x) {
+			logger.error("Caught an exception:", x);
+		}
+	}
+
+	private void commitIndex(IndexWriter iwriter) {
+		try {
+			iwriter.optimize();
+			iwriter.commit();
+			iwriter.close();
+		} catch (Exception x) {
+			logger.error("Caught an exception:", x);
+		}
+	}
+
+	private void commitIndex(IndexWriter iwriter, Map<String, String> map) {
+		try {
+			iwriter.optimize();
+			iwriter.commit(map);
+			iwriter.close();
+		} catch (Exception x) {
+			logger.error("Caught an exception:", x);
+		}
+	}
+
+	
+/*
+	// I will generate the Lucene Index based on a XmlDatabase
+	public void indexFromXmlDB_exp() {
+		int countNodes = 0;
+		String driverXml = "";
+		String connectionString = "";
+		Database db;
+		Collection coll;
+		Class<?> c;
+		try {
+
+			HierarchicalConfiguration connsConf = (HierarchicalConfiguration) Application
+					.getInstance().getPreferences()
+					.getConfSubset("ae.xmldatabase");
+
+			if (null != connsConf) {
+				driverXml = connsConf.getString("driver");
+				connectionString = connsConf.getString("connectionstring");
+			} else {
+				logger.error("ae.xmldatabase Configuration is missing!!");
+			}
+
+			c = Class.forName(driverXml);
+
+			db = (Database) c.newInstance();
+			DatabaseManager.registerDatabase(db);
+			coll = DatabaseManager.getCollection(connectionString);
+			XPathQueryService service = (XPathQueryService) coll.getService(
+					"XPathQueryService", "1.0");
+
+			SaxonEngine saxonEngine = (SaxonEngine) Application.getInstance()
+					.getComponent("SaxonEngine");
+			DocumentInfo source = null;
+			// Loop through all result items
+
+			// collect all the fields data
+			Configuration config = ((SaxonEngine) Application
+					.getAppComponent("SaxonEngine")).trFactory
+					.getConfiguration();
+
+			XPath xp = new XPathEvaluator(config);
+			XPathExpression xpe = xp.compile(this.env.indexDocumentPath);
+
+			for (FieldInfo field : this.env.fields.values()) {
+				fieldXpe.put(field.name, xp.compile(field.path));
+				logger.debug("Field Path->[{}]", field.path);
+			}
+
+			// create the index
+			IndexWriter w = createIndex(this.env.indexDirectory,
+					this.env.indexAnalyzer);
+
+			// the xmldatabase is not very correct and have memory problem for
+			// queires with huge results, so its necessary to implement our own
+			// iteration mechanism
+
+			// I will collect all the results
+			ResourceSet set = service.query(this.env.indexDocumentPath);
+			logger.debug("Number of results->" + set.getSize());
+			long numberResults = set.getSize();
+
+			set = null;
+			long pageSizeDefault = 1000;
+			long pageNumber = 1;
+
+			String xml = "";
+			while ((pageNumber * pageSizeDefault) <= (numberResults
+					+ pageSizeDefault - 1)) {
+
+				// calculate the last hit
+				long pageInit = (pageNumber - 1) * pageSizeDefault + 1;
+				long pageSize = (pageNumber * pageSizeDefault < numberResults) ? pageSizeDefault
+						: (numberResults - pageInit + 1);
+
+				service = (XPathQueryService) coll.getService(
+						"XPathQueryService", "1.0");
+
+				// xquery paging using subsequence function
+				
+				XPath xp2;
+				XPathExpression xpe2;
+				List documentNodes;
+				StringReader reader;
+				int internali=0;
+				while (internali<1000) {
+
+					    Document d = new Document();
+						for (FieldInfo field : this.env.fields.values()) {
+						
+
+								// Configuration config=doc.getConfiguration();
+								// TODO: remove this test
+
+							
+								if (!field.name.equalsIgnoreCase("order")) {
+										if ("integer".equals(field.type)) {
+											addIntIndexField(d, field.name, 1,
+													field.shouldStore,
+													field.shouldSort);
+										} else if ("date".equals(field.type)) {
+											// todo: addDateIndexField(d,
+											// field.name,
+											// v);
+											logger.error(
+													"Date fields are not supported yet, field [{}] will not be created",
+													field.name);
+										} else if ("boolean".equals(field.type)) {
+											addBooleanIndexField(d, field.name,
+													true, field.shouldSort);
+										} else {
+											addIndexField(d, field.name, "teste",
+													field.shouldAnalyze,
+													field.shouldStore,
+													field.shouldSort);
+										}
+	
+								}
+								// TODO: remove this
+								else {
+									addIntIndexField(d, field.name, new BigInteger(countNodes+""),
+											field.shouldStore, field.shouldSort);
+								}
+							
+						}
+					
+				
+
+						documentNodes = null;
+						source = null;
+						reader = null;
+						xml = null;
+						countNodes++;
+						internali++;
+						// logger.debug("count->[{}]", countNodes);
+
+						// add document to lucene index
+						// TODO: rpe (an int just to make some tests);
+
+						addIndexDocument(w, d);	
+				
+				}
+
+				logger.debug("until now it were processed->[{}]",
+						pageNumber * 1000);
+				pageNumber++;
+				// TODO: rpe (review this)
+				// from 1000 to 1000 I will make a commit
+				//w.commit();
 
 
-public class Indexer
-{
-    // logging machinery
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+	
 
-    private AbstractIndexEnvironment env;
+			}
 
-    private Map<String, XPathExpression> fieldXpe = new HashMap<String, XPathExpression>();
+			
+			this.env.setCountDocuments(countNodes);
+			// add metadata to the lucene index
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("numberDocs", Integer.toString(countNodes));
+			map.put("date", Long.toString(System.nanoTime()));
+			map.put("keyValidator", "ZZZZZZZZ");
+			commitIndex(w, map);
 
-    public Indexer( AbstractIndexEnvironment env )
-    {
-        this.env = env;
-    }
+		} catch (Exception x) {
+			logger.error("Caught an exception:", x);
+		}
+	}
 
-    public void index( DocumentInfo document )
-    {
-   
-        try {
-            XPath xp = new XPathEvaluator(document.getConfiguration());
-            XPathExpression xpe = xp.compile(this.env.indexDocumentPath);
-            List documentNodes = (List)xpe.evaluate(document, XPathConstants.NODESET);
-   
-            for (IndexEnvironment.FieldInfo field : this.env.fields.values()) {
-                fieldXpe.put(field.name, xp.compile(field.path));
-            }
-
-            IndexWriter w = createIndex(this.env.indexDirectory, this.env.indexAnalyzer);
-
-            int countNodes=0;
-            for (Object node : documentNodes) {
-            	countNodes++;
-                Document d = new Document();
-
-                // get all the fields taken care of
-                for (IndexEnvironment.FieldInfo field : this.env.fields.values()) {
-                    try {
-                        List values = (List)fieldXpe.get(field.name).evaluate(node, XPathConstants.NODESET);
-                        for (Object v : values) {
-                            if ("integer".equals(field.type)) {
-                                addIntIndexField(d, field.name, v, field.shouldStore,field.shouldSort);
-                            } else if ("date".equals(field.type)) {
-                                // todo: addDateIndexField(d, field.name, v);
-                                logger.error("Date fields are not supported yet, field [{}] will not be created", field.name);
-                            } else if ("boolean".equals(field.type)) {
-                               addBooleanIndexField(d, field.name, v,field.shouldSort);
-                            } else {
-                            	
-//                            	when i use "." i t means that i want to keep all the xml text as text
-                            	if(field.path.equalsIgnoreCase("/.")){
-                            		 String xml=PrintUtils.printNodeInfo((NodeInfo)node, document.getConfiguration());
-                            		 //TODO RPE:
-                            		 
-//                            		 try {
-//                            			 if (xml.indexOf("<experiment>")!=-1){
-//                            				 BufferedWriter out = new BufferedWriter(new FileWriter("/Users/rpslpereira/Apps/apache-tomcat-6.0.33/temp/individual/" + countNodes + ".xml"));
-//                                			 out.write(xml);
-//                                			 out.close();	 
-//                            			 }
-//                            			 
-//                            			 } 
-//                            			 catch (IOException e) 
-//                            			 { 
-//                            			 System.out.println("Exception ");
-//
-//                            			 }
-                            	
-                            		 
-                                     xml=xml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
-                                     xml=xml.replace("\n", "");
-                                     v=xml;
-                     
-                            	}
-                                addIndexField(d, field.name, v, field.shouldAnalyze, field.shouldStore, field.shouldSort);
-                            }
-                        }
-                    } catch (XPathExpressionException x) {
-                        logger.error("Caught an exception while indexing expression [" + field.path + "] for document [" + ((NodeInfo)node).getStringValue().substring(0, 20) + "...]", x);
-                    }
-                }
-
-                addIndexDocument(w, d);
-                // append node to the list
-            }
-            //SET the number of nodes
-            this.env.setCountDocuments(countNodes);
-            
-            //TODO calculate this value
-//            this.env.setCountFiltered(this.env.calculateCountFiltered());
-            commitIndex(w);
-            
-        } catch (Exception x) {
-            logger.error("Caught an exception:", x);
-        }
-    }
-
-
-    private IndexWriter createIndex( Directory indexDirectory, Analyzer analyzer )
-    {
-        IndexWriter iwriter = null;
-        try {
-            iwriter = new IndexWriter(indexDirectory, analyzer, true, IndexWriter.MaxFieldLength.UNLIMITED);
-        } catch (Exception x) {
-            logger.error("Caught an exception:", x);
-        }
-
-        return iwriter;
-    }
-
-    private void addIndexField( Document document, String name, Object value, boolean shouldAnalyze, boolean shouldStore, boolean sort )
-    {
-        String stringValue;
-        if (value instanceof String) {
-            stringValue = (String)value;
-        } else if (value instanceof NodeInfo) {
-            stringValue = ((NodeInfo)value).getStringValue();
-        } else {
-            stringValue = value.toString();
-            logger.warn("Not sure if I handle string value of [{}] for the field [{}] correctly, relying on Object.toString()", value.getClass().getName(), name);
-        }
-
-        document.add(new Field(name, stringValue, shouldStore ? Field.Store.YES : Field.Store.NO, shouldAnalyze ? Field.Index.ANALYZED : Field.Index.NOT_ANALYZED));
-//        ig Im indexing a String and the @sort=true I will always create a new field (fieldname+sort) 
-        if(sort){
-        	String newF=name + "sort";
-        	document.add(new Field(newF, stringValue, Field.Store.NO, Field.Index.NOT_ANALYZED));
-        }
-        
-    }
-
-    private void addBooleanIndexField( Document document, String name, Object value, boolean sort )
-    {
-        Boolean boolValue = null;
-        if (value instanceof Boolean) {
-            boolValue = (Boolean)value;
-        } else if (null != value ) {
-            String stringValue = value.toString();
-            boolValue = StringTools.stringToBoolean(stringValue);
-            logger.warn("Not sure if I handle string value [{}] for the field [{}] correctly, relying on Object.toString()", stringValue, name);
-        }
-        if(!sort){
-        	document.add(new Field(name, null == boolValue ? "" : boolValue.toString(), Field.Store.NO, Field.Index.NOT_ANALYZED));
-        }
-        else{
-        	document.add(new Field(name, null == boolValue ? "" : boolValue.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-        }
-        	
-        	
-        
-    }
-
-    private void addIntIndexField( Document document, String name, Object value , boolean store, boolean sort)
-    {
-        Long longValue;
-        if (value instanceof BigInteger) {
-            longValue = ((BigInteger)value).longValue();
-        } else if (value instanceof NodeInfo) {
-            longValue = Long.parseLong(((NodeInfo)value).getStringValue());
-        } else {
-            longValue = Long.parseLong(value.toString());
-            logger.warn("Not sure if I handle long value of [{}] for the field [{}] correctly, relying on Object.toString()", value.getClass().getName(), name);
-        }
-        if (null != longValue) {
-        	//its more clear to divide the if statement in 3 parts
-            if(sort){
-            	document.add(new NumericField(name,Field.Store.YES, true).setIntValue(longValue.intValue()));
-            }
-            else{
-            	if(!store){
-            		document.add(new NumericField(name).setLongValue(longValue));
-            	}
-            	else{
-            		document.add(new NumericField(name,Field.Store.YES, true).setIntValue(longValue.intValue()));
-            	}
-            	
-            }
-        } else {
-            logger.warn("Long value of the field [{}] was null", name);
-        }
-    }
-
-    private void addIndexDocument( IndexWriter iwriter, Document document )
-    {
-        try {
-            iwriter.addDocument(document);
-        } catch (Exception x) {
-            logger.error("Caught an exception:", x);
-        }
-    }
-
-    private void commitIndex( IndexWriter iwriter )
-    {
-        try {
-            iwriter.optimize();
-            iwriter.commit();
-            iwriter.close();
-        } catch (Exception x) {
-            logger.error("Caught an exception:", x);
-        }
-    }
+*/	
+		
+	
+	
 }

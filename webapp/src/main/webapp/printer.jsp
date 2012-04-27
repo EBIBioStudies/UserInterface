@@ -19,6 +19,17 @@
 <%@ page import="java.io.StringReader"%>
 
 
+<%@ page import="javax.xml.bind.annotation.XmlRootElement"%>
+<%@ page import="org.codehaus.jackson.map.AnnotationIntrospector"%>
+<%@ page import="org.codehaus.jackson.map.ObjectMapper"%>
+<%@ page import="org.codehaus.jackson.xc.JaxbAnnotationIntrospector"%>
+<%@ page import="java.io.IOException"%>
+
+
+<%@ page import="net.sf.json.JSON"%>
+<%@ page import="net.sf.json.xml.XMLSerializer"%>
+
+
 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -317,6 +328,26 @@ try {
         			
         			Unmarshaller um = context.createUnmarshaller();
         			exp = (Experiments) um.unmarshal(new StringReader(xml));
+        			
+        			/* jackson test  */
+  
+ /*    ObjectMapper mapper = new ObjectMapper();
+
+    AnnotationIntrospector introspector = new JaxbAnnotationIntrospector();
+    mapper.getDeserializationConfig().setAnnotationIntrospector(introspector);
+    mapper.getSerializationConfig().setAnnotationIntrospector(introspector);
+    mapper.writeValue( out, exp );
+  */
+
+/*   
+  XMLSerializer xmlSerializer = new XMLSerializer(); 
+  JSON json = xmlSerializer.read( xml );  
+  out.println( json.toString(2) ); */
+        			
+    /* jackson test  */	
+    
+    
+        			
         			for (int i = 0; i < exp.getAll().toArray().length; i++) {
         				System.out.println("Experiment " + (i + 1) + ": "
         						+ exp.getAll().get(i).getExperiment().getAccession());

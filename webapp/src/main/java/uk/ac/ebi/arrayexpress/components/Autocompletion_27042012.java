@@ -27,15 +27,15 @@ import java.util.Set;
  *
  */
 
-public class Autocompletion extends ApplicationComponent
+public class Autocompletion_27042012 extends ApplicationComponent
 {
     private AutocompleteStore autocompleteStore;
 
-    private BioSamplesGroup bioSamplesGroup;
+    private Experiments experiments;
     private SearchEngine search;
     private IEFO efo;
 
-    public Autocompletion()
+    public Autocompletion_27042012()
     {
     }
 
@@ -43,7 +43,7 @@ public class Autocompletion extends ApplicationComponent
     {
         this.autocompleteStore = new AutocompleteStore();
 
-        this.bioSamplesGroup = (BioSamplesGroup) getComponent("BioSamplesGroup");
+        this.experiments = (Experiments) getComponent("Experiments");
         this.search = (SearchEngine) getComponent("SearchEngine");
     }
 
@@ -98,9 +98,9 @@ public class Autocompletion extends ApplicationComponent
         getStore().clear();
 
         // adding field terms (for all non-numerical fields) and names (if there is a description)
-        Set<String> fields = search.getController().getFieldNames(bioSamplesGroup.INDEX_ID);
+        Set<String> fields = search.getController().getFieldNames(experiments.INDEX_ID);
         for (String field : fields) {
-            String fieldTitle = search.getController().getFieldTitle(bioSamplesGroup.INDEX_ID, field);
+            String fieldTitle = search.getController().getFieldTitle(experiments.INDEX_ID, field);
             if (null != fieldTitle && fieldTitle.length() > 0) {
                 getStore().addData(
                         new AutocompleteData(
@@ -110,9 +110,9 @@ public class Autocompletion extends ApplicationComponent
                         )
                 );
             }
-            String fieldType = search.getController().getFieldType(bioSamplesGroup.INDEX_ID, field);
-            if (null != fieldType && !"integer".equals(fieldType) && search.getController().isFieldAutoCompletion(bioSamplesGroup.INDEX_ID, field)) {
-                for (String term : search.getController().getTerms(bioSamplesGroup.INDEX_ID, field, "keywords".equals(field) ? 10 : 1)) {
+            String fieldType = search.getController().getFieldType(experiments.INDEX_ID, field);
+            if (null != fieldType && !"integer".equals(fieldType) && search.getController().isFieldAutoCompletion(experiments.INDEX_ID, field)) {
+                for (String term : search.getController().getTerms(experiments.INDEX_ID, field, "keywords".equals(field) ? 10 : 1)) {
                     getStore().addData(
                             new AutocompleteData(
                                     term

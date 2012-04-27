@@ -49,6 +49,7 @@ public class ArrayDesigns extends ApplicationComponent implements IDocumentSourc
     private SearchEngine search;
 
     public final String INDEX_ID = "arrays";
+    private boolean buildIndexes;
     
     public enum ArrayDesignSource
     {
@@ -68,8 +69,10 @@ public class ArrayDesigns extends ApplicationComponent implements IDocumentSourc
     {
     }
 
-    public void initialize() throws Exception
-    {
+    public void initialize() throws Exception{
+    
+    	buildIndexes= Application
+				.getInstance().getPreferences().getBoolean("ae.buildLuceneIndexes");
         this.saxon = (SaxonEngine) getComponent("SaxonEngine");
         this.search = (SearchEngine) getComponent("SearchEngine");
         
@@ -78,14 +81,19 @@ public class ArrayDesigns extends ApplicationComponent implements IDocumentSourc
 //                , new File(getPreferences().getString("ae.arrays.persistence-location"))
 //        );
 
-        
-        DocumentInfo docTemp = getXmlFromFile(new File(getPreferences()
-				.getString("ae.arrays.persistence-location")));
+        if(buildIndexes){
+    		DocumentInfo docTemp = getXmlFromFile(new File(getPreferences()
+    				.getString("ae.arrays.persistence-location")));
 
-        updateIndex(docTemp);
-//        updateAccelerators(docTemp);
+    		updateIndex(docTemp);
+    		docTemp = null;
+    		}
+    		else{
+    			// null parameter means that I will read the index
+    			updateIndex(null);
+    		}
         this.saxon.registerDocumentSource(this);
-        docTemp=null;
+
     }
 
     public void terminate() throws Exception

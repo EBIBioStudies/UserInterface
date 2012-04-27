@@ -52,6 +52,10 @@ public class JobsController extends ApplicationComponent
         addJob("reload-atlas-info", RetrieveExperimentsListFromAtlasJob.class);
         addJob("reload-efo", ReloadOntologyJob.class);
         addJob("update-efo", UpdateOntologyJob.class);
+        
+        
+        //rpe: job that reload all the data
+        addJob("reload-all", ReloadAllJob.class);
 
         // schedule jobs
         scheduleJob("rescan-files", "ae.files.rescan");

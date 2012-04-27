@@ -47,7 +47,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.*;
 
-public class Experiments extends ApplicationComponent implements
+public class ExperimentsXmlDB extends ApplicationComponent implements
 		IDocumentSource {
 	// logging machinery
 	private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -70,7 +70,7 @@ public class Experiments extends ApplicationComponent implements
 	private boolean buildIndexes;
 
 
-	public final String INDEX_ID = "experiments";
+	public final String INDEX_ID = "experimentsxmldb";
 
 	public enum ExperimentSource {
 		AE1, AE2;
@@ -144,7 +144,7 @@ public class Experiments extends ApplicationComponent implements
 		}
 	}
 
-	public Experiments() {
+	public ExperimentsXmlDB() {
 		
 	}
 
@@ -333,7 +333,10 @@ public class Experiments extends ApplicationComponent implements
 	private void updateIndex(DocumentInfo doc) {
 		try {
 			
-			this.search.getController().index(INDEX_ID, doc);
+			this.search.getController().indexFromXmlDB(INDEX_ID, buildIndexes);
+			
+			
+			
 //			TODO review the autocompletion because of time it takes (maybe the problem is the xml field)
 			this.autocompletion.rebuild();
 		} catch (Exception x) {

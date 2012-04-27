@@ -24,6 +24,7 @@ import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +91,7 @@ public class Controller
     }
     
 
-    public void setEnvironment( String indexId, IndexEnvironment indexEnv )
+    public void setEnvironment( String indexId, AbstractIndexEnvironment indexEnv )
     {
         if (!this.environment.containsKey(indexId)) {
             this.environment.put(indexId, indexEnv);
@@ -100,17 +101,40 @@ public class Controller
         }
     }
     
-
+    // if the document is null it means that I should use an already generated index
     public void index( String indexId, DocumentInfo document)
     {
-        this.logger.info("Started indexing for index id [{}]", indexId);
-//        getEnvironment(indexId).putDocumentInfo(
-//                document.hashCode()
-//                , new Indexer(getEnvironment(indexId)).index(document)
-//        );
-       
-        new Indexer(getEnvironment(indexId)).index(document);    
-        this.logger.info("Indexing for index id [{}] completed", indexId);
+
+        if(document==null){
+        	this.logger.info("Indexing is not done any more, I'm pointing to a generated Lucene Index [{}]", indexId);
+        	new Indexer(getEnvironment(indexId)).indexReader();
+           	
+        }
+        else{
+        	this.logger.info("Started indexing for index id [{}]", indexId);
+        	new Indexer(getEnvironment(indexId)).index(document);      	
+        }
+        
+  
+    }
+    
+    
+    
+    // if the document is null it means that I should use an already generated index
+    //TODO (just a test)
+    public void indexFromXmlDB( String indexId, boolean rebuild)
+    {
+
+    	 if(!rebuild){
+         	this.logger.info("Indexing is not done any more, I'm pointing to a generated Lucene Index [{}]", indexId);
+         	new Indexer(getEnvironment(indexId)).indexReader();
+            	
+         } 
+    	 else{
+    		 this.logger.info("Started indexing Reading data from an Xml Database for index id [{}] from XMLDATABASE", indexId);
+        	new Indexer(getEnvironment(indexId)).indexFromXmlDB();      	
+    	 }
+  
     }
 
     public List<String> getTerms( String indexId, String fieldName, int minFreq ) throws IOException
@@ -197,51 +221,40 @@ public class Controller
     }
 */
     
-
-    public String queryIndexPaged( Integer queryId,HttpServletRequestParameterMap map) throws IOException
+// this function is called by QueryServlet
+    public String queryPaged( Integer queryId,HttpServletRequestParameterMap map) throws IOException
     {
         QueryInfo queryInfo = this.queryPool.getQueryInfo(queryId);
-
-        return queryIndexPaged(queryId, queryInfo, map);
+        return queryPaged(queryId, queryInfo, map);
 
     }
 
-    public TopDocs queryAllDocs( Integer queryId,HttpServletRequestParameterMap map) throws IOException
+    public ScoreDoc[] queryAllDocs( Integer queryId,HttpServletRequestParameterMap map) throws IOException
     {
         QueryInfo queryInfo = this.queryPool.getQueryInfo(queryId);
 
         return queryAllDocs(queryId, queryInfo, map);
 
     }
+ 
     
-  public String queryDB(Integer queryId, TopDocs hits,
+  /*
+  public String queryDB(Integer queryId, ScoreDoc[] hits,
 			int initialExp, int finalExp, HttpServletRequestParameterMap map) throws Exception{
 	  QueryInfo queryInfo = this.queryPool.getQueryInfo(queryId);
 	  return getEnvironment(queryInfo.getIndexId()).queryDB(hits, initialExp, finalExp, map);
   }
-    
-//    public String queryPartialDocs(int queryId, TopDocs hits, int initial, int end, HttpServletRequestParameterMap map) throws IOException
-//    {
-//    	QueryInfo queryInfo = this.queryPool.getQueryInfo(queryId);
-//
-//        return queryPartialDocs(queryInfo, hits, initial, end, map);
-//		
-//		
-//    }
+  */ 
 
-//	public String queryPartialDocs(QueryInfo query, TopDocs hits, int initial, int end, HttpServletRequestParameterMap map) throws IOException
-//    {
-//		return getEnvironment(query.getIndexId()).queryPartialDocs(hits,initial, end,map);
-//		
-//    }
+  
    
-    public TopDocs queryAllDocs( Integer queryId, QueryInfo query ,HttpServletRequestParameterMap map) throws IOException
+    public ScoreDoc[] queryAllDocs( Integer queryId, QueryInfo query ,HttpServletRequestParameterMap map) throws IOException
     {
         return new Querier(getEnvironment(query.getIndexId())).queryAllDocs(queryId,query,map);
     }
     
     
-    public String queryIndexPaged( Integer queryId, QueryInfo query ,HttpServletRequestParameterMap map) throws IOException
+    public String queryPaged( Integer queryId, QueryInfo query ,HttpServletRequestParameterMap map) throws IOException
     {
         return new Querier(getEnvironment(query.getIndexId())).queryPaged(queryId,query,map);
     }

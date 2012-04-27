@@ -60,6 +60,11 @@
         <servlet-name>QueryPageWriterServlet</servlet-name>
         <servlet-class>uk.ac.ebi.arrayexpress.servlets.QueryPageWriterServlet</servlet-class>
     </servlet>
+     <servlet>
+        <description>ArrayExpress Experiments Query Page Writer Servlet for Flat Files</description>
+        <servlet-name>QueryPageWriterFileServlet</servlet-name>
+        <servlet-class>uk.ac.ebi.arrayexpress.servlets.QueryPageWriterFileServlet</servlet-class>
+    </servlet>
     <servlet>
         <description>ArrayExpress Flat File Transformation Servlet</description>
         <servlet-name>FlatFileTransformationServlet</servlet-name>
@@ -114,6 +119,10 @@
      <servlet-mapping>
         <servlet-name>QueryPageWriterServlet</servlet-name>
         <url-pattern>/servlets/querypagewriter/*</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+        <servlet-name>QueryPageWriterFileServlet</servlet-name>
+        <url-pattern>/servlets/querypagewriterfile/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>FlatFileTransformationServlet</servlet-name>

@@ -113,6 +113,31 @@
         <to type="forward">/servlets/query/protocols/protocols/html?accession=$1</to>
     </rule>
 
+
+    <!-- biosamples -->
+    <rule>
+        <from>^/biosamplesgroup/?$</from>
+        <to type="redirect">%{context-path}/biosamplesgroup/browse.html</to>
+    </rule>
+    <rule>
+        <from>^/biosamplesgroup/browse\.html$</from>
+        <to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/html</to>
+    </rule>
+    <rule>
+        <from>^/biosamplesgroup/(SAM(.*))/?$</from>
+        <to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/html?id=$1</to>
+    </rule>
+    <rule>
+        <from>^/biosamplessample/browse\.html$</from>
+        <to type="forward">/servlets/query/biosamplessample/biosamplessample/html</to>
+    </rule>
+    <rule>
+        <from>^/biosamplessample/((SAM(.*))/?)$</from>
+        <to type="forward">/servlets/query/biosamplessample/biosamplessample/html?samplegroup=$1</to>
+    </rule>
+
+
+
     <!-- files -->
     <rule>
         <from>^/files/?$</from>
@@ -290,15 +315,15 @@
     </rule>
     <rule>
         <from>^/ArrayExpress-Experiments\.txt$</from>
-        <!-- <to type="forward">/servlets/querypagewriter/experiments/experiments/tab</to> -->
-        <to type="forward">/filetab.jsp</to>
+        <to type="forward">/servlets/querypagewriterfile/experiments/experiments/tab</to>
+        <!-- <to type="forward">/filetab.jsp</to> -->
     </rule>
 
     <!-- print-friendly layout for the experiments -->
     <rule>
         <from>^/browse\.printer\.html$</from>
-        <!-- <to type="forward">/servlets/querypagewriter/experiments/browse-experiments-printer/html</to> -->
-        <to type="forward">/printer.jsp</to>
+        <to type="forward">/servlets/querypagewriter/experiments/browse-experiments-printer/html</to>
+        <!-- <to type="forward">/printer.jsp</to> -->
     </rule>
 
     <!-- redirects to some pages at www.ebi.ac.uk (via proxy servlet) -->
@@ -368,6 +393,10 @@
     <rule>
         <from>^/reload-efo</from>
         <to type="forward">/servlets/control/reload-efo</to>
+    </rule>
+    <rule>
+        <from>^/reload-all</from>
+        <to type="forward">/servlets/control/reload-all</to>
     </rule>
     <rule>
         <from>^/update-efo</from>

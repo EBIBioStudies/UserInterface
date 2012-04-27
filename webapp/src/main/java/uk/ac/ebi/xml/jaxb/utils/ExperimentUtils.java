@@ -3,7 +3,6 @@
  */
 package uk.ac.ebi.xml.jaxb.utils;
 
-import org.junit.internal.matchers.Each;
 
 import uk.ac.ebi.xml.jaxb.File;
 import uk.ac.ebi.xml.jaxb.Folder;

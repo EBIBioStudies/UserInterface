@@ -7,7 +7,6 @@ import uk.ac.ebi.arrayexpress.utils.RegexHelper;
 import uk.ac.ebi.arrayexpress.utils.StringTools;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.AbstractIndexEnvironment;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IQueryConstructor;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironment;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.QueryConstructor;
 
 import java.util.Map;

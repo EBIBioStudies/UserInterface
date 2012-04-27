@@ -93,7 +93,8 @@ public final class EFOQueryExpander implements IQueryExpander
     private Query doExpand( EFOExpandableQueryInfo queryInfo, Query query ) throws IOException
     {
         String field = getQueryField(query);
-        if (null != field && -1 != " keywords sa efv exptype species ".indexOf(" " + field + " ")) {
+        //TODO:rpe put this configurable
+        if (null != field && -1 != " keywords sa efv exptype species description ".indexOf(" " + field + " ")) {
 
             boolean shouldExpandEfo = queryInfo.getExpandEfoFlag() || "exptype".equals(field);   // exptype always expands
 

@@ -78,19 +78,19 @@ public final class SearchExtension
     }
     
     
- 
-    public static int getExperimentsNumber() throws Exception
-    {
-    	IndexEnvironmentExperiments indexExp=(IndexEnvironmentExperiments)getController().getEnvironment("experiments");
-    	return indexExp.getNumberOfExperiments();
-    }
-
-    public static int getAssaysNumber() throws Exception
-    {
-    	IndexEnvironmentExperiments indexExp=(IndexEnvironmentExperiments)getController().getEnvironment("experiments");
-    	return indexExp.getNumberOfAssays();
-    }
-
+// 
+//    public static long getExperimentsNumber() throws Exception
+//    {
+//    	IndexEnvironmentExperiments indexExp=(IndexEnvironmentExperiments)getController().getEnvironment("experiments");
+//    	return indexExp.getNumberOfExperiments();
+//    }
+//
+//    public static long getAssaysNumber() throws Exception
+//    {
+//    	IndexEnvironmentExperiments indexExp=(IndexEnvironmentExperiments)getController().getEnvironment("experiments");
+//    	return indexExp.getNumberOfAssays();
+//    }
+//
 
     // get/set
     public static void setController( Controller ctrl )

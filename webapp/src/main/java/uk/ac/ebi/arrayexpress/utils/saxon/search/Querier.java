@@ -51,7 +51,7 @@ import uk.ac.ebi.arrayexpress.components.Experiments;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
 import uk.ac.ebi.arrayexpress.utils.StringTools;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.AbstractIndexEnvironment.FieldInfo;
+
 
 public class Querier {
 	// logging machinery
@@ -215,7 +215,7 @@ public class Querier {
         return env.queryPaged(queryId, info, map) ;
     }
 	
-	public TopDocs queryAllDocs( Integer queryId, QueryInfo info, HttpServletRequestParameterMap map) throws IOException
+	public ScoreDoc[] queryAllDocs( Integer queryId, QueryInfo info, HttpServletRequestParameterMap map) throws IOException
     {
            
         return env.queryAllDocs(queryId, info, map) ;

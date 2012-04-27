@@ -43,6 +43,8 @@ public class Protocols extends ApplicationComponent implements IDocumentSource
     private SearchEngine search;
 
     public final String INDEX_ID = "protocols";
+	
+    private boolean buildIndexes;
 
     public enum ProtocolsSource
     {
@@ -64,6 +66,8 @@ public class Protocols extends ApplicationComponent implements IDocumentSource
 
     public void initialize() throws Exception
     {
+    	buildIndexes= Application
+				.getInstance().getPreferences().getBoolean("ae.buildLuceneIndexes");
         this.saxon = (SaxonEngine) getComponent("SaxonEngine");
         this.search = (SearchEngine) getComponent("SearchEngine");
 
@@ -72,12 +76,19 @@ public class Protocols extends ApplicationComponent implements IDocumentSource
 //                , new File(getPreferences().getString("ae.protocols.persistence-location"))
 //        );
         
-        DocumentInfo docTemp = getXmlFromFile(new File(getPreferences()
-				.getString("ae.protocols.persistence-location")));
+        if(buildIndexes){
+    		DocumentInfo docTemp = getXmlFromFile(new File(getPreferences()
+    				.getString("ae.protocols.persistence-location")));
 
-        updateIndex(docTemp);
+    		updateIndex(docTemp);
+    		docTemp = null;
+    		}
+    		else{
+    			// null parameter means that I will read the index
+    			updateIndex(null);
+    		}
         this.saxon.registerDocumentSource(this);
-        docTemp=null;
+
     }
 
     public void terminate() throws Exception

@@ -8,6 +8,8 @@ public class IndexEnvironmentFactory {
 			HierarchicalConfiguration indexConfig) {
 		if (name.equalsIgnoreCase("experiments")) {
 			return new IndexEnvironmentExperiments(indexConfig);
+			// return new IndexEnvironmentExperimentsCacheOnIndex(indexConfig);
+
 		} else {
 
 			if (name.equalsIgnoreCase("protocols")) {
@@ -16,8 +18,16 @@ public class IndexEnvironmentFactory {
 				return new IndexEnvironmentArrayDesigns(indexConfig);
 			} else if (name.equalsIgnoreCase("files")) {
 				return new IndexEnvironmentFiles(indexConfig);
+			} else if (name.equalsIgnoreCase("experimentsxmldb")) {
+				return new IndexEnvironmentExperiments(indexConfig);
+			} else if (name.equalsIgnoreCase("biosamplesgroup")) {
+				return new IndexEnvironmentBiosamplesGroup(indexConfig);
+			} else if (name.equalsIgnoreCase("biosamplessample")) {
+				return new IndexEnvironmentBiosamplesSample(indexConfig);
 			} else {
-				return new IndexEnvironment(indexConfig);
+				//TODO: rpe: consider the possibility of have a default implementation 
+				//return new IndexEnvironment(indexConfig);
+				return new IndexEnvironmentExperiments(indexConfig);
 			}
 
 		}

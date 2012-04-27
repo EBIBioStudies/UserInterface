@@ -15,6 +15,7 @@ import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
 import uk.ac.ebi.arrayexpress.utils.RegexHelper;
 import uk.ac.ebi.arrayexpress.utils.StringTools;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,10 +53,21 @@ public class QueryServlet extends AuthAwareApplicationServlet
     private static final long serialVersionUID = 6806580383145704364L;
 
     private transient final Logger logger = LoggerFactory.getLogger(getClass());
+    
+    private int pageSizeLimit;
 
     protected boolean canAcceptRequest( HttpServletRequest request, RequestType requestType )
     {
         return (requestType == RequestType.GET || requestType == RequestType.POST);
+    }
+    
+    @Override
+    public void init(ServletConfig config) throws ServletException
+    {
+               super.init(config);
+               pageSizeLimit=Application
+       				.getInstance().getPreferences().getInteger("ae.pageSizeLimit");
+            
     }
 
     protected void doAuthenticatedRequest(
@@ -65,7 +77,9 @@ public class QueryServlet extends AuthAwareApplicationServlet
             , List<String> authUserIDs
     ) throws ServletException, IOException
     {
-    	System.out.println("\n################### BEGIN #########################");
+
+    	
+    		
     	RegexHelper PARSE_ARGUMENTS_REGEX = new RegexHelper("/([^/]+)/([^/]+)/([^/]+)$", "i");
 
         logRequest(logger, request, requestType);
@@ -77,6 +91,14 @@ public class QueryServlet extends AuthAwareApplicationServlet
             throw new ServletException("Bad arguments passed via request URL [" + request.getRequestURL().toString() + "]");
         }
 
+        if (request.getParameter("pagesize")!=null && Integer.parseInt(request.getParameter("pagesize"))>pageSizeLimit){
+        	
+        	throw new ServletException("Bad arguments passed via request URL [" + request.getRequestURL().toString() + "]! There's a limit to the page size that cannot be exceeded!!");
+        	
+        	
+        }
+        	
+        	
         String index = requestArgs[0];
         String stylesheet = requestArgs[1];
         String outputType = requestArgs[2];
@@ -160,7 +182,7 @@ public class QueryServlet extends AuthAwareApplicationServlet
                     
                     
                     //all the queries are now executes in this Servlet and not in the XSLT
-                    String xml = search.getController().queryIndexPaged(queryId,params);
+                    String xml = search.getController().queryPaged(queryId,params);
 
     				StringReader reader = new StringReader(xml);
     				long xmlRead = System.currentTimeMillis();
@@ -193,8 +215,6 @@ public class QueryServlet extends AuthAwareApplicationServlet
             throw new RuntimeException(x);
         }
         double ms = (System.nanoTime() - time) / 1000000d;
-		System.out.println("\n\n############################REQUEST TOOK->" + ms + " 2ms");
-	     System.out.println("################### END #########################\n");     
         out.close();
     }
 

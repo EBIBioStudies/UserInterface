@@ -30,21 +30,25 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.PerFieldAnalyzerWrapper;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.MatchAllDocsQuery;
+import org.apache.lucene.search.NumericRangeFilter;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TopFieldCollector;
+import org.apache.lucene.search.TotalHitCountCollector;
+import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xmldb.api.DatabaseManager;
-import org.xmldb.api.base.Collection;
-import org.xmldb.api.base.Database;
-import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.ResourceIterator;
 import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
@@ -52,7 +56,6 @@ import org.xmldb.api.modules.XPathQueryService;
 
 import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
 import uk.ac.ebi.arrayexpress.utils.StringTools;
-import uk.ac.ebi.arrayexpress.utils.search.BackwardsCompatibleQueryConstructor;
 
 public abstract class AbstractIndexEnvironment {
 
@@ -82,11 +85,6 @@ public abstract class AbstractIndexEnvironment {
 		this.countDocuments = count;
 	}
 
-	/**
-	 * Default field used to sort if anyone is specified
-	 */
-	protected String defaultSortField = "date";
-
 	public String getDefaultField() {
 		return defaultField;
 	}
@@ -95,23 +93,34 @@ public abstract class AbstractIndexEnvironment {
 		this.defaultField = defaultField;
 	}
 
-	public abstract String getDefaultSortField();
+	public String getDefaultSortField() {
+		return defaultSortField;
+	}
 
 	public void setDefaultSortField(String defaultSortField) {
 		this.defaultSortField = defaultSortField;
 	}
 
-	public abstract boolean getDefaultSortDescending();
+	public boolean getDefaultSortDescending() {
+		return defaultSortDescending;
+	}
 
 	public void setDefaultSortDescending(boolean defaultSortDescending) {
 		this.defaultSortDescending = defaultSortDescending;
 	}
 
-	public abstract int getDefaultPageSize();
+	public int getDefaultPageSize() {
+		return defaultPageSize;
+	}
 
 	public void setDefaultPageSize(int defaultPageSize) {
 		this.defaultPageSize = defaultPageSize;
 	}
+
+	/**
+	 * Default field used to sort if anyone is specified
+	 */
+	protected String defaultSortField = "releasedate";
 
 	/**
 	 * Default orientation (Ascending)
@@ -123,53 +132,6 @@ public abstract class AbstractIndexEnvironment {
 	 */
 	protected int defaultPageSize = 25;
 
-	// field information, parsed
-	public static class FieldInfo {
-		public String name;
-		public String title;
-		public String type;
-		public String path;
-		public boolean shouldAnalyze;
-		public String analyzer;
-		public boolean shouldStore;
-		public boolean shouldEscape;
-		public boolean shouldSort;
-		public boolean shouldAutoCompletion;
-		public List<String> sortFields;
-
-		public FieldInfo(HierarchicalConfiguration fieldConfig) {
-			this.name = fieldConfig.getString("[@name]");
-			this.title = fieldConfig.containsKey("[@title]") ? fieldConfig
-					.getString("[@title]") : null;
-			this.type = fieldConfig.getString("[@type]");
-			this.path = fieldConfig.getString("[@path]");
-			if ("string".equals(this.type)) {
-				this.shouldAnalyze = fieldConfig.getBoolean("[@analyze]");
-				this.analyzer = fieldConfig.getString("[@analyzer]");
-				this.shouldEscape = fieldConfig.getBoolean("[@escape]");
-			}
-			this.shouldStore = fieldConfig.containsKey("[@store]") ? fieldConfig
-					.getBoolean("[@store]") : false;
-
-			// TODO: try to have debug information when i'm referring a field in
-			// the sortfieldsattribute thas does not is defined in the xml file
-			if (fieldConfig.containsKey("[@sortfields]")) {
-				this.shouldSort = true;
-				String[] spl = fieldConfig.getString("[@sortfields]")
-						.split(",");
-				this.sortFields = Arrays.asList(spl);
-			}
-
-			if (fieldConfig.containsKey("[@autocompletion]")) {
-				this.shouldAutoCompletion = false;
-				if (fieldConfig.getBoolean("[@autocompletion]")) {
-					this.shouldAutoCompletion = true;
-				}
-
-			}
-		}
-	}
-
 	public Map<String, FieldInfo> fields;
 
 	// document info
@@ -178,6 +140,7 @@ public abstract class AbstractIndexEnvironment {
 	public AbstractIndexEnvironment(HierarchicalConfiguration indexConfig) {
 		this.indexConfig = indexConfig;
 		populateIndexConfiguration();
+		setup();
 	}
 
 	private void populateIndexConfiguration() {
@@ -223,7 +186,8 @@ public abstract class AbstractIndexEnvironment {
 	}
 
 	/*
-	 * (non-Javadoc)
+	 * (non-Javadoc) This is the mains function of this classe and it will
+	 * address the query, sort and paging issues
 	 * 
 	 * @see
 	 * uk.ac.ebi.arrayexpress.utils.saxon.search.IIndexEnvironment#queryPaged
@@ -234,7 +198,9 @@ public abstract class AbstractIndexEnvironment {
 			HttpServletRequestParameterMap map) throws IOException {
 		IndexReader ir = null;
 		IndexSearcher isearcher = null;
-		logger.debug("start of queryPaged");
+		if (logger.isDebugEnabled()) {
+			logger.debug("start of queryPaged");
+		}
 		StringBuilder totalRes = new StringBuilder();
 		totalRes.append("<content>");
 		Query query = info.getQuery();
@@ -245,11 +211,19 @@ public abstract class AbstractIndexEnvironment {
 					&& ((BooleanQuery) query).clauses().isEmpty()) {
 				logger.info("Empty search, returned all [{}] documents",
 						getCountDocuments());
-				// TODO:see this RPE
-				// return "";
+				// I need to continue because e i need to sort the data, so I
+				// will create an empty query (this happens when I'm a curator
+				// and I dont have any search criteria)
+
+				// Term t = new Term(defaultField, "?");
+				// ((BooleanQuery) query).add(new BooleanClause(new
+				// WildcardQuery(
+				// t), BooleanClause.Occur.SHOULD));
+
+				// this is much more faster
+				query = new MatchAllDocsQuery();
 			}
 
-			logger.info("Beginning of sort logic");
 			isearcher = new IndexSearcher(ir);
 			boolean descending = getDefaultSortDescending();
 			;
@@ -272,7 +246,9 @@ public abstract class AbstractIndexEnvironment {
 			// I have to test the sort field name. If it is a string i have to
 			// add "sort" to the name
 			// I will only sort if I have a Field
-			TopDocs hits;
+			// TopDocs hits;
+			ScoreDoc[] hits = null;
+			Sort sort = null;
 			if (doesFieldExist(sortBy)) {
 				FieldInfo sortField = fields.get(sortBy);
 				if (sortField == null) {
@@ -315,31 +291,24 @@ public abstract class AbstractIndexEnvironment {
 
 						}
 					}
-					logger.info("Query sorted by: ->[{}] descending: ->[{}]",
+					logger.debug("Query sorted by: ->[{}] descending: ->[{}]",
 							sb.toString(), descending);
 				}
 
-				Sort sort = new Sort(sortFieldArray);
-				logger.info("end of sort");
-
-				hits = isearcher.search(query, getCountDocuments() + 1, sort);
+				sort = new Sort(sortFieldArray);
 			} else {
-				hits = isearcher.search(query, getCountDocuments() + 1);
-				logger.info("Sort query field [{}] doenst exist", sortBy);
+				logger.info(
+						"Sort query field [{}] doenst exist or the SortBy parameter was not specified",
+						sortBy);
 			}
 
-			logger.info("Search of index [" + this.indexId
-					+ "] with query [{}] returned [{}] hits", query.toString(),
-					hits.totalHits);
-
-			logger.info("Beginning of paging logic");
-			// PAGING
 			int pageSize = defaultPageSize;
 			if (map.containsKey("pagesize")) {
 				pageSize = Integer.parseInt(StringTools.arrayToString(
 						map.get("pagesize"), " "));
 			} else {
 				pageSize = getDefaultPageSize();
+				map.put("pagesize", Integer.toString(pageSize));
 			}
 
 			int page = 0;
@@ -350,12 +319,73 @@ public abstract class AbstractIndexEnvironment {
 
 			int initialExp = page * pageSize;
 			int finalExp = initialExp + pageSize;
-			if (finalExp > hits.totalHits) {
-				finalExp = hits.totalHits;
+
+			// I will execute the same query with or without Sortby parameter
+			// (in the last case the sort will be null)
+			TopFieldCollector collector = null;
+			int numHits = getCountDocuments() + 1;
+
+			// Filter filter= NumericRangeFilter.newIntRange("order",
+			// initialExp, null, true, true);
+
+			collector = TopFieldCollector.create(sort == null ? new Sort()
+					: sort,
+			// TODO: rpe If im returning page 3 using pagesize of 50 i need to sort (3*50)
+					(page == 0 ? 1 : page + 1) * pageSize, false, // fillFields
+																	// - not
+																	// needed,
+																	// we want
+																	// score and
+																	// doc only
+					false, // trackDocScores - need doc and score fields
+					false, // trackMaxScore - related to trackDocScores
+					sort == null); // should docs be in docId order?
+			isearcher.search(query, collector);
+			//I will use this Collector to know how much results do i have
+			logger.debug("TotalHitCountCollector.java");
+			TotalHitCountCollector collector2 = new TotalHitCountCollector();
+			isearcher.search(query, collector2);
+			logger.debug("Number of Docs->" + collector2.getTotalHits());
+			int totalHits= collector2.getTotalHits();
+
+			TopDocs topDocs = collector.topDocs();
+			// hits= topDocs.scoreDocs;
+			hits = topDocs.scoreDocs;
+
+			// logger.info("Search of index [" + this.indexId
+			// + "] with query [{}] returned [{}] hits", query.toString(),
+			// hits.totalHits);
+
+			logger.info("Search of index [" + this.indexId
+					+ "] with query [{}] returned [{}] hits", query.toString(),
+					hits.length);
+
+			logger.info("Beginning of paging logic");
+
+			/*
+			 * // PAGING // I put this upper because I need it to create a
+			 * filter int pageSize = defaultPageSize; if
+			 * (map.containsKey("pagesize")) { pageSize =
+			 * Integer.parseInt(StringTools.arrayToString( map.get("pagesize"),
+			 * " ")); } else { pageSize = getDefaultPageSize();
+			 * map.put("pagesize", Integer.toString(pageSize)); }
+			 * 
+			 * int page = 0; if (map.containsKey("page")) { page =
+			 * Integer.parseInt(StringTools.arrayToString( map.get("page"),
+			 * " ")) - 1; }
+			 * 
+			 * int initialExp = page * pageSize; int finalExp = initialExp +
+			 * pageSize; // if (finalExp > hits.totalHits) { // finalExp =
+			 * hits.totalHits; // }
+			 */
+			if (finalExp > hits.length) {
+				finalExp = hits.length;
 			}
 
+			// List<String> combinedTotal = new ArrayList<String>();
+			// combinedTotal.add(String.valueOf(hits.totalHits));
 			List<String> combinedTotal = new ArrayList<String>();
-			combinedTotal.add(String.valueOf(hits.totalHits));
+			combinedTotal.add(String.valueOf(totalHits));
 
 			map.put("total",
 					combinedTotal.toArray(new String[combinedTotal.size()]));
@@ -364,12 +394,17 @@ public abstract class AbstractIndexEnvironment {
 					"End of paging logic, requesting data from [{}] to [{}]",
 					initialExp, finalExp);
 			long time = System.nanoTime();
-			logger.debug("Requesting data from xml database");
+			if (logger.isDebugEnabled()) {
+				logger.debug("Requesting data from xml database");
+			}
 			// this QueryDB should be implemented by all subclasses and is
 			// responsible for the data collecting
 			totalRes.append(queryDB(hits, isearcher, initialExp, finalExp, map));
-			logger.debug("End of requesting data from xml database");
+			if (logger.isDebugEnabled()) {
+				logger.debug("End of requesting data from xml database");
+			}
 
+			// this is now done in the queryDB function
 			// This function should be responsable for add extra parameters to
 			// the XsltInvocation
 			// addExtraParametersToXSLT(hits, isearcher, initialExp,
@@ -387,11 +422,13 @@ public abstract class AbstractIndexEnvironment {
 		}
 
 		totalRes.append("</content>");
-		logger.debug("End of QueryPaged");
+		if (logger.isDebugEnabled()) {
+			logger.debug("End of QueryPaged");
+		}
 		return totalRes.toString();
 	}
-
-	public String queryDB(TopDocs hits, int initialExp, int finalExp,
+/*
+	public String queryDB(ScoreDoc[] hits, int initialExp, int finalExp,
 			HttpServletRequestParameterMap map) throws IOException {
 		String ret = "";
 		IndexReader ir = null;
@@ -413,13 +450,40 @@ public abstract class AbstractIndexEnvironment {
 
 		return ret;
 	}
+	/*
 
-	// this is specific for each type of document
-	// TODO rpe
-	abstract public String queryDB(TopDocs hits, IndexSearcher isearcher,
+	/**
+	 * @param hits this just represents a subset of the result
+	 * @param TotalHits
+	 * @param isearcher
+	 * @param initialExp
+	 * @param finalExp
+	 * @param map
+	 * @return
+	 * @throws Exception
+	 */
+	abstract public String queryDB(ScoreDoc[] hits, IndexSearcher isearcher,
 			int initialExp, int finalExp, HttpServletRequestParameterMap map)
 			throws Exception;
 
+	/*
+	 * public String queryDB(TopDocs hits, int initialExp, int finalExp,
+	 * HttpServletRequestParameterMap map) throws IOException { String ret = "";
+	 * IndexReader ir = null; IndexSearcher isearcher = null; try { ir =
+	 * IndexReader.open(this.indexDirectory, true); isearcher = new
+	 * IndexSearcher(ir); ret = queryDB(hits, isearcher, initialExp, finalExp,
+	 * map); isearcher.close(); ir.close(); } catch (Exception x) {
+	 * logger.error("Caught an exception:", x); } finally { if (null !=
+	 * isearcher) isearcher.close(); if (null != ir) ir.close(); }
+	 * 
+	 * return ret; }
+	 * 
+	 * 
+	 * 
+	 * // this is specific for each type of document // TODO rpe abstract public
+	 * String queryDB(TopDocs hits, IndexSearcher isearcher, int initialExp, int
+	 * finalExp, HttpServletRequestParameterMap map) throws Exception;
+	 */
 	// this is specific for each type of document (I will need this for the
 	// experiments to add the total number of assays)
 	// TODO rpe (this is not the best way to do it) (for now this logis is also
@@ -437,12 +501,12 @@ public abstract class AbstractIndexEnvironment {
 	 * (java.lang.Integer, uk.ac.ebi.arrayexpress.utils.saxon.search.QueryInfo,
 	 * uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap)
 	 */
-	public TopDocs queryAllDocs(Integer queryId, QueryInfo info,
+	public ScoreDoc[] queryAllDocs(Integer queryId, QueryInfo info,
 			HttpServletRequestParameterMap map) throws IOException {
 		IndexReader ir = null;
 		IndexSearcher isearcher = null;
 		Query query = info.getQuery();
-		TopDocs hits = null;
+		ScoreDoc[] hits = null;
 		try {
 			ir = IndexReader.open(this.indexDirectory, true);
 
@@ -452,8 +516,16 @@ public abstract class AbstractIndexEnvironment {
 				logger.info(
 						"queryAllDocs Empty search, returned all [{}] documents",
 						getCountDocuments());
-				// TODO:see this RPE
-				return null;
+				// I need to continue because e i need to sort the data, so I
+				// will create an empty query (this happens when I'm a curator
+				// and I dont have any search criteria)
+				// Term t = new Term(defaultField, "*");
+				// ((BooleanQuery) query).add(new BooleanClause(new
+				// WildcardQuery(
+				// t), BooleanClause.Occur.SHOULD));
+
+				// this is much more faster
+				query = new MatchAllDocsQuery();
 			}
 
 			// to show _all_ available nodes
@@ -481,8 +553,8 @@ public abstract class AbstractIndexEnvironment {
 			// I have to test the sort field name. If it is a string i have to
 			// add "sort" to the name
 			// I will only sort if I have a Field
-
-			if (doesFieldExist(sortBy)) {
+			Sort sort = null;
+			if (!sortBy.equalsIgnoreCase("") && doesFieldExist(sortBy)) {
 				FieldInfo sortField = fields.get(sortBy);
 				if (sortField == null) {
 					logger.info(
@@ -529,13 +601,39 @@ public abstract class AbstractIndexEnvironment {
 					logger.info("Query sorted by: ->[{}]", sb.toString());
 				}
 
-				Sort sort = new Sort(sortFieldArray);
+				sort = new Sort(sortFieldArray);
 
-				hits = isearcher.search(query, getCountDocuments() + 1, sort);
+				// hits = isearcher.search(query, getCountDocuments() + 1,
+				// sort);
 			} else {
-				hits = isearcher.search(query, getCountDocuments() + 1);
+				// hits = isearcher.search(query, getCountDocuments() + 1);
+				logger.info(
+						"Sort query field [{}] doenst exist or the SortBy parameter was not specified",
+						sortBy);
 			}
-			map.put("total", Integer.toString(hits.totalHits));
+
+			// I will execute the same query with or without Sortby parameter
+			// (in the last case the sort will be null)
+			int numHits = getCountDocuments() + 1;
+			TopFieldCollector collector = TopFieldCollector.create(
+					sort == null ? new Sort() : sort, numHits, false, // fillFields
+																		// - not
+																		// needed,
+																		// we
+																		// want
+																		// score
+																		// and
+																		// doc
+																		// only
+					false, // trackDocScores - need doc and score fields
+					false, // trackMaxScore - related to trackDocScores
+					sort == null); // should docs be in docId order?
+			isearcher.search(query, collector);
+			TopDocs topDocs = collector.topDocs();
+			// hits= topDocs.scoreDocs;
+			hits = topDocs.scoreDocs;
+
+			map.put("total", Integer.toString(hits.length));
 
 			isearcher.close();
 			ir.close();
@@ -551,4 +649,38 @@ public abstract class AbstractIndexEnvironment {
 		return hits;
 
 	}
+
+	// TODO RPE
+	public void indexReader() {
+		IndexReader ir = null;
+		try {
+			logger.info("Reload the Lucene Index for [{}]", indexId);
+			ir = IndexReader.open(this.indexDirectory, true);
+
+			Map<String, String> map = ir.getCommitUserData();
+			logger.info("numberDocs->" + map.get("numberDocs"));
+			logger.info("date->" + map.get("date"));
+			logger.info("keyValidator->" + map.get("keyValidator"));
+			this.setCountDocuments(Integer.parseInt(map.get("numberDocs")));
+		} catch (Exception x) {
+			logger.error("Caught an exception:", x);
+		} finally {
+			try {
+				if (null != ir) {
+					ir.close();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				logger.error("Caught an exception:", e);
+			}
+		}
+	}
+
+	public void setup() {
+		// TODO Auto-generated method stub
+		logger.info("default setup for Index Environment");
+
+	}
+
 }
