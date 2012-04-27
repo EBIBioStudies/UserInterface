@@ -10,9 +10,12 @@
                 <port>25</port>
             </smtp>
         </reports>
-    </app>
+    </app>   
     <ae>
-
+		<setupDirectory>${sys:java.io.tmpdir}/${interface.application.index.directory}</setupDirectory>
+		<backupDirectory>${sys:java.io.tmpdir}/Backups</backupDirectory>
+		<buildLuceneIndexes>${interface.application.lucene.indexes.build}</buildLuceneIndexes>
+		<pageSizeLimit>${interface.application.pagesize.limit}</pageSizeLimit>
         <db>
             <connections>
                 <connection>
@@ -67,7 +70,10 @@
                 </connection>
             </connections>
         </db>
-
+		<xmldatabase>
+			<driver>${interface.application.db.xml.driver}</driver>
+			<connectionstring>${interface.application.db.xml.connection.string}</connectionstring>
+		</xmldatabase>
         <experiments>
             <ae1>
                 <source-location>${interface.application.pref.experiments.ae1.source.location}</source-location>
@@ -86,10 +92,10 @@
                     <schedule>${interface.application.pref.experiments.ae2.reload.schedule}</schedule>
                 </reload>
             </ae2>
-
+            
             <persistence-location>${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-experiments.xml</persistence-location>
         </experiments>
-
+        
         <atlasexperiments>
             <source><location>http://www.ebi.ac.uk/gxa/api?experiment=listAll&amp;experimentInfoOnly=yes&amp;format=xml</location></source>
             <persistence-location>${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-atlas-experiments.txt</persistence-location>
@@ -139,13 +145,13 @@
             <index><location>${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-index/efo</location></index>
         </efo>
 
-        <index id="events" location="${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-index" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
+        <index id="events" location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
             <document path="/events/event" defaultField="category">
                 <field name="category" title="" type="string" path="category" analyze="true" store="false" escape="false"/>
                 <field name="success" title="" type="boolean" path="successful/text() = 'true'"/>
             </document>
         </index>
-        <index id="experiments" location="${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-index" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
+        <index id="experiments"  location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
             <document path="/experiments/experiment" defaultField="keywords">
                 <field name="keywords" type="string" path="string-join(.//text(), ' ')" analyze="true" analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer" autocompletion="true" store="false" escape="false"/>
                 <field name="accession" title="by Accession" type="string" path="accession | secondaryaccession" analyze="true" store="true" autocompletion="true" escape="false" sortfields="accessionsort1,accessionsort2"/>
@@ -197,19 +203,166 @@
                 <field name="miamescore" title="MIAME Score" type="integer" path="(if (miamescores/overallscore castable as xs:integer) then miamescores/overallscore else 0) cast as xs:integer" />
                 <field name="minseqescore" title="MINSEQE Score" type="integer" path="(if (minseqescores/overallscore castable as xs:integer) then minseqescores/overallscore else 0) cast as xs:integer" />
 				
-				<!-- Sort Fields -->
-				              <!-- RPE: Sort Fields -->
-        <!--            <field name="datesort" title="by Release Date" type="string" path="releasedate" analyze="false" store="true" escape="false"/>
-                   <field name="namesort" title="Title" type="string" path="name" analyze="false" store="true" escape="false"/>
-                   <field name="assaycountsort" title="Title" type="string" path="name" analyze="false" store="true" escape="false"/>
-         -->           
+          
+                
+       
+                 
+                <!-- xml text content I use "." to mean that I want to keep all the xml content as text -->   
+               <!--  <field name="xml" title="xml" type="string" path="." analyze="false" store="true" escape="false" /> -->
                    
+                <!-- HighLight evolution -->
+                <!-- <field name="xml" title="xml" type="string" path="/." analyze="true" analyzer="uk.ac.ebi.arrayexpress.rpereira.MyAnalyzer" store="true" escape="false"/> -->
+                		
+                <!-- internal filters -->
+                <field name="raw-ftp" type="boolean" path="rawdatafiles/@available = 'true'"/>
+                <field name="fgem-ftp" type="boolean" path="fgemdatafiles/@available = 'true'"/>
+                <field name="seq-uri" type="boolean" path="exists(seqdatauri)"/>
+
+                <field name="array-score" type="boolean" path="(miamescores/reportersequencescore = '1')"/>
+                <field name="protocol-score" type="boolean" path="(miamescores/protocolscore = '1') or (minseqescores/protocolscore = '1')"/>
+                <field name="ef-score" type="boolean" path="(miamescores/factorvaluescore = '1') or (minseqescores/factorvaluescore = '1')"/>
+                <field name="fgem-score" type="boolean" path="(miamescores/derivedbioassaydatascore = '1') or (minseqescores/derivedbioassaydatascore = '1')"/>
+                <field name="raw-score" type="boolean" path="(miamescores/measuredbioassaydatascore = '1')"/>
+                <field name="seq-score" type="boolean" path="(minseqescores/measuredbioassaydatascore = '1')"/>
+            </document>
+        </index>
+   
+   
+                 
+    <index id="biosamplesgroup"  location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
+            <document path="/Biosamples/SampleGroup" defaultField="keywords">
+                <field name="keywords" type="string" path="string-join(.//text(), ' ')" analyze="true" analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer" autocompletion="true" store="false" escape="false"/>
+                <field name="id" title="by Id" type="string" path="@id" analyze="true" store="true" autocompletion="true" escape="false" sortfields="idsort"/>
+                <!-- The sortfields must have this pproperties  analyze="false" store="false" escape="false" -->
+                <field name="idsort" title="by Id" type="string" path="substring(@id,5)" analyze="false" store="false" escape="false"/>
+                
+                <field name="description" title="by Description" type="string" path="attribute/value[../@class='Submission Description']" analyze="true" store="false" escape="false" autocompletion="true" sortfields="description"/>        
+                <field name="name" title="by Description" type="string" path="attribute/value[../@class='Name']" analyze="true" store="false" escape="false" autocompletion="true" sortfields="description"/>                   
+                <field name="title" title="by Description" type="string" path="attribute/value[../@class='Submission Title']" analyze="true" store="false" escape="false"/> 
+                <field name="identifier" title="by Description" type="string" path="attribute/value[../@class='Submission Identifier']" analyze="true" store="false" escape="false"/> 
+                <field name="version" title="by Description" type="string" path="attribute/value[../@class='Submission Version']" analyze="true" store="false" escape="false"/> 
+                <field name="modificationdate" title="by Description" type="string" path="attribute/value[../@class='Submission Release Date']" analyze="true" store="false" escape="false"/>
+                <field name="releasedate" title="by Description" type="string" path="attribute/value[../@class='Submission Modification Date']" analyze="true" store="false" escape="false"/>
+                <field name="databases" title="by Description" type="string" path="attribute/value[../@class='Databases']//value" analyze="true" store="false" escape="false"/>
+                <field name="organizations" title="by Description" type="string" path="attribute/value[../@class='Organizations']//value" analyze="true" store="false" escape="false"/>
+                <field name="persons" title="by Description" type="string" path="attribute/value[../@class='Persons']//value" analyze="true" store="false" escape="false"/>                      
+               <!--  used to order the search using the numer os samples -->
+                <field name="samples" title="by Description" type="integer" path="count(Sample)" store="false" escape="false" sortfields="samples"/>
+            </document>
+        </index>       
+
+
+ <!-- <index id="biosamplessample"  location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
+            <document path="/Biosamples/SampleGroup/Sample" defaultField="accession">
+ 
+                <field name="accession" type="string" path="@id" analyze="true" store="true" escape="false" sortfields="accession"/>
+                <field name="accessionsort1" title="by Id" type="string" path="substring(@id,4,1)" analyze="false" store="false" escape="false"/>
+                <field name="accessionsort2" title="by Id" type="integer" path="substring(@id,6) cast as xs:integer" store="false" escape="false" sortfields="accessionsort2"/>
+                <field name="accessionsort3" title="by Id" type="string" path="substring(@id,6)" analyze="false" store="false" escape="false" sortfields="accessionsort3"/>
+                <field name="order" title="by Id" type="integer" path="1" analyze="false" store="false" escape="false"/>
+            </document>
+        </index>       -->            
+ 
+
+    <index id="biosamplessample"  location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
+            <document path="/Biosamples/SampleGroup/Sample" defaultField="keywords">
+            	<field name="keywords" type="string" path="string-join(.//text(), ' ')" analyze="true" analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer" autocompletion="true" store="false" escape="false"/>
+                <field name="name" type="string" path="attribute/value[../@class='Name']" analyze="true" store="false" escape="false" sortfields="name"/>
+                <field name="accession" type="string" path="@id" analyze="true" store="true" escape="false" sortfields="accession"/>
+                <field name="accessionsort1" title="by Id" type="string" path="substring(@id,4,1)" analyze="false" store="false" escape="false"/>
+                <field name="accessionsort2" title="by Id" type="integer" path="substring(@id,6) cast as xs:integer" store="false" escape="false" sortfields="accessionsort2"/>
+                <field name="accessionsort3" title="by Id" type="string" path="substring(@id,6)" analyze="false" store="false" escape="false" sortfields="accessionsort3"/>
+                <field name="sampleaccession" type="string" path="attribute/value[../@class='Sample Accession']" analyze="true" store="true" escape="false" sortfields="accession"/>
+    
+                
+                <!-- RPE - just for test -->
+                <field name="order" title="by Id" type="integer" path="1" store="false" escape="false" sortfields="order"/>
+                <field name="order2" title="by Id" type="integer" path="1 cast as xs:integer" store="false" escape="false" sortfields="order2"/>
+                <field name="order3" title="by Id" type="integer" path="1" store="false" escape="false" sortfields="order3"/>
+                
+                <field name="samplegroup" type="string" path="@groupId" analyze="true" store="false" escape="false"/>
+                <field name="age" type="integer" path="(if (attribute/value[../@class='Age'] castable as xs:integer) then attribute/value[../@class='Age'] else 0) cast as xs:integer" analyze="true" store="false" escape="false" sortfields="age"/>
+                <field name="disease" type="string" path="attribute/value[../@class='DiseaseType']" analyze="true" store="false" escape="false" sortfields="disease"/>
+                <field name="clinical" type="string" path="attribute/value[../@class='ClinicalHistory']" analyze="true" store="false" escape="false" sortfields="clinical"/>
+                <field name="familyrelationship" type="string" path="attribute/value[../@class='FamilyRelationship']" analyze="true" store="false" escape="false" sortfields="familyrelationship"/>
+                <field name="expansion" type="string" path="attribute/value[../@class='ExpansionLLot']" analyze="true" store="false" escape="false" sortfields="expansion"/>
+                <field name="familymember" type="string" path="attribute/value[../@class='FamilyMember']" analyze="true" store="false" escape="false" sortfields="familymember"/>
+                <field name="geo" type="string" path="attribute/value[../@class='GeographicOrigin']" analyze="true" store="false" escape="false" sortfields="geo"/>
+                <field name="family" type="string" path="attribute/value[../@class='Family']" analyze="true" store="false" escape="false" sortfields="family"/>
+                <field name="clinicallystatus" type="string" path="attribute/value[../@class='ClinicallyAffectedStatus']" analyze="true" store="false" escape="false" sortfields="clinicallystatus"/>
+                <field name="ethnicity" type="string" path="attribute/value[../@class='Ethnicity']" analyze="true" store="false" escape="false" sortfields="ethnicity"/>
+ 				<field name="sex" type="string" path="attribute/value[../@class='Sex']" analyze="true" store="false" escape="false" sortfields="sex"/>                
+ 				<field name="organism" type="string" path="attribute/value[../@class='Organism']" analyze="true" store="false" escape="false" sortfields="organism"/>                
+ 				<field name="transformation" type="string" path="attribute/value[../@class='TransformationType']" analyze="true" store="false" escape="false" sortfields="transformation"/>                
+ 				<field name="biopsysite" type="string" path="attribute/value[../@class='BiopsySite']" analyze="true" store="false" escape="false" sortfields="biopsysite"/>                
+ 				<field name="sampletype" type="string" path="attribute/value[../@class='SampleType']" analyze="true" store="false" escape="false" sortfields="sampletype"/>                
+ 				<field name="celltype" type="string" path="attribute/value[../@class='CellType']" analyze="true" store="false" escape="false" sortfields="celltype"/>                
+ 				<field name="timeunit" type="string" path="attribute/value[../@class='TimeUnit']" analyze="true" store="false" escape="false" sortfields="timeunit"/>                
+ 				<field name="organismpart" type="string" path="attribute/value[../@class='OrganismPart']" analyze="true" store="false" escape="false" sortfields="organismpart"/>                        
+            </document>
+        </index>                  
+ 
+
+ 
+   <index id="experimentsxmldb"  location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
+           <!--  <document path="/experiments/experiment[accession='E-MEXP-2944']" defaultField="keywords"> -->
+            <document path="/experiments/experiment" defaultField="keywords">
+                <field name="keywords" type="string" path="string-join(.//text(), ' ')" analyze="true" analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer" autocompletion="true" store="false" escape="false"/>
+                <field name="accession" title="by Accession" type="string" path="accession | secondaryaccession" analyze="true" store="true" autocompletion="true" escape="false" sortfields="accessionsort1,accessionsort2"/>
+                <field name="name" title="by Experimental Factor" type="string" path="name" analyze="true" store="false" escape="false" autocompletion="true" sortfields="name,accessionsort1,accessionsort2"/>
+                <field name="releasedate" title="by Release Date" type="string" path="releasedate" analyze="true" store="false" escape="false" autocompletion="true" sortfields="releasedate,accessionsort1,accessionsort2"/>
+                <field name="species" title="by Species" type="string" path="species" analyze="true" store="false" escape="false" autocompletion="true" sortfields="species1,species2,species3,accessionsort1,accessionsort2"/>
+                <field name="species1" title="by Species" type="string" path="species[0]" analyze="false" store="false" escape="false"/>
+                <field name="species2" title="by Species" type="string" path="species[1]" analyze="false" store="false" escape="false"/>
+                <field name="species3" title="by Species" type="string" path="species[2]" analyze="false" store="false" escape="false"/>
+                <field name="array" title="by Array" type="string" path="arraydesign/id | arraydesign/legacy_id | arraydesign/accession | arraydesign/name" autocompletion="true" analyze="true" store="false" escape="false"/>
+                <field name="protocol" title="by Protocol" type="string" path="protocol/id | protocol/accession" autocompletion="true" analyze="true" store="false" escape="false"/>
+                <field name="exptype" title="by Experiment Type" type="string" path="experimenttype" analyze="true" autocompletion="true" store="false" escape="false"/>
+                <field name="expdesign" title="by Experiment Design" type="string" path="experimentdesign" analyze="true" autocompletion="true" store="false" escape="false" />
+                <field name="ef" title="by Experimental Factor" type="string" path="experimentalfactor/name" analyze="true" autocompletion="true" store="false" escape="false"/>
+                <field name="efv" title="by Experimental Factor Value" type="string" path="experimentalfactor/value" analyze="true" autocompletion="true" store="false" escape="false"/>
+                <field name="sa" title="by Sample Attribute Value" type="string" path="sampleattribute/value" analyze="true" autocompletion="true" store="false" escape="true"/>
+                <field name="pmid" title="by PubMed ID" type="string" path="bibliography/accession" analyze="false" autocompletion="true" store="false" escape="false"/>
+                <field name="userid" type="string" path="user/@id" analyze="false" autocompletion="true" store="false" escape="false"/>
+                <!-- boolean fields -->
+                <field name="atlas" title="only experiments loaded in Gene Expression Atlas" type="integer" path="count(.[@loadedinatlas = 'true'])" sortfields="atlas,accessionsort1,accessionsort2"/>
+                <field name="directsub" title="only ArrayExpress direct submissions" type="boolean" path="not(contains(accession, '-GEOD-'))"/>
+                <field name="private" type="boolean" path="not(user/@id = '1')"/>
+                <!-- multiple-source filters for curators -->
+                <field name="source" type="string" path="source/@id" analyze="false" store="false" escape="false"/>
+                <field name="public" type="boolean" path="user/@id = '1'" autocompletion="true"/>
+                <field name="migrated" type="boolean" path="source/@migrated = 'true'"/>
+                <field name="identical" type="boolean" path="source/@identical = 'true'"/>
+                <field name="visible" type="boolean" path="source/@visible = 'true'"/>
+                <!-- numeric fields -->
+                <!-- I need to store this fields because they will be need during the queries - to sum all the assays ...-->
+                <field name="assays" title="Number of Assays" type="integer" path="(if (assays castable as xs:integer) then assays else 0) cast as xs:integer" sortfields="assays,accessionsort1,accessionsort2"/>
+                <field name="samplecount" title="Number of Samples" type="integer" path="(if (samples castable as xs:integer) then samples else 0) cast as xs:integer" sortfields="samplecount,accessionsort1,accessionsort2"/>
+                
+                <field name="rawcount" type="integer" path="(if (rawdatafiles castable as xs:integer) then rawdatafiles else 0) cast as xs:integer" store="true" />
+                <field name="raw" type="integer" path="count(seqdatauri)" sortfields="raw,rawcount,accessionsort1,accessionsort2"/>
+                
+               <!-- fot the xml database access -->
+               <field name="id" title="Id" type="integer" path="id" analyze="false" store="true" escape="false"/>
+               
+                 <!--special sort fields using as second and third level of sort-->
+                 <field name="accessionsort1" title="Accession sort1" type="string" path="substring(accession, 3, 4)" store="true" analyze="false" escape="false"/>
+                 <field name="accessionsort2" title="Accession sort2" type="integer" path="(if (substring(accession, 8) castable as xs:integer) then substring(accession, 8) else 0) cast as xs:integer" store="true" analyze="false"/>
+               
+                 <field name="fgem" type="integer" path="(if (fgemdatafiles castable as xs:integer) then fgemdatafiles else 0) cast as xs:integer" sortfields="fgem,accessionsort1,accessionsort2"/>
+
+                
+                <field name="efcount"  title="Number of Experimental Factors" type="integer" path="count(distinct-values(experimentalfactor/name, 'http://saxon.sf.net/collation?ignore-case=yes'))" />
+                <field name="sacount" title="Number of Sample Attributes" type="integer" path="count(distinct-values(sampleattribute/category, 'http://saxon.sf.net/collation?ignore-case=yes'))" />
+                <field name="miamescore" title="MIAME Score" type="integer" path="(if (miamescores/overallscore castable as xs:integer) then miamescores/overallscore else 0) cast as xs:integer" />
+                <field name="minseqescore" title="MINSEQE Score" type="integer" path="(if (minseqescores/overallscore castable as xs:integer) then minseqescores/overallscore else 0) cast as xs:integer" />
+				              
                    
                 <!-- xml text content I use "." to mean that I want to keep all the xml content as text -->   
-                  <field name="xml" title="xml" type="string" path="/." analyze="false" store="true" escape="false" />
+                <!-- <field name="xml" title="xml" type="string" path="." analyze="false" store="true" escape="false" /> -->
                    
-                   <!-- HighLight evolution -->
-                   <!-- <field name="xml" title="xml" type="string" path="/." analyze="true" analyzer="uk.ac.ebi.arrayexpress.rpereira.MyAnalyzer" store="true" escape="false"/> -->
+                <!-- HighLight evolution -->
+                <!-- <field name="xml" title="xml" type="string" path="/." analyze="true" analyzer="uk.ac.ebi.arrayexpress.rpereira.MyAnalyzer" store="true" escape="false"/> -->
                 
 				
                 <!-- internal filters -->
@@ -225,7 +378,9 @@
                 <field name="seq-score" type="boolean" path="(minseqescores/measuredbioassaydatascore = '1')"/>
             </document>
         </index>
-        <index id="arrays" location="${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-index" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
+ 
+
+        <index id="arrays" location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
             <document path="/array_designs/array_design" defaultField="keywords">
                 <field name="keywords" type="string" path="string-join(.//text(), ' ')" analyze="true" analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer" store="false" escape="false"/>
                 <field name="accession" title="by Accession" type="string" path="accession" analyze="true" store="true" escape="false" sortfields="accessionsort1,accessionsort2"/>
@@ -243,7 +398,7 @@
                 <field name="migrated" type="boolean" path="@migrated = 'true'"/>
                 <field name="visible" type="boolean" path="@visible = 'true'"/>
                  <!-- xml text content I use "." to mean that I want to keep all the xml content as text -->   
-                 <field name="xml" title="xml" type="string" path="/." analyze="false" store="true" escape="false" />
+                 <!-- <field name="xml" title="xml" type="string" path="/." analyze="false" store="true" escape="false" /> -->
       
           		<!--special sort fields using as second and third level of sort-->
                  <field name="accessionsort1" title="Accession sort1" type="string" path="substring(accession, 3, 4)" store="true" analyze="false" escape="false"/>
@@ -251,7 +406,7 @@
                
             </document>
         </index>
-        <index id="protocols" location="${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-index" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
+        <index id="protocols" location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
             <document path="/protocols/protocol" defaultField="keywords">
                 <field name="keywords" type="string" path="string-join(.//text(), ' ')" analyze="true" analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer" store="false" escape="false"/>
                 <field name="id" title="" type="string" path="id" analyze="true" store="true" escape="false"/>
@@ -266,7 +421,7 @@
                <!--  <field name="xml" title="xml" type="string" path="/." analyze="false" store="true" escape="false" /> -->
             </document>
         </index>
-        <index id="files" location="${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-index" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
+        <index id="files" location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
             <document path="/files/folder/file" defaultField="keywords">
                 <field name="keywords" type="string" path="string-join(.//@*, ' ')" analyze="true" analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer" store="false" escape="false"/>
                 <field name="name" title="" type="string" path="@name" analyze="true" store="true" escape="false" sortfields="namesort"/>
@@ -280,7 +435,7 @@
                  <field name="visible" type="string" path="'true'" analyze="true" store="false" escape="false" />
             </document>
         </index>
-        <index id="users" location="${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-index" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
+        <index id="users" location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
             <document path="/users/user" defaultField="keywords">
                 <field name="keywords" type="string" path="string-join(.//text(), ' ')" analyze="true" analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer" store="false" escape="false"/>
                 <field name="id" title="" type="string" path="id" analyze="true" store="false" escape="false"/>
