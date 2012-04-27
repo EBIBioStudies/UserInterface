@@ -7,14 +7,18 @@
     <xsl:output method="xml" encoding="UTF-8" indent="no"/>
 
     <xsl:param name="queryid"/>
+    <xsl:param name="total"/>
+    <xsl:param name="totalsamples"/>
+    <xsl:param name="totalassays"/>
+    
+    
 
     <xsl:template match="/">
-        <xsl:variable name="vExperiments" select="search:getExperimentsNumber()"/>
-         <xsl:variable name="vAssays" select="search:getAssaysNumber()"/>
+        
          
-        <experiments total="{$vExperiments}"
+        <experiments total="{$total}"
                      total-samples="4"
-                     total-assays="{$vAssays}"/>
+                     total-assays="{$totalassays}"/>
     </xsl:template>
 
 </xsl:stylesheet>

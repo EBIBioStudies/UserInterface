@@ -46,7 +46,7 @@
     <xsl:variable name="vDetailedViewMainTdClass">td_main<xsl:if test="'true' = $detailedview"> td_expanded</xsl:if></xsl:variable>
 
     <xsl:template match="/">
-   		<h1>Teste2</h1>
+   	<!-- 	<h1>Teste2</h1> -->
       
      
        <xsl:variable name="vFrom" as="xs:integer">
@@ -122,7 +122,7 @@
                                 <xsl:text> identical</xsl:text>
                             </xsl:if>
                             </xsl:attribute>
-                        <xsl:if test="not($userid)"> curator logged in
+                        <xsl:if test="not($userid)"> <!--curator logged in-->
                             <xsl:choose>
                                 <xsl:when test="source/@id = 'ae1' and source/@migrated != 'true'">
                                     <span>&#183;</span>
