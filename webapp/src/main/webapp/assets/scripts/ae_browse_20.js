@@ -182,6 +182,8 @@ $(function() {
 
     // content is hidden by default to prevent its ugly appearance on IE if scripting is disabled
     $("#ae_contents").show();
+    
+    
 
     // retrieve the location of print button element from header
     $("#head").load(function () {

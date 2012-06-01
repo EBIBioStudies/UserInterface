@@ -53,8 +53,10 @@ public class IndexEnvironmentBiosamplesGroup extends AbstractIndexEnvironment {
 	@Override
 	public void setup() {
 
-		defaultSortField = "id";
-		defaultSortDescending = false;
+//		defaultSortField = "id";
+//		defaultSortDescending = false;
+		defaultSortField = "";
+		defaultSortDescending = true;
 		defaultPageSize = 25;
 
 		HierarchicalConfiguration connsConf = (HierarchicalConfiguration) Application
@@ -141,7 +143,8 @@ public class IndexEnvironmentBiosamplesGroup extends AbstractIndexEnvironment {
 			ResourceSet set=null;
 			//search
 			if(!map.containsKey("id")){
-				 set = service
+				 				
+				set = service
 						.query("<biosamples><all>{for $x in  "
 								+ totalRes.toString() 
 								+ " let $y:=//Biosamples/SampleGroup[@id=($x)]"
@@ -160,9 +163,10 @@ public class IndexEnvironmentBiosamplesGroup extends AbstractIndexEnvironment {
 						.query("<biosamples><all>{for $x in "
 								+ totalRes.toString()
 								+ " let $group:=/Biosamples/SampleGroup[@id=($x)]"
-								+ "  return <SampleGroup samplecount=\"{count($group/Sample)}\"> {$group/(@*, * except Sample)} </SampleGroup> "
+								//+ "  return <SampleGroup samplecount=\"{count($group/Sample)}\"> {$group/(@*, * except Sample)} </SampleGroup> "
+								+ " return <SampleGroup samplecount=\"{count($group/Sample)}\"> {$group/(@*, * except Sample)} <attributes>{distinct-values($group/Sample/attribute/replace(@class, ' ' , '-'))} </attributes></SampleGroup> "
 								+ " }</all></biosamples>");	
-						
+//				+ " return <SampleGroup samplecount=\"{count($group/Sample)}\"> {$group/(@*, * except Sample)} <attributes>{distinct-values($group/Sample/attribute[@dataType!='INTEGER']/replace(@class, ' ' , '-'))} </attributes> <attributesinteger>{distinct-values($group/Sample/attribute[@dataType='INTEGER']/replace(@class, ' ' , '-'))} </attributesinteger></SampleGroup> "						
 			}
 				 				 
 		

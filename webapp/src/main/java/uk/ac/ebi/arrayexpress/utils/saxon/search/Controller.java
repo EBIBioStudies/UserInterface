@@ -122,7 +122,7 @@ public class Controller
     
     // if the document is null it means that I should use an already generated index
     //TODO (just a test)
-    public void indexFromXmlDB( String indexId, boolean rebuild)
+    public void indexFromXmlDB( String indexId, boolean rebuild) throws Exception
     {
 
     	 if(!rebuild){

@@ -46,9 +46,9 @@
 	<xsl:output omit-xml-declaration="yes" method="html" indent="no"
 		encoding="UTF-8" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
 
-	<xsl:include href="ae-html-page.xsl" />
+	<xsl:include href="biosamples-html-page.xsl" />
 	<!-- <xsl:include href="ae-sort-arrays.xsl"/> -->
-	<xsl:include href="ae-highlight.xsl" />
+	<xsl:include href="biosamples-highlight.xsl" />
 
 	<xsl:template match="/">
 		<html lang="en">
@@ -60,20 +60,29 @@
 				</xsl:with-param>
 
 				<xsl:with-param name="pExtraCode">
+
 					<link rel="stylesheet"
-						href="{$basepath}/assets/stylesheets/ae_biosamples_20.css" type="text/css" />
+						href="{$basepath}/assets/stylesheets/biosamples_detail_10.css"
+						type="text/css" />
 					<script src="{$basepath}/assets/scripts/jquery-1.4.2.min.js"
 						type="text/javascript" />
 					<script src="{$basepath}/assets/scripts/jquery.query-2.1.7m-ebi.js"
 						type="text/javascript" />
-					<script src="{$basepath}/assets/scripts/ae_common_20.js"
+					<script src="{$basepath}/assets/scripts/biosamples_detail_10.js"
 						type="text/javascript" />
-					<script src="{$basepath}/assets/scripts/ae_biosamples_20.js"
+					<script src="{$basepath}/assets/scripts/biosamples_common_10.js"
 						type="text/javascript" />
-				    <script src="{$basepath}/assets/scripts/jsdeferred.jquery-0.3.1.js" type="text/javascript"></script>
-				    <script src="{$basepath}/assets/scripts/jquery.cookie-1.0.js" type="text/javascript"></script>
-				    <script src="{$basepath}/assets/scripts/jquery.caret-range-1.0.js" type="text/javascript"></script>
-				    <script src="{$basepath}/assets/scripts/jquery.autocomplete-1.1.0m-ebi.js" type="text/javascript"></script>
+					<!-- <script src="{$basepath}/assets/scripts/biosamples_browse_10.js" 
+						type="text/javascript" /> -->
+					<script src="{$basepath}/assets/scripts/jsdeferred.jquery-0.3.1.js"
+						type="text/javascript"></script>
+					<script src="{$basepath}/assets/scripts/jquery.cookie-1.0.js"
+						type="text/javascript"></script>
+					<script src="{$basepath}/assets/scripts/jquery.caret-range-1.0.js"
+						type="text/javascript"></script>
+					<script
+						src="{$basepath}/assets/scripts/jquery.autocomplete-1.1.0m-ebi.js"
+						type="text/javascript"></script>
 				</xsl:with-param>
 
 			</xsl:call-template>
@@ -108,14 +117,12 @@
 			</xsl:choose>
 		</xsl:variable>
 
-		<div id="ae_contents_box_100pc">
-			<div id="ae_content">
-				<div id="ae_navi">
+		<div id="bs_contents_box_100pc">
+			<div id="bs_content">
+				<div id="bs_navi">
 					<a href="${interface.application.link.www_domain}/">EBI</a>
 					<xsl:text> > </xsl:text>
-					<a href="{$basepath}">ArrayExpress</a>
-					<xsl:text> > </xsl:text>
-					<a href="{$basepath}/biosamplesgroup">Bio Samples</a>
+					<a href="{$basepath}/browse.html">BioSamples</a>
 					<xsl:if test="not($vBrowseMode)">
 						<xsl:text> > </xsl:text>
 						<a href="{$basepath}/biosamplesgroup/{$id}">
@@ -123,97 +130,14 @@
 						</a>
 					</xsl:if>
 				</div>
-				<xsl:if test="$vBrowseMode">
-					<div id="ae_query_box">
-						<form id="ae_query_form" method="get" action="browse.html">
-							<fieldset id="ae_keywords_fset">
-								<label for="ae_keywords_field">
-									Bio Samples [
-									<a href="javascript:aeClearField('#ae_keywords_field')">clear</a>
-									]
-								</label>
-								<input id="ae_keywords_field" type="text" name="keywords"
-									value="{$keywords}" maxlength="255" class="ae_assign_font" />
-							</fieldset>
-							<div id="ae_submit_box">
-								<input id="ae_query_submit" type="submit" value="Query" />
-							</div>
-							<div id="ae_results_stats">
-								<div>
-									<xsl:value-of select="$vTotal" />
-									<xsl:text> sample</xsl:text>
-									<xsl:if test="$vTotal != 1">
-										<xsl:text>s</xsl:text>
-									</xsl:if>
-									<xsl:text> found</xsl:text>
-									<xsl:if test="$vTotal > $vPageSize">
-										<xsl:text>, displaying </xsl:text>
-										<xsl:value-of select="$vFrom" />
-										<xsl:text> - </xsl:text>
-										<xsl:value-of select="$vTo" />
-									</xsl:if>
-									<xsl:text>.</xsl:text>
-								</div>
-								<xsl:if test="$vTotal > $vPageSize">
-									<xsl:variable name="vTotalPages"
-										select="floor( ( $vTotal - 1 ) div $vPageSize ) + 1" />
-									<div id="ae_results_pager">
-										<div id="total_pages">
-											<xsl:value-of select="$vTotalPages" />
-										</div>
-										<div id="page">
-											<xsl:value-of select="$vPage" />
-										</div>
-										<div id="page_size">
-											<xsl:value-of select="$vPageSize" />
-										</div>
-									</div>
-								</xsl:if>
-							</div>
-						</form>
-					</div>
-				</xsl:if>
-
-
 
 				<xsl:choose>
-					<xsl:when test="$vTotal&gt;0 and $vBrowseMode">
-						<div id="ae_results_box">
-							<table id="ae_results_table" border="0" cellpadding="0"
-								cellspacing="0">
-								<thead>
-									<tr>
-										<th class="col_id sortable">
-											<xsl:text>Id</xsl:text>
-											<xsl:call-template name="add-sort">
-												<xsl:with-param name="pKind" select="'id'" />
-											</xsl:call-template>
-										</th>
-										<th class="col_description sortable">
-											<xsl:text>Description</xsl:text>
-											<xsl:call-template name="add-sort">
-												<xsl:with-param name="pKind" select="'description'" />
-											</xsl:call-template>
-										</th>
-										<th class="col_samples sortable">
-											<xsl:text>Samples</xsl:text>
-											<xsl:call-template name="add-sort">
-												<xsl:with-param name="pKind" select="'samples'" />
-											</xsl:call-template>
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									<xsl:apply-templates select="$vFiltered">
-									</xsl:apply-templates>
-								</tbody>
-							</table>
-						</div>
-					</xsl:when>
 					<xsl:when test="$vTotal&gt;0">
-						<div id="ae_results_box">
-							<table id="ae_results_table" border="0" cellpadding="0"
+						<div id="bs_results_box">
+							<table id="bs_results_table" border="0" cellpadding="0"
 								cellspacing="0">
+
+
 								<xsl:apply-templates select="$vFiltered">
 								</xsl:apply-templates>
 							</table>
@@ -221,9 +145,9 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:call-template name="block-warning">
-							<xsl:with-param name="pStyle" select="'ae_warn_area'" />
+							<xsl:with-param name="pStyle" select="'bs_warn_area'" />
 							<xsl:with-param name="pMessage">
-								<xsl:text>There are no Samples matching your search criteria found in BioSamples Database.</xsl:text>
+								<xsl:text>There are no Samples matching your search criteria found in BioSample Database.</xsl:text>
 							</xsl:with-param>
 						</xsl:call-template>
 					</xsl:otherwise>
@@ -235,73 +159,36 @@
 
 	<xsl:template match="SampleGroup">
 		<tr>
-			<xsl:if test="not($vBrowseMode)">
-				<xsl:attribute name="class">expanded</xsl:attribute>
-			</xsl:if>
-			<td class="col_id">
-				<div>
-					<a href="{$basepath}/biosamplesgroup/{id}?keywords={$vkeywords}">
-						<xsl:call-template name="highlight">
-							<xsl:with-param name="pText" select="id" />
-							<xsl:with-param name="pFieldName" select="'id'" />
-						</xsl:call-template>
-					</a>
-				</div>
-			</td>
-
-			<td class="col_description">
-				<div>
-					<xsl:call-template name="highlight">
-						<xsl:with-param name="pText" select="description" />
-						<xsl:with-param name="pFieldName" select="'description'" />
+			<td>
+				<div class="detail_table">
+					<xsl:call-template name="detail-table">
+						<xsl:with-param name="id" select="id" />
+						<xsl:with-param name="sampleGroup" select="."/>
 					</xsl:call-template>
+
 				</div>
 			</td>
-
-			<td class="col_samples">
-				<div>
-					<xsl:value-of select="samples"></xsl:value-of>
-					<!-- <xsl:call-template name="highlight"> <xsl:with-param name="pText" 
-						select="count(Sample)"/> <xsl:with-param name="pFieldName"/> </xsl:call-template> -->
-				</div>
-			</td>
-
-
 		</tr>
-
-		<xsl:if test="not($vBrowseMode)">
-			<tr>
-				<td class="col_detail" colspan="4">
-					<div class="detail_table">
-						<xsl:call-template name="detail-table">
-							<xsl:with-param name="id" select="id" />
-						</xsl:call-template>
-
-					</div>
-				</td>
-			</tr>
-		</xsl:if>
-
 	</xsl:template>
 
 	<xsl:template name="detail-table">
 		<xsl:param name="id" />
-		<table border="0" cellpadding="0" cellspacing="0">
+		<xsl:param name="sampleGroup" />
+		<table id="bs_results_tablesamplegroupdetail">
 			<tr>
-				<td width="300">
+				<td class="col_title">
 					<b>Name:</b>
 				</td>
 				<td>
-
 					<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select="attribute/value[../@class='Name']" />
-								<xsl:with-param name="pFieldName" select="'name'" />
-							</xsl:call-template>
+						<xsl:with-param name="pText"
+							select="attribute/value[../@class='Name']" />
+						<xsl:with-param name="pFieldName" select="'name'" />
+					</xsl:call-template>
 				</td>
 			</tr>
 			<tr>
-				<td width="300">
+				<td class="col_title">
 					<b>Group Accession:</b>
 				</td>
 				<td>
@@ -324,33 +211,33 @@
 				</td>
 			</tr>
 			<tr>
-				<td width="300">
+				<td class="col_title">
 					<b>Submission Title:</b>
 				</td>
 				<td>
-				<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select="attribute/value[../@class='Submission Title']" />
-								<xsl:with-param name="pFieldName" select="'title'" />
-							</xsl:call-template>
-	
+					<xsl:call-template name="highlight">
+						<xsl:with-param name="pText"
+							select="attribute/value[../@class='Submission Title']" />
+						<xsl:with-param name="pFieldName" select="'title'" />
+					</xsl:call-template>
+
 				</td>
 			</tr>
 			<tr>
-				<td width="300">
+				<td class="col_title">
 					<b>Submission Identifier:</b>
 				</td>
 				<td>
-				<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select="attribute/value[../@class='Submission Identifier']" />
-								<xsl:with-param name="pFieldName" select="'identifier'" />
-							</xsl:call-template>
-	
+					<xsl:call-template name="highlight">
+						<xsl:with-param name="pText"
+							select="attribute/value[../@class='Submission Identifier']" />
+						<xsl:with-param name="pFieldName" select="'identifier'" />
+					</xsl:call-template>
+
 				</td>
 			</tr>
 			<tr>
-				<td width="300">
+				<td class="col_title">
 					<b>Submission Description:</b>
 				</td>
 				<td>
@@ -363,98 +250,148 @@
 				</td>
 			</tr>
 			<tr>
-				<td width="300">
+				<td class="col_title">
 					<b>Submission Version:</b>
 				</td>
 				<td>
 					<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select="attribute/value[../@class='Submission Version']" />
-								<xsl:with-param name="pFieldName" select="'version'" />
-							</xsl:call-template>
+						<xsl:with-param name="pText"
+							select="attribute/value[../@class='Submission Version']" />
+						<xsl:with-param name="pFieldName" select="'version'" />
+					</xsl:call-template>
 
 				</td>
 			</tr>
 			<tr>
-				<td width="300">
+				<td class="col_title">
 					<b>Submission Release Date:</b>
 				</td>
 				<td>
-				<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select="attribute/value[../@class='Submission Release Date']" />
-								<xsl:with-param name="pFieldName" select="'releasedate'" />
-							</xsl:call-template>
+					<xsl:call-template name="highlight">
+						<xsl:with-param name="pText"
+							select="attribute/value[../@class='Submission Release Date']" />
+						<xsl:with-param name="pFieldName" select="'releasedate'" />
+					</xsl:call-template>
 				</td>
 			</tr>
 			<tr>
-				<td width="300">
+				<td class="col_title">
 					<b>Submission Modification Date:</b>
 				</td>
 				<td>
 					<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select="attribute/value[../@class='Submission Modification Date']" />
-								<xsl:with-param name="pFieldName" select="'modificationdate'" />
-							</xsl:call-template>
+						<xsl:with-param name="pText"
+							select="attribute/value[../@class='Submission Modification Date']" />
+						<xsl:with-param name="pFieldName" select="'modificationdate'" />
+					</xsl:call-template>
 				</td>
 			</tr>
 
 			<tr>
-				<td width="300">
+				<td class="col_title">
 					<b>Submission Reference Layer:</b>
 				</td>
 				<td>
 					<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select="attribute/value[../@class='Submission Reference Layer']" />
-								<xsl:with-param name="pFieldName" select="'referencelayer'" />
-							</xsl:call-template>
+						<xsl:with-param name="pText"
+							select="attribute/value[../@class='Submission Reference Layer']" />
+						<xsl:with-param name="pFieldName" select="'referencelayer'" />
+					</xsl:call-template>
 				</td>
 			</tr>
 
-			<tr>
-				<td width="300">
-					<b>Databases:</b>
-				</td>
-				<td>
-				<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select="string-join(attribute/value[../@class='Databases']//value, ', ')" />
-								<xsl:with-param name="pFieldName" select="'databases'" />
+			<xsl:choose>
+				<xsl:when test="count(attribute/value[../@class='Databases'])>0">
+					<tr>
+						<td class="col_title">
+							<b>Databases:</b>
+						</td>
+						<td>
+							<!-- <xsl:call-template name="highlight"> <xsl:with-param name="pText" 
+								select="string-join(attribute/value[../@class='Databases']//value, ', ')" 
+								/> <xsl:with-param name="pFieldName" select="'databases'" /> </xsl:call-template> -->
+
+							<xsl:call-template name="process_database">
+								<xsl:with-param name="pValue"
+									select="attribute/value[../@class='Databases']"></xsl:with-param>
 							</xsl:call-template>
-	
-				</td>
-			</tr>
-			<tr>
-				<td width="300">
-					<b>Organizations:</b>
-				</td>
-				<td>
-				<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select="string-join(attribute/value[../@class='Organizations']//value, ', ')" />
-								<xsl:with-param name="pFieldName" select="'organizations'" />
+
+						</td>
+					</tr>
+				</xsl:when>
+			</xsl:choose>
+
+
+
+			<xsl:choose>
+				<xsl:when test="count(attribute/value[../@class='Organizations'])>0">
+					<tr>
+						<td class="col_title">
+							<b>Organizations:</b>
+						</td>
+						<td>
+							<!-- <xsl:call-template name="highlight"> <xsl:with-param name="pText" 
+								select="string-join(attribute/value[../@class='Organizations']//value, ', 
+								')" /> <xsl:with-param name="pFieldName" select="'organizations'" /> </xsl:call-template> -->
+
+							<xsl:call-template name="process_organization">
+								<xsl:with-param name="pValue"
+									select="attribute/value[../@class='Organizations']"></xsl:with-param>
 							</xsl:call-template>
-	
-				</td>
-			</tr>
-			<tr>
-				<td width="300">
-					<b>Persons:</b>
-				</td>
-				<td>
-					<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select="string-join(attribute/value[../@class='Persons']//value, ', ')" />
-								<xsl:with-param name="pFieldName" select="'persons'" />
+
+						</td>
+					</tr>
+				</xsl:when>
+			</xsl:choose>
+
+
+			<xsl:choose>
+				<xsl:when test="count(attribute/value[../@class='Term Sources'])>0">
+
+					<tr>
+						<td class="col_title">
+							<b>Term Sources:</b>
+						</td>
+						<td>
+
+
+							<xsl:call-template name="process_termsource">
+								<xsl:with-param name="pValue"
+									select="attribute/value[../@class='Term Sources']"></xsl:with-param>
 							</xsl:call-template>
-	
-				</td>
-			</tr>
+
+						</td>
+					</tr>
+				</xsl:when>
+			</xsl:choose>
+
+
+			<xsl:choose>
+				<xsl:when test="count(attribute/value[../@class='Persons'])>0">
+
+					<tr>
+						<td class="col_title">
+							<b>Persons:</b>
+						</td>
+						<td>
+							<xsl:call-template name="process_person">
+								<xsl:with-param name="pValue"
+									select="attribute/value[../@class='Persons']"></xsl:with-param>
+							</xsl:call-template>
+
+
+							<!-- <xsl:call-template name="highlight"> <xsl:with-param name="pText" 
+								select="string-join(attribute/value[../@class='Persons']//value, ', ')" /> 
+								<xsl:with-param name="pFieldName" select="'persons'" /> </xsl:call-template> -->
+
+						</td>
+					</tr>
+				</xsl:when>
+			</xsl:choose>
+
 			<tr>
-				<td width="300">
-					<b>Total/matched samples:</b>
+				<td class="col_title">
+					<b>Samples in group:</b>
 				</td>
 				<td>
 					<xsl:value-of select="@samplecount"></xsl:value-of>
@@ -463,15 +400,103 @@
 
 			<tr>
 				<td colspan="2">
-					<!-- This div is used to keep all the samples -->
-					<div id="ae_samples_list">
 
+					<div id="bs_query_box">
+						<form id="bs_query_form" method="get"
+							action="javascript:searchSamples(this.bs_keywords_field.value);">
+							<fieldset id="bs_keywords_fset">
+								<label for="bs_keywords_field">
+									Search inside the
+									<xsl:value-of select="@samplecount"></xsl:value-of>
+									<xsl:text> sample</xsl:text>
+									<xsl:if test="$vTotal != 1">
+										<xsl:text>s</xsl:text>
+									</xsl:if>
+									of SampleGroup [
+									<a href="javascript:aeClearField('#bs_keywords_field')">clear</a>
+									]
+								</label>
+								<input id="bs_keywords_field" type="text" name="keywords"
+									value="" maxlength="255" class="bs_assign_font" autocomplete="off" />
+							</fieldset>
+							<div id="bs_submit_box">
+								<input id="bs_query_submit" type="submit" value="Query" />
+							</div>
+							<div id="bs_results_stats">
+								<div id="bs_results_stats_fromto"></div>
+								<div id="bs_results_pager"></div>
+							</div>
+						</form>
 					</div>
-					<!-- <xsl:apply-templates select="//Sample"></xsl:apply-templates> -->
+
+
+
+
+					<!-- This div is used to keep all the samples -->
+					<br />
+					<div id="bs_results_listsamples">
+						<table id="bs_samples_detail" cellpadding="0" cellspacing="0"
+							width="100%">
+							<thead>
+								<tr>
+									<th class="bs_results_accession sortable bs_results_Sample-Accession"
+										id="bs_results_header_0">
+										<a href="javascript:aeSort('0')" title="Click to sort by Sample-Accession">
+											<div class="table_header_inner">
+												Sample-Accession
+											</div>
+										</a>
+									</th>
+									<xsl:for-each select="tokenize(attributes,' ')">
+										<xsl:if test=".!='Sample-Accession'">
+											<!-- <xsl:variable name="aux" select="(/SampleGroup[@id=$id]/Sample/attribute[@class=.]/@dataType)[1]"></xsl:variable>
+											<xsl:copy-of  select="$sampleGroup/@id"></xsl:copy-of> -->
+											<!-- 
+											<xsl:choose>
+     										<xsl:when test="'rui'='INTEGER'">
+												<xsl:variable name="colName" select="concat(position(),'integer')"></xsl:variable>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:variable name="colName" select="position()"></xsl:variable>
+											</xsl:otherwise>
+											</xsl:choose> -->
+											<!-- <xsl:copy-of select="$aux"></xsl:copy-of> -->
+											<th class="bs_results_accession sortable bs_results_{.}"
+												id="bs_results_header_{position()}">
+												<a href="javascript:aeSort('{position()}')" title="Click to sort by {.}">
+													<div class="table_header_inner">
+														<xsl:copy-of select="."></xsl:copy-of>
+													</div>
+												</a>
+											</th>
+										</xsl:if>
+
+									</xsl:for-each>
+									
+<!-- 									<xsl:for-each select="tokenize(attributesinteger,' ')">
+											<th class="bs_results_accession sortable bs_results_{.}"
+												id="bs_results_header_{position()}number">
+												<a href="javascript:aeSort('{position()}number')" title="Click to sort by {.}">
+													<div class="table_header_inner">
+														<xsl:copy-of select="."></xsl:copy-of>
+													</div>
+												</a>
+											</th>
+
+									</xsl:for-each>
+ -->
+								</tr>
+							</thead>
+
+							<tbody id="bs_results_tbody">
+
+
+							</tbody>
+						</table>
+					</div>
 
 				</td>
 			</tr>
-
 		</table>
 	</xsl:template>
 
@@ -530,6 +555,118 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:if>
+	</xsl:template>
+
+
+
+	<xsl:template name="process_person">
+		<xsl:param name="pValue" />
+		<xsl:for-each select="$pValue">
+
+			<xsl:choose>
+				<xsl:when test="count(.//attribute/value[../@class='Person Email'])>0">
+					<xsl:variable name="vStringContacts"
+						select="concat(.//attribute/value[../@class='Person First Name'], ' ', .//attribute/value[../@class='Person Last Name'] , ' &lt;' ,.//attribute/value[../@class='Person Email'], '>')"></xsl:variable>
+					<xsl:call-template name="highlight">
+						<xsl:with-param name="pText" select="$vStringContacts" />
+						<xsl:with-param name="pFieldName" select="'persons'" />
+					</xsl:call-template>
+					<xsl:choose>
+						<xsl:when test="position()&lt;last()">
+							,
+						</xsl:when>
+					</xsl:choose>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:variable name="vStringContacts"
+						select="concat(.//attribute/value[../@class='Person First Name'], ' ', .//attribute/value[../@class='Person Last Name'])"></xsl:variable>
+					<xsl:call-template name="highlight">
+						<xsl:with-param name="pText" select="$vStringContacts" />
+						<xsl:with-param name="pFieldName" select="'persons'" />
+					</xsl:call-template>
+					<xsl:choose>
+						<xsl:when test="position()&lt;last()">
+							,
+						</xsl:when>
+					</xsl:choose>
+
+				</xsl:otherwise>
+
+			</xsl:choose>
+
+
+		</xsl:for-each>
+	</xsl:template>
+
+
+
+	<xsl:template name="process_database">
+		<xsl:param name="pValue" />
+		<xsl:for-each select="$pValue">
+
+			<xsl:call-template name="highlight">
+				<xsl:with-param name="pText"
+					select="concat('Name: ', .//attribute/value[../@class='Database Name'], '; ID: ', .//attribute/value[../@class='Database ID'])" />
+				<xsl:with-param name="pFieldName" select="'databases'" />
+			</xsl:call-template>
+			; URI:
+			<a href="{.//attribute/value[../@class='Database URI']}" target="ext">
+				<xsl:value-of select=".//attribute/value[../@class='Database URI']"></xsl:value-of>
+			</a>
+			<xsl:choose>
+				<xsl:when test="position()&lt;last()">
+					<br />
+				</xsl:when>
+			</xsl:choose>
+		</xsl:for-each>
+	</xsl:template>
+
+
+
+
+	<xsl:template name="process_organization">
+		<xsl:param name="pValue" />
+		<xsl:for-each select="$pValue">
+
+			<xsl:call-template name="highlight">
+				<xsl:with-param name="pText"
+					select="concat('Name: ', .//attribute/value[../@class='Organization Name'], '; Role: ', .//attribute/value[../@class='Organization Role'])" />
+				<xsl:with-param name="pFieldName" select="'organizations'" />
+			</xsl:call-template>
+			; URI:
+			<a href="{.//attribute/value[../@class='Organization URI']}"
+				target="ext">
+				<xsl:value-of select=".//attribute/value[../@class='Organization URI']"></xsl:value-of>
+			</a>
+			<xsl:choose>
+				<xsl:when test="position()&lt;last()">
+					<br />
+				</xsl:when>
+			</xsl:choose>
+		</xsl:for-each>
+	</xsl:template>
+
+
+
+	<xsl:template name="process_termsource">
+		<xsl:param name="pValue" />
+		<xsl:for-each select="$pValue">
+
+			<xsl:call-template name="highlight">
+				<xsl:with-param name="pText"
+					select="concat('Name: ', .//attribute/value[../@class='Term Source Name'])" />
+				<xsl:with-param name="pFieldName" select="'termsources'" />
+			</xsl:call-template>
+			; URI:
+			<a href="{.//attribute/value[../@class='Term Source URI']}" target="ext">
+				<xsl:value-of select=".//attribute/value[../@class='Term Source URI']"></xsl:value-of>
+			</a>
+			<xsl:choose>
+				<xsl:when test="position()&lt;last()">
+					<br />
+				</xsl:when>
+			</xsl:choose>
+		</xsl:for-each>
 	</xsl:template>
 
 

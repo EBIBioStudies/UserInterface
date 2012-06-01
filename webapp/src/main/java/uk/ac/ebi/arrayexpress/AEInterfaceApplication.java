@@ -41,24 +41,24 @@ public class AEInterfaceApplication extends Application implements ServletContex
     {
         super("arrayexpress");
 
-        addComponent(new DbConnectionPool());
+//        addComponent(new DbConnectionPool());
         addComponent(new SaxonEngine());
         addComponent(new SearchEngine());
-        addComponent(new Events());
+  //      addComponent(new Events());
         addComponent(new Autocompletion());
         //I will teste biosample database instead of experiments
   
         addComponent(new BioSamplesGroup());
         addComponent(new BioSamplesSample());
         
-        addComponent(new Experiments());
+    //    addComponent(new Experiments());
         //TODO:rpe
 //        addComponent(new ExperimentsXmlDB());
         
-        addComponent(new ArrayDesigns());
-        addComponent(new Protocols());
+//        addComponent(new ArrayDesigns());
+//        addComponent(new Protocols());
         addComponent(new Users());
-        addComponent(new Files());
+//        addComponent(new Files());
         addComponent(new JobsController());
         addComponent(new Ontologies());
 

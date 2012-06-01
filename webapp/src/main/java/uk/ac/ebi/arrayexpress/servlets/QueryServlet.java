@@ -183,12 +183,12 @@ public class QueryServlet extends AuthAwareApplicationServlet
                     
                     //all the queries are now executes in this Servlet and not in the XSLT
                     String xml = search.getController().queryPaged(queryId,params);
-
+                    //xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + xml;
     				StringReader reader = new StringReader(xml);
     				long xmlRead = System.currentTimeMillis();
     				
-//    				System.out.println("xml->" + xml);
-    				System.out.println("xml size->" + xml.length());
+    				//System.out.println("xml->" + xml);
+//    				System.out.println("xml size->" + xml.length());
     				Configuration config = ((SaxonEngine) Application
     						.getAppComponent("SaxonEngine")).trFactory
     						.getConfiguration();

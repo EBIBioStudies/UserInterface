@@ -16,9 +16,8 @@
     <xsl:template match="/">
         
          
-        <experiments total="{$total}"
-                     total-samples="4"
-                     total-assays="{$totalassays}"/>
+        <biosamples groups="{search:getBiosamplesgroupsNumber()}"
+                     samples="{search:getBiosamplessamplesNumber()}" />
     </xsl:template>
 
 </xsl:stylesheet>

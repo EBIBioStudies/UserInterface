@@ -101,7 +101,6 @@
 
     <!--    <xsl:if test="position() >= $pFrom and not(position() > $pTo)"> -->
             <tr id="{$vExpId}_main" class="{$vDetailedViewMainTrClass}">
-                <td class="{$vDetailedViewMainTdClass}"><div class="table_row_expand"/></td>
                 <td class="{$vDetailedViewMainTdClass}">
                     <div class="acc">
                         <div>

@@ -1,0 +1,350 @@
+/*
+ * Copyright 2009-2011 European Molecular Biology Laboratory
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+
+/*
+ * Copyright 2009-2011 European Molecular Biology Laboratory
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+
+
+#bs_contents_container {
+    font-size: 11px;
+}
+
+
+/* bs resutls area */
+#bs_results_area {
+    position: absolute;
+    top: 125px;
+    bottom: 20px;
+    width: 100%;
+    padding: 0 5px 5px 5px;
+    /*overflow: hidden;*/
+}
+
+
+
+
+
+#bs_keywords_box {
+position: absolute;
+left: 0;
+top: 0;
+width: 100%;
+height: 120px;
+margin: 0;
+padding: 5px 5px 5px 10px;
+}
+
+#bs_query_box {
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    background-color: #eef5f5;
+    border: 1px solid #5e9e9e;
+    padding: 5px 10px 5px 5px;
+    width: 100%;
+
+}
+
+
+
+
+
+#bs_results_tbl table {
+    table-layout: fixed;
+}
+
+#bs_results_table {
+    width: 100%;
+    border-spacing: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+
+#bs_results_table th, #bs_results_table td {
+font-size: 11px;
+padding: 3px 5px;
+vertical-align: top;
+}
+
+.col_title{
+white-space: nowrap;
+width: 100px;
+}
+
+/* samplegroup detail */
+
+
+
+/* browse samples inside samplegroup */
+#bs_samples_detail th {
+font-weight: bold;
+border-bottom: 2px solid #408C8C;
+vertical-align: bottom;
+text-align: left;
+white-space: nowrap;
+}
+
+#bs_samples_detail {
+width: 100%;
+padding: 0;
+spacing: 0;
+}
+
+
+#bs_samples_detail td {
+font-size: 11px;
+padding: 3px 5px; 
+border-bottom: 1px solid #BDD7D7;
+vertical-align: top;
+}
+
+
+#bs_results_tablesamplegroupdetail{
+width:100%;
+}
+/* browse samples inside samplegroup */
+
+
+
+#bs_keywords_fset {
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+    width: 450px;
+}
+
+#bs_keywords_fset label {
+    font-size: 11px;
+}
+
+#bs_keywords_field {
+    border: 1px solid #5e9e9e;
+    width: 100%;
+    font-size: 11px;
+    margin: 3px 0 8px 0;
+}
+
+#bs_submit_box {
+    background-color: #eef5f5;
+    /*float: right;
+    padding: 0 0 0 5px;*/
+}
+
+#bs_query_submit {
+    font-size: 11px;
+}
+
+
+
+
+#bs_contents_box_100pc {
+    width: 100%;
+    padding: 20px;
+    text-align: left;
+}
+
+
+/** font assignment **/
+#bs_keywords
+ {
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+}
+
+#bs_keywords {
+    margin: 3px 0 5px 0;
+    width: 100%;
+    border: 1px solid #5e9e9e;
+}
+
+.table_header_sort_desc {
+    background: url( ../images/tsortd.gif ) 100% 50% no-repeat;
+}
+
+
+.table_header_sort_asc {
+    background: url( ../images/tsorta.gif ) 100% 50% no-repeat;
+}
+
+a:hover 
+a:active {
+    color: #e33e3e;
+    text-decoration: underline;
+}
+
+
+
+
+
+
+#bs_results_summary_info {
+    display: none;
+}
+
+#bs_results_tbl {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    _width: expression(document.body.clientWidth-24);
+    _height: expression(document.body.clientHeight-220);
+    overflow: hidden;
+}
+
+
+
+#bs_results_table th {
+font-weight: bold;
+vertical-align: bottom;
+white-space: nowrap;
+font-size: 12px;
+padding: 3px 5px;
+}
+
+
+#bs_results_tbl th,
+#bs_results_tbl td {
+    font-size: 11px;
+}
+
+
+
+#bs_results_tbl tr.bs_results_tr_error td {
+    background: url( ../images/basic_warning_64.gif ) 50% 50% no-repeat;
+    text-align: center;
+    color: black;
+    font-size: 12px;
+    line-height: 1.5em;
+    padding: 130px 0 0 0;
+}
+
+/* 
+#bs_results_body {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 22px;
+    bottom: 22px;
+    _width: expression(document.body.clientWidth-24);
+    _height: expression(document.body.clientHeight-263);
+    overflow: hidden;
+}
+
+#bs_results_body_inner {
+    width: 100%;
+    height: 100%;
+    _width: expression(document.body.clientWidth-24);
+    _height: expression(document.body.clientHeight-263);
+    overflow: auto; for opera prior to 9.5
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+ */
+
+/* Sample-Accession and Name is always the same size*/
+#bs_results_header_Sample-Accession
+{
+	width: 125px;
+}
+#bs_results_header_Name
+{
+	width: 100px;
+}
+
+#bs_results_ftr {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 22px;
+    _top: expression(this.parentElement.clientHeight-this.clientHeight+1);
+    overflow: hidden;
+}
+
+
+.bs_multisource .td_ext td.name {
+    width: 138px;
+}
+
+.bs_multisource .bs_results_accession {
+    width: 125px;
+}
+
+
+.bs_results_listsamples {
+    width: 100%;
+}
+
+.bs_results_description {
+}
+
+
+
+/* paging */
+#bs_results_stats {
+    font-size: 11px;
+    width: 100%;
+    height: 20px;
+    border-top: 1px solid #bdd7d7;
+    margin: 10px 0 0;
+    padding: 5px 0 0;
+}
+
+#bs_results_stats div {
+    float: left;
+    padding: 0 4px;
+}
+
+#bs_results_status,
+#bs_results_pager {
+    float: left;
+    padding: 2px 4px 0;
+    line-height: 12px;
+}
+
+#bs_results_pager .pager_current {
+    background-color: #9e9e9e;
+    color: white;
+}
+
+#bs_results_pager a,
+#bs_results_pager span {
+    padding: 2px 3px;
+}
+/* paging */
+
+
+

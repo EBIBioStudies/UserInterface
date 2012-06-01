@@ -18,6 +18,8 @@ import org.apache.commons.configuration.HierarchicalConfiguration;
 		public boolean shouldSort;
 		public boolean shouldAutoCompletion;
 		public List<String> sortFields;
+		//this property means that thi s fiels will be not obtained by a direct Xpath expression ... the values will be obtained directly on the code
+		public boolean process;
 
 		public FieldInfo(HierarchicalConfiguration fieldConfig) {
 			this.name = fieldConfig.getString("[@name]");
@@ -46,6 +48,14 @@ import org.apache.commons.configuration.HierarchicalConfiguration;
 				this.shouldAutoCompletion = false;
 				if (fieldConfig.getBoolean("[@autocompletion]")) {
 					this.shouldAutoCompletion = true;
+				}
+
+			}
+			
+			if (fieldConfig.containsKey("[@process]")) {
+				this.process = false;
+				if (fieldConfig.getBoolean("[@process]")) {
+					this.process = true;
 				}
 
 			}

@@ -11,6 +11,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.mortbay.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xmldb.api.DatabaseManager;
@@ -53,7 +54,7 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 	@Override
 	public void setup() {
 
-		defaultSortField = "accession";
+		defaultSortField = "";
 		defaultSortDescending = false;
 		defaultPageSize = 10;
 
@@ -138,15 +139,57 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 			ResourceSet set=null;
 			//search
 			
+			
+			//I'm showing the datail of a sample inside a sample Group browsing a sample group
+			if( map.get("samplegroup")!=null &&  map.get("accession")!=null){
+
+				set = service
+						.query("<biosamples><all>{for $x in  "
+								+ totalRes.toString() 
+								+ "  let $y:=//Sample[@id=($x) and @groupId='" +map.get("samplegroup")[0]  +"']"
+								+ " return ($y) "
+								+ " }</all></biosamples>");	
+			}
 				//I'm browsing a sample group
-				if( map.get("samplegroup")!=null){
+				else{ if( map.get("samplegroup")!=null){
+
+					// I need to implement her the sirt logic
+					int page= Integer.parseInt(map.get("page")[0]);
+					int pageSize=Integer.parseInt(map.get("pagesize")[0]);
+					int sampleInit=(page == 1 ? 1 : (page) * pageSize);
+					
+//					
+//					Log.debug("<biosamples><all>{subsequence( "
+//							+ "  let $att:= /Biosamples/SampleGroup[@id='" + map.get("samplegroup")[0]  +"']"
+//							+ " for $x in $att/Sample "
+//							+ " order  by $x/attribute/value[../@class=replace('"  + map.get("sortby")[0]  + "','-',' ')] " + map.get("sortorder")[0] + " " 
+//							+ " return $x, " + sampleInit +"," + pageSize + ") } "
+//							+ "<attributes>{distinct-values(/Biosamples/SampleGroup[@id='" + map.get("samplegroup")[0]  +"']/Sample/attribute/replace(@class, ' ' , '-'))}</attributes> "
+//							+ " </all></biosamples>");
+//		 
+//					set = service
+//								.query("<biosamples><all>{subsequence( "
+//										+ "  let $att:= /Biosamples/SampleGroup[@id='" + map.get("samplegroup")[0]  +"']"
+//										+ " for $x in $att/Sample "
+//										+ " order  by $x/attribute/value[../@class=replace('"  + map.get("sortby")[0]  + "','-',' ')] " + map.get("sortorder")[0] + " " 
+//										+ " return $x, " + sampleInit +"," + pageSize + ") } "
+//										+ "<attributes>{distinct-values(/Biosamples/SampleGroup[@id='" + map.get("samplegroup")[0]  +"']/Sample/attribute/replace(@class, ' ' , '-'))}</attributes> "
+//										+ " </all></biosamples>");	
+			
 					 set = service
 								.query("<biosamples><all>{for $x in  "
 										+ totalRes.toString() 
 										+ "  let $y:=//Sample[@id=($x)]"
-										+ "  return <Samples>{$y[../@id='" +   map.get("samplegroup")[0]  + "']}</Samples>} "
-										+ " </all></biosamples>");	
+										+ "  let $att:= /Biosamples/SampleGroup[@id='" + map.get("samplegroup")[0]  +"']"
+										+ "  return <Samples>{$y[../@id='" +   map.get("samplegroup")[0]  + "']} </Samples>} "
+										+ " { let $att:= /Biosamples/SampleGroup[@id='" +   map.get("samplegroup")[0]  + "'] " 
+										//+ " return <attributes notnumeric='{distinct-values($att/Sample/attribute[@dataType!='INTEGER']/replace(@class, ' ' , '-'))}' numeric='{distinct-values($att/Sample/attribute[@dataType='INTEGER']/replace(@class, ' ' , '-'))}'></attributes> "
+										+ " return <attributes>{distinct-values($att/Sample/attribute/replace(@class, ' ' , '-'))}</attributes> "
+										+ " }</all></biosamples>");	
 				}
+				
+			
+				
 				//return everything
 				else{
 					 set = service
@@ -156,7 +199,7 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 										+ "  return <Samples>{$y}</Samples>} "
 										+ " </all></biosamples>");	
 				}
-				
+				}
 
 				 				 
 		

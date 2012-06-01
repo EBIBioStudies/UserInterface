@@ -78,19 +78,19 @@ public final class SearchExtension
     }
     
     
-// 
-//    public static long getExperimentsNumber() throws Exception
-//    {
-//    	IndexEnvironmentExperiments indexExp=(IndexEnvironmentExperiments)getController().getEnvironment("experiments");
-//    	return indexExp.getNumberOfExperiments();
-//    }
-//
-//    public static long getAssaysNumber() throws Exception
-//    {
-//    	IndexEnvironmentExperiments indexExp=(IndexEnvironmentExperiments)getController().getEnvironment("experiments");
-//    	return indexExp.getNumberOfAssays();
-//    }
-//
+ // Used on stats.xsl
+    public static long getBiosamplesgroupsNumber() throws Exception
+    {
+    	IndexEnvironmentBiosamplesGroup indexExp=(IndexEnvironmentBiosamplesGroup)getController().getEnvironment("biosamplesgroup");
+    	return indexExp.getCountDocuments();
+    }
+
+    public static long getBiosamplessamplesNumber() throws Exception
+    {
+    	IndexEnvironmentBiosamplesSample indexExp=(IndexEnvironmentBiosamplesSample)getController().getEnvironment("biosamplessample");
+    	return indexExp.getCountDocuments();
+    }
+   // Used on stats.xsl
 
     // get/set
     public static void setController( Controller ctrl )

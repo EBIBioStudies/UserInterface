@@ -18,6 +18,7 @@ package uk.ac.ebi.arrayexpress.utils.saxon.search;
  */
 
 import java.io.StringReader;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +70,34 @@ public class Indexer {
 		this.env = env;
 	}
 
+	//keep information realted with attributes
+	public  class AttsInfo {
+		public String name;
+		public String type;	
+		
+		public  AttsInfo(String name, String type){
+			setName(name);
+			setType(type);
+		}
+		
+		
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getType() {
+			return type;
+		}
+		public void setType(String type) {
+			this.type = type;
+		}		
+		
+		
+		
+	}
+	
 	public void index(DocumentInfo document) {
 
 		try {
@@ -234,7 +263,7 @@ public class Indexer {
 	
 	
 	// I will generate the Lucene Index based on a XmlDatabase
-		public void indexFromXmlDB() {
+		public void indexFromXmlDB() throws Exception {
 			int countNodes = 0;
 			String driverXml = "";
 			String connectionString = "";
@@ -273,7 +302,7 @@ public class Indexer {
 						.getConfiguration();
 
 				XPath xp = new XPathEvaluator(config);
-				XPathExpression xpe = xp.compile(this.env.indexDocumentPath);
+				//XPathExpression xpe = xp.compile(this.env.indexDocumentPath);
 
 				for (FieldInfo field : this.env.fields.values()) {
 					fieldXpe.put(field.name, xp.compile(field.path));
@@ -290,6 +319,8 @@ public class Indexer {
 
 				// I will collect all the results
 				ResourceSet set = service.query(this.env.indexDocumentPath);
+				//TODO rpe
+				//ResourceSet set = service.query("//Sample");
 				logger.debug("Number of results->" + set.getSize());
 				long numberResults = set.getSize();
 				if (coll != null) {
@@ -307,6 +338,9 @@ public class Indexer {
 				long pageNumber = 1;
 
 				String xml = "";
+				Map<String, AttsInfo[]> cacheAtt = new HashMap<String, AttsInfo[]>();
+				Map<String, XPathExpression> cacheXpathAtt = new HashMap<String, XPathExpression>();
+				Map<String, XPathExpression> cacheXpathAttValue=new HashMap<String, XPathExpression>();
 				while ((pageNumber * pageSizeDefault) <= (numberResults
 						+ pageSizeDefault - 1)) {
 
@@ -331,6 +365,8 @@ public class Indexer {
 					XPathExpression xpe2;
 					List documentNodes;
 					StringReader reader;
+					// cache of distinct attributes fora each sample group
+
 					while (iter.hasMoreResources()) {
 
 						xml = (String) iter.nextResource().getContent();
@@ -357,8 +393,12 @@ public class Indexer {
 						}
 						// logger.debug("PathRoot->[{}]",pathRoot);
 						xpe2 = xp2.compile(pathRoot);
+						//TODO rpe
+//						xpe2 = xp2.compile("/Sample");
 						documentNodes = (List) xpe2.evaluate(source,
 								XPathConstants.NODESET);
+
+						
 
 						for (Object node : documentNodes) {
 							// logger.debug("XML£££££££££ DB->[{}]",PrintUtils.printNodeInfo((NodeInfo)node,config));
@@ -366,9 +406,8 @@ public class Indexer {
 								try {
 
 									// Configuration config=doc.getConfiguration();
-									// TODO: remove this test
-
-									if (!field.name.equalsIgnoreCase("order") && !field.name.equalsIgnoreCase("order3")) {
+									// I Just have to calculate the Xpath
+									if (!field.process) {
 
 										List values = (List) fieldXpe.get(
 												field.name).evaluate(node,
@@ -401,16 +440,125 @@ public class Indexer {
 										}
 
 									}
-									// TODO: remove this
 									else {
-										//new BigInteger(countNodes+""),
-										if(field.name.equalsIgnoreCase("order")){
-											addIntIndexField(d, field.name, new BigInteger(countNodes+""),
-													field.shouldStore, field.shouldSort);											
+										if(field.name.equalsIgnoreCase("attributes")){
+											//implement here the biosamples database sample attributes logic
+											//TODO: rpe
+											//logger.debug("There is A special treatment for this field->" + field.name);
+											
+											List values = (List) fieldXpe.get(
+													field.name).evaluate(node,
+													XPathConstants.NODESET);
+											
+//											XPathExpression classAtt=xp.compile("@class");
+//											XPathExpression typeAtt=xp.compile("@dataType");
+//											XPathExpression valueAtt=xp.compile("value");
+											String groupId=(String)fieldXpe.get(
+													"samplegroup").evaluate(node,
+													XPathConstants.STRING);
+											String id=(String)fieldXpe.get(
+													"accession").evaluate(node,
+													XPathConstants.STRING);
+											
+											//logger.debug(groupId+"$$$" + id);
+											
+											// logger.debug("Field->[{}] values-> [{}]",
+											// field.name,
+											// values.toString());
+
+											AttsInfo[] attsInfo=null;
+											if(cacheAtt.containsKey(groupId)){
+												attsInfo=cacheAtt.get(groupId);	
+											}
+											else{
+												logger.debug("No exists cache for samplegroup->" + groupId);
+												//ResourceSet setAtt = service.query("distinct-values(/Biosamples/SampleGroup[@id='" + groupId + "']/Sample/attribute[@dataType!='INTEGER']/replace(@class,' ', '-'))");
+												///ResourceSet setAtt = service.query("distinct-values(/Biosamples/SampleGroup[@id='" + groupId + "']/Sample/attribute/replace(@class,' ', '-'))");
+												ResourceSet setAtt = service.query("distinct-values(/Biosamples/SampleGroup[@id='" + groupId + "']/Sample/attribute/@class)");
+												ResourceIterator resAtt=setAtt.getIterator();
+												int i=0;
+												attsInfo= new AttsInfo[(int)setAtt.getSize()];
+												while (resAtt.hasMoreResources()){
+													String classValue=(String)resAtt.nextResource().getContent();
+													//need to use this because of the use of quotes in the name of the classes
+													String classValueWitoutQuotes=classValue.replaceAll("\"", "\"\"");
+													//logger.debug("Class value->" + classValue);
+													XPathExpression xpathAtt=null;
+													XPathExpression xpathAttValue=null;
+													if(cacheXpathAtt.containsKey(classValue)){
+														 xpathAtt=cacheXpathAtt.get(classValue);
+														 xpathAttValue=cacheXpathAttValue.get(classValue);
+													}
+													else{
+														//String newXpathAttS=();
+														//im using \" becuse there are some attributes thas has ' on the name!!!
+														///xpathAtt=xp.compile("./attribute[@class=replace(\"" + classValueWitoutQuotes + "\",'-',' ')]/@dataType");
+														xpathAtt=xp.compile("./attribute[@class=\"" + classValueWitoutQuotes + "\"]/@dataType");
+														//I need to put[1] because some times I have more than one value (it generates problems when I need to piack up the integer value for sorting
+														///xpathAttValue=xp.compile("./attribute[@class=replace(\"" + classValueWitoutQuotes + "\",'-',' ')]/value[1]/text()");
+														xpathAttValue=xp.compile("./attribute[@class=\"" + classValueWitoutQuotes + "\"]/value[1]/text()");
+														//logger.debug("./attribute[@class=\"" + classValueWitoutQuotes + "\"]/value[1]/text()");
+														cacheXpathAtt.put(classValue, xpathAtt);
+														cacheXpathAttValue.put(classValue,xpathAttValue);
+													}
+													//this doesnt work when the first sample of sample group doens have all the attributes
+													//im using \" becuse there are some attributes thas has ' on the name!!!
+													///ResourceSet setAttType = service.query("string((/Biosamples/SampleGroup[@id='" + groupId +"']/Sample/attribute[@class=replace(\"" + classValueWitoutQuotes + "\",'-',' ')]/@dataType)[1])");
+													ResourceSet setAttType = service.query("string((/Biosamples/SampleGroup[@id='" + groupId +"']/Sample/attribute[@class=\"" + classValueWitoutQuotes + "\"]/@dataType)[1])");
+													String dataValue=(String)setAttType.getIterator().nextResource().getContent();
+													//logger.debug("Data Type of " + classValue + " ->" + dataValue);
+													//String dataValue=(String)xpathAtt.evaluate(node, XPathConstants.STRING);
+													AttsInfo attsI= new AttsInfo(classValue,dataValue);
+													//logger.debug("Atttribute->class" + attsI.name + "->type->" + attsI.type + "->i" + i);
+													attsInfo[i]=attsI;
+//													logger.debug("distinct att->" + value);
+													//cacheAtt.put(groupId, value);
+													i++;
+												}
+												cacheAtt.put(groupId, attsInfo);
+												//distinctAtt=cacheAtt.get(groupId);
+												//logger.debug("Already exists->" + distinctAtt);
+											}
+											int len=attsInfo.length;
+											for (int i=0;i<len;i++){
+												//logger.debug("$$$$$$->" + attsInfo[i].name + "$$$$" + attsInfo[i].type);
+												if(!attsInfo[i].type.equalsIgnoreCase("integer") && !attsInfo[i].type.equalsIgnoreCase("real")){
+	
+													//logger.debug("$$$$$$->" + "STRING");
+													XPathExpression valPath=cacheXpathAttValue.get(attsInfo[i].name);
+													String val=(String)valPath.evaluate(node, XPathConstants.STRING);
+													if(attsInfo[i].name.equalsIgnoreCase("age")){
+//														logger.debug("$$$$$$2->" + attsInfo[i].name + "$$$$" + attsInfo[i].type);
+//														logger.debug("$$$$$$$$$$$$ AGE COMO STRING->" + val + "->groupId->" + groupId);
+														//throw new Exception("ERRRRRRRRRRO!!!!!!!!");
+													}
+													addIndexField(d, (i+1)+"", val,false,false, true);
+												}
+												else{
+													XPathExpression valPath=cacheXpathAttValue.get(attsInfo[i].name);
+													String valS=(String)valPath.evaluate(node, XPathConstants.STRING);
+													valS=valS.trim();
+													//logger.debug("Integer->" + valS);
+													int val=0;
+													if(valS==null ||valS.equalsIgnoreCase("") || valS.equalsIgnoreCase("NaN")){
+														valS="0";
+													}
+													//sort numbers as strings
+													//logger.debug("class->" + attsInfo[i].name  +"value->##"+ valS + "##");
+													BigDecimal num=new BigDecimal(valS);
+													num=num.multiply(new BigDecimal(100));
+													int taux= num.toBigInteger().intValue();
+													valS=String.format("%07d", taux);
+													//logger.debug("Integer->" + valS + "position->" +(i+1)+"integer");
+													addIndexField(d, (i+1)+"", valS,false,false, true);
+													//addIntIndexField(d, (i+1)+"integer", new BigInteger(valS),false, true);
+//															
+												}
+											}
+												
 										}
 										else{
-											addIndexField(d, field.name, countNodes, false,
-													field.shouldStore, field.shouldSort);
+											//logger.debug("There is NO special treatment for this field->" + field.name);
 										}
 									}
 								} catch (XPathExpressionException x) {
@@ -422,6 +570,7 @@ public class Indexer {
 															.getStringValue()
 															.substring(0, 20)
 													+ "...]", x);
+									throw x;
 								}
 							}
 						}
@@ -445,7 +594,7 @@ public class Indexer {
 					}
 
 					logger.debug("until now it were processed->[{}]",
-							pageNumber * 1000);
+							pageNumber * pageSizeDefault);
 					pageNumber++;
 					if (coll != null) {
 						try{
@@ -473,12 +622,264 @@ public class Indexer {
 
 			} catch (Exception x) {
 				logger.error("Caught an exception:", x);
+				throw x;
 			}
 		}
 	
 	
 	
-	
+
+		
+		
+		// I will generate the Lucene Index based on a XmlDatabase
+				public void indexFromXmlDB_29052012() {
+					int countNodes = 0;
+					String driverXml = "";
+					String connectionString = "";
+					Database db;
+					Collection coll;
+					Class<?> c;
+					try {
+
+						HierarchicalConfiguration connsConf = (HierarchicalConfiguration) Application
+								.getInstance().getPreferences()
+								.getConfSubset("ae.xmldatabase");
+
+						if (null != connsConf) {
+							driverXml = connsConf.getString("driver");
+							connectionString = connsConf.getString("connectionstring");
+						} else {
+							logger.error("ae.xmldatabase Configuration is missing!!");
+						}
+
+						c = Class.forName(driverXml);
+
+						db = (Database) c.newInstance();
+						DatabaseManager.registerDatabase(db);
+						coll = DatabaseManager.getCollection(connectionString);
+						XPathQueryService service = (XPathQueryService) coll.getService(
+								"XPathQueryService", "1.0");
+
+						SaxonEngine saxonEngine = (SaxonEngine) Application.getInstance()
+								.getComponent("SaxonEngine");
+						DocumentInfo source = null;
+						// Loop through all result items
+
+						// collect all the fields data
+						Configuration config = ((SaxonEngine) Application
+								.getAppComponent("SaxonEngine")).trFactory
+								.getConfiguration();
+
+						XPath xp = new XPathEvaluator(config);
+						//XPathExpression xpe = xp.compile(this.env.indexDocumentPath);
+
+						for (FieldInfo field : this.env.fields.values()) {
+							fieldXpe.put(field.name, xp.compile(field.path));
+							logger.debug("Field Path->[{}]", field.path);
+						}
+
+						// create the index
+						IndexWriter w = createIndex(this.env.indexDirectory,
+								this.env.indexAnalyzer);
+
+						// the xmldatabase is not very correct and have memory problem for
+						// queires with huge results, so its necessary to implement our own
+						// iteration mechanism
+
+						// I will collect all the results
+						ResourceSet set = service.query(this.env.indexDocumentPath);
+						//TODO rpe
+						//ResourceSet set = service.query("//Sample");
+						logger.debug("Number of results->" + set.getSize());
+						long numberResults = set.getSize();
+						if (coll != null) {
+							try{
+								coll.close();
+							} catch (XMLDBException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						set = null;
+						db=null;
+						//c=null;
+						long pageSizeDefault = 1000;
+						long pageNumber = 1;
+
+						String xml = "";
+						while ((pageNumber * pageSizeDefault) <= (numberResults
+								+ pageSizeDefault - 1)) {
+
+							// calculate the last hit
+							long pageInit = (pageNumber - 1) * pageSizeDefault + 1;
+							long pageSize = (pageNumber * pageSizeDefault < numberResults) ? pageSizeDefault
+									: (numberResults - pageInit + 1);
+							
+							//c = Class.forName(driverXml);
+							db = (Database) c.newInstance();
+							DatabaseManager.registerDatabase(db);
+							coll = DatabaseManager.getCollection(connectionString);
+							service = (XPathQueryService) coll.getService(
+									"XPathQueryService", "1.0");
+
+							// xquery paging using subsequence function
+							set = service.query("subsequence(" + this.env.indexDocumentPath
+									+ "," + pageInit + "," + pageSize + ")");
+							logger.debug("Number of results of page->" + set.getSize());
+							ResourceIterator iter = set.getIterator();
+							XPath xp2;
+							XPathExpression xpe2;
+							List documentNodes;
+							StringReader reader;
+							while (iter.hasMoreResources()) {
+
+								xml = (String) iter.nextResource().getContent();
+								reader = new StringReader(xml);
+								source = config.buildDocument(new StreamSource(reader));
+
+								// logger.debug("XML DB->[{}]",
+								// PrintUtils.printNodeInfo((NodeInfo) source, config));
+								Document d = new Document();
+
+								xp2 = new XPathEvaluator(source.getConfiguration());
+								// TODO rpe: remove this reference tp SmapleGroup (I should
+								// test with /)
+
+								// I need to
+
+								int position = env.indexDocumentPath.lastIndexOf("/");
+								;
+								String pathRoot = "";
+								if (position != -1) {
+									pathRoot = env.indexDocumentPath.substring(position);
+								} else {
+									pathRoot = env.indexDocumentPath;
+								}
+								// logger.debug("PathRoot->[{}]",pathRoot);
+								xpe2 = xp2.compile(pathRoot);
+								//TODO rpe
+//								xpe2 = xp2.compile("/Sample");
+								documentNodes = (List) xpe2.evaluate(source,
+										XPathConstants.NODESET);
+
+								for (Object node : documentNodes) {
+									// logger.debug("XML£££££££££ DB->[{}]",PrintUtils.printNodeInfo((NodeInfo)node,config));
+									for (FieldInfo field : this.env.fields.values()) {
+										try {
+
+											// Configuration config=doc.getConfiguration();
+											// TODO: remove this test
+
+											if (!field.name.equalsIgnoreCase("order") && !field.name.equalsIgnoreCase("order3")) {
+
+												List values = (List) fieldXpe.get(
+														field.name).evaluate(node,
+														XPathConstants.NODESET);
+												// logger.debug("Field->[{}] values-> [{}]",
+												// field.name,
+												// values.toString());
+												for (Object v : values) {
+
+													if ("integer".equals(field.type)) {
+														addIntIndexField(d, field.name, v,
+																field.shouldStore,
+																field.shouldSort);
+													} else if ("date".equals(field.type)) {
+														// todo: addDateIndexField(d,
+														// field.name,
+														// v);
+														logger.error(
+																"Date fields are not supported yet, field [{}] will not be created",
+																field.name);
+													} else if ("boolean".equals(field.type)) {
+														addBooleanIndexField(d, field.name,
+																v, field.shouldSort);
+													} else {
+														addIndexField(d, field.name, v,
+																field.shouldAnalyze,
+																field.shouldStore,
+																field.shouldSort);
+													}
+												}
+
+											}
+											// TODO: remove this
+											else {
+												//new BigInteger(countNodes+""),
+												if(field.name.equalsIgnoreCase("order")){
+													addIntIndexField(d, field.name, new BigInteger(countNodes+""),
+															field.shouldStore, field.shouldSort);											
+												}
+												else{
+													addIndexField(d, field.name, countNodes, false,
+															field.shouldStore, field.shouldSort);
+												}
+											}
+										} catch (XPathExpressionException x) {
+											logger.error(
+													"Caught an exception while indexing expression ["
+															+ field.path
+															+ "] for document ["
+															+ ((NodeInfo) source)
+																	.getStringValue()
+																	.substring(0, 20)
+															+ "...]", x);
+										}
+									}
+								}
+
+								documentNodes = null;
+								source = null;
+								reader = null;
+								xml = null;
+								countNodes++;
+								// logger.debug("count->[{}]", countNodes);
+
+								// add document to lucene index
+								// TODO: rpe (an int just to make some tests);
+
+								addIndexDocument(w, d);
+//								//TODO: rpe - just for test
+//								addIndexDocument(w, d);
+//								addIndexDocument(w, d);
+//								addIndexDocument(w, d);
+//								addIndexDocument(w, d);
+							}
+
+							logger.debug("until now it were processed->[{}]",
+									pageNumber * pageSizeDefault);
+							pageNumber++;
+							if (coll != null) {
+								try{
+									coll.close();
+								} catch (XMLDBException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+							set=null;
+							db=null;
+							// TODO: rpe (review this)
+							// from 1000 to 1000 I will make a commit
+							//w.commit();
+
+						}
+
+						this.env.setCountDocuments(countNodes);
+						// add metadata to the lucene index
+						Map<String, String> map = new HashMap<String, String>();
+						map.put("numberDocs", Integer.toString(countNodes));
+						map.put("date", Long.toString(System.nanoTime()));
+						map.put("keyValidator", "ZZZZZZZZ");
+						commitIndex(w, map);
+
+					} catch (Exception x) {
+						logger.error("Caught an exception:", x);
+					}
+				}
+					
+		
+		
 	
 	public void indexReader() {
 		env.indexReader();

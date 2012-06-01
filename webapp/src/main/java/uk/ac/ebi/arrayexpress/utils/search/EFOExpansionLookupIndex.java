@@ -141,7 +141,7 @@ public class EFOExpansionLookupIndex implements IEFOExpansionLookup
                 }
             }
 
-            System.out.println("Term->" + term);
+           // System.out.println("Term->" + term);
             if (this.customSynonyms.containsKey(term)) {
                 synonyms.addAll(this.customSynonyms.get(term));
             }

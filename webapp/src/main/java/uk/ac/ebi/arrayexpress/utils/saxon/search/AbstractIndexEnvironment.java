@@ -205,7 +205,9 @@ public abstract class AbstractIndexEnvironment {
 		totalRes.append("<content>");
 		Query query = info.getQuery();
 		try {
+			//logger.debug("test");
 			ir = IndexReader.open(this.indexDirectory, true);
+			//logger.debug("test");
 			// empty query returns everything
 			if (query instanceof BooleanQuery
 					&& ((BooleanQuery) query).clauses().isEmpty()) {
@@ -249,6 +251,7 @@ public abstract class AbstractIndexEnvironment {
 			// TopDocs hits;
 			ScoreDoc[] hits = null;
 			Sort sort = null;
+			//logger.debug("test");
 			if (doesFieldExist(sortBy)) {
 				FieldInfo sortField = fields.get(sortBy);
 				if (sortField == null) {

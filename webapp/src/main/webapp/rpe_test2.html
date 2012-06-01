@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+ <head>
+  <title>CSS: The text-overflow property</title>
+  <meta name="Author" content="Krijn Hoetmer ~ http://krijnhoetmer.nl/">
+  <style type="text/css">
+   html { background: #ccc; }
+   body { width: 70%; padding: 20px; margin: 5em auto; background: #fff; }
+   div { white-space: nowrap; border: 1px solid #000; }
+   pre { white-space: nowrap; width: 100%; height: 1.2em; }
+   #test-1, pre { overflow: hidden; text-overflow: ellipsis; -o-text-overflow: ellipsis; width: 100%; }
+   .tbl {
+	table-layout:fixed;
+	border-top: 5px solid #333;
+	border-collapse: collapse;
+	background: #fff;
+	max-height: 50px; 
+	overflow:hidden;
+	 }
+	.tbl td {
+	border-bottom: 1px dashed #333;
+	padding: 2px 5px;
+	text-overflow:ellipsis;
+	overflow:hidden;
+	max-height: 50px; 
+	overflow:hidden;
+ } 
+   
+  </style>
+ </head>
+ <body>
+  <h1>Using <code>text-overflow</code> to indicate text overflow</h1>
+  <table width="50" height="100" border="1" class="tbl"><tr><td>
+  <!--<div id="test-1">-->
+  Some text that will overflow. Look at what it does in this case. Some text that will overflow. Look at what it does in this case. Some text that will overflow. Look at what it does in this case. Some text that will overflow. Look at what it does in this case. Some text that will overflow. Look at what it does in this case. Some text that will overflow. Look at what it does in this case.
+  <!--</div>-->
+  </td></tr></table>
+  <pre title="overflow: hidden; text-overflow: ellipsis; -o-text-overflow: ellipsis; white-space: nowrap; width: 100%; }"><code>overflow: hidden; text-overflow: ellipsis; -o-text-overflow: ellipsis; white-space: nowrap; width: 100%; }</code></pre>
+  <p>At the moment this only works in Internet Explorer (and in Opera 9.0 TP2, using <code>-o-text-overflow: ellipsis;</code>).</p>
+  <hr>
+  <p><a href="/">Home</a> - <a href="/stuff/">More stuff</a></p>
+ </body>
+</html>
