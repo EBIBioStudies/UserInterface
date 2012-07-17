@@ -1,8 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="windows-1252"?>
+<!-- cannto change the enconding to ISO-8859-1 or UTF-8 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:aejava="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
 	xmlns:html="http://www.w3.org/1999/xhtml" extension-element-prefixes="xs aejava html"
 	exclude-result-prefixes="xs aejava html" version="2.0">
+
+
 
 	<xsl:param name="page" />
 	<xsl:param name="pagesize" />
@@ -43,9 +46,13 @@
 
 	<xsl:variable name="vkeywords" select="$keywords" />
 
-  	<xsl:output omit-xml-declaration="yes" method="html" indent="no"
-		encoding="ISO-8859-1" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" /> 
-		
+<!-- 	<xsl:output omit-xml-declaration="yes" method="html" indent="no" 
+		encoding="ISO-8859-1" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
+ -->		
+<!-- 	<xsl:output omit-xml-declaration="yes" method="html" indent="no" 
+		encoding="windows-1252" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" /> -->
+
+
 
 	<!-- <xsl:include href="ae-sort-arrays.xsl"/> -->
 	<xsl:include href="biosamples-highlight.xsl" />
@@ -111,7 +118,7 @@
 
 			<td class="col_description">
 				<div class="ellipsis_class">
-				<span class='ellipsis_text'>
+				<span id="ellipsis" class='ellipsis_text'>
 					<xsl:call-template name="highlight">
 						<xsl:with-param name="pText" select="description" />
 						<xsl:with-param name="pFieldName" select="'description'" />

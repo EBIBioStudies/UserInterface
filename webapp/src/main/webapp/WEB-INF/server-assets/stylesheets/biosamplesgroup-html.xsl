@@ -1,8 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="windows-1252"?>
+<!-- cannto change the enconding to ISO-8859-1 or UTF-8 -->
+
+<!DOCTYPE xsl:stylesheet [ <!ENTITY nbsp "&#160;"> ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:aejava="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
-	xmlns:html="http://www.w3.org/1999/xhtml" extension-element-prefixes="xs aejava html"
-	exclude-result-prefixes="xs aejava html" version="2.0">
+	xmlns:escape="org.apache.commons.lang.StringEscapeUtils"
+	xmlns:html="http://www.w3.org/1999/xhtml" extension-element-prefixes="xs aejava html escape"
+	exclude-result-prefixes="xs aejava html escape" version="2.0">
+
+
+
+
 
 	<xsl:param name="page" />
 	<xsl:param name="pagesize" />
@@ -43,20 +51,26 @@
 
 	<xsl:variable name="vkeywords" select="$keywords" />
 
-	<xsl:output omit-xml-declaration="yes" method="html" indent="no"
-		encoding="UTF-8" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
+   <!-- <xsl:output omit-xml-declaration="yes" method="html" indent="no"
+		encoding="windows-1252" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />  -->
+		
+		<xsl:output omit-xml-declaration="yes" method="xhtml" indent="no"
+		encoding="windows-1252" doctype-public="-//W3C//DTD XHTML 1.1//EN" /> 
+	
 
 	<xsl:include href="biosamples-html-page.xsl" />
 	<!-- <xsl:include href="ae-sort-arrays.xsl"/> -->
 	<xsl:include href="biosamples-highlight.xsl" />
 
+<!--  <xsl:output method="html" indent="yes" version="4.0"/> -->
+		
 	<xsl:template match="/">
-		<html lang="en">
+ 		 <!-- <html lang="en" encoding="windows-1252"> -->
 			<xsl:call-template name="page-header">
 				<xsl:with-param name="pTitle">
 					<xsl:value-of
 						select="if (not($vBrowseMode)) then concat(upper-case($id), ' | ') else ''" />
-					<xsl:text>Bio Samples | ArrayExpress Archive | EBI</xsl:text>
+					<xsl:text>BioSample | EBI</xsl:text>
 				</xsl:with-param>
 
 				<xsl:with-param name="pExtraCode">
@@ -87,7 +101,7 @@
 
 			</xsl:call-template>
 			<xsl:call-template name="page-body" />
-		</html>
+		<!--  </html>  -->
 	</xsl:template>
 
 	<xsl:template name="ae-contents">
@@ -243,7 +257,9 @@
 				<td>
 					<!-- <xsl:value-of select="attribute/value[../@class='Submission Description']"></xsl:value-of> -->
 					<xsl:call-template name="highlight">
-						<xsl:with-param name="pText"
+						<!-- <xsl:with-param name="pText"
+							select="escape:escapeHtml(attribute/value[../@class='Submission Description'])" /> -->
+							<xsl:with-param name="pText"
 							select="attribute/value[../@class='Submission Description']" />
 						<xsl:with-param name="pFieldName" select="'description'" />
 					</xsl:call-template>
@@ -438,7 +454,32 @@
 						<table id="bs_samples_detail" cellpadding="0" cellspacing="0"
 							width="100%">
 							<thead>
-								<tr>
+							
+							<tr>
+									<th class="bs_results_accession sortable bs_results_Sample-Accession"
+										id="bs_results_header_0">
+										<a href="javascript:aeSort('0')" title="Click to sort by Sample-Accession">
+											<div class="table_header_inner">
+												Sample-Accession
+											</div>
+										</a>
+									</th>
+									<xsl:for-each select="SampleAttributes/attribute/replace(@class,' ' , '-')">
+										<xsl:if test=".!='Sample-Accession'">
+										
+											<th class="bs_results_accession sortable bs_results_{replace(.,' ' , '-')}"
+												id="bs_results_header_{position()}">
+												<a href="javascript:aeSort('{position()}')" title="Click to sort by {.}">
+													<div class="table_header_inner">
+														<xsl:copy-of select="."></xsl:copy-of>
+													</div>
+												</a>
+											</th>
+										</xsl:if>
+
+									</xsl:for-each>
+								</tr>
+								<!-- <tr>
 									<th class="bs_results_accession sortable bs_results_Sample-Accession"
 										id="bs_results_header_0">
 										<a href="javascript:aeSort('0')" title="Click to sort by Sample-Accession">
@@ -449,18 +490,7 @@
 									</th>
 									<xsl:for-each select="tokenize(attributes,' ')">
 										<xsl:if test=".!='Sample-Accession'">
-											<!-- <xsl:variable name="aux" select="(/SampleGroup[@id=$id]/Sample/attribute[@class=.]/@dataType)[1]"></xsl:variable>
-											<xsl:copy-of  select="$sampleGroup/@id"></xsl:copy-of> -->
-											<!-- 
-											<xsl:choose>
-     										<xsl:when test="'rui'='INTEGER'">
-												<xsl:variable name="colName" select="concat(position(),'integer')"></xsl:variable>
-											</xsl:when>
-											<xsl:otherwise>
-												<xsl:variable name="colName" select="position()"></xsl:variable>
-											</xsl:otherwise>
-											</xsl:choose> -->
-											<!-- <xsl:copy-of select="$aux"></xsl:copy-of> -->
+										
 											<th class="bs_results_accession sortable bs_results_{.}"
 												id="bs_results_header_{position()}">
 												<a href="javascript:aeSort('{position()}')" title="Click to sort by {.}">
@@ -472,20 +502,7 @@
 										</xsl:if>
 
 									</xsl:for-each>
-									
-<!-- 									<xsl:for-each select="tokenize(attributesinteger,' ')">
-											<th class="bs_results_accession sortable bs_results_{.}"
-												id="bs_results_header_{position()}number">
-												<a href="javascript:aeSort('{position()}number')" title="Click to sort by {.}">
-													<div class="table_header_inner">
-														<xsl:copy-of select="."></xsl:copy-of>
-													</div>
-												</a>
-											</th>
-
-									</xsl:for-each>
- -->
-								</tr>
+								</tr> -->
 							</thead>
 
 							<tbody id="bs_results_tbody">

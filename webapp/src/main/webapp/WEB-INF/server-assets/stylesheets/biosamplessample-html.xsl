@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="windows-1252"?>
+<!-- cannto change the enconding to ISO-8859-1 or UTF-8 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:aejava="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
 	xmlns:html="http://www.w3.org/1999/xhtml" extension-element-prefixes="xs aejava html"
@@ -91,7 +92,7 @@
 		</div>
 
 		<xsl:apply-templates select="//Sample">
-			<xsl:with-param name="pAttributes" select="//attributes"></xsl:with-param>
+			<xsl:with-param name="pAttributes" select="//SampleAttributes"></xsl:with-param>
 		</xsl:apply-templates>
 
 
@@ -105,15 +106,14 @@
 		<xsl:variable name="vSample" select="."></xsl:variable>
 		<tr>
 
-			<!-- <td> <a href="javascript:alert('link to detail')"> <xsl:copy-of select="$vSample/attribute/value[../@class='Sample 
-				Accession']" /> </a> </td> -->
 			<td>
 				<a href="../biosamplessample/detail/{@groupId}/{@id}">
 					<xsl:copy-of
 						select="$vSample/attribute/value[../@class='Sample Accession']" />
 				</a>
 			</td>
-			<xsl:for-each select="tokenize($pAttributes,' ')">
+			
+			<xsl:for-each select="$pAttributes/attribute/replace(@class, ' ' , '-')">
 				<xsl:if test=".!='Sample-Accession'">
 					<td>
 
@@ -129,6 +129,7 @@
 
 								<xsl:call-template name="highlight">
 									<xsl:with-param name="pText" select="string-join($value, ', ')" />
+									<!-- <xsl:with-param name="pFieldName" select="'$token'" /> -->
 									<xsl:with-param name="pFieldName" select="'$token'" />
 								</xsl:call-template>
 
@@ -146,9 +147,8 @@
 				</xsl:if>
 
 			 </xsl:for-each>
-
-<!--
-				<xsl:for-each select="tokenize($pAttributes/@numeric,' ')">
+			<!-- <xsl:for-each select="tokenize($pAttributes,' ')">
+				<xsl:if test=".!='Sample-Accession'">
 					<td>
 
 
@@ -164,6 +164,7 @@
 								<xsl:call-template name="highlight">
 									<xsl:with-param name="pText" select="string-join($value, ', ')" />
 									<xsl:with-param name="pFieldName" select="'$token'" />
+									<xsl:with-param name="pFieldName" select="'$token'" />
 								</xsl:call-template>
 
 							</xsl:when>
@@ -177,8 +178,10 @@
 						</xsl:choose>
 
 					</td>
+				</xsl:if>
 
-			</xsl:for-each> -->
+			 </xsl:for-each> -->
+
 
 
 		</tr>

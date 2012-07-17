@@ -38,7 +38,7 @@ public class SearchEngine extends ApplicationComponent
 
     public void initialize() throws Exception
     {
-        this.controller = new Controller((HierarchicalConfiguration)getPreferences().getConfSubset("ae"));
+    	this.controller = new Controller((HierarchicalConfiguration)getPreferences().getConfSubset("bs"));
         SearchExtension.setController(getController());
         getController().setQueryConstructor(new BackwardsCompatibleQueryConstructor());
     }

@@ -165,17 +165,17 @@ public class ExperimentsXmlDB extends ApplicationComponent implements
 		
 		this.experimentsInAtlas = new FilePersistence<PersistableStringList>(
 				new PersistableStringList(), new File(getPreferences()
-						.getString("ae.atlasexperiments.persistence-location")));
+						.getString("bs.atlasexperiments.persistence-location")));
 
 		this.species = new FilePersistence<PersistableString>(
 				new PersistableString(), new File(getPreferences().getString(
-						"ae.species.dropdown-html-location"))
+						"bs.species.dropdown-html-location"))
 
 		);
 
 		this.arrays = new FilePersistence<PersistableString>(
 				new PersistableString(), new File(getPreferences().getString(
-						"ae.arrays.dropdown-html-location")));
+						"bs.arrays.dropdown-html-location")));
 
 		this.assaysByMolecule = new HashMap<String, String>();
 		this.assaysByMolecule
@@ -210,7 +210,7 @@ public class ExperimentsXmlDB extends ApplicationComponent implements
 		//int numberOfExperiments=calculateNumberOfExperiments(docTemp);
 		if(buildIndexes){
 		DocumentInfo docTemp = getXmlFromFile(new File(getPreferences()
-				.getString("ae.experiments.persistence-location")));
+				.getString("bs.experiments.persistence-location")));
 
 		updateIndex(docTemp);
 		docTemp = null;
@@ -246,7 +246,7 @@ public class ExperimentsXmlDB extends ApplicationComponent implements
 	// disappear, so
 	public synchronized DocumentInfo getDocument() throws Exception {
 		return getXmlFromFile(new File(getPreferences().getString(
-				"ae.experiments.persistence-location")));
+				"bs.experiments.persistence-location")));
 	}
 
 	// implementation of IDocumentSource.setDocument(DocumentInfo)

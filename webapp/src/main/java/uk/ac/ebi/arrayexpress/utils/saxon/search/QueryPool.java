@@ -18,6 +18,9 @@ package uk.ac.ebi.arrayexpress.utils.saxon.search;
  */
 
 import org.apache.lucene.queryParser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.ac.ebi.arrayexpress.utils.LRUMap;
 
 import java.io.IOException;
@@ -28,11 +31,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class QueryPool
 {
     // logging machinery
-    //private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private AtomicInteger queryId;
 
-    private Map<Integer, QueryInfo> queries = Collections.synchronizedMap(new LRUMap<Integer, QueryInfo>(50));
+    private Map<Integer, QueryInfo> queries = Collections.synchronizedMap(new LRUMap<Integer, QueryInfo>(500));
 
     public QueryPool()
     {
@@ -62,9 +65,9 @@ public class QueryPool
         if (null != queryExpander) {
             info.setQuery(queryExpander.expandQuery(info));
         }
-        this.queries.put(this.queryId.addAndGet(1), info);
-
-        return this.queryId.get();
+        Integer id; 
+        this.queries.put(id = this.queryId.addAndGet(1), info);
+        return id;
     }
 
     public QueryInfo getQueryInfo( Integer queryId )

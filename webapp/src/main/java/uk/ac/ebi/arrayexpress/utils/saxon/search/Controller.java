@@ -122,7 +122,8 @@ public class Controller
     
     // if the document is null it means that I should use an already generated index
     //TODO (just a test)
-    public void indexFromXmlDB( String indexId, boolean rebuild) throws Exception
+    //the job parameter menas that we are executing the index building inside a job, so we sould not replace the original one
+    public void indexFromXmlDB( String indexId, boolean rebuild, String indexLocationDirectory, String connectionString) throws Exception
     {
 
     	 if(!rebuild){
@@ -132,7 +133,7 @@ public class Controller
          } 
     	 else{
     		 this.logger.info("Started indexing Reading data from an Xml Database for index id [{}] from XMLDATABASE", indexId);
-        	new Indexer(getEnvironment(indexId)).indexFromXmlDB();      	
+        	new Indexer(getEnvironment(indexId)).indexFromXmlDB(indexLocationDirectory,connectionString);      	
     	 }
   
     }
@@ -273,12 +274,24 @@ public class Controller
 */
     public String highlightQuery( Integer queryId, String fieldName, String text )
     {
+//    	return text;
         if (null == this.queryHighlighter) {
             // sort of lazy init if we forgot to specify more advanced highlighter
             this.setQueryHighlighter(new QueryHighlighter());
         }
         QueryInfo queryInfo = this.queryPool.getQueryInfo(queryId);
+        try{
         return queryHighlighter.setEnvironment(getEnvironment(queryInfo.getIndexId()))
                 .highlightQuery(queryInfo, fieldName, text);
-    }
+        }
+        catch(RuntimeException e){
+        	e.printStackTrace();
+            logger.debug("DEBUG1!!->"+ queryId);
+        	logger.error("ERROR!!->" );
+        	logger.error("ERROR12!!->" + queryInfo);
+        	logger.error("ERROR2!!->" + queryInfo.getIndexId());
+        	logger.error("ERROR3!!->" + getEnvironment(queryInfo.getIndexId()));
+        }
+        return null;
+        }
 }

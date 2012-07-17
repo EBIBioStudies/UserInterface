@@ -68,8 +68,13 @@ public abstract class AbstractIndexEnvironment {
 	// index configuration, parsed
 	public String indexId;
 	public Directory indexDirectory;
+	//I need this to create an temporary directory during the relod job execution
+	public String indexLocationDirectory;
 	public PerFieldAnalyzerWrapper indexAnalyzer;
 	public String defaultField;
+	
+	//I will not open the index in each request
+	private IndexReader ir = null;
 
 	// index document xpath
 	public String indexDocumentPath;
@@ -89,6 +94,29 @@ public abstract class AbstractIndexEnvironment {
 		return defaultField;
 	}
 
+	//RODO: rpe (review this)
+	private IndexReader getIndexReader(){
+		if(ir==null){
+			synchronized(this){
+				try {
+					//logger.debug("test");
+					ir = IndexReader.open(this.indexDirectory, true);
+				}
+				catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return ir;
+
+	}
+	
+	//TODO: rpe Just to test
+	private void closeIndexReader(){
+		ir=null;
+	}
+	
 	public void setDefaultField(String defaultField) {
 		this.defaultField = defaultField;
 	}
@@ -147,11 +175,10 @@ public abstract class AbstractIndexEnvironment {
 		try {
 			this.indexId = this.indexConfig.getString("[@id]");
 
-			String indexBaseLocation = this.indexConfig
+			indexLocationDirectory = this.indexConfig
 					.getString("[@location]");
-			this.indexDirectory = FSDirectory.open(new File(indexBaseLocation,
+			this.indexDirectory = FSDirectory.open(new File(indexLocationDirectory,
 					this.indexId));
-
 			String indexAnalyzer = this.indexConfig
 					.getString("[@defaultAnalyzer]");
 			Analyzer a = (Analyzer) Class.forName(indexAnalyzer).newInstance();
@@ -196,7 +223,8 @@ public abstract class AbstractIndexEnvironment {
 	 */
 	public String queryPaged(Integer queryId, QueryInfo info,
 			HttpServletRequestParameterMap map) throws IOException {
-		IndexReader ir = null;
+//		IndexReader ir = null;
+
 		IndexSearcher isearcher = null;
 		if (logger.isDebugEnabled()) {
 			logger.debug("start of queryPaged");
@@ -206,7 +234,8 @@ public abstract class AbstractIndexEnvironment {
 		Query query = info.getQuery();
 		try {
 			//logger.debug("test");
-			ir = IndexReader.open(this.indexDirectory, true);
+			///ir = IndexReader.open(this.indexDirectory, true);
+			ir=getIndexReader();
 			//logger.debug("test");
 			// empty query returns everything
 			if (query instanceof BooleanQuery
@@ -414,14 +443,14 @@ public abstract class AbstractIndexEnvironment {
 			// finalExp,map);
 
 			isearcher.close();
-			ir.close();
+			///ir.close();
 		} catch (Exception x) {
 			logger.error("Caught an exception:", x);
 		} finally {
 			if (null != isearcher)
 				isearcher.close();
-			if (null != ir)
-				ir.close();
+//			if (null != ir)
+//				ir.close();
 		}
 
 		totalRes.append("</content>");
@@ -682,6 +711,8 @@ public abstract class AbstractIndexEnvironment {
 
 	public void setup() {
 		// TODO Auto-generated method stub
+		closeIndexReader();
+		getIndexReader(); //I need to do this, because the setup method is called when a full reload occurs and we need to open it again
 		logger.info("default setup for Index Environment");
 
 	}

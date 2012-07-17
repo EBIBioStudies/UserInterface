@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.xmldb.api.base.ResourceSet;
 
 import uk.ac.ebi.arrayexpress.app.Application;
+import uk.ac.ebi.arrayexpress.app.ApplicationServlet;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 import uk.ac.ebi.arrayexpress.components.SearchEngine;
 import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
@@ -48,7 +49,8 @@ import java.util.Map;
  *
  */
 
-public class QueryServlet extends AuthAwareApplicationServlet
+//rpe: for now I do not need to have an authentication system
+public class QueryServlet extends ApplicationServlet
 {
     private static final long serialVersionUID = 6806580383145704364L;
 
@@ -66,19 +68,15 @@ public class QueryServlet extends AuthAwareApplicationServlet
     {
                super.init(config);
                pageSizeLimit=Application
-       				.getInstance().getPreferences().getInteger("ae.pageSizeLimit");
+       				.getInstance().getPreferences().getInteger("bs.pageSizeLimit");
             
     }
 
-    protected void doAuthenticatedRequest(
-            HttpServletRequest request
-            , HttpServletResponse response
-            , RequestType requestType
-            , List<String> authUserIDs
-    ) throws ServletException, IOException
-    {
-
-    	
+    @Override
+	protected void doRequest(HttpServletRequest request,
+			HttpServletResponse response, RequestType requestType)
+			throws ServletException, IOException 
+    { 	
     		
     	RegexHelper PARSE_ARGUMENTS_REGEX = new RegexHelper("/([^/]+)/([^/]+)/([^/]+)$", "i");
 
@@ -153,7 +151,7 @@ public class QueryServlet extends AuthAwareApplicationServlet
             params.put("basepath", request.getContextPath());
 
             // to make sure nobody sneaks in the other value w/o proper authentication
-            params.put("userid", StringTools.listToString(authUserIDs, " OR "));
+           // params.put("userid", StringTools.listToString(authUserIDs, " OR "));
 
             // setting "preferred" parameter to true allows only preferred experiments to be displayed, but if
             // any of source control parameters are present in the query, it will not be added
@@ -187,7 +185,7 @@ public class QueryServlet extends AuthAwareApplicationServlet
     				StringReader reader = new StringReader(xml);
     				long xmlRead = System.currentTimeMillis();
     				
-    				//System.out.println("xml->" + xml);
+//    				System.out.println("xml->" + xml);
 //    				System.out.println("xml size->" + xml.length());
     				Configuration config = ((SaxonEngine) Application
     						.getAppComponent("SaxonEngine")).trFactory
@@ -231,4 +229,6 @@ public class QueryServlet extends AuthAwareApplicationServlet
             logger.error("Caught an exception:", x);
         }
     }
+
+	
 }

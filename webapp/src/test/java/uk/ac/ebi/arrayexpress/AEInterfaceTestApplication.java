@@ -19,7 +19,7 @@ public class AEInterfaceTestApplication extends Application
         addComponent(new SaxonEngine());
         addComponent(new SearchEngine());
         addComponent(new Experiments());
-        addComponent(new Users());
+       // addComponent(new Users());
         addComponent(new Files());
         addComponent(new JobsController());
 

@@ -32,7 +32,7 @@ public class RetrieveExperimentsListFromAtlasJob extends ApplicationJob
     public void doExecute( JobExecutionContext jec ) throws Exception
     {
         Application app = Application.getInstance();
-        String srcLocation = app.getPreferences().getString("ae.atlasexperiments.source.location");
+        String srcLocation = app.getPreferences().getString("bs.atlasexperiments.source.location");
         logger.info("Reloading a list of experiments present in GXA from [{}]", srcLocation);
 
         if (null != srcLocation && srcLocation.length() > 0) {

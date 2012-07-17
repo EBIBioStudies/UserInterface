@@ -35,6 +35,7 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 
 	private String driverXml;
 	private String connectionString;
+	private String dbname;
 	private Database db;
 	private Collection coll;
 
@@ -58,14 +59,18 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 		defaultSortDescending = false;
 		defaultPageSize = 10;
 
+		//I'm calling this to clean the reference to the IndexReader-> closeIndexReader();getIndexReader();
+		super.setup();
+		
 		HierarchicalConfiguration connsConf = (HierarchicalConfiguration) Application
-				.getInstance().getPreferences().getConfSubset("ae.xmldatabase");
+				.getInstance().getPreferences().getConfSubset("bs.xmldatabase");
 
 		if (null != connsConf) {
 			driverXml = connsConf.getString("driver");
-			connectionString = connsConf.getString("connectionstring");
+//			connectionString = connsConf.getString("connectionstring");
+			connectionString = connsConf.getString("base") + "://" + connsConf.getString("host") + ":" + connsConf.getString("port") + "/" + connsConf.getString("dbname");
 		} else {
-			logger.error("ae.xmldatabase Configuration is missing!!");
+			logger.error("bs.xmldatabase Configuration is missing!!");
 		}
 
 		Class<?> c;
@@ -76,6 +81,7 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 			db = (Database) c.newInstance();
 			DatabaseManager.registerDatabase(db);
 			coll = DatabaseManager.getCollection(connectionString);
+			
 
 		} catch (XMLDBException e) {
 			// TODO Auto-generated catch block
@@ -153,11 +159,11 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 				//I'm browsing a sample group
 				else{ if( map.get("samplegroup")!=null){
 
-					// I need to implement her the sirt logic
-					int page= Integer.parseInt(map.get("page")[0]);
-					int pageSize=Integer.parseInt(map.get("pagesize")[0]);
-					int sampleInit=(page == 1 ? 1 : (page) * pageSize);
-					
+//					// I need to implement her the sirt logic
+//					int page= Integer.parseInt(map.get("page")[0]);
+//					int pageSize=Integer.parseInt(map.get("pagesize")[0]);
+//					int sampleInit=(page == 1 ? 1 : (page) * pageSize);
+//					
 //					
 //					Log.debug("<biosamples><all>{subsequence( "
 //							+ "  let $att:= /Biosamples/SampleGroup[@id='" + map.get("samplegroup")[0]  +"']"
@@ -176,16 +182,31 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 //										+ "<attributes>{distinct-values(/Biosamples/SampleGroup[@id='" + map.get("samplegroup")[0]  +"']/Sample/attribute/replace(@class, ' ' , '-'))}</attributes> "
 //										+ " </all></biosamples>");	
 			
-					 set = service
+					 
+//			
+//					logger.debug("£££££££££############" + "<biosamples><all>{for $x in  "
+//										+ totalRes.toString() 
+//										+ "  let $y:=//Sample[@id=($x)]"
+//										+ "  return <Samples>{$y[../@id='" +   map.get("samplegroup")[0]  + "']} </Samples>} "
+//										///+ " { let $att:= /Biosamples/SampleGroup[@id='" +   map.get("samplegroup")[0]  + "'] " 
+//										//+ " return <attributes notnumeric='{distinct-values($att/Sample/attribute[@dataType!='INTEGER']/replace(@class, ' ' , '-'))}' numeric='{distinct-values($att/Sample/attribute[@dataType='INTEGER']/replace(@class, ' ' , '-'))}'></attributes> "
+//										///+ " return <attributes>{distinct-values($att/Sample/attribute/replace(@class, ' ' , '-'))}</attributes> "
+//										///+ " }"
+//										+ " { let $att:= /Biosamples/SampleGroup[@id='" + map.get("samplegroup")[0]  +"']"
+//										+ " return {$att/SampleAttributes} }"
+//										+ "</all></biosamples>");
+					set = service
 								.query("<biosamples><all>{for $x in  "
 										+ totalRes.toString() 
 										+ "  let $y:=//Sample[@id=($x)]"
-										+ "  let $att:= /Biosamples/SampleGroup[@id='" + map.get("samplegroup")[0]  +"']"
 										+ "  return <Samples>{$y[../@id='" +   map.get("samplegroup")[0]  + "']} </Samples>} "
-										+ " { let $att:= /Biosamples/SampleGroup[@id='" +   map.get("samplegroup")[0]  + "'] " 
+										///+ " { let $att:= /Biosamples/SampleGroup[@id='" +   map.get("samplegroup")[0]  + "'] " 
 										//+ " return <attributes notnumeric='{distinct-values($att/Sample/attribute[@dataType!='INTEGER']/replace(@class, ' ' , '-'))}' numeric='{distinct-values($att/Sample/attribute[@dataType='INTEGER']/replace(@class, ' ' , '-'))}'></attributes> "
-										+ " return <attributes>{distinct-values($att/Sample/attribute/replace(@class, ' ' , '-'))}</attributes> "
-										+ " }</all></biosamples>");	
+										///+ " return <attributes>{distinct-values($att/Sample/attribute/replace(@class, ' ' , '-'))}</attributes> "
+										///+ " }"
+										+ " { let $att:= /Biosamples/SampleGroup[@id='" + map.get("samplegroup")[0]  +"']"
+										+ " return <SampleAttributes>{$att/SampleAttributes/*} </SampleAttributes>}"
+										+ "</all></biosamples>");	
 				}
 				
 			
@@ -239,7 +260,10 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 		}
 //		logger.debug("Xml->" + ret);
 		//TODO rpe> remove this
-		ret=ret.replace("&", "ZZZZZ");
+//		ret=ret.replace("&", "ZZZZZ");
+		
+
+//		ret=ret.replace("&#x96;", "&#150;");
 		return ret;
 		
 	 
@@ -347,7 +371,7 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 		}
 //		logger.debug("Xml->" + ret);
 		//TODO rpe> remove this
-		ret=ret.replace("&", "ZZZZZ");
+//		ret=ret.replace("&", "ZZZZZ");
 		return ret;
 		
 //		return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +ret; 

@@ -3,11 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.ebi.microarray</groupId>
-	<artifactId>ae-interface-webapp</artifactId>
-	<name>ArrayExpress Interface Web Application</name>
-	<version>2.0</version>
+	<artifactId>bs-interface-webapp</artifactId>
+	<name>BioSamples Interface Web Application</name>
+	<version>1.0</version>
 	<packaging>war</packaging>
-	<url>http://www.ebi.ac.uk/arrayexpress</url>
+	<url>http://www.ebi.ac.uk/biosamples</url>
 
 	<scm>
 		<connection>scm:svn:svn://bar.ebi.ac.uk/trunk/arrayexpress-interface/webapp</connection>
@@ -19,6 +19,7 @@
 	<properties>
 		<interface.application.log.default.priority>INFO</interface.application.log.default.priority>
 		<interface.application.log.appender.ref>ROLLINGFILE</interface.application.log.appender.ref>
+		<interface.application.log.appender.jobs.ref>ROLLINGFILEJOBS</interface.application.log.appender.jobs.ref>
 
 		<interface.application.base.path>/biosamples</interface.application.base.path>
 		<interface.application.link.www_domain />
@@ -29,54 +30,39 @@
 		<interface.application.link.browse_help>/fg/doc/help/browse_results.html</interface.application.link.browse_help>
 		<interface.application.link.aer_old.base.url>/microarray-as/aer</interface.application.link.aer_old.base.url>
 
-		<interface.application.link.atlas.base.url>/gxa</interface.application.link.atlas.base.url>
-		<interface.application.link.atlas.species_options.url>${interface.application.link.atlas.base.url}/list-species.jsp</interface.application.link.atlas.species_options.url>
-		<interface.application.link.atlas.stats.url>${interface.application.link.atlas.base.url}/stats.jsp</interface.application.link.atlas.stats.url>
-		<interface.application.link.atlas.query.url>${interface.application.link.atlas.base.url}/qrs</interface.application.link.atlas.query.url>
-		<interface.application.link.atlas.exp_query.url>${interface.application.link.atlas.base.url}/experiment/</interface.application.link.atlas.exp_query.url>
-
-		<interface.application.link.news_xml.url>/microarray-srv/ae/ae-main-news.xml</interface.application.link.news_xml.url>
-		<interface.application.link.links_xml.url>/microarray-srv/ae/ae-main-links.xml</interface.application.link.links_xml.url>
-
-		<interface.application.pref.reports.recipients>ae-mgmt@ebi.ac.uk</interface.application.pref.reports.recipients>
-		<interface.application.pref.experiments.ae1.source.location>/ebi/microarray/home/arrayexpress/ae1_aepub2_aepub3/</interface.application.pref.experiments.ae1.source.location>
-		<interface.application.pref.experiments.ae1.connections>aepub3,aepub2</interface.application.pref.experiments.ae1.connections>
-		<interface.application.pref.experiments.ae1.reload.schedule>0 30 6 * *
-			?</interface.application.pref.experiments.ae1.reload.schedule>
-		<interface.application.pref.experiments.ae1.export.location />
-
-		<interface.application.pref.experiments.ae2.source.location>/ebi/microarray/home/arrayexpress/ae2_production/software/browse/</interface.application.pref.experiments.ae2.source.location>
-		<interface.application.pref.experiments.ae2.reload.schedule>0 0 6 * *
-			?</interface.application.pref.experiments.ae2.reload.schedule>
-		<interface.application.pref.experiments.ae2.export.location />
-
-		<interface.application.pref.efo.update.schedule>0 0 1 ? * SUN</interface.application.pref.efo.update.schedule>
-
-		<interface.application.pref.files.root.location>/ebi/ArrayExpress-ftp</interface.application.pref.files.root.location>
-		<interface.application.pref.files.prefix>ae</interface.application.pref.files.prefix>
+		<interface.application.pref.files.prefix>bs</interface.application.pref.files.prefix>
 		<interface.application.index.directory>Setup</interface.application.index.directory>
-		<interface.application.pref.files.rescan.interval>60</interface.application.pref.files.rescan.interval>
+		<interface.application.pref.efo.update.schedule>0 0 1 ? * SUN</interface.application.pref.efo.update.schedule>
 		<interface.application.google.analytics />
 		<interface.application.body.class />
 
 		<!-- XML DataBase access -->
 		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/basexAE</interface.application.db.xml.connection.string> -->
-		<interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/biosamplesAEGroup</interface.application.db.xml.connection.string>
+		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/biosamplesAEGroupX16</interface.application.db.xml.connection.string> -->
+		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/biosamples_sampleAtt</interface.application.db.xml.connection.string> -->
+		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.string> -->
+		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/biosamplesAEGroup</interface.application.db.xml.connection.string> -->
+		<interface.application.db.xml.connection.base>xmldb:basex</interface.application.db.xml.connection.base>
+		<interface.application.db.xml.connection.host>localhost</interface.application.db.xml.connection.host>
+		<interface.application.db.xml.connection.port>1984</interface.application.db.xml.connection.port>
+		<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
+		<interface.application.db.xml.admin.password>admin</interface.application.db.xml.admin.password>
+<!-- 		<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname> -->
 		<interface.application.db.xml.driver>org.basex.api.xmldb.BXDatabase</interface.application.db.xml.driver>
-
+		
 		<!-- Generate or not the Lucene Indexes at the startup -->
 		<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
-		
+
 		<!-- Define the maximum pageSize value allowed -->
 		<interface.application.pagesize.limit>500</interface.application.pagesize.limit>
-		
-		
+
+
 	</properties>
 	<profiles>
 		<profile>
 			<id>debug</id>
 			<properties>
-				<interface.application.pref.reports.recipients>kolais@ebi.ac.uk</interface.application.pref.reports.recipients>
+				<interface.application.pref.reports.recipients>rpereira@ebi.ac.uk</interface.application.pref.reports.recipients>
 				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
 			</properties>
 		</profile>
@@ -96,21 +82,6 @@
 				<interface.application.link.atlas.query.url>${interface.application.link.atlas.base.url}/qrs</interface.application.link.atlas.query.url>
 				<interface.application.link.atlas.exp_query.url>${interface.application.link.atlas.base.url}/experiment/</interface.application.link.atlas.exp_query.url>
 
-				<interface.application.link.news_xml.url>ae-news.xml</interface.application.link.news_xml.url>
-				<interface.application.link.links_xml.url>ae-links.xml</interface.application.link.links_xml.url>
-
-				<interface.application.pref.experiments.ae1.source.location />
-				<interface.application.pref.experiments.ae1.connections>aepub1</interface.application.pref.experiments.ae1.connections>
-				<interface.application.pref.experiments.ae1.reload.schedule>0 0 0/1
-					* * ?</interface.application.pref.experiments.ae1.reload.schedule>
-				<interface.application.pref.experiments.ae1.export.location>/ebi/microarray/home/arrayexpress/ae1_aepub1/</interface.application.pref.experiments.ae1.export.location>
-
-				<interface.application.pref.experiments.ae2.source.location />
-				<interface.application.pref.experiments.ae2.reload.schedule />
-
-				<interface.application.pref.files.prefix>ae-aepub1</interface.application.pref.files.prefix>
-				<interface.application.pref.files.rescan.interval>60</interface.application.pref.files.rescan.interval>
-				<interface.application.body.class>dev_preview</interface.application.body.class>
 			</properties>
 		</profile>
 		<profile>
@@ -129,21 +100,6 @@
 				<interface.application.link.atlas.query.url>${interface.application.link.atlas.base.url}/qrs</interface.application.link.atlas.query.url>
 				<interface.application.link.atlas.exp_query.url>${interface.application.link.atlas.base.url}/experiment/</interface.application.link.atlas.exp_query.url>
 
-				<interface.application.link.news_xml.url>ae-news.xml</interface.application.link.news_xml.url>
-				<interface.application.link.links_xml.url>ae-links.xml</interface.application.link.links_xml.url>
-
-				<interface.application.pref.experiments.ae1.source.location />
-				<interface.application.pref.experiments.ae1.connections>aepub2,aepub3</interface.application.pref.experiments.ae1.connections>
-				<interface.application.pref.experiments.ae1.reload.schedule>0 0 6 *
-					* ?</interface.application.pref.experiments.ae1.reload.schedule>
-				<interface.application.pref.experiments.ae1.export.location>/ebi/microarray/home/arrayexpress/ae1_aepub2_aepub3/</interface.application.pref.experiments.ae1.export.location>
-
-				<interface.application.pref.experiments.ae2.source.location />
-				<interface.application.pref.experiments.ae2.reload.schedule />
-
-				<interface.application.pref.files.prefix>ae</interface.application.pref.files.prefix>
-				<interface.application.pref.files.rescan.interval>60</interface.application.pref.files.rescan.interval>
-				<interface.application.body.class />
 			</properties>
 		</profile>
 		<profile>
@@ -162,20 +118,6 @@
 				<interface.application.link.atlas.query.url>${interface.application.link.atlas.base.url}/qrs</interface.application.link.atlas.query.url>
 				<interface.application.link.atlas.exp_query.url>${interface.application.link.atlas.base.url}/experiment/</interface.application.link.atlas.exp_query.url>
 
-				<interface.application.link.news_xml.url>ae-news.xml</interface.application.link.news_xml.url>
-				<interface.application.link.links_xml.url>ae-links.xml</interface.application.link.links_xml.url>
-
-				<interface.application.pref.experiments.ae1.source.location>/ebi/microarray/home/arrayexpress/ae1_aepub1/</interface.application.pref.experiments.ae1.source.location>
-				<interface.application.pref.experiments.ae1.connections />
-				<interface.application.pref.experiments.ae1.reload.schedule>0 30 0/1
-					* * ?</interface.application.pref.experiments.ae1.reload.schedule>
-
-				<interface.application.pref.experiments.ae2.source.location />
-				<interface.application.pref.experiments.ae2.reload.schedule />
-
-				<interface.application.pref.files.prefix>ae-aepub1</interface.application.pref.files.prefix>
-				<interface.application.pref.files.rescan.interval>30</interface.application.pref.files.rescan.interval>
-				<interface.application.body.class>aepub1</interface.application.body.class>
 			</properties>
 		</profile>
 		<profile>
@@ -193,22 +135,6 @@
 				<interface.application.link.atlas.stats.url>atlas_stats.txt</interface.application.link.atlas.stats.url>
 				<interface.application.link.atlas.query.url>${interface.application.link.atlas.base.url}/qrs</interface.application.link.atlas.query.url>
 				<interface.application.link.atlas.exp_query.url>${interface.application.link.atlas.base.url}/experiment/</interface.application.link.atlas.exp_query.url>
-
-				<interface.application.link.news_xml.url>ae-news.xml</interface.application.link.news_xml.url>
-				<interface.application.link.links_xml.url>ae-links.xml</interface.application.link.links_xml.url>
-
-				<interface.application.pref.experiments.ae1.source.location />
-				<interface.application.pref.experiments.ae1.connections />
-				<interface.application.pref.experiments.ae1.reload.schedule />
-
-				<interface.application.pref.experiments.ae2.source.location>/ebi/microarray/home/arrayexpress/ae2_perftest/software/browse/</interface.application.pref.experiments.ae2.source.location>
-				<interface.application.pref.experiments.ae2.reload.schedule>0 0/15 *
-					* * ?</interface.application.pref.experiments.ae2.reload.schedule>
-
-				<interface.application.pref.files.root.location>/ebi/microarray/home/arrayexpress/ae2_perftest/data</interface.application.pref.files.root.location>
-				<interface.application.pref.files.prefix>ae2-perftest</interface.application.pref.files.prefix>
-				<interface.application.pref.files.rescan.interval>30</interface.application.pref.files.rescan.interval>
-				<interface.application.body.class>ae2_perftest</interface.application.body.class>
 			</properties>
 		</profile>
 		<profile>
@@ -227,21 +153,7 @@
 				<interface.application.link.atlas.query.url>${interface.application.link.atlas.base.url}/qrs</interface.application.link.atlas.query.url>
 				<interface.application.link.atlas.exp_query.url>${interface.application.link.atlas.base.url}/experiment/</interface.application.link.atlas.exp_query.url>
 
-				<interface.application.link.news_xml.url>ae-news.xml</interface.application.link.news_xml.url>
-				<interface.application.link.links_xml.url>ae-links.xml</interface.application.link.links_xml.url>
 
-				<interface.application.pref.experiments.ae1.source.location />
-				<interface.application.pref.experiments.ae1.connections />
-				<interface.application.pref.experiments.ae1.reload.schedule />
-
-				<interface.application.pref.experiments.ae2.source.location>/ebi/microarray/home/arrayexpress/ae2_curator/software/browse/</interface.application.pref.experiments.ae2.source.location>
-				<interface.application.pref.experiments.ae2.reload.schedule>0 0/15 *
-					* * ?</interface.application.pref.experiments.ae2.reload.schedule>
-
-				<interface.application.pref.files.root.location>/ebi/microarray/home/arrayexpress/ae2_curator/data</interface.application.pref.files.root.location>
-				<interface.application.pref.files.prefix>ae2-curator</interface.application.pref.files.prefix>
-				<interface.application.pref.files.rescan.interval>30</interface.application.pref.files.rescan.interval>
-				<interface.application.body.class>ae2_curator</interface.application.body.class>
 			</properties>
 		</profile>
 		<profile>
@@ -256,21 +168,6 @@
 				<interface.application.link.atlas.query.url>${interface.application.link.atlas.base.url}/qrs</interface.application.link.atlas.query.url>
 				<interface.application.link.atlas.exp_query.url>${interface.application.link.atlas.base.url}/experiment/</interface.application.link.atlas.exp_query.url>
 
-				<interface.application.link.news_xml.url>ae-news.xml</interface.application.link.news_xml.url>
-				<interface.application.link.links_xml.url>ae-links.xml</interface.application.link.links_xml.url>
-
-				<interface.application.pref.experiments.ae1.source.location>/ebi/microarray/home/arrayexpress/ae1_aepub1/</interface.application.pref.experiments.ae1.source.location>
-				<interface.application.pref.experiments.ae1.connections />
-				<interface.application.pref.experiments.ae1.reload.schedule>0 40 0/1
-					* * ?</interface.application.pref.experiments.ae1.reload.schedule>
-
-				<interface.application.pref.experiments.ae2.source.location>/ebi/microarray/home/arrayexpress/ae2_production/software/browse/</interface.application.pref.experiments.ae2.source.location>
-				<interface.application.pref.experiments.ae2.reload.schedule>0 4/15 *
-					* * ?</interface.application.pref.experiments.ae2.reload.schedule>
-
-				<interface.application.pref.files.prefix>ae-aepub1</interface.application.pref.files.prefix>
-				<interface.application.pref.files.rescan.interval>30</interface.application.pref.files.rescan.interval>
-				<interface.application.body.class>dev_preview</interface.application.body.class>
 			</properties>
 		</profile>
 		<profile>
@@ -301,21 +198,7 @@
 		<profile>
 			<id>london</id>
 			<properties>
-				<interface.application.log.appender.ref>ROLLINGFILE-LONDON</interface.application.log.appender.ref>
-				<interface.application.pref.experiments.ae1.source.location>/nfs/public/rw/fg/arrayexpress/xml/ae1/</interface.application.pref.experiments.ae1.source.location>
-				<interface.application.pref.experiments.ae1.connections />
-				<interface.application.pref.experiments.ae1.reload.schedule>0 30 6 *
-					* ?</interface.application.pref.experiments.ae1.reload.schedule>
-				<interface.application.pref.experiments.ae1.export.location />
 
-				<interface.application.pref.experiments.ae2.source.location>/nfs/public/rw/fg/arrayexpress/xml/ae2/</interface.application.pref.experiments.ae2.source.location>
-				<interface.application.pref.experiments.ae2.reload.schedule>0 35 6 *
-					* ?</interface.application.pref.experiments.ae2.reload.schedule>
-				<interface.application.pref.experiments.ae2.export.location />
-
-				<interface.application.pref.files.root.location>/nfs/public/ro/fg/arrayexpress/ftp/</interface.application.pref.files.root.location>
-				<interface.application.pref.files.prefix>ae</interface.application.pref.files.prefix>
-				<interface.application.pref.files.rescan.interval>60</interface.application.pref.files.rescan.interval>
 			</properties>
 		</profile>
 		<profile>
@@ -328,19 +211,11 @@
 
 	<developers>
 		<developer>
-			<id>kolais</id>
-			<name>Nikolay Kolesnikov</name>
-			<email>kolais@ebi.ac.uk</email>
+			<id>rpereira</id>
+			<name>Rui Pereira</name>
+			<email>rui.pereira@ebi.ac.uk</email>
 			<roles>
 				<role>Software Engineer</role>
-			</roles>
-		</developer>
-		<developer>
-			<id>ugis</id>
-			<name>Ugis Sarkans</name>
-			<email>ugis@ebi.ac.uk</email>
-			<roles>
-				<role>Team Leader</role>
 			</roles>
 		</developer>
 	</developers>
@@ -446,6 +321,17 @@
 					<doUpdate>false</doUpdate>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>tomcat-maven-plugin</artifactId>
+				<configuration>
+					<url>http://cocoa:8180/manager</url>
+					<server>cocoa_tomcat</server>
+					<path>/biosamples</path>
+				</configuration>
+			</plugin>
+			
 		</plugins>
 	</build>
 
@@ -531,6 +417,8 @@
 			<artifactId>saxon9-xpath</artifactId>
 			<version>9.1.0.8</version>
 		</dependency>
+		<!-- <dependency> <groupId>net.sf.saxon</groupId> <artifactId>Saxon-HE</artifactId> 
+			<version>9.4</version> </dependency> -->
 		<dependency>
 			<groupId>org.ccil.cowan.tagsoup</groupId>
 			<artifactId>tagsoup</artifactId>
@@ -546,11 +434,8 @@
 			<artifactId>lucene-highlighter</artifactId>
 			<version>3.5.0</version>
 		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>ae-interface-auth</artifactId>
-			<version>1.0</version>
-		</dependency>
+		<!-- <dependency> <groupId>${project.groupId}</groupId> <artifactId>ae-interface-auth</artifactId> 
+			<version>1.0</version> </dependency> -->
 		<!-- <dependency> <groupId>efo-query</groupId> <artifactId>efo-query</artifactId> 
 			<version>1.0</version> </dependency> -->
 		<dependency>
@@ -611,66 +496,35 @@
 			<artifactId>basex-api</artifactId>
 			<version>7.1</version>
 		</dependency>
+
+<!-- request Xml from Biosamples -->
+	<dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+            <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.1.2</version>
+        </dependency>
 		<!-- <dependency> <groupId>exist</groupId> <artifactId>existdb</artifactId> 
 			<version>1.0</version> <scope>system</scope> <systemPath>/Users/rpslpereira/Apps/ExistDB/exist.jar</systemPath> 
 			</dependency> -->
 
 
 		<!-- Jackson -->
-<!-- 
-	 	<dependency>
-
-			<groupId>org.codehaus.jackson</groupId>
-
-			<artifactId>jackson-core-lgpl</artifactId>
-
-			<version>1.9.4</version>
-
-		</dependency>
-
-		<dependency>
-
-			<groupId>org.codehaus.jackson</groupId>
-
-			<artifactId>jackson-mapper-lgpl</artifactId>
-
-			<version>1.9.4</version>
-
-		</dependency>
-
-		<dependency>
-
-			<groupId>org.codehaus.jackson</groupId>
-
-			<artifactId>jackson-xc</artifactId>
-
-			<version>1.9.4</version>
-
-		</dependency> 
-	
-
-
-	<dependency>
-        <groupId>net.sf.json-lib</groupId>
-        <artifactId>json-lib</artifactId>
-        <version>2.3</version>
-        <type>jar</type>
-        <classifier>jdk15</classifier>
-        <scope>compile</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-io</artifactId>
-        <version>1.3.2</version>
-        <type>jar</type>
-        <scope>compile</scope>
-    </dependency>
-    <dependency>
-        <groupId>xom</groupId>
-        <artifactId>xom</artifactId>
-        <version>1.1</version>
-    </dependency>
- -->
+		<!-- <dependency> <groupId>org.codehaus.jackson</groupId> <artifactId>jackson-core-lgpl</artifactId> 
+			<version>1.9.4</version> </dependency> <dependency> <groupId>org.codehaus.jackson</groupId> 
+			<artifactId>jackson-mapper-lgpl</artifactId> <version>1.9.4</version> </dependency> 
+			<dependency> <groupId>org.codehaus.jackson</groupId> <artifactId>jackson-xc</artifactId> 
+			<version>1.9.4</version> </dependency> <dependency> <groupId>net.sf.json-lib</groupId> 
+			<artifactId>json-lib</artifactId> <version>2.3</version> <type>jar</type> 
+			<classifier>jdk15</classifier> <scope>compile</scope> </dependency> <dependency> 
+			<groupId>org.apache.commons</groupId> <artifactId>commons-io</artifactId> 
+			<version>1.3.2</version> <type>jar</type> <scope>compile</scope> </dependency> 
+			<dependency> <groupId>xom</groupId> <artifactId>xom</artifactId> <version>1.1</version> 
+			</dependency> -->
 
 	</dependencies>
 </project>

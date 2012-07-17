@@ -39,7 +39,7 @@ public class UpdateOntologyJob extends ApplicationJob
     {
         // check the version of EFO from update location; if newer, copy it
         // over to our location and launch a reload process
-        String efoLocation = getPreferences().getString("ae.efo.update.source");
+        String efoLocation = getPreferences().getString("bs.efo.update.source");
         URI efoURI = new URI(efoLocation);
         logger.info("Checking EFO ontology version from [{}]", efoURI.toString());
         String version = EFOLoader.getOWLVersion(efoURI);
@@ -53,7 +53,7 @@ public class UpdateOntologyJob extends ApplicationJob
             InputStream is = null;
             try {
                 is = efoURI.toURL().openStream();
-                File efoFile = new File(getPreferences().getString("ae.efo.location"));
+                File efoFile = new File(getPreferences().getString("bs.efo.location"));
                 StringTools.stringToFile(StringTools.streamToString(is, "UTF-8"), efoFile, "UTF-8");
                 getApplication().sendEmail("EFO update",
                         "Experimental Factor Ontology has been updated to version [" + version + "]" + StringTools.EOL

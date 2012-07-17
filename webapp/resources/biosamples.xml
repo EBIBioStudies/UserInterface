@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<app>
+		<reports>
+			<originator>"ArrayExpress Archive" &lt;ae-mgmt@ebi.ac.uk&gt; </originator>
+			<recipients>${interface.application.pref.reports.recipients}
+			</recipients>
+			<subject>Runtime exception report</subject>
+			<smtp>
+				<host>smtp.ebi.ac.uk</host>
+				<port>25</port>
+			</smtp>
+		</reports>
+	</app>
+		
+		
+	<bs>
+		<setupDirectory>${sys:java.io.tmpdir}/${interface.application.index.directory}
+		</setupDirectory>
+		<backupDirectory>${sys:java.io.tmpdir}/Backups</backupDirectory>
+		<downloadDirectory>${sys:java.io.tmpdir}/DownloadXml</downloadDirectory>
+		<buildLuceneIndexes>${interface.application.lucene.indexes.build}
+		</buildLuceneIndexes>
+		<pageSizeLimit>${interface.application.pagesize.limit}</pageSizeLimit>
+
+		<xmldatabase>
+			<driver>${interface.application.db.xml.driver}</driver>
+			<base>${interface.application.db.xml.connection.base}</base>
+			<host>${interface.application.db.xml.connection.host}</host>
+			<port>${interface.application.db.xml.connection.port}</port>
+			<dbname>${interface.application.db.xml.connection.dbname}</dbname>
+			<adminpassword>${interface.application.db.xml.admin.password}</adminpassword>
+			<!-- <connectionstring>${interface.application.db.xml.connection.string}
+			</connectionstring> -->
+			<!-- <dbname>${interface.application.db.xml.connection.dbname}</dbname> -->
+		</xmldatabase>
+
+
+		<efo>
+			<location>${sys:java.io.tmpdir}/efo.owl</location>
+			<source>/WEB-INF/classes/efo.owl</source>
+			<update>
+				<source>http://efo.svn.sourceforge.net/svnroot/efo/trunk/src/efoinowl/efo.owl
+				</source>
+				<schedule>${interface.application.pref.efo.update.schedule}
+				</schedule>
+			</update>
+			<ignoreList>/WEB-INF/classes/efo-ignore.txt</ignoreList>
+			<synonyms>/WEB-INF/classes/synonyms.txt</synonyms>
+			<stopWords>a,able,about,across,after,all,almost,also,am,among,an,and,any,are,as,at,be,because,been,but,by,can,cannot,could,dear,did,do,does,either,else,ever,every,for,from,get,got,had,has,have,he,her,hers,him,his,how,however,i,if,in,into,is,it,its,just,least,let,like,likely,may,me,might,most,must,my,neither,no,nor,not,of,off,often,on,only,or,other,our,own,rather,said,say,says,she,should,since,so,some,than,that,the,their,them,then,there,these,they,this,tis,to,too,twas,us,wants,was,we,were,what,when,where,which,while,who,whom,why,will,with,would,yet,you,your
+			</stopWords>
+			<index>
+				<location>${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-index/efo
+				</location>
+			</index>
+		</efo>
+
+
+
+
+		<index id="biosamplesgroup"
+			location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes"
+			defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
+			<document path="/Biosamples/SampleGroup" defaultField="keywords">
+				<field name="keywords" type="string" path="string-join(.//text(), ' ')"
+					analyze="true"
+					analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer"
+					autocompletion="true" store="false" escape="false" />
+				<field name="id" title="by Id" type="string" path="@id"
+					analyze="true" store="true" autocompletion="true" escape="false"
+					sortfields="idsort" />
+				<!-- The sortfields must have this pproperties analyze="false" store="false" 
+					escape="false" -->
+				<field name="idsort" title="by Id" type="string" path="substring(@id,5)"
+					analyze="false" store="false" escape="false" />
+				<field name="description" title="by Description" type="string"
+					path="attribute/value[../@class='Submission Description']" analyze="true"
+					store="true" escape="false" autocompletion="true" sortfields="description" />
+				<field name="name" title="by Description" type="string"
+					path="attribute/value[../@class='Name']" analyze="true" store="false"
+					escape="false" autocompletion="true" sortfields="description" />
+				<field name="title" title="by Description" type="string"
+					path="attribute/value[../@class='Submission Title']" analyze="true"
+					store="false" escape="false" />
+				<field name="identifier" title="by Description" type="string"
+					path="attribute/value[../@class='Submission Identifier']" analyze="true"
+					store="false" escape="false" />
+				<field name="version" title="by Description" type="string"
+					path="attribute/value[../@class='Submission Version']" analyze="true"
+					store="false" escape="false" />
+				<field name="modificationdate" title="by Description" type="string"
+					path="attribute/value[../@class='Submission Release Date']"
+					analyze="true" store="false" escape="false" />
+				<field name="releasedate" title="by Description" type="string"
+					path="attribute/value[../@class='Submission Modification Date']"
+					analyze="true" store="false" escape="false" />
+				<field name="databases" title="by Description" type="string"
+					path="attribute/value[../@class='Databases']//value" analyze="true"
+					store="false" escape="false" />
+				<field name="organizations" title="by Description" type="string"
+					path="attribute/value[../@class='Organizations']//value" analyze="true"
+					store="false" escape="false" />
+				<!-- change to people -->
+				<field name="persons" title="by Description" type="string"
+					path="attribute/value[../@class='Persons']//value" analyze="true"
+					store="false" escape="false" />
+				<field name="termsources" title="by Description" type="string"
+					path="attribute/value[../@class='Term Sources']//value" analyze="true"
+					store="false" escape="false" />
+
+				<!-- used to order the search using the numer os samples -->
+				<field name="samples" title="by Description" type="integer"
+					path="count(Sample)" store="false" escape="false" sortfields="samples" />
+					
+				<!-- Reference -->
+				<!-- used to order the search using the numer os samples -->
+	<!-- 			<attribute class="Submission Reference Layer" classDefined="true" dataType="BOOLEAN">
+    <value>true</value> -->
+				<field name="reference" type="boolean" path="attribute/value[../@class='Submission Reference Layer']//value = 'true'"/>
+			</document>
+		</index>
+
+
+		<index id="biosamplessample"
+			location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes"
+			defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
+
+
+			<document path="/Biosamples/SampleGroup/Sample"
+				defaultField="keywords">
+				<field name="keywords" type="string" path="string-join(.//text(), ' ')"
+					analyze="true"
+					analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer"
+					autocompletion="true" store="false" escape="false" />
+				<field name="name" type="string" path="attribute/value[../@class='Name']"
+					analyze="true" store="false" escape="false" sortfields="name" />
+				<field name="accession" type="string" path="@id" analyze="true"
+					store="true" escape="false" sortfields="accession" />
+				<!-- <field name="accessionsort1" title="by Id" type="string"
+					path="substring(@id,4,1)" analyze="false" store="false" escape="false" />
+				<field name="accessionsort2" title="by Id" type="integer"
+					path="substring(@id,6) cast as xs:integer" store="false" escape="false"
+					sortfields="accessionsort2" />
+				<field name="accessionsort3" title="by Id" type="string"
+					path="substring(@id,6)" analyze="false" store="false" escape="false"
+					sortfields="accessionsort3" /> -->
+				<field name="sampleaccession" type="string"
+					path="attribute/value[../@class='Sample Accession']" analyze="true"
+					store="true" escape="false" sortfields="accession" />
+				<field name="samplegroup" type="string" path="@groupId"
+					analyze="true" store="false" escape="false" />
+				<!-- I always have this field in samples list -->
+				<field name="0" type="string"
+					path="attribute/value[../@class='Sample Accession']" analyze="true"
+					store="false" escape="false" sortfields="0" />
+				<!-- dynamic sort -->
+				
+				<field name="attributes" type="string" path="attribute"
+					process="true" analyze="true" store="false" escape="false" />
+				<field name="1" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="1" />
+				<field name="2" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="2" />
+				<field name="3" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="3" />
+				<field name="4" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="4" />
+				<field name="5" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="5" />
+				<field name="6" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="6" />
+				<field name="7" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="7" />
+				<field name="8" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="8" />
+				<field name="9" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="9" />
+				<field name="10" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="10" />
+				<field name="11" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="11" />
+				<field name="12" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="12" />
+				<field name="13" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="13" />
+				<field name="14" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="14" />
+				<field name="15" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="15" />
+				<field name="16" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="16" />
+				<field name="17" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="17" />
+				<field name="18" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="18" />
+				<field name="19" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="19" />
+				<field name="20" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="20" />
+				<field name="21" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="21" />
+				<field name="22" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="22" />
+				<field name="23" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="23" />
+				<field name="24" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="24" />
+				<field name="25" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="25" />
+				<field name="26" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="26" />
+				<field name="27" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="27" />
+				<field name="28" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="28" />
+				<field name="29" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="29" />
+				<field name="30" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="30" />
+
+
+				<!-- <field name="1integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="1integer" />
+				<field name="2integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="2integer" />
+				<field name="3integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="3integer" />
+
+				<field name="4integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="4integer" />
+				<field name="5integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="5integer" />
+				<field name="6integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="6integer" />
+
+				<field name="7integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="7integer" />
+				<field name="8integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="8integer" />
+				<field name="9integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="9integer" />
+
+				<field name="10integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="10integer" />
+				<field name="11integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="11integer" />
+				<field name="12integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="12integer" />
+
+				<field name="13integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="13integer" />
+				<field name="14integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="14integer" />
+				<field name="15integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="15integer" />
+
+				<field name="16integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="16integer" />
+				<field name="17integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="17integer" />
+				<field name="18integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="18integer" />
+
+				<field name="19integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="19integer" />
+				<field name="20integer" type="integer" process="true" path="0"
+					analyze="false" store="false" escape="false" sortfields="20integer" /> -->
+
+			</document>
+
+		</index>
+
+
+	</bs>
+</configuration>

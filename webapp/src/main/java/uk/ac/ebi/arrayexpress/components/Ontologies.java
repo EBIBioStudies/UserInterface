@@ -89,7 +89,7 @@ public class Ontologies extends ApplicationComponent
 
     private void loadCustomSynonyms() throws IOException
     {
-        String synFileLocation = getPreferences().getString("ae.efo.synonyms");
+        String synFileLocation = getPreferences().getString("bs.efo.synonyms");
         if (null != synFileLocation) {
             InputStream is = null;
             try {
@@ -107,7 +107,7 @@ public class Ontologies extends ApplicationComponent
 
     private IEFO removeIgnoredClasses( IEFO efo ) throws IOException
     {
-        String ignoreListFileLocation = getPreferences().getString("ae.efo.ignoreList");
+        String ignoreListFileLocation = getPreferences().getString("bs.efo.ignoreList");
         if (null != ignoreListFileLocation) {
             InputStream is = null;
             try {
@@ -152,12 +152,12 @@ public class Ontologies extends ApplicationComponent
     private void initLookupIndex() throws IOException
     {
         Set<String> stopWords = new HashSet<String>();
-        String[] words = getPreferences().getString("ae.efo.stopWords").split("\\s*,\\s*");
+        String[] words = getPreferences().getString("bs.efo.stopWords").split("\\s*,\\s*");
         if (null != words && words.length > 0) {
             stopWords.addAll(Arrays.asList(words));
         }
         this.lookupIndex = new EFOExpansionLookupIndex(
-                getPreferences().getString("ae.efo.index.location")
+                getPreferences().getString("bs.efo.index.location")
                 , stopWords
         );
 

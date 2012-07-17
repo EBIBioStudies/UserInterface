@@ -67,7 +67,7 @@ public class Protocols extends ApplicationComponent implements IDocumentSource
     public void initialize() throws Exception
     {
     	buildIndexes= Application
-				.getInstance().getPreferences().getBoolean("ae.buildLuceneIndexes");
+				.getInstance().getPreferences().getBoolean("bs.buildLuceneIndexes");
         this.saxon = (SaxonEngine) getComponent("SaxonEngine");
         this.search = (SearchEngine) getComponent("SearchEngine");
 
@@ -78,7 +78,7 @@ public class Protocols extends ApplicationComponent implements IDocumentSource
         
         if(buildIndexes){
     		DocumentInfo docTemp = getXmlFromFile(new File(getPreferences()
-    				.getString("ae.protocols.persistence-location")));
+    				.getString("bs.protocols.persistence-location")));
 
     		updateIndex(docTemp);
     		docTemp = null;

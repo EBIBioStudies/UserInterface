@@ -82,6 +82,9 @@ $(function() {
 	//initialize the keywords input with the search string from the homepage
 	$("#bs_keywords").val(keywords);
 
+	//initialize the sortby
+	 $("#sortby").removeAttr("disabled").val(getQueryStringParam("sortby", ""));
+	
 	QuerySampleGroup(urlPage);
 	// added autocompletion
 	var basePath = decodeURI(window.location.pathname).replace(/\/\w+\.\w+$/,
@@ -187,12 +190,16 @@ function QuerySampleGroup(url) {
 						}
 						
 //						//ellipsis
-//						//alert("ellipsis");
+						//alert("ellipsis");
 //						var the_obj = $('.ellipsis_class').ThreeDots({
 //							max_rows : 3,
-//							alt_text_t : true
+///*							alt_text_t : true */
 //						});
 //						//ellipsis
+						//$('.ellipsis').dotdotdot();
+						//$('#ellipsis').tipsy();
+//						$('#ellipsis').tipsy({fallback: "Where's my tooltip yo'?" });
+//						alert(4);
 
 					});
 
@@ -254,7 +261,8 @@ function aeSort(psortby) {
 	// alert("sortBy->" + sortBy + ";sortOrder->" + sortOrder);
 	pageInit = $.query.get("page") || pageInit;
 	pageSize = $.query.get("pagesize") || pageSize;
-
+	
+	
 	for ( var key in sortDefault) {
 		// do something with key and hmap[key]
 		$("#bs_results_header_" + key).find("div.table_header_inner")
@@ -262,6 +270,19 @@ function aeSort(psortby) {
 						"table_header_sort_asc");
 
 	}
+
+
+	var newQuery = $.query.set("keywords", keywords).set("sortby", sortBy).set(
+			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
+			pageSize).toString();
+
+	// var pageName =
+	// /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
+	var urlPage = "biosamplesgroup/browse-table.html" + newQuery;
+
+	QuerySampleGroup(urlPage);
+	
+	//I just put the orientation after the query return the results (before I clean all the asc and desc of all the columns, after I make the query and at the end i Put the correct one)
 	var thElt = $("#bs_results_header_" + sortBy);
 
 	if (null != thElt) {
@@ -276,16 +297,19 @@ function aeSort(psortby) {
 			}
 		}
 	}
-
-	var newQuery = $.query.set("keywords", keywords).set("sortby", sortBy).set(
-			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
-			pageSize).toString();
-
-	// var pageName =
-	// /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
-	var urlPage = "biosamplesgroup/browse-table.html" + newQuery;
-
-	QuerySampleGroup(urlPage);
+	
+	
 	// window.location.href = urlPage;
 
+}
+
+function
+getQueryStringParam( paramName, defaultValue )
+{
+    var param = $.query.get(paramName);
+    if ("" !== param) {
+        return param;
+    } else {
+        return defaultValue;
+    }
 }

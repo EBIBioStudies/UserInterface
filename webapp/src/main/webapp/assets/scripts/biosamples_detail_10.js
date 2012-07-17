@@ -275,6 +275,18 @@ function aeSort(psortby) {
 						"table_header_sort_asc");
 
 	}
+	
+	var newQuery = $.query.set("keywords", keywords).set("sortby", sortBy).set(
+			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
+			pageSize).toString();
+
+	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
+	var urlPage = "../biosamplessample/" + pageName + newQuery;
+	//alert(urlPage);
+	updateSamplesList(urlPage);
+	
+	
+	//I just put the orientation after the query return the results (before I clean all the asc and desc of all the columns, after I make the query and at the end i Put the correct one)
 	var thElt = $("#bs_results_header_" + sortBy);
 
 	if (null != thElt) {
@@ -290,13 +302,6 @@ function aeSort(psortby) {
 		}
 	}
 
-	var newQuery = $.query.set("keywords", keywords).set("sortby", sortBy).set(
-			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
-			pageSize).toString();
-
-	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
-	var urlPage = "../biosamplessample/" + pageName + newQuery;
-	updateSamplesList(urlPage);
 }
 
 // ######### PAGING SAMPLES INSIDE A GROUP OF SAMPLES ############

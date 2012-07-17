@@ -52,13 +52,13 @@ public class ReloadAllJob extends ApplicationJob {
 		File setupTempDirectory=null;
 		try{
 		String setupDir= Application
-				.getInstance().getPreferences().getString("ae.setupDirectory");
+				.getInstance().getPreferences().getString("bs.setupDirectory");
 		System.out.println("$$$$$$->" + setupDir);
 		
 		setupDirectory=new File(setupDir);
 		
 		String backupDirectory= Application
-				.getInstance().getPreferences().getString("ae.backupDirectory");
+				.getInstance().getPreferences().getString("bs.backupDirectory");
 		System.out.println("$$$$$$->" + backupDirectory);
 		
 		String newDir="teste" + System.nanoTime();

@@ -38,10 +38,10 @@ public class ReloadOntologyJob extends ApplicationJob
     public void doExecute( JobExecutionContext jec ) throws Exception
     {
         // check if efo.owl is in temp folder; if it's not there, copy from source
-        String efoLocation = getPreferences().getString("ae.efo.location");
+        String efoLocation = getPreferences().getString("bs.efo.location");
         File efoFile = new File(efoLocation);
         if (!efoFile.exists()) {
-            String efoBuiltinSource = getPreferences().getString("ae.efo.source");
+            String efoBuiltinSource = getPreferences().getString("bs.efo.source");
             InputStream is = null;
             try {
                 is = getApplication().getResource(efoBuiltinSource).openStream();

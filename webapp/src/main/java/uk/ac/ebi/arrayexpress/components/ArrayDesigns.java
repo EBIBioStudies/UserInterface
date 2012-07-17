@@ -72,7 +72,7 @@ public class ArrayDesigns extends ApplicationComponent implements IDocumentSourc
     public void initialize() throws Exception{
     
     	buildIndexes= Application
-				.getInstance().getPreferences().getBoolean("ae.buildLuceneIndexes");
+				.getInstance().getPreferences().getBoolean("bs.buildLuceneIndexes");
         this.saxon = (SaxonEngine) getComponent("SaxonEngine");
         this.search = (SearchEngine) getComponent("SearchEngine");
         
@@ -83,7 +83,7 @@ public class ArrayDesigns extends ApplicationComponent implements IDocumentSourc
 
         if(buildIndexes){
     		DocumentInfo docTemp = getXmlFromFile(new File(getPreferences()
-    				.getString("ae.arrays.persistence-location")));
+    				.getString("bs.arrays.persistence-location")));
 
     		updateIndex(docTemp);
     		docTemp = null;

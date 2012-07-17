@@ -1,15 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="windows-1252"?>
+<!-- cannto change the enconding to ISO-8859-1 or UTF-8 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:html="http://www.w3.org/1999/xhtml"
-                extension-element-prefixes="html"
+        		extension-element-prefixes="html"
                 exclude-result-prefixes="html"
-                version="1.0">
+                version="1.0" >
 
+		
     <xsl:template name="page-header">
         <xsl:param name="pTitle"/>
         <xsl:param name="pExtraCode"/>
+     
         <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"/>
             <meta http-equiv="Content-Language" content="en-GB"/>
             <meta http-equiv="Window-target" content="_top"/>
             <meta name="no-email-collection" content="http://www.unspam.com/noemailcollection/"/>
@@ -35,6 +38,7 @@
             </script>
             ${interface.application.google.analytics}
         </head>
+        
     </xsl:template>
 
     <xsl:template name="page-body">
@@ -71,7 +75,7 @@
         <xsl:param name="pTitle"/>
         <xsl:param name="pExtraCode"/>
         <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=windows-1252"/>
             <meta http-equiv="Content-Language" content="en-GB"/>
             <meta http-equiv="Window-target" content="_top"/>
             <meta name="no-email-collection" content="http://www.unspam.com/noemailcollection/"/>

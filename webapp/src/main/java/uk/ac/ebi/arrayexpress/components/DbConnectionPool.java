@@ -39,7 +39,7 @@ public class DbConnectionPool extends ApplicationComponent
 
     public void initialize() throws Exception
     {
-        HierarchicalConfiguration connsConf = (HierarchicalConfiguration)getPreferences().getConfSubset("ae.db.connections");
+        HierarchicalConfiguration connsConf = (HierarchicalConfiguration)getPreferences().getConfSubset("bs.db.connections");
         if (null != connsConf) {
             List conns = connsConf.configurationsAt("connection");
             for (Object conn : conns) {

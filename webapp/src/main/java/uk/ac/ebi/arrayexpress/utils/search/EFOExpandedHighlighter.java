@@ -29,67 +29,89 @@ import uk.ac.ebi.arrayexpress.utils.saxon.search.QueryInfo;
  *
  */
 
-public class EFOExpandedHighlighter implements IQueryHighlighter
-{
-    // logging machinery
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+public class EFOExpandedHighlighter implements IQueryHighlighter {
+	// logging machinery
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private AbstractIndexEnvironment env;
+	private AbstractIndexEnvironment env;
 
-    private static final String HIT_OPEN_MARK = "\u00ab";
-    private static final String HIT_CLOSE_MARK = "\u00bb";
-    private static final String SYN_OPEN_MARK = "\u2039";
-    private static final String SYN_CLOSE_MARK = "\u203a";
-    private static final String EFO_OPEN_MARK = "\u2035";
-    private static final String EFO_CLOSE_MARK = "\u2032";
+	private static final String HIT_OPEN_MARK = "\u00ab";
+	private static final String HIT_CLOSE_MARK = "\u00bb";
+	private static final String SYN_OPEN_MARK = "\u2039";
+	private static final String SYN_CLOSE_MARK = "\u203a";
+	private static final String EFO_OPEN_MARK = "\u2035";
+	private static final String EFO_CLOSE_MARK = "\u2032";
 
-    private final RegexHelper SYN_AND_HIT_REGEX = new RegexHelper(HIT_OPEN_MARK + SYN_OPEN_MARK + "([^" + SYN_CLOSE_MARK + HIT_CLOSE_MARK + "]+)" + SYN_CLOSE_MARK + HIT_CLOSE_MARK, "g");
-    private final RegexHelper EFO_AND_SYN_REGEX = new RegexHelper(SYN_OPEN_MARK + EFO_OPEN_MARK + "([^" + EFO_CLOSE_MARK + SYN_CLOSE_MARK + "]+)" + EFO_CLOSE_MARK + SYN_CLOSE_MARK, "g");
-    private final RegexHelper EFO_AND_HIT_REGEX = new RegexHelper(HIT_OPEN_MARK + EFO_OPEN_MARK + "([^" + EFO_CLOSE_MARK + HIT_CLOSE_MARK + "]+)" + EFO_CLOSE_MARK + HIT_CLOSE_MARK, "g");
+	private final RegexHelper SYN_AND_HIT_REGEX = new RegexHelper(HIT_OPEN_MARK
+			+ SYN_OPEN_MARK + "([^" + SYN_CLOSE_MARK + HIT_CLOSE_MARK + "]+)"
+			+ SYN_CLOSE_MARK + HIT_CLOSE_MARK, "g");
+	private final RegexHelper EFO_AND_SYN_REGEX = new RegexHelper(SYN_OPEN_MARK
+			+ EFO_OPEN_MARK + "([^" + EFO_CLOSE_MARK + SYN_CLOSE_MARK + "]+)"
+			+ EFO_CLOSE_MARK + SYN_CLOSE_MARK, "g");
+	private final RegexHelper EFO_AND_HIT_REGEX = new RegexHelper(HIT_OPEN_MARK
+			+ EFO_OPEN_MARK + "([^" + EFO_CLOSE_MARK + HIT_CLOSE_MARK + "]+)"
+			+ EFO_CLOSE_MARK + HIT_CLOSE_MARK, "g");
 
-    public IQueryHighlighter setEnvironment( AbstractIndexEnvironment env )
-    {
-        this.env = env;
-        return this;
-    }
+	public IQueryHighlighter setEnvironment(AbstractIndexEnvironment env) {
+		this.env = env;
+		return this;
+	}
 
-    public String highlightQuery( QueryInfo info, String fieldName, String text )
-    {
-        EFOExpandableQueryInfo queryInfo = null;
+	public String highlightQuery(QueryInfo info, String fieldName, String text) {
+		String result = "";
+		try {
+			EFOExpandableQueryInfo queryInfo = null;
 
-        if (info instanceof EFOExpandableQueryInfo) {
-            queryInfo = (EFOExpandableQueryInfo)info;
-        }
+			if (info instanceof EFOExpandableQueryInfo) {
+				queryInfo = (EFOExpandableQueryInfo) info;
+			}
 
-        if (null == queryInfo) {
-            return doHighlightQuery(info.getQuery(), fieldName, text, HIT_OPEN_MARK, HIT_CLOSE_MARK);
-        } else {
-            String result = doHighlightQuery(queryInfo.getOriginalQuery(), fieldName, text, HIT_OPEN_MARK, HIT_CLOSE_MARK);
-            result = doHighlightQuery(queryInfo.getSynonymPartQuery(), fieldName, result, SYN_OPEN_MARK, SYN_CLOSE_MARK);
-            result = doHighlightQuery(queryInfo.getEfoExpansionPartQuery(), fieldName, result, EFO_OPEN_MARK, EFO_CLOSE_MARK);
+			if (null == queryInfo) {
+				result = doHighlightQuery(info.getQuery(), fieldName, text,
+						HIT_OPEN_MARK, HIT_CLOSE_MARK);
+			} else {
+				result = doHighlightQuery(queryInfo.getOriginalQuery(),
+						fieldName, text, HIT_OPEN_MARK, HIT_CLOSE_MARK);
+				result = doHighlightQuery(queryInfo.getSynonymPartQuery(),
+						fieldName, result, SYN_OPEN_MARK, SYN_CLOSE_MARK);
+				result = doHighlightQuery(queryInfo.getEfoExpansionPartQuery(),
+						fieldName, result, EFO_OPEN_MARK, EFO_CLOSE_MARK);
 
-            result = EFO_AND_SYN_REGEX.replace(result, SYN_OPEN_MARK + "$1" + SYN_CLOSE_MARK);
-            result = SYN_AND_HIT_REGEX.replace(result, HIT_OPEN_MARK + "$1" + HIT_CLOSE_MARK);
-            result = EFO_AND_HIT_REGEX.replace(result, HIT_OPEN_MARK + "$1" + HIT_CLOSE_MARK);
+				result = EFO_AND_SYN_REGEX.replace(result, SYN_OPEN_MARK + "$1"
+						+ SYN_CLOSE_MARK);
+				result = SYN_AND_HIT_REGEX.replace(result, HIT_OPEN_MARK + "$1"
+						+ HIT_CLOSE_MARK);
+				result = EFO_AND_HIT_REGEX.replace(result, HIT_OPEN_MARK + "$1"
+						+ HIT_CLOSE_MARK);
+			}
 
-            return result;
-        }
-    }
+		} catch (Exception x) {
+			logger.error("Caught an exception:", x);
+		}
 
-    private String doHighlightQuery( Query query, String fieldName, String text, String openMark, String closeMark )
-    {
-        try {
-            SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(openMark, closeMark);
-            Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query, fieldName, this.env.defaultField));
-            highlighter.setTextFragmenter(new NullFragmenter());
+		return result;
+	}
 
-            String str = highlighter.getBestFragment(this.env.indexAnalyzer, "".equals(fieldName) ? this.env.defaultField : fieldName, text);
+	private String doHighlightQuery(Query query, String fieldName, String text,
+			String openMark, String closeMark) {
+		try {
+			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(
+					openMark, closeMark);
+			Highlighter highlighter = new Highlighter(htmlFormatter,
+					new QueryScorer(query, fieldName, this.env.defaultField));
+			highlighter.setTextFragmenter(new NullFragmenter());
 
-            return null != str ? str : text;
-        } catch (Exception x) {
-            logger.error("Caught an exception:", x);
-        }
-        return text;
+			String str = highlighter.getBestFragment(this.env.indexAnalyzer,
+					"".equals(fieldName) ? this.env.defaultField : fieldName,
+					text);
 
-    }
+			return null != str ? str : text;
+		}
+
+		catch (Exception x) {
+			logger.error("Caught an exception:", x);
+		}
+		return text;
+
+	}
 }

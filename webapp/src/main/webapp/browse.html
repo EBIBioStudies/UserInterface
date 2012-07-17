@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
 <html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <meta http-equiv="Content-Language" content="en-GB" />
 <meta http-equiv="Window-target" content="_top" />
 <meta name="no-email-collection"
@@ -56,6 +56,10 @@
 
 <!-- Ellipsis -->
 <script src="assets/scripts/ThreeDots.js" type="text/javascript"></script>
+<script src="assets/scripts/jquery.tipsy.js" type="text/javascript"></script>
+
+
+
 
 </head>
 
@@ -131,8 +135,8 @@
 																	</td>
 																	<td valign="middle">
 																				Sort by:
-																			<select name="sortby">
-																			<option value="" selected>Relevance</option>
+																			<select id="sortby" name="sortby" disabled>
+																			<option value="">Relevance</option>
 																			<option value="id">Accession</option>
 																			<option value="description">Description</option>
 																			<option value="samples">Samples</option>

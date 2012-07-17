@@ -60,7 +60,7 @@ public class Files extends ApplicationComponent implements IDocumentSource {
 	public void initialize() throws Exception {
 
 		buildIndexes= Application
-				.getInstance().getPreferences().getBoolean("ae.buildLuceneIndexes");
+				.getInstance().getPreferences().getBoolean("bs.buildLuceneIndexes");
 
 		this.saxon = (SaxonEngine) getComponent("SaxonEngine");
 		this.search = (SearchEngine) getComponent("SearchEngine");
@@ -74,7 +74,7 @@ public class Files extends ApplicationComponent implements IDocumentSource {
 
 		if (buildIndexes) {
 			DocumentInfo docTemp = getXmlFromFile(new File(getPreferences()
-					.getString("ae.files.persistence-location")));
+					.getString("bs.files.persistence-location")));
 
 			updateIndex(docTemp);
 			docTemp = null;
@@ -98,7 +98,7 @@ public class Files extends ApplicationComponent implements IDocumentSource {
 	 public synchronized DocumentInfo getDocument() throws Exception
 	 {
 		 return getXmlFromFile(new File(getPreferences().getString(
-					"ae.files.persistence-location")));
+					"bs.files.persistence-location")));
 //	 return this.document.getObject().getDocument();
 	 }
 	
@@ -196,7 +196,7 @@ public class Files extends ApplicationComponent implements IDocumentSource {
 	public synchronized String getRootFolder() {
 		if (null == this.rootFolder) {
 			this.rootFolder = getPreferences().getString(
-					"ae.files.root.location");
+					"bs.files.root.location");
 		}
 		return this.rootFolder;
 	}

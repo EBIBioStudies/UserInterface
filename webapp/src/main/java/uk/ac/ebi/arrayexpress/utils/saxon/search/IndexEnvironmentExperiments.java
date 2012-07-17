@@ -58,13 +58,14 @@ public class IndexEnvironmentExperiments extends AbstractIndexEnvironment {
 		defaultPageSize = 50;
 
 		HierarchicalConfiguration connsConf = (HierarchicalConfiguration) Application
-				.getInstance().getPreferences().getConfSubset("ae.xmldatabase");
+				.getInstance().getPreferences().getConfSubset("bs.xmldatabase");
 
 		if (null != connsConf) {
 			driverXml = connsConf.getString("driver");
-			connectionString = connsConf.getString("connectionstring");
+//			connectionString = connsConf.getString("connectionstring");
+			connectionString = connsConf.getString("base") + "://" + connsConf.getString("host") + ":" + connsConf.getString("port") + "/" + connsConf.getString("dbname");
 		} else {
-			logger.error("ae.xmldatabase Configuration is missing!!");
+			logger.error("bs.xmldatabase Configuration is missing!!");
 		}
 
 		Class<?> c;

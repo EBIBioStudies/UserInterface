@@ -17,6 +17,7 @@ package uk.ac.ebi.arrayexpress.utils.saxon.search;
  *
  */
 
+import java.io.File;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -43,6 +44,7 @@ import org.apache.lucene.document.NumericField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.search.FieldCache;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xmldb.api.DatabaseManager;
@@ -145,85 +147,6 @@ public class Indexer {
 							}
 
 							else {
-								// TODO rpe: remove this
-								// in this case I will put all the data
-								// processed
-								// in the index
-								if (field.name.equalsIgnoreCase("xml")) {
-									String acc = ((NodeInfo) v)
-											.getStringValue();
-
-									String connectionString = "xmldb:basex://localhost:1984/basexAE";
-									Class<?> c = Class
-											.forName("org.basex.api.xmldb.BXDatabase");
-
-									// Class<?> c =
-									// Class.forName("org.exist.xmldb.DatabaseImpl");
-									Database db = (Database) c.newInstance();
-									DatabaseManager.registerDatabase(db);
-									Collection coll = null;
-									try {
-										System.out.println("ZZZZZZ->" + acc);
-										coll = DatabaseManager
-												.getCollection(connectionString);
-										XPathQueryService service = (XPathQueryService) coll
-												.getService(
-														"XPathQueryService",
-														"1.0");
-
-										long time = System.nanoTime();
-										ResourceSet set = service
-												.query("for $x in ('"
-														+ acc
-														+ "')  let $y:= //folder[@accession=$x] return <all>{//experiment[accession=($x) and source/@visible!='false' and user/@id=1]} {$y}  </all>");
-										double ms = (System.nanoTime() - time) / 1000000d;
-										System.out
-												.println("\n\n" + ms + " 2ms");
-
-										ResourceIterator iter = set
-												.getIterator();
-
-										// Loop through all result items
-										while (iter.hasMoreResources()) {
-
-											v = iter.nextResource()
-													.getContent();
-											System.out.println("query result->"
-													+ v);
-										}
-									} catch (final XMLDBException ex) {
-										// Handle exceptions
-										System.err
-												.println("XML:DB Exception occured "
-														+ ex.errorCode);
-										ex.printStackTrace();
-									} finally {
-										if (coll != null) {
-											try {
-												coll.close();
-											} catch (XMLDBException e) {
-												// TODO Auto-generated catch
-												// block
-												e.printStackTrace();
-											}
-										}
-									}
-
-								}
-
-								// when i use "." i t means that i want to keep
-								// all the xml text as text
-								// if(field.path.equalsIgnoreCase("/.")){
-								// String
-								// xml=PrintUtils.printNodeInfo((NodeInfo)node,
-								// document.getConfiguration());
-								// //TODO RPE:
-								// xml=xml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
-								// "");
-								// xml=xml.replace("\n", "");
-								// v=xml;
-								//
-								// }
 								addIndexField(d, field.name, v,
 										field.shouldAnalyze, field.shouldStore,
 										field.shouldSort);
@@ -263,7 +186,8 @@ public class Indexer {
 	
 	
 	// I will generate the Lucene Index based on a XmlDatabase
-		public void indexFromXmlDB() throws Exception {
+	//the indexLocationDirectory parameter tells me if I will create the index in a different directory(we have a parametrized directory, but we may need t define a new one because we dont want to avoid users accessing during the generation pf the new index - when o reload job is running)
+		public void indexFromXmlDB(String indexLocationDirectory, String connectionStringExt) throws Exception {
 			int countNodes = 0;
 			String driverXml = "";
 			String connectionString = "";
@@ -272,23 +196,54 @@ public class Indexer {
 			Class<?> c;
 			try {
 
-				HierarchicalConfiguration connsConf = (HierarchicalConfiguration) Application
-						.getInstance().getPreferences()
-						.getConfSubset("ae.xmldatabase");
+				IndexWriter w=null;
+				// create the index in the default directory and I will use the configured database
+				if(indexLocationDirectory.equalsIgnoreCase("") || indexLocationDirectory==null){
+					w = createIndex(this.env.indexDirectory,
+						this.env.indexAnalyzer);
+		
+				
+					HierarchicalConfiguration connsConf = (HierarchicalConfiguration) Application
+							.getInstance().getPreferences()
+							.getConfSubset("bs.xmldatabase");
 
-				if (null != connsConf) {
-					driverXml = connsConf.getString("driver");
-					connectionString = connsConf.getString("connectionstring");
-				} else {
-					logger.error("ae.xmldatabase Configuration is missing!!");
+					if (null != connsConf) {
+						driverXml = connsConf.getString("driver");
+						connectionString = connsConf.getString("connectionstring");
+					} else {
+						logger.error("bs.xmldatabase Configuration is missing!!");
+					}
+
+			
+
 				}
+				else{ // create it on a temporary directory (I should change this(
+					//
+					String indexBaseLocation = this.env.indexConfig
+							.getString("[@location]");
+					Directory indexTempDirectory = FSDirectory.open(new File(indexLocationDirectory,
+							this.env.indexId));
+					w = createIndex(indexTempDirectory,
+							this.env.indexAnalyzer);
+					
+					HierarchicalConfiguration connsConf = (HierarchicalConfiguration) Application
+							.getInstance().getPreferences()
+							.getConfSubset("bs.xmldatabase");
 
+					if (null != connsConf) {
+						driverXml = connsConf.getString("driver");
+						//I will use the connectionString that was passed by parameter
+						connectionString = connectionStringExt;
+					} else {
+						logger.error("bs.xmldatabase Configuration is missing!!");
+					}
+					
+				}
 				c = Class.forName(driverXml);
-
 				db = (Database) c.newInstance();
 				DatabaseManager.registerDatabase(db);
 				coll = DatabaseManager.getCollection(connectionString);
-				XPathQueryService service = (XPathQueryService) coll.getService(
+						XPathQueryService service = (XPathQueryService) coll.getService(
 						"XPathQueryService", "1.0");
 
 				SaxonEngine saxonEngine = (SaxonEngine) Application.getInstance()
@@ -308,21 +263,23 @@ public class Indexer {
 					fieldXpe.put(field.name, xp.compile(field.path));
 					logger.debug("Field Path->[{}]", field.path);
 				}
-
-				// create the index
-				IndexWriter w = createIndex(this.env.indexDirectory,
-						this.env.indexAnalyzer);
-
+			
 				// the xmldatabase is not very correct and have memory problem for
 				// queires with huge results, so its necessary to implement our own
 				// iteration mechanism
-
-				// I will collect all the results
-				ResourceSet set = service.query(this.env.indexDocumentPath);
-				//TODO rpe
-				//ResourceSet set = service.query("//Sample");
-				logger.debug("Number of results->" + set.getSize());
-				long numberResults = set.getSize();
+//
+//				// I will collect all the results
+//				ResourceSet set = service.query(this.env.indexDocumentPath);
+//				//TODO rpe
+//				//ResourceSet set = service.query("//Sample");
+//				logger.debug("Number of results->" + set.getSize());
+//				long numberResults = set.getSize();
+				long numberResults = 0;
+				ResourceSet set = service.query("count(" + this.env.indexDocumentPath + ")");
+				if(set.getIterator().hasMoreResources()){
+					numberResults=Integer.parseInt((String)set.getIterator().nextResource().getContent());
+				}
+				logger.debug("Number of results->" + numberResults);
 				if (coll != null) {
 					try{
 						coll.close();
@@ -334,16 +291,15 @@ public class Indexer {
 				set = null;
 				db=null;
 				//c=null;
-				long pageSizeDefault = 1000;
+				long pageSizeDefault = 10000; //(for samples 1million, for samplegroup 10000)
 				long pageNumber = 1;
-
-				String xml = "";
+				int count=0;
 				Map<String, AttsInfo[]> cacheAtt = new HashMap<String, AttsInfo[]>();
 				Map<String, XPathExpression> cacheXpathAtt = new HashMap<String, XPathExpression>();
 				Map<String, XPathExpression> cacheXpathAttValue=new HashMap<String, XPathExpression>();
 				while ((pageNumber * pageSizeDefault) <= (numberResults
 						+ pageSizeDefault - 1)) {
-
+				//while ((pageNumber<=1)) {
 					// calculate the last hit
 					long pageInit = (pageNumber - 1) * pageSizeDefault + 1;
 					long pageSize = (pageNumber * pageSizeDefault < numberResults) ? pageSizeDefault
@@ -357,9 +313,14 @@ public class Indexer {
 							"XPathQueryService", "1.0");
 
 					// xquery paging using subsequence function
-					set = service.query("subsequence(" + this.env.indexDocumentPath
-							+ "," + pageInit + "," + pageSize + ")");
-					logger.debug("Number of results of page->" + set.getSize());
+					long time = System.nanoTime();
+					
+					///set = service.query("for $x in(/Biosamples/SampleGroup/Sample/@id) return string($x)");
+					set = service.query("for $x in(subsequence(" + this.env.indexDocumentPath + "/@id," +pageInit + "," + pageSize + ")) return string($x)");
+					//logger.debug("Number of results of page->" + set.getSize());
+					double ms = (System.nanoTime() - time) / 1000000d;
+					logger.info("Query XMLDB took ->[{}]", ms);
+	
 					ResourceIterator iter = set.getIterator();
 					XPath xp2;
 					XPathExpression xpe2;
@@ -368,11 +329,28 @@ public class Indexer {
 					// cache of distinct attributes fora each sample group
 
 					while (iter.hasMoreResources()) {
-
-						xml = (String) iter.nextResource().getContent();
-						reader = new StringReader(xml);
+						count++;
+						logger.debug("its beeing processed the number ->" + count);
+						String idSample= (String) iter.nextResource().getContent();
+						logger.debug("idSample->"+idSample);
+						//I need to get the sample
+						ResourceSet setid = service.query(this.env.indexDocumentPath +"[@id='" + idSample + "']");
+						
+//						System.out.println("/Biosamples/SampleGroup/Sample[@id='" + idSample + "']");
+						ResourceIterator iterid = setid.getIterator();
+						while (iterid.hasMoreResources()) {
+//							System.out.println("££££££££££££££££££££££££££££");
+							///xml=(String) iterid.nextResource().getContent();
+						
+						///xml=(String) iter.nextResource().getContent();
+							//logger.debug("xml->"+xml);
+							///reader = new StringReader(xml);
+						StringBuilder xml = new StringBuilder();
+						xml.append((String) iterid.nextResource().getContent());
+						//logger.debug(xml.toString());
+						reader = new StringReader(xml.toString());
 						source = config.buildDocument(new StreamSource(reader));
-
+						
 						// logger.debug("XML DB->[{}]",
 						// PrintUtils.printNodeInfo((NodeInfo) source, config));
 						Document d = new Document();
@@ -391,7 +369,7 @@ public class Indexer {
 						} else {
 							pathRoot = env.indexDocumentPath;
 						}
-						// logger.debug("PathRoot->[{}]",pathRoot);
+						//logger.debug("PathRoot->[{}]",pathRoot);
 						xpe2 = xp2.compile(pathRoot);
 						//TODO rpe
 //						xpe2 = xp2.compile("/Sample");
@@ -401,7 +379,7 @@ public class Indexer {
 						
 
 						for (Object node : documentNodes) {
-							// logger.debug("XML£££££££££ DB->[{}]",PrintUtils.printNodeInfo((NodeInfo)node,config));
+							//logger.debug("XML£££££££££ DB->[{}]",PrintUtils.printNodeInfo((NodeInfo)node,config));
 							for (FieldInfo field : this.env.fields.values()) {
 								try {
 
@@ -474,12 +452,16 @@ public class Indexer {
 												logger.debug("No exists cache for samplegroup->" + groupId);
 												//ResourceSet setAtt = service.query("distinct-values(/Biosamples/SampleGroup[@id='" + groupId + "']/Sample/attribute[@dataType!='INTEGER']/replace(@class,' ', '-'))");
 												///ResourceSet setAtt = service.query("distinct-values(/Biosamples/SampleGroup[@id='" + groupId + "']/Sample/attribute/replace(@class,' ', '-'))");
-												ResourceSet setAtt = service.query("distinct-values(/Biosamples/SampleGroup[@id='" + groupId + "']/Sample/attribute/@class)");
+												///ResourceSet setAtt = service.query("distinct-values(/Biosamples/SampleGroup[@id='" + groupId + "']/Sample/attribute/@class)");
+												ResourceSet setAtt = service.query("data(/Biosamples/SampleGroup[@id='" + groupId + "']/SampleAttributes/attribute/@class)");
+//												logger.debug("££££££££££££££->" + "/Biosamples/SampleGroup[@id='" + groupId + "']/SampleAttributes/attribute/@class");
+												
 												ResourceIterator resAtt=setAtt.getIterator();
 												int i=0;
 												attsInfo= new AttsInfo[(int)setAtt.getSize()];
 												while (resAtt.hasMoreResources()){
 													String classValue=(String)resAtt.nextResource().getContent();
+													//logger.debug("££££££££££££££->" + classValue);
 													//need to use this because of the use of quotes in the name of the classes
 													String classValueWitoutQuotes=classValue.replaceAll("\"", "\"\"");
 													//logger.debug("Class value->" + classValue);
@@ -504,9 +486,10 @@ public class Indexer {
 													//this doesnt work when the first sample of sample group doens have all the attributes
 													//im using \" becuse there are some attributes thas has ' on the name!!!
 													///ResourceSet setAttType = service.query("string((/Biosamples/SampleGroup[@id='" + groupId +"']/Sample/attribute[@class=replace(\"" + classValueWitoutQuotes + "\",'-',' ')]/@dataType)[1])");
-													ResourceSet setAttType = service.query("string((/Biosamples/SampleGroup[@id='" + groupId +"']/Sample/attribute[@class=\"" + classValueWitoutQuotes + "\"]/@dataType)[1])");
+													///ResourceSet setAttType = service.query("string(/Biosamples/SampleGroup[@id='" + groupId +"']/Sample/attribute[@class=\"" + classValueWitoutQuotes + "\"]/@dataType)");
+													ResourceSet setAttType = service.query("data(/Biosamples/SampleGroup[@id='" + groupId + "']/SampleAttributes/attribute[@class=\"" + classValueWitoutQuotes + "\"]/@dataType)");
 													String dataValue=(String)setAttType.getIterator().nextResource().getContent();
-													//logger.debug("Data Type of " + classValue + " ->" + dataValue);
+//													logger.debug("Data Type of " + classValue + " ->" + dataValue);
 													//String dataValue=(String)xpathAtt.evaluate(node, XPathConstants.STRING);
 													AttsInfo attsI= new AttsInfo(classValue,dataValue);
 													//logger.debug("Atttribute->class" + attsI.name + "->type->" + attsI.type + "->i" + i);
@@ -527,11 +510,6 @@ public class Indexer {
 													//logger.debug("$$$$$$->" + "STRING");
 													XPathExpression valPath=cacheXpathAttValue.get(attsInfo[i].name);
 													String val=(String)valPath.evaluate(node, XPathConstants.STRING);
-													if(attsInfo[i].name.equalsIgnoreCase("age")){
-//														logger.debug("$$$$$$2->" + attsInfo[i].name + "$$$$" + attsInfo[i].type);
-//														logger.debug("$$$$$$$$$$$$ AGE COMO STRING->" + val + "->groupId->" + groupId);
-														//throw new Exception("ERRRRRRRRRRO!!!!!!!!");
-													}
 													addIndexField(d, (i+1)+"", val,false,false, true);
 												}
 												else{
@@ -592,7 +570,7 @@ public class Indexer {
 //						addIndexDocument(w, d);
 //						addIndexDocument(w, d);
 					}
-
+					}	
 					logger.debug("until now it were processed->[{}]",
 							pageNumber * pageSizeDefault);
 					pageNumber++;
@@ -643,13 +621,13 @@ public class Indexer {
 
 						HierarchicalConfiguration connsConf = (HierarchicalConfiguration) Application
 								.getInstance().getPreferences()
-								.getConfSubset("ae.xmldatabase");
+								.getConfSubset("bs.xmldatabase");
 
 						if (null != connsConf) {
 							driverXml = connsConf.getString("driver");
 							connectionString = connsConf.getString("connectionstring");
 						} else {
-							logger.error("ae.xmldatabase Configuration is missing!!");
+							logger.error("bs.xmldatabase Configuration is missing!!");
 						}
 
 						c = Class.forName(driverXml);

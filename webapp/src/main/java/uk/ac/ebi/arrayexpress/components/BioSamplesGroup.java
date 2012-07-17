@@ -75,7 +75,7 @@ public class BioSamplesGroup extends ApplicationComponent implements
 
 	public void initialize() throws Exception {
 		buildIndexes= Application
-				.getInstance().getPreferences().getBoolean("ae.buildLuceneIndexes");
+				.getInstance().getPreferences().getBoolean("bs.buildLuceneIndexes");
 		
 		this.saxon = (SaxonEngine) getComponent("SaxonEngine");
 		this.search = (SearchEngine) getComponent("SearchEngine");
@@ -110,7 +110,7 @@ public class BioSamplesGroup extends ApplicationComponent implements
 	// disappear, so
 	public synchronized DocumentInfo getDocument() throws Exception {
 		return getXmlFromFile(new File(getPreferences().getString(
-				"ae.experiments.persistence-location")));
+				"bs.experiments.persistence-location")));
 	}
 
 	// implementation of IDocumentSource.setDocument(DocumentInfo)
@@ -125,7 +125,7 @@ public class BioSamplesGroup extends ApplicationComponent implements
 	private void updateIndex(boolean rebuild) {
 		try {
 			
-			this.search.getController().indexFromXmlDB(INDEX_ID, rebuild);			
+			this.search.getController().indexFromXmlDB(INDEX_ID, rebuild, "", "");			
 			
 //			TODO review the autocompletion because of time it takes (maybe the problem is the xml field)
 			this.autocompletion.rebuild();
@@ -134,6 +134,19 @@ public class BioSamplesGroup extends ApplicationComponent implements
 		}
 	}
 
+	
+	
+	//return the Index location
+	private void rebuilIndex(String indexLocationDirectory,String connectionString) {
+		try {
+			//String indexLocationDirectory= this.search.getController().getEnvironment(INDEX_ID).indexLocationDirectory + "_" + System.currentTimeMillis();
+			this.search.getController().indexFromXmlDB(INDEX_ID, true, indexLocationDirectory, connectionString);		
+			
+		} catch (Exception x) {
+			this.logger.error("Caught an exception:", x);
+		}
+
+	}
 
 	//TODO move this to anoher place (i will not do now because i dont know from where I will read the xml source... maybe in the future I will not use the file!!
 	public DocumentInfo getXmlFromFile(File file) throws Exception {

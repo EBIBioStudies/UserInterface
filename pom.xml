@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.microarray</groupId>
-    <artifactId>ae-interface</artifactId>
+    <artifactId>bs-interface</artifactId>
     <name>ArrayExpress Interface</name>
-    <version>2.0</version>
+    <version>1.0</version>
     <packaging>pom</packaging>
     <url>http://www.ebi.ac.uk/arrayexpress</url>
 
@@ -16,22 +16,14 @@
     </scm>
 
     <developers>
-        <developer>
-            <id>kolais</id>
-            <name>Nikolay Kolesnikov</name>
-            <email>kolais@ebi.ac.uk</email>
-            <roles>
-                <role>Software Engineer</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>ugis</id>
-            <name>Ugis Sarkans</name>
-            <email>ugis@ebi.ac.uk</email>
-            <roles>
-                <role>Team Leader</role>
-            </roles>
-        </developer>
+       	<developer>
+			<id>rpereira</id>
+			<name>Rui Pereira</name>
+			<email>rui.pereira@ebi.ac.uk</email>
+			<roles>
+				<role>Software Engineer</role>
+			</roles>
+		</developer>
     </developers>
 
     <repositories>
@@ -69,9 +61,9 @@
         </plugins>
     </build>
     <modules>
-        <module>components</module>
+        <!-- <module>components</module> -->
         <module>webapp</module>
-        <module>redirector</module>
+       <!--  <module>redirector</module> -->
     </modules>
 </project>
 
