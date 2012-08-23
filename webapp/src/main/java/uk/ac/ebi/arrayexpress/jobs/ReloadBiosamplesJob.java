@@ -7,8 +7,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.io.FileUtils;
 import org.basex.core.cmd.CreateDB;
 import org.basex.server.ClientSession;
 import org.basex.server.Session;
@@ -56,15 +62,45 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 
 			// download the xml
 			// TODO: rpe (define it externally)
-			
-			String downloadDirectory = Application.getInstance().getPreferences()
-					.getString("bs.downloadDirectory");
-			logger.debug("downloadDirectory->" + downloadDirectory);
-			
-			DownloadBiosamplesXmlFile dxml = new DownloadBiosamplesXmlFile();
-			boolean downloadOk = dxml.downloadXml(downloadDirectory);
 
-		
+			String downloadDirectory = Application.getInstance()
+					.getPreferences().getString("bs.downloadDirectory");
+			logger.debug("downloadDirectory->" + downloadDirectory);
+
+			int updateDatabaseTimestamp = Application.getInstance()
+					.getPreferences().getInteger("bs.reloadBiosamplesDatabase");
+			logger.debug("reloadBiosamplesDatabase->" + updateDatabaseTimestamp);
+			// incremental or total
+			// SimpleDateFormat sd= new SimpleDateFormat("yyyy.MM.dd");
+			// today
+
+			if (updateDatabaseTimestamp == -1) {
+				logger.error("ReloadBiosamplesJob is trying to execute and the configuration does not allow that");
+				this.getApplication().sendEmail("BIOSMAPLES: WARNING","ReloadBiosamplesJob is trying to execute and the configuration does not allow that!");
+				//throw new Exception("ReloadBiosamplesJob is trying to execute and the configuration does not allow that!");
+				return;
+			}
+			
+			Long time=null;
+			if (updateDatabaseTimestamp == 0) {
+				time = new Long(0);
+			} else {
+				Calendar date = new GregorianCalendar();
+				// reset hour, minutes, seconds and millis
+				date.set(Calendar.HOUR_OF_DAY, 0);
+				date.set(Calendar.MINUTE, 0);
+				date.set(Calendar.SECOND, 0);
+				date.set(Calendar.MILLISECOND, 0);
+				// logger.debug("today->" + date.getTimeInMillis());
+				//date.add(Calendar.DAY_OF_MONTH, -1);
+				// logger.debug("today -2 days->" + date.getTimeInMillis());
+
+				time = date.getTimeInMillis();
+			}
+
+			DownloadBiosamplesXmlFile dxml = new DownloadBiosamplesXmlFile();
+			boolean downloadOk = dxml.downloadXml(downloadDirectory, time);
+
 			if (downloadOk) {
 				String setupDir = Application.getInstance().getPreferences()
 						.getString("bs.setupDirectory");
@@ -76,7 +112,8 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 						.getPreferences().getString("bs.backupDirectory");
 				logger.debug("backupDirectory->" + backupDirectory);
 
-				//this variable will be used in the creation of the bakup directory anda in the creation od the database backup
+				// this variable will be used in the creation of the bakup
+				// directory anda in the creation od the database backup
 				Long tempDir = System.nanoTime();
 
 				String newDir = "backup_" + tempDir;
@@ -103,6 +140,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 							setupTempDirectory.getAbsolutePath());
 				}
 
+				
 				// Download it from
 
 				File sourceLocation = new File(downloadDirectory);
@@ -120,6 +158,10 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				// only after update the database I update the Lucenes Indexes
 				logger.info("Deleting Setup Directory and renaming - from now on the application is not answering");
 
+				SearchEngine search = ((SearchEngine) getComponent("SearchEngine"));
+				search.getController().getEnvironment("biosamplesgroup").closeIndexReader();
+				search.getController().getEnvironment("biosamplessample").closeIndexReader();
+				
 				deleteDirectory(setupDirectory);
 
 				// Rename file (or directory)
@@ -136,17 +178,17 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 
 				logger.info("Deleting Setup Directory and renaming - End");
 
-				SearchEngine search = ((SearchEngine) getComponent("SearchEngine"));
+				
 				search.getController().getEnvironment("biosamplesgroup")
 						.indexReader();
+				
 				((IndexEnvironmentBiosamplesGroup) search.getController()
 						.getEnvironment("biosamplesgroup")).setup();
 				search.getController().getEnvironment("biosamplessample")
 						.indexReader();
 				((IndexEnvironmentBiosamplesSample) search.getController()
 						.getEnvironment("biosamplessample")).setup();
-				//TODO: RPE Update the EFO!!??
-				
+				// TODO: RPE Update the EFO!!??
 
 			} else {
 				logger.debug("Something went wrong on Xml download");
@@ -155,7 +197,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		} finally {
-
+			
 		}
 		logger.info("End of Reloading all Biosamples data into the Application Server");
 		// I want to start using the new version of the data
@@ -174,12 +216,13 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				.getString("bs.xmldatabase.port");
 		String dbPassword = Application.getInstance().getPreferences()
 				.getString("bs.xmldatabase.adminpassword");
-		
+
 		String originalDbName = Application.getInstance().getPreferences()
 				.getString("bs.xmldatabase.dbname");
-		//String originalDbName = "biosamplesAEGroup";
-		
-		Session session = new ClientSession(dbHost, Integer.parseInt(dbPort), "admin", dbPassword);
+		// String originalDbName = "biosamplesAEGroup";
+
+		Session session = new ClientSession(dbHost, Integer.parseInt(dbPort),
+				"admin", dbPassword);
 
 		// ------------------------------------------------------------------------
 		// Create a database
@@ -188,13 +231,18 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 		// session.execute(new CreateDB("input",
 		// "/Users/rpereira/Downloads/factbook.xml"));
 		//
-	
+
 		String tempDbName = originalDbName + "_" + tempDir;
 		String logs = session.execute(new CreateDB(tempDbName, setupDirectory
 				.getAbsolutePath()));
-				//.getAbsolutePath() + "/XmlFiles"));
+		// .getAbsolutePath() + "/XmlFiles"));
 		logger.debug("CreateDB('" + tempDbName + "' ...->" + logs);
-
+		
+		logs = session.execute("CLOSE");
+		logger.debug("CLOSE ...->" + logs);
+		
+		
+		logger.debug("Start Indexing ..." + logs);
 		// I will create now the Lucene Indexes ...
 		SearchEngine search = ((SearchEngine) getComponent("SearchEngine"));
 		// TODO: rpe change all this static values
@@ -208,6 +256,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				"xmldb:basex://localhost:1984/" + tempDbName);
 		((IndexEnvironmentBiosamplesSample) search.getController()
 				.getEnvironment("biosamplessample")).setup();
+		logger.debug("End Indexing ..." + logs);
 		//
 
 		// index
@@ -216,12 +265,11 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				+ tempDbName + "_backup");
 		logger.debug("ALTER DATABASE " + originalDbName + " " + tempDbName
 				+ "_backup" + "->" + logs);
-
 		logs = session.execute("ALTER DATABASE " + tempDbName + " "
 				+ originalDbName);
-		logger.debug("ALTER DATABASE " + tempDbName + " " + originalDbName
-				+ "->" + logs);
+		
 		logger.info("DatabaseXml Rename - End!");
+
 		System.out.println("\n* Close the client session.");
 
 		session.close();
@@ -229,41 +277,46 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 	}
 
 	void deleteDirectory(File f) throws IOException {
-		if (f.isDirectory()) {
-			for (File c : f.listFiles())
-				deleteDirectory(c);
-		}
-		if (!f.delete())
-			throw new FileNotFoundException("Failed to delete file: " + f);
+		FileUtils.deleteDirectory(f);
+		// if (f.isDirectory()) {
+		// for (File c : f.listFiles()){
+		// logger.debug("File to be deleted->" + c.getAbsolutePath());
+		// deleteDirectory(c);
+		//
+		// }
+		// }
+		// if (!f.delete())
+		// throw new FileNotFoundException("Failed to delete file: " + f);
 	}
 
 	public void copyDirectory(File sourceLocation, File targetLocation)
 			throws IOException {
-
-		if (sourceLocation.isDirectory()) {
-			if (!targetLocation.exists()) {
-				targetLocation.mkdir();
-			}
-
-			String[] children = sourceLocation.list();
-			for (int i = 0; i < children.length; i++) {
-				copyDirectory(new File(sourceLocation, children[i]), new File(
-						targetLocation, children[i]));
-			}
-		} else {
-
-			InputStream in = new FileInputStream(sourceLocation);
-			OutputStream out = new FileOutputStream(targetLocation);
-
-			// Copy the bits from instream to outstream
-			byte[] buf = new byte[1024];
-			int len;
-			while ((len = in.read(buf)) > 0) {
-				out.write(buf, 0, len);
-			}
-			in.close();
-			out.close();
-		}
+		FileUtils.copyDirectory(sourceLocation, targetLocation);
+//
+//		if (sourceLocation.isDirectory()) {
+//			if (!targetLocation.exists()) {
+//				targetLocation.mkdir();
+//			}
+//
+//			String[] children = sourceLocation.list();
+//			for (int i = 0; i < children.length; i++) {
+//				copyDirectory(new File(sourceLocation, children[i]), new File(
+//						targetLocation, children[i]));
+//			}
+//		} else {
+//
+//			InputStream in = new FileInputStream(sourceLocation);
+//			OutputStream out = new FileOutputStream(targetLocation);
+//
+//			// Copy the bits from instream to outstream
+//			byte[] buf = new byte[1024];
+//			int len;
+//			while ((len = in.read(buf)) > 0) {
+//				out.write(buf, 0, len);
+//			}
+//			in.close();
+//			out.close();
+//		}
 	}
 
 }

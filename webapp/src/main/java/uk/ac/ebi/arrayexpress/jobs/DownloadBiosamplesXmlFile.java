@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,14 +47,14 @@ public class DownloadBiosamplesXmlFile {
 	public static void main(String[] args) {
 		DownloadBiosamplesXmlFile test= new DownloadBiosamplesXmlFile();
 		try {
-		test.downloadXml("/Users/rpslpereira/Apps/apache-tomcat-6.0.33/temp/StagingArea/DownloadXml/");
+		test.downloadXml("/Users/rpslpereira/Apps/apache-tomcat-6.0.33/temp/StagingArea/DownloadXml/", 0);
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
 	}
 	
-	public boolean downloadXml(String downloadDirectory) throws Exception {
+	public boolean downloadXml(String downloadDirectory, long time) throws Exception {
 		// TODO Auto-generated method stub
 	
 		String sessionKey = null;
@@ -84,8 +85,16 @@ public class DownloadBiosamplesXmlFile {
             if (respStr.startsWith("OK:")) {
             	log.debug("Login successful");
                 sessionKey = respStr.substring(3);
-                log.debug("Call XMLDataExport URL");
-                 URL website = new URL(url + "XMLDataExport?" + sessionCookieName +"=" + sessionKey );
+                log.debug("Call XMLDataExport URL"); //since=timestamp
+                URL website=null;
+                if(time!=0){
+                    website = new URL(url + "XMLDataExport?" + sessionCookieName +"=" + sessionKey  + "&since=" + time);    
+                    System.out.println(url + "XMLDataExport?" + sessionCookieName +"=" + sessionKey  + "&since=" + time);
+                }
+                else{
+                    website = new URL(url + "XMLDataExport?" + sessionCookieName +"=" + sessionKey );
+                }
+                	
 //                 ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 //                 FileOutputStream fos = new FileOutputStream("biosamples.xml");
 //                 fos.getChannel().transferFrom(rbc, 0, 1 << 2400);
@@ -96,7 +105,7 @@ public class DownloadBiosamplesXmlFile {
                  try
                  {
                          in = new BufferedInputStream(website.openStream());
-                         fileLocation=downloadDirectory + "biosamples.xml";
+                         fileLocation=downloadDirectory + "/biosamples.xml";
                          fout = new FileOutputStream( fileLocation);
 
                          byte data[] = new byte[1024];
@@ -123,6 +132,7 @@ public class DownloadBiosamplesXmlFile {
             ok = true;
         } catch (Exception e) {
         	 log.error("ERROR on download: " + e.getMessage());
+        	 e.printStackTrace();
         	 throw new RuntimeException(e);
         	 //return false;
         } finally {
