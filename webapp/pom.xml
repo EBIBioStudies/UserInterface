@@ -20,7 +20,7 @@
 		<interface.application.log.default.priority>INFO</interface.application.log.default.priority>
 		<interface.application.log.appender.ref>ROLLINGFILE</interface.application.log.appender.ref>
 		<interface.application.log.appender.jobs.ref>ROLLINGFILEJOBS</interface.application.log.appender.jobs.ref>
-
+		<interface.application.pref.reports.recipients>rpereira@ebi.ac.uk</interface.application.pref.reports.recipients>
 		<interface.application.base.path>/biosamples</interface.application.base.path>
 		<interface.application.link.www_domain />
 		<interface.application.link.www_domain_hack />
@@ -32,7 +32,19 @@
 
 		<interface.application.pref.files.prefix>bs</interface.application.pref.files.prefix>
 		<interface.application.index.directory>Setup</interface.application.index.directory>
+		
+		<interface.application.pref.reload-all.update.schedule/>
+		<interface.application.pref.reload-all.update.interval></interface.application.pref.reload-all.update.interval>
+		<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
+		
+		
 		<interface.application.pref.efo.update.schedule>0 0 1 ? * SUN</interface.application.pref.efo.update.schedule>
+		<!-- -1 means that the update is not possible; 0 means complete update; 
+			1 means last day update -->
+		<!-- if 0 or 1 it means that its possible to run the reload job - this 
+			should be only used on internal environments -->
+		<interface.application.pref.biosamples.update.timestamp>-1</interface.application.pref.biosamples.update.timestamp>
+
 		<interface.application.google.analytics />
 		<interface.application.body.class />
 
@@ -47,9 +59,9 @@
 		<interface.application.db.xml.connection.port>1984</interface.application.db.xml.connection.port>
 		<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
 		<interface.application.db.xml.admin.password>admin</interface.application.db.xml.admin.password>
-<!-- 		<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname> -->
+		<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname> -->
 		<interface.application.db.xml.driver>org.basex.api.xmldb.BXDatabase</interface.application.db.xml.driver>
-		
+
 		<!-- Generate or not the Lucene Indexes at the startup -->
 		<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
 
@@ -62,111 +74,117 @@
 		<profile>
 			<id>debug</id>
 			<properties>
-				<interface.application.pref.reports.recipients>rpereira@ebi.ac.uk</interface.application.pref.reports.recipients>
 				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
 			</properties>
 		</profile>
-		<profile>
-			<id>export.aepub1</id>
-			<properties>
-				<interface.application.link.aer_old.base.url>/aer</interface.application.link.aer_old.base.url>
 
+
+		<profile>
+			<id>development</id>
+
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<interface.application.base.path>/biosamples</interface.application.base.path>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
-				<interface.application.link.query_help>${interface.application.link.www_domain}/fg/doc/help/ae_help.html</interface.application.link.query_help>
-				<interface.application.link.adv_query_help>${interface.application.link.www_domain}/fg/doc/help/ae_help.html#AdvancedSearchesNewInterface</interface.application.link.adv_query_help>
-				<interface.application.link.browse_help>${interface.application.link.www_domain}/fg/doc/help/browse_results.html</interface.application.link.browse_help>
-				<interface.application.link.atlas.base.url>${interface.application.link.www_domain}/gxa</interface.application.link.atlas.base.url>
-				<interface.application.link.atlas.species_options.url>atlas_list-species.html</interface.application.link.atlas.species_options.url>
-				<interface.application.link.atlas.stats.url>atlas_stats.txt</interface.application.link.atlas.stats.url>
-				<interface.application.link.atlas.query.url>${interface.application.link.atlas.base.url}/qrs</interface.application.link.atlas.query.url>
-				<interface.application.link.atlas.exp_query.url>${interface.application.link.atlas.base.url}/experiment/</interface.application.link.atlas.exp_query.url>
-
+				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
+				<interface.application.db.xml.connection.dbname>biosamplesAEGroupDev</interface.application.db.xml.connection.dbname>
+				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.dbname> -->
 			</properties>
 		</profile>
-		<profile>
-			<id>export.aepub2_aepub3</id>
-			<properties>
-				<interface.application.link.aer_old.base.url>/aer</interface.application.link.aer_old.base.url>
 
+		<profile>
+			<id>curator</id>
+
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<interface.application.base.path>/biosamples</interface.application.base.path>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
-				<interface.application.link.query_help>${interface.application.link.www_domain}/fg/doc/help/ae_help.html</interface.application.link.query_help>
-				<interface.application.link.adv_query_help>${interface.application.link.www_domain}/fg/doc/help/ae_help.html#AdvancedSearchesNewInterface</interface.application.link.adv_query_help>
-				<interface.application.link.browse_help>${interface.application.link.www_domain}/fg/doc/help/browse_results.html</interface.application.link.browse_help>
-				<interface.application.link.atlas.base.url>${interface.application.link.www_domain}/gxa</interface.application.link.atlas.base.url>
-				<interface.application.link.atlas.species_options.url>atlas_list-species.html</interface.application.link.atlas.species_options.url>
-				<interface.application.link.atlas.stats.url>atlas_stats.txt</interface.application.link.atlas.stats.url>
-				<interface.application.link.atlas.query.url>${interface.application.link.atlas.base.url}/qrs</interface.application.link.atlas.query.url>
-				<interface.application.link.atlas.exp_query.url>${interface.application.link.atlas.base.url}/experiment/</interface.application.link.atlas.exp_query.url>
-
+				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
+				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
+				<!-- -1 means that the update is not possible; 0 means complete update; 
+					1 means last day update -->
+				<!-- if 0 or 1 it means that its possible to run the reload job - this 
+					should be only used on internal environments -->
+				<interface.application.pref.biosamples.update.timestamp>0</interface.application.pref.biosamples.update.timestamp>
+				<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule>
+				<interface.application.pref.reload-all.update.interval/>
+				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
+		
 			</properties>
 		</profile>
-		<profile>
-			<id>dukkha.aepub1</id>
-			<properties>
-				<interface.application.link.aer_old.base.url>/aer</interface.application.link.aer_old.base.url>
 
+		<profile>
+			<id>curator_daily</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<interface.application.base.path>/biosamples</interface.application.base.path>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
-				<interface.application.link.query_help>${interface.application.link.www_domain}/fg/doc/help/ae_help.html</interface.application.link.query_help>
-				<interface.application.link.adv_query_help>${interface.application.link.www_domain}/fg/doc/help/ae_help.html#AdvancedSearchesNewInterface</interface.application.link.adv_query_help>
-				<interface.application.link.browse_help>${interface.application.link.www_domain}/fg/doc/help/browse_results.html</interface.application.link.browse_help>
-				<interface.application.link.atlas.base.url>${interface.application.link.www_domain}/gxa</interface.application.link.atlas.base.url>
-				<interface.application.link.atlas.species_options.url>atlas_list-species.html</interface.application.link.atlas.species_options.url>
-				<interface.application.link.atlas.stats.url>atlas_stats.txt</interface.application.link.atlas.stats.url>
-				<interface.application.link.atlas.query.url>${interface.application.link.atlas.base.url}/qrs</interface.application.link.atlas.query.url>
-				<interface.application.link.atlas.exp_query.url>${interface.application.link.atlas.base.url}/experiment/</interface.application.link.atlas.exp_query.url>
-
+				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
+				<interface.application.db.xml.connection.dbname>biosamplesAEGroupDaily</interface.application.db.xml.connection.dbname>
+				<!-- -1 means that the update is not possible; 0 means complete update; 
+					1 means last day update -->
+				<!-- if 0 or 1 it means that its possible to run the reload job - this 
+					should be only used on internal environments -->
+				<interface.application.pref.biosamples.update.timestamp>1</interface.application.pref.biosamples.update.timestamp>
+				<interface.application.pref.reload-all.update.schedule/>
+				<interface.application.pref.reload-all.update.interval>15</interface.application.pref.reload-all.update.interval>
+				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
+		
+			</properties>
+		</profile>
+		
+			<profile>
+			<id>local</id>
+			<properties>
+				<interface.application.base.path>/biosamples</interface.application.base.path>
+				<interface.application.log.appender.ref>CONSOLE</interface.application.log.appender.ref>
+				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
+				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
+				<!-- -1 means that the update is not possible; 0 means complete update; 
+					1 means last day update -->
+				<!-- if 0 or 1 it means that its possible to run the reload job - this 
+					should be only used on internal environments -->
+				<!-- <interface.application.pref.biosamples.update.timestamp>1</interface.application.pref.biosamples.update.timestamp> -->
+				<!-- <interface.application.pref.reload-all.update.schedule>0 0 1 ? * SUN</interface.application.pref.reload-all.update.schedule> -->
+				<!-- <interface.application.pref.reload-all.update.schedule/>
+				<interface.application.pref.reload-all.update.interval>5</interface.application.pref.reload-all.update.interval>
+				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
+				
+				<!-- <interface.application.pref.biosamples.update.timestamp>0</interface.application.pref.biosamples.update.timestamp>
+				<interface.application.pref.reload-all.update.schedule>0 10 14 * * ?</interface.application.pref.reload-all.update.schedule>
+				<interface.application.pref.reload-all.update.interval/> -->
+				
+				<!-- <interface.application.pref.biosamples.update.timestamp>1</interface.application.pref.biosamples.update.timestamp>
+				<interface.application.pref.reload-all.update.schedule></interface.application.pref.reload-all.update.schedule>
+				<interface.application.pref.reload-all.update.interval>5</interface.application.pref.reload-all.update.interval>-->
+				<!-- <interface.application.pref.reload-all.update.atstart>true</interface.application.pref.reload-all.update.atstart> -->
+	
+				<interface.application.body.class />
+				<interface.application.pref.reports.recipients>rpereira@ebi.ac.uk</interface.application.pref.reports.recipients>
 			</properties>
 		</profile>
 		<profile>
 			<id>test.ae2_perftest</id>
 			<properties>
-				<interface.application.link.aer_old.base.url>/aer</interface.application.link.aer_old.base.url>
-
-				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
-				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
-				<interface.application.link.query_help>${interface.application.link.www_domain}/fg/doc/help/ae_help.html</interface.application.link.query_help>
-				<interface.application.link.adv_query_help>${interface.application.link.www_domain}/fg/doc/help/ae_help.html#AdvancedSearchesNewInterface</interface.application.link.adv_query_help>
-				<interface.application.link.browse_help>${interface.application.link.www_domain}/fg/doc/help/browse_results.html</interface.application.link.browse_help>
-				<interface.application.link.atlas.base.url>${interface.application.link.www_domain}/gxa</interface.application.link.atlas.base.url>
-				<interface.application.link.atlas.species_options.url>atlas_list-species.html</interface.application.link.atlas.species_options.url>
-				<interface.application.link.atlas.stats.url>atlas_stats.txt</interface.application.link.atlas.stats.url>
-				<interface.application.link.atlas.query.url>${interface.application.link.atlas.base.url}/qrs</interface.application.link.atlas.query.url>
-				<interface.application.link.atlas.exp_query.url>${interface.application.link.atlas.base.url}/experiment/</interface.application.link.atlas.exp_query.url>
 			</properties>
 		</profile>
 		<profile>
 			<id>test.ae2_curator</id>
 			<properties>
-				<interface.application.link.aer_old.base.url>/aer</interface.application.link.aer_old.base.url>
-
-				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
-				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
-				<interface.application.link.query_help>${interface.application.link.www_domain}/fg/doc/help/ae_help.html</interface.application.link.query_help>
-				<interface.application.link.adv_query_help>${interface.application.link.www_domain}/fg/doc/help/ae_help.html#AdvancedSearchesNewInterface</interface.application.link.adv_query_help>
-				<interface.application.link.browse_help>${interface.application.link.www_domain}/fg/doc/help/browse_results.html</interface.application.link.browse_help>
-				<interface.application.link.atlas.base.url>${interface.application.link.www_domain}/gxa</interface.application.link.atlas.base.url>
-				<interface.application.link.atlas.species_options.url>atlas_list-species.html</interface.application.link.atlas.species_options.url>
-				<interface.application.link.atlas.stats.url>atlas_stats.txt</interface.application.link.atlas.stats.url>
-				<interface.application.link.atlas.query.url>${interface.application.link.atlas.base.url}/qrs</interface.application.link.atlas.query.url>
-				<interface.application.link.atlas.exp_query.url>${interface.application.link.atlas.base.url}/experiment/</interface.application.link.atlas.exp_query.url>
-
-
 			</properties>
 		</profile>
 		<profile>
 			<id>preproduction</id>
 			<properties>
-				<interface.application.link.www_domain />
-				<interface.application.link.www_domain_hack>http://www.embl-ebi.ac.uk</interface.application.link.www_domain_hack>
-				<interface.application.link.aer_old.base.url>${interface.application.link.www_domain_hack}/microarray-as/aer</interface.application.link.aer_old.base.url>
-				<interface.application.link.atlas.base.url>${interface.application.link.www_domain_hack}/gxa</interface.application.link.atlas.base.url>
-				<interface.application.link.atlas.species_options.url>atlas_list-species.html</interface.application.link.atlas.species_options.url>
-				<interface.application.link.atlas.stats.url>atlas_stats.txt</interface.application.link.atlas.stats.url>
-				<interface.application.link.atlas.query.url>${interface.application.link.atlas.base.url}/qrs</interface.application.link.atlas.query.url>
-				<interface.application.link.atlas.exp_query.url>${interface.application.link.atlas.base.url}/experiment/</interface.application.link.atlas.exp_query.url>
 
 			</properties>
 		</profile>
@@ -201,12 +219,7 @@
 
 			</properties>
 		</profile>
-		<profile>
-			<id>local</id>
-			<properties>
-				<interface.application.log.appender.ref>CONSOLE</interface.application.log.appender.ref>
-			</properties>
-		</profile>
+	
 	</profiles>
 
 	<developers>
@@ -321,7 +334,7 @@
 					<doUpdate>false</doUpdate>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>tomcat-maven-plugin</artifactId>
@@ -331,7 +344,7 @@
 					<path>/biosamples</path>
 				</configuration>
 			</plugin>
-			
+
 		</plugins>
 	</build>
 
@@ -497,17 +510,17 @@
 			<version>7.1</version>
 		</dependency>
 
-<!-- request Xml from Biosamples -->
-	<dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.1.2</version>
-        </dependency>
-            <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpmime</artifactId>
-            <version>4.1.2</version>
-        </dependency>
+		<!-- request Xml from Biosamples -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>4.1.2</version>
+		</dependency>
 		<!-- <dependency> <groupId>exist</groupId> <artifactId>existdb</artifactId> 
 			<version>1.0</version> <scope>system</scope> <systemPath>/Users/rpslpereira/Apps/ExistDB/exist.jar</systemPath> 
 			</dependency> -->

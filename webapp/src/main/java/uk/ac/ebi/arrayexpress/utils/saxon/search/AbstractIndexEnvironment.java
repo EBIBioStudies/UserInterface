@@ -111,11 +111,27 @@ public abstract class AbstractIndexEnvironment {
 		return ir;
 
 	}
+
+	
+	
+	public void closeIndexReader(){
+		if(ir!=null){
+			try {
+					logger.debug("Close the closeIndexReader!!!");
+					ir.close();
+					ir=null;
+				}
+				catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+
+	}
 	
 	//TODO: rpe Just to test
-	private void closeIndexReader(){
-		ir=null;
-	}
+//	private void closeIndexReader(){
+//		ir=null;
+//	}
 	
 	public void setDefaultField(String defaultField) {
 		this.defaultField = defaultField;
@@ -374,10 +390,13 @@ public abstract class AbstractIndexEnvironment {
 					sort == null); // should docs be in docId order?
 			isearcher.search(query, collector);
 			//I will use this Collector to know how much results do i have
+			long timeHits=System.nanoTime();
 			logger.debug("TotalHitCountCollector.java");
 			TotalHitCountCollector collector2 = new TotalHitCountCollector();
+			logger.debug("2 - TotalHitCountCollector.java");
 			isearcher.search(query, collector2);
-			logger.debug("Number of Docs->" + collector2.getTotalHits());
+			double ms = (System.nanoTime() - timeHits) / 1000000d;
+			logger.debug("Number of Docs->" + collector2.getTotalHits() + "- TOTALHITS TOOK->" + ms );
 			int totalHits= collector2.getTotalHits();
 
 			TopDocs topDocs = collector.topDocs();

@@ -130,12 +130,13 @@
 								<xsl:call-template name="highlight">
 									<xsl:with-param name="pText" select="string-join($value, ', ')" />
 									<!-- <xsl:with-param name="pFieldName" select="'$token'" /> -->
-									<xsl:with-param name="pFieldName" select="'$token'" />
+									<xsl:with-param name="pFieldName" select="'position()'" />
 								</xsl:call-template>
 
 							</xsl:when>
 
 							<xsl:otherwise>
+								<!-- efo-><xsl:copy-of select="$value"></xsl:copy-of> -->
 								<xsl:call-template name="process_efo">
 									<xsl:with-param name="pValue" select="$value"></xsl:with-param>
 								</xsl:call-template>
@@ -192,10 +193,15 @@
 
 
 
+<xsl:template name="process_efo">
+		<xsl:param name="pValue" />
+		<xsl:call-template name="highlight"> <xsl:with-param name="pText" 
+				select="$pValue/text()[last()]" /> <xsl:with-param name="pFieldName" 
+				select="''" /> </xsl:call-template>
+	</xsl:template>
 
 
-
-	<xsl:template name="process_efo">
+	<xsl:template name="process_efo_25072012">
 		<xsl:param name="pValue" />
 
 		<xsl:for-each select="$pValue">

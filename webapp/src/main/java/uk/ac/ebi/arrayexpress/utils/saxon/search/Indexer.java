@@ -186,7 +186,7 @@ public class Indexer {
 	
 	
 	// I will generate the Lucene Index based on a XmlDatabase
-	//the indexLocationDirectory parameter tells me if I will create the index in a different directory(we have a parametrized directory, but we may need t define a new one because we dont want to avoid users accessing during the generation pf the new index - when o reload job is running)
+	//the indexLocationDirectory parameter tells me if I will create the index in a different directory(we have a parametrized directory, but we may need t define a new one because we dont want to avoid users accessing during the generation of the new index - when o reload job is running)
 		public void indexFromXmlDB(String indexLocationDirectory, String connectionStringExt) throws Exception {
 			int countNodes = 0;
 			String driverXml = "";
@@ -209,7 +209,8 @@ public class Indexer {
 
 					if (null != connsConf) {
 						driverXml = connsConf.getString("driver");
-						connectionString = connsConf.getString("connectionstring");
+						//connectionString = connsConf.getString("connectionstring");
+						connectionString = connsConf.getString("base") + "://" + connsConf.getString("host") + ":" + connsConf.getString("port") + "/" + connsConf.getString("dbname");
 					} else {
 						logger.error("bs.xmldatabase Configuration is missing!!");
 					}
@@ -478,7 +479,11 @@ public class Indexer {
 														xpathAtt=xp.compile("./attribute[@class=\"" + classValueWitoutQuotes + "\"]/@dataType");
 														//I need to put[1] because some times I have more than one value (it generates problems when I need to piack up the integer value for sorting
 														///xpathAttValue=xp.compile("./attribute[@class=replace(\"" + classValueWitoutQuotes + "\",'-',' ')]/value[1]/text()");
-														xpathAttValue=xp.compile("./attribute[@class=\"" + classValueWitoutQuotes + "\"]/value[1]/text()");
+														
+														xpathAttValue=xp.compile("attribute[@class=\"" + classValueWitoutQuotes + "\"]/value/text()[last()]");
+														
+														//logger.debug("attribute[@class=\"" + classValueWitoutQuotes + "\"]//value/text()");													
+														////xpathAttValue=xp.compile("./attribute[@class=\"" + classValueWitoutQuotes + "\"]/value[1]/text()");
 														//logger.debug("./attribute[@class=\"" + classValueWitoutQuotes + "\"]/value[1]/text()");
 														cacheXpathAtt.put(classValue, xpathAtt);
 														cacheXpathAttValue.put(classValue,xpathAttValue);
@@ -504,12 +509,13 @@ public class Indexer {
 											}
 											int len=attsInfo.length;
 											for (int i=0;i<len;i++){
-												//logger.debug("$$$$$$->" + attsInfo[i].name + "$$$$" + attsInfo[i].type);
+//												logger.debug("$$$$$$->" + attsInfo[i].name + "$$$$" + attsInfo[i].type);
 												if(!attsInfo[i].type.equalsIgnoreCase("integer") && !attsInfo[i].type.equalsIgnoreCase("real")){
 	
-													//logger.debug("$$$$$$->" + "STRING");
+							
 													XPathExpression valPath=cacheXpathAttValue.get(attsInfo[i].name);
 													String val=(String)valPath.evaluate(node, XPathConstants.STRING);
+//													logger.debug("$$$$$$->" + "STRING->" + val + "££");
 													addIndexField(d, (i+1)+"", val,false,false, true);
 												}
 												else{

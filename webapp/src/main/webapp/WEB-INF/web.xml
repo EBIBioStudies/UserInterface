@@ -101,6 +101,13 @@
         <servlet-class>uk.ac.ebi.arrayexpress.servlets.LookupServlet</servlet-class>
     </servlet>
     
+    
+    <servlet>
+        <description>BioSamples MetaData Servlet</description>
+        <servlet-name>MetaDataServlet</servlet-name>
+        <servlet-class>uk.ac.ebi.arrayexpress.servlets.MetaDataServlet</servlet-class>
+    </servlet>
+    
     <!-- Stripes -->
   <!--   <servlet-mapping>
 		<servlet-name>StripesDispatcher</servlet-name>
@@ -111,6 +118,10 @@
     <servlet-mapping>
         <servlet-name>StatusServlet</servlet-name>
         <url-pattern>/servlets/status</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MetaDataServlet</servlet-name>
+        <url-pattern>/servlets/metadata</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>QueryServlet</servlet-name>

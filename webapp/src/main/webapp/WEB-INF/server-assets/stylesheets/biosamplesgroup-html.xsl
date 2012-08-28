@@ -458,7 +458,7 @@
 							<tr>
 									<th class="bs_results_accession sortable bs_results_Sample-Accession"
 										id="bs_results_header_0">
-										<a href="javascript:aeSort('0')" title="Click to sort by Sample-Accession">
+										<a href="javascript:aeSort('sampleaccession')" title="Click to sort by Sample-Accession">
 											<div class="table_header_inner">
 												Sample-Accession
 											</div>

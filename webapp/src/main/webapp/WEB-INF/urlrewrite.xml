@@ -62,4 +62,11 @@
         <from>^/reload-all</from>
         <to type="forward">/servlets/control/reload-all</to>
     </rule>
+    
+    
+    <!-- Metadata Information-rule -->
+	<rule>
+        <from>^/metadata</from>
+        <to type="forward">/servlets/metadata</to>
+    </rule>
 </urlrewrite>

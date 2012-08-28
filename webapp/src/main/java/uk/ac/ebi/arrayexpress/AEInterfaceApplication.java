@@ -52,6 +52,7 @@ public class AEInterfaceApplication extends Application implements ServletContex
         addComponent(new BioSamplesGroup());
         addComponent(new BioSamplesSample());
         
+        
     //    addComponent(new Experiments());
         //TODO:rpe
 //        addComponent(new ExperimentsXmlDB());

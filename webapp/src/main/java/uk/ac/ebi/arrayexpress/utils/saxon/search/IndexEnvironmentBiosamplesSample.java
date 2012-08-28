@@ -75,6 +75,13 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 
 		Class<?> c;
 		try {
+			
+			//TODO: rpe: review this (DB open files)
+			if(coll!=null){
+				coll.close();
+				db=null;
+			}
+			
 			c = Class.forName(driverXml);
 
 			// Class<?> c = Class.forName("org.exist.xmldb.DatabaseImpl");

@@ -19,6 +19,8 @@ package uk.ac.ebi.arrayexpress.components;
 
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
+import org.quartz.impl.matchers.GroupMatcher;
+
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.jobs.*;
 
@@ -62,6 +64,7 @@ public class JobsController extends ApplicationComponent
 //        scheduleJob("reload-ae1-xml", "ae.experiments.ae1.reload");
 //        scheduleJob("reload-ae2-xml", "ae.experiments.ae2.reload");
         scheduleJob("update-efo", "bs.efo.update");
+        scheduleJob("reload-all", "bs.reload-all.update");
 
         startScheduler();
     }
@@ -132,6 +135,10 @@ public class JobsController extends ApplicationComponent
         String schedule = getPreferences().getString(preferencePrefix + ".schedule");
         Integer interval = getPreferences().getInteger(preferencePrefix + ".interval");
         Boolean atStart = getPreferences().getBoolean(preferencePrefix + ".atstart");
+        
+//       System.out.println(schedule);
+//       System.out.println(interval);
+//       System.out.println(atStart);
 
         if (null != schedule && 0 < schedule.length()) {
             CronExpression cexp = new CronExpression(schedule);
@@ -140,7 +147,6 @@ public class JobsController extends ApplicationComponent
                     .withSchedule(CronScheduleBuilder.cronSchedule(cexp))
                     .forJob(name, AE_JOBS_GROUP)
                     .build();
-
             // schedule a job with JobDetail and Trigger
             getScheduler().scheduleJob(cronTrigger);
         }
@@ -181,5 +187,30 @@ public class JobsController extends ApplicationComponent
         }
 
         getScheduler().shutdown(true);
+    }
+    
+    
+    public String getMetaDataInformation(){
+    	
+    	String ret="";
+    	try {
+			ret+=scheduler.getJobGroupNames();
+			for (JobKey iterable_element : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(AE_JOBS_GROUP))) {
+				ret+="Job->" + scheduler.getJobDetail(iterable_element).getDescription();
+				//ret+="Job->" + scheduler.getTriggersOfJob(iterable_element).;				
+			}
+//			for(String group: scheduler.getTriggerGroupNames()) {
+//			    // enumerate each trigger in group
+//			    for(TriggerKey triggerKey : scheduler.getTriggerKeys(TriggerMatcher.jobGroupEquals(AE_JOBS_GROUP)) {
+//			        ret+="Found trigger identified by: " + triggerKey;
+//			    }
+//			}
+			
+		} catch (SchedulerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	return ret;
     }
 }

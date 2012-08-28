@@ -15,6 +15,7 @@ import java.util.GregorianCalendar;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.io.FileUtils;
+import org.basex.BaseXServer;
 import org.basex.core.cmd.CreateDB;
 import org.basex.server.ClientSession;
 import org.basex.server.Session;
@@ -63,9 +64,9 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 			// download the xml
 			// TODO: rpe (define it externally)
 
-			String downloadDirectory = Application.getInstance()
-					.getPreferences().getString("bs.downloadDirectory");
-			logger.debug("downloadDirectory->" + downloadDirectory);
+//			String downloadDirectory = Application.getInstance()
+//					.getPreferences().getString("bs.downloadDirectory");
+//			logger.debug("downloadDirectory->" + downloadDirectory);
 
 			int updateDatabaseTimestamp = Application.getInstance()
 					.getPreferences().getInteger("bs.reloadBiosamplesDatabase");
@@ -98,62 +99,91 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				time = date.getTimeInMillis();
 			}
 
+
+			// I will create a backup directory, where I will backup the Actual Setup directory, where I will put the new biosamples.xml and where I will creste a new SetupDirectory based on the new biosamples.xml 
+			String setupDir = Application.getInstance().getPreferences()
+					.getString("bs.setupDirectory");
+			logger.debug("setupDir->" + setupDir);
+
+			setupDirectory = new File(setupDir);
+			String backupDirectory = Application.getInstance()
+					.getPreferences().getString("bs.backupDirectory");
+			logger.debug("backupDirectory->" + backupDirectory);
+
+			// this variable will be used in the creation of the bakup
+			// directory anda in the creation od the database backup
+			Long tempDir = System.nanoTime();
+
+			String newDir = "backup_" + tempDir;
+			backDir = new File(backupDirectory + "/" + newDir);
+			if (backDir.mkdir()) {
+				logger.info("Backup directory was created in [{}]",
+						backDir.getAbsolutePath());
+				
+			} else {
+				// TODO: rpe stop the process
+				logger.error("Backup directory was NOT created in [{}]",
+						backDir.getAbsolutePath());
+				throw new Exception("Backup directory was NOT created in " + backDir.getAbsolutePath());
+			}
+
+//			setupTempDirectory = new File(setupDir + newDir);
+//			if (setupTempDirectory.mkdir()) {
+//				logger.info(
+//						"Setup temporary directory was created in [{}]",
+//						setupTempDirectory.getAbsolutePath());
+//			} else {
+//				// TODO: rpe stop the process
+//				logger.error(
+//						"Setup temporary directory was NOT created in [{}]",
+//						setupTempDirectory.getAbsolutePath());
+//			}
+
+
+			
 			DownloadBiosamplesXmlFile dxml = new DownloadBiosamplesXmlFile();
+			File xmlDir= new File(backDir.getAbsolutePath() + "/XmlDownload" );
+			if (xmlDir.mkdir()) {
+				logger.info("XmlDownload  directory was created in [{}]",
+						xmlDir.getAbsolutePath());
+			}
+			else{
+				logger.error("XmlDownload directory was NOT created in [{}]",
+						xmlDir.getAbsolutePath());
+				throw new Exception("XmlDownload  directory was NOT created in " + xmlDir.getAbsolutePath());
+			}
+			String downloadDirectory= xmlDir.getAbsolutePath();
 			boolean downloadOk = dxml.downloadXml(downloadDirectory, time);
 
 			if (downloadOk) {
-				String setupDir = Application.getInstance().getPreferences()
-						.getString("bs.setupDirectory");
-				logger.debug("setupDir->" + setupDir);
-
-				setupDirectory = new File(setupDir);
-
-				String backupDirectory = Application.getInstance()
-						.getPreferences().getString("bs.backupDirectory");
-				logger.debug("backupDirectory->" + backupDirectory);
-
-				// this variable will be used in the creation of the bakup
-				// directory anda in the creation od the database backup
-				Long tempDir = System.nanoTime();
-
-				String newDir = "backup_" + tempDir;
-				backDir = new File(backupDirectory + "/" + newDir);
-				if (backDir.mkdir()) {
-					logger.info("Backup directory was created in [{}]",
-							backDir.getAbsolutePath());
-					copyDirectory(setupDirectory, backDir);
-				} else {
-					// TODO: rpe stop the process
-					logger.error("Backup directory was NOT created in [{}]",
-							backDir.getAbsolutePath());
+							
+				File oldSetupDir= new File(backDir.getAbsolutePath() + "/OldSetup" );
+				if (oldSetupDir.mkdir()) {
+					logger.info("OldSetup Backup directory was created in [{}]",
+							oldSetupDir.getAbsolutePath());
+					copyDirectory(setupDirectory, oldSetupDir);
 				}
-
-				setupTempDirectory = new File(setupDir + newDir);
-				if (setupTempDirectory.mkdir()) {
-					logger.info(
-							"Setup temporary directory was created in [{}]",
-							setupTempDirectory.getAbsolutePath());
-				} else {
-					// TODO: rpe stop the process
-					logger.error(
-							"Setup temporary directory was NOT created in [{}]",
-							setupTempDirectory.getAbsolutePath());
+				else{
+					logger.error("OldSetup Backup directory was NOT created in [{}]",
+							oldSetupDir.getAbsolutePath());
+					throw new Exception("oldSetupDir Backup directory was NOT created in " + oldSetupDir.getAbsolutePath());
 				}
-
 				
-				// Download it from
-
-				File sourceLocation = new File(downloadDirectory);
-
-				logger.error("Coying directory from [{}] to [{}]",
-						sourceLocation.getAbsolutePath(),
-						setupTempDirectory.getAbsolutePath());
-				copyDirectory(sourceLocation, setupTempDirectory);
-
 				// update of the xmlDatabase
 				logger.info("DatabaseXml Creation");
-
-				updateXMLDatabase(setupTempDirectory, tempDir);
+				
+				File newSetupDir= new File(backDir.getAbsolutePath() + "/newSetup" );
+				if (newSetupDir.mkdir()) {
+					logger.info("newSetupDir  directory was created in [{}]",
+							newSetupDir.getAbsolutePath());
+				}
+				else{
+					logger.error("newSetupDir directory was NOT created in [{}]",
+							newSetupDir.getAbsolutePath());
+					throw new Exception("newSetupDir  directory was NOT created in " + newSetupDir.getAbsolutePath());
+				}
+				
+				updateXMLDatabase(xmlDir,newSetupDir, tempDir);
 				logger.info("End of DatabaseXml Creation");
 				// only after update the database I update the Lucenes Indexes
 				logger.info("Deleting Setup Directory and renaming - from now on the application is not answering");
@@ -162,11 +192,12 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				search.getController().getEnvironment("biosamplesgroup").closeIndexReader();
 				search.getController().getEnvironment("biosamplessample").closeIndexReader();
 				
+				//remove the old setupdirectory
 				deleteDirectory(setupDirectory);
 
 				// Rename file (or directory)
 				logger.info("Before file renamed!!!");
-				boolean success2 = setupTempDirectory.renameTo(setupDirectory);
+				boolean success2 = newSetupDir.renameTo(setupDirectory);
 				if (success2) {
 					logger.info("file was successfully renamed [{}]!!!",
 							setupDirectory.getAbsolutePath());
@@ -204,11 +235,13 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 		// (/Users/rpslpereira/Apps/apache-tomcat-6.0.33/temp/StagingArea/4)
 	}
 
-	public void updateXMLDatabase(File setupDirectory, long tempDir)
+	public void updateXMLDatabase(File xmlDirectory, File newSetupDirectory, long tempDir)
 			throws Exception {
 
 		// Create a client session with host name, port, user name and password
-		logger.debug("\n* Create a client session int the Xml Database.");
+
+		
+		logger.debug("* Create a client session int the Xml Database.");
 
 		String dbHost = Application.getInstance().getPreferences()
 				.getString("bs.xmldatabase.host");
@@ -221,19 +254,22 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				.getString("bs.xmldatabase.dbname");
 		// String originalDbName = "biosamplesAEGroup";
 
+//		logger.debug("\n* Server Initialization.");	
+//		BaseXServer server = new BaseXServer("-p " + Integer.parseInt(dbPort));
+		
 		Session session = new ClientSession(dbHost, Integer.parseInt(dbPort),
 				"admin", dbPassword);
 
 		// ------------------------------------------------------------------------
 		// Create a database
-		logger.debug("\n* Create a database.");
+		logger.debug("* Create a database.");
 
 		// session.execute(new CreateDB("input",
 		// "/Users/rpereira/Downloads/factbook.xml"));
 		//
 
 		String tempDbName = originalDbName + "_" + tempDir;
-		String logs = session.execute(new CreateDB(tempDbName, setupDirectory
+		String logs = session.execute(new CreateDB(tempDbName, xmlDirectory
 				.getAbsolutePath()));
 		// .getAbsolutePath() + "/XmlFiles"));
 		logger.debug("CreateDB('" + tempDbName + "' ...->" + logs);
@@ -247,12 +283,12 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 		SearchEngine search = ((SearchEngine) getComponent("SearchEngine"));
 		// TODO: rpe change all this static values
 		search.getController().indexFromXmlDB("biosamplesgroup", true,
-				setupDirectory.getAbsolutePath() + "/LuceneIndexes",
+				newSetupDirectory.getAbsolutePath() + "/LuceneIndexes",
 				"xmldb:basex://localhost:1984/" + tempDbName);
 		((IndexEnvironmentBiosamplesGroup) search.getController()
 				.getEnvironment("biosamplesgroup")).setup();
 		search.getController().indexFromXmlDB("biosamplessample", true,
-				setupDirectory.getAbsolutePath() + "/LuceneIndexes",
+				newSetupDirectory.getAbsolutePath() + "/LuceneIndexes",
 				"xmldb:basex://localhost:1984/" + tempDbName);
 		((IndexEnvironmentBiosamplesSample) search.getController()
 				.getEnvironment("biosamplessample")).setup();
@@ -270,9 +306,11 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 		
 		logger.info("DatabaseXml Rename - End!");
 
-		System.out.println("\n* Close the client session.");
-
+		logger.debug("* Close the client session.");
 		session.close();
+		
+//		logger.debug("\n* Server stopped.");
+//		server.stop();
 
 	}
 

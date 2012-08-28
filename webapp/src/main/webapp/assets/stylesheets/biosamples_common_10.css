@@ -23,6 +23,14 @@ body {
     overflow: hidden;
 }
 
+
+a:hover, 
+a:active {
+    color: #e33e3e;
+    text-decoration: underline;
+}
+
+
 * {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -64,6 +72,10 @@ body {
 #bs_contents a:visited {
     color: #006666;
     text-decoration: none;
+}
+#bs_contents a:hover {
+    color: #e33e3e;
+    text-decoration: underline;
 }
 
 

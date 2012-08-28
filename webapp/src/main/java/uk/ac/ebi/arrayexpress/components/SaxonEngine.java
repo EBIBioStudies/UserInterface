@@ -282,8 +282,8 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver,
 			Templates templates;
 			// TODO RPE: just to not make cache of XSLT (MUST REMOVE
 			// THIS!!!!!!!!!!!!!!!)
-			// if (!templatesCache.containsKey(stylesheet) || 1==1) {
-			if (!templatesCache.containsKey(stylesheet)) {
+			 if (!templatesCache.containsKey(stylesheet) || 1==1) {
+			//if (!templatesCache.containsKey(stylesheet)) {
 				logger.debug("Caching prepared stylesheet [{}]", stylesheet);
 				// Open the stylesheet
 				Source xslSource = resolve(stylesheet, null);

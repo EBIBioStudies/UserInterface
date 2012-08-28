@@ -12,17 +12,20 @@
 			</smtp>
 		</reports>
 	</app>
-		
-		
+	
+
 	<bs>
 		<setupDirectory>${sys:java.io.tmpdir}/${interface.application.index.directory}
 		</setupDirectory>
 		<backupDirectory>${sys:java.io.tmpdir}/Backups</backupDirectory>
-		<downloadDirectory>${sys:java.io.tmpdir}/DownloadXml</downloadDirectory>
+		<!-- <downloadDirectory>${sys:java.io.tmpdir}/DownloadXml</downloadDirectory> -->
 		<buildLuceneIndexes>${interface.application.lucene.indexes.build}
 		</buildLuceneIndexes>
 		<pageSizeLimit>${interface.application.pagesize.limit}</pageSizeLimit>
-
+		<!-- -1 means that the update is not possible; 0 means complete update; 1 means last day update -->
+		<reloadBiosamplesDatabase>${interface.application.pref.biosamples.update.timestamp}</reloadBiosamplesDatabase>
+		
+		
 		<xmldatabase>
 			<driver>${interface.application.db.xml.driver}</driver>
 			<base>${interface.application.db.xml.connection.base}</base>
@@ -34,7 +37,16 @@
 			</connectionstring> -->
 			<!-- <dbname>${interface.application.db.xml.connection.dbname}</dbname> -->
 		</xmldatabase>
+	
+	
 
+		<reload-all>
+		<update>
+		<schedule>${interface.application.pref.reload-all.update.schedule}</schedule>
+		<interval>${interface.application.pref.reload-all.update.interval}</interval>
+		<atstart>${interface.application.pref.reload-all.update.atstart}</atstart>
+		</update>
+		</reload-all>
 
 		<efo>
 			<location>${sys:java.io.tmpdir}/efo.owl</location>
@@ -57,6 +69,8 @@
 
 
 
+
+<!-- location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" -->
 
 		<index id="biosamplesgroup"
 			location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes"
@@ -121,13 +135,16 @@
 		</index>
 
 
+
+
 		<index id="biosamplessample"
 			location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes"
 			defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
 
-
-			<document path="/Biosamples/SampleGroup/Sample"
-				defaultField="keywords">
+			
+			<!-- <document path="/Biosamples/SampleGroup/Sample[@id='SAMEA147487']" -->
+				<document path="/Biosamples/SampleGroup/Sample"
+				 defaultField="keywords">
 				<field name="keywords" type="string" path="string-join(.//text(), ' ')"
 					analyze="true"
 					analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer"
@@ -157,6 +174,8 @@
 				
 				<field name="attributes" type="string" path="attribute"
 					process="true" analyze="true" store="false" escape="false" />
+					
+				<!-- //this is just for sorting -->	
 				<field name="1" type="string" process="true" path="''"
 					analyze="true" store="false" escape="false" sortfields="1" />
 				<field name="2" type="string" process="true" path="''"

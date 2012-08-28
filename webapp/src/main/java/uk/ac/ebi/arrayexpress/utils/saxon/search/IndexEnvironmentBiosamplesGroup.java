@@ -12,6 +12,9 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.basex.core.cmd.CreateDB;
+import org.basex.server.ClientSession;
+import org.basex.server.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xmldb.api.DatabaseManager;
@@ -23,6 +26,7 @@ import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XPathQueryService;
 
 import uk.ac.ebi.arrayexpress.app.Application;
+import uk.ac.ebi.arrayexpress.components.SearchEngine;
 import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
 import uk.ac.ebi.arrayexpress.utils.StringTools;
 
@@ -70,13 +74,25 @@ public class IndexEnvironmentBiosamplesGroup extends AbstractIndexEnvironment {
 
 		if (null != connsConf) {
 			driverXml = connsConf.getString("driver");
-			connectionString = connsConf.getString("base") + "://" + connsConf.getString("host") + ":" + connsConf.getString("port") + "/" + connsConf.getString("dbname");
+			connectionString = connsConf.getString("base") + "://"
+					+ connsConf.getString("host") + ":"
+					+ connsConf.getString("port") + "/"
+					+ connsConf.getString("dbname");
 		} else {
 			logger.error("ae.xmldatabase Configuration is missing!!");
 		}
 
 		Class<?> c;
 		try {
+
+			// TODO: rpe: review this (DB open files - because the setup method
+			// is being called from the reloadBioSamplesJob and I ned to close
+			// the database files)
+			if (coll != null) {
+				coll.close();
+				db = null;
+			}
+
 			c = Class.forName(driverXml);
 
 			// Class<?> c = Class.forName("org.exist.xmldb.DatabaseImpl");
@@ -115,7 +131,7 @@ public class IndexEnvironmentBiosamplesGroup extends AbstractIndexEnvironment {
 		StringBuilder totalRes = new StringBuilder();
 
 		// Collection coll=null;
-
+		// getInfoDB();
 		// search
 		if (!map.containsKey("id")) {
 			totalRes.append("<biosamples><all>");
@@ -218,6 +234,54 @@ public class IndexEnvironmentBiosamplesGroup extends AbstractIndexEnvironment {
 			}
 		}
 
+		return ret;
+	}
+
+	public String getInfoDB() {
+
+		String ret = "";
+		try {
+
+			logger.debug("* Create a client session int the Xml Database to get information about it.");
+
+			String dbHost = Application.getInstance().getPreferences()
+					.getString("bs.xmldatabase.host");
+			String dbPort = Application.getInstance().getPreferences()
+					.getString("bs.xmldatabase.port");
+			String dbPassword = Application.getInstance().getPreferences()
+					.getString("bs.xmldatabase.adminpassword");
+
+			String originalDbName = Application.getInstance().getPreferences()
+					.getString("bs.xmldatabase.dbname");
+
+			Session session = new ClientSession(dbHost,
+					Integer.parseInt(dbPort), "admin", dbPassword);
+
+			// ------------------------------------------------------------------------
+			// Create a database
+			logger.debug("* open database.");
+			String logs = "";
+
+			logs = session.execute("open " + originalDbName);
+			logger.debug("open ...->" + logs);
+			ret = session.execute("info db ");
+			// logger.debug("info db ...->" + logs);
+			logs = session.execute("close");
+			logger.debug("close ...->" + logs);
+
+			logger.debug("* Close the client session.");
+			session.close();
+			return ret;
+		}
+
+		catch (Exception ex) {
+			// Handle exceptions
+			ret = "ERROR";
+			logger.error("Exception:->[{}]", ex.getMessage());
+			ex.printStackTrace();
+		} finally {
+
+		}
 		return ret;
 	}
 
