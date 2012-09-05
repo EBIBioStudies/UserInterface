@@ -23,6 +23,8 @@ import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XPathQueryService;
 
 import uk.ac.ebi.arrayexpress.app.Application;
+import uk.ac.ebi.arrayexpress.components.SaxonEngine;
+import uk.ac.ebi.arrayexpress.components.XmlDbConnectionPool;
 import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
 
 /**
@@ -32,12 +34,14 @@ import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
 public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
+	
+	private XmlDbConnectionPool xmlDBConnectionPool;
 
-	private String driverXml;
-	private String connectionString;
-	private String dbname;
-	private Database db;
-	private Collection coll;
+//	private String driverXml;
+//	private String connectionString;
+//	private String dbname;
+//	private Database db;
+//	private Collection coll;
 
 	// private long numberOfExperiments;
 	//
@@ -59,57 +63,11 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 		defaultSortDescending = false;
 		defaultPageSize = 10;
 
+		
 		//I'm calling this to clean the reference to the IndexReader-> closeIndexReader();getIndexReader();
 		super.setup();
-		
-		HierarchicalConfiguration connsConf = (HierarchicalConfiguration) Application
-				.getInstance().getPreferences().getConfSubset("bs.xmldatabase");
-
-		if (null != connsConf) {
-			driverXml = connsConf.getString("driver");
-//			connectionString = connsConf.getString("connectionstring");
-			connectionString = connsConf.getString("base") + "://" + connsConf.getString("host") + ":" + connsConf.getString("port") + "/" + connsConf.getString("dbname");
-		} else {
-			logger.error("bs.xmldatabase Configuration is missing!!");
-		}
-
-		Class<?> c;
-		try {
-			
-			//TODO: rpe: review this (DB open files)
-			if(coll!=null){
-				coll.close();
-				db=null;
-			}
-			
-			c = Class.forName(driverXml);
-
-			// Class<?> c = Class.forName("org.exist.xmldb.DatabaseImpl");
-			db = (Database) c.newInstance();
-			DatabaseManager.registerDatabase(db);
-			coll = DatabaseManager.getCollection(connectionString);
-			
-
-		} catch (XMLDBException e) {
-			// TODO Auto-generated catch block
-			logger.error("Exception:->[{}]", e.getMessage());
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			logger.error("Exception:->[{}]", e.getMessage());
-			e.printStackTrace();
-		}
-		// Receive the database
-		catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			logger.error("Exception:->[{}]", e.getMessage());
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			logger.error("Exception:->[{}]", e.getMessage());
-			e.printStackTrace();
-		}
-
+		this.xmlDBConnectionPool = (XmlDbConnectionPool) Application.getAppComponent("XmlDbConnectionPool");
+	
 	}
 	
 	
@@ -128,6 +86,7 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 		try {
 
 			// coll = DatabaseManager.getCollection(connectionString);
+			Collection coll=xmlDBConnectionPool.getCollection();
 			XPathQueryService service = (XPathQueryService) coll.getService(
 					"XPathQueryService", "1.0");
 			totalRes.append("(");
@@ -166,42 +125,6 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 				//I'm browsing a sample group
 				else{ if( map.get("samplegroup")!=null){
 
-//					// I need to implement her the sirt logic
-//					int page= Integer.parseInt(map.get("page")[0]);
-//					int pageSize=Integer.parseInt(map.get("pagesize")[0]);
-//					int sampleInit=(page == 1 ? 1 : (page) * pageSize);
-//					
-//					
-//					Log.debug("<biosamples><all>{subsequence( "
-//							+ "  let $att:= /Biosamples/SampleGroup[@id='" + map.get("samplegroup")[0]  +"']"
-//							+ " for $x in $att/Sample "
-//							+ " order  by $x/attribute/value[../@class=replace('"  + map.get("sortby")[0]  + "','-',' ')] " + map.get("sortorder")[0] + " " 
-//							+ " return $x, " + sampleInit +"," + pageSize + ") } "
-//							+ "<attributes>{distinct-values(/Biosamples/SampleGroup[@id='" + map.get("samplegroup")[0]  +"']/Sample/attribute/replace(@class, ' ' , '-'))}</attributes> "
-//							+ " </all></biosamples>");
-//		 
-//					set = service
-//								.query("<biosamples><all>{subsequence( "
-//										+ "  let $att:= /Biosamples/SampleGroup[@id='" + map.get("samplegroup")[0]  +"']"
-//										+ " for $x in $att/Sample "
-//										+ " order  by $x/attribute/value[../@class=replace('"  + map.get("sortby")[0]  + "','-',' ')] " + map.get("sortorder")[0] + " " 
-//										+ " return $x, " + sampleInit +"," + pageSize + ") } "
-//										+ "<attributes>{distinct-values(/Biosamples/SampleGroup[@id='" + map.get("samplegroup")[0]  +"']/Sample/attribute/replace(@class, ' ' , '-'))}</attributes> "
-//										+ " </all></biosamples>");	
-			
-					 
-//			
-//					logger.debug("£££££££££############" + "<biosamples><all>{for $x in  "
-//										+ totalRes.toString() 
-//										+ "  let $y:=//Sample[@id=($x)]"
-//										+ "  return <Samples>{$y[../@id='" +   map.get("samplegroup")[0]  + "']} </Samples>} "
-//										///+ " { let $att:= /Biosamples/SampleGroup[@id='" +   map.get("samplegroup")[0]  + "'] " 
-//										//+ " return <attributes notnumeric='{distinct-values($att/Sample/attribute[@dataType!='INTEGER']/replace(@class, ' ' , '-'))}' numeric='{distinct-values($att/Sample/attribute[@dataType='INTEGER']/replace(@class, ' ' , '-'))}'></attributes> "
-//										///+ " return <attributes>{distinct-values($att/Sample/attribute/replace(@class, ' ' , '-'))}</attributes> "
-//										///+ " }"
-//										+ " { let $att:= /Biosamples/SampleGroup[@id='" + map.get("samplegroup")[0]  +"']"
-//										+ " return {$att/SampleAttributes} }"
-//										+ "</all></biosamples>");
 					set = service
 								.query("<biosamples><all>{for $x in  "
 										+ totalRes.toString() 
@@ -255,24 +178,11 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 			logger.error("Exception:->[{}]", ex.getMessage());
 			ex.printStackTrace();
 		} finally {
-			// if (coll!=null){
-			// try {
-			// coll.close();
-			// } catch (XMLDBException e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// }
-			// }
+		
 
 		}
-//		logger.debug("Xml->" + ret);
-		//TODO rpe> remove this
-//		ret=ret.replace("&", "ZZZZZ");
-		
 
-//		ret=ret.replace("&#x96;", "&#150;");
 		return ret;
-		
 	 
 	 
 	 
@@ -306,6 +216,7 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 		try {
 
 			// coll = DatabaseManager.getCollection(connectionString);
+			Collection coll=xmlDBConnectionPool.getCollection();
 			XPathQueryService service = (XPathQueryService) coll.getService(
 					"XPathQueryService", "1.0");
 			totalRes.append("(");

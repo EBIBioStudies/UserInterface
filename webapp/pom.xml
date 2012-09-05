@@ -47,6 +47,8 @@
 
 		<interface.application.google.analytics />
 		<interface.application.body.class />
+		<!-- this class defines if the Metadata link shoul or not appear in the Biosample Homepage - it shoul only appears in internal environmenta, so by defaul the class hidden the link -->
+		<interface.application.metadata.class>metadata_hide</interface.application.metadata.class>
 
 		<!-- XML DataBase access -->
 		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/basexAE</interface.application.db.xml.connection.string> -->
@@ -65,6 +67,15 @@
 		<!-- Generate or not the Lucene Indexes at the startup -->
 		<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
 
+
+		<!-- define all the variables that we need to update the biosamples Database -->
+		<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8080/biosamples/</interface.application.db.xml.update.url>
+		<interface.application.db.xml.update.username>rui</interface.application.db.xml.update.username>
+		<interface.application.db.xml.update.password>ruipereire</interface.application.db.xml.update.password>
+		<interface.application.db.xml.update.cookie>AGESESS</interface.application.db.xml.update.cookie>
+	
+		
+		
 		<!-- Define the maximum pageSize value allowed -->
 		<interface.application.pagesize.limit>500</interface.application.pagesize.limit>
 
@@ -102,6 +113,8 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
+			    <interface.application.body.class>bs_curator</interface.application.body.class>
+			    <interface.application.metadata.class>metadata_show</interface.application.metadata.class>
 				<interface.application.base.path>/biosamples</interface.application.base.path>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
@@ -125,6 +138,8 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
+			<interface.application.body.class>bs_curator_daily</interface.application.body.class>
+			<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
 				<interface.application.base.path>/biosamples</interface.application.base.path>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
@@ -145,10 +160,17 @@
 			<profile>
 			<id>local</id>
 			<properties>
+				<interface.application.body.class>bs_curator_daily</interface.application.body.class>
+				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
 				<interface.application.base.path>/biosamples</interface.application.base.path>
 				<interface.application.log.appender.ref>CONSOLE</interface.application.log.appender.ref>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
+				
+			<interface.application.pref.biosamples.update.timestamp>1</interface.application.pref.biosamples.update.timestamp>
+				<interface.application.pref.reload-all.update.schedule/>
+				<interface.application.pref.reload-all.update.interval>15</interface.application.pref.reload-all.update.interval>
+				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
 				<!-- -1 means that the update is not possible; 0 means complete update; 
 					1 means last day update -->
 				<!-- if 0 or 1 it means that its possible to run the reload job - this 
@@ -167,8 +189,7 @@
 				<interface.application.pref.reload-all.update.schedule></interface.application.pref.reload-all.update.schedule>
 				<interface.application.pref.reload-all.update.interval>5</interface.application.pref.reload-all.update.interval>-->
 				<!-- <interface.application.pref.reload-all.update.atstart>true</interface.application.pref.reload-all.update.atstart> -->
-	
-				<interface.application.body.class />
+
 				<interface.application.pref.reports.recipients>rpereira@ebi.ac.uk</interface.application.pref.reports.recipients>
 			</properties>
 		</profile>

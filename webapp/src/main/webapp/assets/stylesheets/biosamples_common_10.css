@@ -24,6 +24,15 @@ body {
 }
 
 
+body.bs_curator {
+	background: #ffffdb url(../images/bs_curator.gif) no-repeat fixed 0 97%;
+}
+
+body.bs_curator_daily {
+	background: #ffe6f5 url(../images/bs_curator_daily.gif) no-repeat fixed 0 97%;
+}
+
+
 a:hover, 
 a:active {
     color: #e33e3e;

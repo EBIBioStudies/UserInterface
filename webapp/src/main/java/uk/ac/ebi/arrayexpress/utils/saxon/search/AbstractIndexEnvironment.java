@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -94,7 +95,7 @@ public abstract class AbstractIndexEnvironment {
 		return defaultField;
 	}
 
-	//RODO: rpe (review this)
+	//TODO: rpe (review this)
 	private IndexReader getIndexReader(){
 		if(ir==null){
 			synchronized(this){
@@ -734,6 +735,17 @@ public abstract class AbstractIndexEnvironment {
 		getIndexReader(); //I need to do this, because the setup method is called when a full reload occurs and we need to open it again
 		logger.info("default setup for Index Environment");
 
+	}
+	
+	public String getMetadataInformation(){
+		
+		String ret="<table>";
+		Map<String, String> map = getIndexReader().getCommitUserData();
+		for (String key : map.keySet()) {
+			ret+="<tr><td valign='top'><u>" + key + "</u></td><td>" + map.get(key) + "</td></tr>";
+		}
+		ret+="</table>";
+		return ret;
 	}
 
 }

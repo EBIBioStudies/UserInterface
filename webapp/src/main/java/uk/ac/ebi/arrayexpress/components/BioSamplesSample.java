@@ -36,6 +36,8 @@ import uk.ac.ebi.arrayexpress.utils.saxon.DocumentUpdater;
 import uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions;
 import uk.ac.ebi.arrayexpress.utils.saxon.IDocumentSource;
 import uk.ac.ebi.arrayexpress.utils.saxon.PersistableDocumentContainer;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesGroup;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesSample;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentExperiments;
 
 import javax.xml.transform.stream.StreamSource;
@@ -124,14 +126,26 @@ public class BioSamplesSample extends ApplicationComponent implements
 	private void updateIndex(boolean rebuild) {
 		try {
 			
-			this.search.getController().indexFromXmlDB(INDEX_ID, rebuild, "","");			
+			this.search.getController().indexFromXmlDB(INDEX_ID, rebuild);			
+			//is only donr on BioSampleGroup
+			//this.autocompletion.rebuild();
+		} catch (Exception x) {
+			this.logger.error("Caught an exception:", x);
+		}
+	}
+
+	//used to reload the index after the synchronization process
+	public void reloadIndex() {
+		try {
+			//String indexLocationDirectory= this.search.getController().getEnvironment(INDEX_ID).indexLocationDirectory + "_" + System.currentTimeMillis();
+			this.search.getController().indexFromXmlDB(INDEX_ID, false);		
 			
 		} catch (Exception x) {
 			this.logger.error("Caught an exception:", x);
 		}
 	}
 	
-	
+/*	
 	//return the Index location
 	private void rebuilIndex(String indexLocationDirectory,String connectionString) {
 		try {
@@ -142,7 +156,7 @@ public class BioSamplesSample extends ApplicationComponent implements
 			this.logger.error("Caught an exception:", x);
 		}
 	}
-
+*/
 
 	//TODO move this to anoher place (i will not do now because i dont know from where I will read the xml source... maybe in the future I will not use the file!!
 	public DocumentInfo getXmlFromFile(File file) throws Exception {
@@ -156,6 +170,13 @@ public class BioSamplesSample extends ApplicationComponent implements
 	}
 
 
+	@Override
+	public String getMetaDataInformation(){
+		
+		String info=((IndexEnvironmentBiosamplesSample)this.search.getController().getEnvironment(INDEX_ID)).getMetadataInformation();
+    	return info;
+    }
 	
+
 
 }

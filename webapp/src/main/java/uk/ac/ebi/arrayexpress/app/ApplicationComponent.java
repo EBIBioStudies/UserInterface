@@ -49,4 +49,8 @@ abstract public class ApplicationComponent
     public abstract void initialize() throws Exception;
 
     public abstract void terminate() throws Exception;
+    
+    public String getMetaDataInformation(){
+    	return "Default Implementation - No MetaDataInformation Available";
+    }
 }

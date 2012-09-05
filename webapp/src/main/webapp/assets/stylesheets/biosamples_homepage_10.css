@@ -60,9 +60,25 @@ body {
     overflow: auto;
 }
 
-body.dev_preview {
-	background: #ffffff url(../images/ae_dev_bg.gif) repeat fixed top;
-    overflow: auto;
+
+
+body.bs_curator {
+	background: #ffffdb url(../images/bs_curator.gif) no-repeat fixed 0 97%;
+}
+
+body.bs_curator_daily {
+	background: #ffe6f5 url(../images/bs_curator_daily.gif) no-repeat fixed 0 97%;
+}
+
+
+metadata_show{
+	
+}
+
+
+metadata_hide{
+{
+	visibility:hidden;
 }
 
 #ebi_footer {

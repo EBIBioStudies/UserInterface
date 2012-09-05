@@ -36,6 +36,7 @@ body
  font-size: 9pt;
 }
 
+
 #ebi_footer {
     background-color: #DEDEDE;
     border-top: 1px solid #BFBFBF;
@@ -218,7 +219,7 @@ onBiosamplesStatsSuccess(xml)
 </script>
 
 </head>
-<body onload="if(navigator.userAgent.indexOf('MSIE') != -1) {document.getElementById('head').allowTransparency = true;}; updateBiosamplesStats();">
+<body class="${interface.application.body.class}" onload="if(navigator.userAgent.indexOf('MSIE') != -1) {document.getElementById('head').allowTransparency = true;}; updateBiosamplesStats();">
 		<div class="headerdiv" id="headerdiv" style="position:absolute; z-index: 1;">
 			<iframe src="${interface.application.link.www_domain.inc}/head.html" name="head" id="head" frameborder="0" marginwidth="0px" marginheight="0px" scrolling="no"  width="100%" style="position:absolute; z-index: 1; height: 57px;">Your browser does not support inline frames or is currently configured not to display inline frames. Content can be viewed at actual source page: http://www.ebi.ac.uk/inc/head.html</iframe>
 
@@ -276,7 +277,7 @@ onBiosamplesStatsSuccess(xml)
 <div class="form_top_right">
 <div class="form_inner">
 						<div class="biosd_facts_box" style=" margin-left: 15px; margin-top: 15px">
-							<div class="title">BioSamples database</div>
+							<div class="title">BioSamples database <span class="${interface.application.metadata.class}"><a href="metadata?class=${interface.application.body.class}" target="ext">Metadata</a></span></div> 
 
 							<div class="facts">
 							Samples: <span id="totalSamples"></span>

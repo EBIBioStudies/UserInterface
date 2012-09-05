@@ -39,7 +39,18 @@
 		</xmldatabase>
 	
 	
+	<!-- define all the variables that we need to update the biosamples Database -->
+	<xmlupdate>
+		<url>${interface.application.db.xml.update.url}</url>
+		<username>${interface.application.db.xml.update.username}</username>
+		<password>${interface.application.db.xml.update.password}</password>
+		<cookie>${interface.application.db.xml.update.cookie}</cookie>	
+	</xmlupdate>
+	
 
+	
+
+		<!-- job -->
 		<reload-all>
 		<update>
 		<schedule>${interface.application.pref.reload-all.update.schedule}</schedule>
@@ -68,13 +79,14 @@
 		</efo>
 
 
-
-
 <!-- location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" -->
 
 		<index id="biosamplesgroup"
 			location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes"
 			defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
+			
+			<!-- <document path="/Biosamples/SampleGroup[@id='SAMEG11547']" defaultField="keywords"> -->
+			
 			<document path="/Biosamples/SampleGroup" defaultField="keywords">
 				<field name="keywords" type="string" path="string-join(.//text(), ' ')"
 					analyze="true"
@@ -136,14 +148,14 @@
 
 
 
-
 		<index id="biosamplessample"
 			location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes"
 			defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
 
 			
-			<!-- <document path="/Biosamples/SampleGroup/Sample[@id='SAMEA147487']" -->
-				<document path="/Biosamples/SampleGroup/Sample"
+			 
+				<!-- <document path="/Biosamples/SampleGroup/Sample[@id='SAMEA147487']" -->
+				<document path="/Biosamples/SampleGroup/Sample" 
 				 defaultField="keywords">
 				<field name="keywords" type="string" path="string-join(.//text(), ' ')"
 					analyze="true"
@@ -170,8 +182,8 @@
 				<field name="0" type="string"
 					path="attribute/value[../@class='Sample Accession']" analyze="true"
 					store="false" escape="false" sortfields="0" />
-				<!-- dynamic sort -->
 				
+				<!-- dynamic sort -->				
 				<field name="attributes" type="string" path="attribute"
 					process="true" analyze="true" store="false" escape="false" />
 					
@@ -237,54 +249,8 @@
 				<field name="30" type="string" process="true" path="''"
 					analyze="true" store="false" escape="false" sortfields="30" />
 
-
-				<!-- <field name="1integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="1integer" />
-				<field name="2integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="2integer" />
-				<field name="3integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="3integer" />
-
-				<field name="4integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="4integer" />
-				<field name="5integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="5integer" />
-				<field name="6integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="6integer" />
-
-				<field name="7integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="7integer" />
-				<field name="8integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="8integer" />
-				<field name="9integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="9integer" />
-
-				<field name="10integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="10integer" />
-				<field name="11integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="11integer" />
-				<field name="12integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="12integer" />
-
-				<field name="13integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="13integer" />
-				<field name="14integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="14integer" />
-				<field name="15integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="15integer" />
-
-				<field name="16integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="16integer" />
-				<field name="17integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="17integer" />
-				<field name="18integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="18integer" />
-
-				<field name="19integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="19integer" />
-				<field name="20integer" type="integer" process="true" path="0"
-					analyze="false" store="false" escape="false" sortfields="20integer" /> -->
-
+				<!-- dynamic sort -->				
+		
 			</document>
 
 		</index>

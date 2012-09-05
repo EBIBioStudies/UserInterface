@@ -122,8 +122,8 @@ public class Controller
     
     // if the document is null it means that I should use an already generated index
     //TODO (just a test)
-    //the job parameter menas that we are executing the index building inside a job, so we sould not replace the original one
-    public void indexFromXmlDB( String indexId, boolean rebuild, String indexLocationDirectory, String connectionString) throws Exception
+    //the indexLocationDirectory and connectionString parameter means that we are executing the index building inside a job, so we should not replace the original one
+    public void indexFromXmlDB( String indexId, boolean rebuild, String indexLocationDirectory, String dbHost, int dbPort, String dbPassword, String dbName) throws Exception
     {
 
     	 if(!rebuild){
@@ -133,10 +133,32 @@ public class Controller
          } 
     	 else{
     		 this.logger.info("Started indexing Reading data from an Xml Database for index id [{}] from XMLDATABASE", indexId);
-        	new Indexer(getEnvironment(indexId)).indexFromXmlDB(indexLocationDirectory,connectionString);      	
+    		 this.logger.info("with indexLocationDirectory [{}]",indexLocationDirectory);
+    		 this.logger.info("connectionString-> [{}] [{}] [{}] [{}]", new Object[]{dbHost, dbPort, dbPassword, dbName});
+        	new Indexer(getEnvironment(indexId)).indexFromXmlDB(indexLocationDirectory,dbHost, dbPort, dbPassword, dbName);      	
     	 }
   
     }
+    
+    
+    
+    
+    //TODO rpe: rethink this overload for this method (just a test)
+    public void indexFromXmlDB( String indexId, boolean rebuild) throws Exception
+    {
+
+    	 if(!rebuild){
+         	this.logger.info("Indexing is not done any more, I'm pointing to a generated Lucene Index [{}]", indexId);
+         	new Indexer(getEnvironment(indexId)).indexReader();
+            	
+         } 
+    	 else{
+    		 this.logger.info("Started indexing Reading data from an Xml Database for index id [{}] from XMLDATABASE", indexId);
+        	new Indexer(getEnvironment(indexId)).indexFromXmlDB();      	
+    	 }
+  
+    }
+    
 
     public List<String> getTerms( String indexId, String fieldName, int minFreq ) throws IOException
     {

@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationJob;
+import uk.ac.ebi.arrayexpress.components.BioSamplesGroup;
+import uk.ac.ebi.arrayexpress.components.BioSamplesSample;
 import uk.ac.ebi.arrayexpress.components.SearchEngine;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentArrayDesigns;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesGroup;
@@ -61,19 +63,13 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 		File setupTempDirectory = null;
 		try {
 
-			// download the xml
-			// TODO: rpe (define it externally)
-
-//			String downloadDirectory = Application.getInstance()
-//					.getPreferences().getString("bs.downloadDirectory");
-//			logger.debug("downloadDirectory->" + downloadDirectory);
-
-			int updateDatabaseTimestamp = Application.getInstance()
+			
+				  //Thread.currentThread().sleep(30000);//sleep for 1000 ms
+			
+				  int updateDatabaseTimestamp = Application.getInstance()
 					.getPreferences().getInteger("bs.reloadBiosamplesDatabase");
 			logger.debug("reloadBiosamplesDatabase->" + updateDatabaseTimestamp);
-			// incremental or total
-			// SimpleDateFormat sd= new SimpleDateFormat("yyyy.MM.dd");
-			// today
+
 
 			if (updateDatabaseTimestamp == -1) {
 				logger.error("ReloadBiosamplesJob is trying to execute and the configuration does not allow that");
@@ -127,20 +123,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				throw new Exception("Backup directory was NOT created in " + backDir.getAbsolutePath());
 			}
 
-//			setupTempDirectory = new File(setupDir + newDir);
-//			if (setupTempDirectory.mkdir()) {
-//				logger.info(
-//						"Setup temporary directory was created in [{}]",
-//						setupTempDirectory.getAbsolutePath());
-//			} else {
-//				// TODO: rpe stop the process
-//				logger.error(
-//						"Setup temporary directory was NOT created in [{}]",
-//						setupTempDirectory.getAbsolutePath());
-//			}
 
-
-			
 			DownloadBiosamplesXmlFile dxml = new DownloadBiosamplesXmlFile();
 			File xmlDir= new File(backDir.getAbsolutePath() + "/XmlDownload" );
 			if (xmlDir.mkdir()) {
@@ -183,12 +166,16 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 					throw new Exception("newSetupDir  directory was NOT created in " + newSetupDir.getAbsolutePath());
 				}
 				
+				//update in a temporary database
+				//index it in the newSetupDir
 				updateXMLDatabase(xmlDir,newSetupDir, tempDir);
 				logger.info("End of DatabaseXml Creation");
 				// only after update the database I update the Lucenes Indexes
 				logger.info("Deleting Setup Directory and renaming - from now on the application is not answering");
 
 				SearchEngine search = ((SearchEngine) getComponent("SearchEngine"));
+		
+				// I need to close the IndexReader otherwise it would not be possible dor me to delete the Setup directory (this problem only occurs on NFS);
 				search.getController().getEnvironment("biosamplesgroup").closeIndexReader();
 				search.getController().getEnvironment("biosamplessample").closeIndexReader();
 				
@@ -202,23 +189,34 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 					logger.info("file was successfully renamed [{}]!!!",
 							setupDirectory.getAbsolutePath());
 				}
-				if (!success2) {
-					logger.error("file was  successfully renamed [{}]!!!",
+				else {
+					logger.error("file was not successfully renamed [{}]!!!",
 							setupDirectory.getAbsolutePath());
 				}
 
 				logger.info("Deleting Setup Directory and renaming - End");
 
 				
-				search.getController().getEnvironment("biosamplesgroup")
-						.indexReader();
-				
+				//I do this to know the number of elements
+				((BioSamplesGroup)getComponent("BioSamplesGroup")).reloadIndex();
+				//TODO: rpe nowaday I need to do this to clean the xmldatabase connection nad to reload the new index
 				((IndexEnvironmentBiosamplesGroup) search.getController()
-						.getEnvironment("biosamplesgroup")).setup();
-				search.getController().getEnvironment("biosamplessample")
-						.indexReader();
+					.getEnvironment("biosamplesgroup")).setup();
+				
+				((BioSamplesSample)getComponent("BioSamplesSample")).reloadIndex();
+				//TODO: rpe nowadays I need to do this to clean the xmldatabase connection nad to reload the new index
 				((IndexEnvironmentBiosamplesSample) search.getController()
-						.getEnvironment("biosamplessample")).setup();
+					.getEnvironment("biosamplessample")).setup();
+				
+///				search.getController().getEnvironment("biosamplesgroup")
+///						.indexReader();
+///				//I need to setupIt to point to the new Database
+///				((IndexEnvironmentBiosamplesGroup) search.getController()
+///						.getEnvironment("biosamplesgroup")).setup();
+///				search.getController().getEnvironment("biosamplessample").
+///						indexReader();
+///				((IndexEnvironmentBiosamplesSample) search.getController()
+///						.getEnvironment("biosamplessample")).setup();
 				// TODO: RPE Update the EFO!!??
 
 			} else {
@@ -231,6 +229,8 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 			
 		}
 		logger.info("End of Reloading all Biosamples data into the Application Server");
+		
+	
 		// I want to start using the new version of the data
 		// (/Users/rpslpereira/Apps/apache-tomcat-6.0.33/temp/StagingArea/4)
 	}
@@ -239,34 +239,25 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 			throws Exception {
 
 		// Create a client session with host name, port, user name and password
-
 		
 		logger.debug("* Create a client session int the Xml Database.");
 
 		String dbHost = Application.getInstance().getPreferences()
 				.getString("bs.xmldatabase.host");
-		String dbPort = Application.getInstance().getPreferences()
-				.getString("bs.xmldatabase.port");
+		int dbPort = Integer.parseInt(Application.getInstance().getPreferences()
+				.getString("bs.xmldatabase.port"));
 		String dbPassword = Application.getInstance().getPreferences()
 				.getString("bs.xmldatabase.adminpassword");
 
 		String originalDbName = Application.getInstance().getPreferences()
 				.getString("bs.xmldatabase.dbname");
-		// String originalDbName = "biosamplesAEGroup";
-
-//		logger.debug("\n* Server Initialization.");	
-//		BaseXServer server = new BaseXServer("-p " + Integer.parseInt(dbPort));
-		
-		Session session = new ClientSession(dbHost, Integer.parseInt(dbPort),
+	
+		Session session = new ClientSession(dbHost, dbPort,
 				"admin", dbPassword);
 
 		// ------------------------------------------------------------------------
 		// Create a database
 		logger.debug("* Create a database.");
-
-		// session.execute(new CreateDB("input",
-		// "/Users/rpereira/Downloads/factbook.xml"));
-		//
 
 		String tempDbName = originalDbName + "_" + tempDir;
 		String logs = session.execute(new CreateDB(tempDbName, xmlDirectory
@@ -278,21 +269,23 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 		logger.debug("CLOSE ...->" + logs);
 		
 		
-		logger.debug("Start Indexing ..." + logs);
+		logger.debug("Start Indexing ...");
 		// I will create now the Lucene Indexes ...
 		SearchEngine search = ((SearchEngine) getComponent("SearchEngine"));
 		// TODO: rpe change all this static values
 		search.getController().indexFromXmlDB("biosamplesgroup", true,
 				newSetupDirectory.getAbsolutePath() + "/LuceneIndexes",
-				"xmldb:basex://localhost:1984/" + tempDbName);
-		((IndexEnvironmentBiosamplesGroup) search.getController()
-				.getEnvironment("biosamplesgroup")).setup();
+				dbHost, dbPort, dbPassword, tempDbName);
+	
+///		((IndexEnvironmentBiosamplesGroup) search.getController()
+///				.getEnvironment("biosamplesgroup")).setup();
+		//TODO: rpe this db path shoul not be static
 		search.getController().indexFromXmlDB("biosamplessample", true,
 				newSetupDirectory.getAbsolutePath() + "/LuceneIndexes",
-				"xmldb:basex://localhost:1984/" + tempDbName);
-		((IndexEnvironmentBiosamplesSample) search.getController()
-				.getEnvironment("biosamplessample")).setup();
-		logger.debug("End Indexing ..." + logs);
+				dbHost, dbPort, dbPassword, tempDbName);
+///		((IndexEnvironmentBiosamplesSample) search.getController()
+///				.getEnvironment("biosamplessample")).setup();
+		logger.debug("End Indexing ...");
 		//
 
 		// index
@@ -308,53 +301,18 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 
 		logger.debug("* Close the client session.");
 		session.close();
-		
-//		logger.debug("\n* Server stopped.");
-//		server.stop();
+
 
 	}
 
 	void deleteDirectory(File f) throws IOException {
 		FileUtils.deleteDirectory(f);
-		// if (f.isDirectory()) {
-		// for (File c : f.listFiles()){
-		// logger.debug("File to be deleted->" + c.getAbsolutePath());
-		// deleteDirectory(c);
-		//
-		// }
-		// }
-		// if (!f.delete())
-		// throw new FileNotFoundException("Failed to delete file: " + f);
 	}
 
 	public void copyDirectory(File sourceLocation, File targetLocation)
 			throws IOException {
 		FileUtils.copyDirectory(sourceLocation, targetLocation);
-//
-//		if (sourceLocation.isDirectory()) {
-//			if (!targetLocation.exists()) {
-//				targetLocation.mkdir();
-//			}
-//
-//			String[] children = sourceLocation.list();
-//			for (int i = 0; i < children.length; i++) {
-//				copyDirectory(new File(sourceLocation, children[i]), new File(
-//						targetLocation, children[i]));
-//			}
-//		} else {
-//
-//			InputStream in = new FileInputStream(sourceLocation);
-//			OutputStream out = new FileOutputStream(targetLocation);
-//
-//			// Copy the bits from instream to outstream
-//			byte[] buf = new byte[1024];
-//			int len;
-//			while ((len = in.read(buf)) > 0) {
-//				out.write(buf, 0, len);
-//			}
-//			in.close();
-//			out.close();
-//		}
+
 	}
 
 }

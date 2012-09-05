@@ -18,8 +18,11 @@ package uk.ac.ebi.arrayexpress.servlets;
  */
 
 import uk.ac.ebi.arrayexpress.app.ApplicationServlet;
+import uk.ac.ebi.arrayexpress.components.BioSamplesGroup;
+import uk.ac.ebi.arrayexpress.components.BioSamplesSample;
 import uk.ac.ebi.arrayexpress.components.JobsController;
 import uk.ac.ebi.arrayexpress.components.SearchEngine;
+import uk.ac.ebi.arrayexpress.components.XmlDbConnectionPool;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesGroup;
 
 import javax.servlet.ServletException;
@@ -28,42 +31,72 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class MetaDataServlet extends ApplicationServlet
-{
-    private static final long serialVersionUID = 8929729058610937695L;
+public class MetaDataServlet extends ApplicationServlet {
+	private static final long serialVersionUID = 8929729058610937695L;
 
-    protected boolean canAcceptRequest( HttpServletRequest request, RequestType requestType )
-    {
-        return (requestType == RequestType.GET || requestType == RequestType.POST);
-    }
+	protected boolean canAcceptRequest(HttpServletRequest request,
+			RequestType requestType) {
+		return (requestType == RequestType.GET || requestType == RequestType.POST);
+	}
 
-    // Respond to HTTP requests from browsers.
-    protected void doRequest( HttpServletRequest request, HttpServletResponse response, RequestType requestType )
-            throws ServletException, IOException
-    {
-        response.addHeader("Pragma", "no-cache");
-        response.addHeader("Cache-Control", "no-cache");
-        response.addHeader("Cache-Control", "must-revalidate");
-        response.addHeader("Expires", "Fri, 16 May 2008 10:00:00 GMT"); // some date in the past
+	// Respond to HTTP requests from browsers.
+	protected void doRequest(HttpServletRequest request,
+			HttpServletResponse response, RequestType requestType)
+			throws ServletException, IOException {
+		response.addHeader("Pragma", "no-cache");
+		response.addHeader("Cache-Control", "no-cache");
+		response.addHeader("Cache-Control", "must-revalidate");
+		response.addHeader("Expires", "Fri, 16 May 2008 10:00:00 GMT"); // some
+																		// date
+																		// in
+																		// the
+																		// past
 
-        PrintWriter out = null;
-        try {
-        	SearchEngine search = ((SearchEngine) getComponent("SearchEngine"));
-    		// TODO: rpe change all this static values
-    		
-    		String infoDB=((IndexEnvironmentBiosamplesGroup) search.getController()
-    				.getEnvironment("biosamplesgroup")).getInfoDB();
-            out = response.getWriter();
-            out.println("METADATA Information");
-            out.println(infoDB);
-            JobsController jobs = ((JobsController) getComponent("JobsController"));
-            out.println(jobs.getMetaDataInformation());
-            
-        } finally {
-            if (null != out) {
-                out.flush();
-                out.close();
-            }
-        }
-    }
+		PrintWriter out = null;
+		try {
+
+			String[] componentsArray = { "JobsController", "XmlDbConnectionPool",
+					"BioSamplesGroup", "BioSamplesSample" };
+			out = response.getWriter();
+			out.println("<html><head>");
+			out.println("<link rel=\"stylesheet\" href=\"assets/stylesheets/biosamples_homepage_10.css\" type=\"text/css\">");
+//			out.println("<link rel=\"stylesheet\" href=\"assets/stylesheets/biosamples_common_10.css\" type=\"text/css\">");
+			out.println("</head><body class='" + request.getParameter("class") +  "'>");
+			for (int j = 0; j < componentsArray.length; j++) {
+				String infoDB = (getComponent(componentsArray[j]))
+						.getMetaDataInformation();
+				out.println("<br/><br/><b>"+ componentsArray[j] + "</b>");
+				out.println(infoDB.replaceAll("\n", "<br/>"));
+			}
+			// String infoDB=((BioSamplesGroup)
+			// getComponent("BioSamplesGroup")).getMetaDataInformation();
+			// // .getEnvironment("biosamplesgroup")).getMetaDataInformation();
+			// out = response.getWriter();
+			// out.println("<br/><br/>BioSamplesGroup");
+			// out.println(infoDB);
+			//
+			// infoDB=((BioSamplesSample)
+			// getComponent("BioSamplesSample")).getMetaDataInformation();
+			// out.println("<br/><br/>BioSamplesSample");
+			// out.println(infoDB);
+			//
+			//
+			// infoDB=((XmlDbConnectionPool)
+			// getComponent("XmlDbConnectionPool")).getMetaDataInformation();
+			// out.println("<br/><br/>XmlDbConnectionPool");
+			// out.println(infoDB);
+			//
+			//
+			// infoDB=((JobsController)
+			// getComponent("JobsController")).getMetaDataInformation();
+			// out.println("<br/><br/>JobsController");
+			// out.println(infoDB);
+
+		} finally {
+			if (null != out) {
+				out.flush();
+				out.close();
+			}
+		}
+	}
 }

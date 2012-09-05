@@ -49,6 +49,7 @@ public class AEInterfaceApplication extends Application implements ServletContex
         addComponent(new Autocompletion());
         //I will teste biosample database instead of experiments
   
+        addComponent(new XmlDbConnectionPool());
         addComponent(new BioSamplesGroup());
         addComponent(new BioSamplesSample());
         

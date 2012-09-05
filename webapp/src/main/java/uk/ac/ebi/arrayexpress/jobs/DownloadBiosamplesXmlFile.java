@@ -26,6 +26,8 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.ebi.arrayexpress.app.Application;
+
 
 /**
  * @author rpslpereira
@@ -38,10 +40,10 @@ public class DownloadBiosamplesXmlFile {
 	 */
 	
 	private final Logger log = LoggerFactory.getLogger(getClass());
-	String url="http://tomcat-18:21480/biosamples/";
-	String username="rui";
-	String password="ruipereire";
-	String sessionCookieName="AGESESS";
+//	String url="http://tomcat-18:21480/biosamples/";
+//	String username="rui";
+//	String password="ruipereire";
+//	String sessionCookieName="AGESESS";
 	//String downloadDirectory="/Users/rpslpereira/Apps/apache-tomcat-6.0.33/temp/StagingArea/DownloadXml/";
 	
 	public static void main(String[] args) {
@@ -57,6 +59,16 @@ public class DownloadBiosamplesXmlFile {
 	public boolean downloadXml(String downloadDirectory, long time) throws Exception {
 		// TODO Auto-generated method stub
 	
+	
+		String url= Application.getInstance()
+	.getPreferences().getString("bs.xmlupdate.url");
+		String username= Application.getInstance()
+				.getPreferences().getString("bs.xmlupdate.username");
+		String password= Application.getInstance()
+				.getPreferences().getString("bs.xmlupdate.password");
+		String sessionCookieName= Application.getInstance()
+				.getPreferences().getString("bs.xmlupdate.cookie");
+		
 		String sessionKey = null;
         DefaultHttpClient httpclient = null;
         boolean ok = false;
@@ -89,10 +101,11 @@ public class DownloadBiosamplesXmlFile {
                 URL website=null;
                 if(time!=0){
                     website = new URL(url + "XMLDataExport?" + sessionCookieName +"=" + sessionKey  + "&since=" + time);    
-                    System.out.println(url + "XMLDataExport?" + sessionCookieName +"=" + sessionKey  + "&since=" + time);
+                    log.debug(url + "XMLDataExport?" + sessionCookieName +"=" + sessionKey  + "&since=" + time);
                 }
                 else{
                     website = new URL(url + "XMLDataExport?" + sessionCookieName +"=" + sessionKey );
+                    log.debug(url + "XMLDataExport?" + sessionCookieName +"=" + sessionKey);
                 }
                 	
 //                 ReadableByteChannel rbc = Channels.newChannel(website.openStream());

@@ -23,6 +23,7 @@ import org.quartz.impl.matchers.GroupMatcher;
 
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.jobs.*;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesGroup;
 
 import java.text.ParseException;
 import java.util.List;
@@ -188,17 +189,57 @@ public class JobsController extends ApplicationComponent
 
         getScheduler().shutdown(true);
     }
+  
     
-    
+	
+
+	 @Override
     public String getMetaDataInformation(){
     	
-    	String ret="";
+    	String ret="<u>Synchronization Process</u>:<br>";
     	try {
-			ret+=scheduler.getJobGroupNames();
-			for (JobKey iterable_element : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(AE_JOBS_GROUP))) {
-				ret+="Job->" + scheduler.getJobDetail(iterable_element).getDescription();
-				//ret+="Job->" + scheduler.getTriggersOfJob(iterable_element).;				
+    		
+			
+			Trigger t = scheduler.getTrigger(new TriggerKey("reload-all_schedule_trigger", AE_JOBS_GROUP));
+			if(t!=null){
+			ret+="Previous Time->" + t.getPreviousFireTime();
+			ret+="<br>Next Time->" + t.getNextFireTime();
 			}
+			else{
+				ret+="Not executed yet!";
+			}
+
+			
+			boolean isRunning=false;
+			List<JobExecutionContext> executingJobs = scheduler.getCurrentlyExecutingJobs();
+		     
+			for (JobExecutionContext jobExecutionContext : executingJobs)
+		      {
+		        JobDetail execJobDetail = jobExecutionContext.getJobDetail();
+		        //ret+=execJobDetail;
+		        if (execJobDetail.getKey().equals(scheduler.getJobDetail(new JobKey("reload-all",AE_JOBS_GROUP)).getKey()))
+		        {
+		          isRunning=true;
+		        }
+		      }
+			ret+="<br>Is it running?->" + isRunning;
+			
+			
+//			 List<JobExecutionContext> currentJobs = scheduler.getCurrentlyExecutingJobs();
+//			    for (JobExecutionContext jobCtx: currentJobs){
+//			   
+//			        ret+="the job is already running - do nothing->" + jobCtx;
+//			    }     
+//			ret+="Is it running?->"+ scheduler.getJobDetail(new JobKey("reload-all", AE_JOBS_GROUP));
+			
+//			ret+=scheduler.getJobGroupNames();
+			
+//			scheduler.getContext().
+			
+//			for (JobKey iterable_element : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(AE_JOBS_GROUP))) {
+//				ret+="Job->" + scheduler.getJobDetail(iterable_element).getDescription();
+//				//ret+="Job->" + scheduler.getTriggersOfJob(iterable_element).;				
+//			}
 //			for(String group: scheduler.getTriggerGroupNames()) {
 //			    // enumerate each trigger in group
 //			    for(TriggerKey triggerKey : scheduler.getTriggerKeys(TriggerMatcher.jobGroupEquals(AE_JOBS_GROUP)) {
@@ -206,6 +247,7 @@ public class JobsController extends ApplicationComponent
 //			    }
 //			}
 			
+
 		} catch (SchedulerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
