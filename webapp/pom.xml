@@ -530,6 +530,12 @@
 			<artifactId>basex-api</artifactId>
 			<version>7.3.1</version>
 		</dependency> -->
+		
+		<dependency>
+	<groupId>xmldb</groupId>
+	<artifactId>xmldb-api</artifactId>
+	<version>20021118</version>
+</dependency>
 
 		<!-- request Xml from Biosamples -->
 		<dependency>
