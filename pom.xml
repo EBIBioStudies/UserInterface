@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>uk.ac.ebi.microarray</groupId>
-    <artifactId>bs-interface</artifactId>
-    <name>ArrayExpress Interface</name>
-    <version>1.0</version>
-    <packaging>pom</packaging>
-    <url>http://www.ebi.ac.uk/arrayexpress</url>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>uk.ac.ebi.microarray</groupId>
+	<artifactId>bs-interface</artifactId>
+	<name>BioSamples Interface</name>
+	<version>1.0</version>
+	<packaging>pom</packaging>
+	<url>http://www.ebi.ac.uk/arrayexpress</url>
 
-    <scm>
-        <connection>scm:svn:svn://dukkha.ebi.ac.uk/trunk/arrayexpress-interface</connection>
-        <developerConnection>scm:svn:svn://dukkha.ebi.ac.uk/trunk/arrayexpress-interface</developerConnection>
-        <url>svn://dukkha.ebi.ac.uk/trunk/arrayexpress-interface</url>
-    </scm>
+	<scm>
+		<connection>scm:svn:svn://dukkha.ebi.ac.uk/trunk/arrayexpress-interface</connection>
+		<developerConnection>scm:svn:svn://dukkha.ebi.ac.uk/trunk/arrayexpress-interface</developerConnection>
+		<url>svn://dukkha.ebi.ac.uk/trunk/arrayexpress-interface</url>
+	</scm>
 
-    <developers>
-       	<developer>
+	<developers>
+		<developer>
 			<id>rpereira</id>
 			<name>Rui Pereira</name>
 			<email>rui.pereira@ebi.ac.uk</email>
@@ -24,46 +24,51 @@
 				<role>Software Engineer</role>
 			</roles>
 		</developer>
-    </developers>
+	</developers>
 
-    <repositories>
-        <repository>
-            <id>artifactory-repo</id>
-            <url>http://bar.ebi.ac.uk:8081/artifactory/repo/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+	<repositories>
+		<repository>
+			<id>artifactory-repo</id>
+			<url>http://bar.ebi.ac.uk:8081/artifactory/repo/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>artifactory-repo</id>
-            <url>http://bar.ebi.ac.uk:8081/artifactory/repo/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
+		<repository>
+			<id>maven2</id>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
+	</repositories>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <encoding>ISO-8859-1</encoding>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    <modules>
-        <!-- <module>components</module> -->
-        <module>webapp</module>
-       <!--  <module>redirector</module> -->
-    </modules>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>artifactory-repo</id>
+			<url>http://bar.ebi.ac.uk:8081/artifactory/repo/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<encoding>ISO-8859-1</encoding>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<modules>
+		<!-- <module>components</module> -->
+		<module>webapp</module>
+		<!-- <module>redirector</module> -->
+	</modules>
 </project>
 
