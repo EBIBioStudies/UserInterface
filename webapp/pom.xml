@@ -65,7 +65,7 @@
 		<interface.application.db.xml.driver>org.basex.api.xmldb.BXDatabase</interface.application.db.xml.driver>
 
 		<!-- Generate or not the Lucene Indexes at the startup -->
-		<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
+		<interface.application.lucene.indexes.build>true</interface.application.lucene.indexes.build>
 
 
 		<!-- define all the variables that we need to update the biosamples Database -->
@@ -101,8 +101,8 @@
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
 				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
-				<interface.application.db.xml.connection.dbname>biosamplesAEGroupDev</interface.application.db.xml.connection.dbname>
-				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.dbname> -->
+				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroupDev</interface.application.db.xml.connection.dbname> -->
+				<interface.application.db.xml.connection.dbname>biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.dbname>
 			</properties>
 		</profile>
 
@@ -518,18 +518,18 @@
 		<dependency>
 			<groupId>org.basex</groupId>
 			<artifactId>basex</artifactId>
-			<version>7.1</version>
+			<version>7.3.1</version>
 		</dependency>
-		<dependency>
+	<!-- 	<dependency>
 			<groupId>org.xmldb</groupId>
 			<artifactId>xmldb-api</artifactId>
 			<version>1.0</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.basex</groupId>
 			<artifactId>basex-api</artifactId>
-			<version>7.1</version>
-		</dependency>
+			<version>7.3.1</version>
+		</dependency> -->
 
 		<!-- request Xml from Biosamples -->
 		<dependency>
