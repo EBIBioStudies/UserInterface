@@ -264,14 +264,20 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
-		
-		
-			<repository>
+
+
+		<repository>
 			<id>basex</id>
 			<name>BaseX Maven Repository</name>
 			<url>http://files.basex.org/maven</url>
 		</repository>
-		
+
+
+		<repository>
+			<id>xqj</id>
+			<name>XQJ Maven Repository</name>
+			<url>http://xqj.net/maven</url>
+		</repository>
 	</repositories>
 
 	<pluginRepositories>
@@ -552,13 +558,10 @@
 			<groupId>xmldb</groupId>
 			<artifactId>xmldb-api</artifactId>
 			<version>1.0</version>
-		</dependency> 
+		</dependency>
 
-		<!-- <dependency>
-			<groupId>xmldb</groupId>
-			<artifactId>xmldb-api</artifactId>
-			<version>20021118</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>xmldb</groupId> <artifactId>xmldb-api</artifactId> 
+			<version>20021118</version> </dependency> -->
 
 		<!-- request Xml from Biosamples -->
 		<dependency>
