@@ -27,6 +27,13 @@
 	</developers>
 
 	<repositories>
+
+		<repository>
+			<id>basex</id>
+			<name>BaseX Maven Repository</name>
+			<url>http://files.basex.org/maven</url>
+		</repository>
+
 		<repository>
 			<id>artifactory-repo</id>
 			<url>http://bar.ebi.ac.uk:8081/artifactory/repo/</url>
@@ -36,14 +43,16 @@
 		</repository>
 
 
-		<repository>
+
+
+		<!-- <repository>
 			<id>maven2</id>
 			<url>http://repo1.maven.org/maven2</url>
 		</repository>
+ -->
 
-		
-		
-		
+
+
 	</repositories>
 
 	<pluginRepositories>
