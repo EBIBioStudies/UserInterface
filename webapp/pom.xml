@@ -527,18 +527,22 @@
 		<dependency>
 			<groupId>org.basex</groupId>
 			<artifactId>basex</artifactId>
-			<version>7.3.1</version>
+			<!-- <version>7.3.1</version> -->
+			<version>7.1</version>
 		</dependency>
-		<!-- <dependency> <groupId>org.xmldb</groupId> <artifactId>xmldb-api</artifactId> 
+		 <!-- <dependency> <groupId>org.xmldb</groupId> <artifactId>xmldb-api</artifactId> 
 			<version>1.0</version> </dependency> -->
-		<!-- <dependency> <groupId>org.basex</groupId> <artifactId>basex-api</artifactId> 
-			<version>7.3.1</version> </dependency> -->
+			
+		 <dependency> <groupId>org.basex</groupId> <artifactId>basex-api</artifactId> 
+			<version>7.1</version> </dependency>
 
-		<dependency>
+
+
+		 <dependency>
 			<groupId>xmldb</groupId>
 			<artifactId>xmldb-api</artifactId>
 			<version>20021118</version>
-		</dependency>
+		</dependency> 
 
 		<!-- request Xml from Biosamples -->
 		<dependency>

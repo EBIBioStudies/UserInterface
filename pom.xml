@@ -41,10 +41,6 @@
 			<url>http://repo1.maven.org/maven2</url>
 		</repository>
 
-		<!-- <repository>
-			<id>basex</id>
-			<url>http://files.basex.org/maven</url>
-		</repository> -->
 		
 		
 		
