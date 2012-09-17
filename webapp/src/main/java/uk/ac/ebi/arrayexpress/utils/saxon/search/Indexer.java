@@ -36,6 +36,7 @@ import net.sf.saxon.om.DocumentInfo;
 import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.xpath.XPathEvaluator;
 
+
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -237,6 +238,7 @@ public class Indexer {
 					.getConfSubset("bs.xmldatabase");
 
 			if (null != connsConf) {
+				//TODO: rpe use the component XmlDatabasePooling
 				driverXml = connsConf.getString("driver");
 				// I will use the connectionString that was passed by parameter (in several parameters)
 				connectionString = connsConf.getString("base") + "://"  + dbHost +":" + dbPort +"/" + dbName;
@@ -247,6 +249,7 @@ public class Indexer {
 			c = Class.forName(driverXml);
 			db = (Database) c.newInstance();
 			DatabaseManager.registerDatabase(db);
+			logger.debug("connectionString->" + connectionString);
 			coll = DatabaseManager.getCollection(connectionString);
 			XPathQueryService service = (XPathQueryService) coll.getService(
 					"XPathQueryService", "1.0");
@@ -298,8 +301,13 @@ public class Indexer {
 			set = null;
 			db = null;
 			// c=null;
-			long pageSizeDefault = 10000; // (for samples 1million, for
-											// samplegroup 10000)
+			long pageSizeDefault = 50000;
+			// the samplegroup cannot be big otherwise I will obtain a memory error ... but the sample must b at least one million because the paging queries are really slow - we need to balance it
+			// (for samples 1million, for samplegroup 50000)
+			if (numberResults>1000000){
+				pageSizeDefault = 1000000;
+			}
+
 			long pageNumber = 1;
 			int count = 0;
 			Map<String, AttsInfo[]> cacheAtt = new HashMap<String, AttsInfo[]>();
