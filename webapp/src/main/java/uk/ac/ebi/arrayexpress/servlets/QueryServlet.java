@@ -168,6 +168,11 @@ public class QueryServlet extends ApplicationServlet
                 params.put("visible", "true");
             }
 
+            
+            //TODO: rpe
+            //EFO expansion (this is now done in a different way by Nikolay
+            params.put("expandefo", "true");
+       
             try {
                 SearchEngine search = ((SearchEngine) getComponent("SearchEngine"));
                 SaxonEngine saxonEngine = (SaxonEngine) getComponent("SaxonEngine");

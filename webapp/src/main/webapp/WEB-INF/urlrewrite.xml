@@ -6,67 +6,98 @@
 <urlrewrite>
 
 
-    <!-- biosamples -->
-    <rule>
-        <from>^/$</from>
-        <to type="redirect">%{context-path}/index.html</to>
-    </rule>
-    <rule>
-        <from>^/biosamplesgroup/browse\.html$</from>
-        <to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/html</to>
-    </rule>
-    
-     <rule>
-        <from>^/biosamplesgroup/browse-table.html</from>
-        <to type="forward">/servlets/query/biosamplesgroup/browse-biosamplesgroup/html</to>
-    </rule>
-    <rule>
-        <from>^/biosamplesgroup/(SAM(.*))/?$</from>
-        <to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/html?id=$1</to>
-    </rule>
-    <rule>
-        <from>^/biosamplessample/browse\.html$</from>
-        <to type="forward">/servlets/query/biosamplessample/biosamplessample/html</to>
-    </rule>
-    <rule>
-        <from>^/biosamplessample/((SAM(.*))/?)$</from>
-        <to type="forward">/servlets/query/biosamplessample/biosamplessample/html?samplegroup=$1</to>
-    </rule>
-     <rule>
-        <from>^/biosamplessample/detail/((SAM(.*))/?)/((SAM(.*))/?)$</from>
-        <to type="forward">/servlets/query/biosamplessample/detail-biosamplessample/html?samplegroup=$1&amp;accession=$4</to>
-    </rule>
-
- <rule>
-        <from>^/biosamples-stats.xml</from>
-        <to type="forward">/servlets/query/noindex/stats/xml</to>
-    </rule>
+	<!-- biosamples -->
+	<rule>
+		<from>^/$</from>
+		<to type="redirect">%{context-path}/index.html</to>
+	</rule>
+	<rule>
+		<from>^/biosamplesgroup/browse\.html$</from>
+		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/html</to>
+	</rule>
 
 	<rule>
-        <from>^/keywords.txt</from>
-        <to type="forward">/servlets/lookup/keywords</to>
-    </rule>
-    <rule>
-        <from>^/efotree.txt</from>
-        <to type="forward">/servlets/lookup/efotree</to>
-    </rule>
+		<from>^/biosamplesgroup/browse-table.html</from>
+		<to type="forward">/servlets/query/biosamplesgroup/browse-biosamplesgroup/html</to>
+	</rule>
+	<rule>
+		<from>^/biosamplesgroup/(SAM(.*))/?$</from>
+		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/html?id=$1</to>
+	</rule>
+	<rule>
+		<from>^/biosamplessample/browse\.html$</from>
+		<to type="forward">/servlets/query/biosamplessample/biosamplessample/html</to>
+	</rule>
+	<rule>
+		<from>^/biosamplessample/((SAM(.*))/?)$</from>
+		<to type="forward">/servlets/query/biosamplessample/biosamplessample/html?samplegroup=$1</to>
+	</rule>
+	<rule>
+		<from>^/biosamplessample/detail/((SAM(.*))/?)/((SAM(.*))/?)$</from>
+		<to type="forward">/servlets/query/biosamplessample/detail-biosamplessample/html?samplegroup=$1&amp;accession=$4</to>
+	</rule>
 
- 	<rule>
-        <from>^/www-inc/(.+)</from>
-        <to type="forward">/servlets/proxy/http://www.ebi.ac.uk/inc/$1</to>
-    </rule>
+	<rule>
+		<from>^/biosamples-stats.xml</from>
+		<to type="forward">/servlets/query/noindex/stats/xml</to>
+	</rule>
+
+	<rule>
+		<from>^/keywords.txt</from>
+		<to type="forward">/servlets/lookup/keywords</to>
+	</rule>
+	<rule>
+		<from>^/efotree.txt</from>
+		<to type="forward">/servlets/lookup/efotree</to>
+	</rule>
+
+	<rule>
+		<from>^/www-inc/(.+)</from>
+		<to type="forward">/servlets/proxy/http://www.ebi.ac.uk/inc/$1</to>
+	</rule>
 
 
-<!-- Jobs-rule -->
+	<!-- Jobs-rule -->
+	<rule>
+		<from>^/reload-all</from>
+		<to type="forward">/servlets/control/reload-all</to>
+	</rule>
+	
+	<!-- Jobs-rule -->
+	<rule>
+		<from>^/reload-efo</from>
+		<to type="forward">/servlets/control/reload-efo</to>
+	</rule>
+	<!-- Jobs-rule -->
+
+	<!-- Metadata Information-rule -->
+	<rule>
+		<from>^/metadata</from>
+		<to type="forward">/servlets/metadata</to>
+	</rule>
+	<!-- Metadata Information-rule -->
+
+
+	<!-- rest API -->
+
+	<rule>
+		<from>^/xml/group/(SAM(.*))/?$</from>
+		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/xml?id=$1</to>
+	</rule>
+	<rule>
+		<from>^/xml/group/query=(.*)?$</from>
+		<to type="forward">/servlets/query/biosamplesgroup/browse-biosamplesgroup/xml?$1</to>
+	</rule>
+	
+	<rule>
+		<from>^/xml/sample/(SAM(.*))/?$</from>
+		<to type="forward">/servlets/query/biosamplessample/biosamplessample/xml?accession=$1</to>
+	</rule>
 <rule>
-        <from>^/reload-all</from>
-        <to type="forward">/servlets/control/reload-all</to>
-    </rule>
-    
-    
-    <!-- Metadata Information-rule -->
-	<rule>
-        <from>^/metadata</from>
-        <to type="forward">/servlets/metadata</to>
-    </rule>
+		<from>^/xml/groupsamples/(SAM(.*))/query=(.*)?$</from>
+		<to type="forward">/servlets/query/biosamplessample/browse-biosamplessample/xml?samplegroup=$1&amp;$3</to>
+	</rule>
+
+	<!-- rest API -->
+
 </urlrewrite>

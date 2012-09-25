@@ -33,14 +33,14 @@ import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
 public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-	
+
 	private XmlDbConnectionPool xmlDBConnectionPool;
 
-//	private String driverXml;
-//	private String connectionString;
-//	private String dbname;
-//	private Database db;
-//	private Collection coll;
+	// private String driverXml;
+	// private String connectionString;
+	// private String dbname;
+	// private Database db;
+	// private Collection coll;
 
 	// private long numberOfExperiments;
 	//
@@ -49,7 +49,8 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 	/**
 	 * @param indexConfig
 	 */
-	public IndexEnvironmentBiosamplesSample(HierarchicalConfiguration indexConfig) {
+	public IndexEnvironmentBiosamplesSample(
+			HierarchicalConfiguration indexConfig) {
 		super(indexConfig);
 	}
 
@@ -62,99 +63,98 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 		defaultSortDescending = false;
 		defaultPageSize = 10;
 
-		
-		//I'm calling this to clean the reference to the IndexReader-> closeIndexReader();getIndexReader();
+		// I'm calling this to clean the reference to the IndexReader->
+		// closeIndexReader();getIndexReader();
 		super.setup();
-		this.xmlDBConnectionPool = (XmlDbConnectionPool) Application.getAppComponent("XmlDbConnectionPool");
-	
+		this.xmlDBConnectionPool = (XmlDbConnectionPool) Application
+				.getAppComponent("XmlDbConnectionPool");
+
 	}
-	
-	
-	
-	
- public String queryDB(ScoreDoc[] hits, IndexSearcher isearcher,
+
+	public String queryDB(ScoreDoc[] hits, IndexSearcher isearcher,
 			int initialExp, int finalExp, HttpServletRequestParameterMap map)
-			throws Exception{
-	 
+			throws Exception {
+
 		// Collection instance
 		String ret = "";
 		StringBuilder totalRes = new StringBuilder();
 
-	
 		// Collection coll=null;
 		try {
 
 			// coll = DatabaseManager.getCollection(connectionString);
-			Collection coll=xmlDBConnectionPool.getCollection();
+			Collection coll = xmlDBConnectionPool.getCollection();
 			XPathQueryService service = (XPathQueryService) coll.getService(
 					"XPathQueryService", "1.0");
 			totalRes.append("(");
-			
+
 			for (int i = initialExp; i < finalExp; i++) {
-			
-			      int docId = hits[i].doc;
-			      Document doc = isearcher.doc(docId);
-			      totalRes.append("'" + doc.get("accession") + "'");
-					// totalRes.append("'" + doc.get("id") + "'");
-					if (i != (finalExp - 1)) {
-						totalRes.append(",");
-					}
-			    }
-	
+
+				int docId = hits[i].doc;
+				Document doc = isearcher.doc(docId);
+				totalRes.append("'" + doc.get("accession") + "'");
+				// totalRes.append("'" + doc.get("id") + "'");
+				if (i != (finalExp - 1)) {
+					totalRes.append(",");
+				}
+			}
+
 			totalRes.append(")");
 			if (logger.isDebugEnabled()) {
 				logger.debug("QueryString->" + totalRes);
 			}
 			long time = System.nanoTime();
-			
-			ResourceSet set=null;
-			//search
-			
-			
-			//I'm showing the datail of a sample inside a sample Group browsing a sample group
-			if( map.get("samplegroup")!=null &&  map.get("accession")!=null){
 
-				set = service
-						.query("<biosamples><all>{for $x in  "
-								+ totalRes.toString() 
-								+ "  let $y:=//Sample[@id=($x) and @groupId='" +map.get("samplegroup")[0]  +"']"
-								+ " return ($y) "
-								+ " }</all></biosamples>");	
+			ResourceSet set = null;
+			// search
+
+			// I'm showing the datail of a sample inside a sample Group browsing
+			if (map.get("samplegroup") != null && map.get("accession") != null) {
+
+				set = service.query("<biosamples><all>{for $x in  "
+						+ totalRes.toString()
+						+ "  let $y:=//Sample[@id=($x) and @groupId='"
+						+ map.get("samplegroup")[0] + "']" + " return ($y) "
+						+ " }</all></biosamples>");
 			}
-				//I'm browsing a sample group
-				else{ if( map.get("samplegroup")!=null){
+			// I'm browsing a sample group
+			else {
+				if (map.get("samplegroup") != null) {
 
 					set = service
-								.query("<biosamples><all>{for $x in  "
-										+ totalRes.toString() 
-										+ "  let $y:=//Sample[@id=($x)]"
-										+ "  return <Samples>{$y[../@id='" +   map.get("samplegroup")[0]  + "']} </Samples>} "
-										///+ " { let $att:= /Biosamples/SampleGroup[@id='" +   map.get("samplegroup")[0]  + "'] " 
-										//+ " return <attributes notnumeric='{distinct-values($att/Sample/attribute[@dataType!='INTEGER']/replace(@class, ' ' , '-'))}' numeric='{distinct-values($att/Sample/attribute[@dataType='INTEGER']/replace(@class, ' ' , '-'))}'></attributes> "
-										///+ " return <attributes>{distinct-values($att/Sample/attribute/replace(@class, ' ' , '-'))}</attributes> "
-										///+ " }"
-										+ " { let $att:= /Biosamples/SampleGroup[@id='" + map.get("samplegroup")[0]  +"']"
-										+ " return <SampleAttributes>{$att/SampleAttributes/*} </SampleAttributes>}"
-										+ "</all></biosamples>");	
-				}
-				
-			
-				
-				//return everything
-				else{
-					 set = service
-								.query("<biosamples><all>{for $x in  "
-										+ totalRes.toString() 
-										+ "  let $y:=//Sample[@id=($x)]"
-										+ "  return <Samples>{$y}</Samples>} "
-										+ " </all></biosamples>");	
-				}
+							.query("<biosamples><all>{for $x in  "
+									+ totalRes.toString()
+									+ "  let $y:=//Sample[@id=($x)]"
+									+ "  return <Samples>{$y[../@id='"
+									+ map.get("samplegroup")[0]
+									+ "']} </Samples>} "
+									// /+
+									// " { let $att:= /Biosamples/SampleGroup[@id='"
+									// + map.get("samplegroup")[0] + "'] "
+									// +
+									// " return <attributes notnumeric='{distinct-values($att/Sample/attribute[@dataType!='INTEGER']/replace(@class, ' ' , '-'))}' numeric='{distinct-values($att/Sample/attribute[@dataType='INTEGER']/replace(@class, ' ' , '-'))}'></attributes> "
+									// /+
+									// " return <attributes>{distinct-values($att/Sample/attribute/replace(@class, ' ' , '-'))}</attributes> "
+									// /+ " }"
+									+ " { let $att:= /Biosamples/SampleGroup[@id='"
+									+ map.get("samplegroup")[0]
+									+ "']"
+									+ " return <SampleAttributes>{$att/SampleAttributes/*} </SampleAttributes>}"
+									+ "</all></biosamples>");
 				}
 
-				 				 
-		
+				// return everything
+				else {
+					set = service.query("<biosamples><all>{for $x in  "
+							+ totalRes.toString()
+							+ "  let $y:=//Sample[@id=($x)]"
+							+ "  return <Samples>{$y}</Samples>} "
+							+ " </all></biosamples>");
+				}
+			}
+
 			double ms = (System.nanoTime() - time) / 1000000d;
-	
+
 			if (logger.isDebugEnabled()) {
 				logger.debug("Xml db query took: " + ms + " ms");
 			}
@@ -177,22 +177,13 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 			logger.error("Exception:->[{}]", ex.getMessage());
 			ex.printStackTrace();
 		} finally {
-		
 
 		}
 
 		return ret;
-	 
-	 
-	 
- }
-	
 
- 
- 
- 
- 
- 
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -210,12 +201,11 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 		String ret = "";
 		StringBuilder totalRes = new StringBuilder();
 
-	
 		// Collection coll=null;
 		try {
 
 			// coll = DatabaseManager.getCollection(connectionString);
-			Collection coll=xmlDBConnectionPool.getCollection();
+			Collection coll = xmlDBConnectionPool.getCollection();
 			XPathQueryService service = (XPathQueryService) coll.getService(
 					"XPathQueryService", "1.0");
 			totalRes.append("(");
@@ -232,32 +222,21 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 				logger.debug("QueryString->" + totalRes);
 			}
 			long time = System.nanoTime();
-			
-			ResourceSet set=null;
-			//search
-				 set = service
-						.query("<biosamples><all>{for $x in  "
-								+ totalRes.toString() 
-								+ "  let $y:=//Sample[@id=($x)]"
-								+ "  return <Samples>{$y[../@id='" +   map.get("samplegroup")[0]  + "']}</Samples>} "
-								+ " </all></biosamples>");	
 
-				 				 
-		
+			ResourceSet set = null;
+			// search
+			set = service.query("<biosamples><all>{for $x in  "
+					+ totalRes.toString() + "  let $y:=//Sample[@id=($x)]"
+					+ "  return <Samples>{$y[../@id='"
+					+ map.get("samplegroup")[0] + "']}</Samples>} "
+					+ " </all></biosamples>");
+
 			double ms = (System.nanoTime() - time) / 1000000d;
-	
-			
-			
-			
-			
-			
+
 			if (logger.isDebugEnabled()) {
 				logger.debug("Xml db query took: " + ms + " ms");
 			}
 
-		
-			
-			
 			time = System.nanoTime();
 			ResourceIterator iter = set.getIterator();
 
@@ -286,13 +265,12 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 			// }
 
 		}
-//		logger.debug("Xml->" + ret);
-		//TODO rpe> remove this
-//		ret=ret.replace("&", "ZZZZZ");
+		// logger.debug("Xml->" + ret);
+		// TODO rpe> remove this
+		// ret=ret.replace("&", "ZZZZZ");
 		return ret;
-		
-//		return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +ret; 
-	}
 
+		// return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +ret;
+	}
 
 }

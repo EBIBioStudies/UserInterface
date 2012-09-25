@@ -102,7 +102,7 @@
             <div id="ae_contents_box_915px">
                 <div class="{$pStyle}">
                     <div><xsl:copy-of select="$pMessage"/></div>
-                    <div>We value your feedback. If you believe there was an error and wish to report it, please do not hesitate to drop us a line to <strong>arrayexpress(at)ebi.ac.uk</strong> or use <a href="${interface.application.link.www_domain}/support/" title="EBI Support">EBI Support Feedback</a> form.</div>
+                    <div>We value your feedback. If you believe there was an error and wish to report it, please do not hesitate to drop us a line to <strong>biosamples(at)ebi.ac.uk</strong> or use <a href="${interface.application.link.www_domain}/support/" title="EBI Support">EBI Support Feedback</a> form.</div>
                 </div>
             </div>
         </div>
@@ -111,14 +111,14 @@
     <xsl:template name="block-access-restricted">
         <xsl:call-template name="block-warning">
             <xsl:with-param name="pStyle" select="'ae_protected_area'"/>
-            <xsl:with-param name="pMessage">Sorry, the access to the resource you are requesting is restricted. You may wish to go <a href="javascript:history.back()" title="Click to go to the page you just left">back</a>, or to <a href="{$basepath}" title="ArrayExpress Home">ArrayExpress Home</a>.</xsl:with-param>
+            <xsl:with-param name="pMessage">Sorry, the access to the resource you are requesting is restricted. You may wish to go <a href="javascript:history.back()" title="Click to go to the page you just left">back</a>, or to <a href="{$basepath}" title="Biosamples Home">Biosamples Home</a>.</xsl:with-param>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template name="block-not-found">
         <xsl:call-template name="block-warning">
             <xsl:with-param name="pStyle" select="'ae_warn_area'"/>
-            <xsl:with-param name="pMessage">The resource you are requesting is not found. You may wish to go <a href="javascript:history.back()" title="Click to go to the page you just left">back</a>, or to <a href="{$basepath}" title="ArrayExpress Home">ArrayExpress Home</a>.</xsl:with-param>
+            <xsl:with-param name="pMessage">The resource you are requesting is not found. You may wish to go <a href="javascript:history.back()" title="Click to go to the page you just left">back</a>, or to <a href="{$basepath}" title="Biosamples Home">Biosamples Home</a>.</xsl:with-param>
         </xsl:call-template>
     </xsl:template>
 

@@ -117,14 +117,14 @@
 			</td>
 
 			<td class="col_description">
-				<div class="ellipsis_class">
-				<span id="ellipsis" class='ellipsis_text'>
+				<!-- <div class="ellipsis_class">
+				<span id="ellipsis" class='ellipsis_text'> -->
 					<xsl:call-template name="highlight">
 						<xsl:with-param name="pText" select="description" />
 						<xsl:with-param name="pFieldName" select="'description'" />
 					</xsl:call-template>
-				</span>
-				</div>
+				<!-- </span>
+				</div> -->
 			</td>
 
 			<td class="col_samples">

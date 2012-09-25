@@ -67,7 +67,7 @@
 		<interface.application.db.xml.driver>org.basex.api.xmldb.BXDatabase</interface.application.db.xml.driver>
 
 		<!-- Generate or not the Lucene Indexes at the startup -->
-		<interface.application.lucene.indexes.build>true</interface.application.lucene.indexes.build>
+		<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
 
 
 		<!-- define all the variables that we need to update the biosamples Database -->
@@ -115,6 +115,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
+				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
 				<interface.application.body.class>bs_curator</interface.application.body.class>
 				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
 				<interface.application.base.path>/biosamples</interface.application.base.path>
@@ -140,6 +141,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
+				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
 				<interface.application.body.class>bs_curator_daily</interface.application.body.class>
 				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
 				<interface.application.base.path>/biosamples</interface.application.base.path>
@@ -159,6 +161,7 @@
 			</properties>
 		</profile>
 
+
 		<profile>
 			<id>local</id>
 			<properties>
@@ -168,29 +171,10 @@
 				<interface.application.log.appender.ref>CONSOLE</interface.application.log.appender.ref>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
-
-				<interface.application.pref.biosamples.update.timestamp>1</interface.application.pref.biosamples.update.timestamp>
-				<interface.application.pref.reload-all.update.schedule />
-				<interface.application.pref.reload-all.update.interval>15</interface.application.pref.reload-all.update.interval>
-				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
-				<!-- -1 means that the update is not possible; 0 means complete update; 
-					1 means last day update -->
-				<!-- if 0 or 1 it means that its possible to run the reload job - this 
-					should be only used on internal environments -->
-				<!-- <interface.application.pref.biosamples.update.timestamp>1</interface.application.pref.biosamples.update.timestamp> -->
-				<!-- <interface.application.pref.reload-all.update.schedule>0 0 1 ? * 
-					SUN</interface.application.pref.reload-all.update.schedule> -->
-				<!-- <interface.application.pref.reload-all.update.schedule/> <interface.application.pref.reload-all.update.interval>5</interface.application.pref.reload-all.update.interval> 
-					<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
-
-				<!-- <interface.application.pref.biosamples.update.timestamp>0</interface.application.pref.biosamples.update.timestamp> 
-					<interface.application.pref.reload-all.update.schedule>0 10 14 * * ?</interface.application.pref.reload-all.update.schedule> 
-					<interface.application.pref.reload-all.update.interval/> -->
-
 				<!-- <interface.application.pref.biosamples.update.timestamp>1</interface.application.pref.biosamples.update.timestamp> 
-					<interface.application.pref.reload-all.update.schedule></interface.application.pref.reload-all.update.schedule> 
-					<interface.application.pref.reload-all.update.interval>5</interface.application.pref.reload-all.update.interval> -->
-				<!-- <interface.application.pref.reload-all.update.atstart>true</interface.application.pref.reload-all.update.atstart> -->
+					<interface.application.pref.reload-all.update.schedule /> <interface.application.pref.reload-all.update.interval>15</interface.application.pref.reload-all.update.interval> 
+					<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
+				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.dbname> -->
 
 				<interface.application.pref.reports.recipients>rpereira@ebi.ac.uk</interface.application.pref.reports.recipients>
 			</properties>
@@ -541,7 +525,7 @@
 		<dependency>
 			<groupId>org.basex</groupId>
 			<artifactId>basex</artifactId>
-			<version>7.3</version>
+			<version>7.2</version>
 			<!-- version>7.1</version> -->
 		</dependency>
 		<!-- <dependency> <groupId>org.xmldb</groupId> <artifactId>xmldb-api</artifactId> 
@@ -551,7 +535,7 @@
 		<dependency>
 			<groupId>org.basex</groupId>
 			<artifactId>basex-api</artifactId>
-			<version>7.3</version>
+			<version>7.2</version>
 		</dependency>
 
 		<dependency>
@@ -560,6 +544,12 @@
 			<version>1.0</version>
 		</dependency>
 
+		<!-- XQJ -->
+		<dependency>
+			<groupId>net.xqj</groupId>
+			<artifactId>basex-xqj</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 		<!-- <dependency> <groupId>xmldb</groupId> <artifactId>xmldb-api</artifactId> 
 			<version>20021118</version> </dependency> -->
 

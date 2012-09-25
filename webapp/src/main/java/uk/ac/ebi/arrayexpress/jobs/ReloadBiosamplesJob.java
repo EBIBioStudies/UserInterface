@@ -197,6 +197,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				logger.info("Deleting Setup Directory and renaming - End");
 
 				
+				
 				//I do this to know the number of elements
 				((BioSamplesGroup)getComponent("BioSamplesGroup")).reloadIndex();
 				//TODO: rpe nowaday I need to do this to clean the xmldatabase connection nad to reload the new index
@@ -301,6 +302,10 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 
 		logger.debug("* Close the client session.");
 		session.close();
+		
+		//I neeed to reinitialize the XmldbConnectionPool otherwise I wiil be looking to old data!
+		search.getComponent("XmlDbConnectionPool").terminate();
+		search.getComponent("XmlDbConnectionPool").initialize();
 
 
 	}

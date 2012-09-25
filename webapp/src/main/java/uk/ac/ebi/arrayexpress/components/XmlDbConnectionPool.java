@@ -51,6 +51,7 @@ public class XmlDbConnectionPool extends ApplicationComponent
 			driverXml = connsConf.getString("driver");
 //			connectionString = connsConf.getString("connectionstring");
 			connectionString = connsConf.getString("base") + "://" + connsConf.getString("host") + ":" + connsConf.getString("port") + "/" + connsConf.getString("dbname");
+			logger.debug("connectionString->"+connectionString);
 		} else {
 			logger.error("bs.xmldatabase Configuration is missing!!");
 		}

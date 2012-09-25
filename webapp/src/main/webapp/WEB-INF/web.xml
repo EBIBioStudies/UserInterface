@@ -3,7 +3,15 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     <display-name>${project.name} v${project.version}.r${buildNumber}</display-name>
 
+<!-- <context-param>
+  <param-name>org.basex.dbpath</param-name>
+  <param-value>/Users/rpslpereira/BaseXData</param-value>
+</context-param>
 
+<context-param>
+  <param-name>org.basex.lang</param-name>
+  <param-value>English</param-value>
+</context-param> -->
 
  <!-- Stripes -->
 <!-- 	<filter>

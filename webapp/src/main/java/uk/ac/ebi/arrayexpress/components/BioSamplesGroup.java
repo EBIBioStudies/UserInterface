@@ -24,6 +24,9 @@ import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.xpath.XPathEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xmldb.api.base.ResourceSet;
+import org.xmldb.api.modules.XPathQueryService;
+
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.components.Events.IEventInformation;
@@ -47,6 +50,8 @@ import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
+
+import org.xmldb.api.base.Collection;
 
 public class BioSamplesGroup extends ApplicationComponent implements
 		IDocumentSource {
@@ -127,6 +132,19 @@ public class BioSamplesGroup extends ApplicationComponent implements
 		try {
 			
 			this.search.getController().indexFromXmlDB(INDEX_ID, rebuild);			
+			
+//			Collection coll=((XmlDbConnectionPool)this.search.getComponent("XmlDbConnectionPool")).getCollection();
+//			XPathQueryService service = (XPathQueryService) coll.getService(
+//					"XPathQueryService", "1.0");
+//			ResourceSet set = service.query("/Biosamples/SampleGroup/@id/string(.)");
+//			String res="";
+//			while (set.getIterator().hasMoreResources()) {
+//				res += (String) set.getIterator()
+//						.nextResource().getContent();
+//			}
+//			logger.debug("##########result->" + res);
+//			
+			
 			
 //			TODO review the autocompletion because of time it takes (maybe the problem is the xml field)
 			this.autocompletion.rebuild();

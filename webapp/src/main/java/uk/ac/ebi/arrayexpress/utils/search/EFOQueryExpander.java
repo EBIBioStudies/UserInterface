@@ -112,6 +112,7 @@ public final class EFOQueryExpander implements IQueryExpander
                     }
                 }
 
+
                 if (shouldExpandEfo) {
                     for (String term : expansionTerms.efo) {
                         Query expansionPart = newQueryFromString(term.trim(), field);

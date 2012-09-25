@@ -102,7 +102,7 @@
 
 	<xsl:template match="Sample">
 		<xsl:param name="pAttributes"></xsl:param>
-	<!-- 	<xsl:param name="pAttributesinteger"></xsl:param> -->
+		<!-- <xsl:param name="pAttributesinteger"></xsl:param> -->
 		<xsl:variable name="vSample" select="."></xsl:variable>
 		<tr>
 
@@ -112,7 +112,7 @@
 						select="$vSample/attribute/value[../@class='Sample Accession']" />
 				</a>
 			</td>
-			
+
 			<xsl:for-each select="$pAttributes/attribute/replace(@class, ' ' , '-')">
 				<xsl:if test=".!='Sample-Accession'">
 					<td>
@@ -124,8 +124,15 @@
 						<xsl:choose>
 
 
-							<xsl:when test="count($value/attribute[@class='Term Source REF'])=0">
+							<!-- LINKS -->
+							<xsl:when test="replace($token,'-',' ')='Database URI'">
 
+								<a href="{$value}" target="ext">
+									<xsl:value-of select="$value"></xsl:value-of>
+								</a>
+							</xsl:when>
+
+							<xsl:when test="count($value/attribute[@class='Term Source REF'])=0">
 
 								<xsl:call-template name="highlight">
 									<xsl:with-param name="pText" select="string-join($value, ', ')" />
@@ -134,6 +141,7 @@
 								</xsl:call-template>
 
 							</xsl:when>
+
 
 							<xsl:otherwise>
 								<!-- efo-><xsl:copy-of select="$value"></xsl:copy-of> -->
@@ -147,41 +155,17 @@
 					</td>
 				</xsl:if>
 
-			 </xsl:for-each>
-			<!-- <xsl:for-each select="tokenize($pAttributes,' ')">
-				<xsl:if test=".!='Sample-Accession'">
-					<td>
-
-
-						<xsl:variable name="token" select="."></xsl:variable>
-						<xsl:variable name="value"
-							select="$vSample/attribute/value[../@class=replace($token, '-' , ' ')]" />
-						<xsl:choose>
-
-
-							<xsl:when test="count($value/attribute[@class='Term Source REF'])=0">
-
-
-								<xsl:call-template name="highlight">
-									<xsl:with-param name="pText" select="string-join($value, ', ')" />
-									<xsl:with-param name="pFieldName" select="'$token'" />
-									<xsl:with-param name="pFieldName" select="'$token'" />
-								</xsl:call-template>
-
-							</xsl:when>
-
-							<xsl:otherwise>
-								<xsl:call-template name="process_efo">
-									<xsl:with-param name="pValue" select="$value"></xsl:with-param>
-								</xsl:call-template>
-							</xsl:otherwise>
-
-						</xsl:choose>
-
-					</td>
-				</xsl:if>
-
-			 </xsl:for-each> -->
+			</xsl:for-each>
+			<!-- <xsl:for-each select="tokenize($pAttributes,' ')"> <xsl:if test=".!='Sample-Accession'"> 
+				<td> <xsl:variable name="token" select="."></xsl:variable> <xsl:variable 
+				name="value" select="$vSample/attribute/value[../@class=replace($token, '-' 
+				, ' ')]" /> <xsl:choose> <xsl:when test="count($value/attribute[@class='Term 
+				Source REF'])=0"> <xsl:call-template name="highlight"> <xsl:with-param name="pText" 
+				select="string-join($value, ', ')" /> <xsl:with-param name="pFieldName" select="'$token'" 
+				/> <xsl:with-param name="pFieldName" select="'$token'" /> </xsl:call-template> 
+				</xsl:when> <xsl:otherwise> <xsl:call-template name="process_efo"> <xsl:with-param 
+				name="pValue" select="$value"></xsl:with-param> </xsl:call-template> </xsl:otherwise> 
+				</xsl:choose> </td> </xsl:if> </xsl:for-each> -->
 
 
 
@@ -193,11 +177,17 @@
 
 
 
-<xsl:template name="process_efo">
+	<xsl:template name="process_efo">
 		<xsl:param name="pValue" />
-		<xsl:call-template name="highlight"> <xsl:with-param name="pText" 
-				select="$pValue/text()[last()]" /> <xsl:with-param name="pFieldName" 
-				select="''" /> </xsl:call-template>
+		<xsl:for-each select="$pValue">
+			<xsl:call-template name="highlight">
+				<!-- <xsl:with-param name="pText" select="$pValue/text()[last()]" /> -->
+				<xsl:with-param name="pText" select="./text()[last()]" />
+				<xsl:with-param name="pFieldName" select="''" />
+			</xsl:call-template>
+			<xsl:if test="position()!=last()">,
+			</xsl:if>
+		</xsl:for-each>
 	</xsl:template>
 
 
