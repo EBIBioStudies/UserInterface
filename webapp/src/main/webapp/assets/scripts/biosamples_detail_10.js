@@ -22,48 +22,48 @@ var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
 var anchor = decodeURI(window.location.hash);
 
 var sortDefault = {
-	0 :	"ascending",
-	1 : "ascending",
-	2 : "ascending",
-	3 : "ascending",
-	4 : "ascending",
-	5 : "ascending",
-	6 : "ascending",
-	7 : "ascending",
-	8 : "ascending",
-	9 : "ascending",
-	10 : "ascending",
-	11 : "ascending",
-	12 : "ascending",
-	13 : "ascending",
-	14 : "ascending",
-	15 : "ascending",
-	16 : "ascending",
-	17 : "ascending",
-	18 : "ascending",
-	19 : "ascending",
-	20 : "ascending",
+	"sampleaccession" :	"ascending",
+	"1" : "ascending",
+	"2" : "ascending",
+	"3" : "ascending",
+	"4" : "ascending",
+	"5" : "ascending",
+	"6" : "ascending",
+	"7" : "ascending",
+	"8" : "ascending",
+	"9" : "ascending",
+	"10" : "ascending",
+	"11" : "ascending",
+	"12" : "ascending",
+	"13" : "ascending",
+	"14" : "ascending",
+	"15" : "ascending",
+	"16" : "ascending",
+	"17" : "ascending",
+	"18" : "ascending",
+	"19" : "ascending",
+	"20" : "ascending",
 
 };
 
 var sortTitle = {
-	1 : "name",
-	2 : "name",
-	3 : "name",
-	4 : "name",
-	5 : "name"
+	"1" : "name",
+	"2" : "name",
+	"3" : "name",
+	"4" : "name",
+	"5" : "name"
 };
 
 
 
 //these are used when i make a new query in samples
-var sortByDefault="";
-var sortOrderDefault = sortDefault["0"];
+var sortByDefault="sampleaccession";
+var sortOrderDefault = sortDefault[sortByDefault];
 var pageInitDefault = "1";
 
-//these are used to mantain the current srt and order (they are rest when I make a new search)
-var sortBy = "";
-var sortOrder = sortDefault["0"];
+//these are used to mantain the current srt and order (they are reset when I make a new search)
+var sortBy = "sampleaccession";
+var sortOrder = sortDefault[sortBy];
 
 
 var pageInit = pageInitDefault;
@@ -85,7 +85,7 @@ $(function() {
 
 			var divElt = thElt.find("div.table_header_inner");
 			if (null != divElt) {
-				// alert("not null");
+				 //alert("not null");
 				divElt
 						.addClass("descending" == sortOrder ? "table_header_sort_desc"
 								: "table_header_sort_asc");
@@ -112,7 +112,7 @@ $(function() {
 			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
 			pageSize).toString();
 	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
-	var urlPage = "../biosamplessample/" + pageName + newQuery;
+	var urlPage = "../sample/browse/" + pageName + newQuery;
 	updateSamplesList(urlPage);
 
 	var basePath = decodeURI(window.location.pathname).replace(/\/\w+\.\w+$/,
@@ -246,7 +246,7 @@ function searchSamples(pKeywords) {
 			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
 			pageSize).toString();
 	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
-	var urlPage = "../biosamplessample/" + pageName + newQuery;
+	var urlPage = "../sample/browse/" + pageName + newQuery;
 	updateSamplesList(urlPage);
 }
 
@@ -256,7 +256,7 @@ function goToPage(page) {
 			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
 			pageSize).toString();
 	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
-	var urlPage = "../biosamplessample/" + pageName + newQuery;
+	var urlPage = "../sample/browse/" + pageName + newQuery;
 	updateSamplesList(urlPage);
 }
 
@@ -281,7 +281,7 @@ function aeSort(psortby) {
 			pageSize).toString();
 
 	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
-	var urlPage = "../biosamplessample/" + pageName + newQuery;
+	var urlPage = "../sample/browse/" + pageName + newQuery;
 	//alert(urlPage);
 	updateSamplesList(urlPage);
 	

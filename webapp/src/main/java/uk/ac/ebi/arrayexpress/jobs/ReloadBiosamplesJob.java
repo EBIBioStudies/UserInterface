@@ -260,6 +260,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 		// Create a database
 		logger.debug("* Create a database.");
 
+		
 		String tempDbName = originalDbName + "_" + tempDir;
 		String logs = session.execute(new CreateDB(tempDbName, xmlDirectory
 				.getAbsolutePath()));

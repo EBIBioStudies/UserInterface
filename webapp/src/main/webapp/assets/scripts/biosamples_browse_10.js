@@ -77,7 +77,7 @@ $(function() {
 			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
 			pageSize).toString();
 
-	var urlPage = "biosamplesgroup/browse-table.html" + newQuery;
+	var urlPage = "group/browse-table.html" + newQuery;
 
 	//initialize the keywords input with the search string from the homepage
 	$("#bs_keywords").val(keywords);
@@ -219,7 +219,7 @@ function goToPage(pPage) {
 	var newQuery = $.query.set("keywords", keywords).set("sortby", sortBy).set(
 			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
 			pageSize).toString();
-	var urlPage = "biosamplesgroup/browse-table.html" + newQuery;
+	var urlPage = "group/browse-table.html" + newQuery;
 	QuerySampleGroup(urlPage);
 }
 
@@ -278,7 +278,7 @@ function aeSort(psortby) {
 
 	// var pageName =
 	// /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
-	var urlPage = "biosamplesgroup/browse-table.html" + newQuery;
+	var urlPage = "group/browse-table.html" + newQuery;
 
 	QuerySampleGroup(urlPage);
 	

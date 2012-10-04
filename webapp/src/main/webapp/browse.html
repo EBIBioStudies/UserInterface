@@ -35,6 +35,8 @@
 	href="assets/stylesheets/biosamples_browse_10.css" type="text/css" />
 <link rel="stylesheet"
 	href="assets/stylesheets/biosamples_common_10.css" type="text/css" />
+<link rel="stylesheet"
+	href="assets/stylesheets/biosamples_metadata_10.css" type="text/css">
 
 <script src="assets/scripts/jquery-1.4.2.min.js" type="text/javascript"></script>
 <script src="assets/scripts/jsdeferred.jquery-0.3.1.js"
@@ -121,31 +123,35 @@
 															<div id="bs_query_box">
 																<form id="bs_query_form" method="get"
 																	action="browse.html">
-																	<table border="0"><tr><td>
-																	<fieldset id="bs_keywords_fset">
-																		<label for="bs_keywords">Query BioSample
-																			Database at EBI [<a
-																			href="javascript:aeClearField('#bs_keywords')">clear</a>]
-																		</label> <input id="bs_keywords" type="text" name="keywords"
-																			value="" maxlength="200" class="bs_assign_font"
-																			autocomplete="off" /> 
-																
+																	<table border="0">
+																		<tr>
+																			<td>
+																				<fieldset id="bs_keywords_fset">
+																					<label for="bs_keywords">Query BioSample
+																						Database at EBI [<a
+																						href="javascript:aeClearField('#bs_keywords')">clear</a>]
+																					</label> <input id="bs_keywords" type="text"
+																						name="keywords" value="" maxlength="200"
+																						class="bs_assign_font" autocomplete="off" />
 
-																	</fieldset>
-																	</td>
-																	<td valign="middle">
-																				Sort by:
-																			<select id="sortby" name="sortby" disabled>
-																			<option value="">Relevance</option>
-																			<option value="id">Accession</option>
-																			<option value="description">Description</option>
-																			<option value="samples">Samples</option>
-																		</select>
-																	</td>
-																	<td align="right"><span class="${interface.application.metadata.class}"><a href="metadata?class=${interface.application.body.class}" target="ext">Metadata</a></span></td>
-																	</tr>
+
+																				</fieldset>
+																			</td>
+																			<td valign="middle">Sort by: <select id="sortby"
+																				name="sortby" disabled>
+																					<option value="">Relevance</option>
+																					<option value="id">Accession</option>
+																					<option value="description">Description</option>
+																					<option value="samples">Samples</option>
+																			</select>
+																			</td>
+																			<td align="right"><span
+																				class="${interface.application.metadata.class}"><a
+																					href="metadata?class=${interface.application.body.class}"
+																					target="ext">Metadata</a></span></td>
+																		</tr>
 																	</table>
-																	
+
 																	<div id="bs_submit_box">
 																		<input id="bs_query_submit" type="submit"
 																			value="Query" />

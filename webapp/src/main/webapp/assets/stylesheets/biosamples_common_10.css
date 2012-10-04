@@ -32,6 +32,9 @@ body.bs_curator_daily {
 	background: #ffe6f5 url(../images/bs_curator_daily.gif) no-repeat fixed 0 97%;
 }
 
+body.bs_dev_preview {
+background: white url(../images/bs_dev_bg.gif) repeat fixed top;
+}
 
 a:hover, 
 a:active {

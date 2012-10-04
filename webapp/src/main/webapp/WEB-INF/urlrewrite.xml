@@ -12,29 +12,29 @@
 		<to type="redirect">%{context-path}/index.html</to>
 	</rule>
 	<rule>
-		<from>^/biosamplesgroup/browse\.html$</from>
+		<from>^/group/browse\.html$</from>
 		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/html</to>
 	</rule>
 
 	<rule>
-		<from>^/biosamplesgroup/browse-table.html</from>
+		<from>^/group/browse-table.html</from>
 		<to type="forward">/servlets/query/biosamplesgroup/browse-biosamplesgroup/html</to>
 	</rule>
 	<rule>
-		<from>^/biosamplesgroup/(SAM(.*))/?$</from>
+		<from>^/group/(SAM(.*))/?$</from>
 		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/html?id=$1</to>
 	</rule>
 	<rule>
-		<from>^/biosamplessample/browse\.html$</from>
+		<from>^/sample/browse\.html$</from>
 		<to type="forward">/servlets/query/biosamplessample/biosamplessample/html</to>
 	</rule>
 	<rule>
-		<from>^/biosamplessample/((SAM(.*))/?)$</from>
+		<from>^/sample/browse/((SAM(.*))/?)$</from>
 		<to type="forward">/servlets/query/biosamplessample/biosamplessample/html?samplegroup=$1</to>
 	</rule>
 	<rule>
-		<from>^/biosamplessample/detail/((SAM(.*))/?)/((SAM(.*))/?)$</from>
-		<to type="forward">/servlets/query/biosamplessample/detail-biosamplessample/html?samplegroup=$1&amp;accession=$4</to>
+		<from>^/sample/((SAM(.*))/?)$</from>
+		<to type="forward">/servlets/query/biosamplessample/detail-biosamplessample/html?accession=$2</to>
 	</rule>
 
 	<rule>

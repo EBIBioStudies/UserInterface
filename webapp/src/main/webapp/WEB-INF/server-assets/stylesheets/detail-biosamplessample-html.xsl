@@ -99,14 +99,18 @@
 					<xsl:text> > </xsl:text>
 					<a href="{$basepath}/browse.html">BioSamples</a>
 					<xsl:text> > </xsl:text>
-					<a href="{$basepath}/biosamplesgroup/{$vFiltered/@groupId}">
+					<a
+						href="{$basepath}/sample/{$vFiltered/@id}">
+						<xsl:value-of select="$vFiltered/@id" />
+					</a> 
+					<!-- <a href="{$basepath}/biosamplesgroup/{$vFiltered/@groupId}">
 						<xsl:value-of select="$vFiltered/@groupId" />
 					</a>
 					<xsl:text> > </xsl:text>
 					<a
 						href="{$basepath}/biosamplessample/detail/{$vFiltered/@groupId}/{$vFiltered/@id}">
 						<xsl:value-of select="$vFiltered/@id" />
-					</a>
+					</a> -->
 				</div>
 
 				<xsl:choose>

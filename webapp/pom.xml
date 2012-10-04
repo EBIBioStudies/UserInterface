@@ -108,6 +108,33 @@
 			</properties>
 		</profile>
 
+
+		<profile>
+			<id>wwwdev</id>
+
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
+				<interface.application.body.class>bs_dev_preview</interface.application.body.class>
+				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
+				<interface.application.base.path>/biosamples</interface.application.base.path>
+				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
+				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
+				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
+				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
+				<interface.application.pref.biosamples.update.timestamp>0</interface.application.pref.biosamples.update.timestamp>
+ 				<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule>
+				<interface.application.pref.reload-all.update.interval /> 
+				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
+				<interface.application.db.xml.update.url>http://tomcat-15:21480/biosamples/</interface.application.db.xml.update.url>
+				<interface.application.db.xml.update.username>rui</interface.application.db.xml.update.username>
+				<interface.application.db.xml.update.password>ruipereire</interface.application.db.xml.update.password>
+				<interface.application.db.xml.update.cookie>AGESESS</interface.application.db.xml.update.cookie>
+			</properties>
+		</profile>
+
 		<profile>
 			<id>curator</id>
 

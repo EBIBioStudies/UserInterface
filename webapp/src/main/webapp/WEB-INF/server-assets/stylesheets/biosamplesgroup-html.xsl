@@ -139,7 +139,7 @@
 					<a href="{$basepath}/browse.html">BioSamples</a>
 					<xsl:if test="not($vBrowseMode)">
 						<xsl:text> > </xsl:text>
-						<a href="{$basepath}/biosamplesgroup/{$id}">
+						<a href="{$basepath}/group/{$id}">
 							<xsl:value-of select="$id" />
 						</a>
 					</xsl:if>
@@ -457,7 +457,7 @@
 							
 							<tr>
 									<th class="bs_results_accession sortable bs_results_Sample-Accession"
-										id="bs_results_header_0">
+										id="bs_results_header_sampleaccession">
 										<a href="javascript:aeSort('sampleaccession')" title="Click to sort by Sample-Accession">
 											<div class="table_header_inner">
 												Sample-Accession

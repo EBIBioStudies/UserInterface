@@ -82,6 +82,7 @@
 		</efo>
 
 
+
 <!-- location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" -->
 
 		<index id="biosamplesgroup"

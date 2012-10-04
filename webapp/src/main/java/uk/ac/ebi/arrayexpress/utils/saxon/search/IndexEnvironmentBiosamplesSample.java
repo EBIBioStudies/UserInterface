@@ -109,48 +109,26 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 			// search
 
 			// I'm showing the datail of a sample inside a sample Group browsing
-			if (map.get("samplegroup") != null && map.get("accession") != null) {
+			if (map.get("accession") != null) {
 
 				set = service.query("<biosamples><all>{for $x in  "
-						+ totalRes.toString()
-						+ "  let $y:=//Sample[@id=($x) and @groupId='"
-						+ map.get("samplegroup")[0] + "']" + " return ($y) "
-						+ " }</all></biosamples>");
+						+ totalRes.toString() + "  let $y:=//Sample[@id=($x)]"
+						+ " return ($y) " + " }</all></biosamples>");
 			}
 			// I'm browsing a sample group
 			else {
-				if (map.get("samplegroup") != null) {
-
-					set = service
-							.query("<biosamples><all>{for $x in  "
-									+ totalRes.toString()
-									+ "  let $y:=//Sample[@id=($x)]"
-									+ "  return <Samples>{$y[../@id='"
-									+ map.get("samplegroup")[0]
-									+ "']} </Samples>} "
-									// /+
-									// " { let $att:= /Biosamples/SampleGroup[@id='"
-									// + map.get("samplegroup")[0] + "'] "
-									// +
-									// " return <attributes notnumeric='{distinct-values($att/Sample/attribute[@dataType!='INTEGER']/replace(@class, ' ' , '-'))}' numeric='{distinct-values($att/Sample/attribute[@dataType='INTEGER']/replace(@class, ' ' , '-'))}'></attributes> "
-									// /+
-									// " return <attributes>{distinct-values($att/Sample/attribute/replace(@class, ' ' , '-'))}</attributes> "
-									// /+ " }"
-									+ " { let $att:= /Biosamples/SampleGroup[@id='"
-									+ map.get("samplegroup")[0]
-									+ "']"
-									+ " return <SampleAttributes>{$att/SampleAttributes/*} </SampleAttributes>}"
-									+ "</all></biosamples>");
-				}
-
-				// return everything
-				else {
-					set = service.query("<biosamples><all>{for $x in  "
-							+ totalRes.toString()
-							+ "  let $y:=//Sample[@id=($x)]"
-							+ "  return <Samples>{$y}</Samples>} "
-							+ " </all></biosamples>");
-				}
+				set = service
+						.query("<biosamples><all>{for $x in  "
+								+ totalRes.toString()
+								+ "  let $y:=//Sample[@id=($x)]"
+								+ "  return <Samples>{$y[../@id='"
+								+ map.get("samplegroup")[0]
+								+ "']} </Samples>} "
+								+ " { let $att:= /Biosamples/SampleGroup[@id='"
+								+ map.get("samplegroup")[0]
+								+ "']"
+								+ " return <SampleAttributes>{$att/SampleAttributes/*} </SampleAttributes>}"
+								+ "</all></biosamples>");
 			}
 
 			double ms = (System.nanoTime() - time) / 1000000d;

@@ -107,7 +107,7 @@
 		<tr>
 
 			<td>
-				<a href="../biosamplessample/detail/{@groupId}/{@id}">
+				<a href="../sample/{@id}">
 					<xsl:copy-of
 						select="$vSample/attribute/value[../@class='Sample Accession']" />
 				</a>

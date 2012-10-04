@@ -107,7 +107,7 @@
 		<tr>
 			<td class="col_id">
 				<div>
-					<a href="{$basepath}/biosamplesgroup/{id}?keywords={$vkeywords}">
+					<a href="{$basepath}/group/{id}?keywords={$vkeywords}">
 						<xsl:call-template name="highlight">
 							<xsl:with-param name="pText" select="id" />
 							<xsl:with-param name="pFieldName" select="'id'" />
