@@ -1,7 +1,7 @@
 package uk.ac.ebi.arrayexpress.jobs;
 
 /*
- * Copyright 2009-2011 European Molecular Biology Laboratory
+ * Copyright 2009-2012 European Molecular Biology Laboratory
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,8 @@ public class UpdateOntologyJob extends ApplicationJob
         String loadedVersion = ((Ontologies)getComponent("Ontologies")).getEfo().getVersionInfo();
         if ( null != version
                 && !version.equals(loadedVersion)
-                && Float.parseFloat(version) > Float.parseFloat(loadedVersion)
+                && isVersionNewer(version, loadedVersion)
+
                 ) {
             // we have newer version, let's fetch it and copy it over to our working location
             logger.info("Updating EFO with version [{}]", version);
@@ -72,4 +73,13 @@ public class UpdateOntologyJob extends ApplicationJob
             logger.info("Current ontology version [{}] is up-to-date", loadedVersion);
         }
     }
+
+    private boolean isVersionNewer( String version, String baseVersion )
+    {
+        return null != version
+                && null != baseVersion
+                && Float.parseFloat("0." + version.replace(".", "")) > Float.parseFloat("0." + baseVersion.replace(".", ""));
+    }
 }
+ 
+
