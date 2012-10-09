@@ -288,13 +288,6 @@
 			<url>http://files.basex.org/maven</url>
 		</repository>
 
-		<!-- dependency basex 7.1 -->
-		<repository>
-			<id>milton</id>
-			<name>Milton Maven Repository</name>
-			<url>http://www.ettrema.com/maven2</url>
-		</repository>
-		
 		<repository>
 			<id>xqj</id>
 			<name>XQJ Maven Repository</name>
@@ -560,11 +553,11 @@
 		</dependency>
 
 		<!-- BASEX DEPENDENCIES -->
-		<!-- version 7.3 changes the behavior of -Dhttp.proxyHost -->
+		
 		<dependency>
 			<groupId>org.basex</groupId>
 			<artifactId>basex</artifactId>
-			<version>7.2</version>
+			<version>7.3</version>
 		</dependency>
 
 		<!-- <dependency> <groupId>org.xmldb</groupId> <artifactId>xmldb-api</artifactId> 
@@ -574,7 +567,7 @@
 		<dependency>
 			<groupId>org.basex</groupId>
 			<artifactId>basex-api</artifactId>
-			<version>7.2</version>
+			<version>7.3</version>
 		</dependency>
 
 		<dependency>
