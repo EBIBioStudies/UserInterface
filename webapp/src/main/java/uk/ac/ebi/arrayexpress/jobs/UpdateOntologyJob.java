@@ -42,6 +42,10 @@ public class UpdateOntologyJob extends ApplicationJob
         String efoLocation = getPreferences().getString("bs.efo.update.source");
         URI efoURI = new URI(efoLocation);
         logger.info("Checking EFO ontology version from [{}]", efoURI.toString());
+        logger.debug("http.proxyHost->"+System.getProperty("http.proxyHost"));
+        logger.debug("http.proxyPort->"+System.getProperty("http.proxyPort"));
+
+        
         String version = EFOLoader.getOWLVersion(efoURI);
         String loadedVersion = ((Ontologies)getComponent("Ontologies")).getEfo().getVersionInfo();
         if ( null != version
