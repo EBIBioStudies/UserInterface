@@ -93,8 +93,35 @@
 
 
 		<profile>
-			<id>development</id>
+			<id>local</id>
+			<properties>
+				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
+				<interface.application.body.class>bs_curator_daily</interface.application.body.class>
+				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
+				<interface.application.base.path>/biosamples</interface.application.base.path>
+				<interface.application.log.appender.ref>CONSOLE</interface.application.log.appender.ref>
+				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
+				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
+				 <!-- <interface.application.pref.biosamples.update.timestamp>0</interface.application.pref.biosamples.update.timestamp>
+				<interface.application.pref.reload-all.update.schedule>0 55 09 * * ?</interface.application.pref.reload-all.update.schedule>
+				<interface.application.pref.reload-all.update.interval />
+				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
+				<interface.application.db.xml.update.url>http://tomcat-15:21480/biosamples/</interface.application.db.xml.update.url>
+				<interface.application.db.xml.update.username>rui</interface.application.db.xml.update.username>
+				<interface.application.db.xml.update.password>ruipereire</interface.application.db.xml.update.password>
+				<interface.application.db.xml.update.cookie>AGESESS</interface.application.db.xml.update.cookie> -->
+				<!--  <interface.application.pref.biosamples.update.timestamp>0</interface.application.pref.biosamples.update.timestamp> 
+					<interface.application.pref.reload-all.update.schedule /> 
+					<interface.application.pref.reload-all.update.interval>15</interface.application.pref.reload-all.update.interval> 
+					<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
+				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.dbname> -->
+				<interface.application.pref.reports.recipients>rpereira@ebi.ac.uk</interface.application.pref.reports.recipients>
+			</properties>
+		</profile>
 
+
+		<profile>
+			<id>development</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -111,7 +138,6 @@
 
 		<profile>
 			<id>wwwdev</id>
-
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -125,8 +151,8 @@
 				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
 				<interface.application.pref.biosamples.update.timestamp>0</interface.application.pref.biosamples.update.timestamp>
- 				<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule>
-				<interface.application.pref.reload-all.update.interval /> 
+				<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule>
+				<interface.application.pref.reload-all.update.interval />
 				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
 				<interface.application.db.xml.update.url>http://tomcat-15:21480/biosamples/</interface.application.db.xml.update.url>
 				<interface.application.db.xml.update.username>rui</interface.application.db.xml.update.username>
@@ -137,7 +163,6 @@
 
 		<profile>
 			<id>curator</id>
-
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -188,24 +213,6 @@
 			</properties>
 		</profile>
 
-
-		<profile>
-			<id>local</id>
-			<properties>
-				<interface.application.body.class>bs_curator_daily</interface.application.body.class>
-				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
-				<interface.application.base.path>/biosamples</interface.application.base.path>
-				<interface.application.log.appender.ref>CONSOLE</interface.application.log.appender.ref>
-				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
-				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
-				<!-- <interface.application.pref.biosamples.update.timestamp>1</interface.application.pref.biosamples.update.timestamp> 
-					<interface.application.pref.reload-all.update.schedule /> <interface.application.pref.reload-all.update.interval>15</interface.application.pref.reload-all.update.interval> 
-					<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
-				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.dbname> -->
-
-				<interface.application.pref.reports.recipients>rpereira@ebi.ac.uk</interface.application.pref.reports.recipients>
-			</properties>
-		</profile>
 		<profile>
 			<id>test.ae2_perftest</id>
 			<properties>
@@ -549,12 +556,13 @@
 		</dependency>
 
 		<!-- BASEX DEPENDENCIES -->
+		<!-- version 7.3 changes the behavior of -Dhttp.proxyHost -->
 		<dependency>
 			<groupId>org.basex</groupId>
 			<artifactId>basex</artifactId>
-			<version>7.3</version>
-			<!-- version>7.1</version> -->
+			<version>7.1</version>
 		</dependency>
+	
 		<!-- <dependency> <groupId>org.xmldb</groupId> <artifactId>xmldb-api</artifactId> 
 			<version>1.0</version> </dependency> -->
 
@@ -562,7 +570,7 @@
 		<dependency>
 			<groupId>org.basex</groupId>
 			<artifactId>basex-api</artifactId>
-			<version>7.3</version>
+			<version>7.1</version>
 		</dependency>
 
 		<dependency>
@@ -570,18 +578,20 @@
 			<artifactId>xmldb-api</artifactId>
 			<version>1.0</version>
 		</dependency>
+		
+		
 
 		<!-- XQJ -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>net.xqj</groupId>
 			<artifactId>basex-xqj</artifactId>
 			<version>1.0.0</version>
-		</dependency>
+		</dependency> -->
 		<!-- <dependency> <groupId>xmldb</groupId> <artifactId>xmldb-api</artifactId> 
 			<version>20021118</version> </dependency> -->
 
 		<!-- request Xml from Biosamples -->
-		<dependency>
+		 <dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.1.2</version>
@@ -591,6 +601,7 @@
 			<artifactId>httpmime</artifactId>
 			<version>4.1.2</version>
 		</dependency>
+		
 		<!-- <dependency> <groupId>exist</groupId> <artifactId>existdb</artifactId> 
 			<version>1.0</version> <scope>system</scope> <systemPath>/Users/rpslpereira/Apps/ExistDB/exist.jar</systemPath> 
 			</dependency> -->
