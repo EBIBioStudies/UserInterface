@@ -137,9 +137,8 @@
 								<xsl:call-template name="highlight">
 									<xsl:with-param name="pText" select="string-join($value, ', ')" />
 									<!-- <xsl:with-param name="pFieldName" select="'$token'" /> -->
-									<xsl:with-param name="pFieldName" select="'position()'" />
+									<xsl:with-param name="pFieldName" select="string(position())" />
 								</xsl:call-template>
-
 							</xsl:when>
 
 

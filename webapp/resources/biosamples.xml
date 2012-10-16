@@ -14,7 +14,6 @@
 	</app>
 	
 
-
 	<bs>
 		<setupDirectory>${sys:java.io.tmpdir}/${interface.application.index.directory}
 		</setupDirectory>
@@ -48,9 +47,6 @@
 		<cookie>${interface.application.db.xml.update.cookie}</cookie>	
 	</xmlupdate>
 	
-
-
-
 		<!-- job -->
 		<reload-all>
 		<update>
@@ -59,7 +55,6 @@
 		<atstart>${interface.application.pref.reload-all.update.atstart}</atstart>
 		</update>
 		</reload-all>
-
 		<efo>
 			<location>${sys:java.io.tmpdir}/efo.owl</location>
 			<source>/WEB-INF/classes/efo.owl</source>
@@ -82,15 +77,16 @@
 		</efo>
 
 
-
 <!-- location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" -->
 
 		<index id="biosamplesgroup"
 			location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes"
-			defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
-			
-			<!-- <document path="/Biosamples/SampleGroup[@id='SAMEG11547']" defaultField="keywords"> -->			
-			<document path="/Biosamples/SampleGroup" defaultField="keywords">
+			defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">		
+		
+		
+		
+			<!--  <document path="/Biosamples/SampleGroup[@id='SAMEG82627']" defaultField="keywords"> -->
+	<document path="/Biosamples/SampleGroup" defaultField="keywords">
 				<field name="keywords" type="string" path="string-join(.//text(), ' ')"
 					analyze="true"
 					analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer"
@@ -136,11 +132,12 @@
 				<field name="termsources" title="by Description" type="string"
 					path="attribute/value[../@class='Term Sources']//value" analyze="true"
 					store="false" escape="false" />
-
-				<!-- used to order the search using the numer os samples -->
-				<field name="samples" title="by Description" type="integer"
-					path="count(Sample)" store="false" escape="false" sortfields="samples" />
 					
+				
+				<!-- used to order the search using the number os samples --> <!-- never forget the cast as xs:integer -->
+				<field name="samples" title="by Number of Samples" type="integer" 
+					path="(count(Sample)) cast as xs:integer" sortfields="samples" />
+		
 				<!-- Reference -->
 				<!-- used to order the search using the numer os samples -->
 	<!-- 			<attribute class="Submission Reference Layer" classDefined="true" dataType="BOOLEAN">
@@ -149,19 +146,28 @@
 			</document>
 		</index>
 
+
 		<index id="biosamplessample"
 			location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes"
 			defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
 
-			
-			 
-				<!-- <document path="/Biosamples/SampleGroup/Sample[@id='SAMEA147487']" -->
-				<document path="/Biosamples/SampleGroup/Sample" 
+<!--  <document path="/Biosamples/SampleGroup/Sample[@groupId='SAMEG82627']" 	 -->
+	  <document path="/Biosamples/SampleGroup/Sample"  				 
 				 defaultField="keywords">
+				
+				
 				<field name="keywords" type="string" path="string-join(.//text(), ' ')"
 					analyze="true"
 					analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer"
 					autocompletion="true" store="false" escape="false" />
+				
+			
+				
+			<!-- 	<field name="allele" type="string" path="attribute/value[../@class='Allele Name']"
+					analyze="true" store="false" escape="false" sortfields="allele" /> -->
+				
+						
+				
 				<field name="name" type="string" path="attribute/value[../@class='Name']"
 					analyze="true" store="false" escape="false" sortfields="name" />
 				<field name="accession" type="string" path="@id" analyze="true"
@@ -183,7 +189,9 @@
 				<field name="0" type="string"
 					path="attribute/value[../@class='Sample Accession']" analyze="true"
 					store="false" escape="false" sortfields="0" />
-				
+	
+	
+			
 				<!-- dynamic sort -->				
 				<field name="attributes" type="string" path="attribute"
 					process="true" analyze="true" store="false" escape="false" />
@@ -249,6 +257,26 @@
 					analyze="true" store="false" escape="false" sortfields="29" />
 				<field name="30" type="string" process="true" path="''"
 					analyze="true" store="false" escape="false" sortfields="30" />
+				<field name="31" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="31" />
+				<field name="32" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="32" />
+				<field name="33" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="33" />
+				<field name="34" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="34" />
+				<field name="35" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="35" />
+				<field name="36" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="36" />
+				<field name="37" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="37" />
+				<field name="38" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="38" />
+				<field name="39" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="39" />
+				<field name="40" type="string" process="true" path="''"
+					analyze="true" store="false" escape="false" sortfields="40" />
 
 				<!-- dynamic sort -->				
 		

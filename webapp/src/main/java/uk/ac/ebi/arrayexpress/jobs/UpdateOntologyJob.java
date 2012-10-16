@@ -44,7 +44,6 @@ public class UpdateOntologyJob extends ApplicationJob
         logger.info("Checking EFO ontology version from [{}]", efoURI.toString());
         logger.debug("http.proxyHost->"+System.getProperty("http.proxyHost"));
         logger.debug("http.proxyPort->"+System.getProperty("http.proxyPort"));
-
         
         String version = EFOLoader.getOWLVersion(efoURI);
         String loadedVersion = ((Ontologies)getComponent("Ontologies")).getEfo().getVersionInfo();

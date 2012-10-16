@@ -152,6 +152,7 @@ public class DownloadBiosamplesXmlFile {
             if (!ok) {
                 httpclient.getConnectionManager().shutdown();
                 log.error("Login failed");
+                throw new Exception("Login Failed!!");
 
             }
         }

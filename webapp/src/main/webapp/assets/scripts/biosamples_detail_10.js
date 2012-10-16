@@ -21,6 +21,8 @@ var query = new Object();
 var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
 var anchor = decodeURI(window.location.hash);
 
+
+//all the fileds are numbers excepts the first one that is "sampleaccession". If you need  to change it here, be careful and change it also in the biosamplesgroup-html.xsl
 var sortDefault = {
 	"sampleaccession" :	"ascending",
 	"1" : "ascending",

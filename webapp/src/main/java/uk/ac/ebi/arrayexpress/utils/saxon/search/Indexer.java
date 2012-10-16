@@ -246,9 +246,10 @@ public class Indexer {
 				logger.error("bs.xmldatabase Configuration is missing!!");
 			}
 
-			c = Class.forName(driverXml);
-			db = (Database) c.newInstance();
-			DatabaseManager.registerDatabase(db);
+			//I cannot register this database again (this is already registered on XmlDbConnectionPool Component - java.nio.channels.OverlappingFileLockException 
+			//c = Class.forName(driverXml);
+			//db = (Database) c.newInstance();
+			//DatabaseManager.registerDatabase(db);
 			logger.debug("connectionString->" + connectionString);
 			coll = DatabaseManager.getCollection(connectionString);
 			XPathQueryService service = (XPathQueryService) coll.getService(
@@ -290,16 +291,16 @@ public class Indexer {
 						.nextResource().getContent());
 			}
 			logger.debug("Number of results->" + numberResults);
-			if (coll != null) {
-				try {
-					coll.close();
-				} catch (XMLDBException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			set = null;
-			db = null;
+///			if (coll != null) {
+///				try {
+///					coll.close();
+///				} catch (XMLDBException e) {
+///					// TODO Auto-generated catch block
+///					e.printStackTrace();
+///				}
+///			}
+///			set = null;
+///			db = null;
 			// c=null;
 			long pageSizeDefault = 50000;
 			// the samplegroup cannot be big otherwise I will obtain a memory
@@ -324,9 +325,9 @@ public class Indexer {
 						: (numberResults - pageInit + 1);
 
 				// c = Class.forName(driverXml);
-				db = (Database) c.newInstance();
-				DatabaseManager.registerDatabase(db);
-				coll = DatabaseManager.getCollection(connectionString);
+///				db = (Database) c.newInstance();
+///				DatabaseManager.registerDatabase(db);
+///				coll = DatabaseManager.getCollection(connectionString);
 				service = (XPathQueryService) coll.getService(
 						"XPathQueryService", "1.0");
 
@@ -639,7 +640,7 @@ public class Indexer {
 													// logger.debug("$$$$$$->" +
 													// "STRING->" + val + "££");
 													addIndexField(d, (i + 1)
-															+ "", val, false,
+															+ "", val, true,
 															false, true);
 												} else {
 													XPathExpression valPath = cacheXpathAttValue
@@ -676,7 +677,7 @@ public class Indexer {
 													// + valS + "position->"
 													// +(i+1)+"integer");
 													addIndexField(d, (i + 1)
-															+ "", valS, false,
+															+ "", valS, true,
 															false, true);
 													// addIntIndexField(d,
 													// (i+1)+"integer", new
@@ -721,8 +722,8 @@ public class Indexer {
 				pageNumber++;
 				if (coll != null) {
 					try {
-						coll.close();
-					} catch (XMLDBException e) {
+						//coll.close();
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
@@ -839,18 +840,21 @@ public class Indexer {
 					value.getClass().getName(), name);
 		}
 		// TODO
-		// logger.debug("value->[{}]", longValue.toString());
+//		logger.debug( "field [{}] value->[{}]", name, longValue.toString());
+//		logger.debug( "field [{}] store->[{}]", name, store);
+//		logger.debug( "field [{}] sort->[{}]", name, sort);
 		if (null != longValue) {
 			// its more clear to divide the if statement in 3 parts
 			if (sort) {
+				//It has to be int because of sorting (otherwise the error: Invalid shift value in prefixCoded string (is encoded value really an INT?)) 
 				document.add(new NumericField(name, Field.Store.YES, true)
-						.setIntValue(longValue.intValue()));
+						.setLongValue(longValue));
 			} else {
 				if (!store) {
 					document.add(new NumericField(name).setLongValue(longValue));
 				} else {
 					document.add(new NumericField(name, Field.Store.YES, true)
-							.setIntValue(longValue.intValue()));
+							.setLongValue(longValue));
 				}
 
 			}

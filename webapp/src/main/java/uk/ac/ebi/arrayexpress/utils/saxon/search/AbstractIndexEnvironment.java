@@ -290,7 +290,7 @@ public abstract class AbstractIndexEnvironment {
 				}
 			}
 
-			int sortFieldType = SortField.INT;
+		
 			// I have to test the sort field name. If it is a string i have to
 			// add "sort" to the name
 			// I will only sort if I have a Field
@@ -331,7 +331,7 @@ public abstract class AbstractIndexEnvironment {
 							} else {
 								if (otherSortField.type
 										.equalsIgnoreCase("integer")) {
-									descendingType = SortField.INT;
+									descendingType = SortField.LONG;
 								}
 							}
 
