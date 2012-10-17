@@ -392,12 +392,10 @@ public abstract class AbstractIndexEnvironment {
 			isearcher.search(query, collector);
 			//I will use this Collector to know how much results do i have
 			long timeHits=System.nanoTime();
-			logger.debug("TotalHitCountCollector.java");
 			TotalHitCountCollector collector2 = new TotalHitCountCollector();
-			logger.debug("2 - TotalHitCountCollector.java");
 			isearcher.search(query, collector2);
 			double ms = (System.nanoTime() - timeHits) / 1000000d;
-			logger.debug("Number of Docs->" + collector2.getTotalHits() + "- TOTALHITS TOOK->" + ms );
+			logger.info("Number of Docs TotalHitCountCollector->" + collector2.getTotalHits() + "- TOTALHITS TOOK->" + ms );
 			int totalHits= collector2.getTotalHits();
 
 			TopDocs topDocs = collector.topDocs();
