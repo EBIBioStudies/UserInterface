@@ -61,7 +61,7 @@ public class IndexEnvironmentBiosamplesGroup extends AbstractIndexEnvironment {
 		// defaultSortDescending = false;
 		defaultSortField = "";
 		defaultSortDescending = true;
-		defaultPageSize = 25;
+		defaultPageSize = 50;
 
 		// I'm calling this to clean the reference to the IndexReader->
 		// closeIndexReader();getIndexReader();
@@ -137,13 +137,7 @@ public class IndexEnvironmentBiosamplesGroup extends AbstractIndexEnvironment {
 						.query("<biosamples><all>{for $x in "
 								+ totalRes.toString()
 								+ " let $group:=/Biosamples/SampleGroup[@id=($x)]"
-								// +
-								// "  return <SampleGroup samplecount=\"{count($group/Sample)}\"> {$group/(@*, * except Sample)} </SampleGroup> "
-								// /+
-								// " return <SampleGroup samplecount=\"{count($group/Sample)}\"> {$group/(@*, * except Sample)} <attributes>{distinct-values($group/Sample/attribute/replace(@class, ' ' , '-'))} </attributes></SampleGroup> "
-								// /+
-								// " return <SampleGroup samplecount=\"{count($group/Sample)}\"> {$group/(@*, * except Sample)} <attributes>Organism FamilyRelationship DiseaseType Name ExpansionLLot FamilyMember Ethnicity TransformationType Sample-Accession BiopsySite Age SampleType CellType TimeUnit Family Sex OrganismPart ClinicallyAffectedStatus ClinicalHistory GeographicOrigin GeneticStatus</attributes></SampleGroup> "
-								+ " return <SampleGroup samplecount=\"{count($group/Sample)}\"> {$group/(@*, * except Sample)} </SampleGroup> "
+								+ " return <SampleGroup samplecount=\"{count($group/Sample)}\"> {$group/(@*, * except Sample)} <Samples>{distinct-values($group/Sample/@id)}</Samples></SampleGroup> "
 								+ " }</all></biosamples>");
 				// +
 				// " return <SampleGroup samplecount=\"{count($group/Sample)}\"> {$group/(@*, * except Sample)} <attributes>{distinct-values($group/Sample/attribute[@dataType!='INTEGER']/replace(@class, ' ' , '-'))} </attributes> <attributesinteger>{distinct-values($group/Sample/attribute[@dataType='INTEGER']/replace(@class, ' ' , '-'))} </attributesinteger></SampleGroup> "

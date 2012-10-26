@@ -90,7 +90,7 @@
 	</rule>
 	<rule>
 		<from>^/xml/group/query=(.*)?$</from>
-		<to type="forward">/servlets/query/biosamplesgroup/browse-biosamplesgroup/xml?$1</to>
+		<to type="forward">/servlets/query/biosamplesgroup/browse-biosamplesgroup/xml?keywords=$1</to>
 	</rule>
 	
 	<rule>
@@ -99,7 +99,7 @@
 	</rule>
 <rule>
 		<from>^/xml/groupsamples/(SAM(.*))/query=(.*)?$</from>
-		<to type="forward">/servlets/query/biosamplessample/browse-biosamplessample/xml?samplegroup=$1&amp;$3</to>
+		<to type="forward">/servlets/query/biosamplessample/browse-biosamplessample/xml?samplegroup=$1&amp;keywords=$3</to>
 	</rule>
 
 	<!-- rest API -->

@@ -70,9 +70,11 @@
 	</xsl:template>
 
 	<xsl:template match="//Sample">
-		<Sample id="{@id}" groupId="{@groupId}">
-			<xsl:copy-of select="*" />
-		</Sample>
+		<BioSample>
+		<xsl:copy-of select="@*" />
+			<!-- I'm only returning a list of Ids -->
+			<!-- <xsl:copy-of select="*" /> -->
+		</BioSample>
 	</xsl:template>
 
 

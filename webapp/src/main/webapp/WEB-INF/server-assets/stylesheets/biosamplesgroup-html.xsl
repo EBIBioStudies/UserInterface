@@ -404,6 +404,29 @@
 					</tr>
 				</xsl:when>
 			</xsl:choose>
+			
+			<xsl:choose>
+				<xsl:when test="count(attribute/value[../@class='Publications'])>0">
+
+					<tr>
+						<td class="col_title">
+							<b>Publications:</b>
+						</td>
+						<td>
+							<xsl:call-template name="process_publications">
+								<xsl:with-param name="pValue"
+									select="attribute/value[../@class='Publications']"></xsl:with-param>
+							</xsl:call-template>
+
+
+							<!-- <xsl:call-template name="highlight"> <xsl:with-param name="pText" 
+								select="string-join(attribute/value[../@class='Persons']//value, ', ')" /> 
+								<xsl:with-param name="pFieldName" select="'persons'" /> </xsl:call-template> -->
+
+						</td>
+					</tr>
+				</xsl:when>
+			</xsl:choose>
 
 			<tr>
 				<td class="col_title">
@@ -639,6 +662,24 @@
 	</xsl:template>
 
 
+
+
+<xsl:template name="process_publications">
+		<xsl:param name="pValue" />
+		<xsl:for-each select="$pValue">
+
+			<xsl:call-template name="highlight">
+				<xsl:with-param name="pText"
+					select="concat('Publication DOI: ', .//attribute/value[../@class='Publication DOI'], ';  Publication PubMed ID: ', .//attribute/value[../@class='Publication PubMed ID'])" />
+				<xsl:with-param name="pFieldName" select="'publications'" />
+			</xsl:call-template>
+			<xsl:choose>
+				<xsl:when test="position()&lt;last()">
+					<br />
+				</xsl:when>
+			</xsl:choose>
+		</xsl:for-each>
+	</xsl:template>
 
 
 	<xsl:template name="process_organization">

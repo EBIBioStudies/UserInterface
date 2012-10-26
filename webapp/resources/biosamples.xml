@@ -101,35 +101,38 @@
 				<field name="description" title="by Description" type="string"
 					path="attribute/value[../@class='Submission Description']" analyze="true"
 					store="true" escape="false" autocompletion="true" sortfields="description" />
-				<field name="name" title="by Description" type="string"
+				<field name="name" title="by Name" type="string"
 					path="attribute/value[../@class='Name']" analyze="true" store="false"
 					escape="false" autocompletion="true" sortfields="description" />
-				<field name="title" title="by Description" type="string"
+				<field name="title" title="by Title" type="string"
 					path="attribute/value[../@class='Submission Title']" analyze="true"
 					store="false" escape="false" />
-				<field name="identifier" title="by Description" type="string"
+				<field name="identifier" title="by Identifier" type="string"
 					path="attribute/value[../@class='Submission Identifier']" analyze="true"
 					store="false" escape="false" />
-				<field name="version" title="by Description" type="string"
+				<field name="version" title="by Versios" type="string"
 					path="attribute/value[../@class='Submission Version']" analyze="true"
 					store="false" escape="false" />
-				<field name="modificationdate" title="by Description" type="string"
+				<field name="modificationdate" title="by Modification date" type="string"
 					path="attribute/value[../@class='Submission Release Date']"
 					analyze="true" store="false" escape="false" />
-				<field name="releasedate" title="by Description" type="string"
+				<field name="releasedate" title="by Release Date" type="string"
 					path="attribute/value[../@class='Submission Modification Date']"
 					analyze="true" store="false" escape="false" />
-				<field name="databases" title="by Description" type="string"
+				<field name="databases" title="by Databases" type="string"
 					path="attribute/value[../@class='Databases']//value" analyze="true"
 					store="false" escape="false" />
-				<field name="organizations" title="by Description" type="string"
+				<field name="organizations" title="by Organizations" type="string"
 					path="attribute/value[../@class='Organizations']//value" analyze="true"
 					store="false" escape="false" />
+				<field name="publications" title="by Publications" type="string"
+					path="attribute/value[../@class='Publications']//value" analyze="true"
+					store="false" escape="false" />
 				<!-- change to people -->
-				<field name="persons" title="by Description" type="string"
+				<field name="persons" title="by Persons" type="string"
 					path="attribute/value[../@class='Persons']//value" analyze="true"
 					store="false" escape="false" />
-				<field name="termsources" title="by Description" type="string"
+				<field name="termsources" title="by Term Sources" type="string"
 					path="attribute/value[../@class='Term Sources']//value" analyze="true"
 					store="false" escape="false" />
 					
