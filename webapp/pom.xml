@@ -249,7 +249,7 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>production</id>
+			<id>production_old</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
