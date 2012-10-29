@@ -110,15 +110,19 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 
 			// I'm showing the datail of a sample inside a sample Group browsing
 			if (map.get("accession") != null) {
-
-				set = service.query("<biosamples><all>{for $x in  "
-						+ totalRes.toString() + "  let $y:=//Sample[@id=($x)]"
-						+ " return ($y) " + " }</all></biosamples>");
+				//TODO: rpe (this is not correct - i need to return all one Sample (usei o distinct values e o $y[1])
+				set = service.query("<biosamples><all>{for $x in  distinct-values("
+						+ totalRes.toString() + ")  let $y:=//Sample[@id=($x)]"
+						+ " return ($y[1]) " + " }</all></biosamples>");
+//				set = service.query("<biosamples><all>{for $x in  "
+//						+ totalRes.toString() + "  let $y:=//Sample[@id=($x)]"
+//						+ " return ($y) " + " }</all></biosamples>");
 			}
 			// I'm browsing a sample group
 			else {
+
 				set = service
-						.query("<biosamples><all>{for $x in  "
+						.query("<biosamples><all>{for $x in "
 								+ totalRes.toString()
 								+ "  let $y:=//Sample[@id=($x)]"
 								+ "  return <Samples>{$y[../@id='"

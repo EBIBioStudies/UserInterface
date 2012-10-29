@@ -114,10 +114,10 @@
 					path="attribute/value[../@class='Submission Version']" analyze="true"
 					store="false" escape="false" />
 				<field name="modificationdate" title="by Modification date" type="string"
-					path="attribute/value[../@class='Submission Release Date']"
+					path="attribute/value[../@class='Submission Update Date']"
 					analyze="true" store="false" escape="false" />
 				<field name="releasedate" title="by Release Date" type="string"
-					path="attribute/value[../@class='Submission Modification Date']"
+					path="attribute/value[../@class='Submission Release Date']"
 					analyze="true" store="false" escape="false" />
 				<field name="databases" title="by Databases" type="string"
 					path="attribute/value[../@class='Databases']//value" analyze="true"

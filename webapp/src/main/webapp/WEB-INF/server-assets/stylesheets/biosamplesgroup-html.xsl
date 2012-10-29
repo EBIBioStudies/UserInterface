@@ -292,12 +292,12 @@
 			</tr>
 			<tr>
 				<td class="col_title">
-					<b>Submission Modification Date:</b>
+					<b>Submission Update Date:</b>
 				</td>
 				<td>
 					<xsl:call-template name="highlight">
 						<xsl:with-param name="pText"
-							select="attribute/value[../@class='Submission Modification Date']" />
+							select="attribute/value[../@class='Submission Update Date']" />
 						<xsl:with-param name="pFieldName" select="'modificationdate'" />
 					</xsl:call-template>
 				</td>
@@ -688,7 +688,7 @@
 
 			<xsl:call-template name="highlight">
 				<xsl:with-param name="pText"
-					select="concat('Name: ', .//attribute/value[../@class='Organization Name'], '; Role: ', .//attribute/value[../@class='Organization Role'])" />
+					select="concat('Name: ', .//attribute/value[../@class='Organization Name'],'; Address: ', .//attribute/value[../@class='Organization Address'], '; Role: ', .//attribute/value[../@class='Organization Role'], '; Email: ', .//attribute/value[../@class='Organization Email'])" />
 				<xsl:with-param name="pFieldName" select="'organizations'" />
 			</xsl:call-template>
 			; URI:
