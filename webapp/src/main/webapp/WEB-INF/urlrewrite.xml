@@ -103,5 +103,28 @@
 	</rule>
 
 	<!-- rest API -->
+	
+	
+	<!-- return the original xml -->
+
+	<rule>
+		<from>^/original/group/(SAM(.*))/?$</from>
+		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/original?id=$1</to>
+	</rule>
+	<rule>
+		<from>^/original/group/query=(.*)?$</from>
+		<to type="forward">/servlets/query/biosamplesgroup/browse-biosamplesgroup/original?keywords=$1</to>
+	</rule>
+	
+	<rule>
+		<from>^/original/sample/(SAM(.*))/?$</from>
+		<to type="forward">/servlets/query/biosamplessample/biosamplessample/original?accession=$1</to>
+	</rule>
+<rule>
+		<from>^/original/groupsamples/(SAM(.*))/query=(.*)?$</from>
+		<to type="forward">/servlets/query/biosamplessample/browse-biosamplessample/original?samplegroup=$1&amp;keywords=$3</to>
+	</rule>
+
+	<!-- return the original xml -->
 
 </urlrewrite>
