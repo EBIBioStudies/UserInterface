@@ -23,7 +23,7 @@
 				<xsl:copy-of select="@id" /> 
 				<!-- <xsl:apply-templates select="*[not(self::SampleAttributes)]"></xsl:apply-templates> -->
 				 <xsl:apply-templates select="attribute/value[count(.//object[@class='Term Source'])>0]"></xsl:apply-templates>
-            <xsl:apply-templates select="//attribute[value/text()]"></xsl:apply-templates>
+            <xsl:apply-templates select="attribute[value/text() and count(.//object)=0]"></xsl:apply-templates>
             <xsl:apply-templates select="attribute/value[count(.//object[@class='Organization'])>0]"></xsl:apply-templates>
             <xsl:apply-templates select="attribute/value[count(.//object[@class='Person'])>0]"></xsl:apply-templates>
             <xsl:apply-templates select="attribute/value[count(.//object[@class='Database'])>0]"></xsl:apply-templates>
@@ -36,7 +36,8 @@
 	<xsl:template match="//Samples">
 		<xsl:if test="$vSamplesList=1">
 			<xsl:for-each select="tokenize(.,' ')">
-				<BioSample id="{.}" groupId="{$id}"></BioSample>
+				<!-- <BioSample id="{.}" groupId="{$id}"></BioSample> -->
+				<BioSample id="{.}"></BioSample>
 			</xsl:for-each>
 		</xsl:if>
 	</xsl:template>

@@ -12,7 +12,8 @@
 	<xsl:strip-space elements="*" />
 	<xsl:template match="//Sample">
 			<BioSample>
-				<xsl:copy-of select="@*" />
+				<!-- I dont want to copy the groupId attribute  -->
+				<xsl:copy-of select="@id" />
 				<xsl:apply-templates select="./attribute"></xsl:apply-templates>
 			</BioSample>
 	</xsl:template>

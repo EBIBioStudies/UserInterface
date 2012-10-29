@@ -71,7 +71,8 @@
 
 	<xsl:template match="//Sample">
 		<BioSample>
-		<xsl:copy-of select="@*" />
+		<!-- I dont want to copy the groupId attribute  -->
+		<xsl:copy-of select="@id" />
 			<!-- I'm only returning a list of Ids -->
 			<!-- <xsl:copy-of select="*" /> -->
 		</BioSample>
