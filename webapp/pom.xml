@@ -133,7 +133,7 @@
 				<interface.application.log.default.priority>INFO</interface.application.log.default.priority>
 				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroupDev</interface.application.db.xml.connection.dbname> -->
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.dbname>
-				<interface.application.db.xml.connection.port>1986</interface.application.db.xml.connection.port>
+				<interface.application.db.xml.connection.port>1984</interface.application.db.xml.connection.port>
 			</properties>
 		</profile>
 
