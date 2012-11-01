@@ -7,12 +7,12 @@
 	<name>BioSamples Interface</name>
 	<version>1.0</version>
 	<packaging>pom</packaging>
-	<url>http://www.ebi.ac.uk/arrayexpress</url>
+	<url>http://www.ebi.ac.uk/biosamples</url>
 
 	<scm>
-		<connection>scm:svn:svn://dukkha.ebi.ac.uk/trunk/arrayexpress-interface</connection>
-		<developerConnection>scm:svn:svn://dukkha.ebi.ac.uk/trunk/arrayexpress-interface</developerConnection>
-		<url>svn://dukkha.ebi.ac.uk/trunk/arrayexpress-interface</url>
+		<connection>scm:svn:svn://dukkha.ebi.ac.uk/trunk/BioSamples</connection>
+		<developerConnection>scm:svn:svn://dukkha.ebi.ac.uk/trunk/BioSamples</developerConnection>
+		<url>svn://dukkha.ebi.ac.uk/trunk/BioSamples</url>
 	</scm>
 
 	<developers>

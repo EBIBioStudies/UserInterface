@@ -113,7 +113,8 @@
 	</rule>
 	<rule>
 		<from>^/original/group/query=(.*)?$</from>
-		<to type="forward">/servlets/query/biosamplesgroup/browse-biosamplesgroup/original?keywords=$1</to>
+		<!-- im using the biosamplesgroup-xml.xsl - I just want to make a copy -->
+		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/original?keywords=$1</to>
 	</rule>
 	
 	<rule>
@@ -122,7 +123,8 @@
 	</rule>
 <rule>
 		<from>^/original/groupsamples/(SAM(.*))/query=(.*)?$</from>
-		<to type="forward">/servlets/query/biosamplessample/browse-biosamplessample/original?samplegroup=$1&amp;keywords=$3</to>
+		<!-- im using the biosamplessample-xml.xsl - I just want to make a copy -->
+		<to type="forward">/servlets/query/biosamplessample/biosamplessample/original?samplegroup=$1&amp;keywords=$3</to>
 	</rule>
 
 	<!-- return the original xml -->

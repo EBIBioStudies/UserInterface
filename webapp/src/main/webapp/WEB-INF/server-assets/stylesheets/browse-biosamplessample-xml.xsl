@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="windows-1252"?>
-<!-- cannto change the enconding to ISO-8859-1 or UTF-8 -->
+<!-- cannot change the enconding to ISO-8859-1 or UTF-8 -->
 
 <!DOCTYPE xsl:stylesheet [ <!ENTITY nbsp "&#160;"> ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
