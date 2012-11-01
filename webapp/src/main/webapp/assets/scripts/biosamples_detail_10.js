@@ -44,8 +44,7 @@ var sortDefault = {
 	"17" : "ascending",
 	"18" : "ascending",
 	"19" : "ascending",
-	"20" : "ascending",
-
+	"20" : "ascending"
 };
 
 var sortTitle = {
@@ -139,7 +138,24 @@ function updateSamplesList(urlPage) {
 					urlPage,
 					function(data) {
 						// alert('Load was performed.' + data);
+						//TODO: find a different solution (this was done because a IE problem)
+						var dataParsed=data.replace(/<\?xml(.*?)<tr>/g,"<tr>");
 						$("#bs_results_tbody").html(data);
+						// get stats from the first row
+						//I need to get the numbers before an afterwards I put the html without the DIVs - To Solve IE problems
+						var total = $("#bs_results_total").text();
+						var from = $("#bs_results_from").text();
+						var to = $("#bs_results_to").text();
+						var curpage = $("#bs_results_page").text();
+						var pagesize = $("#bs_results_pagesize").text();
+
+						var totalPages = total > 0 ? Math.floor((total - 1)
+								/ pagesize) + 1 : 0;
+						
+						
+						$("#bs_results_tbody").html(dataParsed);
+						
+						//alert('Load was performed.' + dataParsed);
 
 						/* hint to the lucene highlight */
 						$("#bs_results_tbody")
@@ -158,15 +174,7 @@ function updateSamplesList(urlPage) {
 										"This is matched child term from Experimental Factor Ontology e.g. brain and subparts of brain");
 						/* hint to the lucene highlight */
 
-						// get stats from the first row
-						var total = $("#bs_results_total").text();
-						var from = $("#bs_results_from").text();
-						var to = $("#bs_results_to").text();
-						var curpage = $("#bs_results_page").text();
-						var pagesize = $("#bs_results_pagesize").text();
-
-						var totalPages = total > 0 ? Math.floor((total - 1)
-								/ pagesize) + 1 : 0;
+					
 
 //						$("#ae_results_status")
 //								.html(

@@ -20,7 +20,7 @@
 
 body {
 	background: #ffffff url(../images/empty.gif) fixed top;
-    overflow: hidden;
+   /* overflow: hidden;*/
 }
 
 
