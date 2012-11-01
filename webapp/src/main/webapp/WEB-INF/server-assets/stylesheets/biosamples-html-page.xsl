@@ -50,7 +50,7 @@
                     <xsl:text>Your browser does not support inline frames or is currently configured not to display inline frames. Content can be viewed at actual source page: http://www.ebi.ac.uk/inc/head.html</xsl:text>
                 </iframe>
             </div>
-            <div id="bs_contents" class="bs_contents_frame ae_assign_font"><xsl:call-template name="ae-contents"/></div>
+            <div id="bs_contents" class="bs_contents_frame ae_assign_font" style="position: absolute; z-index:2;"><xsl:call-template name="ae-contents"/></div>
             <noscript>
                 <div id="ae_noscript" class="bs_contents_frame bs_assign_font bs_white_bg">
                     <div class="bs_center_box">
@@ -63,7 +63,7 @@
             <div id="ebi_footer">
                 <iframe src="${interface.application.link.www_domain.inc}/foot.html"
                         name="foot" frameborder="0" marginwidth="0px" marginheight="0px"
-                        scrolling="no" height="22px" width="100%" style="z-index:2">
+                        scrolling="no" height="22px" width="100%" style="z-index:3">
                     <xsl:text>Your browser does not support inline frames or is currently configured not to display inline frames. Content can be viewed at actual source page: http://www.ebi.ac.uk/inc/foot.html</xsl:text>
                 </iframe>
             </div>

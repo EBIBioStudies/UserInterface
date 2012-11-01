@@ -442,7 +442,7 @@
 
 					<div id="bs_query_box">
 						<form id="bs_query_form" method="get"
-							action="javascript:searchSamples(this.bs_keywords_field.value);">
+							action="javascript:searchSamples(this.bs_query_form.bs_keywords_field.value);">
 							<fieldset id="bs_keywords_fset">
 								<label for="bs_keywords_field">
 									Search inside the
