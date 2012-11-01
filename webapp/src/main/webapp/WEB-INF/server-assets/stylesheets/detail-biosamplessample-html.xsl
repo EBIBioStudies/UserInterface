@@ -44,8 +44,8 @@
 
 	<xsl:variable name="vkeywords" select="$keywords" />
 
-	<xsl:output omit-xml-declaration="yes" method="html" indent="no"
-		encoding="UTF-8" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
+	<xsl:output omit-xml-declaration="yes" method="xhtml" indent="no"
+		encoding="windows-1252" doctype-public="-//W3C//DTD XHTML 1.1//EN" /> 
 
 	<xsl:include href="biosamples-html-page.xsl" />
 	<!-- <xsl:include href="ae-sort-arrays.xsl"/> -->
