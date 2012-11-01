@@ -171,7 +171,7 @@
 			</activation>
 			<properties>
 				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
-				<interface.application.base.path>/biosamples</interface.application.base.path>
+				<interface.application.base.path>/biosd</interface.application.base.path>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
 				<interface.application.log.default.priority>INFO</interface.application.log.default.priority>
