@@ -80,7 +80,7 @@ $(function() {
 	var urlPage = "group/browse-table.html" + newQuery;
 
 	//initialize the keywords input with the search string from the homepage
-	$("#bs_keywords").val(keywords);
+	$("#bs_keywords_field").val(keywords);
 
 	//initialize the sortby
 	 $("#sortby").removeAttr("disabled").val(getQueryStringParam("sortby", ""));
@@ -90,7 +90,7 @@ $(function() {
 	var basePath = decodeURI(window.location.pathname).replace(/\/\w+\.\w+$/,
 			"/");
 	// alert(basePath);
-	$("#bs_keywords").autocomplete(basePath + "keywords.txt", {
+	$("#bs_keywords_field").autocomplete(basePath + "keywords.txt", {
 		matchContains : false,
 		selectFirst : false,
 		scroll : true,
@@ -98,6 +98,8 @@ $(function() {
 		requestTreeUrl : basePath + "efotree.txt"
 	});
 });
+
+
 
 function QuerySampleGroup(url) {
 	// alert("QuerySampleGroup2->" + url);

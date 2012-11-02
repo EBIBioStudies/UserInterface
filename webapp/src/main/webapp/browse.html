@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -32,9 +32,9 @@
 	type="text/css" />
 
 <link rel="stylesheet"
-	href="assets/stylesheets/biosamples_browse_10.css" type="text/css" />
+	href="assets/stylesheets/biosamples_browse_10.css" type="text/css" /> 
 <link rel="stylesheet"
-	href="assets/stylesheets/biosamples_common_10.css" type="text/css" />
+	href="assets/stylesheets/biosamples_common_10.css" type="text/css" /> 
 <link rel="stylesheet"
 	href="assets/stylesheets/biosamples_metadata_10.css" type="text/css">
 
@@ -81,21 +81,10 @@
 			to display inline frames. Content can be viewed at actual source
 			page: http://www.ebi.ac.uk/inc/head.html </iframe>
 	</div>
-	<noscript>
-		<div id="ae_noscript" class="ae_contents_frame ae_assign_font">
-			<div class="ae_center_box">
-				<div id="ae_contents_box_915px">
-					<div class="ae_error_area">BioSamples uses JavaScript for
-						better data handling and enhanced representation. Please enable
-						JavaScript if you want to continue browsing ArrayExpress.</div>
-				</div>
-			</div>
-		</div>
-	</noscript>
 
 
 
-	<div id="bs_contents" class="bs_contents_frame" style="position: absolute; z-index:2;">
+	<div id="bs_contents" class="bs_contents_frame ae_assign_font" style="position: absolute; z-index:2;">
 		<div id="bs_contents_box_100pc">
 			<div id="bs_contents_container">
 
@@ -126,10 +115,10 @@
 																		<tr>
 																			<td>
 																				<fieldset id="bs_keywords_fset">
-																					<label for="bs_keywords">Query BioSample
+																					<label for="bs_keywords_field">Query BioSample
 																						Database at EBI [<a
 																						href="javascript:aeClearField('#bs_keywords')">clear</a>]
-																					</label> <input id="bs_keywords" type="text"
+																					</label> <input id="bs_keywords_field" type="text"
 																						name="keywords" value="" maxlength="200"
 																						class="bs_assign_font" autocomplete="off" />
 
@@ -201,22 +190,6 @@
 							</tr>
 						</thead>
 						<tbody id="bs_results_tbody">
-
-
-							<!-- ,th
-																					class="table_header_box sortable bs_results_accession"
-																					id="bs_results_header_accession"><a
-																					href="javascript:aeSort('accession')"
-																					title="Click to sort by accession">
-																						<div class="table_header_border_left">
-																							<div class="table_header_border_right">
-																								<div class="table_header_inner">
-																									<div class="table_header_label">Accession
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																				</a></th> -->
 
 						</tbody>
 					</table>
