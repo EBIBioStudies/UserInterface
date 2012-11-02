@@ -23,6 +23,11 @@ body {
    /* overflow: hidden;*/
 }
 
+/*
+html {
+    overflow: hidden;
+}
+*/
 
 body.bs_curator {
 	background: #ffffdb url(../images/bs_curator.gif) no-repeat fixed 0 97%;
@@ -42,13 +47,12 @@ a:active {
     text-decoration: underline;
 }
 
-/*
+
 * {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
 }
-*/
 
 #ebi_footer {
     background-color: #dedede;
@@ -70,13 +74,14 @@ a:active {
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 }
 
+
 .bs_contents_frame {
     position: absolute;
     top: 57px;
     bottom: 22px;
     left: 0;
     width: 100%;
-    /*overflow: auto;*/
+    overflow: auto;
     text-align: left;
 }
 
