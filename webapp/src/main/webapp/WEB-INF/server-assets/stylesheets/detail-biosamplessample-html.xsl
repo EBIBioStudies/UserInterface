@@ -44,8 +44,8 @@
 
 	<xsl:variable name="vkeywords" select="$keywords" />
 
-	<xsl:output omit-xml-declaration="yes" method="xhtml" indent="no"
-		encoding="windows-1252" doctype-public="-//W3C//DTD XHTML 1.1//EN" /> 
+	<xsl:output omit-xml-declaration="yes" method="xhtml"
+		indent="no" encoding="windows-1252" doctype-public="-//W3C//DTD XHTML 1.1//EN" />
 
 	<xsl:include href="biosamples-html-page.xsl" />
 	<!-- <xsl:include href="ae-sort-arrays.xsl"/> -->
@@ -100,18 +100,12 @@
 					<xsl:text> > </xsl:text>
 					<a href="{$basepath}/browse.html">BioSamples</a>
 					<xsl:text> > </xsl:text>
-					<a
-						href="{$basepath}/sample/{$vFiltered/@id}">
+					<a href="{$basepath}/sample/{$vFiltered/@id}">
 						<xsl:value-of select="$vFiltered/@id" />
-					</a> 
-					<!-- <a href="{$basepath}/biosamplesgroup/{$vFiltered/@groupId}">
-						<xsl:value-of select="$vFiltered/@groupId" />
 					</a>
-					<xsl:text> > </xsl:text>
-					<a
-						href="{$basepath}/biosamplessample/detail/{$vFiltered/@groupId}/{$vFiltered/@id}">
-						<xsl:value-of select="$vFiltered/@id" />
-					</a> -->
+					<!-- <a href="{$basepath}/biosamplesgroup/{$vFiltered/@groupId}"> <xsl:value-of 
+						select="$vFiltered/@groupId" /> </a> <xsl:text> > </xsl:text> <a href="{$basepath}/biosamplessample/detail/{$vFiltered/@groupId}/{$vFiltered/@id}"> 
+						<xsl:value-of select="$vFiltered/@id" /> </a> -->
 				</div>
 
 				<xsl:choose>
@@ -128,7 +122,7 @@
 						<xsl:call-template name="block-warning">
 							<xsl:with-param name="pStyle" select="'bs_warn_area'" />
 							<xsl:with-param name="pMessage">
-								<xsl:text>There are no Samples matching your search criteria found in BioSample Database.</xsl:text>
+								<xsl:text>There are no Samples matching your search criteria found in BioSamples Database.</xsl:text>
 							</xsl:with-param>
 						</xsl:call-template>
 					</xsl:otherwise>
@@ -156,10 +150,19 @@
 								<td>
 									<xsl:choose>
 
+										<xsl:when test="count(.[@class='Database URI'])&gt;0">
+											<xsl:call-template name="process_uri">
+												<xsl:with-param name="pValue" select="value"></xsl:with-param>
+											</xsl:call-template>
+										</xsl:when>
 
 										<xsl:when test="count(.//attribute[@class='Term Source REF'])=0">
 											<xsl:copy-of select="value"></xsl:copy-of>
 										</xsl:when>
+
+
+
+
 
 										<xsl:otherwise>
 											<xsl:call-template name="process_efo">
@@ -223,6 +226,12 @@
 
 
 
+	<xsl:template name="process_uri">
+		<xsl:param name="pValue" />
+		<a href="{.}" target="ext">
+			<xsl:value-of select="."></xsl:value-of>
+		</a>
+	</xsl:template>
 
 	<xsl:template name="process_efo">
 		<xsl:param name="pValue" />
@@ -237,26 +246,27 @@
 				select="'keywords'" /> </xsl:call-template> -->
 
 
-<xsl:choose>
-			<xsl:when test="count(.//object[@id='NCBI Taxonomy'])=0">
+			<xsl:choose>
+				<xsl:when test="count(.//object[@id='NCBI Taxonomy'])=0">
 
-				<a href="{.//attribute/value[../@class='Term Source URI']}"
-					target="ext">
-					<xsl:value-of select=".//attribute/value[../@class='Term Source URI']"></xsl:value-of>
-				</a>
+					<a href="{.//attribute/value[../@class='Term Source URI']}"
+						target="ext">
+						<xsl:value-of select=".//attribute/value[../@class='Term Source URI']"></xsl:value-of>
+					</a>
 
-			</xsl:when>
+				</xsl:when>
 
-			<xsl:otherwise>
-				<a
-					href="{.//attribute/value[../@class='Term Source URI']}?term={.//attribute/value[../@class='Term Source ID']}"
-					target="ext">
-					<xsl:value-of select=".//attribute/value[../@class='Term Source URI']"></xsl:value-of>?term=
-					<xsl:value-of select=".//attribute/value[../@class='Term Source ID']"></xsl:value-of>
-				</a>
+				<xsl:otherwise>
+					<a
+						href="{.//attribute/value[../@class='Term Source URI']}?term={.//attribute/value[../@class='Term Source ID']}"
+						target="ext">
+						<xsl:value-of select=".//attribute/value[../@class='Term Source URI']"></xsl:value-of>
+						?term=
+						<xsl:value-of select=".//attribute/value[../@class='Term Source ID']"></xsl:value-of>
+					</a>
 
-			</xsl:otherwise>
-</xsl:choose>
+				</xsl:otherwise>
+			</xsl:choose>
 			<br />
 		</xsl:for-each>
 	</xsl:template>
