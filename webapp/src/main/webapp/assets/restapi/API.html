@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0040)http://bar:8080/trac/wiki/ESD/NewGUI/API -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>
+      BioSamples - API
+    </title>
+        <link rel="stylesheet" href="./Assets/trac.css" type="text/css">
+        <link rel="stylesheet" href="./Assets/wiki.css" type="text/css">
+         <script type="text/javascript" src="./Assets/jquery.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/trac/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("#content").find("h1,h2,h3,h4,h5,h6").addAnchor("Link to this section");
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../stylesheets/biosamples_common_10.css">
+    <link rel="stylesheet" type="text/css" href="./Assets/ae_trac.css">
+  </head>
+ 
+  <body>
+        
+          <h2 id="RESTAPI">REST API</h2>
+<p>
+Biosamples exposes an API for external usage.
+<br>
+If you have any problem or suggestion please contact: <a class="mail-link" href="mailto:rpereira@ebi.ac.uk"><span class="icon">&nbsp;</span>rpereira@ebi.ac.uk</a>;
+</p>
+<p>
+This is an on-going work, so some parts are not yet implemented (security, error codes catalog, etc.), but it's already possible to have access to:
+</p>
+<ul><li>Information about a specific Group Accession;
+</li><li>Information about a specific Sample Accession;
+</li><li>Search Groups with paging support;
+</li><li>Search Samples inside a specific Group with paging support;
+</li></ul><p>
+You can consult the descriptions of each of those bellow, and you can always follow the "More details" link to know all the details about it.
+<br>
+For each service the follow information will be available:
+</p>
+<ul><li>Security;
+</li><li>Parameters;
+</li><li>Invocation example;
+</li><li>Response example;
+</li><li>Error codes;
+</li><li>XSD - Xml Schema definition;
+</li></ul><h3 id="AvailableServices">Available Services</h3>
+<ol><li>Group Accession (<a class="ext-link" href="http://%24server/biosamples/xml/group/$GROUPACCESSION"><span class="icon">&nbsp;</span>http://$SERVER/biosamples/xml/group/$GROUPACCESSION</a>)
+<ul><li>It returns all information about a SampleGroup;
+</li><li>If you specify the sampleslist argument with true value, it will also return a list with the Samples Accessions; 
+</li><li>E.g. <a class="ext-link" href="http://wwwdev.ebi.ac.uk/biosamples/xml/group/SAMEG82620"><span class="icon">&nbsp;</span>http://wwwdev.ebi.ac.uk/biosamples/xml/group/SAMEG82620</a>;
+</li><li><a class="wiki" href="GroupAccession.html">More details</a>;
+</li></ul></li></ol><ol start="2"><li>Sample Accession (<a class="ext-link" href="http://%24server/biosamples/xml/sample/$SAMPLEACCESSION"><span class="icon">&nbsp;</span>http://$SERVER/biosamples/xml/sample/$SAMPLEACCESSION</a>)
+<ul><li>It returns all information about a Sample;
+</li><li>E.g. <a class="ext-link" href="http://wwwdev.ebi.ac.uk/biosamples/xml/sample/SAME546131"><span class="icon">&nbsp;</span>http://wwwdev.ebi.ac.uk/biosamples/xml/sample/SAME546131</a>;
+</li><li><a class="wiki" href="SampleAccession.html">More details</a>;
+</li></ul></li></ol><ol start="3"><li>Search Sample Groups (<a class="ext-link" href="http://%24server/biosamples/xml/group/query=$QUERY"><span class="icon">&nbsp;</span>http://$SERVER/biosamples/xml/group/query=$QUERY</a>)
+<ul><li>It returns all the groups that match the query (e.g. <a class="ext-link" href="http://wwwdev.ebi.ac.uk/biosamples/xml/group/query=cancer"><span class="icon">&nbsp;</span>http://wwwdev.ebi.ac.uk/biosamples/xml/group/query=cancer</a>);
+</li><li>It is possible to use paging and sorting (e.g. <a class="ext-link" href="http://wwwdev.ebi.ac.uk/biosamples/xml/group/query=cancer&sortby=relevance&sortorder=descending&page=2&pagesize=50"><span class="icon">&nbsp;</span>http://wwwdev.ebi.ac.uk/biosamples/xml/group/query=cancer&amp;sortby=relevance&amp;sortorder=descending&amp;page=2&amp;pagesize=50</a>);
+</li><li>Always return a result summary information;
+<pre class="wiki">&lt;ResultQuery&gt;
+&lt;SummaryInfo&gt;
+&lt;Total&gt;7766&lt;/Total&gt;
+&lt;From&gt;51&lt;/From&gt;
+&lt;To&gt;100&lt;/To&gt;
+&lt;PageNumber&gt;2&lt;/PageNumber&gt;
+&lt;PageSize&gt;50&lt;/PageSize&gt;
+&lt;/SummaryInfo&gt;
+&lt;BioSampleGroup id="SAMEG72185"/&gt;
+&lt;BioSampleGroup id="SAMEG126084"/&gt;
+...
+&lt;/ResultQuery&gt;
+</pre></li><li><a class="wiki" href="GroupSearch.html">More details</a>;
+</li></ul></li></ol><ol start="4"><li>Search Samples inside a  Sample Group (<a class="ext-link" href="http://%24server/biosamples/xml/groupsamples/$SAMPLEGROUP/query=$QUERY"><span class="icon">&nbsp;</span>http://$SERVER/biosamples/xml/groupsamples/$SAMPLEGROUP/query=$QUERY</a>)
+<ul><li>It returns all the samples that are inside the <a class="missing wiki" href="http://bar:8080/trac/wiki/SampleGroup" rel="nofollow">SampleGroup?</a> parameter and also match the query(e.g. <a class="ext-link" href="http://wwwdev.ebi.ac.uk/biosamples/xml/groupsamples/SAMEG23004/query=cancer"><span class="icon">&nbsp;</span>http://wwwdev.ebi.ac.uk/biosamples/xml/groupsamples/SAMEG23004/query=cancer</a>);
+</li><li>It is possible to use paging (e.g. <a class="ext-link" href="http://wwwdev.ebi.ac.uk/biosamples/xml/groupsamples/SAMEG23004/query=cancer&page=3&pagesize=10"><span class="icon">&nbsp;</span>e.g.http://wwwdev.ebi.ac.uk/biosamples/xml/groupsamples/SAMEG23004/query=cancer&amp;page=3&amp;pagesize=10</a>);
+</li><li>Always return a result summary information;
+<pre class="wiki">&lt;ResultQuery&gt;
+&lt;SummaryInfo&gt;
+&lt;Total&gt;3316&lt;/Total&gt; 
+&lt;From&gt;21&lt;/From&gt;
+&lt;To&gt;40&lt;/To&gt;
+&lt;PageNumber&gt;2&lt;/PageNumber&gt;
+&lt;PageSize&gt;20&lt;/PageSize&gt;
+&lt;/SummaryInfo&gt;
+&lt;BioSample id="SAMEA477370"/&gt;
+&lt;BioSample id="SAMEA507158"/&gt;
+...
+&lt;/ResultQuery&gt;
+</pre></li><li><a class="wiki" href="SampleSearch.html">More details</a>;
+</li></ul></li></ol>
+        
+    
+</body></html>

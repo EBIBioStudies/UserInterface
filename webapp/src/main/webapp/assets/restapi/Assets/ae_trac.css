@@ -1,0 +1,67 @@
+body {
+  margin: 5px 20px 5px 20px;
+  background: url('ae_trac_bg_tile_dk.gif') repeat scroll;
+  border-top: 1px solid #666666;
+  border-left: 1px solid #666666;
+  border-right: 1px solid #666666;
+  border-bottom: 1px solid #666666;
+  font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  padding: 5px 5px 5px 5px;
+}
+
+#banner {
+  background-image: url('ae_trac_bg_tile.gif');
+  padding: 12px 5px 5px 7px;
+}
+
+#search {
+  margin-right: 6px;
+}
+
+#metanav {
+  margin-right: 0px;
+}
+
+#mainnav {
+  margin: 0px;
+  border-top: 1px solid #808080;
+  border-bottom: 1px solid #808080;
+  border-left: 0px none;
+  border-right: 0px none;
+}
+
+#main {
+  background: #FFFFFF none repeat scroll 0%;
+  padding: 5px 20px;
+}
+
+#footer {
+  background: #FFFFFF none repeat scroll 0%;
+  padding: 5px 10px 2px 5px;
+}
+
+table.listing {
+  /* table-layout: fixed; */
+}
+
+table.listing td {
+/*  white-space: nowrap; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+}
+
+table.listing .sel {
+  width: 30px;
+  text-align: center;
+}
+
+.fullrow td {
+  word-wrap: break-word;
+}
+
+pre {
+  white-space: pre-wrap; /* css-3 */
+  word-wrap: break-word;
+}

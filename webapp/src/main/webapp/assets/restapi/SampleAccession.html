@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0056)http://bar:8080/trac/wiki/ESD/NewGUI/API/SampleAccession -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>
+      BioSamples - API
+    </title>
+        <link rel="stylesheet" href="./Assets/trac.css" type="text/css">
+        <link rel="stylesheet" href="./Assets/wiki.css" type="text/css">
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/trac/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("#content").find("h1,h2,h3,h4,h5,h6").addAnchor("Link to this section");
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../stylesheets/biosamples_common_10.css">
+    <link rel="stylesheet" type="text/css" href="./Assets/ae_trac.css">
+  </head>
+  <body>
+          
+           <a class="ext-link" href="javascript:history.go(-1);">REST API</a> 
+          <h2 id="SampleAccession">Sample Accession</h2>
+<p>
+ 
+</p>
+<ul><li>It returns all information about a Sample;
+</li><li>E.g.    <a class="ext-link" href="http://wwwdev.ebi.ac.uk/biosamples/xml/sample/SAME546131"><span class="icon">&nbsp;</span>http://wwwdev.ebi.ac.uk/biosamples/xml/sample/SAME546131</a>;
+</li></ul><p>
+<br>
+</p>
+<h4 id="Authentication">Authentication</h4>
+<p>
+N/A
+</p>
+<p>
+<br>
+<br>
+</p>
+<h4 id="Arguments">Arguments</h4>
+<p>
+groupAccession (required)
+</p>
+<p>
+<br>
+<br>
+</p>
+<h4 id="ExampleRequest">Example Request</h4>
+<pre class="wiki">Get /xml/sample/SAME546131
+</pre><p>
+<br>
+<br>
+</p>
+<h4 id="ExampleResponse">Example Response</h4>
+<pre class="wiki">&lt;BioSample xmlns="http://www.ebi.ac.uk/biosamples/SampleGroupExport" id="SAME546131"&gt;
+&lt;Property class="Synonym" characteristic="false" comment="false" type="STRING"&gt;
+&lt;Value&gt;ApoE/PLGN, 129(B6)-Apoe&lt;tm1Bres&gt;Plg&lt;tm1Jld&gt;/CljH&lt;/Value&gt;
+&lt;/Property&gt;
+&lt;Property class="Allele Name" characteristic="false" comment="false" type="STRING"&gt;
+&lt;Value&gt;
+targeted mutation 1, Jan L Breslowtargeted mutation 1, Jay L Degen
+&lt;/Value&gt;
+&lt;/Property&gt;
+&lt;Property class="Material" characteristic="false" comment="false" type="STRING"&gt;
+&lt;Value&gt;sperm&lt;/Value&gt;
+&lt;/Property&gt;
+&lt;Property class="Name" characteristic="false" comment="false" type="STRING"&gt;
+&lt;Value&gt;129(B6)-Apoe&lt;tm1Bres&gt; Plg&lt;tm1Jld&gt;/CljH[cc]&lt;/Value&gt;
+&lt;/Property&gt;
+&lt;Property class="Allele Symbol" characteristic="false" comment="false" type="STRING"&gt;
+&lt;Value&gt;Apoe&lt;tm1Bres&gt;Plg&lt;tm1Jld&gt;&lt;/Value&gt;
+&lt;/Property&gt;
+&lt;Property class="Sample Accession" characteristic="false" comment="false" type="STRING"&gt;
+&lt;Value&gt;SAME546131&lt;/Value&gt;
+&lt;/Property&gt;
+&lt;Property class="Gene Name" characteristic="false" comment="false" type="STRING"&gt;
+&lt;Value&gt;apolipoprotein Eplasminogen&lt;/Value&gt;
+&lt;/Property&gt;
+&lt;/BioSample&gt;
+  
+</pre><p>
+<br>
+<br>
+</p>
+<h4 id="ErrorCodes">Error Codes</h4>
+<p>
+N/A
+</p>
+<p>
+<br>
+<br>
+</p>
+<h4 id="XSD-XmlSchemaDefinition">XSD - Xml Schema Definition</h4>
+<ul><li><a class="ext-link" href="http://wwwdev.ebi.ac.uk/biosamples/assets/xsd/BioSDSchema.xsd"><span class="icon">&nbsp;</span>http://wwwdev.ebi.ac.uk/biosamples/assets/xsd/BioSDSchema.xsd</a>
+</li></ul><p>
+<img src="./Assets/BioSDSchemaV2_BioSample.png" alt="BioSamplesSample XSD" title="BioSamplesSample XSD">
+</p>
+
+        
+        
+      </div>
+    
+</body></html>
