@@ -128,7 +128,7 @@
 			</td>
 
 			<td class="col_samples">
-				<div>
+				<!-- <div> -->
 					<!-- <xsl:value-of select="samples"></xsl:value-of> -->
 					<xsl:call-template name="highlight">
 						<xsl:with-param name="pText" select="string(samples)" />
@@ -136,7 +136,7 @@
 					</xsl:call-template>
 					<!-- <xsl:call-template name="highlight"> <xsl:with-param name="pText" 
 						select="count(Sample)"/> <xsl:with-param name="pFieldName"/> </xsl:call-template> -->
-				</div>
+				<!-- </div>-->
 			</td>
 
 

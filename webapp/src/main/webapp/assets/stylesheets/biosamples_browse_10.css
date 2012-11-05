@@ -300,7 +300,9 @@ vertical-align: top;
 }
 /* paging */
 
-
+.col_samples{
+	text-align: center;
+}
 
 
 
