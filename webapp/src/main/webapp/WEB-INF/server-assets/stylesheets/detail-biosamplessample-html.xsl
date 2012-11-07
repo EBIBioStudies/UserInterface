@@ -228,8 +228,8 @@
 
 	<xsl:template name="process_uri">
 		<xsl:param name="pValue" />
-		<a href="{.}" target="ext">
-			<xsl:value-of select="."></xsl:value-of>
+		<a href="{$pValue}" target="ext">
+			<xsl:value-of select="$pValue"></xsl:value-of>
 		</a>
 	</xsl:template>
 
