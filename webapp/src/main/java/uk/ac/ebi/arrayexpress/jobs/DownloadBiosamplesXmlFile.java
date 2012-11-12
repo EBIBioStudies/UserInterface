@@ -100,12 +100,12 @@ public class DownloadBiosamplesXmlFile {
                 log.debug("Call XMLDataExport URL"); //since=timestamp
                 URL website=null;
                 if(time!=0){
-                    website = new URL(url + "XMLDataExport?" + sessionCookieName +"=" + sessionKey  + "&since=" + time);    
-                    log.debug(url + "XMLDataExport?" + sessionCookieName +"=" + sessionKey  + "&since=" + time);
+                    website = new URL(url + "XMLDataExport?" + sessionCookieName +"=" + sessionKey  + "&oldFormat=true&since=" + time);    
+                    log.debug(url + "XMLDataExport?" + sessionCookieName +"=" + sessionKey  + "&oldFormat=true&since=" + time);
                 }
                 else{
-                    website = new URL(url + "XMLDataExport?" + sessionCookieName +"=" + sessionKey );
-                    log.debug(url + "XMLDataExport?" + sessionCookieName +"=" + sessionKey);
+                    website = new URL(url + "XMLDataExport?oldFormat=true&" + sessionCookieName +"=" + sessionKey );
+                    log.debug(url + "XMLDataExport?oldFormat=true&" + sessionCookieName +"=" + sessionKey);
                 }
                 	
 //                 ReadableByteChannel rbc = Channels.newChannel(website.openStream());
