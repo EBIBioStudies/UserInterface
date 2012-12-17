@@ -14,6 +14,11 @@
     <link rel="stylesheet" href="${interface.application.link.www_domain.inc}/css/userstyles.css" type="text/css"/>
     <script src="${interface.application.link.www_domain.inc}/js/contents.js" type="text/javascript"></script>
    
+
+
+ <%@ include file="WEB-INF/server-assets/html/mitigation_ebi.html" %>
+
+
    
    <script src="assets/scripts/jquery-1.4.2.min.js" type="text/javascript"></script>
 <script src="assets/scripts/jsdeferred.jquery-0.3.1.js"
@@ -38,16 +43,7 @@ body
 }
 
 
-#ebi_footer {
-    background-color: #DEDEDE;
-    border-top: 1px solid #BFBFBF;
-    bottom: 0;
-    height: 22px;
-    padding: 0 0 0 15px;
-    position: fixed;
-    width: 100%;
-    z-index: 2;
-}
+
 
 .biosd_query_area
 {
@@ -220,12 +216,11 @@ onBiosamplesStatsSuccess(xml)
 </script>
 ${interface.application.google.analytics}
 </head>
-<body class="${interface.application.body.class}" onload="if(navigator.userAgent.indexOf('MSIE') != -1) {document.getElementById('head').allowTransparency = true;}; updateBiosamplesStats();">
-		<div class="headerdiv" id="headerdiv" style="position:absolute; z-index: 1;">
-			<iframe src="${interface.application.link.www_domain.inc}/head.html" name="head" id="head" frameborder="0" marginwidth="0px" marginheight="0px" scrolling="no"  width="100%" style="position:absolute; z-index: 1; height: 57px;">Your browser does not support inline frames or is currently configured not to display inline frames. Content can be viewed at actual source page: http://www.ebi.ac.uk/inc/head.html</iframe>
+<body class="${interface.application.body.class}" onload="updateBiosamplesStats();">
 
-		</div>
-		<div class="contents" id="contents">
+ <%@ include file="WEB-INF/server-assets/html/header_ebi.html" %>
+		<div id="bs_contents_box_100pc">
+
 			<table class="contentspane" id="contentspane" summary="The main content pane of the page"  cellpadding="0" cellspacing="0">
 
 			<tr>
@@ -409,28 +404,17 @@ ${interface.application.google.analytics}
 </div>
 </div>
 </div>
+
+
 </td>
 </tr>
 </table>
 
 <!-- InstanceEndEditable -->
+ <%@ include file="WEB-INF/server-assets/html/footer_ebi.html" %>
 		</td>
 		</tr>
-		</table>		
-		<table class="footerpane" id="footerpane" summary="The main footer pane of the page" style="position: fixed; bottom:1px;">
-
-		<tr>
-			<td colspan ="4" class="footerrow">
-				<div class="footerdiv" id="footerdiv"  style="z-index:2;">
-					<iframe src="${interface.application.link.www_domain.inc}/foot.html" name="foot" frameborder="0" marginwidth="0px" marginheight="0px" scrolling="no"  height="22px" width="100%"  style="z-index:2;">Your browser does not support inline frames or is currently configured not to display inline frames. Content can be viewed at actual source page: http://www.ebi.ac.uk/inc/foot.html</iframe>
-
-				</div>
-			</td>
-		</tr>
-	  	</table>
-
-	<script src="${interface.application.link.www_domain.inc}/js/footer.js" type="text/javascript"></script> 
-	</div>
+		</table>	
 
 </body>
 </html>

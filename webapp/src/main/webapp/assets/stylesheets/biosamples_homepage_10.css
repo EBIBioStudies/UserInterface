@@ -35,11 +35,7 @@
 
 
 /* general page layout */
-* {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-}
+
 
 /* overrides for stooped EBI templates */
 table.contentspane {
@@ -56,11 +52,17 @@ table td.contentsarea {
 
 /* hack for position:fixed for stooped EBI footer */
 body {
-	background: #ffffff url(../images/empty.gif) fixed top;
+	/*background: #ffffff url(../images/empty.gif) fixed top;*/
     overflow: auto;
 }
 
 
+body {
+padding: 0;
+text-align: center;
+width: 96%;
+margin: 0 auto;
+}
 
 body.bs_curator {
 	background: #ffffdb url(../images/bs_curator.gif) no-repeat fixed 0 97%;
@@ -74,18 +76,7 @@ body.bs_dev_preview {
 background: white url(../images/bs_dev_bg.gif) repeat fixed top;
 }
 
-#ebi_footer {
-    background-color: #dedede;
-    border-top: 1px solid #bfbfbf;
-    z-index: 2;
-    position: fixed;
-    bottom: 0;
-    padding: 0 0 0 15px;
-    height: 22px;
-    width: 100%;
-    _position: absolute;
-    _top: expression(document.body.scrollTop+document.body.clientHeight-this.clientHeight-1);
-}
+
 
 /* specific property setters */
 .assign_font {

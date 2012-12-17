@@ -17,11 +17,35 @@
 
 /* hack for position:fixed for stooped EBI footer */
 
-
+/*
 body {
-	background: #ffffff url(../images/empty.gif) fixed top;
+	background: top;
     overflow: auto;
+    padding: 0;
+	width: 98%;
+	margin: 0 auto;
 }
+*/
+
+/* I'm redefining the EBI css because its the easy way to put the backgroud white*/
+/* 
+#browse_page_bgcolor {
+    background: white;
+    height: expression(document.body.clientHeight-147);
+}
+
+#browse_page_footer_bgcolor {
+    background: white;
+    height: 256;
+}
+*/
+
+div#footerdiv {
+background-color: white;
+}
+/* I'm redefining the EBI css because its the easy way to put the backgroud white*/
+
+
 
 /*
 html {
@@ -47,12 +71,13 @@ a:active {
     text-decoration: underline;
 }
 
-
+/*
 * {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
 }
+*/
 
 #ebi_footer {
     background-color: #dedede;
@@ -85,7 +110,17 @@ a:active {
     text-align: left;
 }
 
+#bs_contents_box_100pc {
+    /*width: 100%;*/
+    padding: 10px;
+    text-align: left;
+}
 
+#bs_contents_box_100pc  * {
+	 box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
 
 #bs_contents a:link,
 #bs_contents a:visited {

@@ -20,24 +20,17 @@ package uk.ac.ebi.arrayexpress.utils.saxon.search;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.PerFieldAnalyzerWrapper;
-import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.MatchAllDocsQuery;
-import org.apache.lucene.search.NumericRangeFilter;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Sort;
@@ -45,15 +38,10 @@ import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.TopFieldCollector;
 import org.apache.lucene.search.TotalHitCountCollector;
-import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xmldb.api.base.ResourceIterator;
-import org.xmldb.api.base.ResourceSet;
-import org.xmldb.api.base.XMLDBException;
-import org.xmldb.api.modules.XPathQueryService;
 
 import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
 import uk.ac.ebi.arrayexpress.utils.StringTools;
@@ -250,24 +238,11 @@ public abstract class AbstractIndexEnvironment {
 		totalRes.append("<content>");
 		Query query = info.getQuery();
 		try {
-			//logger.debug("test");
-			///ir = IndexReader.open(this.indexDirectory, true);
 			ir=getIndexReader();
-			//logger.debug("test");
-			// empty query returns everything
 			if (query instanceof BooleanQuery
 					&& ((BooleanQuery) query).clauses().isEmpty()) {
 				logger.info("Empty search, returned all [{}] documents",
 						getCountDocuments());
-				// I need to continue because e i need to sort the data, so I
-				// will create an empty query (this happens when I'm a curator
-				// and I dont have any search criteria)
-
-				// Term t = new Term(defaultField, "?");
-				// ((BooleanQuery) query).add(new BooleanClause(new
-				// WildcardQuery(
-				// t), BooleanClause.Occur.SHOULD));
-
 				// this is much more faster
 				query = new MatchAllDocsQuery();
 			}
@@ -289,7 +264,6 @@ public abstract class AbstractIndexEnvironment {
 					descending = true;
 				}
 			}
-
 		
 			// I have to test the sort field name. If it is a string i have to
 			// add "sort" to the name
@@ -371,14 +345,13 @@ public abstract class AbstractIndexEnvironment {
 
 			// I will execute the same query with or without Sortby parameter
 			// (in the last case the sort will be null)
+			///TopFieldCollector collectorAux = null;
 			TopFieldCollector collector = null;
 			int numHits = getCountDocuments() + 1;
-
-			// Filter filter= NumericRangeFilter.newIntRange("order",
-			// initialExp, null, true, true);
-
-			collector = TopFieldCollector.create(sort == null ? new Sort()
+collector = TopFieldCollector.create(sort == null ? new Sort()
 					: sort,
+		///	collectorAux = TopFieldCollector.create(sort == null ? new Sort()
+			///		: sort,
 			// TODO: rpe If im returning page 3 using pagesize of 50 i need to sort (3*50)
 					(page == 0 ? 1 : page + 1) * pageSize, false, // fillFields
 																	// - not
@@ -389,10 +362,13 @@ public abstract class AbstractIndexEnvironment {
 					false, // trackDocScores - need doc and score fields
 					false, // trackMaxScore - related to trackDocScores
 					sort == null); // should docs be in docId order?
+			
+			///TopFieldCollectorReference collector= new TopFieldCollectorReference(collectorAux);
 			isearcher.search(query, collector);
 			//I will use this Collector to know how much results do i have
 			long timeHits=System.nanoTime();
-			TotalHitCountCollector collector2 = new TotalHitCountCollector();
+			TotalHitCountCollector collector2 = new TotalHitCountCollector();		
+			///TotalHitCountCollectorReference collector2 = new TotalHitCountCollectorReference();
 			isearcher.search(query, collector2);
 			double ms = (System.nanoTime() - timeHits) / 1000000d;
 			logger.info("Number of Docs TotalHitCountCollector->" + collector2.getTotalHits() + "- TOTALHITS TOOK->" + ms );
@@ -402,38 +378,16 @@ public abstract class AbstractIndexEnvironment {
 			// hits= topDocs.scoreDocs;
 			hits = topDocs.scoreDocs;
 
-			// logger.info("Search of index [" + this.indexId
-			// + "] with query [{}] returned [{}] hits", query.toString(),
-			// hits.totalHits);
-
 			logger.info("Search of index [" + this.indexId
 					+ "] with query [{}] returned [{}] hits", query.toString(),
 					hits.length);
 
 			logger.info("Beginning of paging logic");
 
-			/*
-			 * // PAGING // I put this upper because I need it to create a
-			 * filter int pageSize = defaultPageSize; if
-			 * (map.containsKey("pagesize")) { pageSize =
-			 * Integer.parseInt(StringTools.arrayToString( map.get("pagesize"),
-			 * " ")); } else { pageSize = getDefaultPageSize();
-			 * map.put("pagesize", Integer.toString(pageSize)); }
-			 * 
-			 * int page = 0; if (map.containsKey("page")) { page =
-			 * Integer.parseInt(StringTools.arrayToString( map.get("page"),
-			 * " ")) - 1; }
-			 * 
-			 * int initialExp = page * pageSize; int finalExp = initialExp +
-			 * pageSize; // if (finalExp > hits.totalHits) { // finalExp =
-			 * hits.totalHits; // }
-			 */
 			if (finalExp > hits.length) {
 				finalExp = hits.length;
 			}
 
-			// List<String> combinedTotal = new ArrayList<String>();
-			// combinedTotal.add(String.valueOf(hits.totalHits));
 			List<String> combinedTotal = new ArrayList<String>();
 			combinedTotal.add(String.valueOf(totalHits));
 
@@ -454,12 +408,6 @@ public abstract class AbstractIndexEnvironment {
 				logger.debug("End of requesting data from xml database");
 			}
 
-			// this is now done in the queryDB function
-			// This function should be responsable for add extra parameters to
-			// the XsltInvocation
-			// addExtraParametersToXSLT(hits, isearcher, initialExp,
-			// finalExp,map);
-
 			isearcher.close();
 			///ir.close();
 		} catch (Exception x) {
@@ -477,30 +425,6 @@ public abstract class AbstractIndexEnvironment {
 		}
 		return totalRes.toString();
 	}
-/*
-	public String queryDB(ScoreDoc[] hits, int initialExp, int finalExp,
-			HttpServletRequestParameterMap map) throws IOException {
-		String ret = "";
-		IndexReader ir = null;
-		IndexSearcher isearcher = null;
-		try {
-			ir = IndexReader.open(this.indexDirectory, true);
-			isearcher = new IndexSearcher(ir);
-			ret = queryDB(hits, isearcher, initialExp, finalExp, map);
-			isearcher.close();
-			ir.close();
-		} catch (Exception x) {
-			logger.error("Caught an exception:", x);
-		} finally {
-			if (null != isearcher)
-				isearcher.close();
-			if (null != ir)
-				ir.close();
-		}
-
-		return ret;
-	}
-	/*
 
 	/**
 	 * @param hits this just represents a subset of the result
@@ -515,33 +439,6 @@ public abstract class AbstractIndexEnvironment {
 	abstract public String queryDB(ScoreDoc[] hits, IndexSearcher isearcher,
 			int initialExp, int finalExp, HttpServletRequestParameterMap map)
 			throws Exception;
-
-	/*
-	 * public String queryDB(TopDocs hits, int initialExp, int finalExp,
-	 * HttpServletRequestParameterMap map) throws IOException { String ret = "";
-	 * IndexReader ir = null; IndexSearcher isearcher = null; try { ir =
-	 * IndexReader.open(this.indexDirectory, true); isearcher = new
-	 * IndexSearcher(ir); ret = queryDB(hits, isearcher, initialExp, finalExp,
-	 * map); isearcher.close(); ir.close(); } catch (Exception x) {
-	 * logger.error("Caught an exception:", x); } finally { if (null !=
-	 * isearcher) isearcher.close(); if (null != ir) ir.close(); }
-	 * 
-	 * return ret; }
-	 * 
-	 * 
-	 * 
-	 * // this is specific for each type of document // TODO rpe abstract public
-	 * String queryDB(TopDocs hits, IndexSearcher isearcher, int initialExp, int
-	 * finalExp, HttpServletRequestParameterMap map) throws Exception;
-	 */
-	// this is specific for each type of document (I will need this for the
-	// experiments to add the total number of assays)
-	// TODO rpe (this is not the best way to do it) (for now this logis is also
-	// included in the function QueryDB)
-	// abstract public void addExtraParametersToXSLT(TopDocs hits, IndexSearcher
-	// isearcher,
-	// int initialExp, int finalExp, HttpServletRequestParameterMap map) throws
-	// Exception;
 
 	/*
 	 * (non-Javadoc)

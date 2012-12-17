@@ -93,12 +93,19 @@ padding: 5px 5px 5px 10px;
     overflow: hidden;
 }
 
+#bs_title {
+    font-size: 18px;
+    color: #066;
+}
 
 #bs_results_table th, #bs_results_table td {
 font-size: 11px;
 padding: 3px 5px;
 vertical-align: top;
 }
+
+
+
 
 .col_title{
 white-space: nowrap;
@@ -140,6 +147,18 @@ width:100%;
 
 
 
+
+#bs_table_databases{
+    border-spacing: 0;
+    padding: 0;
+	spacing: 0;
+}
+
+#bs_table_databases td {
+	vertical-align: middle;
+	padding: 0;
+}
+
 #bs_keywords_fset {
     margin: 0;
     padding: 0;
@@ -171,11 +190,7 @@ width:100%;
 
 
 
-#bs_contents_box_100pc {
-    width: 100%;
-    padding: 20px;
-    text-align: left;
-}
+
 
 
 /** font assignment **/

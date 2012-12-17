@@ -3,9 +3,6 @@
  */
 package uk.ac.ebi.arrayexpress.utils.saxon.search;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.IndexSearcher;
@@ -13,16 +10,13 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
-import org.xmldb.api.base.Database;
 import org.xmldb.api.base.ResourceIterator;
 import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XPathQueryService;
 
 import uk.ac.ebi.arrayexpress.app.Application;
-import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 import uk.ac.ebi.arrayexpress.components.XmlDbConnectionPool;
 import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
 
@@ -120,19 +114,24 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 			}
 			// I'm browsing a sample group
 			else {
+				
 
 				set = service
-						.query("<biosamples><all>{for $x in "
+						.query("<biosamples><all><Samples>{for $x in "
 								+ totalRes.toString()
 								+ "  let $y:=//Sample[@id=($x)]"
-								+ "  return <Samples>{$y[../@id='"
+								+ "  return $y[../@id='"
 								+ map.get("samplegroup")[0]
-								+ "']} </Samples>} "
+								+ "'] } "
 								+ " { let $att:= /Biosamples/SampleGroup[@id='"
 								+ map.get("samplegroup")[0]
 								+ "']"
 								+ " return <SampleAttributes>{$att/SampleAttributes/*} </SampleAttributes>}"
-								+ "</all></biosamples>");
+								+ " { let $att:= /Biosamples/SampleGroup[@id='"
+								+ map.get("samplegroup")[0]
+										+ "']"
+								+ " return <DatabaseGroup name=\"{$att/attribute/value[../@class='Databases']//attribute/value[../@class='Database Name']}\"  uri=\"{$att/attribute/value[../@class='Databases']//attribute/value[../@class='Database URI']}\"/>}" 
+								+ "</Samples></all></biosamples>");
 			}
 
 			double ms = (System.nanoTime() - time) / 1000000d;

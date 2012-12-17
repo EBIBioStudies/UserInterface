@@ -102,6 +102,19 @@
 		<to type="forward">/servlets/query/biosamplessample/browse-biosamplessample/xml?samplegroup=$1&amp;keywords=$3</to>
 	</rule>
 
+
+<!-- map browse.html + index.html to *page*.jsp - the main ideia is to allow me to include EBI header and footer -->
+<rule>
+		<from>index.html</from>
+		<to type="forward">index.jsp</to>
+	</rule>
+<rule>
+		<from>browse.html</from>
+		<to type="forward">browse.jsp</to>
+	</rule>
+<!-- map browse.html + index.html to *page*.jsp - the main ideia is to allow me to include EBI header and footer -->
+
+	
 	<!-- rest API -->
 	
 	

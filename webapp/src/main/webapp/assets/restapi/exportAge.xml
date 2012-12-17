@@ -1,0 +1,1797 @@
+<Biosamples>
+<SampleGroup id="SAMEG126438AAAA">
+  <attribute class="Submission Title" classDefined="true" dataType="STRING">
+    <value>Transcription profiling of barley tissues from multiple strains</value>
+  </attribute>
+  <attribute class="Submission Identifier" classDefined="true" dataType="STRING">
+    <value>GAE-AFMX-3</value>
+  </attribute>
+  <attribute class="Submission Description" classDefined="true" dataType="STRING">
+    <value>Gene Expression in Barley [Hordeum vulgare]</value>
+  </attribute>
+  <attribute class="Submission Version" classDefined="true" dataType="STRING">
+    <value>1.2</value>
+  </attribute>
+  <attribute class="Submission Reference Layer" classDefined="true" dataType="BOOLEAN">
+    <value>false</value>
+  </attribute>
+  <attribute class="Submission Release Date" classDefined="true" dataType="STRING">
+    <value>2006/04/06</value>
+  </attribute>
+  <attribute class="Submission Modification Date" classDefined="true" dataType="STRING">
+    <value>2012/10/01</value>
+  </attribute>
+  <attribute class="Name" classDefined="true" dataType="BOOLEAN">
+    <value>Other Group</value>
+  </attribute>
+  <attribute class="Group Accession" classDefined="true" dataType="BOOLEAN">
+    <value>SAMEG126438</value>
+  </attribute>
+  <attribute class="Organizations" classDefined="true" dataType="OBJECT">
+    <value>
+      <object id="Org0" class="Organization" classDefined="true">
+        <attribute class="Organization Name" classDefined="true" dataType="STRING">
+          <value>Scottish Crop Research Institute</value>
+        </attribute>
+        <attribute class="Organization Address" classDefined="true" dataType="STRING"/>
+        <attribute class="Organization URI" classDefined="true" dataType="STRING"/>
+        <attribute class="Organization Email" classDefined="true" dataType="STRING"/>
+        <attribute class="Organization Role" classDefined="true" dataType="STRING">
+          <value>investigator</value>
+        </attribute>
+      </object>
+      <object id="Org1" class="Organization" classDefined="true">
+        <attribute class="Organization Name" classDefined="true" dataType="STRING"/>
+        <attribute class="Organization Address" classDefined="true" dataType="STRING"/>
+        <attribute class="Organization URI" classDefined="true" dataType="STRING"/>
+        <attribute class="Organization Email" classDefined="true" dataType="STRING"/>
+        <attribute class="Organization Role" classDefined="true" dataType="STRING"/>
+      </object>
+      <object id="Org2" class="Organization" classDefined="true">
+        <attribute class="Organization Name" classDefined="true" dataType="STRING">
+          <value>Scottish Crop Research Institute</value>
+        </attribute>
+        <attribute class="Organization Address" classDefined="true" dataType="STRING"/>
+        <attribute class="Organization URI" classDefined="true" dataType="STRING"/>
+        <attribute class="Organization Email" classDefined="true" dataType="STRING"/>
+        <attribute class="Organization Role" classDefined="true" dataType="STRING">
+          <value>submitter</value>
+        </attribute>
+      </object>
+    </value>
+  </attribute>
+  <attribute class="Persons" classDefined="true" dataType="OBJECT">
+    <value>
+      <object id="Per0" class="Person" classDefined="true">
+        <attribute class="Person Last Name" classDefined="true" dataType="STRING">
+          <value>Druka</value>
+        </attribute>
+        <attribute class="Person Initials" classDefined="true" dataType="STRING"/>
+        <attribute class="Person First Name" classDefined="true" dataType="STRING">
+          <value>Ilze</value>
+        </attribute>
+        <attribute class="Person Email" classDefined="true" dataType="STRING">
+          <value>idruka@scri.sari.ac.uk</value>
+        </attribute>
+        <attribute class="Person Role" classDefined="true" dataType="STRING">
+          <value>investigator</value>
+        </attribute>
+      </object>
+      <object id="Per1" class="Person" classDefined="true">
+        <attribute class="Person Last Name" classDefined="true" dataType="STRING">
+          <value>unknown</value>
+        </attribute>
+        <attribute class="Person Initials" classDefined="true" dataType="STRING"/>
+        <attribute class="Person First Name" classDefined="true" dataType="STRING">
+          <value>unknown</value>
+        </attribute>
+        <attribute class="Person Email" classDefined="true" dataType="STRING"/>
+        <attribute class="Person Role" classDefined="true" dataType="STRING"/>
+      </object>
+      <object id="Per2" class="Person" classDefined="true">
+        <attribute class="Person Last Name" classDefined="true" dataType="STRING">
+          <value>Druka</value>
+        </attribute>
+        <attribute class="Person Initials" classDefined="true" dataType="STRING"/>
+        <attribute class="Person First Name" classDefined="true" dataType="STRING">
+          <value>Arnis</value>
+        </attribute>
+        <attribute class="Person Email" classDefined="true" dataType="STRING">
+          <value>adruka@scri.sari.ac.uk</value>
+        </attribute>
+        <attribute class="Person Role" classDefined="true" dataType="STRING">
+          <value>submitter</value>
+        </attribute>
+      </object>
+    </value>
+  </attribute>
+  <attribute class="Publications" classDefined="true" dataType="OBJECT">
+    <value>
+      <object id="Pub0" class="Publication" classDefined="true">
+        <attribute class="Publication PubMed ID" classDefined="true" dataType="STRING">
+          <value>16547597</value>
+        </attribute>
+        <attribute class="Publication DOI" classDefined="true" dataType="STRING">
+          <value>16547597</value>
+        </attribute>
+      </object>
+    </value>
+  </attribute>
+  <attribute class="Term Sources" classDefined="true" dataType="OBJECT">
+    <value>
+      <object id="NCBI Taxonomy" class="Term Source" classDefined="true">
+        <attribute class="Term Source Name" classDefined="true" dataType="STRING">
+          <value>NCBI Taxonomy</value>
+        </attribute>
+        <attribute class="Term Source URI" classDefined="true" dataType="STRING">
+          <value>http://www.ncbi.nlm.nih.gov/taxonomy/</value>
+        </attribute>
+        <attribute class="Term Source Version" classDefined="true" dataType="STRING"/>
+      </object>
+    </value>
+  </attribute>
+  <attribute class="Databases" classDefined="true" dataType="OBJECT">
+    <value>
+      <object id="Dat0" class="Database" classDefined="true">
+        <attribute class="Database Name" classDefined="true" dataType="STRING">
+          <value>ArrayExpress</value>
+        </attribute>
+        <attribute class="Database ID" classDefined="true" dataType="STRING">
+          <value>E-AFMX-3</value>
+        </attribute>
+        <attribute class="Database URI" classDefined="true" dataType="STRING">
+          <value>http://www.ebi.ac.uk/arrayexpress/experiments/E-AFMX-3</value>
+        </attribute>
+      </object>
+    </value>
+  </attribute>
+  <Sample groupId="SAMEG126438" id="SAMEA2995473">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-32(ROO_MX_B_38)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995473</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling root</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>root</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995474">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-4(COL_MX_A_16)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995474</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>coleoptile</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995475">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-55(INF_MX_C_45)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995475</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>immature inflorescence</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>flag leaf ligule/collar just visible</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>inflorescence</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995476">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-18(CAR10_MX_A_58)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995476</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>caryopsis</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>early milk</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 DAP caryopsis</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995477">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-43(COL_GP_C_13)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995477</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>coleoptile</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995478">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-13(INF_MX_A_43)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995478</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>immature inflorescence</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>flag leaf ligule/collar just visible</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>inflorescence</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995479">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-23(GEM_GP_B_11)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995479</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>embryo from germinating seed (coleoptyle and roots removed)</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>hypocotyl</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995480">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-31(CRO_MX_B_35)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995480</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>stem and crown</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling crown</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995481">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-34(INF_MX_B_44)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995481</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>immature inflorescence</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>flag leaf ligule/collar just visible</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>inflorescence</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995482">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-15(PST_MX_A_49)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995482</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>pistil</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>1-2 days before anthesis</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995483">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-63(END22_MX_C_69)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995483</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>22 DAP endosperm</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>soft dough</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>seed coat  and endosperm</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995484">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-16(BRC_MX_A_52)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995484</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>bracts</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>1-2 days before anthesis</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>palea and glumes</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>lemma</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995485">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-36(PST_MX_B_50)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995485</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>pistil</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>1-2 days before anthesis</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995486">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-30(LEA_GP_B_32)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995486</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling leaf</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>vegetative shoot</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995487">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-22(COL_GP_B_10)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995487</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>coleoptile</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995488">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-17(CAR5_MX_A_55)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995488</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>5 DAP caryopsis</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>kernl watery ripe</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>caryopsis</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995489">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-46(COL_MX_C_22)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995489</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>coleoptile</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995490">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-47(GEM_MX_C_23)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995490</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>embryo from germinating seed (coleoptyle and roots removed)</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>hypocotyl</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995491">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-25(COL_MX_B_19)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995491</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>coleoptile</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995492">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-29(ROO_GP_B_29)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995492</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling root</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>root</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995493">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-6(RAD_MX_A_18)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995493</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>seminal root</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995494">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-50(ROO_GP_C_30)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995494</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling root</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>root</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995495">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-26(GEM_MX_B_20)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995495</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>embryo from germinating seed (coleoptyle and roots removed)</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>hypocotyl</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995496">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-12(LEA_MX_A_40)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995496</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>vegetative shoot</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling leaf</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995497">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-48(RAD_MX_C_24)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995497</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>seminal root</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995498">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-1(COL_GP_A_7)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995498</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>coleoptile</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995499">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-61(CAR16_MX_C_63)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995499</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>caryopsis</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>late milk</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>16 DAP caryopsis</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995500">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-40(CAR16_MX_B_62)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995500</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>16 DAP caryopsis</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>late milk</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>caryopsis</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995501">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-8(ROO_GP_A_28)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995501</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling root</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>root</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995502">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-42(END22_MX_B_68)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995502</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>22 DAP endosperm</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>soft dough</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>seed coat  and endosperm</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995503">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-59(CAR5_MX_C_57)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995503</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>5 DAP caryopsis</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>kernel watery ripe</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>caryopsis</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995504">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-51(LEA_GP_C_33)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995504</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling leaf</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>vegetative shoot</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995505">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-37(BRC_MX_B_53)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995505</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>palea and  glumes</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>1-2 days before anthesis</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>bracts</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>lemma</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995506">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-39(CAR10_MX_B_59)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995506</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>caryopsis</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>early milk</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 DAP caryopsis</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995507">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-3(RAD_GP_A_9)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995507</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>seminal root</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995508">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-41(DEM22_MX_B_65)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995508</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>embryo</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>soft dough</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>22 DAP embryo</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995509">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-52(CRO_MX_C_36)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995509</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>stem and crown</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling crown</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995510">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-9(LEA_GP_A_31)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995510</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling leaf</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>vegetative shoot</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995511">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-7(CRO_GP_A_25)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995511</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>stem and crown</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling crown</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995512">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-11(ROO_MX_A_37)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995512</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling root</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>root</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995513">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-10(CRO_MX_A_34)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995513</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>stem and crown</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling crown</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995514">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-2(GEM_GP_A_8)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995514</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>hypocotyl</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>embryo from germinating seed (coleoptyle and roots removed)</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995515">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-14(ANT_MX_A_46)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995515</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>anther</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>1-2 days before anthesis</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>anthers</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995516">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-35(ANT_MX_B_47)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995516</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>anther</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>1-2 days before anthesis</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>anthers</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995517">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-58(BRC_MX_C_54)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995517</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>bracts</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>1-2 days before anthesis</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>palea and  glumes</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>lemma</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995518">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-33(LEA_MX_B_41)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995518</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>vegetative shoot</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling leaf</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995519">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-57(PST_MX_C_51)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995519</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>pistil</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>1-2 days before anthesis</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995520">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-28(CRO_GP_B_26)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995520</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>stem and crown</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling crown</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995521">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-62(DEM22_MX_C_66)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995521</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>embryo</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>soft dough</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>22 DAP embryo</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995523">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-27(RAD_MX_B_21)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995523</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>seminal root</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995522">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-49(CRO_GP_C_27)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995522</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>stem and crown</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling crown</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995524">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-19(CAR16_MX_A_61)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995524</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>16 DAP caryopsis</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>late milk</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>caryopsis</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995525">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-54(LEA_MX_C_42)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995525</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling leaf</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>vegetative shoot</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995526">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-24(RAD_GP_B_12)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995526</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>seminal root</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995527">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-38(CAR5_MX_B_56)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995527</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>5 DAP caryopsis</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>kernl watery ripe</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>caryopsis</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995528">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-5(GEM_MX_A_17)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995528</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>hypocotyl</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>embryo from germinating seed (coleoptyle and roots removed)</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995529">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-53(ROO_MX_C_39)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995529</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>root</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>first leaf unfolded</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 cm seedling root</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995530">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-56(ANT_MX_C_48)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995530</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>anther</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>1-2 days before anthesis</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>anthers</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995531">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-44(RAD_GP_C_15)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995531</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>hypocotyl</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>embryo from germinating seed (coleoptyle and roots removed)</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995533">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-60(CAR10_MX_C_60)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995533</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>caryopsis</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>early milk</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>10 DAP caryopsis</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995532">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-45(GEM_GP_C_14)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995532</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>seminal root</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Golden Promise</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>coleoptile emerged from seed</value>
+    </attribute>
+  </Sample>
+  <Sample groupId="SAMEG126438" id="SAMEA2995534">
+    <attribute class="Name" classDefined="false" dataType="STRING">
+      <value>source BioSource:0404-20(DEM22_MX_A_64)</value>
+    </attribute>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING">
+      <value>SAMEA2995534</value>
+    </attribute>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>embryo</value>
+    </attribute>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING">
+      <value>Morex</value>
+    </attribute>
+    <attribute class="Organism" classDefined="false" dataType="STRING">
+      <value>Hordeum vulgare</value>
+    </attribute>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING">
+      <value>Arnis Druka</value>
+    </attribute>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING">
+      <value>soft dough</value>
+    </attribute>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING">
+      <value>22 DAP embryo</value>
+    </attribute>
+  </Sample>
+  <SampleAttributes>
+    <attribute class="characteristic[genotype]" classDefined="false" dataType="STRING"/>
+    <attribute class="Name" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[developmental stage]" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[organism part]" classDefined="false" dataType="STRING"/>
+    <attribute class="Sample Accession" classDefined="false" dataType="STRING"/>
+    <attribute class="Sample Description" classDefined="false" dataType="STRING"/>
+    <attribute class="characteristic[BioSourceProvider]" classDefined="false" dataType="STRING"/>
+    <attribute class="Organism" classDefined="false" dataType="STRING"/>
+  </SampleAttributes>
+</SampleGroup>
+</Biosamples>

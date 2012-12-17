@@ -34,6 +34,7 @@
  */
 
 
+
 #bs_contents_container {
     font-size: 11px;
 }
@@ -60,6 +61,12 @@
     height: 120px;
     padding: 5px;
     overflow: hidden;
+}
+
+#bs_keywords_filters_area * {
+	 box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
 #bs_query {
@@ -184,12 +191,6 @@ vertical-align: top;
 }
 
 
-
-#bs_contents_box_100pc {
-    width: 100%;
-    padding: 20px;
-    text-align: left;
-}
 
 
 /** font assignment **/

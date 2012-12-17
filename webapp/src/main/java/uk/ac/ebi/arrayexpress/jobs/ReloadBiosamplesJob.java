@@ -66,35 +66,18 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 			
 				  //Thread.currentThread().sleep(30000);//sleep for 1000 ms
 			
-				  int updateDatabaseTimestamp = Application.getInstance()
-					.getPreferences().getInteger("bs.reloadBiosamplesDatabase");
-			logger.debug("reloadBiosamplesDatabase->" + updateDatabaseTimestamp);
+			   boolean updateActive = Application.getInstance()
+						.getPreferences().getBoolean("bs.xmlupdate.active");
+				logger.debug("Is Reloading Active?->" + updateActive);
 
 
-			if (updateDatabaseTimestamp == -1) {
+			if (!updateActive) {
 				logger.error("ReloadBiosamplesJob is trying to execute and the configuration does not allow that");
-				this.getApplication().sendEmail("BIOSMAPLES: WARNING","ReloadBiosamplesJob is trying to execute and the configuration does not allow that!");
+				this.getApplication().sendEmail("BIOSAMPLES: WARNING","ReloadBiosamplesJob is trying to execute and the configuration does not allow that!");
 				//throw new Exception("ReloadBiosamplesJob is trying to execute and the configuration does not allow that!");
 				return;
 			}
 			
-			Long time=null;
-			if (updateDatabaseTimestamp == 0) {
-				time = new Long(0);
-			} else {
-				Calendar date = new GregorianCalendar();
-				// reset hour, minutes, seconds and millis
-				date.set(Calendar.HOUR_OF_DAY, 0);
-				date.set(Calendar.MINUTE, 0);
-				date.set(Calendar.SECOND, 0);
-				date.set(Calendar.MILLISECOND, 0);
-				// logger.debug("today->" + date.getTimeInMillis());
-				//date.add(Calendar.DAY_OF_MONTH, -1);
-				// logger.debug("today -2 days->" + date.getTimeInMillis());
-
-				time = date.getTimeInMillis();
-			}
-
 
 			// I will create a backup directory, where I will backup the Actual Setup directory, where I will put the new biosamples.xml and where I will creste a new SetupDirectory based on the new biosamples.xml 
 			String setupDir = Application.getInstance().getPreferences()
@@ -124,7 +107,12 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 			}
 
 
-			DownloadBiosamplesXmlFile dxml = new DownloadBiosamplesXmlFile();
+			//DownloadBiosamplesXmlFileFromAGE dxml = new DownloadBiosamplesXmlFileFromAGE();
+			//I need to know which type of biosample updting process am I using
+			String typeBioSampleUpdate = Application.getInstance().getPreferences()
+					.getString("bs.xmlupdate.type");
+			logger.debug("Type of Biosamples updating process->" + typeBioSampleUpdate);
+			IDownloadBiosamplesXmlFile dxml=DownloadBiosamplesXmlFileFactory.createDownloadBiosamplesXmlFile(typeBioSampleUpdate);
 			File xmlDir= new File(backDir.getAbsolutePath() + "/XmlDownload" );
 			if (xmlDir.mkdir()) {
 				logger.info("XmlDownload  directory was created in [{}]",
@@ -136,7 +124,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				throw new Exception("XmlDownload  directory was NOT created in " + xmlDir.getAbsolutePath());
 			}
 			String downloadDirectory= xmlDir.getAbsolutePath();
-			boolean downloadOk = dxml.downloadXml(downloadDirectory, time);
+			boolean downloadOk = dxml.downloadXml(downloadDirectory);
 
 			if (downloadOk) {
 							

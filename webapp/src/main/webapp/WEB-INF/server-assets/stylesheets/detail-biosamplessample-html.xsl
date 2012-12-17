@@ -23,7 +23,7 @@
 
 	<xsl:param name="queryid" />
 	<xsl:param name="keywords" />
-	<xsl:param name="id" />
+	<xsl:param name="accession" />
 
 	<xsl:param name="userid" />
 
@@ -40,7 +40,6 @@
 		<xsl:value-of select="$basepath" />
 	</xsl:variable>
 
-	<xsl:variable name="vBrowseMode" select="not($id)" />
 
 	<xsl:variable name="vkeywords" select="$keywords" />
 
@@ -56,8 +55,8 @@
 			<xsl:call-template name="page-header">
 				<xsl:with-param name="pTitle">
 					<xsl:value-of
-						select="if (not($vBrowseMode)) then concat(upper-case($id), ' | ') else ''" />
-					<xsl:text>Bio Samples | ArrayExpress Archive | EBI</xsl:text>
+						select="if ($accession) then concat(upper-case($accession), ' | ') else ''" />
+					<xsl:text>BioSample | EBI</xsl:text>
 				</xsl:with-param>
 
 				<xsl:with-param name="pExtraCode">
@@ -138,8 +137,13 @@
 				<div class="detail_table">
 					<table id="bs_results_tablesamplegroupdetail">
 
-
-						<xsl:for-each select="attribute">
+						<td colspan="2">
+							<div id="bs_title">
+								Sample Accession
+								<xsl:copy-of select="attribute/value[../@class='Sample Accession']" />
+							</div>
+						</td>
+						<xsl:for-each select="attribute[@class!='Sample Accession']">
 							<tr>
 								<td class="col_title">
 									<b>

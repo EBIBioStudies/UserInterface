@@ -11,7 +11,6 @@
 
 
 
-
 	<xsl:param name="page" />
 	<xsl:param name="pagesize" />
 
@@ -189,24 +188,12 @@
 		<xsl:param name="id" />
 		<xsl:param name="sampleGroup" />
 		<table id="bs_results_tablesamplegroupdetail">
-			<tr>
-				<td class="col_title">
-					<b>Name:</b>
-				</td>
-				<td>
-					<xsl:call-template name="highlight">
-						<xsl:with-param name="pText"
-							select="attribute/value[../@class='Name']" />
-						<xsl:with-param name="pFieldName" select="'name'" />
-					</xsl:call-template>
-				</td>
-			</tr>
-			<tr>
-				<td class="col_title">
-					<b>Group Accession:</b>
-				</td>
-				<td>
+		<tr>
+				<td colspan="2">
+				<div id="bs_title" >
+				Group Accession
 					<xsl:choose>
+								<!-- test="string-length($vkeywords)>0"> -->
 						<xsl:when
 							test="string-length($vkeywords)>0 and contains($vkeywords,'id:')">
 							<xsl:call-template name="highlight">
@@ -221,7 +208,19 @@
 
 					</xsl:choose>
 					<!-- -->
-
+				</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="col_title">
+					<b>Name:</b>
+				</td>
+				<td>
+					<xsl:call-template name="highlight">
+						<xsl:with-param name="pText"
+							select="attribute/value[../@class='Name']" />
+						<xsl:with-param name="pFieldName" select="'name'" />
+					</xsl:call-template>
 				</td>
 			</tr>
 			<tr>
@@ -265,7 +264,7 @@
 					</xsl:call-template>
 				</td>
 			</tr>
-			<tr>
+<!-- 			<tr>
 				<td class="col_title">
 					<b>Submission Version:</b>
 				</td>
@@ -277,7 +276,7 @@
 					</xsl:call-template>
 
 				</td>
-			</tr>
+			</tr> -->
 			<tr>
 				<td class="col_title">
 					<b>Submission Release Date:</b>
@@ -323,9 +322,9 @@
 							<b>Databases:</b>
 						</td>
 						<td>
-							<!-- <xsl:call-template name="highlight"> <xsl:with-param name="pText" 
+							<xsl:call-template name="highlight"> <xsl:with-param name="pText" 
 								select="string-join(attribute/value[../@class='Databases']//value, ', ')" 
-								/> <xsl:with-param name="pFieldName" select="'databases'" /> </xsl:call-template> -->
+								/> <xsl:with-param name="pFieldName" select="'databases'" /> </xsl:call-template>
 
 							<xsl:call-template name="process_database">
 								<xsl:with-param name="pValue"
@@ -382,7 +381,7 @@
 			</xsl:choose>
 
 
-			<xsl:choose>
+		 	<xsl:choose>
 				<xsl:when test="count(attribute/value[../@class='Persons'])>0">
 
 					<tr>
@@ -405,7 +404,7 @@
 				</xsl:when>
 			</xsl:choose>
 			
-			<xsl:choose>
+		 	<xsl:choose>
 				<xsl:when test="count(attribute/value[../@class='Publications'])>0">
 
 					<tr>
@@ -419,14 +418,14 @@
 							</xsl:call-template>
 
 
-							<!-- <xsl:call-template name="highlight"> <xsl:with-param name="pText" 
+						<!-- 	<xsl:call-template name="highlight"> <xsl:with-param name="pText" 
 								select="string-join(attribute/value[../@class='Persons']//value, ', ')" /> 
-								<xsl:with-param name="pFieldName" select="'persons'" /> </xsl:call-template> -->
-
+								<xsl:with-param name="pFieldName" select="'persons'" /> </xsl:call-template>
+ -->
 						</td>
 					</tr>
 				</xsl:when>
-			</xsl:choose>
+			</xsl:choose>  
 
 			<tr>
 				<td class="col_title">
@@ -501,6 +500,11 @@
 										</xsl:if>
 
 									</xsl:for-each>
+									
+									<!--  I will not allow to sort -->
+									<th class="bs_results_accession">
+										<a href="javascipt:void">Link</a>
+									</th>
 								</tr>
 								<!-- <tr>
 									<th class="bs_results_accession sortable bs_results_Sample-Accession"
@@ -601,7 +605,7 @@
 
 	<xsl:template name="process_person">
 		<xsl:param name="pValue" />
-		<xsl:for-each select="$pValue">
+		<xsl:for-each select="$pValue/object">
 
 			<xsl:choose>
 				<xsl:when test="count(.//attribute/value[../@class='Person Email'])>0">
@@ -611,11 +615,11 @@
 						<xsl:with-param name="pText" select="$vStringContacts" />
 						<xsl:with-param name="pFieldName" select="'persons'" />
 					</xsl:call-template>
-					<xsl:choose>
+<!-- 					<xsl:choose>
 						<xsl:when test="position()&lt;last()">
 							,
-						</xsl:when>
-					</xsl:choose>
+						</xsl:when> 
+					</xsl:choose>-->
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:variable name="vStringContacts"
@@ -624,35 +628,15 @@
 						<xsl:with-param name="pText" select="$vStringContacts" />
 						<xsl:with-param name="pFieldName" select="'persons'" />
 					</xsl:call-template>
-					<xsl:choose>
+	<!-- 				<xsl:choose>
 						<xsl:when test="position()&lt;last()">
 							,
 						</xsl:when>
-					</xsl:choose>
+					</xsl:choose> -->
 
 				</xsl:otherwise>
-
 			</xsl:choose>
 
-
-		</xsl:for-each>
-	</xsl:template>
-
-
-
-	<xsl:template name="process_database">
-		<xsl:param name="pValue" />
-		<xsl:for-each select="$pValue">
-
-			<xsl:call-template name="highlight">
-				<xsl:with-param name="pText"
-					select="concat('Name: ', .//attribute/value[../@class='Database Name'], '; ID: ', .//attribute/value[../@class='Database ID'])" />
-				<xsl:with-param name="pFieldName" select="'databases'" />
-			</xsl:call-template>
-			; URI:
-			<a href="{.//attribute/value[../@class='Database URI']}" target="ext">
-				<xsl:value-of select=".//attribute/value[../@class='Database URI']"></xsl:value-of>
-			</a>
 			<xsl:choose>
 				<xsl:when test="position()&lt;last()">
 					<br />
@@ -663,7 +647,50 @@
 
 
 
+	<xsl:template name="process_database">
+		<xsl:param name="pValue" />
+		<xsl:for-each select="$pValue">
+			<xsl:variable name="bdName" select="lower-case(.//attribute/value[../@class='Database Name'])"></xsl:variable>
+			<table id="bs_table_databases"><tr>
+			<xsl:choose>
+				<xsl:when test="$bdName =('arrayexpress','ena sra','dgva','pride') and not(.//attribute/value[../@class='Database URI']='')">
+					<td><a href="{.//attribute/value[../@class='Database URI']}" target="ext">
+					  <img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{.//attribute/value[../@class='Database Name']} Link" border="0" title="{$bdName}"/>
+					  </a> &nbsp;
+					 </td>
+				</xsl:when>
+				<xsl:when test="not(.//attribute/value[../@class='Database URI']='')">
+					<td><a href="{.//attribute/value[../@class='Database URI']}" target="ext">
+					  <img src="{$basepath}/assets/images/generic_logo.gif" border="0" title="{$bdName}"/>
+					  </a> &nbsp;
+					 </td>				
+				</xsl:when>
+			</xsl:choose>
+			<td>
+			<xsl:call-template name="highlight">
+				<xsl:with-param name="pText" select="concat('Name: ', .//attribute/value[../@class='Database Name'], '; ID: ', .//attribute/value[../@class='Database ID'])" />
+				<xsl:with-param name="pFieldName" select="'databases'" />
+			</xsl:call-template>
+			; URI:
+			<a href="{.//attribute/value[../@class='Database URI']}" target="ext">
+				<xsl:value-of select=".//attribute/value[../@class='Database URI']"></xsl:value-of>
+			</a>
+			</td>
+			<xsl:choose>
+				<xsl:when test="position()&lt;last()">
+					<br />
+				</xsl:when>
+			</xsl:choose>
+			</tr></table>
+		</xsl:for-each>
+	</xsl:template>
 
+<!-- <td vertical-align="middle">&nbsp;Name: <xsl:copy-of select=".//attribute/value[../@class='Database Name']"/>; ID: <xsl:copy-of select=".//attribute/value[../@class='Database ID']"/>; URI:
+			<a href="{.//attribute/value[../@class='Database URI']}" target="ext">
+				<xsl:value-of select=".//attribute/value[../@class='Database URI']"></xsl:value-of>
+			</a>
+ -->
+ 
 <xsl:template name="process_publications">
 		<xsl:param name="pValue" />
 		<xsl:for-each select="$pValue">
@@ -684,7 +711,7 @@
 
 	<xsl:template name="process_organization">
 		<xsl:param name="pValue" />
-		<xsl:for-each select="$pValue">
+		<xsl:for-each select="$pValue/object">
 
 			<xsl:call-template name="highlight">
 				<xsl:with-param name="pText"
@@ -708,7 +735,7 @@
 
 	<xsl:template name="process_termsource">
 		<xsl:param name="pValue" />
-		<xsl:for-each select="$pValue">
+		<xsl:for-each select="$pValue/object">
 
 			<xsl:call-template name="highlight">
 				<xsl:with-param name="pText"

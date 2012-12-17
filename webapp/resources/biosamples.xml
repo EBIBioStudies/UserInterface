@@ -14,6 +14,7 @@
 	</app>
 	
 
+
 	<bs>
 		<setupDirectory>${sys:java.io.tmpdir}/${interface.application.index.directory}
 		</setupDirectory>
@@ -25,6 +26,7 @@
 		<!-- -1 means that the update is not possible; 0 means complete update; 1 means last day update -->
 		<reloadBiosamplesDatabase>${interface.application.pref.biosamples.update.timestamp}</reloadBiosamplesDatabase>
 		
+
 		
 		<xmldatabase>
 			<driver>${interface.application.db.xml.driver}</driver>
@@ -37,11 +39,14 @@
 			</connectionstring> -->
 			<!-- <dbname>${interface.application.db.xml.connection.dbname}</dbname> -->
 		</xmldatabase>
-	
-	
+
+
 	<!-- define all the variables that we need to update the biosamples Database -->
 	<xmlupdate>
+		<active>${interface.application.db.xml.update.active}</active>
+		<type>${interface.application.db.xml.update.type}</type>
 		<url>${interface.application.db.xml.update.url}</url>
+		<timestamp>${interface.application.db.xml.update.timestamp}</timestamp>
 		<username>${interface.application.db.xml.update.username}</username>
 		<password>${interface.application.db.xml.update.password}</password>
 		<cookie>${interface.application.db.xml.update.cookie}</cookie>	
@@ -77,6 +82,8 @@
 		</efo>
 
 
+
+
 <!-- location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" -->
 
 		<index id="biosamplesgroup"
@@ -110,9 +117,10 @@
 				<field name="identifier" title="by Identifier" type="string"
 					path="attribute/value[../@class='Submission Identifier']" analyze="true"
 					store="false" escape="false" />
-				<field name="version" title="by Versios" type="string"
+					<!-- version is not visible on the GUI - [PT:39779087] -->
+				<!-- <field name="version" title="by Version" type="string"
 					path="attribute/value[../@class='Submission Version']" analyze="true"
-					store="false" escape="false" />
+					store="false" escape="false" /> -->
 				<field name="modificationdate" title="by Modification date" type="string"
 					path="attribute/value[../@class='Submission Update Date']"
 					analyze="true" store="false" escape="false" />
@@ -193,7 +201,7 @@
 					path="attribute/value[../@class='Sample Accession']" analyze="true"
 					store="false" escape="false" sortfields="0" />
 	
-	
+
 			
 				<!-- dynamic sort -->				
 				<field name="attributes" type="string" path="attribute"

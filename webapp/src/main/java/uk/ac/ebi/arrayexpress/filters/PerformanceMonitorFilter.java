@@ -34,7 +34,7 @@ public class PerformanceMonitorFilter implements javax.servlet.Filter {
 		chain.doFilter(request, resp);
 	
 		double ms = (System.nanoTime() - time) / 1000000d;
-		logger.info("<RS>The request [{}] took [{}]ms <RE>\n", methInvoked, ms);
+		logger.info("<RT>The request [{}] took [{}]ms <RT>\n", methInvoked, ms);
 	}
 
 	@Override

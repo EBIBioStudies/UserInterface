@@ -152,9 +152,42 @@
 						</xsl:choose>
 
 					</td>
+
+
+
 				</xsl:if>
 
 			</xsl:for-each>
+
+			<td>
+				<xsl:variable name="bdName" select="lower-case(../DatabaseGroup/@name)"></xsl:variable>
+				<xsl:variable name="bdNameSample" select="lower-case($vSample/attribute/value[../@class='Database Name'])"></xsl:variable>
+				<xsl:choose>
+				   <!-- firts I will see if the database is defined inside the Sample -->
+				   <xsl:when
+						test="$bdNameSample =('arrayexpress','ena sra','dgva','pride') and not($vSample/attribute/value[../@class='Database URI']='')">
+						<a href="{$vSample/attribute/value[../@class='Database URI']}" target="ext">
+							<img src="{$basepath}/assets/images/{$bdNameSample}_logo.gif" alt="{$bdName} Link" title="{$bdName}"
+								valign="middle" border="0"/>
+						</a>
+					</xsl:when>
+					<xsl:when
+						test="not($bdNameSample='') and not($vSample/attribute/value[../@class='Database URI']='')">
+						<a href="{$vSample/attribute/value[../@class='Database URI']}" target="ext"><img src="{$basepath}/assets/images/generic_logo.gif" border="0" title="{$bdNameSample}"/></a>
+					</xsl:when>
+					<xsl:when
+						test="$bdName =('arrayexpress','ena sra','dgva','pride') and not(../DatabaseGroup/@uri='')">
+						<a href="{../DatabaseGroup/@uri}" target="ext">
+							<img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{$bdName} Link" title="{$bdName}"
+								valign="middle" border="0"/>
+						</a>
+					</xsl:when>
+					<xsl:when test="not (../DatabaseGroup/@uri='')">
+						<a href="{../DatabaseGroup/@uri}" target="ext"><img src="{$basepath}/assets/images/generic_logo.gif" border="0" title="{$bdName}"/></a>
+					</xsl:when>
+				</xsl:choose>
+			</td>
+
 			<!-- <xsl:for-each select="tokenize($pAttributes,' ')"> <xsl:if test=".!='Sample-Accession'"> 
 				<td> <xsl:variable name="token" select="."></xsl:variable> <xsl:variable 
 				name="value" select="$vSample/attribute/value[../@class=replace($token, '-' 
@@ -184,7 +217,8 @@
 				<xsl:with-param name="pText" select="./text()[last()]" />
 				<xsl:with-param name="pFieldName" select="''" />
 			</xsl:call-template>
-			<xsl:if test="position()!=last()">,
+			<xsl:if test="position()!=last()">
+				,
 			</xsl:if>
 		</xsl:for-each>
 	</xsl:template>
