@@ -26,7 +26,7 @@ import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 
 //TODO: need to complete this testCase
-public class SynonymAnalyzerTest{ //extends TestCase {
+public class SynonymAnalyzerExample{ //extends TestCase {
 	private IndexSearcher searcher;
 	private static SynonymAnalyzer synonymAnalyzer = new SynonymAnalyzer(
 			new SynonymEngineExample());
