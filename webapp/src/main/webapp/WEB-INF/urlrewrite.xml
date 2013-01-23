@@ -62,7 +62,7 @@
 		<from>^/reload-all</from>
 		<to type="forward">/servlets/control/reload-all</to>
 	</rule>
-	
+
 	<!-- Jobs-rule -->
 	<rule>
 		<from>^/reload-efo</from>
@@ -82,8 +82,28 @@
 	<!-- Metadata Information-rule -->
 
 
-	<!-- rest API -->
 
+	<!-- rest API for deprecated APIS-->
+	<rule>
+		<from>^/xml/v(.*)/group/(SAM(.*))/?$</from>
+		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/xml_v$1?id=$2</to>
+	</rule>
+	<rule>
+		<from>^/xml/v(.*)/group/query=(.*)?$</from>
+		<to type="forward">/servlets/query/biosamplesgroup/browse-biosamplesgroup/xml_v$1?keywords=$2</to>
+	</rule>
+
+	<rule>
+		<from>^/xml/v(.*)/sample/(SAM(.*))/?$</from>
+		<to type="forward">/servlets/query/biosamplessample/biosamplessample/xml_v$1?accession=$2</to>
+	</rule>
+	<rule>
+		<from>^/xml/v(.*)/groupsamples/(SAM(.*))/query=(.*)?$</from>
+		<to type="forward">/servlets/query/biosamplessample/browse-biosamplessample/xml_v$1?samplegroup=$2&amp;keywords=$4</to>
+	</rule>
+	<!-- rest API -->
+	
+	<!-- rest API -->
 	<rule>
 		<from>^/xml/group/(SAM(.*))/?$</from>
 		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/xml?id=$1</to>
@@ -92,32 +112,34 @@
 		<from>^/xml/group/query=(.*)?$</from>
 		<to type="forward">/servlets/query/biosamplesgroup/browse-biosamplesgroup/xml?keywords=$1</to>
 	</rule>
-	
+
 	<rule>
 		<from>^/xml/sample/(SAM(.*))/?$</from>
 		<to type="forward">/servlets/query/biosamplessample/biosamplessample/xml?accession=$1</to>
 	</rule>
-<rule>
+	<rule>
 		<from>^/xml/groupsamples/(SAM(.*))/query=(.*)?$</from>
 		<to type="forward">/servlets/query/biosamplessample/browse-biosamplessample/xml?samplegroup=$1&amp;keywords=$3</to>
 	</rule>
 
 
-<!-- map browse.html + index.html to *page*.jsp - the main ideia is to allow me to include EBI header and footer -->
-<rule>
+	<!-- map browse.html + index.html to *page*.jsp - the main ideia is to allow 
+		me to include EBI header and footer -->
+	<rule>
 		<from>index.html</from>
 		<to type="forward">index.jsp</to>
 	</rule>
-<rule>
+	<rule>
 		<from>browse.html</from>
 		<to type="forward">browse.jsp</to>
 	</rule>
-<!-- map browse.html + index.html to *page*.jsp - the main ideia is to allow me to include EBI header and footer -->
+	<!-- map browse.html + index.html to *page*.jsp - the main ideia is to allow 
+		me to include EBI header and footer -->
 
-	
+
 	<!-- rest API -->
-	
-	
+
+
 	<!-- return the original xml -->
 
 	<rule>
@@ -129,12 +151,12 @@
 		<!-- im using the biosamplesgroup-xml.xsl - I just want to make a copy -->
 		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/original?keywords=$1</to>
 	</rule>
-	
+
 	<rule>
 		<from>^/original/sample/(SAM(.*))/?$</from>
 		<to type="forward">/servlets/query/biosamplessample/biosamplessample/original?accession=$1</to>
 	</rule>
-<rule>
+	<rule>
 		<from>^/original/groupsamples/(SAM(.*))/query=(.*)?$</from>
 		<!-- im using the biosamplessample-xml.xsl - I just want to make a copy -->
 		<to type="forward">/servlets/query/biosamplessample/biosamplessample/original?samplegroup=$1&amp;keywords=$3</to>

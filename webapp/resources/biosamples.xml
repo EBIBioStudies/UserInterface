@@ -14,7 +14,6 @@
 	</app>
 	
 
-
 	<bs>
 		<setupDirectory>${sys:java.io.tmpdir}/${interface.application.index.directory}
 		</setupDirectory>
@@ -26,7 +25,6 @@
 		<!-- -1 means that the update is not possible; 0 means complete update; 1 means last day update -->
 		<reloadBiosamplesDatabase>${interface.application.pref.biosamples.update.timestamp}</reloadBiosamplesDatabase>
 		
-
 		
 		<xmldatabase>
 			<driver>${interface.application.db.xml.driver}</driver>
@@ -39,8 +37,8 @@
 			</connectionstring> -->
 			<!-- <dbname>${interface.application.db.xml.connection.dbname}</dbname> -->
 		</xmldatabase>
-
-
+	
+	
 	<!-- define all the variables that we need to update the biosamples Database -->
 	<xmlupdate>
 		<active>${interface.application.db.xml.update.active}</active>
@@ -51,6 +49,7 @@
 		<password>${interface.application.db.xml.update.password}</password>
 		<cookie>${interface.application.db.xml.update.cookie}</cookie>	
 	</xmlupdate>
+	
 	
 		<!-- job -->
 		<reload-all>
@@ -80,8 +79,6 @@
 				<location>${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-index/efo</location>
 			</index>
 		</efo>
-
-
 
 
 <!-- location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" -->
@@ -166,8 +163,8 @@
 	  <document path="/Biosamples/SampleGroup/Sample"  				 
 				 defaultField="keywords">
 				
-				
-				<field name="keywords" type="string" path="string-join(.//text(), ' ')"
+				<!-- I also want to search in the attributes name, so I will add it to the keywords -->
+				<field name="keywords" type="string" path="concat(string-join(.//attribute/@class, ' '),string-join(.//text(), ' '))"
 					analyze="true"
 					analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer"
 					autocompletion="true" store="false" escape="false" />
@@ -201,7 +198,7 @@
 					path="attribute/value[../@class='Sample Accession']" analyze="true"
 					store="false" escape="false" sortfields="0" />
 	
-
+	
 			
 				<!-- dynamic sort -->				
 				<field name="attributes" type="string" path="attribute"

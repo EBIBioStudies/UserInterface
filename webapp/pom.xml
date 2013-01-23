@@ -121,9 +121,12 @@
 					<interface.application.db.xml.update.url>/Users/rpslpereira/Downloads/exportAge.xml</interface.application.db.xml.update.url> -->
 
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
-				<interface.application.db.xml.update.type>url</interface.application.db.xml.update.type>
-				<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?server=h2&amp;amp;samples=EMBED&amp;amp;schema=AGE1&amp;amp;showAttributes=true</interface.application.db.xml.update.url>
 
+				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
+				<interface.application.db.xml.update.url>/Users/rpslpereira/Apps/apache-tomcat-6.0.33/temp/Backups/backup_1358867487733763000/XmlDownload/biosamples.xml</interface.application.db.xml.update.url>
+
+				<!-- <interface.application.db.xml.update.type>url</interface.application.db.xml.update.type> 
+					<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?server=dev&amp;amp;samples=EMBED&amp;amp;schema=AGE1&amp;amp;showAttributes=true</interface.application.db.xml.update.url> -->
 
 				<!-- <interface.application.pref.biosamples.update.timestamp>0</interface.application.pref.biosamples.update.timestamp> 
 					<interface.application.pref.reload-all.update.schedule>0 0 12 * * ?</interface.application.pref.reload-all.update.schedule> 

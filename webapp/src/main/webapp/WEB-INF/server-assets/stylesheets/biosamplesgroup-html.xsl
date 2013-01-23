@@ -693,7 +693,7 @@
  
 <xsl:template name="process_publications">
 		<xsl:param name="pValue" />
-		<xsl:for-each select="$pValue">
+		<xsl:for-each select="$pValue/object">
 
 			<xsl:call-template name="highlight">
 				<xsl:with-param name="pText"
