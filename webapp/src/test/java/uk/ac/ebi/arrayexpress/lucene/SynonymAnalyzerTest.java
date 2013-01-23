@@ -25,10 +25,11 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 
-public class SynonymAnalyzerTest extends TestCase {
+//TODO: need to complete this testCase
+public class SynonymAnalyzerTest{ //extends TestCase {
 	private IndexSearcher searcher;
 	private static SynonymAnalyzer synonymAnalyzer = new SynonymAnalyzer(
-			new TestSynonymEngine());
+			new SynonymEngineExample());
 
 	public void setUp() throws Exception {
 		//RAMDirectory directory = new RAMDirectory();

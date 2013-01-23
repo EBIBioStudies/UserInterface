@@ -2,7 +2,7 @@ package uk.ac.ebi.arrayexpress.lucene;
 
 import java.util.HashMap;
 
-public class TestSynonymEngine implements SynonymEngine {
+public class SynonymEngineExample implements SynonymEngine {
     private static HashMap map = new HashMap();
     static {
       map.put("quick", new String[] {"fast", "speedy"});
