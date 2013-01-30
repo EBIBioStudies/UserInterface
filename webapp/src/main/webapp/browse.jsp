@@ -1,3 +1,4 @@
+<%@ page import="java.net.*" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="en">
 <head>
@@ -7,7 +8,7 @@
 <meta name="no-email-collection"
 	content="http://www.unspam.com/noemailcollection/" />
 
-<title>BioSamples | EBI</title>
+<title>BioSamples &lt; EMBL-EBI</title>
 
 <link rel="stylesheet"
 	href="${interface.application.link.www_domain.inc}/css/contents.css"
@@ -25,7 +26,7 @@
 	type="text/css" /> -->
 
 
- <%@ include file="WEB-INF/server-assets/html/mitigation_ebi.html" %>
+<%@ include file="WEB-INF/server-assets/html/mitigation_ebi.html"%>
 
 
 <link rel="stylesheet"
@@ -67,72 +68,79 @@ ${interface.application.google.analytics}
 
 <body class="${interface.application.body.class}">
 
- <%@ include file="WEB-INF/server-assets/html/header_ebi.html" %>
-	<!-- <div id="browse_page_bgcolor"> -->	
+	<%@ include file="WEB-INF/server-assets/html/header_ebi.html"%>
+	<!-- <div id="browse_page_bgcolor"> -->
 
-		<div id="bs_contents_box_100pc">
-			<div id="bs_navi">
-				<a href="http://www.ebi.ac.uk/">EBI</a> &gt; <a
-					href="${interface.application.base.path}">BioSamples</a>
-			</div>
-			<!-- </div> -->
-			<div id="bs_keywords_filters_area">
-
-
-				<div id="bs_keywords_filters_box">
+	<div id="bs_contents_box_100pc">
+		<div id="bs_navi">
+			<a href="http://www.ebi.ac.uk/">EBI</a> &gt; <a
+				href="${interface.application.base.path}">BioSamples</a>
+		</div>
+		<!-- </div> -->
+		<div id="bs_keywords_filters_area">
 
 
-
-					<div class="form_outer">
-						<div class="form_top">
-							<div class="form_bottom">
-								<div class="form_left">
-									<div class="form_right">
-										<div class="form_bottom_left">
-											<div class="form_bottom_right">
-												<div class="form_top_left">
-													<div class="form_top_right">
-														<div id="bs_query_box">
-															<form id="bs_query_form" method="get"
-																action="browse.html">
-																<table border="0">
-																	<tr>
-																		<td>
-																			<fieldset id="bs_keywords_fset">
-																				<label for="bs_keywords_field">Query
-																					BioSample Database at EBI [<a
-																					href="javascript:aeClearField('#bs_keywords')">clear</a>]
-																				</label> <input id="bs_keywords_field" type="text"
-																					name="keywords" value="" maxlength="200"
-																					class="bs_assign_font" autocomplete="off" />
+			<div id="bs_keywords_filters_box">
 
 
-																			</fieldset>
+
+				<div class="form_outer">
+					<div class="form_top">
+						<div class="form_bottom">
+							<div class="form_left">
+								<div class="form_right">
+									<div class="form_bottom_left">
+										<div class="form_bottom_right">
+											<div class="form_top_left">
+												<div class="form_top_right">
+													<div id="bs_query_box">
+														<form id="bs_query_form" method="get" action="browse.html">
+															<table border="0">
+																<tr>
+																	<td colspan="4" style="font-size: 11px">Search BioSample
+																			Database at EBI [<a
+																			href="javascript:aeClearField('#bs_keywords_field')">clear</a>]
+																	</td>
+																</tr>
+																<tr>
+																	<td valign="bottom">
+																		<fieldset id="bs_keywords_fset"> 
+																			<input id="bs_keywords_field" type="text"
+																				name="keywords" value="" maxlength="200"
+																				class="bs_assign_font" autocomplete="off" />
+																		</fieldset> 
 																		</td>
-																		<td valign="middle" style="font-size: 11px">Sort
-																			by: <select id="sortby" name="sortby" disabled>
-																				<option value="">Relevance</option>
-																				<option value="id">Accession</option>
-																				<option value="description">Description</option>
-																				<option value="samples">Samples</option>
-																		</select>
-																		</td>
-																		<td align="right"><span
-																			class="${interface.application.metadata.class}"><a
-																				href="metadata?class=${interface.application.body.class}"
-																				target="ext">Metadata</a></span></td>
-																	</tr>
-																</table>
+																		<td valign="bottom">
+																		<div id="bs_submit_box">
+																			<input id="bs_query_submit" type="submit"
+																				value="Search" />
+																		</div>
+																	</td>
+																	<td valign="middle" style="font-size: 11px">Sort
+																		by: <select id="sortby" name="sortby" disabled>
+																			<option value="">Relevance</option>
+																			<option value="id">Accession</option>
+																			<option value="description">Description</option>
+																			<option value="samples">Samples</option>
+																	</select>
+																	</td>
+																	<td valign="bottom" align="right"><span
+																		class="${interface.application.metadata.class}"><a
+																			href="metadata?class=${interface.application.body.class}"
+																			target="ext">Metadata</a></span></td>
+																</tr>
+																<tr>
+																	<td colspan="3" style="font-size: 11px">Examples:
+																		<a href="browse.html?keywords=leukemia">leukemia</a>, <a href="browse.html?keywords=<%=URLEncoder.encode("ArrayExpress AND \"Mus musculus\"","UTF-8")%>">ArrayExpress AND "Mus musculus"</a>
+																	</td>
+															</table>
 
-																<div id="bs_submit_box">
-																	<input id="bs_query_submit" type="submit" value="Query" />
-																</div>
-																<div id="bs_results_stats">
-																	<div id="bs_results_stats_fromto"></div>
-																	<div id="bs_results_pager"></div>
-																</div>
-															</form>
-														</div>
+
+															<div id="bs_results_stats">
+																<div id="bs_results_stats_fromto"></div>
+																<div id="bs_results_pager"></div>
+															</div>
+														</form>
 													</div>
 												</div>
 											</div>
@@ -144,44 +152,44 @@ ${interface.application.google.analytics}
 					</div>
 				</div>
 			</div>
+		</div>
 
 
 
-			<div id="bs_results_area">
-				<table id="bs_results_table" border="0" cellpadding="0"
-					cellspacing="0">
-					<thead>
-						<tr>
-							<th class="bs_results_accession sortable bs_results_id"
-								id="bs_results_header_id"><a href="javascript:aeSort('id')"
-								title="Click to sort by accession"><div
-										class="table_header_inner">Accession</div></a> <!-- <img
+		<div id="bs_results_area">
+			<table id="bs_results_table" border="0" cellpadding="0"
+				cellspacing="0">
+				<thead>
+					<tr>
+						<th class="bs_results_accession sortable bs_results_id"
+							id="bs_results_header_id"><a href="javascript:aeSort('id')"
+							title="Click to sort by accession"><div
+									class="table_header_inner">Accession</div></a> <!-- <img
 								src="/arrayexpress/assets/images/mini_arrow_up.gif" width="12"
 								height="16" alt="^"> --></th>
-							<th
-								class="bs_results_description sortable bs_results_description"
-								id="bs_results_header_description"><a
-								href="javascript:aeSort('description')"
-								title="Click to sort by description"><div
-										class="table_header_inner">Description</div></a></th>
-							<th class="bs_results_samples sortable bs_results_samples"
-								id="bs_results_header_samples"><a
-								href="javascript:aeSort('samples')"
-								title="Click to sort by accession"><div
-										class="table_header_inner">Samples</div></a></th>
-						</tr>
-					</thead>
-					<tbody id="bs_results_tbody">
+						<th class="bs_results_description sortable bs_results_description"
+							id="bs_results_header_description"><a
+							href="javascript:aeSort('description')"
+							title="Click to sort by description"><div
+									class="table_header_inner">Description</div></a></th>
+						<th class="bs_results_samples sortable bs_results_samples"
+							id="bs_results_header_samples"><a
+							href="javascript:aeSort('samples')"
+							title="Click to sort by accession"><div
+									class="table_header_inner">Samples</div></a></th>
+					</tr>
+				</thead>
+				<tbody id="bs_results_tbody">
 
-					</tbody>
-				</table>
+				</tbody>
+			</table>
 
-			</div>
-			</div>
-			
-<!-- <div id="browse_page_footer_bgcolor"> -->
- <%@ include file="WEB-INF/server-assets/html/footer_ebi.html" %>
-<!--  </div>
+		</div>
+	</div>
+
+	<!-- <div id="browse_page_footer_bgcolor"> -->
+	<%@ include file="WEB-INF/server-assets/html/footer_ebi.html"%>
+	<!--  </div>
  </div> -->
 </body>
 </html>

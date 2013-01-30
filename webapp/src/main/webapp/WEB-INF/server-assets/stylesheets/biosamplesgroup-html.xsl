@@ -68,8 +68,8 @@
 			<xsl:call-template name="page-header">
 				<xsl:with-param name="pTitle">
 					<xsl:value-of
-						select="if (not($vBrowseMode)) then concat(upper-case($id), ' | ') else ''" />
-					<xsl:text>BioSample | EBI</xsl:text>
+						select="if (not($vBrowseMode)) then concat(upper-case($id), ' &lt; ') else ''" />
+					<xsl:text>BioSamples &lt; EMBL-EBI</xsl:text>
 				</xsl:with-param>
 
 				<xsl:with-param name="pExtraCode">

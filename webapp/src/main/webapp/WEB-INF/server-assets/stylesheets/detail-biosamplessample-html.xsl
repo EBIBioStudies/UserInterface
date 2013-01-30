@@ -55,8 +55,8 @@
 			<xsl:call-template name="page-header">
 				<xsl:with-param name="pTitle">
 					<xsl:value-of
-						select="if ($accession) then concat(upper-case($accession), ' | ') else ''" />
-					<xsl:text>BioSample | EBI</xsl:text>
+						select="if ($accession) then concat(upper-case($accession), ' &lt; ') else ''" />
+					<xsl:text>BioSamples &lt; EMBL-EBI</xsl:text>
 				</xsl:with-param>
 
 				<xsl:with-param name="pExtraCode">
