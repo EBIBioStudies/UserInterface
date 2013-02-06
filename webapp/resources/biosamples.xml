@@ -12,12 +12,15 @@
 			</smtp>
 		</reports>
 	</app>
-	
+
 
 	<bs>
+		<globalSetupDirectory>${interface.application.global.setup.directory}
+		</globalSetupDirectory>
 		<setupDirectory>${sys:java.io.tmpdir}/${interface.application.index.directory}
 		</setupDirectory>
-		<backupDirectory>${sys:java.io.tmpdir}/Backups</backupDirectory>
+		<backupDirectory>${interface.application.global.backup.directory}</backupDirectory>
+		<!-- <backupDirectory>${sys:java.io.tmpdir}/Backups</backupDirectory> -->
 		<!-- <downloadDirectory>${sys:java.io.tmpdir}/DownloadXml</downloadDirectory> -->
 		<buildLuceneIndexes>${interface.application.lucene.indexes.build}
 		</buildLuceneIndexes>
@@ -49,6 +52,7 @@
 		<password>${interface.application.db.xml.update.password}</password>
 		<cookie>${interface.application.db.xml.update.cookie}</cookie>	
 	</xmlupdate>
+
 	
 	
 		<!-- job -->
@@ -86,6 +90,8 @@
 		<index id="biosamplesgroup"
 			location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes"
 			defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">		
+		
+		
 		
 		
 		
