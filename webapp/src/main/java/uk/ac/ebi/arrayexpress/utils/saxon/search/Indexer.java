@@ -372,12 +372,13 @@ public class Indexer {
 						// /reader = new StringReader(xml);
 						StringBuilder xml = new StringBuilder();
 						xml.append((String) iterid.nextResource().getContent());
-						// logger.debug(xml.toString());
+						
+						logger.debug(xml.toString());
 						reader = new StringReader(xml.toString());
 						source = config.buildDocument(new StreamSource(reader));
 
-						// logger.debug("XML DB->[{}]",
-						// PrintUtils.printNodeInfo((NodeInfo) source, config));
+//						 logger.debug("XML DB->[{}]",
+//						 PrintUtils.printNodeInfo((NodeInfo) source, config));
 						Document d = new Document();
 
 						xp2 = new XPathEvaluator(source.getConfiguration());
