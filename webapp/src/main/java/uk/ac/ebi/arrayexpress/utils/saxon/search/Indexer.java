@@ -373,7 +373,7 @@ public class Indexer {
 						StringBuilder xml = new StringBuilder();
 						xml.append((String) iterid.nextResource().getContent());
 						
-						logger.debug(xml.toString());
+						//logger.debug(xml.toString());
 						reader = new StringReader(xml.toString());
 						source = config.buildDocument(new StreamSource(reader));
 
