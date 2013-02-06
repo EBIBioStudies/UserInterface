@@ -89,6 +89,11 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 					.getPreferences().getString("bs.backupDirectory");
 			logger.debug("backupDirectory->" + backupDirectory);
 
+		
+			String globalSetupDir = Application.getInstance()
+					.getPreferences().getString("bs.globalSetupDirectory");
+			logger.debug("globalSetupDirectory->" + globalSetupDir);
+			
 			// this variable will be used in the creation of the bakup
 			// directory anda in the creation od the database backup
 			Long tempDir = System.nanoTime();
@@ -176,6 +181,17 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				if (success2) {
 					logger.info("file was successfully renamed [{}]!!!",
 							setupDirectory.getAbsolutePath());
+					//need to remove the globalSetupDirectory e copy the new one to there
+					File globalSetupDirectory = new File(globalSetupDir);
+					if(globalSetupDirectory.exists()){
+						FileUtils.forceDelete(globalSetupDirectory);
+						FileUtils.copyDirectory(setupDirectory, globalSetupDirectory);
+					}
+					else{
+						logger.error("globalSetupDirectory doesnt exist!! [{}]!!!",
+								globalSetupDirectory.getAbsolutePath());
+					}
+					
 				}
 				else {
 					logger.error("file was not successfully renamed [{}]!!!",

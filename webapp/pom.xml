@@ -35,7 +35,8 @@
 
 		<interface.application.pref.files.prefix>bs</interface.application.pref.files.prefix>
 		<interface.application.index.directory>Setup</interface.application.index.directory>
-
+		<interface.application.global.setup.directory>${sys:catalina.base}/deploy/GlobalSetup/Setup</interface.application.global.setup.directory>
+		<interface.application.global.backup.directory>${sys:catalina.base}/deploy/GlobalSetup/Backups</interface.application.global.backup.directory>
 		<interface.application.pref.reload-all.update.schedule />
 		<interface.application.pref.reload-all.update.interval></interface.application.pref.reload-all.update.interval>
 		<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
@@ -121,13 +122,14 @@
 					<interface.application.db.xml.update.url>/Users/rpslpereira/Downloads/exportAge.xml</interface.application.db.xml.update.url> -->
 
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
+ 
+ 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
+				<interface.application.db.xml.update.url>/Users/rpslpereira/Apps/apache-tomcat-6.0.33/temp_05022013/Backups/backup_1359978165466909000/XmlDownload/biosamples.xml</interface.application.db.xml.update.url>
 
-				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
-				<interface.application.db.xml.update.url>/Users/rpslpereira/Apps/apache-tomcat-6.0.33/temp/Backups/backup_1358867487733763000/XmlDownload/biosamples.xml</interface.application.db.xml.update.url>
-
-				<!-- <interface.application.db.xml.update.type>url</interface.application.db.xml.update.type> 
-					<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?server=dev&amp;amp;samples=EMBED&amp;amp;schema=AGE1&amp;amp;showAttributes=true</interface.application.db.xml.update.url> -->
-
+ <!-- 
+				<interface.application.db.xml.update.type>url</interface.application.db.xml.update.type> 
+				<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?server=tst&amp;amp;samples=EMBED&amp;amp;schema=AGE1&amp;amp;showAttributes=true&amp;amp;sources=true</interface.application.db.xml.update.url> 
+ -->
 				<!-- <interface.application.pref.biosamples.update.timestamp>0</interface.application.pref.biosamples.update.timestamp> 
 					<interface.application.pref.reload-all.update.schedule>0 0 12 * * ?</interface.application.pref.reload-all.update.schedule> 
 					<interface.application.pref.reload-all.update.interval /> <interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->

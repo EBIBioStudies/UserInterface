@@ -41,7 +41,8 @@ public class AEInterfaceApplication extends Application implements ServletContex
     {
         super("biosamples");
 
-        
+        //The first thing I should do is to check the Setup Directory
+        addComponent(new SetupDirectoryCheck());
 //        addComponent(new DbConnectionPool());
         addComponent(new SaxonEngine());
         addComponent(new SearchEngine());
