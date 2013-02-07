@@ -28,6 +28,7 @@ import uk.ac.ebi.arrayexpress.app.ApplicationJob;
 import uk.ac.ebi.arrayexpress.components.BioSamplesGroup;
 import uk.ac.ebi.arrayexpress.components.BioSamplesSample;
 import uk.ac.ebi.arrayexpress.components.SearchEngine;
+import uk.ac.ebi.arrayexpress.utils.file.FileUtilities;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentArrayDesigns;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesGroup;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesSample;
@@ -148,7 +149,10 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				// update of the xmlDatabase
 				logger.info("DatabaseXml Creation");
 				
-				File newSetupDir= new File(backDir.getAbsolutePath() + "/newSetup" );
+				//File newSetupDir= new File(backDir.getAbsolutePath() + "/newSetup" );
+				//I need to change this because it's not possible to move directories from a local disk (/tomcat/temp to NFS). So my all temporary Setup will be created in the same place where is th Setup Directory)
+				//getParentFile() to create at the same level of Setup directory
+				File newSetupDir= new File(setupDirectory.getParentFile().getAbsolutePath() + "/newSetup" );
 				if (newSetupDir.mkdir()) {
 					logger.info("newSetupDir  directory was created in [{}]",
 							newSetupDir.getAbsolutePath());
@@ -178,6 +182,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				// Rename file (or directory)
 				logger.info("Before file renamed!!!");
 				boolean success2 = newSetupDir.renameTo(setupDirectory);
+				//FileUtilities.
 				if (success2) {
 					logger.info("file was successfully renamed [{}]!!!",
 							setupDirectory.getAbsolutePath());
