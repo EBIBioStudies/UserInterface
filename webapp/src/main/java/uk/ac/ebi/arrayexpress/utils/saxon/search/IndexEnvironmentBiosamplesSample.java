@@ -55,7 +55,7 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 
 		defaultSortField = "";
 		defaultSortDescending = false;
-		defaultPageSize = 10;
+		defaultPageSize = 25;
 
 		// I'm calling this to clean the reference to the IndexReader->
 		// closeIndexReader();getIndexReader();

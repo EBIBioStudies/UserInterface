@@ -694,6 +694,8 @@ public class Indexer {
 										}
 									}
 								} catch (XPathExpressionException x) {
+									String xmlError=PrintUtils.printNodeInfo((NodeInfo)node,config);
+									logger.error("XML£££££££££ DB->[{}]",xmlError);
 									logger.error(
 											"Caught an exception while indexing expression ["
 													+ field.path
@@ -702,7 +704,7 @@ public class Indexer {
 															.getStringValue()
 															.substring(0, 20)
 													+ "...]", x);
-									throw x;
+									throw new Exception("Xml:" + xmlError,x);
 								}
 							}
 						}
@@ -864,11 +866,12 @@ public class Indexer {
 		}
 	}
 
-	private void addIndexDocument(IndexWriter iwriter, Document document) {
+	private void addIndexDocument(IndexWriter iwriter, Document document) throws Exception{
 		try {
 			iwriter.addDocument(document);
 		} catch (Exception x) {
 			logger.error("Caught an exception:", x);
+			throw x;
 		}
 	}
 

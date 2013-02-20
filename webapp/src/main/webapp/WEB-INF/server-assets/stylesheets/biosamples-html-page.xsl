@@ -62,7 +62,12 @@
 				<div class="header">
 					<div id="global-masthead" class="masthead grid_24">
 						<!--This has to be one line and no newline characters -->
-						<a href="//www.ebi.ac.uk/" title="Go to the EMBL-EBI homepage"><img src="//www.ebi.ac.uk/web_guidelines/images/logos/EMBL-EBI/EMBL_EBI_Logo_white.png" alt="EMBL European Bioinformatics Institute" /></a><div class="nav">
+						<a href="//www.ebi.ac.uk/" title="Go to the EMBL-EBI homepage">
+							<img
+								src="//www.ebi.ac.uk/web_guidelines/images/logos/EMBL-EBI/EMBL_EBI_Logo_white.png"
+								alt="EMBL European Bioinformatics Institute" />
+						</a>
+						<div class="nav">
 							<ul id="global-nav">
 								<!-- set active class as appropriate -->
 								<li class="first active" id="services">
@@ -89,20 +94,16 @@
 
 						<!-- local-title -->
 						<!-- NB: for additional title style patterns, see http://frontier.ebi.ac.uk/web/style/patterns -->
-
-			<div class="grid_24 alpha omega" id="local-title">
-				<h1><a href="${interface.application.base.path}" title="Back to ${interface.application.base.service.name} homepage">${interface.application.base.service.name}</a></h1>
-			</div>
-						<!-- <div class="grid_12 alpha logo-title" id="local-title">
-							<h1 class="visuallyhidden">${interface.application.base.service.name}</h1>
+						<div id="local-title" class="grid_12 alpha logo-title">
 							<a href="${interface.application.base.path}"
 								title="Back to ${interface.application.base.service.name} homepage">
-								<img src="${interface.application.base.service.logo}" alt="${interface.application.base.service.name} logo"
-									height="64" />
+								<img src="${interface.application.base.service.logo}" alt="{interface.application.base.service.name} logo"
+									width="64" height="64"/>
 							</a>
-						</div> -->
-
-						<!-- /local-title -->
+							<span style="padding-top: 5px">
+								<h1>${interface.application.base.service.name}</h1>
+							</span>
+						</div>
 
 					</div>
 				</div>
@@ -176,7 +177,16 @@
 									UK &nbsp; &nbsp;
 									+44 (0)1223 49 44 44
 								</p>
-								<p>Copyright © EMBL-EBI 2012 | EBI is an Outstation of the <a href="http://www.embl.org">European Molecular Biology Laboratory</a> | <a href="/about/privacy">Privacy</a> | <a href="/about/cookies">Cookies</a> | <a href="/about/terms-of-use">Terms of use</a></p>	
+								<p>
+									Copyright © EMBL-EBI 2012 | EBI is an Outstation of the
+									<a href="http://www.embl.org">European Molecular Biology Laboratory</a>
+									|
+									<a href="/about/privacy">Privacy</a>
+									|
+									<a href="/about/cookies">Cookies</a>
+									|
+									<a href="/about/terms-of-use">Terms of use</a>
+								</p>
 							</div>
 						</div>
 					</div>

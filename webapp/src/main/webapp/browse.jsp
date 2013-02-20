@@ -120,7 +120,7 @@ ${interface.application.google.analytics}
 																		by: <select id="sortby" name="sortby" disabled>
 																			<option value="">Relevance</option>
 																			<option value="id">Accession</option>
-																			<option value="description">Description</option>
+																			<option value="title">Title</option>
 																			<option value="samples">Samples</option>
 																	</select>
 																	</td>
@@ -167,11 +167,11 @@ ${interface.application.google.analytics}
 									class="table_header_inner">Accession</div></a> <!-- <img
 								src="/arrayexpress/assets/images/mini_arrow_up.gif" width="12"
 								height="16" alt="^"> --></th>
-						<th class="bs_results_description sortable bs_results_description"
-							id="bs_results_header_description"><a
-							href="javascript:aeSort('description')"
-							title="Click to sort by description"><div
-									class="table_header_inner">Description</div></a></th>
+						<th class="bs_results_title sortable"
+							id="bs_results_header_title"><a
+							href="javascript:aeSort('title')"
+							title="Click to sort by title"><div
+									class="table_header_inner">Title</div></a></th>
 						<th class="bs_results_samples sortable bs_results_samples"
 							id="bs_results_header_samples"><a
 							href="javascript:aeSort('samples')"

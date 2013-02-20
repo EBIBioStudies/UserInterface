@@ -3,10 +3,12 @@
 
 <!DOCTYPE xsl:stylesheet [ <!ENTITY nbsp "&#160;"> ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:aejava="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
-	xmlns:escape="org.apache.commons.lang.StringEscapeUtils"
-	xmlns:html="http://www.w3.org/1999/xhtml" extension-element-prefixes="xs aejava html escape"
-	exclude-result-prefixes="xs aejava html escape" version="2.0">
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns:fn="http://www.w3.org/2005/xpath-functions"
+	xmlns:aejava="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
+	xmlns:escape="org.apache.commons.lang.StringEscapeUtils" xmlns:html="http://www.w3.org/1999/xhtml"
+	extension-element-prefixes="xs fn aejava html escape"
+	exclude-result-prefixes="xs fn aejava html escape" version="2.0">
 
 
 
@@ -29,6 +31,8 @@
 
 	<xsl:param name="queryid" />
 	<xsl:param name="keywords" />
+
+
 	<xsl:param name="id" />
 
 	<xsl:param name="userid" />
@@ -50,57 +54,57 @@
 
 	<xsl:variable name="vkeywords" select="$keywords" />
 
-   <!-- <xsl:output omit-xml-declaration="yes" method="html" indent="no"
-		encoding="windows-1252" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />  -->
-		
-		<xsl:output omit-xml-declaration="yes" method="xhtml" indent="no"
-		encoding="windows-1252" doctype-public="-//W3C//DTD XHTML 1.1//EN" /> 
-	
+	<!-- <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="windows-1252" 
+		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" /> -->
+
+	<xsl:output omit-xml-declaration="yes" method="xhtml"
+		indent="no" encoding="windows-1252" doctype-public="-//W3C//DTD XHTML 1.1//EN" />
+
 
 	<xsl:include href="biosamples-html-page.xsl" />
 	<!-- <xsl:include href="ae-sort-arrays.xsl"/> -->
 	<xsl:include href="biosamples-highlight.xsl" />
 
-<!--  <xsl:output method="html" indent="yes" version="4.0"/> -->
-		
+	<!-- <xsl:output method="html" indent="yes" version="4.0"/> -->
+
 	<xsl:template match="/">
- 		 <!-- <html lang="en" encoding="windows-1252"> -->
-			<xsl:call-template name="page-header">
-				<xsl:with-param name="pTitle">
-					<xsl:value-of
-						select="if (not($vBrowseMode)) then concat(upper-case($id), ' &lt; ') else ''" />
-					<xsl:text>BioSamples &lt; EMBL-EBI</xsl:text>
-				</xsl:with-param>
+		<!-- <html lang="en" encoding="windows-1252"> -->
+		<xsl:call-template name="page-header">
+			<xsl:with-param name="pTitle">
+				<xsl:value-of
+					select="if (not($vBrowseMode)) then concat(upper-case($id), ' &lt; ') else ''" />
+				<xsl:text>BioSamples &lt; EMBL-EBI</xsl:text>
+			</xsl:with-param>
 
-				<xsl:with-param name="pExtraCode">
+			<xsl:with-param name="pExtraCode">
 
-					<link rel="stylesheet"
-						href="{$basepath}/assets/stylesheets/biosamples_detail_10.css"
-						type="text/css" />
-					<script src="{$basepath}/assets/scripts/jquery-1.4.2.min.js"
-						type="text/javascript" />
-					<script src="{$basepath}/assets/scripts/jquery.query-2.1.7m-ebi.js"
-						type="text/javascript" />
-					<script src="{$basepath}/assets/scripts/biosamples_detail_10.js"
-						type="text/javascript" />
-					<script src="{$basepath}/assets/scripts/biosamples_common_10.js"
-						type="text/javascript" />
-					<!-- <script src="{$basepath}/assets/scripts/biosamples_browse_10.js" 
-						type="text/javascript" /> -->
-					<script src="{$basepath}/assets/scripts/jsdeferred.jquery-0.3.1.js"
-						type="text/javascript"></script>
-					<script src="{$basepath}/assets/scripts/jquery.cookie-1.0.js"
-						type="text/javascript"></script>
-					<script src="{$basepath}/assets/scripts/jquery.caret-range-1.0.js"
-						type="text/javascript"></script>
-					<script
-						src="{$basepath}/assets/scripts/jquery.autocomplete-1.1.0m-ebi.js"
-						type="text/javascript"></script>
-				</xsl:with-param>
+				<link rel="stylesheet"
+					href="{$basepath}/assets/stylesheets/biosamples_detail_10.css"
+					type="text/css" />
+				<script src="{$basepath}/assets/scripts/jquery-1.4.2.min.js"
+					type="text/javascript" />
+				<script src="{$basepath}/assets/scripts/jquery.query-2.1.7m-ebi.js"
+					type="text/javascript" />
+				<script src="{$basepath}/assets/scripts/biosamples_detail_10.js"
+					type="text/javascript" />
+				<script src="{$basepath}/assets/scripts/biosamples_common_10.js"
+					type="text/javascript" />
+				<!-- <script src="{$basepath}/assets/scripts/biosamples_browse_10.js" 
+					type="text/javascript" /> -->
+				<script src="{$basepath}/assets/scripts/jsdeferred.jquery-0.3.1.js"
+					type="text/javascript"></script>
+				<script src="{$basepath}/assets/scripts/jquery.cookie-1.0.js"
+					type="text/javascript"></script>
+				<script src="{$basepath}/assets/scripts/jquery.caret-range-1.0.js"
+					type="text/javascript"></script>
+				<script
+					src="{$basepath}/assets/scripts/jquery.autocomplete-1.1.0m-ebi.js"
+					type="text/javascript"></script>
+			</xsl:with-param>
 
-			</xsl:call-template>
-			<xsl:call-template name="page-body" />
-		<!--  </html>  -->
+		</xsl:call-template>
+		<xsl:call-template name="page-body" />
+		<!-- </html> -->
 	</xsl:template>
 
 	<xsl:template name="ae-contents">
@@ -176,7 +180,7 @@
 				<div class="detail_table">
 					<xsl:call-template name="detail-table">
 						<xsl:with-param name="id" select="id" />
-						<xsl:with-param name="sampleGroup" select="."/>
+						<xsl:with-param name="sampleGroup" select="." />
 					</xsl:call-template>
 
 				</div>
@@ -188,27 +192,27 @@
 		<xsl:param name="id" />
 		<xsl:param name="sampleGroup" />
 		<table id="bs_results_tablesamplegroupdetail">
-		<tr>
+			<tr>
 				<td colspan="2">
-				<div id="bs_title" >
-				Group Accession
-					<xsl:choose>
-								<!-- test="string-length($vkeywords)>0"> -->
-						<xsl:when
-							test="string-length($vkeywords)>0 and contains($vkeywords,'id:')">
-							<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select="attribute/value[../@class='Group Accession']" />
-								<xsl:with-param name="pFieldName" select="'id'" />
-							</xsl:call-template>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="attribute/value[../@class='Group Accession']"></xsl:value-of>
-						</xsl:otherwise>
+					<div id="bs_title">
+						Group Accession
+						<xsl:choose>
+							<!-- test="string-length($vkeywords)>0"> -->
+							<xsl:when
+								test="string-length($vkeywords)>0 and contains($vkeywords,'id:')">
+								<xsl:call-template name="highlight">
+									<xsl:with-param name="pText"
+										select="attribute/value[../@class='Group Accession']" />
+									<xsl:with-param name="pFieldName" select="'id'" />
+								</xsl:call-template>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="attribute/value[../@class='Group Accession']"></xsl:value-of>
+							</xsl:otherwise>
 
-					</xsl:choose>
-					<!-- -->
-				</div>
+						</xsl:choose>
+						<!-- -->
+					</div>
 				</td>
 			</tr>
 			<tr>
@@ -256,27 +260,18 @@
 				<td>
 					<!-- <xsl:value-of select="attribute/value[../@class='Submission Description']"></xsl:value-of> -->
 					<xsl:call-template name="highlight">
-						<!-- <xsl:with-param name="pText"
-							select="escape:escapeHtml(attribute/value[../@class='Submission Description'])" /> -->
-							<xsl:with-param name="pText"
+						<!-- <xsl:with-param name="pText" select="escape:escapeHtml(attribute/value[../@class='Submission 
+							Description'])" /> -->
+						<xsl:with-param name="pText"
 							select="attribute/value[../@class='Submission Description']" />
 						<xsl:with-param name="pFieldName" select="'description'" />
 					</xsl:call-template>
 				</td>
 			</tr>
-<!-- 			<tr>
-				<td class="col_title">
-					<b>Submission Version:</b>
-				</td>
-				<td>
-					<xsl:call-template name="highlight">
-						<xsl:with-param name="pText"
-							select="attribute/value[../@class='Submission Version']" />
-						<xsl:with-param name="pFieldName" select="'version'" />
-					</xsl:call-template>
-
-				</td>
-			</tr> -->
+			<!-- <tr> <td class="col_title"> <b>Submission Version:</b> </td> <td> 
+				<xsl:call-template name="highlight"> <xsl:with-param name="pText" select="attribute/value[../@class='Submission 
+				Version']" /> <xsl:with-param name="pFieldName" select="'version'" /> </xsl:call-template> 
+				</td> </tr> -->
 			<tr>
 				<td class="col_title">
 					<b>Submission Release Date:</b>
@@ -322,9 +317,11 @@
 							<b>Databases:</b>
 						</td>
 						<td>
-							<xsl:call-template name="highlight"> <xsl:with-param name="pText" 
-								select="string-join(attribute/value[../@class='Databases']//value, ', ')" 
-								/> <xsl:with-param name="pFieldName" select="'databases'" /> </xsl:call-template>
+							<xsl:call-template name="highlight">
+								<xsl:with-param name="pText"
+									select="string-join(attribute/value[../@class='Databases']//value, ', ')" />
+								<xsl:with-param name="pFieldName" select="'databases'" />
+							</xsl:call-template>
 
 							<xsl:call-template name="process_database">
 								<xsl:with-param name="pValue"
@@ -381,7 +378,7 @@
 			</xsl:choose>
 
 
-		 	<xsl:choose>
+			<xsl:choose>
 				<xsl:when test="count(attribute/value[../@class='Persons'])>0">
 
 					<tr>
@@ -403,8 +400,8 @@
 					</tr>
 				</xsl:when>
 			</xsl:choose>
-			
-		 	<xsl:choose>
+
+			<xsl:choose>
 				<xsl:when test="count(attribute/value[../@class='Publications'])>0">
 
 					<tr>
@@ -418,14 +415,13 @@
 							</xsl:call-template>
 
 
-						<!-- 	<xsl:call-template name="highlight"> <xsl:with-param name="pText" 
+							<!-- <xsl:call-template name="highlight"> <xsl:with-param name="pText" 
 								select="string-join(attribute/value[../@class='Persons']//value, ', ')" /> 
-								<xsl:with-param name="pFieldName" select="'persons'" /> </xsl:call-template>
- -->
+								<xsl:with-param name="pFieldName" select="'persons'" /> </xsl:call-template> -->
 						</td>
 					</tr>
 				</xsl:when>
-			</xsl:choose>  
+			</xsl:choose>
 
 			<tr>
 				<td class="col_title">
@@ -454,8 +450,12 @@
 									<a href="javascript:aeClearField('#bs_keywords_field')">clear</a>
 									]
 								</label>
+								<!-- if I have a filter by field i will put the textbox search with "" -->
+								<xsl:variable name="vKeywordsAux"
+									select="if (fn:matches($vkeywords,'\s*\w\s*:\s*\w')) then ''  else $vkeywords" />
 								<input id="bs_keywords_field" type="text" name="keywords"
-									value="" maxlength="255" class="bs_assign_font" autocomplete="off" />
+									value="{$vKeywordsAux}" maxlength="255" class="bs_assign_font"
+									autocomplete="off" />
 							</fieldset>
 							<div id="bs_submit_box">
 								<input id="bs_query_submit" type="submit" value="Query" />
@@ -476,60 +476,45 @@
 						<table id="bs_samples_detail" cellpadding="0" cellspacing="0"
 							width="100%">
 							<thead>
-							
-							<tr>
+
+								<tr>
 									<th class="bs_results_accession sortable bs_results_Sample-Accession"
 										id="bs_results_header_sampleaccession">
-										<a href="javascript:aeSort('sampleaccession')" title="Click to sort by Sample-Accession">
+										<a href="javascript:aeSort('sampleaccession')" title="Click to sort by Sample Accession">
 											<div class="table_header_inner">
-												Sample-Accession
+												Sample Accession
 											</div>
 										</a>
 									</th>
-									<xsl:for-each select="SampleAttributes/attribute/replace(@class,' ' , '-')">
-										<xsl:if test=".!='Sample-Accession'">
-										
-											<th class="bs_results_accession sortable bs_results_{replace(.,' ' , '-')}"
+									<xsl:for-each select="SampleAttributes/attribute/@class">
+										<xsl:if test=".!='Sample Accession'">
+
+											<th
+												class="bs_results_accession sortable bs_results_{replace(.,' ' , '-')}"
 												id="bs_results_header_{position()}">
 												<a href="javascript:aeSort('{position()}')" title="Click to sort by {.}">
 													<div class="table_header_inner">
-														<xsl:copy-of select="."></xsl:copy-of>
+														<xsl:value-of select="."></xsl:value-of>
 													</div>
 												</a>
 											</th>
 										</xsl:if>
 
 									</xsl:for-each>
-									
-									<!--  I will not allow to sort -->
+
+									<!-- I will not allow to sort -->
 									<th class="bs_results_accession">
 										<a href="javascipt:void">Link</a>
 									</th>
 								</tr>
-								<!-- <tr>
-									<th class="bs_results_accession sortable bs_results_Sample-Accession"
-										id="bs_results_header_0">
-										<a href="javascript:aeSort('0')" title="Click to sort by Sample-Accession">
-											<div class="table_header_inner">
-												Sample-Accession
-											</div>
-										</a>
-									</th>
-									<xsl:for-each select="tokenize(attributes,' ')">
-										<xsl:if test=".!='Sample-Accession'">
-										
-											<th class="bs_results_accession sortable bs_results_{.}"
-												id="bs_results_header_{position()}">
-												<a href="javascript:aeSort('{position()}')" title="Click to sort by {.}">
-													<div class="table_header_inner">
-														<xsl:copy-of select="."></xsl:copy-of>
-													</div>
-												</a>
-											</th>
-										</xsl:if>
-
-									</xsl:for-each>
-								</tr> -->
+								<!-- <tr> <th class="bs_results_accession sortable bs_results_Sample-Accession" 
+									id="bs_results_header_0"> <a href="javascript:aeSort('0')" title="Click to 
+									sort by Sample-Accession"> <div class="table_header_inner"> Sample-Accession 
+									</div> </a> </th> <xsl:for-each select="tokenize(attributes,' ')"> <xsl:if 
+									test=".!='Sample-Accession'"> <th class="bs_results_accession sortable bs_results_{.}" 
+									id="bs_results_header_{position()}"> <a href="javascript:aeSort('{position()}')" 
+									title="Click to sort by {.}"> <div class="table_header_inner"> <xsl:copy-of 
+									select="."></xsl:copy-of> </div> </a> </th> </xsl:if> </xsl:for-each> </tr> -->
 							</thead>
 
 							<tbody id="bs_results_tbody">
@@ -615,11 +600,8 @@
 						<xsl:with-param name="pText" select="$vStringContacts" />
 						<xsl:with-param name="pFieldName" select="'persons'" />
 					</xsl:call-template>
-<!-- 					<xsl:choose>
-						<xsl:when test="position()&lt;last()">
-							,
-						</xsl:when> 
-					</xsl:choose>-->
+					<!-- <xsl:choose> <xsl:when test="position()&lt;last()"> , </xsl:when> 
+						</xsl:choose> -->
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:variable name="vStringContacts"
@@ -628,11 +610,8 @@
 						<xsl:with-param name="pText" select="$vStringContacts" />
 						<xsl:with-param name="pFieldName" select="'persons'" />
 					</xsl:call-template>
-	<!-- 				<xsl:choose>
-						<xsl:when test="position()&lt;last()">
-							,
-						</xsl:when>
-					</xsl:choose> -->
+					<!-- <xsl:choose> <xsl:when test="position()&lt;last()"> , </xsl:when> 
+						</xsl:choose> -->
 
 				</xsl:otherwise>
 			</xsl:choose>
@@ -650,48 +629,59 @@
 	<xsl:template name="process_database">
 		<xsl:param name="pValue" />
 		<xsl:for-each select="$pValue">
-			<xsl:variable name="bdName" select="lower-case(.//attribute/value[../@class='Database Name'])"></xsl:variable>
-			<table id="bs_table_databases"><tr>
-			<xsl:choose>
-				<xsl:when test="$bdName =('arrayexpress','ena sra','dgva','pride') and not(.//attribute/value[../@class='Database URI']='')">
-					<td><a href="{.//attribute/value[../@class='Database URI']}" target="ext">
-					  <img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{.//attribute/value[../@class='Database Name']} Link" border="0" title="{$bdName}"/>
-					  </a> &nbsp;
-					 </td>
-				</xsl:when>
-				<xsl:when test="not(.//attribute/value[../@class='Database URI']='')">
-					<td><a href="{.//attribute/value[../@class='Database URI']}" target="ext">
-					  <img src="{$basepath}/assets/images/generic_logo.gif" border="0" title="{$bdName}"/>
-					  </a> &nbsp;
-					 </td>				
-				</xsl:when>
-			</xsl:choose>
-			<td>
-			<xsl:call-template name="highlight">
-				<xsl:with-param name="pText" select="concat('Name: ', .//attribute/value[../@class='Database Name'], '; ID: ', .//attribute/value[../@class='Database ID'])" />
-				<xsl:with-param name="pFieldName" select="'databases'" />
-			</xsl:call-template>
-			; URI:
-			<a href="{.//attribute/value[../@class='Database URI']}" target="ext">
-				<xsl:value-of select=".//attribute/value[../@class='Database URI']"></xsl:value-of>
-			</a>
-			</td>
-			<xsl:choose>
-				<xsl:when test="position()&lt;last()">
-					<br />
-				</xsl:when>
-			</xsl:choose>
-			</tr></table>
+			<xsl:variable name="bdName"
+				select="lower-case(.//attribute/value[../@class='Database Name'])"></xsl:variable>
+			<table id="bs_table_databases">
+				<tr>
+					<xsl:choose>
+						<xsl:when
+							test="$bdName =('arrayexpress','ena sra','dgva','pride') and not(.//attribute/value[../@class='Database URI']='')">
+							<td>
+								<a href="{.//attribute/value[../@class='Database URI']}"
+									target="ext">
+									<img src="{$basepath}/assets/images/{$bdName}_logo.gif"
+										alt="{.//attribute/value[../@class='Database Name']} Link"
+										border="0" title="{$bdName}" />
+								</a> &nbsp;
+							</td>
+						</xsl:when>
+						<xsl:when test="not(.//attribute/value[../@class='Database URI']='')">
+							<td>
+								<a href="{.//attribute/value[../@class='Database URI']}"
+									target="ext">
+									<font class="icon icon-generic" data-icon="L"/>
+								</a> &nbsp;
+							</td>
+						</xsl:when>
+					</xsl:choose>
+					<td>
+						<xsl:call-template name="highlight">
+							<xsl:with-param name="pText"
+								select="concat('Name: ', .//attribute/value[../@class='Database Name'], '; ID: ', .//attribute/value[../@class='Database ID'])" />
+							<xsl:with-param name="pFieldName" select="'databases'" />
+						</xsl:call-template>
+						; URI:
+						<a href="{.//attribute/value[../@class='Database URI']}" target="ext">
+							<xsl:value-of select=".//attribute/value[../@class='Database URI']"></xsl:value-of>
+						</a>
+					</td>
+					<xsl:choose>
+						<xsl:when test="position()&lt;last()">
+							<br />
+						</xsl:when>
+					</xsl:choose>
+				</tr>
+			</table>
 		</xsl:for-each>
 	</xsl:template>
 
-<!-- <td vertical-align="middle">&nbsp;Name: <xsl:copy-of select=".//attribute/value[../@class='Database Name']"/>; ID: <xsl:copy-of select=".//attribute/value[../@class='Database ID']"/>; URI:
-			<a href="{.//attribute/value[../@class='Database URI']}" target="ext">
-				<xsl:value-of select=".//attribute/value[../@class='Database URI']"></xsl:value-of>
-			</a>
- -->
- 
-<xsl:template name="process_publications">
+	<!-- <td vertical-align="middle">&nbsp;Name: <xsl:copy-of select=".//attribute/value[../@class='Database 
+		Name']"/>; ID: <xsl:copy-of select=".//attribute/value[../@class='Database 
+		ID']"/>; URI: <a href="{.//attribute/value[../@class='Database URI']}" target="ext"> 
+		<xsl:value-of select=".//attribute/value[../@class='Database URI']"></xsl:value-of> 
+		</a> -->
+
+	<xsl:template name="process_publications">
 		<xsl:param name="pValue" />
 		<xsl:for-each select="$pValue/object">
 

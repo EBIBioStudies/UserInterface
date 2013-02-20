@@ -117,9 +117,11 @@
 
 })(window.jQuery);
 
+//I will clear and sumit the form with no data (refresh) [PT:44656245]
 function
 aeClearField( sel )
 {
     $(sel).val("").focus();
+    document.forms['bs_query_form'].submit();
 }
 

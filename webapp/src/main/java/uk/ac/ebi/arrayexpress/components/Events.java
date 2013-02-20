@@ -28,7 +28,6 @@ import java.io.File;
  *
  */
 
-
 public class Events extends ApplicationComponent implements IDocumentSource
 {
     // logging machinery

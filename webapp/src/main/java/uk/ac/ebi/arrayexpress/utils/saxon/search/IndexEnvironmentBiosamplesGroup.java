@@ -92,7 +92,8 @@ public class IndexEnvironmentBiosamplesGroup extends AbstractIndexEnvironment {
 				totalRes.append("<SampleGroup>");
 				totalRes.append("<id>" + doc.get("id") + "</id>");
 				totalRes.append("<description>"
-						+ StringEscapeUtils.escapeXml(doc.get("description"))
+						+ StringEscapeUtils.escapeXml(doc.get("title"))
+						//+ doc.get("title")
 						+ "</description>");
 				totalRes.append("<samples>" + doc.get("samples") + "</samples>");
 				totalRes.append("</SampleGroup>");

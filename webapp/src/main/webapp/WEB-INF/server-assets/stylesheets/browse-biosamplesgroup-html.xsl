@@ -121,7 +121,7 @@
 				<span id="ellipsis" class='ellipsis_text'> -->
 					<xsl:call-template name="highlight">
 						<xsl:with-param name="pText" select="description" />
-						<xsl:with-param name="pFieldName" select="'description'" />
+						<xsl:with-param name="pFieldName" select="'title'" />
 					</xsl:call-template>
 				<!-- </span>
 				</div> -->

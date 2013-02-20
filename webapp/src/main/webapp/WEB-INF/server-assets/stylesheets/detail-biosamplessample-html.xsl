@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="windows-1252"?>
 <!-- cannot change the enconding to ISO-8859-1 or UTF-8 -->
+<!DOCTYPE xsl:stylesheet [ <!ENTITY nbsp "&#160;"> ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:aejava="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
 	xmlns:html="http://www.w3.org/1999/xhtml" extension-element-prefixes="xs aejava html"
@@ -132,6 +133,7 @@
 	</xsl:template>
 
 	<xsl:template match="Sample">
+		<xsl:variable name="vSample" select="."></xsl:variable>
 		<tr>
 			<td>
 				<div class="detail_table">
@@ -156,7 +158,7 @@
 
 										<xsl:when test="count(.[@class='Database URI'])&gt;0">
 											<xsl:call-template name="process_uri">
-												<xsl:with-param name="pValue" select="value"></xsl:with-param>
+												<xsl:with-param name="vSample" select="$vSample"></xsl:with-param>
 											</xsl:call-template>
 										</xsl:when>
 
@@ -231,10 +233,42 @@
 
 
 	<xsl:template name="process_uri">
-		<xsl:param name="pValue" />
-		<a href="{$pValue}" target="ext">
-			<xsl:value-of select="$pValue"></xsl:value-of>
-		</a>
+		<xsl:param name="vSample" />
+		<xsl:variable name="bdName"
+			select="lower-case($vSample/attribute/value[../@class='Database Name'])"></xsl:variable>
+		<table id="bs_table_databases">
+			<tr>
+				<xsl:choose>
+					<xsl:when
+						test="$bdName =('arrayexpress','ena sra','dgva','pride') and not($vSample/attribute/value[../@class='Database URI']='')">
+						<td>
+							<a href="{$vSample/attribute/value[../@class='Database URI']}"
+								target="ext">
+								<img src="{$basepath}/assets/images/{$bdName}_logo.gif"
+									alt="{$vSample/attribute/value[../@class='Database Name']} Link"
+									border="0" title="{$bdName}" />
+							</a> &nbsp; <a href="{$vSample/attribute/value[../@class='Database URI']}" target="ext">
+				<xsl:value-of select="$vSample//attribute/value[../@class='Database URI']"></xsl:value-of>
+			</a>
+						</td>
+					</xsl:when>
+					<xsl:when
+						test="not($vSample/attribute/value[../@class='Database URI']='')">
+						<td>
+							<a href="{$vSample/attribute/value[../@class='Database URI']}"
+								target="ext">
+								<img src="{$basepath}/assets/images/generic_logo.gif"
+									border="0" title="{$bdName}" />
+							</a> &nbsp; <a href="{$vSample/attribute/value[../@class='Database URI']}" target="ext">
+				<xsl:value-of select="$vSample//attribute/value[../@class='Database URI']"></xsl:value-of>
+			</a>
+						</td>
+					</xsl:when>
+				</xsl:choose>
+			</tr>
+		</table>
+		<!-- <a href="{$pValue}" target="ext"> <xsl:value-of select="$pValue"></xsl:value-of> 
+			</a> -->
 	</xsl:template>
 
 	<xsl:template name="process_efo">

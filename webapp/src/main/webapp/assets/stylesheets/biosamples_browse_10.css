@@ -254,7 +254,11 @@ vertical-align: top;
     width: 138px;
 }
 
-.bs_multisource .bs_results_accession {
+.bs_multisource  {
+    width: 125px;
+}
+
+.bs_results_accession {
     width: 125px;
 }
 
@@ -263,7 +267,7 @@ vertical-align: top;
     width: 105px;
 }
 
-.bs_results_description {
+.bs_results_title {
 }
 
 

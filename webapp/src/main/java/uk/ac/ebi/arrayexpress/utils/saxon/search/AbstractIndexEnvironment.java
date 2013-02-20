@@ -173,6 +173,8 @@ public abstract class AbstractIndexEnvironment {
 	public AbstractIndexEnvironment(HierarchicalConfiguration indexConfig) {
 		this.indexConfig = indexConfig;
 		populateIndexConfiguration();
+		//TODO: review this (This is causing one error when you are forcing the index building on server start, and the lucenes directory is no there
+		//this is not common but it's an error - I will not change this until we merge ArrayExpress Code with Biosamples (the appraoch can be a little bit different)
 		setup();
 	}
 

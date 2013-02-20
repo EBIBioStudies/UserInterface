@@ -68,7 +68,7 @@ var sortOrder = sortDefault[sortBy];
 
 
 var pageInit = pageInitDefault;
-var pageSize = "10";
+var pageSize = "25"; 
 var keywords = "";
 
 
@@ -109,7 +109,14 @@ $(function() {
 					"This is matched child term from Experimental Factor Ontology e.g. brain and subparts of brain");
 	/* hint to the lucene highlight */
 	// if (-1 == url.indexOf("browse")) {
-	var newQuery = $.query.set("keywords", keywords).set("sortby", sortBy).set(
+	var keywordsFixed=$.query.get("keywords");
+	//If I was filtering the seach for some field I will not apply a search to the samples
+	var aux=keywordsFixed.match(/\s*\w\s*:\s*\w/g);
+	if(aux!=null){
+		keywordsFixed="";
+	}
+
+	var newQuery = $.query.set("keywords",keywordsFixed).set("sortby", sortBy).set(
 			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
 			pageSize).toString();
 	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
@@ -262,7 +269,7 @@ function searchSamples(pKeywords) {
 
 function goToPage(page) {
 	pageInit = page;
-	var newQuery = $.query.set("keywords", keywords).set("sortby", sortBy).set(
+	var newQuery = $.query.set("keywords", document.forms['bs_query_form'].bs_keywords_field.value).set("sortby", sortBy).set(
 			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
 			pageSize).toString();
 	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
@@ -313,5 +320,6 @@ function aeSort(psortby) {
 	}
 
 }
+
 
 // ######### PAGING SAMPLES INSIDE A GROUP OF SAMPLES ############

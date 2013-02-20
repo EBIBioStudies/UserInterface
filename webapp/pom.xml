@@ -24,7 +24,7 @@
 		<interface.application.pref.reports.recipients>rpereira@ebi.ac.uk</interface.application.pref.reports.recipients>
 		<interface.application.base.path>/biosamples</interface.application.base.path>
 		<interface.application.base.service.name>BioSamples</interface.application.base.service.name>
-		<interface.application.base.service.logo>//www.ebi.ac.uk/microarray-srv/biosd/images/title.png</interface.application.base.service.logo>
+		<interface.application.base.service.logo>/biosamples/assets/images/BioSamples_logo.png</interface.application.base.service.logo>
 		<interface.application.link.www_domain />
 		<interface.application.link.www_domain_hack />
 		<interface.application.link.www_domain.inc>${interface.application.link.www_domain}/inc</interface.application.link.www_domain.inc>
@@ -121,16 +121,31 @@
 					<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type> 
 					<interface.application.db.xml.update.url>/Users/rpslpereira/Downloads/exportAge.xml</interface.application.db.xml.update.url> -->
 
-				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
- 
- 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
+	<!-- 			<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
+  				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
 				<interface.application.db.xml.update.url>/Users/rpslpereira/Apps/apache-tomcat-6.0.33/temp_05022013/Backups/backup_1359978165466909000/XmlDownload/biosamples.xml</interface.application.db.xml.update.url>
+
+ -->
+ 
+<!-- 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
+				<interface.application.db.xml.update.type>age</interface.application.db.xml.update.type>
+				<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp>
+				<interface.application.db.xml.update.url>http://tomcat-15:21480/biosamples/</interface.application.db.xml.update.url>
+				<interface.application.db.xml.update.username>rui</interface.application.db.xml.update.username>
+				<interface.application.db.xml.update.password>ruipereire</interface.application.db.xml.update.password>
+				<interface.application.db.xml.update.cookie>AGESESS</interface.application.db.xml.update.cookie>
+ -->		
 
  <!-- 
 				<interface.application.db.xml.update.type>url</interface.application.db.xml.update.type> 
 				<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?server=tst&amp;amp;samples=EMBED&amp;amp;schema=AGE1&amp;amp;showAttributes=true&amp;amp;sources=true</interface.application.db.xml.update.url> 
+
  -->
-				<!-- <interface.application.pref.biosamples.update.timestamp>0</interface.application.pref.biosamples.update.timestamp> 
+ 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
+ 				<interface.application.db.xml.update.type>url</interface.application.db.xml.update.type> 
+				<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?server=tst&amp;amp;samples=EMBED&amp;amp;schema=AGE1&amp;amp;showAttributes=true&amp;amp;sources=true&amp;amp;hideNS=true</interface.application.db.xml.update.url> 
+ 
+ 				<!-- <interface.application.pref.biosamples.update.timestamp>0</interface.application.pref.biosamples.update.timestamp> 
 					<interface.application.pref.reload-all.update.schedule>0 0 12 * * ?</interface.application.pref.reload-all.update.schedule> 
 					<interface.application.pref.reload-all.update.interval /> <interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
 				<!-- <interface.application.db.xml.update.url>http://tomcat-15:21480/biosamples/</interface.application.db.xml.update.url> 
@@ -173,6 +188,34 @@
 			</properties>
 		</profile>
 
+		<profile>
+			<id>development2</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<interface.application.base.path>/biosamples</interface.application.base.path>
+				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
+				<interface.application.body.class>bs_dev_preview</interface.application.body.class>
+				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
+				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
+				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
+				<interface.application.log.default.priority>INFO</interface.application.log.default.priority>
+				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroupDev</interface.application.db.xml.connection.dbname> -->
+				<interface.application.db.xml.connection.dbname>biosamplesAEGroup_Dev2</interface.application.db.xml.connection.dbname>
+				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
+				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
+				<interface.application.db.xml.update.url>/ebi/microarray/ma-exp/biosamples-ncbi/gui.xml</interface.application.db.xml.update.url>
+				<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule>
+				<interface.application.pref.reload-all.update.interval />
+				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
+
+				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.dbname> 
+					<interface.application.db.xml.connection.port>1984</interface.application.db.xml.connection.port> -->
+			</properties>
+		</profile>
+
+
 
 		<profile>
 			<id>wwwdev</id>
@@ -181,7 +224,8 @@
 			</activation>
 			<properties>
 				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
-				<interface.application.body.class>bs_dev_preview</interface.application.body.class>
+				<!--  JUST REMOVED IT FOR FRONTIERIFICATION PROCESS - need to use it again -->
+				<!-- <interface.application.body.class>bs_dev_preview</interface.application.body.class> -->
 				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
 				<interface.application.base.path>/biosamples</interface.application.base.path>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
@@ -189,6 +233,7 @@
 				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
+				<interface.application.db.xml.update.type>age</interface.application.db.xml.update.type>
 				<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp>
 				<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule>
 				<interface.application.pref.reload-all.update.interval />
@@ -250,6 +295,7 @@
 				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
+				<interface.application.db.xml.update.type>age</interface.application.db.xml.update.type>
 				<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp>
 				<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule>
 				<interface.application.pref.reload-all.update.interval />
@@ -273,6 +319,7 @@
 				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroupDaily</interface.application.db.xml.connection.dbname>
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
+				<interface.application.db.xml.update.type>age</interface.application.db.xml.update.type>
 				<interface.application.db.xml.update.timestamp>1</interface.application.db.xml.update.timestamp>
 				<interface.application.pref.reload-all.update.schedule />
 				<interface.application.pref.reload-all.update.interval>15</interface.application.pref.reload-all.update.interval>

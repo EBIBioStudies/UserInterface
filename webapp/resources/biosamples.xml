@@ -14,6 +14,8 @@
 	</app>
 
 
+
+
 	<bs>
 		<globalSetupDirectory>${interface.application.global.setup.directory}
 		</globalSetupDirectory>
@@ -28,7 +30,7 @@
 		<!-- -1 means that the update is not possible; 0 means complete update; 1 means last day update -->
 		<reloadBiosamplesDatabase>${interface.application.pref.biosamples.update.timestamp}</reloadBiosamplesDatabase>
 		
-		
+	
 		<xmldatabase>
 			<driver>${interface.application.db.xml.driver}</driver>
 			<base>${interface.application.db.xml.connection.base}</base>
@@ -94,7 +96,7 @@
 		
 		
 		
-		
+
 			<!--  <document path="/Biosamples/SampleGroup[@id='SAMEG82627']" defaultField="keywords"> -->
 	<document path="/Biosamples/SampleGroup" defaultField="keywords">
 				<!-- I also want to search in the attributes name, so I will add it to the keywords -->
@@ -107,7 +109,7 @@
 					sortfields="idsort" />
 				<!-- The sortfields must have this pproperties analyze="false" store="false" 
 					escape="false" -->
-				<field name="idsort" title="by Id" type="string" path="substring(@id,5)"
+				<field name="idsort" title="by Id" type="integer" path="substring(@id,6) cast as xs:integer"
 					analyze="false" store="false" escape="false" />
 				<field name="description" title="by Description" type="string"
 					path="attribute/value[../@class='Submission Description']" analyze="true"
@@ -117,7 +119,7 @@
 					escape="false" autocompletion="true" sortfields="description" />
 				<field name="title" title="by Title" type="string"
 					path="attribute/value[../@class='Submission Title']" analyze="true"
-					store="false" escape="false" />
+					store="true" escape="false" autocompletion="true" sortfields="title"/>
 				<field name="identifier" title="by Identifier" type="string"
 					path="attribute/value[../@class='Submission Identifier']" analyze="true"
 					store="false" escape="false" />
@@ -186,7 +188,11 @@
 				<field name="name" type="string" path="attribute/value[../@class='Name']"
 					analyze="true" store="false" escape="false" sortfields="name" />
 				<field name="accession" type="string" path="@id" analyze="true"
-					store="true" escape="false" sortfields="accession" />
+					store="true" escape="false" sortfields="accessionsort" />
+						<!-- The sortfields must have this pproperties analyze="false" store="false" 
+					escape="false" -->
+				<field name="accessionsort" title="by Accession" type="integer" path="substring(@id,6) cast as xs:integer"
+					analyze="false" store="false" escape="false" />
 				<!-- <field name="accessionsort1" title="by Id" type="string"
 					path="substring(@id,4,1)" analyze="false" store="false" escape="false" />
 				<field name="accessionsort2" title="by Id" type="integer"

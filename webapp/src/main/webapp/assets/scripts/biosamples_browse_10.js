@@ -22,13 +22,13 @@ var anchor = decodeURI(window.location.hash);
 var sortDefault = {
 	relevance : "descending",
 	id : "ascending",
-	description : "ascending",
+	title : "ascending",
 	samples : "descending"
 };
 
 var sortTitle = {
 	id : "accession",
-	description : "description",
+	title : "title",
 	samples : "number of samples"
 };
 

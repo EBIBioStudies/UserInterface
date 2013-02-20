@@ -92,14 +92,14 @@ a:hover#browseLink {
 .newsIF {
 	height: 220px;
 	border: 0;
-	overflow: scroll;
+	overflow: hidden;
 	width: 100%;
 }
 
 .sourcesIF {
 	height: 220px;
 	border: 0;
-	overflow: scroll;
+	overflow: hidden;
 	width: 100%;
 }
 
