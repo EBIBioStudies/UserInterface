@@ -160,6 +160,9 @@
 			</xsl:for-each>
 
 			<td>
+					<!-- problem of have 2 database names - I just put the link if I have only one database-->
+				<xsl:if test="count($vSample/attribute/value[../@class='Database Name']) = 1">
+			
 				<xsl:variable name="bdName" select="lower-case(../DatabaseGroup/@name)"></xsl:variable>
 				<xsl:variable name="bdNameSample" select="lower-case($vSample/attribute/value[../@class='Database Name'])"></xsl:variable>
 				<xsl:choose>
@@ -186,6 +189,7 @@
 						<a href="{../DatabaseGroup/@uri}" target="ext"><img src="{$basepath}/assets/images/generic_logo.gif" border="0" title="{$bdName}"/></a>
 					</xsl:when>
 				</xsl:choose>
+				</xsl:if>
 			</td>
 
 			<!-- <xsl:for-each select="tokenize($pAttributes,' ')"> <xsl:if test=".!='Sample-Accession'"> 
