@@ -126,10 +126,11 @@
 
 							<!-- LINKS -->
 							<xsl:when test="replace($token,'-',' ')='Database URI'">
-
-								<a href="{$value}" target="ext">
-									<xsl:value-of select="$value"></xsl:value-of>
+								<xsl:for-each select="$vSample/attribute/value[../@class='Database URI']">
+								<a href="{.}" target="ext">
+									<xsl:value-of select="."></xsl:value-of>
 								</a>
+								</xsl:for-each>
 							</xsl:when>
 
 							<xsl:when test="count($value/attribute[@class='Term Source REF'])=0">
