@@ -271,7 +271,7 @@
 		</table>
 		</xsl:when>
 		<xsl:otherwise>
-		 <xsl:for-each select="$vSample/attribute/value[../@class!='Database URI']">
+		 <xsl:for-each select="$vSample/attribute/value[../@class='Database URI']">
 		 <a href="{.}" target="ext">
 										<xsl:value-of select="."></xsl:value-of>
 									</a>
