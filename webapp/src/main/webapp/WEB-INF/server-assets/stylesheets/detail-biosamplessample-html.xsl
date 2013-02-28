@@ -234,6 +234,8 @@
 
 	<xsl:template name="process_uri">
 		<xsl:param name="vSample" />
+		<xsl:choose>
+		<xsl:when test="count($vSample/attribute[@class!='Database URI'])=1">
 		<xsl:variable name="bdName"
 			select="lower-case($vSample/attribute/value[../@class='Database Name'])"></xsl:variable>
 		<table id="bs_table_databases">
@@ -267,6 +269,18 @@
 				</xsl:choose>
 			</tr>
 		</table>
+		</xsl:when>
+		<xsl:otherwise>
+		 <xsl:for-each select="$vSample/attribute/value[../@class!='Database URI']">
+		 <a href="{.}" target="ext">
+										<xsl:value-of select="."></xsl:value-of>
+									</a>
+									<xsl:if test="position()!=last()">
+										<br/>
+									</xsl:if>
+		 </xsl:for-each>
+		</xsl:otherwise>
+		</xsl:choose>
 		<!-- <a href="{$pValue}" target="ext"> <xsl:value-of select="$pValue"></xsl:value-of> 
 			</a> -->
 	</xsl:template>
