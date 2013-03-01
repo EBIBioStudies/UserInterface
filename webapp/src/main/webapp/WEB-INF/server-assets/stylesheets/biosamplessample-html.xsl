@@ -119,9 +119,8 @@
 
 
 						<xsl:variable name="token" select="."></xsl:variable>
-						<!-- escape the [ ] characters -->
 						<xsl:variable name="value"
-							select="$vSample/attribute/value[../@class=replace(replace(replace($token, '-' , ' '),']','\]'),'[','\[')]" />
+							select="$vSample/attribute/value[../@class=replace($token, '-' , ' ')]" />
 						<xsl:choose>
 
 
