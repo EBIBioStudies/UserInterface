@@ -2,6 +2,7 @@
 <!-- cannto change the enconding to ISO-8859-1 or UTF-8 -->
 
 <!DOCTYPE xsl:stylesheet [ <!ENTITY nbsp "&#160;"> ]>
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
@@ -9,7 +10,6 @@
 	xmlns:escape="org.apache.commons.lang.StringEscapeUtils" xmlns:html="http://www.w3.org/1999/xhtml"
 	extension-element-prefixes="xs fn aejava html escape"
 	exclude-result-prefixes="xs fn aejava html escape" version="2.0">
-
 
 
 
@@ -54,11 +54,20 @@
 
 	<xsl:variable name="vkeywords" select="$keywords" />
 
-	<!-- <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="windows-1252" 
-		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" /> -->
-
-	<xsl:output omit-xml-declaration="yes" method="xhtml"
+ 	 <xsl:output omit-xml-declaration="yes" method="xhtml"
 		indent="no" encoding="windows-1252" doctype-public="-//W3C//DTD XHTML 1.1//EN" />
+
+<!-- 	 <xsl:output omit-xml-declaration="no" method="html" indent="no" encoding="windows-1252" 
+		 doctype-public="-//W3C//DTD XHTML 4.01 Transitional//EN" />  -->
+
+<!--  <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="windows-1252" 
+		doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"/> -->
+
+<!--  	<xsl:output omit-xml-declaration="yes" method="xhtml"
+		indent="no" encoding="windows-1252" doctype-system="-//W3C//DTD XHTML 4.01 Transitional//EN"  /> -->
+		
+ <!-- 	<xsl:output omit-xml-declaration="yes" method="xhtml"
+		indent="no" encoding="windows-1252" doctype-public="-//W3C//DTD XHTML 1.1//EN" /> -->
 
 
 	<xsl:include href="biosamples-html-page.xsl" />

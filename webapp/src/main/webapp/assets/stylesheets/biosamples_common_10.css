@@ -79,19 +79,10 @@ a:active {
 }
 */
 
-#ebi_footer {
-    background-color: #dedede;
-    border-top: 1px solid #bfbfbf;
-    z-index: 2;
-    position: fixed;
-    bottom: 0;
-    padding: 0 0 0 15px;
-    height: 22px;
-    width: 100%;
-    _position: absolute;
-    _top: expression(document.body.scrollTop+document.body.clientHeight-this.clientHeight-1);
-}
 
+.contents{
+background-color: white;
+}
 
 
 /* specific property setters */

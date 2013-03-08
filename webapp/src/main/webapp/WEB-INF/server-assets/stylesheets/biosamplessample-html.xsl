@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="windows-1252"?>
 <!-- cannto change the enconding to ISO-8859-1 or UTF-8 -->
+<!DOCTYPE xsl:stylesheet [ <!ENTITY nbsp "&#160;"> ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:aejava="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
 	xmlns:html="http://www.w3.org/1999/xhtml" extension-element-prefixes="xs aejava html"
@@ -126,16 +127,10 @@
 
 							<!-- LINKS -->
 							<xsl:when test="replace($token,'-',' ')='Database URI'">
-								<xsl:for-each
-									select="$vSample/attribute/value[../@class='Database URI']">
-									<a href="{.}" target="ext">
-										<xsl:value-of select="."></xsl:value-of>
-									</a>
-									<xsl:if test="position()!=last()">
-										,
-									</xsl:if>
 
-								</xsl:for-each>
+								<a href="{$value}" target="ext">
+									<xsl:value-of select="$value"></xsl:value-of>
+								</a>
 							</xsl:when>
 
 							<xsl:when test="count($value/attribute[@class='Term Source REF'])=0">
@@ -166,48 +161,32 @@
 			</xsl:for-each>
 
 			<td>
-				<!-- problem of have 2 database names - I just put the link if I have 
-					only one database -->
-				<xsl:if
-					test="count($vSample/attribute/value[../@class='Database Name']) = 1">
-
-					<xsl:variable name="bdName"
-						select="lower-case(../DatabaseGroup/@name)"></xsl:variable>
-					<xsl:variable name="bdNameSample"
-						select="lower-case($vSample/attribute/value[../@class='Database Name'])"></xsl:variable>
-					<xsl:choose>
-						<!-- firts I will see if the database is defined inside the Sample -->
-						<xsl:when
-							test="$bdNameSample =('arrayexpress','ena sra','dgva','pride') and not($vSample/attribute/value[../@class='Database URI']='')">
-							<a href="{$vSample/attribute/value[../@class='Database URI']}"
-								target="ext">
-								<img src="{$basepath}/assets/images/{$bdNameSample}_logo.gif"
-									alt="{$bdName} Link" title="{$bdName}" valign="middle" border="0" />
-							</a>
-						</xsl:when>
-						<xsl:when
-							test="not($bdNameSample='') and not($vSample/attribute/value[../@class='Database URI']='')">
-							<a href="{$vSample/attribute/value[../@class='Database URI']}"
-								target="ext">
-								<img src="{$basepath}/assets/images/generic_logo.gif"
-									border="0" title="{$bdNameSample}" />
-							</a>
-						</xsl:when>
-						<xsl:when
-							test="$bdName =('arrayexpress','ena sra','dgva','pride') and not(../DatabaseGroup/@uri='')">
-							<a href="{../DatabaseGroup/@uri}" target="ext">
-								<img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{$bdName} Link"
-									title="{$bdName}" valign="middle" border="0" />
-							</a>
-						</xsl:when>
-						<xsl:when test="not (../DatabaseGroup/@uri='')">
-							<a href="{../DatabaseGroup/@uri}" target="ext">
-								<img src="{$basepath}/assets/images/generic_logo.gif"
-									border="0" title="{$bdName}" />
-							</a>
-						</xsl:when>
-					</xsl:choose>
-				</xsl:if>
+				<xsl:variable name="bdName" select="lower-case(../DatabaseGroup/@name)"></xsl:variable>
+				<xsl:variable name="bdNameSample" select="lower-case($vSample/attribute/value[../@class='Database Name'])"></xsl:variable>
+				<xsl:choose>
+				   <!-- firts I will see if the database is defined inside the Sample -->
+				   <xsl:when
+						test="$bdNameSample =('arrayexpress','ena sra','dgva','pride') and not($vSample/attribute/value[../@class='Database URI']='')">
+						<a href="{$vSample/attribute/value[../@class='Database URI']}" target="ext">
+							<img src="{$basepath}/assets/images/{$bdNameSample}_logo.gif" alt="{$bdName} Link" title="{$bdName}"
+								valign="middle" border="0"/>
+						</a>
+					</xsl:when>
+					<xsl:when
+						test="not($bdNameSample='') and not($vSample/attribute/value[../@class='Database URI']='')">
+						<a href="{$vSample/attribute/value[../@class='Database URI']}" target="ext"><img src="{$basepath}/assets/images/generic_logo.gif" border="0" title="{$bdNameSample}"/></a>
+					</xsl:when>
+					<xsl:when
+						test="$bdName =('arrayexpress','ena sra','dgva','pride') and not(../DatabaseGroup/@uri='')">
+						<a href="{../DatabaseGroup/@uri}" target="ext">
+							<img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{$bdName} Link" title="{$bdName}"
+								valign="middle" border="0"/>
+						</a>
+					</xsl:when>
+					<xsl:when test="not (../DatabaseGroup/@uri='')">
+						<a href="{../DatabaseGroup/@uri}" target="ext"><img src="{$basepath}/assets/images/generic_logo.gif" border="0" title="{$bdName}"/></a>
+					</xsl:when>
+				</xsl:choose>
 			</td>
 
 			<!-- <xsl:for-each select="tokenize($pAttributes,' ')"> <xsl:if test=".!='Sample-Accession'"> 

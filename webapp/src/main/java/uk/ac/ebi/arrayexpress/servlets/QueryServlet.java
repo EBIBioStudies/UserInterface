@@ -140,6 +140,13 @@ public class QueryServlet extends ApplicationServlet
 
         // Output goes to the response PrintWriter.
         PrintWriter out = response.getWriter();
+        
+        //TODO: [PT:45669791] I must remove this afterwards. I need to have this here because I can't put thi on the XSL stylesheet (problems with enconding)
+        if (outputType.equals("html")) {
+            out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 4.01 Transitional//EN\">");
+        }
+        
+        
         try {
             String stylesheetName = new StringBuilder(stylesheet)
                     .append('-').append(outputType).append(".xsl").toString();
@@ -200,7 +207,7 @@ public class QueryServlet extends ApplicationServlet
     			
                     
                 }
- 
+
                 logger.info("Transformation initial");
                 if (!saxonEngine.transformToWriter(
                         source

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="windows-1252"?>
 <!-- cannot change the enconding to ISO-8859-1 or UTF-8 -->
+
 <!DOCTYPE xsl:stylesheet [ <!ENTITY nbsp "&#160;"> ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:aejava="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
@@ -44,8 +45,10 @@
 
 	<xsl:variable name="vkeywords" select="$keywords" />
 
-	<xsl:output omit-xml-declaration="yes" method="xhtml"
+ 	 <xsl:output omit-xml-declaration="yes" method="xhtml"
 		indent="no" encoding="windows-1252" doctype-public="-//W3C//DTD XHTML 1.1//EN" />
+<!-- 	<xsl:output method="html" indent="no" encoding="windows-1252" 
+		doctype-system="-//W3C//DTD XHTML 4.01 Transitional//EN" />  -->
 
 	<xsl:include href="biosamples-html-page.xsl" />
 	<!-- <xsl:include href="ae-sort-arrays.xsl"/> -->
@@ -234,8 +237,6 @@
 
 	<xsl:template name="process_uri">
 		<xsl:param name="vSample" />
-		<xsl:choose>
-		<xsl:when test="count($vSample/attribute[@class!='Database URI'])=1">
 		<xsl:variable name="bdName"
 			select="lower-case($vSample/attribute/value[../@class='Database Name'])"></xsl:variable>
 		<table id="bs_table_databases">
@@ -269,18 +270,6 @@
 				</xsl:choose>
 			</tr>
 		</table>
-		</xsl:when>
-		<xsl:otherwise>
-		 <xsl:for-each select="$vSample/attribute/value[../@class='Database URI']">
-		 <a href="{.}" target="ext">
-										<xsl:value-of select="."></xsl:value-of>
-									</a>
-									<xsl:if test="position()!=last()">
-										<br/>
-									</xsl:if>
-		 </xsl:for-each>
-		</xsl:otherwise>
-		</xsl:choose>
 		<!-- <a href="{$pValue}" target="ext"> <xsl:value-of select="$pValue"></xsl:value-of> 
 			</a> -->
 	</xsl:template>

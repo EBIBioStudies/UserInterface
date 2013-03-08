@@ -240,8 +240,8 @@ ${interface.application.google.analytics}
 
 	<%@ include file="WEB-INF/server-assets/html/header_ebi.html"%>
 
-	<div class="contents" id="contents">
-
+<!-- 	<div class="contents" id="contents">
+ -->
 		<div id="contentspane" class="contentspane">
 
 						<table class="mainFmtTable" cellspacing="15">
