@@ -64,6 +64,7 @@ import uk.ac.ebi.arrayexpress.utils.StringTools;
 import uk.ac.ebi.arrayexpress.utils.saxon.IDocumentSource;
 import uk.ac.ebi.arrayexpress.utils.saxon.SaxonException;
 import uk.ac.ebi.arrayexpress.utils.saxon.functions.FormatFileSizeFunction;
+import uk.ac.ebi.arrayexpress.utils.saxon.functions.HTMLDocumentFunction;
 import uk.ac.ebi.arrayexpress.utils.saxon.functions.HTTPStatusException;
 import uk.ac.ebi.arrayexpress.utils.saxon.functions.HTTPStatusFunction;
 import uk.ac.ebi.arrayexpress.utils.saxon.functions.NamespaceConstant;
