@@ -1,7 +1,7 @@
 package uk.ac.ebi.arrayexpress.components;
 
 /*
- * Copyright 2009-2011 European Molecular Biology Laboratory
+ * Copyright 2009-2013 European Molecular Biology Laboratory
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,151 +20,189 @@ package uk.ac.ebi.arrayexpress.components;
 import net.sf.saxon.Configuration;
 import net.sf.saxon.Controller;
 import net.sf.saxon.TransformerFactoryImpl;
-import net.sf.saxon.event.SaxonOutputKeys;
 import net.sf.saxon.event.SequenceWriter;
-import net.sf.saxon.functions.FunctionLibraryList;
-import net.sf.saxon.instruct.TerminationException;
+import net.sf.saxon.expr.instruct.TerminationException;
+import net.sf.saxon.lib.ExtensionFunctionDefinition;
+import net.sf.saxon.lib.SaxonOutputKeys;
 import net.sf.saxon.om.DocumentInfo;
 import net.sf.saxon.om.Item;
-import net.sf.saxon.tinytree.TinyBuilder;
+import net.sf.saxon.om.NodeInfo;
+import net.sf.saxon.sxpath.IndependentContext;
+import net.sf.saxon.sxpath.XPathEvaluator;
+import net.sf.saxon.sxpath.XPathExpression;
 import net.sf.saxon.trans.XPathException;
-import net.sf.saxon.xpath.XPathEvaluator;
+import net.sf.saxon.tree.tiny.TinyBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
+import uk.ac.ebi.arrayexpress.utils.LRUMap;
 import uk.ac.ebi.arrayexpress.utils.StringTools;
 import uk.ac.ebi.arrayexpress.utils.saxon.IDocumentSource;
-import uk.ac.ebi.arrayexpress.utils.saxon.functions.UserFunctionLibrary;
+import uk.ac.ebi.arrayexpress.utils.saxon.SaxonException;
+import uk.ac.ebi.arrayexpress.utils.saxon.functions.*;
+import uk.ac.ebi.arrayexpress.utils.saxon.functions.saxon.ParseHTMLFunction;
+//import uk.ac.ebi.fg.utils.saxon.IXPathEngine;
 
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
 import java.io.*;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-public class SaxonEngine extends ApplicationComponent implements URIResolver,
-		ErrorListener {
-	// logging machinery
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+public class SaxonEngine extends ApplicationComponent implements URIResolver, ErrorListener
+{
+    // logging machinery
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	public TransformerFactoryImpl trFactory;
-	private Map<String, Templates> templatesCache = new Hashtable<String, Templates>();
-	private Map<String, IDocumentSource> documentSources = new Hashtable<String, IDocumentSource>();
+    public TransformerFactoryImpl trFactory;
+    private XPathEvaluator xPathEvaluator;
+    private Map<String, Templates> templatesCache = new Hashtable<String, Templates>();
+    private Map<String, IDocumentSource> documentSources = new Hashtable<String, IDocumentSource>();
+    private Map<String, XPathExpression> xPathExpMap = Collections.synchronizedMap(new LRUMap<String, XPathExpression>(100));
 
-	private DocumentInfo appDocument;
+    private DocumentInfo appDocument;
 
-	private static final String XML_STRING_ENCODING = "UTF-8";
+    private static final String XML_STRING_ENCODING = "UTF-8";
 
-	public SaxonEngine() {
-	}
+    public SaxonEngine()
+    {
+    }
 
-	public void initialize() throws Exception {
-		// This is so we make sure we use Saxon and not anything else
-		trFactory = (TransformerFactoryImpl) TransformerFactoryImpl
-				.newInstance();
-		trFactory.setErrorListener(this);
-		trFactory.setURIResolver(this);
+    @Override
+    public void initialize() throws Exception
+    {
+        // This is so we make sure we use Saxon and not anything else
+        trFactory = (TransformerFactoryImpl) TransformerFactoryImpl.newInstance();
+        trFactory.setErrorListener(this);
+        trFactory.setURIResolver(this);
 
-		// create application document
-		appDocument = buildDocument("<?xml version=\"1.0\" encoding=\"UTF-8\"?><application name=\""
-				+ getApplication().getName() + "\"/>");
+        // TODO: study the impact of this change later
+        //trFactory.getConfiguration().setTreeModel(Builder.TINY_TREE_CONDENSED);
 
-		// hack into Saxon to add "parse-html" function from 9.2
-		Configuration c = trFactory.getConfiguration();
-		FunctionLibraryList extLibraries = new FunctionLibraryList();
-		extLibraries.addFunctionLibrary(c.getExtensionBinder("java"));
-		extLibraries.addFunctionLibrary(new UserFunctionLibrary());
-		c.setExtensionBinder("java", extLibraries);
-	}
+        // create application document
+        appDocument = buildDocument(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?><application name=\""
+                        + getApplication().getName()
+                        + "\"/>"
+        );
 
-	public void terminate() throws Exception {
-	}
+        registerExtensionFunction(new ParseHTMLFunction());
+        registerExtensionFunction(new SerializeXMLFunction());
+        //registerExtensionFunction(new TabularDocumentFunction());
+        //registerExtensionFunction(new GetMappedValueFunction());
+        registerExtensionFunction(new FormatFileSizeFunction());
+        registerExtensionFunction(new TrimTrailingDotFunction());
+        registerExtensionFunction(new HTMLDocumentFunction());
+        registerExtensionFunction(new HTTPStatusFunction());
 
-	public void registerDocumentSource(IDocumentSource documentSource) {
-		logger.debug("Registering source [{}]", documentSource.getDocumentURI());
-		this.documentSources.put(documentSource.getDocumentURI(),
-				documentSource);
-	}
+        xPathEvaluator = new XPathEvaluator(trFactory.getConfiguration());
+        IndependentContext namespaces = new IndependentContext(trFactory.getConfiguration());
+        namespaces.declareNamespace("ae", NamespaceConstant.AE_EXT);
+        xPathEvaluator.setNamespaceResolver(namespaces);
+    }
 
-	public void unregisterDocumentSource(IDocumentSource documentSource) {
-		logger.debug("Removing source [{}]", documentSource.getDocumentURI());
-		this.documentSources.remove(documentSource.getDocumentURI());
-	}
+    @Override
+    public void terminate() throws Exception
+    {
+    }
 
-	public DocumentInfo getRegisteredDocument(String documentURI)
-			throws Exception {
-		if (this.documentSources.containsKey(documentURI)) {
-			return this.documentSources.get(documentURI).getDocument();
-		} else {
-			return null;
-		}
-	}
+    public void registerDocumentSource( IDocumentSource documentSource )
+    {
+        logger.debug("Registering source [{}]", documentSource.getDocumentURI());
+        this.documentSources.put(documentSource.getDocumentURI(), documentSource);
+    }
 
-	// implements URIResolver.resolve
-	public Source resolve(String href, String base) throws TransformerException {
-		Source src;
-		try {
-			// try document sources first
-			if (documentSources.containsKey(href)) {
-				return documentSources.get(href).getDocument();
-			} else {
-				URL resource = Application.getInstance().getResource(
-						"/WEB-INF/server-assets/stylesheets/" + href);
-				if (null == resource) {
-					throw new TransformerException(
-							"Unable to locate stylesheet resource [" + href
-									+ "]");
-				}
-				InputStream input = resource.openStream();
-				if (null == input) {
-					throw new TransformerException(
-							"Unable to open stream for resource [" + resource
-									+ "]");
-				}
-				src = new StreamSource(input);
-			}
-		} catch (TransformerException x) {
-			throw x;
-		} catch (Exception x) {
-			logger.error("Caught an exception:", x);
-			throw new TransformerException(x.getMessage());
-		}
+    public void unregisterDocumentSource( IDocumentSource documentSource )
+    {
+        logger.debug("Removing source [{}]", documentSource.getDocumentURI());
+        this.documentSources.remove(documentSource.getDocumentURI());
+    }
 
-		return src;
-	}
+    public DocumentInfo getRegisteredDocument( String documentURI ) throws Exception
+    {
+        if (this.documentSources.containsKey(documentURI)) {
+            return this.documentSources.get(documentURI).getDocument();
+        } else {
+            return null;
+        }
+    }
 
-	// implements ErrorListener.error
-	public void error(TransformerException x) throws TransformerException {
-		throw x;
-	}
+    // implements URIResolver.resolve
+    @Override
+    public Source resolve( String href, String base ) throws TransformerException
+    {
+        Source src;
+        try {
+            // try document sources first
+            if (documentSources.containsKey(href)) {
+                return documentSources.get(href).getDocument();
+            } else {
+                if (null != href && !href.startsWith("/")) {
+                    href = "/WEB-INF/server-assets/stylesheets/" + href;
+                }
+                URL resource = Application.getInstance().getResource(href);
+                if (null == resource) {
+                    throw new TransformerException("Unable to locate resource [" + href + "]");
+                }
+                InputStream input = resource.openStream();
+                if (null == input) {
+                    throw new TransformerException("Unable to open stream for resource [" + resource.toString() + "]");
+                }
+                src = new StreamSource(input);
+            }
+        } catch (TransformerException x) {
+            throw x;
+        } catch (Exception x) {
+            logger.error("Caught an exception:", x);
+            throw new TransformerException(x.getMessage());
+        }
 
-	// implements ErrorListener.fatalError
-	public void fatalError(TransformerException x) throws TransformerException {
-		throw x;
-	}
+        return src;
+    }
 
-	// implements ErrorListener.warning
-	public void warning(TransformerException x) {
-		// if (logger.isDebugEnabled()) {
-		// logger.debug("There was a warning while transforming:", x);
-		// } else {
-		logger.warn(x.getLocalizedMessage());
-		// }
-	}
+    // implements ErrorListener.error
+    @Override
+    public void error( TransformerException x ) throws TransformerException
+    {
+        logger.error("Caught XSLT transformation error:", x);
+        getApplication().sendExceptionReport("[PROBLEM] XSLT transformation error occurred", x);
+        throw x;
+    }
 
-	public DocumentInfo getAppDocument() {
-		return appDocument;
-	}
+    // implements ErrorListener.fatalError
+    @Override
+    public void fatalError( TransformerException x ) throws TransformerException
+    {
+        if (!(x instanceof HTTPStatusException)) {
+            logger.error("Caught XSLT fatal transformation error:", x);
+            getApplication().sendExceptionReport("[SEVERE] XSLT fatal transformation error occurred", x);
+        }
+        throw x;
+    }
 
-	public String serializeDocument(DocumentInfo document) throws Exception {
+    // implements ErrorListener.warning
+    @Override
+    public void warning( TransformerException x )
+    {
+        logger.warn(x.getLocalizedMessage());
+    }
+
+    public DocumentInfo getAppDocument()
+    {
+        return appDocument;
+    }
+
+    public void registerExtensionFunction( ExtensionFunctionDefinition f )
+    {
+        trFactory.getConfiguration().registerExtensionFunction(f);
+    }
+
+    public String serializeDocument(DocumentInfo document) throws Exception {
 		Transformer transformer = trFactory.newTransformer();
 		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
@@ -172,47 +210,81 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver,
 		transformer.setOutputProperty(OutputKeys.INDENT, "no");
 		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
 		transformer.setOutputProperty(OutputKeys.ENCODING, "US-ASCII");
-		transformer.setOutputProperty(SaxonOutputKeys.CHARACTER_REPRESENTATION,
-				"entity;decimal");
+//		transformer.setOutputProperty(SaxonOutputKeys.CHARACTER_REPRESENTATION,
+//				"entity;decimal");
 
 		transformer.transform(document, new StreamResult(outStream));
 		return outStream.toString(XML_STRING_ENCODING);
 	}
 
-	public DocumentInfo buildDocument(String xml) throws XPathException {
-		StringReader reader = new StringReader(xml);
-		Configuration config = trFactory.getConfiguration();
-		return config.buildDocument(new StreamSource(reader));
-	}
+    
+    
+    
+    public DocumentInfo buildDocument( String xml ) throws XPathException
+    {
+        StringReader reader = new StringReader(xml);
+        Configuration config = trFactory.getConfiguration();
+        return config.buildDocument(new StreamSource(reader));
+    }
 
-	public List evaluateXPath(DocumentInfo doc, String xpath)
-			throws XPathExpressionException {
-		XPath xp = new XPathEvaluator(trFactory.getConfiguration());
-		XPathExpression xpe = xp.compile(xpath);
-		Object o = xpe.evaluate(doc, XPathConstants.NODESET);
-		return (o instanceof List) ? (List) o : null;
-	}
+    public DocumentInfo buildDocument( InputStream stream ) throws XPathException
+    {
+        Configuration config = trFactory.getConfiguration();
+        return config.buildDocument(new StreamSource(stream));
+    }
 
-	public String evaluateXPathSingle(DocumentInfo doc, String xpath)
-			throws XPathExpressionException {
-		XPath xp = new XPathEvaluator(trFactory.getConfiguration());
-		XPathExpression xpe = xp.compile(xpath);
-		return xpe.evaluate(doc);
-	}
 
-	public boolean transformToWriter(Source srcDocument, String stylesheet,
-			Map<String, String[]> params, Writer dstWriter) throws Exception {
-		return transform(srcDocument, stylesheet, params, new StreamResult(
-				dstWriter));
-	}
+    private XPathExpression getXPathExpression( String xpath ) throws XPathException
+    {
+        if (xPathExpMap.containsKey(xpath)) {
+            return xPathExpMap.get(xpath);
+        } else {
+            XPathExpression xpe = xPathEvaluator.createExpression(xpath);
+            xPathExpMap.put(xpath, xpe);
+            return xpe;
+        }
+    }
 
-	public boolean transformToFile(DocumentInfo srcDocument, String stylesheet,
-			Map<String, String[]> params, File dstFile) throws Exception {
-		return transform(srcDocument, stylesheet, params, new StreamResult(
-				dstFile));
-	}
+    public List<Object> evaluateXPath( NodeInfo node, String xpath ) throws XPathException
+    {
+        XPathExpression xpe = getXPathExpression(xpath);
 
-	public String transformToString(URL src, String stylesheet,
+        return xpe.evaluate(node);
+    }
+
+    public Object evaluateXPathSingle( NodeInfo node, String xpath ) throws XPathException
+    {
+        XPathExpression xpe = getXPathExpression(xpath);
+
+        return xpe.evaluateSingle(node);
+    }
+
+    public String evaluateXPathSingleAsString(NodeInfo node, String xpath) throws XPathException
+    {
+        Object e = evaluateXPathSingle(node, xpath);
+        if (null == e) {
+            return null;
+        } else if (e instanceof Item) {
+            return ((Item)e).getStringValue();
+        } else if (e instanceof String ) {
+            return (String)e;
+        } else {
+            throw new XPathException("Conversion from [" + e.getClass() + "] to String was not implemented");
+        }
+    }
+
+    public boolean transformToWriter( Source srcDocument, String stylesheet, Map<String, String[]> params, Writer dstWriter ) throws SaxonException
+    {
+        return transform(srcDocument, stylesheet, params, new StreamResult(dstWriter));
+    }
+
+    @SuppressWarnings("unused")
+    public boolean transformToFile( DocumentInfo srcDocument, String stylesheet, Map<String, String[]> params, File dstFile ) throws SaxonException
+    {
+        return transform(srcDocument, stylesheet, params, new StreamResult(dstFile));
+    }
+
+    public String transformToString(URL src, String stylesheet,
 			Map<String, String[]> params) throws Exception {
 		String str;
 		InputStream inStream = null;
@@ -256,80 +328,80 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver,
 		}
 	}
 
-	public DocumentInfo transform(String srcXmlString, String stylesheet,
-			Map<String, String[]> params) throws Exception {
-		Source src = new StreamSource(new StringReader(srcXmlString));
-		TinyBuilder dstDocument = new TinyBuilder();
-		if (transform(src, stylesheet, params, dstDocument)) {
-			return (DocumentInfo) dstDocument.getCurrentRoot();
-		}
-		return null;
-	}
+    public DocumentInfo transform( String srcXmlString, String stylesheet, Map<String, String[]> params ) throws SaxonException
+    {
+        Source src = new StreamSource(new StringReader(srcXmlString));
+        TinyBuilder dstDocument = new TinyBuilder(trFactory.getConfiguration().makePipelineConfiguration());
+        if (transform(src, stylesheet, params, dstDocument)) {
+            return (DocumentInfo) dstDocument.getCurrentRoot();
+        }
+        return null;
+    }
 
-	public DocumentInfo transform(DocumentInfo srcDocument, String stylesheet,
-			Map<String, String[]> params) throws Exception {
-		TinyBuilder dstDocument = new TinyBuilder();
-		if (transform(srcDocument, stylesheet, params, dstDocument)) {
-			return (DocumentInfo) dstDocument.getCurrentRoot();
-		}
-		return null;
-	}
+    public DocumentInfo transform( Source source, String stylesheet, Map<String, String[]> params ) throws SaxonException
+    {
+        TinyBuilder dstDocument = new TinyBuilder(trFactory.getConfiguration().makePipelineConfiguration());
+        if (transform(source, stylesheet, params, dstDocument)) {
+            return (DocumentInfo) dstDocument.getCurrentRoot();
+        }
+        return null;
+    }
 
-	private boolean transform(Source src, String stylesheet,
-			Map<String, String[]> params, Result dst) throws Exception {
-		boolean result = false;
-		try {
-			Templates templates;
-			// TODO RPE: just to not make cache of XSLT (MUST REMOVE
-			// THIS!!!!!!!!!!!!!!!)
-			 if (!templatesCache.containsKey(stylesheet) || 1==1) {
-			//if (!templatesCache.containsKey(stylesheet)) {
-				logger.debug("Caching prepared stylesheet [{}]", stylesheet);
-				// Open the stylesheet
-				Source xslSource = resolve(stylesheet, null);
+    private boolean transform( Source src, String stylesheet, Map<String, String[]> params, Result dst ) throws SaxonException
+    {
+        boolean result = false;
+        try {
+            Templates templates;
+            if (!templatesCache.containsKey(stylesheet)) {
+                logger.debug("Caching prepared stylesheet [{}]", stylesheet);
+                // Open the stylesheet
+                Source xslSource = resolve(stylesheet, null);
 
-				templates = trFactory.newTemplates(xslSource);
-				templatesCache.put(stylesheet, templates);
-			} else {
-				logger.debug("Getting prepared stylesheet [{}] from cache",
-						stylesheet);
-				templates = templatesCache.get(stylesheet);
-			}
-			Transformer xslt = templates.newTransformer();
+                templates = trFactory.newTemplates(xslSource);
+                templatesCache.put(stylesheet, templates);
+            } else {
+                logger.debug("Getting prepared stylesheet [{}] from cache", stylesheet);
+                templates = templatesCache.get(stylesheet);
+            }
+            Transformer xslt = templates.newTransformer();
 
-			// redirect all messages to logger
-			((Controller) xslt).setMessageEmitter(new LoggerWriter(logger));
+            // redirect all messages to logger
+            ((Controller) xslt).setMessageEmitter(new LoggerWriter(logger));
 
-			// assign the parameters (if not null)
-			if (null != params) {
-				for (Map.Entry<String, String[]> param : params.entrySet()) {
-					xslt.setParameter(param.getKey(),
-							StringTools.arrayToString(param.getValue(), " "));
-				}
-			}
+            // assign the parameters (if not null)
+            if (null != params) {
+                for (Map.Entry<String, String[]> param : params.entrySet()) {
+                    xslt.setParameter(param.getKey(), StringTools.arrayToString(param.getValue(), " "));
+                }
+            }
 
-			// Perform the transformation, sending the output to the response.
-			logger.debug("Performing transformation, stylesheet [{}]",
-					stylesheet);
-			xslt.transform(src, dst);
-			logger.debug("Transformation completed");
+            // Perform the transformation, sending the output to the response.
+            logger.debug("Performing transformation, stylesheet [{}]", stylesheet);
+            xslt.transform(src, dst);
+            logger.debug("Transformation completed");
 
-			result = true;
-		} catch (TerminationException x) {
-			logger.error("Transformation has been terminated by xsl instruction, please inspect log for details");
-		}
-		return result;
-	}
+            result = true;
+        } catch (TerminationException x) {
+            logger.error("Transformation has been terminated by XSL instruction, please inspect log for details");
+        } catch (TransformerException x) {
+            throw new SaxonException(x);
+        }
+        return result;
+    }
 
-	private static class LoggerWriter extends SequenceWriter {
-		private Logger logger;
+    class LoggerWriter extends SequenceWriter
+    {
+        private Logger logger;
 
-		public LoggerWriter(Logger logger) {
-			this.logger = logger;
-		}
+        protected LoggerWriter( Logger logger )
+        {
+            super(null);
+            this.logger = logger;
+        }
 
-		public void write(Item item) {
-			logger.debug("[xsl:message] {}", item.getStringValue());
-		}
-	}
+        public void write( Item item )
+        {
+            logger.debug("[xsl:message] {}", item.getStringValue());
+        }
+    }
 }

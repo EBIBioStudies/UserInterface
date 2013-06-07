@@ -35,6 +35,7 @@ import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesSampl
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentExperiments;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentFiles;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentProtocols;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.Indexer;
 
 /*
  * Copyright 2009-2011 European Molecular Biology Laboratory
@@ -74,7 +75,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 			if (!updateActive) {
 				logger.error("ReloadBiosamplesJob is trying to execute and the configuration does not allow that");
 				this.getApplication()
-						.sendEmail(
+						.sendEmail(null,null,
 								"BIOSAMPLES: WARNING",
 								"ReloadBiosamplesJob is trying to execute and the configuration does not allow that!");
 				// throw new
@@ -316,14 +317,14 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 		// I will create now the Lucene Indexes ...
 		SearchEngine search = ((SearchEngine) getComponent("SearchEngine"));
 		// TODO: rpe change all this static values
-		search.getController().indexFromXmlDB("biosamplesgroup", true,
+		search.getController().indexFromXmlDB("biosamplesgroup", Indexer.RebuildCategories.REBUILD,
 				newSetupDirectory.getAbsolutePath() + "/LuceneIndexes", dbHost,
 				dbPort, dbPassword, tempDbName);
 
 		// / ((IndexEnvironmentBiosamplesGroup) search.getController()
 		// / .getEnvironment("biosamplesgroup")).setup();
 		// TODO: rpe this db path shoul not be static
-		search.getController().indexFromXmlDB("biosamplessample", true,
+		search.getController().indexFromXmlDB("biosamplessample", Indexer.RebuildCategories.REBUILD,
 				newSetupDirectory.getAbsolutePath() + "/LuceneIndexes", dbHost,
 				dbPort, dbPassword, tempDbName);
 		// / ((IndexEnvironmentBiosamplesSample) search.getController()

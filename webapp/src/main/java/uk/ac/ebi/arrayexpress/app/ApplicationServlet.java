@@ -108,7 +108,7 @@ public abstract class ApplicationServlet extends HttpServlet
     protected abstract boolean canAcceptRequest( HttpServletRequest request, RequestType requestType );
 
     protected abstract void doRequest( HttpServletRequest request, HttpServletResponse response, RequestType requestType )
-            throws ServletException, IOException;
+            throws ServletException, Exception;
 
     protected void logRequest( Logger logger, HttpServletRequest request, RequestType requestType )
     {

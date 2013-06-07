@@ -166,7 +166,7 @@ public class XmlDbConnectionPool extends ApplicationComponent
 
 		catch (Exception ex) {
 			// Handle exceptions
-			ret = "ERROR";
+			ret = "ERROR - The BaseXServer is not available";
 			logger.error("Exception:->[{}]", ex.getMessage());
 			ex.printStackTrace();
 		} finally {

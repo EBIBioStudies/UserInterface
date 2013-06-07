@@ -19,102 +19,355 @@
     if($ == undefined)
         throw "jQuery not loaded";
 
+	//alert("dsdsrerere2");
+	    
     $.fn.extend({
-
-        aePager: function() {
-            return this.each(function() {
-			new $.AEPager(this);
-            });
-        }
-    });
-
-    $.AEPager = function(elt) {
-
-        var $element = $(elt);
-        var curPage = $element.find("#page").first().text();
-        var pageSize = $element.find("#page_size").first().text();
-        var totalPages = $element.find("#total_pages").first().text();
-
-        if ( totalPages > 1 ) {
-            var pagerHtml = "Pages: ";
-            for ( var page = 1; page <= totalPages; page++ ) {
-                if ( curPage == page ) {
-                    pagerHtml = pagerHtml + "<span id=\"current_page\">" + page + "</span>";
-                } else if ( 2 == page && curPage > 6 && totalPages > 11 ) {
-                    pagerHtml = pagerHtml + "..";
-                } else if ( totalPages - 1 == page && totalPages - curPage > 5 && totalPages > 11 ) {
-                    pagerHtml = pagerHtml + "..";
-                } else if ( 1 == page || ( curPage < 7 && page < 11 ) || ( Math.abs( page - curPage ) < 5 ) || ( totalPages - curPage < 6 && totalPages - page < 10 ) || totalPages == page || totalPages <= 11 ) {
-                    var newQuery = $.query.set( "page", page ).set( "pagesize", pageSize ).toString();
-                    pagerHtml = pagerHtml + "<a href=\"browse.html" + newQuery + "\">" + page + "</a>";
-                }
-            }
-            $element.html(pagerHtml).show();
-        }
-    };
-
-    $.fn.extend({
-
         aeLoginForm: function(options) {
             return this.each(function() {
-			new $.AELoginForm(this, options);
+			    new $.AELoginForm(this, options);
             });
         }
     });
 
-    $.AELoginForm = function(form, opts) {
-
-        var $form = $(form);
-        var $user = $form.find("input[name='u']").first();
-        var $pass = $form.find("input[name='p']").first();
-        var $remember = $form.find("input[name='r']").first();
-        var $submit = $form.find("input[name='s']").first();
-        var options = opts
+    $.AELoginForm = function(loginWindow, options) {
+        var $body = $("body");
+        var $window = $(loginWindow);
+        var $login_form = $window.find("form").first();
+        var $user = $login_form.find("input[name='u']").first();
+        var $pass = $login_form.find("input[name='p']").first();
+        var $open = $(options.open).first();
+        var $close = $(options.close).first();
         var $status = $(options.status);
+        var $status_text = $("<span class='alert'/>").appendTo($status);
+        var $forgot = $(options.forgot).first();
+        var $forgot_form = $window.find("form").last();
+        var $email = $forgot_form.find("input[name='e']").first();
+        var $accession = $forgot_form.find("input[name='a']").first();
 
-        function doLogin() {
-            var pass = $pass.val();
+        function verifyLoginValues() {
+            if ("" == $user.val()) {
+                showStatus("User name should not be empty");
+                $user.focus();
+                return false;
+            }
 
-            $pass.val("");
-            $status.text("");
-            $submit.attr("disabled", "true");
-            $.get(options.verifyURL, { u: $user.val(), p: pass }, doLoginNext);
+            if ("" == $pass.val()) {
+                showStatus("Password should not be empty");
+                $pass.focus();
+                return false;
+            }
+
+            hideStatus();
+            return true;
         }
 
-        function doLoginNext(text) {
-            $submit.removeAttr("disabled");
-            if ( "" != text ) {
-                var loginExpiration = null;
-                if ( $remember.attr("checked") ) {
-                    loginExpiration = 365;
-                }
+        function verifyForgotValues() {
 
-                $.cookie("AeLoggedUser", $user.val(), {expires: loginExpiration, path: '/'});
-                $.cookie("AeLoginToken", text, {expires: loginExpiration, path: '/'});
+            if ("" == $email.val()) {
+                showStatus("User name or email should not be empty");
+                $email.focus();
+                return false;
+            }
 
-                window.location.href = decodeURI(window.location.pathname);
+            if ("" == $accession.val()) {
+                showStatus("Accession should not be empty");
+                $accession.focus();
+                return false;
+            }
+
+            if (-1 == ("=" + $accession.val() + "=").search(new RegExp("=[ae]-[a-z]{4}-[0-9]+=", "i"))) {
+                showStatus("Incorrect accession format (should be E-xxxx-nnnn)");
+                $accession.focus();
+                return false;
+            }
+
+            hideStatus();
+            return true;
+        }
+
+        function isLoggedIn() {
+            return (undefined != $.cookie("AeLoggedUser") && undefined != $.cookie("AeLoginToken"));
+        }
+
+        function clearCookies() {
+            $.cookie("AeAuthMessage", null, {path: '/' });
+            $.cookie("AeAuthUser", null, {path: '/' });
+            $.cookie("AeLoggedUser", null, {path: '/' });
+            $.cookie("AeLoginToken", null, {path: '/' });
+        }
+
+        function doLogout() {
+            clearCookies();
+            doReload();
+        }
+
+        function doReload() {
+            window.location.href = window.location.href;
+        }
+
+        function doOpenWindow() {
+            $body.bind("click", doCloseWindow);
+            $window.bind("click", onWindowClick);
+            hideForgotPanel();
+            $window.show();
+        }
+
+        function doCloseWindow() {
+            $window.unbind("click", onWindowClick);
+            $body.unbind("click", doCloseWindow);
+            $window.hide();
+            hideStatus();
+        }
+
+        function onWindowClick(e) {
+            e.stopPropagation();
+        }
+
+        function showStatus(text) {
+            $status_text.text(text);
+            $status.show();
+        }
+
+        function hideStatus() {
+            $status.hide();
+            $status_text.text();
+        }
+
+        function showForgotPanel() {
+            $login_form.hide();
+            $forgot_form.show();
+            $forgot_form.find("input").first().focus();
+        }
+
+        function hideForgotPanel() {
+
+            $forgot_form.hide();
+            $forgot_form.find("input").first().val("");
+            $login_form.show();
+        }
+
+        $login_form.submit(function() {
+            return verifyLoginValues();
+        });
+
+        $forgot_form.submit(function() {
+            return verifyForgotValues();
+        });
+
+        $open.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (isLoggedIn()) {
+                doLogout();
             } else {
-                $status.text("Incorrect user name or password. Please try again.");
+                doOpenWindow();
+                $user.focus();
+            }
+        });
+
+        $close.click(function (e) {
+            e.preventDefault();
+            doCloseWindow();
+        });
+
+        $forgot.find("a").click(function (e) {
+            e.preventDefault();
+            hideStatus();
+            showForgotPanel();
+        });
+
+        $window.find("input").keydown(function (e) {
+            if (27 == e.keyCode) {
+                doCloseWindow();
+            }
+        });
+
+        var message = $.cookie("AeAuthMessage");
+        if (undefined != message) {
+            var username = $.cookie("AeAuthUser");
+            clearCookies();
+            if (undefined != username) {
+                $user.val(username);
+            }
+            showStatus(message.replace(/^"?(.+[^"])"?$/g, "$1"));
+            doOpenWindow();
+            if (undefined != username) {
+                $pass.focus();
+            } else {
                 $user.focus();
             }
         }
-
-        $(form).submit(function() {
-            doLogin();
-            return false;
-        });
-
-        $user.focus();
     };
 
-    $(function() {
-        // fixes EBI iframes issue in MSIE
-        if ($.browser.msie) {
-            $("#head").attr("allowTransparency", true);
-            $("#ae_contents").css("z-index", 1);
+    $.fn.extend({
+
+        aeFeedbackForm: function(options) {
+            return this.each(function() {
+                new $.AEFeedbackForm(this, options);
+            });
         }
     });
 
+    $.AEFeedbackForm = function(feedbackWindow, options) {
+
+        var $body = $("body");
+        var $window = $(feedbackWindow);
+        var $form = $window.find("form").first();
+        var $message = $form.find("textarea[name='m']").first();
+        var $email = $form.find("input[name='e']").first();
+        var $page = $form.find("input[name='p']").first();
+        var $ref = $form.find("input[name='r']").first();
+        var $submit = $form.find("input[type='submit']").first();
+        var $open = $(options.open).first();
+        var $close = $(options.close).first();
+
+
+        function doOpenWindow() {
+            $body.bind("click", doCloseWindow);
+            $window.bind("click", onWindowClick);
+
+            $submit.removeAttr("disabled");
+            $window.show();
+            $message.val("").focus();
+        }
+
+        function doCloseWindow() {
+            $window.unbind("click", onWindowClick);
+            $body.unbind("click", doCloseWindow);
+            $window.hide();
+        }
+
+        function onWindowClick(e) {
+            e.stopPropagation();
+        }
+
+        $form.submit(function() {
+            $submit.attr("disabled", "true");
+            $.post( contextPath + "/feedback"
+                , {m : $message.val(), e : $email.val(), p : $page.val(), r : $ref.val()}
+            ).always(function() {
+                doCloseWindow();
+            });
+        });
+
+        $open.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            doOpenWindow();
+        });
+
+        $close.click(function (e) {
+            e.preventDefault();
+            doCloseWindow();
+        });
+
+        $form.find("input,textarea").keydown(function (e) {
+            if (27 == e.keyCode) {
+                doCloseWindow();
+            }
+        });
+    };
+
+    
+    function updateTableHeaders() {
+    	//alert("updateTableHeaders");
+        $(".persist-area").each(function() {
+
+            var el             = $(this),
+                offset         = el.offset(),
+                scrollTop      = $(window).scrollTop(),
+                floatingHeader = $(".floating-header", this),
+                width          = floatingHeader.prev().width();
+
+            //alert(floatingHeader);
+            if ((scrollTop > offset.top) && (scrollTop < offset.top + el.height())) {
+                floatingHeader.css({
+                    "visibility": "visible",
+                    "width": width
+                });
+            } else {
+                floatingHeader.css({
+                    "visibility": "hidden"
+                });
+            }
+        });
+    }
+
+    function resizeTableHeaders() {
+    	//alert("resizeTableHeaders");
+        $(".persist-area").each(function() {
+
+            var floatingHeader = $(".floating-header", this),
+                width          = floatingHeader.prev().width();
+
+
+            if ("visible" == floatingHeader.css("visibility")) {
+                floatingHeader.css({
+                    "visibility": "visible",
+                    "width": width
+                });
+            }
+        });
+    }
+
+    function initPersistentHeaders()
+    {
+        var clonedHeaderRow;
+
+        $(".persist-area").each(function() {
+            clonedHeaderRow = $(".persist-header", this);
+            clonedHeaderRow
+                .before(clonedHeaderRow.clone())
+                .addClass("floating-header");
+
+        });
+
+        $(window)
+            .scroll(updateTableHeaders)
+            .resize(resizeTableHeaders)
+            .trigger("scroll");
+    }
+
+    $.aeFeedback = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $("li.feedback a").click();
+    };
+    
+    $(function() {
+    	//alert("Assoc");
+    	initPersistentHeaders();
+        $("#ae-login").aeLoginForm({
+            open: "li.login a",
+            close: "#ae-login-close",
+            status: ".ae-login-status",
+            forgot: "#ae-login-forgot"
+        });
+        $("#ae-feedback").aeFeedbackForm({
+            open: "li.feedback a",
+            close: "#ae-feedback-close"
+        });
+        
+        var autoCompleteFixSet = function() {
+            $(this).attr('autocomplete', 'off');
+        };
+        var autoCompleteFixUnset = function() {
+            $(this).removeAttr('autocomplete');
+        };
+
+        $("#local-searchbox").autocomplete(
+            contextPath + "/keywords.txt"
+            , { matchContains: false
+                , selectFirst: false
+                , scroll: true
+                , max: 50
+                , requestTreeUrl: contextPath + "/efotree.txt"
+            }
+        ).focus(autoCompleteFixSet).blur(autoCompleteFixUnset).removeAttr('autocomplete');
+
+    });
+
+    
 })(window.jQuery);
 
 //I will clear and sumit the form with no data (refresh) [PT:44656245]

@@ -17,19 +17,20 @@ package uk.ac.ebi.arrayexpress.servlets;
  *
  */
 
-import org.quartz.SchedulerException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import uk.ac.ebi.arrayexpress.app.ApplicationServlet;
-import uk.ac.ebi.arrayexpress.components.Files;
-import uk.ac.ebi.arrayexpress.components.JobsController;
-import uk.ac.ebi.arrayexpress.utils.RegexHelper;
-import uk.ac.ebi.arrayexpress.utils.StringTools;
+import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import org.quartz.SchedulerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import uk.ac.ebi.arrayexpress.app.ApplicationServlet;
+import uk.ac.ebi.arrayexpress.components.JobsController;
+import uk.ac.ebi.arrayexpress.utils.RegexHelper;
+import uk.ac.ebi.arrayexpress.utils.StringTools;
 
 public class ControlServlet extends ApplicationServlet
 {
@@ -42,6 +43,7 @@ public class ControlServlet extends ApplicationServlet
         return (requestType == RequestType.GET || requestType == RequestType.POST);
     }
 
+    
     // Respond to HTTP requests from browsers.
     protected void doRequest( HttpServletRequest request, HttpServletResponse response, RequestType requestType ) throws ServletException, IOException
     {
@@ -63,17 +65,13 @@ public class ControlServlet extends ApplicationServlet
                     || "reload-efo".equals(command)
                     || "update-efo".equals(command)
                     || "reload-all".equals(command)
+                    | "incremental-reload".equals(command)
             		) {
                 ((JobsController) getComponent("JobsController")).executeJob(command);
             } else if (command.equals("reload-ae1-xml")) {
                 ((JobsController) getComponent("JobsController")).executeJobWithParam(command, "connections", params);
-            } else if (command.equals("rescan-files")) {
-                if (0 < params.length()) {
-                    ((Files) getComponent("Files")).setRootFolder(params);
-                }
-                ((JobsController) getComponent("JobsController")).executeJob(command);
             } else if ("test-email".equals(command)) {
-                getApplication().sendEmail(
+                getApplication().sendEmail(null,null,
                         "Test message"
                         , "This test message was sent from [${variable.appname}] running on [${variable.hostname}], please ignore."
                             + StringTools.EOL

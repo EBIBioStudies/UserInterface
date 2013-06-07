@@ -3,7 +3,7 @@
 
 <!DOCTYPE xsl:stylesheet [ <!ENTITY nbsp "&#160;"> ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:aejava="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"   xmlns:aejava="http://www.ebi.ac.uk/arrayexpress/XSLT/SearchExtension"
 	xmlns:html="http://www.w3.org/1999/xhtml" extension-element-prefixes="xs aejava html"
 	exclude-result-prefixes="xs aejava html" version="2.0">
 
@@ -118,7 +118,7 @@
 				</div>
 			</td>
 
-			<td class="col_description">
+			<td>
 				<!-- <div class="ellipsis_class">
 				<span id="ellipsis" class='ellipsis_text'> -->
 					<xsl:call-template name="highlight">

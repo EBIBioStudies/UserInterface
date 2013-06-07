@@ -33,6 +33,12 @@
 		<interface.application.link.browse_help>/fg/doc/help/browse_results.html</interface.application.link.browse_help>
 		<interface.application.link.aer_old.base.url>/microarray-as/aer</interface.application.link.aer_old.base.url>
 
+
+		<interface.application.pref.reports.recipients>rpereira&#64;ebi.ac.uk</interface.application.pref.reports.recipients>
+        <interface.application.pref.reports.hidden-recipients>rpereira&#64;ebi.ac.uk</interface.application.pref.reports.hidden-recipients>
+        <interface.application.pref.feedback.recipients>rpereira&#64;ebi.ac.uk</interface.application.pref.feedback.recipients>
+        <interface.application.pref.remind.recipients>rpereira&#64;ebi.ac.uk</interface.application.pref.remind.recipients>
+
 		<interface.application.pref.files.prefix>bs</interface.application.pref.files.prefix>
 		<interface.application.index.directory>Setup</interface.application.index.directory>
 		<interface.application.global.setup.directory>${sys:catalina.base}/deploy/GlobalSetup/Setup</interface.application.global.setup.directory>
@@ -67,7 +73,7 @@
 		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/basexAE</interface.application.db.xml.connection.string> -->
 		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/biosamplesAEGroupX16</interface.application.db.xml.connection.string> -->
 		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/biosamples_sampleAtt</interface.application.db.xml.connection.string> -->
-		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.string> -->
+		<!-- <interface.application.db.xml.connection.string>xmldb:basex://host:1984/biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.string> -->
 		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/biosamplesAEGroup</interface.application.db.xml.connection.string> -->
 		<interface.application.db.xml.connection.base>xmldb:basex</interface.application.db.xml.connection.base>
 		<interface.application.db.xml.connection.host>localhost</interface.application.db.xml.connection.host>
@@ -121,23 +127,20 @@
 					<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type> 
 					<interface.application.db.xml.update.url>/Users/rpslpereira/Downloads/exportAge.xml</interface.application.db.xml.update.url> -->
 
-	<!-- 			<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
- 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
-				<interface.application.db.xml.update.url>/Users/rpslpereira/Apps/apache-tomcat-6.0.33/temp_05022013/Backups/backup_1359978165466909000/XmlDownload/biosamples.xml</interface.application.db.xml.update.url>
- -->
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
-				<interface.application.db.xml.update.type>age</interface.application.db.xml.update.type>
-				<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp>
-				<interface.application.db.xml.update.url>http://tomcat-15:21480/biosamples/</interface.application.db.xml.update.url>
-				<interface.application.db.xml.update.username>rui</interface.application.db.xml.update.username>
-				<interface.application.db.xml.update.password>ruipereire</interface.application.db.xml.update.password>
-				<interface.application.db.xml.update.cookie>AGESESS</interface.application.db.xml.update.cookie>
-		
+				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
+				<interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/upgrade.xml</interface.application.db.xml.update.url>
+				<!-- <interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/IncrementalUpdates/biosamplesIncrementalUpdate_FileUsedOnServer.xml</interface.application.db.xml.update.url> -->
+				<!-- <interface.application.db.xml.update.active>true</interface.application.db.xml.update.active> 
+					<interface.application.db.xml.update.type>age</interface.application.db.xml.update.type> 
+					<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp> 
+					<interface.application.db.xml.update.url>http://tomcat-15:21480/biosamples/</interface.application.db.xml.update.url> 
+					<interface.application.db.xml.update.username>rui</interface.application.db.xml.update.username> 
+					<interface.application.db.xml.update.password>ruipereire</interface.application.db.xml.update.password> 
+					<interface.application.db.xml.update.cookie>AGESESS</interface.application.db.xml.update.cookie> -->
 
- <!-- 
-				<interface.application.db.xml.update.type>url</interface.application.db.xml.update.type> 
-				<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?server=tst&amp;amp;samples=EMBED&amp;amp;schema=AGE1&amp;amp;showAttributes=true&amp;amp;sources=true</interface.application.db.xml.update.url> 
- -->
+				<!-- <interface.application.db.xml.update.type>url</interface.application.db.xml.update.type> 
+					<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?server=tst&amp;amp;samples=EMBED&amp;amp;schema=AGE1&amp;amp;showAttributes=true&amp;amp;sources=true</interface.application.db.xml.update.url> -->
 				<!-- <interface.application.pref.biosamples.update.timestamp>0</interface.application.pref.biosamples.update.timestamp> 
 					<interface.application.pref.reload-all.update.schedule>0 0 12 * * ?</interface.application.pref.reload-all.update.schedule> 
 					<interface.application.pref.reload-all.update.interval /> <interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
@@ -209,14 +212,14 @@
 		</profile>
 
 
-<profile>
+		<profile>
 			<id>wwwdev</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
 				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
-				<!--  JUST REMOVED IT FOR FRONTIERIFICATION PROCESS - need to use it again -->
+				<!-- JUST REMOVED IT FOR FRONTIERIFICATION PROCESS - need to use it again -->
 				<interface.application.body.class>bs_dev_preview</interface.application.body.class>
 				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
 				<interface.application.base.path>/biosamples</interface.application.base.path>
@@ -224,25 +227,23 @@
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
 				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
-				
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
 				<interface.application.db.xml.update.url>/ebi/microarray/ma-exp/biosamples/gui.xml</interface.application.db.xml.update.url>
 				<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule>
 				<interface.application.pref.reload-all.update.interval />
 				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
-				
-<!-- 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
-				<interface.application.db.xml.update.type>age</interface.application.db.xml.update.type>
-				<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp>
-				<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule>
-				<interface.application.pref.reload-all.update.interval />
-				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
-				<interface.application.db.xml.update.url>http://tomcat-15:21480/biosamples/</interface.application.db.xml.update.url>
-				<interface.application.db.xml.update.username>rui</interface.application.db.xml.update.username>
-				<interface.application.db.xml.update.password>ruipereire</interface.application.db.xml.update.password>
-				<interface.application.db.xml.update.cookie>AGESESS</interface.application.db.xml.update.cookie>
- -->			</properties>
+
+				<!-- <interface.application.db.xml.update.active>true</interface.application.db.xml.update.active> 
+					<interface.application.db.xml.update.type>age</interface.application.db.xml.update.type> 
+					<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp> 
+					<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule> 
+					<interface.application.pref.reload-all.update.interval /> <interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> 
+					<interface.application.db.xml.update.url>http://tomcat-15:21480/biosamples/</interface.application.db.xml.update.url> 
+					<interface.application.db.xml.update.username>rui</interface.application.db.xml.update.username> 
+					<interface.application.db.xml.update.password>ruipereire</interface.application.db.xml.update.password> 
+					<interface.application.db.xml.update.cookie>AGESESS</interface.application.db.xml.update.cookie> -->
+			</properties>
 		</profile>
 
 		<profile>
@@ -521,17 +522,18 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>bs-interface-auth</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.5</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.tuckey</groupId>
-			<artifactId>urlrewritefilter</artifactId>
-			<version>3.2.0</version>
-			<scope>runtime</scope>
-		</dependency>
+
 		<dependency> <!-- tomcat 5.5 implements servlet api 2.4 -->
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -543,11 +545,11 @@
 			<artifactId>mail</artifactId>
 			<version>1.4.3</version>
 		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jul-to-slf4j</artifactId>
-			<version>1.5.10</version>
-		</dependency>
+
+		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>jul-to-slf4j</artifactId> 
+			</dependency> <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-api</artifactId> 
+			</dependency> <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-log4j12</artifactId> 
+			<scope>runtime</scope> </dependency> -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -555,22 +557,25 @@
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>1.5.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.5.10</version>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.16</version>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1.1</version>
-			<scope>runtime</scope>
+			<groupId>org.tuckey</groupId>
+			<artifactId>urlrewritefilter</artifactId>
+			<version>4.0.3</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
@@ -598,18 +603,8 @@
 			<version>1.3.2</version>
 			<type>jar</type>
 		</dependency>
-		<dependency>
-			<groupId>net.sf.saxon</groupId>
-			<artifactId>saxon9</artifactId>
-			<version>9.1.0.8</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.saxon</groupId>
-			<artifactId>saxon9-xpath</artifactId>
-			<version>9.1.0.8</version>
-		</dependency>
-		<!-- <dependency> <groupId>net.sf.saxon</groupId> <artifactId>Saxon-HE</artifactId> 
-			<version>9.4</version> </dependency> -->
+		 <dependency> <groupId>net.sf.saxon</groupId> <artifactId>Saxon-HE</artifactId> 
+			<version>9.4</version> </dependency>
 		<dependency>
 			<groupId>org.ccil.cowan.tagsoup</groupId>
 			<artifactId>tagsoup</artifactId>
@@ -721,6 +716,18 @@
 			<version>4.1.2</version>
 		</dependency>
 
+		<dependency>
+			<groupId>net.sf.uadetector</groupId>
+			<artifactId>uadetector-resources</artifactId>
+			<version>2013.02</version>
+		</dependency>
+		
+		 <dependency>
+            <groupId>nu.validator.htmlparser</groupId>
+            <artifactId>htmlparser</artifactId>
+            <version>1.4</version>
+        </dependency>
+        
 		<!-- <dependency> <groupId>exist</groupId> <artifactId>existdb</artifactId> 
 			<version>1.0</version> <scope>system</scope> <systemPath>/Users/rpslpereira/Apps/ExistDB/exist.jar</systemPath> 
 			</dependency> -->

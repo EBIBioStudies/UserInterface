@@ -3,8 +3,8 @@
 	<app>
 		<reports>
 			<originator>"Biosamples" &lt;biosamples@ebi.ac.uk&gt; </originator>
-			<recipients>${interface.application.pref.reports.recipients}
-			</recipients>
+			<recipients>${interface.application.pref.reports.recipients}</recipients>
+			<hidden-recipients>${interface.application.pref.reports.hidden-recipients}</hidden-recipients>
 			<subject>Runtime exception report</subject>
 			<smtp>
 				<host>smtp.ebi.ac.uk</host>
@@ -12,11 +12,8 @@
 			</smtp>
 		</reports>
 	</app>
-
-
-
-
 	<bs>
+
 		<globalSetupDirectory>${interface.application.global.setup.directory}
 		</globalSetupDirectory>
 		<setupDirectory>${sys:java.io.tmpdir}/${interface.application.index.directory}
@@ -30,7 +27,16 @@
 		<!-- -1 means that the update is not possible; 0 means complete update; 1 means last day update -->
 		<reloadBiosamplesDatabase>${interface.application.pref.biosamples.update.timestamp}</reloadBiosamplesDatabase>
 		
-		
+		<feedback>
+            <recipients>${interface.application.pref.feedback.recipients}</recipients>
+            <subject>BioSamples user feedback</subject>
+        </feedback>
+        <password-remind>
+            <originator>"Biosamples" &lt;biosamples@ebi.ac.uk&gt;</originator>
+            <recipients>${interface.application.pref.remind.recipients}</recipients>
+            <subject>BioSamples account information</subject>
+        </password-remind>
+        
 		<xmldatabase>
 			<driver>${interface.application.db.xml.driver}</driver>
 			<base>${interface.application.db.xml.connection.base}</base>
@@ -87,6 +93,8 @@
 		</efo>
 
 
+
+
 <!-- location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" -->
 
 		<index id="biosamplesgroup"
@@ -111,6 +119,15 @@
 					escape="false" -->
 				<field name="idsort" title="by Id" type="integer" path="substring(@id,6) cast as xs:integer"
 					analyze="false" store="false" escape="false" />
+					
+				<!-- Security - authorization-->
+				<field name="userid" type="string" path="user/@id" analyze="false" store="false" escape="false"/>
+				<!-- Security - authorization-->
+		
+							
+				<!-- this field is only used for incremental updates -->
+				<field name="delete" type="boolean" path="@delete = 'true'"/>	
+					
 				<field name="description" title="by Description" type="string"
 					path="attribute/value[../@class='Submission Description']" analyze="true"
 					store="true" escape="false" autocompletion="true" sortfields="description" />
@@ -183,7 +200,9 @@
 			<!-- 	<field name="allele" type="string" path="attribute/value[../@class='Allele Name']"
 					analyze="true" store="false" escape="false" sortfields="allele" /> -->
 				
-						
+				<!-- Security - authorization-->
+				<field name="userid" type="string" path="user/@id" analyze="false" store="false" escape="false"/>
+				<!-- Security - authorization-->				
 				
 				<field name="name" type="string" path="attribute/value[../@class='Name']"
 					analyze="true" store="false" escape="false" sortfields="name" />
@@ -203,6 +222,8 @@
 					path="attribute/value[../@class='Sample Accession']" analyze="true"
 					store="false" escape="false" sortfields="0" />
 	
+					<!-- this field is only used for incremental updates -->
+				<field name="delete" type="boolean" path="@delete = 'true'"/>	
 	
 			
 				<!-- dynamic sort -->				

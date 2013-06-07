@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="windows-1252"?>
 <!-- cannto change the enconding to ISO-8859-1 or UTF-8 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:search="java:uk.ac.ebi.arrayexpress.utils.saxon.search.SearchExtension"
+                xmlns:search="http://www.ebi.ac.uk/arrayexpress/XSLT/SearchExtension"
                 xmlns:html="http://www.w3.org/1999/xhtml"
-                extension-element-prefixes="search"
+                extension-element-prefixes="search html"
                 exclude-result-prefixes="search html"
                 version="2.0">
 

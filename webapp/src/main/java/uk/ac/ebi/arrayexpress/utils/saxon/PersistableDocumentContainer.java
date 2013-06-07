@@ -1,7 +1,7 @@
 package uk.ac.ebi.arrayexpress.utils.saxon;
 
 /*
- * Copyright 2009-2011 European Molecular Biology Laboratory
+ * Copyright 2009-2013 European Molecular Biology Laboratory
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,12 @@ package uk.ac.ebi.arrayexpress.utils.saxon;
  */
 
 import net.sf.saxon.om.DocumentInfo;
+import net.sf.saxon.trans.XPathException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 import uk.ac.ebi.arrayexpress.utils.persistence.Persistable;
-
-import javax.xml.xpath.XPathExpressionException;
 
 // TODO - check XML version on persistence events
 
@@ -57,6 +56,7 @@ public class PersistableDocumentContainer extends DocumentContainer implements P
             return ((SaxonEngine)Application.getAppComponent("SaxonEngine")).serializeDocument(getDocument());
         } catch (Exception x)
         {
+            logger.debug( "Caught an exception:", x );
         }
         return null;
     }
@@ -67,6 +67,7 @@ public class PersistableDocumentContainer extends DocumentContainer implements P
             setDocument(((SaxonEngine)Application.getAppComponent("SaxonEngine")).buildDocument(str));
         } catch (Exception x)
         {
+            setDocument(null);
         }
 
         if (null == getDocument()) {
@@ -79,15 +80,16 @@ public class PersistableDocumentContainer extends DocumentContainer implements P
         if (null == getDocument())
             return true;
 
-        String total = null;
+        Long total = null;
         try {
-             total = ((SaxonEngine)Application.getAppComponent("SaxonEngine")).evaluateXPathSingle(getDocument(), "count(/" + this.rootElement + "/*)");
-        } catch (XPathExpressionException x)
+            SaxonEngine saxon = (SaxonEngine)Application.getAppComponent("SaxonEngine");
+            total = (Long)saxon.evaluateXPathSingle(getDocument(), "count(/" + this.rootElement + "/*)");
+        } catch (XPathException x)
         {
-
+            logger.debug("Caught an exception:", x);
         }
 
-        return (null == total || total.equals("0"));
+        return (null == total || 0 == total);
     }
 
     private void createDocument()

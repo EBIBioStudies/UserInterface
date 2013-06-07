@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.stream.StreamSource;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
@@ -50,7 +51,7 @@ import java.util.Map;
  */
 
 //rpe: for now I do not need to have an authentication system
-public class QueryServlet extends ApplicationServlet
+public class QueryServlet extends AuthAwareApplicationServlet
 {
     private static final long serialVersionUID = 6806580383145704364L;
 
@@ -58,11 +59,7 @@ public class QueryServlet extends ApplicationServlet
     
     private int pageSizeLimit;
 
-    protected boolean canAcceptRequest( HttpServletRequest request, RequestType requestType )
-    {
-        return (requestType == RequestType.GET || requestType == RequestType.POST);
-    }
-    
+ 
     @Override
     public void init(ServletConfig config) throws ServletException
     {
@@ -72,11 +69,20 @@ public class QueryServlet extends ApplicationServlet
             
     }
 
-    @Override
-	protected void doRequest(HttpServletRequest request,
-			HttpServletResponse response, RequestType requestType)
-			throws ServletException, IOException 
-    { 	
+    
+    protected boolean canAcceptRequest( HttpServletRequest request, RequestType requestType )
+    {
+        return (requestType == RequestType.GET || requestType == RequestType.POST);
+    }
+    
+    
+    protected void doAuthenticatedRequest(
+            HttpServletRequest request
+            , HttpServletResponse response
+            , RequestType requestType
+            , String authUserName
+    ) throws ServletException, IOException
+    {
     		
     	RegexHelper PARSE_ARGUMENTS_REGEX = new RegexHelper("/([^/]+)/([^/]+)/([^/]+)$", "i");
 
@@ -142,9 +148,9 @@ public class QueryServlet extends ApplicationServlet
         PrintWriter out = response.getWriter();
         
         //TODO: [PT:45669791] I must remove this afterwards. I need to have this here because I can't put thi on the XSL stylesheet (problems with enconding)
-        if (outputType.equals("html")) {
-            out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 4.01 Transitional//EN\">");
-        }
+//        if (outputType.equals("html")) {
+//            out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 4.01 Transitional//EN\">");
+//        }
         
         
         try {
@@ -179,7 +185,13 @@ public class QueryServlet extends ApplicationServlet
             //TODO: rpe
             //EFO expansion (this is now done in a different way by Nikolay
             params.put("expandefo", "true");
-       
+ 
+            // to make sure nobody sneaks in the other value w/o proper authentication
+            //remove to add security stuff
+            //params.put("userid", StringTools.listToString(getUserIds(authUserName), " OR "));
+            params.put("username", authUserName);
+
+            
             try {
                 SearchEngine search = ((SearchEngine) getComponent("SearchEngine"));
                 SaxonEngine saxonEngine = (SaxonEngine) getComponent("SaxonEngine");
@@ -198,16 +210,19 @@ public class QueryServlet extends ApplicationServlet
     				long xmlRead = System.currentTimeMillis();
     				
 //    				System.out.println("xml->" + xml);
-//    				System.out.println("xml size->" + xml.length());
+                    //System.out.println("xml2->" + saxonEngine.transformToString(source, stylesheetName, params));
+
+    				//    				System.out.println("xml size->" + xml.length());
     				Configuration config = ((SaxonEngine) Application
     						.getAppComponent("SaxonEngine")).trFactory
     						.getConfiguration();
     				source = config.buildDocument(new StreamSource(
     						reader));
+    				
     			
-                    
+                   // System.out.println("fdfdfd->" +saxonEngine.transformToString(saxonEngine.transform(xml, stylesheetName, params), stylesheetName, params));
                 }
-
+                //saxonEngine.transformToFile(source, stylesheetName, params, new File("/Users/rpslpereira/Desktop/testeEnc.xml"));
                 logger.info("Transformation initial");
                 if (!saxonEngine.transformToWriter(
                         source

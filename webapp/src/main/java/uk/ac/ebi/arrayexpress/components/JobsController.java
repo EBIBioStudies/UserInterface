@@ -47,12 +47,7 @@ public class JobsController extends ApplicationComponent
         // create scheduler
         this.scheduler = new StdSchedulerFactory().getScheduler();
 
-        // add jobs
-//        addJob("rescan-files", RescanFilesJob.class);
-//        addJob("reload-ae1-xml", ReloadExperimentsFromAE1Job.class);
-//        addJob("reload-ae2-xml", ReloadExperimentsFromAE2Job.class);
-//        addJob("retrieve-xml", RetrieveExperimentsXmlJob.class);
-//        addJob("reload-atlas-info", RetrieveExperimentsListFromAtlasJob.class);
+
         addJob("reload-efo", ReloadOntologyJob.class);
         addJob("update-efo", UpdateOntologyJob.class);
         
@@ -60,10 +55,10 @@ public class JobsController extends ApplicationComponent
         //rpe: job that reload all the data
         addJob("reload-all", ReloadBiosamplesJob.class);
 
-        // schedule jobs
-//        scheduleJob("rescan-files", "ae.files.rescan");
-//        scheduleJob("reload-ae1-xml", "ae.experiments.ae1.reload");
-//        scheduleJob("reload-ae2-xml", "ae.experiments.ae2.reload");
+        //rpe: job that reloads incremental data
+       /// addJob("incremental-reload", IncrementalReloadBiosamplesJob.class);
+        
+
         scheduleJob("update-efo", "bs.efo.update");
         scheduleJob("reload-all", "bs.reload-all.update");
 

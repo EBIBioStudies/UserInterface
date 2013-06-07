@@ -59,7 +59,7 @@ public class UpdateOntologyJob extends ApplicationJob
                 is = efoURI.toURL().openStream();
                 File efoFile = new File(getPreferences().getString("bs.efo.location"));
                 StringTools.stringToFile(StringTools.streamToString(is, "UTF-8"), efoFile, "UTF-8");
-                getApplication().sendEmail("EFO update",
+                getApplication().sendEmail(null,null,"EFO update",
                         "Experimental Factor Ontology has been updated to version [" + version + "]" + StringTools.EOL
                             + StringTools.EOL
                             + "Application [${variable.appname}]" + StringTools.EOL

@@ -129,7 +129,9 @@ public abstract class Application
         }
     }
 
-    public void sendEmail( String subject, String message )
+
+    
+    public void sendEmail( String originator, String[] recipients, String subject, String message )
     {
         try {
             Thread currentThread = Thread.currentThread();
@@ -141,26 +143,38 @@ public abstract class Application
                 logger.debug("Caught an exception:", xx);
             }
 
-            Map<String, String> params = new HashMap<String, String>();
+            if (null == recipients || 0 == recipients.length) {
+                recipients = getPreferences().getStringArray("app.reports.recipients");
+            }
+
+            if (null == originator || "".equals(originator)) {
+                originator = getPreferences().getString("app.reports.originator");
+            }
+
+            Map<String, String> params = new HashMap<String,String>();
             params.put("variable.appname", getName());
             params.put("variable.thread", String.valueOf(currentThread));
             params.put("variable.hostname", hostName);
             StrSubstitutor sub = new StrSubstitutor(params);
-            
-            emailer.send(getPreferences().getStringArray("app.reports.recipients")
+
+            emailer.send(recipients
+                    , getPreferences().getStringArray("app.reports.hidden-recipients")
                     , subject
                     , sub.replace(message)
-                    , getPreferences().getString("app.reports.originator")
+                    , originator
             );
 
         } catch (Throwable x) {
             logger.error("[SEVERE] Cannot even send an email without an exception:", x);
         }
     }
-
+    
     public void sendExceptionReport( String message, Throwable x )
     {
-        sendEmail( getPreferences().getString("app.reports.subject")
+        sendEmail(
+                null
+                , null
+                , getPreferences().getString("app.reports.subject")
                 , message + ": " + x.getMessage() + StringTools.EOL
                     + "Application [${variable.appname}]" + StringTools.EOL
                     + "Host [${variable.hostname}]" + StringTools.EOL

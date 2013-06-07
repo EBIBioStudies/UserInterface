@@ -21,10 +21,11 @@ var query = new Object();
 var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
 var anchor = decodeURI(window.location.hash);
 
-
-//all the fileds are numbers excepts the first one that is "sampleaccession". If you need  to change it here, be careful and change it also in the biosamplesgroup-html.xsl
+// all the fileds are numbers excepts the first one that is "sampleaccession".
+// If you need to change it here, be careful and change it also in the
+// biosamplesgroup-html.xsl
 var sortDefault = {
-	"sampleaccession" :	"ascending",
+	"sampleaccession" : "ascending",
 	"1" : "ascending",
 	"2" : "ascending",
 	"3" : "ascending",
@@ -44,7 +45,27 @@ var sortDefault = {
 	"17" : "ascending",
 	"18" : "ascending",
 	"19" : "ascending",
-	"20" : "ascending"
+	"20" : "ascending",
+	"21" : "ascending",
+	"22" : "ascending",
+	"23" : "ascending",
+	"24" : "ascending",
+	"25" : "ascending",
+	"26" : "ascending",
+	"27" : "ascending",
+	"28" : "ascending",
+	"29" : "ascending",
+	"30" : "ascending",
+	"31" : "ascending",
+	"32" : "ascending",
+	"33" : "ascending",
+	"34" : "ascending",
+	"35" : "ascending",
+	"36" : "ascending",
+	"37" : "ascending",
+	"38" : "ascending",
+	"39" : "ascending",
+	"40" : "ascending"
 };
 
 var sortTitle = {
@@ -55,30 +76,26 @@ var sortTitle = {
 	"5" : "name"
 };
 
-
-
-//these are used when i make a new query in samples
-var sortByDefault="sampleaccession";
+// these are used when i make a new query in samples
+var sortByDefault = "sampleaccession";
 var sortOrderDefault = sortDefault[sortByDefault];
 var pageInitDefault = "1";
 
-//these are used to mantain the current srt and order (they are reset when I make a new search)
+// these are used to mantain the current srt and order (they are reset when I
+// make a new search)
 var sortBy = "sampleaccession";
 var sortOrder = sortDefault[sortBy];
 
-
 var pageInit = pageInitDefault;
-var pageSize = "25"; 
-var keywords = "";
-
-
+var pageSize = "25";
+var keywords = $.query.get("keywords") ? $.query.get("keywords") : "";
 
 // if I;m showing the detail I will get all the samples using paging
 $(function() {
 	// $("#ae_results_body_inner").removeClass("ae_results_tbl_loading");
 
-	
 	// I need to initialize the sorting on the defaultfield
+	// alert(sortBy);
 	var thElt = $("#bs_results_header_" + sortBy);
 	if (null != thElt) {
 		// alert("#bs_results_header_" + sortBy);
@@ -86,10 +103,31 @@ $(function() {
 
 			var divElt = thElt.find("div.table_header_inner");
 			if (null != divElt) {
-				 //alert("not null");
-				divElt
-						.addClass("descending" == sortOrder ? "table_header_sort_desc"
-								: "table_header_sort_asc");
+				// alert("not null");
+				// I'm using textContent because innerText doesnt work on
+				// FireFox
+
+				var hasInnerText = (divElt[0].innerText != undefined) ? true
+						: false;
+				if (hasInnerText) {
+					if ("descending" == sortOrder) {
+						divElt[0].innerHTML = divElt[0].innerText
+								+ "<i class='aw-icon-angle-down'></i>";
+					} else {
+						divElt[0].innerHTML = divElt[0].innerText
+								+ "<i class='aw-icon-angle-up'></i>";
+					}
+				} else {
+
+					if ("descending" == sortOrder) {
+						divElt[0].innerHTML = divElt[0].textContent
+								+ "<i class='aw-icon-angle-down'></i>";
+					} else {
+						divElt[0].innerHTML = divElt[0].textContent
+								+ "<i class='aw-icon-angle-up'></i>";
+					}
+				}
+
 			}
 		}
 	}
@@ -109,18 +147,20 @@ $(function() {
 					"This is matched child term from Experimental Factor Ontology e.g. brain and subparts of brain");
 	/* hint to the lucene highlight */
 	// if (-1 == url.indexOf("browse")) {
-	var keywordsFixed=$.query.get("keywords");
-	//If I was filtering the seach for some field I will not apply a search to the samples
-	var aux=keywordsFixed.match(/\s*\w\s*:\s*\w/g);
-	if(aux!=null){
-		keywordsFixed="";
+	var keywordsFixed = $.query.get("keywords");
+	// If I was filtering the seach for some field I will not apply a search to
+	// the samples
+	var aux = keywordsFixed.match(/\s*\w\s*:\s*\w/g);
+	if (aux != null) {
+		keywordsFixed = "";
 	}
 
-	var newQuery = $.query.set("keywords",keywordsFixed).set("sortby", sortBy).set(
-			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
-			pageSize).toString();
+	var newQuery = $.query.set("keywords", keywordsFixed).set("sortby", sortBy)
+			.set("sortorder", sortOrder).set("page", pageInit).set("pagesize",
+					pageSize).toString();
 	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
 	var urlPage = "../sample/browse/" + pageName + newQuery;
+	// alert(urlPage);
 	updateSamplesList(urlPage);
 
 	var basePath = decodeURI(window.location.pathname).replace(/\/\w+\.\w+$/,
@@ -145,77 +185,137 @@ function updateSamplesList(urlPage) {
 					urlPage,
 					function(data) {
 						// alert('Load was performed.' + data);
-						//TODO: find a different solution (this was done because a IE problem)
-						var dataParsed=data.replace(/<\?xml(.*?)<tr>/g,"<tr>");
+						// TODO: find a different solution (this was done
+						// because a IE problem)
+						// var
+						// dataParsed=data.replace(/<\?xml(.*?)<tr>/g,"<tr>");
+
 						$("#bs_results_tbody").html(data);
+
 						// get stats from the first row
-						//I need to get the numbers before an afterwards I put the html without the DIVs - To Solve IE problems
+						// I need to get the numbers before an afterwards I put
+						// the html without the DIVs - To Solve IE problems
 						var total = $("#bs_results_total").text();
 						var from = $("#bs_results_from").text();
 						var to = $("#bs_results_to").text();
 						var curpage = $("#bs_results_page").text();
 						var pagesize = $("#bs_results_pagesize").text();
 
+						// split the tr from left middel and right
+
+						var count = to - from;
+						samplesleftstring = "";
+						samplesmiddlestring = "";
+						samplesrigthstring = "";
+						for (i = 1; i <= (count + 1); i++) {
+							// alert("Found bs_results_total element2: " +
+							// pars3[i].innerHTML);
+							countleft = "#samplesleft" + i;
+							countmiddle = "#samplesmiddle" + i;
+							countrigth = "#samplesright" + i;
+							samplesleftstring += "<tr>" + $(countleft).html()
+									+ "</tr>";
+							samplesmiddlestring += "<tr>"
+									+ $(countmiddle).html() + "</tr>";
+							samplesrigthstring += "<tr>" + $(countrigth).html()
+									+ "</tr>";
+							// alert("fixed->" + $("#samplesmiddle1").html());
+							// alert("fixed->" + $("#samplesmiddle1").text());
+							// alert("left" + i + "->" + $(countleft).html());
+						}
+						// I need to use /i because in IE the <bs_value_att> is
+						// transformed in <BS_VALUE_ATT>
+						samplesleftstring = samplesleftstring.replace(
+								/<bs_value_att>/gi,
+								"<td><div class='cell_height'>");
+						samplesleftstring = samplesleftstring.replace(
+								/<\/bs_value_att>/gi, "<\/div><\/td>");
+						// alert("left table->" + samplesleftstring);
+						samplesmiddlestring = samplesmiddlestring.replace(
+								/<bs_value_att>/gi,
+								"<td><div class='cell_height'>");
+						samplesmiddlestring = samplesmiddlestring.replace(
+								/<\/bs_value_att>/gi, "<\/div><\/td>");
+						// alert("middle table->" + samplesmiddlestring);
+						samplesrigthstring = samplesrigthstring.replace(
+								/<bs_value_att>/gi,
+								"<td align='middle'><div class='cell_height'>");
+						samplesrigthstring = samplesrigthstring.replace(
+								/<\/bs_value_att>/gi, "<\/div><\/td>");
+						// alert("right table->" + samplesrigthstring);
+
+						$("#bs_results_tbody").html("");
+						$("#bs_results_tbody_left").html(samplesleftstring);
+						$("#bs_results_tbody_middle").html(samplesmiddlestring);
+						$("#bs_results_tbody_right").html(samplesrigthstring);
+
 						var totalPages = total > 0 ? Math.floor((total - 1)
 								/ pagesize) + 1 : 0;
-						
-						
-						$("#bs_results_tbody").html(dataParsed);
-						
-						//alert('Load was performed.' + dataParsed);
 
-						/* hint to the lucene highlight */
-						$("#bs_results_tbody")
+						// $("#bs_results_tbody").html(dataParsed);
+
+						// alert('Load was performed.' + dataParsed);
+
+						/*
+						 * hint to the lucene highlight - the right side is the
+						 * link, so I dont need
+						 */
+						$("#bs_results_tbody_left")
 								.find(".ae_text_hit")
 								.attr("title",
 										"This is exact string matched for input query terms");
-						$("#bs_results_tbody")
+						$("#bs_results_tbody_left")
 								.find(".ae_text_syn")
 								.attr(
 										"title",
 										"This is synonym matched from Experimental Factor Ontology e.g. neoplasia for cancer");
-						$("#bs_results_tbody")
+						$("#bs_results_tbody_left")
+								.find(".ae_text_efo")
+								.attr(
+										"title",
+										"This is matched child term from Experimental Factor Ontology e.g. brain and subparts of brain");
+
+						$("#bs_results_tbody_middle")
+								.find(".ae_text_hit")
+								.attr("title",
+										"This is exact string matched for input query terms");
+						$("#bs_results_tbody_middle")
+								.find(".ae_text_syn")
+								.attr(
+										"title",
+										"This is synonym matched from Experimental Factor Ontology e.g. neoplasia for cancer");
+						$("#bs_results_tbody_middle")
 								.find(".ae_text_efo")
 								.attr(
 										"title",
 										"This is matched child term from Experimental Factor Ontology e.g. brain and subparts of brain");
 						/* hint to the lucene highlight */
 
-					
-
-//						$("#ae_results_status")
-//								.html(
-//										total
-//												+ " sample"
-//												+ (total != 1 ? "s" : "")
-//												+ " found "
-//												+ (totalPages > 1 ? (", displaying samples "
-//														+ from + " to " + to + ".")
-//														: ""));
+						// $("#ae_results_status")
+						// .html(
+						// total
+						// + " sample"
+						// + (total != 1 ? "s" : "")
+						// + " found "
+						// + (totalPages > 1 ? (", displaying samples "
+						// + from + " to " + to + ".")
+						// : ""));
 						$("#bs_results_pager").html("&nbsp;");
 						if (total > 0) {
 
 							var totalPages = total > 0 ? Math.floor((total - 1)
 									/ pagesize) + 1 : 0;
-							$("#bs_results_stats_fromto")
-									.html(
-											total
-													+ " sample"
-													+ (total != 1 ? "s" : "")
-													+ " found"
-													+ (totalPages > 1 ? (", displaying samples "
-															+ from
-															+ " to "
-															+ to + ".")
-															: ""));
+							$(".bs-stats").html(
+									" Showing <span>" + from + " - " + to
+											+ "</span> of <span>" + total
+											+ "</span> Samples");
 
 							if (totalPages > 1) {
-								var pagerHtml = "Pages: ";
+								var pagerHtml = "Page ";
 								for ( var page = 1; page <= totalPages; page++) {
 									if (curpage == page) {
-										pagerHtml = pagerHtml
-												+ "<span class=\"pager_current\">"
-												+ page + "</span>";
+										pagerHtml = pagerHtml + "<span>" + page
+												+ "</span>";
 									} else if (2 == page && curpage > 6
 											&& totalPages > 11) {
 										pagerHtml = pagerHtml + "..";
@@ -236,16 +336,38 @@ function updateSamplesList(urlPage) {
 												+ "</a>";
 									}
 								}
-								$("#bs_results_pager").html(pagerHtml);
+								$(".bs-pager").html(pagerHtml);
+							} else {
+								$(".bs-pager").html("&nbsp;");
 							}
+
+							// pagesize
+							var arrayPageSize = [ "10", "25", "50", "100",
+									"250", "500" ];
+							var pageSizeHtml = "Page size ";
+							for ( var i = 0; i < arrayPageSize.length; i++) {
+								if (pagesize == arrayPageSize[i]) {
+									pageSizeHtml += "<span>" + pagesize
+											+ "</span>";
+								} else {
+									pageSizeHtml += "<a href=\"javascript:goToPageSize("
+											+ arrayPageSize[i]
+											+ ")"
+											+ ";\">"
+											+ arrayPageSize[i] + "</a>";
+									;
+
+								}
+								// Do something with element i.
+							}
+							$(".bs-page-size").html(pageSizeHtml);
 
 						} else {
 							// Clean the paging information
-							$("#bs_results_stats_fromto").html(
-									"No samples found.");
-
+							$(".bs-stats").html("No Samples found.");
+							$(".bs-page-size").html("&nbsp;");
+							$(".bs-pager").html("&nbsp;");
 						}
-
 						// }
 
 					});
@@ -255,71 +377,143 @@ function updateSamplesList(urlPage) {
 function searchSamples(pKeywords) {
 	// alert("par->" + pKeywords);
 	keywords = pKeywords;
-	//reset of status variables
-	sortBy=sortByDefault;
-	sortOrder=sortOrderDefault;
-	pageInit=pageInitDefault;
+	// reset of status variables
+	sortBy = sortByDefault;
+	sortOrder = sortOrderDefault;
+	pageInit = pageInitDefault;
 	var newQuery = $.query.set("keywords", keywords).set("sortby", sortBy).set(
 			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
 			pageSize).toString();
 	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
 	var urlPage = "../sample/browse/" + pageName + newQuery;
-	updateSamplesList(urlPage);
+	removeSortIndications();
+	aeSort(""); // I'm passing "" and to mean that it is a new search
+	// aeSort(sortBy);
+	// updateSamplesList(urlPage);
 }
 
 function goToPage(page) {
 	pageInit = page;
-	var newQuery = $.query.set("keywords", document.forms['bs_query_form'].bs_keywords_field.value).set("sortby", sortBy).set(
-			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
-			pageSize).toString();
+	var newQuery = $.query.set("keywords",
+			document.forms['bs_query_form'].bs_keywords_field.value).set(
+			"sortby", sortBy).set("sortorder", sortOrder).set("page", pageInit)
+			.set("pagesize", pageSize).toString();
+	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
+	var urlPage = "../sample/browse/" + pageName + newQuery;
+	updateSamplesList(urlPage);
+}
+
+function goToPageSize(pPageSize) {
+	pageSize = pPageSize;
+	pageInit = 1;
+	var newQuery = $.query.set("keywords",
+			document.forms['bs_query_form'].bs_keywords_field.value).set(
+			"sortby", sortBy).set("sortorder", sortOrder).set("page", pageInit)
+			.set("pagesize", pageSize).toString();
 	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
 	var urlPage = "../sample/browse/" + pageName + newQuery;
 	updateSamplesList(urlPage);
 }
 
 function aeSort(psortby) {
-	if (psortby == sortBy) {
-		sortOrder = (sortOrder == "ascending" ? "descending" : "ascending");
-	} else {
-		sortBy = psortby;
-		sortOrder = "ascending";
+	// If i'm sorting for the actual field, I just change the sorting directions
+	if (psortby != "") {
+		if (psortby == sortBy) {
+			sortOrder = (sortOrder == "ascending" ? "descending" : "ascending");
+		} else {
+			sortBy = psortby;
+			sortOrder = "ascending";
+		}
+	}
+	//else - it will use the defaults - it was done in the searchSamples function but i will also do it here
+	else{
+		sortBy = sortByDefault;
+		sortOrder = sortOrderDefault;
 	}
 
-	for ( var key in sortDefault) {
-		// do something with key and hmap[key]
-		$("#bs_results_header_" + key).find("div.table_header_inner")
-				.removeClass("table_header_sort_desc").removeClass(
-						"table_header_sort_asc");
+	// for ( var key in sortDefault) {
+	// // do something with key and hmap[key]
+	// $("#bs_results_header_" + key).find("div.table_header_inner")
+	// .removeClass("table_header_sort_desc").removeClass(
+	// "table_header_sort_asc");
+	//
+	// }
 
-	}
-	
-	var newQuery = $.query.set("keywords", keywords).set("sortby", sortBy).set(
-			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
-			pageSize).toString();
+	// remove all the sort signs on the headers
+	// I'm using textContent because innerText doesnt work on FireFox
+	removeSortIndications();
+
+	var newQuery = $.query.set("keywords",
+			document.forms['bs_query_form'].bs_keywords_field.value).set(
+			"sortby", sortBy).set("sortorder", sortOrder).set("page", pageInit)
+			.set("pagesize", pageSize).toString();
 
 	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
 	var urlPage = "../sample/browse/" + pageName + newQuery;
-	//alert(urlPage);
+	// alert(urlPage);
 	updateSamplesList(urlPage);
-	
-	
-	//I just put the orientation after the query return the results (before I clean all the asc and desc of all the columns, after I make the query and at the end i Put the correct one)
+
+	// I just put the orientation after the query return the results (before I
+	// clean all the asc and desc of all the columns, after I make the query and
+	// at the end i Put the correct one)
 	var thElt = $("#bs_results_header_" + sortBy);
 
 	if (null != thElt) {
-		//alert("#bs_results_header_" + sortBy);
+		// alert("#bs_results_header_" + sortBy);
 		if ("" != sortOrder) {
 			var divElt = thElt.find("div.table_header_inner");
 			if (null != divElt) {
-				//alert("div.table_header_inner not null");
-				divElt
-						.addClass("descending" == sortOrder ? "table_header_sort_desc"
-								: "table_header_sort_asc");
+				// alert("div.table_header_inner not null");
+				// alert(divElt[0]);
+				// I'm using textContent because innerText doesnt work on
+				// FireFox
+				var hasInnerText = ($("div.table_header_inner")[0].innerText != undefined) ? true
+						: false;
+				if (hasInnerText) {
+					if ("descending" == sortOrder) {
+						// alert(divElt[0].innerText);
+						divElt[0].innerHTML = divElt[0].innerText
+								+ "<i class='aw-icon-angle-down'></i>";
+					} else {
+						divElt[0].innerHTML = divElt[0].innerText
+								+ "<i class='aw-icon-angle-up'></i>";
+					}
+				} else {
+					if ("descending" == sortOrder) {
+						divElt[0].innerHTML = divElt[0].textContent
+								+ "<i class='aw-icon-angle-down'></i>";
+					} else {
+						divElt[0].innerHTML = divElt[0].textContent
+								+ "<i class='aw-icon-angle-up'></i>";
+					}
+				}
+
 			}
 		}
 	}
 
 }
 
+function removeSortIndications() {
+
+	// remove all the sort signs on the headers
+	// I'm using textContent because innerText doesnt work on FireFox
+	for (i = 0; i < ($("div.table_header_inner").length); i++) {
+		// alert($("div.table_header_inner")[i].textContent);
+		// browser implementation differences :(
+		var hasInnerText = ($("div.table_header_inner")[i].innerText != undefined) ? true
+				: false;
+		if (hasInnerText) {
+			$("div.table_header_inner")[i].innerHTML = $("div.table_header_inner")[i].innerText; // +
+																									// "&nbsp;";
+		} else {
+			// &nbsp is used to preserve the arrow space
+			$("div.table_header_inner")[i].innerHTML = $("div.table_header_inner")[i].textContent; // +
+																									// "&nbsp;";
+		}
+
+	}
+
+}
 
 // ######### PAGING SAMPLES INSIDE A GROUP OF SAMPLES ############

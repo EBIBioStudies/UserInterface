@@ -1,17 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE urlrewrite
-        PUBLIC "-//tuckey.org//DTD UrlRewrite 3.0//EN"
-        "http://tuckey.org/res/dtds/urlrewrite3.0.dtd">
+        PUBLIC "-//tuckey.org//DTD UrlRewrite 4.0//EN"
+        "http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
 
 <urlrewrite>
 
-
+<!-- global rule to set original request uri as a parameter -->
+    <rule>
+        <from>.*</from>
+        <set type="parameter" name="original-request-uri">%{request-uri}</set>
+    </rule>
 	<!-- biosamples -->
+	
+	
+	 <!-- search page -->
+<!--     <rule>
+        <from>^/search/?$</from>
+        <to type="forward" last="true">browse.html</to>
+    </rule> 
+
+    <rule>
+        <from>^/search/?(.+)$</from>
+        <to type="redirect" last="true">browse.html?=$1</to>
+    </rule> -->
+	
+	<!-- redirect the old rest api html documentation to the new one -->	
 	<rule>
+        <from>/assets/restapi/(.*)?[.]html</from>
+        <to type="redirect" last="true">%{context-path}/help/api.html</to>
+    </rule>
+	<!-- redirect the old rest api html documentation to the new one -->
+	
+	<!-- about biosamples page -->
+    <rule>
+        <from>^/about[.]html?$</from>
+        <to type="forward" last="true">/servlets/query/-/static-page/html?filename=about.html</to>
+    </rule>
+
+	 <rule>
+        <from>^/help/?$</from>
+        <to type="redirect" last="true">%{context-path}/help/index.html</to>
+    </rule>
+    <rule>
+        <from>^/help/(.+)[.]html?$</from>
+        <to type="forward" last="true">/servlets/query/-/static-page/html?filename=help/${lower:$1}.html</to>
+    </rule>
+    
+	<!-- home page -->
+    <rule>
+        <from>^/index[.]html?$</from>
+        <to type="redirect" last="true">%{context-path}/</to>
+    </rule>
+    
+<!-- 	<rule>
 		<from>^/$</from>
 		<to type="redirect">%{context-path}/index.html</to>
 	</rule>
-	<rule>
+ -->	<rule>
 		<from>^/group/browse\.html$</from>
 		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/html</to>
 	</rule>
@@ -61,6 +106,10 @@
 	<rule>
 		<from>^/reload-all</from>
 		<to type="forward">/servlets/control/reload-all</to>
+	</rule>
+	<rule>
+		<from>^/incremental-reload</from>
+		<to type="forward">/servlets/control/incremental-reload</to>
 	</rule>
 
 	<!-- Jobs-rule -->
@@ -163,5 +212,15 @@
 	</rule>
 
 	<!-- return the original xml -->
+	
+	
+	<!-- authentication -->
+	 <rule>
+        <from>^/verify-login[.]txt</from>
+        <to type="forward" last="true">/auth</to>
+    </rule>
+
+
+	
 
 </urlrewrite>

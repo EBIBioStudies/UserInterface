@@ -41,6 +41,7 @@ import uk.ac.ebi.arrayexpress.utils.saxon.IDocumentSource;
 import uk.ac.ebi.arrayexpress.utils.saxon.PersistableDocumentContainer;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesGroup;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentExperiments;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.Indexer;
 
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
@@ -87,8 +88,14 @@ public class BioSamplesGroup extends ApplicationComponent implements
 		this.search = (SearchEngine) getComponent("SearchEngine");
 		this.autocompletion = (Autocompletion) getComponent("Autocompletion");
 
-	
-		updateIndex(buildIndexes);
+		//TODO: change this (I will never restart the server with an incremental update, even though I shoul change it) 
+				if(buildIndexes){
+					updateIndex(Indexer.RebuildCategories.REBUILD);
+				}
+				else{
+					updateIndex(Indexer.RebuildCategories.NOTREBUILD);
+				}
+					
 			
 		
 //		TODO rpe
@@ -107,7 +114,7 @@ public class BioSamplesGroup extends ApplicationComponent implements
 	// implementation of IDocumentSource.getDocumentURI()
 	//TODO rpe (this must be reformulated)
 	public String getDocumentURI() {
-		return "experiments.xml";
+		return "BioSamplesGroup.xml";
 	}
 
 	// implementation of IDocumentSource.getDocument()
@@ -128,23 +135,12 @@ public class BioSamplesGroup extends ApplicationComponent implements
 
 
 
-	private void updateIndex(boolean rebuild) {
+	private void updateIndex(Indexer.RebuildCategories rebuild) {
 		try {
 			
-			this.search.getController().indexFromXmlDB(INDEX_ID, rebuild);			
-			
-//			Collection coll=((XmlDbConnectionPool)this.search.getComponent("XmlDbConnectionPool")).getCollection();
-//			XPathQueryService service = (XPathQueryService) coll.getService(
-//					"XPathQueryService", "1.0");
-//			ResourceSet set = service.query("/Biosamples/SampleGroup/@id/string(.)");
-//			String res="";
-//			while (set.getIterator().hasMoreResources()) {
-//				res += (String) set.getIterator()
-//						.nextResource().getContent();
-//			}
-//			logger.debug("##########result->" + res);
-//			
-			
+			this.search.getController().indexFromXmlDB(INDEX_ID, rebuild);	
+			//I need to do this because when I initialize the server with the interface.application.lucene.indexes.build=true I need to restart the indexreader;
+			this.search.getController().getEnvironment(INDEX_ID).setup();
 			
 //			TODO review the autocompletion because of time it takes (maybe the problem is the xml field)
 			this.autocompletion.rebuild();
@@ -159,30 +155,17 @@ public class BioSamplesGroup extends ApplicationComponent implements
 	public void reloadIndex() {
 		try {
 			//String indexLocationDirectory= this.search.getController().getEnvironment(INDEX_ID).indexLocationDirectory + "_" + System.currentTimeMillis();
-			this.search.getController().indexFromXmlDB(INDEX_ID, false);		
+			this.search.getController().indexFromXmlDB(INDEX_ID, Indexer.RebuildCategories.NOTREBUILD);		
 			this.autocompletion.rebuild();
 		} catch (Exception x) {
 			this.logger.error("Caught an exception:", x);
 		}
 	}
 	
-/*	
-	//return the Index location
-	private void rebuilIndex(String indexLocationDirectory,String connectionString) {
-		try {
-			//String indexLocationDirectory= this.search.getController().getEnvironment(INDEX_ID).indexLocationDirectory + "_" + System.currentTimeMillis();
-			this.search.getController().indexFromXmlDB(INDEX_ID, true, indexLocationDirectory, connectionString);		
-			
-		} catch (Exception x) {
-			this.logger.error("Caught an exception:", x);
-		}
 
-	}
-*/
 
 	//TODO move this to anoher place (i will not do now because i dont know from where I will read the xml source... maybe in the future I will not use the file!!
 	public DocumentInfo getXmlFromFile(File file) throws Exception {
-
 		Configuration config = ((SaxonEngine) Application
 				.getAppComponent("SaxonEngine")).trFactory.getConfiguration();
 		DocumentInfo doc = null;

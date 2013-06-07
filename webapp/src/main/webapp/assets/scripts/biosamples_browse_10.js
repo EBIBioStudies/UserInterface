@@ -32,13 +32,12 @@ var sortTitle = {
 	samples : "number of samples"
 };
 
-//var sortBy = "id";
-//var sortOrder = sortDefault[sortBy];
+// var sortBy = "id";
+// var sortOrder = sortDefault[sortBy];
 
-//by default I will sort by lucene algorithm
+// by default I will sort by lucene algorithm
 var sortBy = "relevance";
 var sortOrder = sortDefault[sortBy];
-
 
 var pageInit = "1";
 var pageSize = "50";
@@ -50,12 +49,12 @@ $(function() {
 	// this will be executed when DOM is ready
 	if ($.query == undefined)
 		throw "jQuery.query not loaded";
-	
+
 	pageInit = $.query.get("page") || pageInit;
 	pageSize = $.query.get("pagesize") || pageSize;
 	keywords = $.query.get("keywords") || keywords;
 	sortBy = $.query.get("sortby") || sortBy;
-	//alert(sortBy);
+	// alert(sortBy);
 	sortOrder = $.query.get("sortorder") || sortDefault[sortBy];
 	// I need to initialize the sorting on the defaultfield
 	var thElt = $("#bs_results_header_" + sortBy);
@@ -63,28 +62,47 @@ $(function() {
 		// alert("#bs_results_header_" + sortBy);
 		if ("" != sortOrder) {
 			var divElt = thElt.find("div.table_header_inner");
-			if (null != divElt) {
-				divElt
-						.addClass("descending" == sortOrder ? "table_header_sort_desc"
-								: "table_header_sort_asc");
+			// alert(divElt[0]);
+			// I'm using textContent because innerText doesnt work on FireFox
+			if (divElt[0] != null) {
+				var hasInnerText = (divElt[0].innerText != undefined) ? true
+						: false;
+				if (hasInnerText) {
+					if ("descending" == sortOrder) {
+						divElt[0].innerHTML = divElt[0].innerText
+								+ "<i class='aw-icon-angle-down'></i>";
+					} else {
+						divElt[0].innerHTML = divElt[0].innerText
+								+ "<i class='aw-icon-angle-up'></i>";
+					}
+				} else {
+
+					if ("descending" == sortOrder) {
+						divElt[0].innerHTML = divElt[0].textContent
+								+ "<i class='aw-icon-angle-down'></i>";
+					} else {
+						divElt[0].innerHTML = divElt[0].textContent
+								+ "<i class='aw-icon-angle-up'></i>";
+					}
+				}
 			}
+
 		}
 	}
-
-	
 
 	var newQuery = $.query.set("keywords", keywords).set("sortby", sortBy).set(
 			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
 			pageSize).toString();
 
 	var urlPage = "group/browse-table.html" + newQuery;
+	// alert(urlPage);
 
-	//initialize the keywords input with the search string from the homepage
+	// initialize the keywords input with the search string from the homepage
 	$("#bs_keywords_field").val(keywords);
 
-	//initialize the sortby
-	 $("#sortby").removeAttr("disabled").val(getQueryStringParam("sortby", ""));
-	
+	// initialize the sortby
+	$("#sortby").removeAttr("disabled").val(getQueryStringParam("sortby", ""));
+
 	QuerySampleGroup(urlPage);
 	// added autocompletion
 	var basePath = decodeURI(window.location.pathname).replace(/\/\w+\.\w+$/,
@@ -99,15 +117,13 @@ $(function() {
 	});
 });
 
-
-
 function QuerySampleGroup(url) {
 	// alert("QuerySampleGroup2->" + url);
 	$
 			.get(
 					url,
 					function(tableHtml) {
-						//alert("Data->"+tableHtml);
+						// alert("Data->"+tableHtml);
 
 						$("#bs_results_body_inner").removeClass(
 								"bs_results_tbl_loading");
@@ -142,25 +158,17 @@ function QuerySampleGroup(url) {
 
 							var totalPages = total > 0 ? Math.floor((total - 1)
 									/ pagesize) + 1 : 0;
-							$("#bs_results_stats_fromto")
-									.html(
-											total
-													+ " group"
-													+ (total != 1 ? "s" : "")
-													+ " found"
-													+ (totalPages > 1 ? (", displaying groups "
-															+ from
-															+ " to "
-															+ to + ".")
-															: ""));
+							$(".bs-stats").html(
+									" Showing <span>" + from + " - " + to
+											+ "</span> of <span>" + total
+											+ "</span> SampleGroups");
 
 							if (totalPages > 1) {
-								var pagerHtml = "Pages: ";
+								var pagerHtml = "Page ";
 								for ( var page = 1; page <= totalPages; page++) {
 									if (curpage == page) {
-										pagerHtml = pagerHtml
-												+ "<span class=\"pager_current\">"
-												+ page + "</span>";
+										pagerHtml = pagerHtml + "<span>" + page
+												+ "</span>";
 									} else if (2 == page && curpage > 6
 											&& totalPages > 11) {
 										pagerHtml = pagerHtml + "..";
@@ -181,27 +189,51 @@ function QuerySampleGroup(url) {
 												+ "</a>";
 									}
 								}
-								$("#bs_results_pager").html(pagerHtml);
+								$(".bs-pager").html(pagerHtml);
+							} else {
+								$(".bs-pager").html("&nbsp;");
 							}
 
-						}
-						else{
+							// pagesize
+							var arrayPageSize = [ "10", "25", "50", "100",
+									"250", "500" ];
+							var pageSizeHtml = "Page size ";
+							for ( var i = 0; i < arrayPageSize.length; i++) {
+								if (pagesize == arrayPageSize[i]) {
+									pageSizeHtml += "<span>" + pagesize
+											+ "</span>";
+								} else {
+									pageSizeHtml += "<a href=\"javascript:goToPageSize("
+											+ arrayPageSize[i]
+											+ ")"
+											+ ";\">"
+											+ arrayPageSize[i] + "</a>";
+									;
+
+								}
+								// Do something with element i.
+							}
+							$(".bs-page-size").html(pageSizeHtml);
+
+						} else {
 							// Clean the paging information
-							$("#bs_results_stats_fromto").html("No groups found.");
-							$("#bs_results_pager").html("&nbsp;");	
+							$(".bs-stats").html("No SampleGroups found.");
+							$(".bs-page-size").html("&nbsp;");
+							$(".bs-pager").html("&nbsp;");
 						}
-						
-//						//ellipsis
-						//alert("ellipsis");
-//						var the_obj = $('.ellipsis_class').ThreeDots({
-//							max_rows : 3,
-///*							alt_text_t : true */
-//						});
-//						//ellipsis
-						//$('.ellipsis').dotdotdot();
-						//$('#ellipsis').tipsy();
-//						$('#ellipsis').tipsy({fallback: "Where's my tooltip yo'?" });
-//						alert(4);
+
+						// //ellipsis
+						// alert("ellipsis");
+						// var the_obj = $('.ellipsis_class').ThreeDots({
+						// max_rows : 3,
+						// /* alt_text_t : true */
+						// });
+						// //ellipsis
+						// $('.ellipsis').dotdotdot();
+						// $('#ellipsis').tipsy();
+						// $('#ellipsis').tipsy({fallback: "Where's my tooltip
+						// yo'?" });
+						// alert(4);
 
 					});
 
@@ -225,7 +257,15 @@ function goToPage(pPage) {
 	QuerySampleGroup(urlPage);
 }
 
-
+function goToPageSize(pPageSize) {
+	pageSize = pPageSize;
+	pageInit = 1;
+	var newQuery = $.query.set("keywords", keywords).set("sortby", sortBy).set(
+			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
+			pageSize).toString();
+	var urlPage = "group/browse-table.html" + newQuery;
+	QuerySampleGroup(urlPage);
+}
 
 function getQueryStringParam(paramName, defaultValue) {
 	var param = $.query.get(paramName);
@@ -263,16 +303,29 @@ function aeSort(psortby) {
 	// alert("sortBy->" + sortBy + ";sortOrder->" + sortOrder);
 	pageInit = $.query.get("page") || pageInit;
 	pageSize = $.query.get("pagesize") || pageSize;
-	
-	
-	for ( var key in sortDefault) {
-		// do something with key and hmap[key]
-		$("#bs_results_header_" + key).find("div.table_header_inner")
-				.removeClass("table_header_sort_desc").removeClass(
-						"table_header_sort_asc");
 
+	// remove all the sort signs on the headers
+	// I'm using textContent because innerText doesnt work on FireFox
+	for (i = 0; i < ($("div.table_header_inner").length); i++) {
+		var hasInnerText = ($("div.table_header_inner")[i].innerText != undefined) ? true
+				: false;
+		if (hasInnerText) {
+			$("div.table_header_inner")[i].innerHTML = $("div.table_header_inner")[i].innerText; // +
+			// "&nbsp;";
+		} else {
+			// &nbsp is used to preserve the arrow space
+			$("div.table_header_inner")[i].innerHTML = $("div.table_header_inner")[i].textContent; // +
+			// "&nbsp;";
+		}
 	}
 
+	// for ( var key in sortDefault) {
+	// // do something with key and hmap[key]
+	// $("#bs_results_header_" + key).find("div.table_header_inner")
+	// .removeClass("table_header_sort_desc").removeClass(
+	// "table_header_sort_asc");
+	//
+	// }
 
 	var newQuery = $.query.set("keywords", keywords).set("sortby", sortBy).set(
 			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
@@ -283,8 +336,10 @@ function aeSort(psortby) {
 	var urlPage = "group/browse-table.html" + newQuery;
 
 	QuerySampleGroup(urlPage);
-	
-	//I just put the orientation after the query return the results (before I clean all the asc and desc of all the columns, after I make the query and at the end i Put the correct one)
+
+	// I just put the orientation after the query return the results (before I
+	// clean all the asc and desc of all the columns, after I make the query and
+	// at the end i Put the correct one)
 	var thElt = $("#bs_results_header_" + sortBy);
 
 	if (null != thElt) {
@@ -292,26 +347,39 @@ function aeSort(psortby) {
 		if ("" != sortOrder) {
 			var divElt = thElt.find("div.table_header_inner");
 			if (null != divElt) {
-				// alert("div.table_header_inner not null");
-				divElt
-						.addClass("descending" == sortOrder ? "table_header_sort_desc"
-								: "table_header_sort_asc");
+				var hasInnerText = ($("div.table_header_inner")[0].innerText != undefined) ? true
+						: false;
+				if (hasInnerText) {
+					if ("descending" == sortOrder) {
+						// alert(divElt[0].innerText);
+						divElt[0].innerHTML = divElt[0].innerText
+								+ "<i class='aw-icon-angle-down'></i>";
+					} else {
+						divElt[0].innerHTML = divElt[0].innerText
+								+ "<i class='aw-icon-angle-up'></i>";
+					}
+				} else {
+					if ("descending" == sortOrder) {
+						divElt[0].innerHTML = divElt[0].textContent
+								+ "<i class='aw-icon-angle-down'></i>";
+					} else {
+						divElt[0].innerHTML = divElt[0].textContent
+								+ "<i class='aw-icon-angle-up'></i>";
+					}
+				}
 			}
 		}
 	}
-	
-	
+
 	// window.location.href = urlPage;
 
 }
 
-function
-getQueryStringParam( paramName, defaultValue )
-{
-    var param = $.query.get(paramName);
-    if ("" !== param) {
-        return param;
-    } else {
-        return defaultValue;
-    }
+function getQueryStringParam(paramName, defaultValue) {
+	var param = $.query.get(paramName);
+	if ("" !== param) {
+		return param;
+	} else {
+		return defaultValue;
+	}
 }

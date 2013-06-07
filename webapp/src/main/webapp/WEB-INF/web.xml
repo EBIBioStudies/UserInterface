@@ -1,226 +1,227 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
-    <display-name>${project.name} v${project.version}.r${buildNumber}</display-name>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>${project.name} v${project.version}.r${buildNumber}</display-name>
 
-<!-- <context-param>
-  <param-name>org.basex.dbpath</param-name>
-  <param-value>/Users/rpslpereira/BaseXData</param-value>
-</context-param>
+	<!-- <context-param> <param-name>org.basex.dbpath</param-name> <param-value>/Users/rpslpereira/BaseXData</param-value> 
+		</context-param> <context-param> <param-name>org.basex.lang</param-name> 
+		<param-value>English</param-value> </context-param> -->
 
-<context-param>
-  <param-name>org.basex.lang</param-name>
-  <param-value>English</param-value>
-</context-param> -->
+	<!-- Stripes -->
+	<!-- <filter> <display-name>Stripes Filter</display-name> <filter-name>StripesFilter</filter-name> 
+		<filter-class>net.sourceforge.stripes.controller.StripesFilter</filter-class> 
+		<init-param> <param-name>ActionResolver.Packages</param-name> <param-value>uk.ac.ebi.arrayexpress.utils.saxon.search</param-value> 
+		</init-param> </filter> -->
 
- <!-- Stripes -->
-<!-- 	<filter>
-		<display-name>Stripes Filter</display-name>
-		<filter-name>StripesFilter</filter-name>
-		<filter-class>net.sourceforge.stripes.controller.StripesFilter</filter-class>
-		<init-param>
-			<param-name>ActionResolver.Packages</param-name>
-			<param-value>uk.ac.ebi.arrayexpress.utils.saxon.search</param-value>
-		</init-param>
- 	</filter> -->
-
-<filter>
-  <filter-name>performancemonitorfilter</filter-name>
-  <filter-class>uk.ac.ebi.arrayexpress.filters.PerformanceMonitorFilter</filter-class>
-</filter> 
-<filter-mapping>
-  <filter-name>performancemonitorfilter</filter-name>
-  <url-pattern>/*</url-pattern>
-</filter-mapping>
-
-<!-- 
+	<filter>
+		<filter-name>performancemonitorfilter</filter-name>
+		<filter-class>uk.ac.ebi.arrayexpress.filters.PerformanceMonitorFilter</filter-class>
+	</filter>
 	<filter-mapping>
-		<filter-name>StripesFilter</filter-name>
-		<url-pattern>*.jsp</url-pattern>
-		<dispatcher>REQUEST</dispatcher>
+		<filter-name>performancemonitorfilter</filter-name>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
-	<filter-mapping>
-		<filter-name>StripesFilter</filter-name>
-		<servlet-name>StripesDispatcher</servlet-name>
-		<dispatcher>REQUEST</dispatcher>
-	</filter-mapping>
-	
+
+	<!-- <filter-mapping> <filter-name>StripesFilter</filter-name> <url-pattern>*.jsp</url-pattern> 
+		<dispatcher>REQUEST</dispatcher> </filter-mapping> <filter-mapping> <filter-name>StripesFilter</filter-name> 
+		<servlet-name>StripesDispatcher</servlet-name> <dispatcher>REQUEST</dispatcher> 
+		</filter-mapping> <servlet> <servlet-name>StripesDispatcher</servlet-name> 
+		<servlet-class>net.sourceforge.stripes.controller.DispatcherServlet</servlet-class> 
+		<load-on-startup>1</load-on-startup> </servlet> -->
+	<!-- Stripes -->
+
 	<servlet>
-		<servlet-name>StripesDispatcher</servlet-name>
-		<servlet-class>net.sourceforge.stripes.controller.DispatcherServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet> -->
-	 <!-- Stripes -->
-	
-    <servlet>
-        <description>ArrayExpress Application Status Servlet</description>
-        <servlet-name>StatusServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.arrayexpress.servlets.StatusServlet</servlet-class>
+		<description>ArrayExpress Application Status Servlet</description>
+		<servlet-name>StatusServlet</servlet-name>
+		<servlet-class>uk.ac.ebi.arrayexpress.servlets.StatusServlet</servlet-class>
+	</servlet>
+	  <servlet>
+        <description>ArrayExpress Error Pages Servlet</description>
+        <servlet-name>ErrorServlet</servlet-name>
+        <servlet-class>uk.ac.ebi.arrayexpress.servlets.ErrorServlet</servlet-class>
     </servlet>
-    <servlet>
-        <description>ArrayExpress Experiments Query Servlet</description>
-        <servlet-name>QueryServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.arrayexpress.servlets.QueryServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <description>ArrayExpress Experiments Query Page Writer Servlet</description>
-        <servlet-name>QueryPageWriterServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.arrayexpress.servlets.QueryPageWriterServlet</servlet-class>
-    </servlet>
-     <servlet>
-        <description>ArrayExpress Experiments Query Page Writer Servlet for Flat Files</description>
-        <servlet-name>QueryPageWriterFileServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.arrayexpress.servlets.QueryPageWriterFileServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <description>ArrayExpress Flat File Transformation Servlet</description>
-        <servlet-name>FlatFileTransformationServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.arrayexpress.servlets.FlatFileTransformationServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <description>ArrayExpress File Download Servlet</description>
-        <servlet-name>FileDownloadServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.arrayexpress.servlets.FileDownloadServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <description>ArrayExpress Archived File Download Servlet</description>
-        <servlet-name>ArchivedFileDownloadServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.arrayexpress.servlets.ArchivedFileDownloadServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <description>ArrayExpress Data Control Servlet</description>
-        <servlet-name>ControlServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.arrayexpress.servlets.ControlServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <description>ArrayExpress Login Verification Servlet</description>
-        <servlet-name>VerifyLoginServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.arrayexpress.servlets.VerifyLoginServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <description>ArrayExpress HTTP Proxy Servlet</description>
-        <servlet-name>HttpProxyServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.arrayexpress.servlets.HttpProxyServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <description>ArrayExpress Data Lookup Servlet</description>
-        <servlet-name>LookupServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.arrayexpress.servlets.LookupServlet</servlet-class>
-    </servlet>
-    
-    
-    <servlet>
-        <description>BioSamples MetaData Servlet</description>
-        <servlet-name>MetaDataServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.arrayexpress.servlets.MetaDataServlet</servlet-class>
-    </servlet>
-    
-    <!-- Stripes -->
-  <!--   <servlet-mapping>
-		<servlet-name>StripesDispatcher</servlet-name>
-		<url-pattern>*.action</url-pattern>
-	</servlet-mapping> -->
-      <!-- Stripes -->
-    
-    <servlet-mapping>
-        <servlet-name>StatusServlet</servlet-name>
-        <url-pattern>/servlets/status</url-pattern>
+	<servlet>
+		<description>ArrayExpress Experiments Query Servlet</description>
+		<servlet-name>QueryServlet</servlet-name>
+		<servlet-class>uk.ac.ebi.arrayexpress.servlets.QueryServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>ArrayExpress Experiments Query Page Writer Servlet</description>
+		<servlet-name>QueryPageWriterServlet</servlet-name>
+		<servlet-class>uk.ac.ebi.arrayexpress.servlets.QueryPageWriterServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>ArrayExpress Experiments Query Page Writer Servlet for Flat Files</description>
+		<servlet-name>QueryPageWriterFileServlet</servlet-name>
+		<servlet-class>uk.ac.ebi.arrayexpress.servlets.QueryPageWriterFileServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>ArrayExpress Flat File Transformation Servlet</description>
+		<servlet-name>FlatFileTransformationServlet</servlet-name>
+		<servlet-class>uk.ac.ebi.arrayexpress.servlets.FlatFileTransformationServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>ArrayExpress File Download Servlet</description>
+		<servlet-name>FileDownloadServlet</servlet-name>
+		<servlet-class>uk.ac.ebi.arrayexpress.servlets.FileDownloadServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>ArrayExpress Archived File Download Servlet</description>
+		<servlet-name>ArchivedFileDownloadServlet</servlet-name>
+		<servlet-class>uk.ac.ebi.arrayexpress.servlets.ArchivedFileDownloadServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>ArrayExpress Data Control Servlet</description>
+		<servlet-name>ControlServlet</servlet-name>
+		<servlet-class>uk.ac.ebi.arrayexpress.servlets.ControlServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>ArrayExpress Feedback Reporter Servlet</description>
+		<servlet-name>FeedbackServlet</servlet-name>
+		<servlet-class>uk.ac.ebi.arrayexpress.servlets.FeedbackServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>ArrayExpress Authentication Servlet</description>
+		<servlet-name>AuthServlet</servlet-name>
+		<servlet-class>uk.ac.ebi.arrayexpress.servlets.AuthServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>ArrayExpress HTTP Proxy Servlet</description>
+		<servlet-name>HttpProxyServlet</servlet-name>
+		<servlet-class>uk.ac.ebi.arrayexpress.servlets.HttpProxyServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>ArrayExpress Data Lookup Servlet</description>
+		<servlet-name>LookupServlet</servlet-name>
+		<servlet-class>uk.ac.ebi.arrayexpress.servlets.LookupServlet</servlet-class>
+	</servlet>
+
+
+	<servlet>
+		<description>BioSamples MetaData Servlet</description>
+		<servlet-name>MetaDataServlet</servlet-name>
+		<servlet-class>uk.ac.ebi.arrayexpress.servlets.MetaDataServlet</servlet-class>
+	</servlet>
+
+	<!-- Stripes -->
+	<!-- <servlet-mapping> <servlet-name>StripesDispatcher</servlet-name> <url-pattern>*.action</url-pattern> 
+		</servlet-mapping> -->
+	<!-- Stripes -->
+
+	<servlet-mapping>
+		<servlet-name>StatusServlet</servlet-name>
+		<url-pattern>/servlets/status</url-pattern>
+	</servlet-mapping>
+	 <servlet-mapping>
+        <servlet-name>ErrorServlet</servlet-name>
+        <url-pattern>/servlets/error/*</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>MetaDataServlet</servlet-name>
-        <url-pattern>/servlets/metadata</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>QueryServlet</servlet-name>
-        <url-pattern>/servlets/query/*</url-pattern>
-    </servlet-mapping>
-     <servlet-mapping>
-        <servlet-name>QueryPageWriterServlet</servlet-name>
-        <url-pattern>/servlets/querypagewriter/*</url-pattern>
-    </servlet-mapping>
-     <servlet-mapping>
-        <servlet-name>QueryPageWriterFileServlet</servlet-name>
-        <url-pattern>/servlets/querypagewriterfile/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>FlatFileTransformationServlet</servlet-name>
-        <url-pattern>/servlets/fftransform/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>FileDownloadServlet</servlet-name>
-        <url-pattern>/servlets/download/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ArchivedFileDownloadServlet</servlet-name>
-        <url-pattern>/servlets/archdownload/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ControlServlet</servlet-name>
-        <url-pattern>/servlets/control/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>VerifyLoginServlet</servlet-name>
-        <url-pattern>/servlets/verify-login/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>HttpProxyServlet</servlet-name>
-        <url-pattern>/servlets/proxy/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>LookupServlet</servlet-name>
-        <url-pattern>/servlets/lookup/*</url-pattern>
-    </servlet-mapping>
-    <filter>
-        <filter-name>AccessLoggingSuppressFilter</filter-name>
-        <filter-class>uk.ac.ebi.arrayexpress.servlets.AccessLoggingSuppressFilter</filter-class>
-    </filter>
-    <filter>
-        <filter-name>UrlRewriteFilter</filter-name>
-        <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
-        <init-param>
-            <param-name>confPath</param-name>
-            <param-value>/WEB-INF/urlrewrite.xml</param-value>
-        </init-param>
-        <init-param>
-            <param-name>confReloadCheckInterval</param-name>
-            <param-value>-1</param-value>
-        </init-param>
-        <init-param>
-            <param-name>logLevel</param-name>
-            <param-value>log4j</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>AccessLoggingSuppressFilter</filter-name>
-        <url-pattern>/servlets/status</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>UrlRewriteFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-    <listener>
-        <description>The class implementing the "ServletContextListener" interface and thus receiving the
+	<servlet-mapping>
+		<servlet-name>MetaDataServlet</servlet-name>
+		<url-pattern>/servlets/metadata</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>QueryServlet</servlet-name>
+		<url-pattern>/servlets/query/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>QueryPageWriterServlet</servlet-name>
+		<url-pattern>/servlets/querypagewriter/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>QueryPageWriterFileServlet</servlet-name>
+		<url-pattern>/servlets/querypagewriterfile/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FlatFileTransformationServlet</servlet-name>
+		<url-pattern>/servlets/fftransform/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FileDownloadServlet</servlet-name>
+		<url-pattern>/servlets/download/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ArchivedFileDownloadServlet</servlet-name>
+		<url-pattern>/servlets/archdownload/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ControlServlet</servlet-name>
+		<url-pattern>/servlets/control/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>FeedbackServlet</servlet-name>
+		<url-pattern>/feedback</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AuthServlet</servlet-name>
+		<url-pattern>/auth</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>HttpProxyServlet</servlet-name>
+		<url-pattern>/servlets/proxy/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>LookupServlet</servlet-name>
+		<url-pattern>/servlets/lookup/*</url-pattern>
+	</servlet-mapping>
+	<filter>
+		<filter-name>AccessLoggingSuppressFilter</filter-name>
+		<filter-class>uk.ac.ebi.arrayexpress.servlets.AccessLoggingSuppressFilter</filter-class>
+	</filter>
+	<filter>
+		<filter-name>UrlRewriteFilter</filter-name>
+		<filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+		<init-param>
+			<param-name>confPath</param-name>
+			<param-value>/WEB-INF/urlrewrite.xml</param-value>
+		</init-param>
+		<init-param>
+			<param-name>confReloadCheckInterval</param-name>
+			<param-value>-1</param-value>
+		</init-param>
+		<!-- <init-param> <param-name>logLevel</param-name> <param-value>slf4j</param-value> 
+			</init-param> -->
+		<init-param>
+			<param-name>logLevel</param-name>
+			<param-value>log4j</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>AccessLoggingSuppressFilter</filter-name>
+		<url-pattern>/servlets/status</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>UrlRewriteFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<listener>
+		<description>The class implementing the "ServletContextListener" interface and thus receiving the
             "contextInitialized" and "contextDestroyed" messages indicating that the application
             is being de/initialized.
         </description>
-        <listener-class>uk.ac.ebi.arrayexpress.AEInterfaceApplication</listener-class>
-    </listener>
+		<listener-class>uk.ac.ebi.arrayexpress.AEInterfaceApplication</listener-class>
+	</listener>
 
-    <session-config>
-        <session-timeout>1</session-timeout>
-    </session-config>
-
-    <error-page>
-        <error-code>500</error-code>
-        <location>/server_error.html</location>
+	<session-config>
+		<session-timeout>1</session-timeout>
+	</session-config>
+	<error-page>
+        <error-code>400</error-code>
+        <location>/servlets/error/400</location>
     </error-page>
     <error-page>
         <error-code>403</error-code>
-        <location>/restricted_access.html</location>
+        <location>/servlets/error/403</location>
     </error-page>
     <error-page>
         <error-code>404</error-code>
-        <location>/not_found.html</location>
+        <location>/servlets/error/404</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/servlets/error/500</location>
     </error-page>
 </web-app>

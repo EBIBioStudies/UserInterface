@@ -21,6 +21,9 @@ import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
+import uk.ac.ebi.arrayexpress.utils.saxon.functions.search.GetBiosamplesgroupsNumberFunction;
+import uk.ac.ebi.arrayexpress.utils.saxon.functions.search.GetBiosamplessamplesNumberFunction;
+import uk.ac.ebi.arrayexpress.utils.saxon.functions.search.HighlightQueryFunction;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.Controller;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.SearchExtension;
 import uk.ac.ebi.arrayexpress.utils.search.BackwardsCompatibleQueryConstructor;
@@ -38,14 +41,28 @@ public class SearchEngine extends ApplicationComponent
 
     public void initialize() throws Exception
     {
+    	SaxonEngine saxon = (SaxonEngine)getComponent("SaxonEngine");
     	this.controller = new Controller((HierarchicalConfiguration)getPreferences().getConfSubset("bs"));
-        SearchExtension.setController(getController());
+        //SearchExtension.setController(getController());
         getController().setQueryConstructor(new BackwardsCompatibleQueryConstructor());
+        getController().setXPathEngine(saxon);
+        if (null != saxon) {
+//            saxon.registerExtensionFunction(new QueryIndexFunction(getController()));
+            saxon.registerExtensionFunction(new HighlightQueryFunction(getController()));
+            saxon.registerExtensionFunction(new GetBiosamplessamplesNumberFunction(getController()));
+            saxon.registerExtensionFunction(new GetBiosamplesgroupsNumberFunction(getController()));
+            
+//            saxon.registerExtensionFunction(new GetExperimentScoreFunction(getController()));
+//            saxon.registerExtensionFunction(new GetExtendedTextForEBEYEFunction(getController()));
+//                  
+            
+        }
+  
     }
 
     public void terminate() throws Exception
     {
-        SearchExtension.setController(null);
+        //SearchExtension.setController(null);
     }
 
     public Controller getController()

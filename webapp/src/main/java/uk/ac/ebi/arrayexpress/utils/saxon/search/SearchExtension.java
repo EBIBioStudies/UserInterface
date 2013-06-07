@@ -17,16 +17,6 @@ package uk.ac.ebi.arrayexpress.utils.saxon.search;
  *
  */
 
-import net.sf.saxon.om.NodeInfo;
-import net.sf.saxon.om.NodeListIterator;
-import net.sf.saxon.om.SequenceIterator;
-import net.sf.saxon.trans.XPathException;
-
-import org.apache.commons.lang.math.IEEE754rUtils;
-import org.apache.lucene.queryParser.ParseException;
-
-import java.io.IOException;
-import java.util.List;
 
 public final class SearchExtension
 {

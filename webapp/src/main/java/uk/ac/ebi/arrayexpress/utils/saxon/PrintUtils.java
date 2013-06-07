@@ -35,7 +35,8 @@ public class PrintUtils {
 		try {
 			serializer = config.getSerializerFactory().getReceiver(strResult,
 			config.makePipelineConfiguration(), props);
-			nodeInfo.copy(serializer, NodeInfo.ALL_NAMESPACES, true, 0);
+			//nodeInfo.copy(serializer, NodeInfo.ALL_NAMESPACES, true, 0);
+			nodeInfo.copy(serializer, NodeInfo.ALL_NAMESPACES, 0);
 		} catch (XPathException e) {
 			// TODO Auto-generated catch block
 			// TODO Exception management

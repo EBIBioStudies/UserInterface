@@ -1,7 +1,7 @@
 package uk.ac.ebi.arrayexpress.utils;
 
 /*
- * Copyright 2009-2011 European Molecular Biology Laboratory
+ * Copyright 2009-2013 European Molecular Biology Laboratory
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class EmailSender
         this.smtpPort = smtpPort;
     }
 
-    public void send( String recipients[], String subject, String message, String from ) throws MessagingException
+    public void send( String recipients[], String hiddenRecipients[], String subject, String message, String from ) throws MessagingException
     {
         boolean debug = false;
 
@@ -50,21 +50,29 @@ public class EmailSender
         session.setDebug(debug);
 
         // create a message
-        Message msg = new MimeMessage(session);
+        MimeMessage msg = new MimeMessage(session);
 
-        // set the from and to address
+        // set originator (FROM) address
         InternetAddress addressFrom = new InternetAddress(from);
         msg.setFrom(addressFrom);
 
+        // set recipients (TO) address
         InternetAddress[] addressTo = new InternetAddress[recipients.length];
         for (int i = 0; i < recipients.length; i++) {
             addressTo[i] = new InternetAddress(recipients[i]);
         }
         msg.setRecipients(Message.RecipientType.TO, addressTo);
 
+        // set hidden recipients (BCC) address
+        InternetAddress[] addressBcc = new InternetAddress[hiddenRecipients.length];
+        for (int i = 0; i < hiddenRecipients.length; i++) {
+            addressBcc[i] = new InternetAddress(hiddenRecipients[i]);
+        }
+        msg.setRecipients(Message.RecipientType.BCC, addressBcc);
+
         // Setting the Subject and Content Type
         msg.setSubject(subject);
-        msg.setContent(message, "text/plain");
+        msg.setText(message, "UTF-8");
         Transport.send(msg);
     }
 }

@@ -69,7 +69,7 @@ public class SetupDirectoryCheck extends ApplicationComponent {
 					+ fileGlobalSetup.getAbsolutePath());
 			if (!fileGlobalSetup.exists()) {
 				this.getApplication()
-						.sendEmail(
+						.sendEmail(null,null,
 								"BIOSAMPLES: ##### INITIALIZATION WARNING #######",
 								"The GlobalSetupDirectory doesnt exist and it can cause problems (temporary directories removed during the servers restart)");
 			}
@@ -101,14 +101,14 @@ public class SetupDirectoryCheck extends ApplicationComponent {
 							+ globalSetupDirectory
 							+ ") also doesnt exist!!!! ERROR\n";
 				}
-				this.getApplication().sendEmail(
+				this.getApplication().sendEmail(null,null,
 						"BIOSAMPLES: ##### INITIALIZATION ERROR #######",
 						emailError);
 			}
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			this.getApplication().sendEmail(
+			this.getApplication().sendEmail(null,null,
 					"BIOSAMPLES: ##### INITIALIZATION ERROR #######",
 					emailError);
 			logger.error("Exception:->[{}]", e.getMessage());

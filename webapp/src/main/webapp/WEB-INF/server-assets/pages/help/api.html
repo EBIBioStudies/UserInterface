@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>BioSamples - API</title>
+</head>
+
+<body>
+	<div id="content" role="main" class="grid_24 clearfix">
+		<section id="ae-help" class="grid_18 alpha">
+			<h2 id="RESTAPI">
+				REST API <font color="red">(beta version)</font>
+			</h2>
+			<p>
+				Biosamples exposes an API for external usage. <br> If you have
+					any problem or suggestion please contact: <a href="mailto:rpereira@ebi.ac.uk" class="icon icon-generic" data-icon="E">Rui Pereira &lt;rpereira@ebi.ac.uk&gt;</a>;
+
+
+				
+			</p>
+			<p>This is an on-going work, so some parts are not yet
+				implemented (security, error codes catalog, etc.), but it's already
+				possible to have access to:</p>
+			<ul>
+				<li>Information about a specific Group Accession;</li>
+				<li>Information about a specific Sample Accession;</li>
+				<li>Search Groups with paging support;</li>
+				<li>Search Samples inside a specific Group with paging support;
+				</li>
+			</ul>
+			<p>
+				You can consult the descriptions of each of those bellow, and you
+				can always follow the "More details" link to know all the details
+				about it. <br> For each service the follow information will be
+					available: 
+			</p>
+			<ul>
+				<li>Security;</li>
+				<li>Parameters;</li>
+				<li>Invocation example;</li>
+				<li>Response example;</li>
+				<li>Error codes;</li>
+				<li>XSD - Xml Schema definition;</li>
+			</ul>
+			<h3 id="AvailableServices">Available Services</h3>
+			<ol>
+				<li>Group Accession (<a class="ext-link"
+					href="http://%24server/biosamples/xml/group/$GROUPACCESSION"><span
+						class="icon">&nbsp;</span>http://$SERVER/biosamples/xml/group/$GROUPACCESSION</a>)
+					<ul>
+						<li>It returns all information about a SampleGroup;</li>
+						<li>If you specify the sampleslist argument with true value,
+							it will also return a list with the Samples Accessions;</li>
+						<li>E.g. <a class="ext-link"
+							href="/biosamples/xml/group/SAMEG82620"><span class="icon">&nbsp;</span>/biosamples/xml/group/SAMEG82620</a>;
+						</li>
+						<li><a class="wiki" href="group_accession.html">More
+								details</a>;</li>
+					</ul></li>
+			</ol>
+			<ol start="2">
+				<li>Sample Accession (<a class="ext-link"
+					href="http://%24server/biosamples/xml/sample/$SAMPLEACCESSION"><span
+						class="icon">&nbsp;</span>http://$SERVER/biosamples/xml/sample/$SAMPLEACCESSION</a>)
+					<ul>
+						<li>It returns all information about a Sample;</li>
+						<li>E.g. <a class="ext-link"
+							href="/biosamples/xml/sample/SAME546131"><span class="icon">&nbsp;</span>/biosamples/xml/sample/SAME546131</a>;
+						</li>
+						<li><a class="wiki" href="sample_accession.html">More
+								details</a>;</li>
+					</ul></li>
+			</ol>
+			<ol start="3">
+				<li>Search Sample Groups (<a class="ext-link"
+					href="http://%24server/biosamples/xml/group/query=$QUERY"><span
+						class="icon">&nbsp;</span>http://$SERVER/biosamples/xml/group/query=$QUERY</a>)
+					<ul>
+						<li>It returns all the groups that match the query (e.g. <a
+							class="ext-link" href="/biosamples/xml/group/query=cancer"><span
+								class="icon">&nbsp;</span>/biosamples/xml/group/query=cancer</a>);
+						</li>
+						<li>It is possible to use paging and sorting (e.g. <a
+							class="ext-link"
+							href="/biosamples/xml/group/query=cancer&amp;sortby=relevance&amp;sortorder=descending&amp;page=2&amp;pagesize=50"><span
+								class="icon">&nbsp;</span>/biosamples/xml/group/query=cancer&amp;sortby=relevance&amp;sortorder=descending&amp;page=2&amp;pagesize=50</a>);
+						</li>
+						<li>Always return a result summary information; <pre
+								class="wiki">&lt;ResultQuery&gt;
+&lt;SummaryInfo&gt;
+&lt;Total&gt;7766&lt;/Total&gt;
+&lt;From&gt;51&lt;/From&gt;
+&lt;To&gt;100&lt;/To&gt;
+&lt;PageNumber&gt;2&lt;/PageNumber&gt;
+&lt;PageSize&gt;50&lt;/PageSize&gt;
+&lt;/SummaryInfo&gt;
+&lt;BioSampleGroup id="SAMEG72185"/&gt;
+&lt;BioSampleGroup id="SAMEG126084"/&gt;
+...
+&lt;/ResultQuery&gt;
+</pre></li>
+						<li><a class="wiki" href="group_search.html">More details</a>;
+						</li>
+					</ul></li>
+			</ol>
+			<ol start="4">
+				<li>Search Samples inside a Sample Group (<a class="ext-link"
+					href="http://%24server/biosamples/xml/groupsamples/$SAMPLEGROUP/query=$QUERY"><span
+						class="icon">&nbsp;</span>http://$SERVER/biosamples/xml/groupsamples/$SAMPLEGROUP/query=$QUERY</a>)
+					<ul>
+						<li>It returns all the samples that are inside the
+							SampleGroup parameter and also match the query(e.g. <a
+							class="ext-link"
+							href="/biosamples/xml/groupsamples/SAMEG23004/query=cancer"><span
+								class="icon">&nbsp;</span>http://www.ebi.ac.uk/biosamples/xml/groupsamples/SAMEG23004/query=cancer</a>);
+						</li>
+						<li>It is possible to use paging (e.g. <a class="ext-link"
+							href="/biosamples/xml/groupsamples/SAMEG23004/query=cancer&amp;page=3&amp;pagesize=10"><span
+								class="icon">&nbsp;</span>e.g.
+								/biosamples/xml/groupsamples/SAMEG23004/query=cancer&amp;page=3&amp;pagesize=10</a>);
+						</li>
+						<li>Always return a result summary information; <pre
+								class="wiki">&lt;ResultQuery&gt;
+&lt;SummaryInfo&gt;
+&lt;Total&gt;3316&lt;/Total&gt; 
+&lt;From&gt;21&lt;/From&gt;
+&lt;To&gt;40&lt;/To&gt;
+&lt;PageNumber&gt;2&lt;/PageNumber&gt;
+&lt;PageSize&gt;20&lt;/PageSize&gt;
+&lt;/SummaryInfo&gt;
+&lt;BioSample id="SAMEA477370"/&gt;
+&lt;BioSample id="SAMEA507158"/&gt;
+...
+&lt;/ResultQuery&gt;
+</pre></li>
+						<li><a class="wiki" href="sample_search.html">More
+								details</a>;</li>
+					</ul></li>
+			</ol>
+		</section>
+		<aside class="grid_6 omega">
+			<h3>Help</h3>
+			<ul id="secondary-nav">
+				<li><a href="index.html">Help home</a></li>
+				<li><a href="quick_start.html">Quick Start guide</a></li>
+				<li><a href="how_to_search.html">How to search</a></li>
+				<li><a href="api.html">Other ways to get
+						data</a>
+					<ul>
+						<li class="active"><a href="api.html">Programmatic
+								access</a></li>
+					</ul></li>
+				<li><a href="submissions_overview.html">How to submit</a>
+					<ul>
+						<li><a href="UHTS_submissions.html">Sequencing
+								submissions</a></li>
+						<li><a href="third_party_tools.html">Third-party tools</a></li>
+					</ul></li>
+				<li><a href="FAQ.html">FAQ</a></li>
+				<li><a href="data_availability.html">Learn more about our
+						data</a>
+					<ul>
+						<li><a href="data_availability.html">Data access policy</a></li>
+						<li><a href="accession_codes.html">Accession codes</a></li>
+						<li><a href="GEO_data.html">GEO data</a></li>
+					</ul></li>
+				<li><a href="contact_us.html">Contact us</a></li>
+			</ul>
+		</aside>
+	</div>
+</body>
+</html>

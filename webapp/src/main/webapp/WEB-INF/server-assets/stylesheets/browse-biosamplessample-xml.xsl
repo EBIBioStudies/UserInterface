@@ -65,7 +65,7 @@
 					<xsl:value-of select="$vPageSize" />
 				</PageSize>
 			</SummaryInfo>
-			<xsl:apply-templates select="*"></xsl:apply-templates>
+			<xsl:apply-templates select="//Sample"></xsl:apply-templates>
 		</ResultQuery>
 	</xsl:template>
 

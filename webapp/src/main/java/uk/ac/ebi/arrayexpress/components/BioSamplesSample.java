@@ -39,6 +39,7 @@ import uk.ac.ebi.arrayexpress.utils.saxon.PersistableDocumentContainer;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesGroup;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesSample;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentExperiments;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.Indexer;
 
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
@@ -82,8 +83,13 @@ public class BioSamplesSample extends ApplicationComponent implements
 		this.saxon = (SaxonEngine) getComponent("SaxonEngine");
 		this.search = (SearchEngine) getComponent("SearchEngine");
 		
-	
-		updateIndex(buildIndexes);
+		//TODO: change this (I will never restart the server with an incremental update, even though I shoul change it) 
+		if(buildIndexes){
+			updateIndex(Indexer.RebuildCategories.REBUILD);
+		}
+		else{
+			updateIndex(Indexer.RebuildCategories.NOTREBUILD);
+		}
 			
 		
 //		TODO rpe
@@ -123,10 +129,12 @@ public class BioSamplesSample extends ApplicationComponent implements
 
 
 
-	private void updateIndex(boolean rebuild) {
+	private void updateIndex(Indexer.RebuildCategories rebuild) {
 		try {
 			
-			this.search.getController().indexFromXmlDB(INDEX_ID, rebuild);			
+			this.search.getController().indexFromXmlDB(INDEX_ID, rebuild);	
+			//I need to do this because when I initialize the server with the interface.application.lucene.indexes.build=true I need to restart the indexreader;
+			this.search.getController().getEnvironment(INDEX_ID).setup();
 			//is only donr on BioSampleGroup
 			//this.autocompletion.rebuild();
 		} catch (Exception x) {
@@ -138,7 +146,7 @@ public class BioSamplesSample extends ApplicationComponent implements
 	public void reloadIndex() {
 		try {
 			//String indexLocationDirectory= this.search.getController().getEnvironment(INDEX_ID).indexLocationDirectory + "_" + System.currentTimeMillis();
-			this.search.getController().indexFromXmlDB(INDEX_ID, false);		
+			this.search.getController().indexFromXmlDB(INDEX_ID, Indexer.RebuildCategories.NOTREBUILD);		
 			
 		} catch (Exception x) {
 			this.logger.error("Caught an exception:", x);

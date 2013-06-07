@@ -92,6 +92,7 @@
 			</div>
 		</div>
 
+
 		<xsl:apply-templates select="//Sample">
 			<xsl:with-param name="pAttributes" select="//SampleAttributes"></xsl:with-param>
 		</xsl:apply-templates>
@@ -105,28 +106,29 @@
 		<xsl:param name="pAttributes"></xsl:param>
 		<!-- <xsl:param name="pAttributesinteger"></xsl:param> -->
 		<xsl:variable name="vSample" select="."></xsl:variable>
-		<tr>
-
-			<td>
+		<div id="samplesleft{position()}">
+			<bs_value_att>
 				<a href="../sample/{@id}">
 					<xsl:copy-of
 						select="$vSample/attribute/value[../@class='Sample Accession']" />
 				</a>
-			</td>
+			</bs_value_att>
+		</div>
 
-			<xsl:for-each select="$pAttributes/attribute/replace(@class, ' ' , '-')">
-				<xsl:if test=".!='Sample-Accession'">
-					<td>
+		<div id="samplesmiddle{position()}">
+			<xsl:for-each select="$pAttributes/attribute/@class">
+				<xsl:if test=".!='Sample Accession'">
+					<bs_value_att>
 
 
 						<xsl:variable name="token" select="."></xsl:variable>
 						<xsl:variable name="value"
-							select="$vSample/attribute/value[../@class=replace($token, '-' , ' ')]" />
+							select="$vSample/attribute/value[../@class=$token]" />
 						<xsl:choose>
 
 
 							<!-- LINKS -->
-							<xsl:when test="replace($token,'-',' ')='Database URI'">
+							<xsl:when test="$token='Database URI'">
 
 								<a href="{$value}" target="ext">
 									<xsl:value-of select="$value"></xsl:value-of>
@@ -152,7 +154,8 @@
 
 						</xsl:choose>
 
-					</td>
+					</bs_value_att>
+
 
 
 
@@ -160,49 +163,85 @@
 
 			</xsl:for-each>
 
-			<td>
-				<xsl:variable name="bdName" select="lower-case(../DatabaseGroup/@name)"></xsl:variable>
-				<xsl:variable name="bdNameSample" select="lower-case($vSample/attribute/value[../@class='Database Name'])"></xsl:variable>
-				<xsl:choose>
-				   <!-- firts I will see if the database is defined inside the Sample -->
-				   <xsl:when
-						test="$bdNameSample =('arrayexpress','ena sra','dgva','pride') and not($vSample/attribute/value[../@class='Database URI']='')">
-						<a href="{$vSample/attribute/value[../@class='Database URI']}" target="ext">
-							<img src="{$basepath}/assets/images/{$bdNameSample}_logo.gif" alt="{$bdName} Link" title="{$bdName}"
-								valign="middle" border="0"/>
-						</a>
-					</xsl:when>
-					<xsl:when
-						test="not($bdNameSample='') and not($vSample/attribute/value[../@class='Database URI']='')">
-						<a href="{$vSample/attribute/value[../@class='Database URI']}" target="ext"><img src="{$basepath}/assets/images/generic_logo.gif" border="0" title="{$bdNameSample}"/></a>
-					</xsl:when>
-					<xsl:when
-						test="$bdName =('arrayexpress','ena sra','dgva','pride') and not(../DatabaseGroup/@uri='')">
-						<a href="{../DatabaseGroup/@uri}" target="ext">
-							<img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{$bdName} Link" title="{$bdName}"
-								valign="middle" border="0"/>
-						</a>
-					</xsl:when>
-					<xsl:when test="not (../DatabaseGroup/@uri='')">
-						<a href="{../DatabaseGroup/@uri}" target="ext"><img src="{$basepath}/assets/images/generic_logo.gif" border="0" title="{$bdName}"/></a>
-					</xsl:when>
-				</xsl:choose>
-			</td>
+		</div>
 
-			<!-- <xsl:for-each select="tokenize($pAttributes,' ')"> <xsl:if test=".!='Sample-Accession'"> 
-				<td> <xsl:variable name="token" select="."></xsl:variable> <xsl:variable 
-				name="value" select="$vSample/attribute/value[../@class=replace($token, '-' 
-				, ' ')]" /> <xsl:choose> <xsl:when test="count($value/attribute[@class='Term 
-				Source REF'])=0"> <xsl:call-template name="highlight"> <xsl:with-param name="pText" 
-				select="string-join($value, ', ')" /> <xsl:with-param name="pFieldName" select="'$token'" 
-				/> <xsl:with-param name="pFieldName" select="'$token'" /> </xsl:call-template> 
-				</xsl:when> <xsl:otherwise> <xsl:call-template name="process_efo"> <xsl:with-param 
-				name="pValue" select="$value"></xsl:with-param> </xsl:call-template> </xsl:otherwise> 
-				</xsl:choose> </td> </xsl:if> </xsl:for-each> -->
+		<div id="samplesright{position()}">
+			<div>
+				<!-- <tr> <td> -->
+				<bs_value_att>
 
 
+					<xsl:choose>
+						<!-- firts I will see if the database is defined inside the Sample -->
+						<xsl:when
+							test="count($vSample/attribute/value[../@class='Database Name'])=1">
+							<xsl:variable name="bdNameSample"
+								select="lower-case($vSample/attribute/value[../@class='Database Name'])"></xsl:variable>
+							<xsl:variable name="bdUriSample"
+								select="$vSample/attribute/value[../@class='Database URI']"></xsl:variable>
+							<xsl:choose>
+								<!-- firts I will see if the database is defined inside the Sample -->
+								<xsl:when
+									test="$bdNameSample =('arrayexpress','ena sra','dgva','pride') and not($bdUriSample='')">
+									<a href="{$bdUriSample}"
+										target="ext">
+										<img src="{$basepath}/assets/images/{$bdNameSample}_logo.gif"
+											alt="{$bdNameSample} Link" title="{$bdNameSample}" valign="middle"
+											border="0" />
+									</a>
+								</xsl:when>
+								<xsl:when
+									test="not($bdNameSample='') and not($bdUriSample='')">
+									<a href="{$bdUriSample}"
+										target="ext">
+										<font class="icon icon-generic" data-icon="L" />
+									</a>
+								</xsl:when>
+							</xsl:choose>
+						</xsl:when>
+						<!-- database inside the samplegroup -->
+						<xsl:otherwise>
+							<xsl:for-each select="../DatabaseGroup//object">
+								<xsl:variable name="bdNameGroup"
+									select="lower-case(.//attribute/value[../@class='Database Name'])"></xsl:variable>
+								<xsl:variable name="bdUriGroup"
+									select=".//attribute/value[../@class='Database URI']"></xsl:variable>
+								<xsl:choose>
+									<xsl:when
+										test="$bdNameGroup =('arrayexpress','ena sra','dgva','pride') and not($bdUriGroup='')">
+										<a href="{$bdUriGroup}" target="ext">
+											<img src="{$basepath}/assets/images/{$bdNameGroup}_logo.gif"
+												alt="{$bdNameGroup} Link" title="{$bdNameGroup}" valign="middle"
+												border="0" />
+										</a>
+									</xsl:when>
+									<xsl:when test="not ($bdUriGroup='')">
+										<a href="{$bdUriGroup}" target="ext">
+											<font class="icon icon-generic" data-icon="L" />
+										</a>
+									</xsl:when>
+								</xsl:choose>
+							</xsl:for-each>
+						</xsl:otherwise>
+					</xsl:choose>
+				</bs_value_att>
+				<!-- </td> </tr> -->
+			</div>
+		</div>
+		<!-- <xsl:for-each select="tokenize($pAttributes,' ')"> <xsl:if test=".!='Sample-Accession'"> 
+			<td> <xsl:variable name="token" select="."></xsl:variable> <xsl:variable 
+			name="value" select="$vSample/attribute/value[../@class=replace($token, '-' 
+			, ' ')]" /> <xsl:choose> <xsl:when test="count($value/attribute[@class='Term 
+			Source REF'])=0"> <xsl:call-template name="highlight"> <xsl:with-param name="pText" 
+			select="string-join($value, ', ')" /> <xsl:with-param name="pFieldName" select="'$token'" 
+			/> <xsl:with-param name="pFieldName" select="'$token'" /> </xsl:call-template> 
+			</xsl:when> <xsl:otherwise> <xsl:call-template name="process_efo"> <xsl:with-param 
+			name="pValue" select="$value"></xsl:with-param> </xsl:call-template> </xsl:otherwise> 
+			</xsl:choose> </td> </xsl:if> </xsl:for-each> -->
 
-		</tr>
+
+
+
 	</xsl:template>
 
 
