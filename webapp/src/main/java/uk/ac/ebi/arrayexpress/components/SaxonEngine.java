@@ -17,13 +17,34 @@ package uk.ac.ebi.arrayexpress.components;
  *
  */
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.Writer;
+import java.net.URL;
+import java.util.Collections;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.transform.ErrorListener;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Templates;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
 import net.sf.saxon.Configuration;
 import net.sf.saxon.Controller;
 import net.sf.saxon.TransformerFactoryImpl;
 import net.sf.saxon.event.SequenceWriter;
 import net.sf.saxon.expr.instruct.TerminationException;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
-import net.sf.saxon.lib.SaxonOutputKeys;
 import net.sf.saxon.om.DocumentInfo;
 import net.sf.saxon.om.Item;
 import net.sf.saxon.om.NodeInfo;
@@ -32,27 +53,23 @@ import net.sf.saxon.sxpath.XPathEvaluator;
 import net.sf.saxon.sxpath.XPathExpression;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.tree.tiny.TinyBuilder;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
 import uk.ac.ebi.arrayexpress.utils.LRUMap;
 import uk.ac.ebi.arrayexpress.utils.StringTools;
 import uk.ac.ebi.arrayexpress.utils.saxon.IDocumentSource;
 import uk.ac.ebi.arrayexpress.utils.saxon.SaxonException;
-import uk.ac.ebi.arrayexpress.utils.saxon.functions.*;
+import uk.ac.ebi.arrayexpress.utils.saxon.functions.FormatFileSizeFunction;
+import uk.ac.ebi.arrayexpress.utils.saxon.functions.HTTPStatusException;
+import uk.ac.ebi.arrayexpress.utils.saxon.functions.HTTPStatusFunction;
+import uk.ac.ebi.arrayexpress.utils.saxon.functions.NamespaceConstant;
+import uk.ac.ebi.arrayexpress.utils.saxon.functions.SerializeXMLFunction;
+import uk.ac.ebi.arrayexpress.utils.saxon.functions.TrimTrailingDotFunction;
 import uk.ac.ebi.arrayexpress.utils.saxon.functions.saxon.ParseHTMLFunction;
-//import uk.ac.ebi.fg.utils.saxon.IXPathEngine;
-
-import javax.xml.transform.*;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import java.io.*;
-import java.net.URL;
-import java.util.Collections;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
 
 public class SaxonEngine extends ApplicationComponent implements URIResolver, ErrorListener
 {
@@ -91,6 +108,7 @@ public class SaxonEngine extends ApplicationComponent implements URIResolver, Er
                         + "\"/>"
         );
 
+        
         registerExtensionFunction(new ParseHTMLFunction());
         registerExtensionFunction(new SerializeXMLFunction());
         //registerExtensionFunction(new TabularDocumentFunction());
