@@ -202,7 +202,7 @@
 			</activation>
 			<properties>
 				<interface.application.base.path>/biosamples</interface.application.base.path>
-				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
+				<interface.application.lucene.indexes.build>true</interface.application.lucene.indexes.build>
 				<interface.application.body.class>bs_dev_preview</interface.application.body.class>
 				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>

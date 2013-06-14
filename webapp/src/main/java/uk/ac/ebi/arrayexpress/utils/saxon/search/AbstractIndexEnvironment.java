@@ -883,7 +883,7 @@ public abstract class AbstractIndexEnvironment {
 				//I'm getting everything based on nodeId, because i have the sample sample in different samplegroups
 				//TODO: change this (just works with baseX)
 				set = service.query("for $x in(subsequence("
-						+ indexDocumentPath + "/@id," + pageInit + ","
+						+ indexDocumentPath + "," + pageInit + ","
 						+ pageSize + ")) return db:node-id($x)");
 				
 				// logger.debug("Number of results of page->" + set.getSize());
@@ -913,11 +913,11 @@ public abstract class AbstractIndexEnvironment {
 						// /xml=(String) iterid.nextResource().getContent();
 
 						// /xml=(String) iter.nextResource().getContent();
-						// logger.debug("xml->"+xml);
+						
 						// /reader = new StringReader(xml);
 						StringBuilder xml = new StringBuilder();
 						xml.append((String) iterid.nextResource().getContent());
-
+						//logger.debug("xml->"+xml);
 						// logger.debug(xml.toString());
 						reader = new StringReader(xml.toString());
 						source = config.buildDocument(new StreamSource(reader));

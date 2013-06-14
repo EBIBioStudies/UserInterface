@@ -13,6 +13,7 @@
 		</reports>
 	</app>
 	<bs>
+	
 		<globalSetupDirectory>${interface.application.global.setup.directory}
 		</globalSetupDirectory>
 		<setupDirectory>${sys:java.io.tmpdir}/${interface.application.index.directory}
