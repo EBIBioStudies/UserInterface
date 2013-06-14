@@ -1,7 +1,7 @@
 package uk.ac.ebi.arrayexpress.servlets;
 
 /*
- * Copyright 2009-2011 European Molecular Biology Laboratory
+ * Copyright 2009-2013 European Molecular Biology Laboratory
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,14 @@ package uk.ac.ebi.arrayexpress.servlets;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationServlet;
 import uk.ac.ebi.arrayexpress.utils.RegexHelper;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,22 +42,42 @@ public class HttpProxyServlet extends ApplicationServlet
 
     private static final int PROXY_BUFFER_SIZE = 64000;
 
+    private HttpClient httpClient;
+
+    @Override
+    public void init( ServletConfig config ) throws ServletException
+    {
+        super.init(config);
+
+        httpClient = new HttpClient(new MultiThreadedHttpConnectionManager());
+        httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
+        /* proxy is not needed here I think, but I'll keep this just in case
+        String proxyHost = System.getProperty("http.proxyHost");
+        String proxyPort = System.getProperty("http.proxyPort");
+        logger.info("Checking system properties for proxy configuration: [{}:{}]", proxyHost, proxyPort);
+        if (null != proxyHost && null != proxyPort) {
+            httpClient.getHostConfiguration().setProxy(proxyHost, Integer.parseInt(proxyPort));
+        }
+        */
+    }
+
+    @Override
     protected boolean canAcceptRequest( HttpServletRequest request, RequestType requestType )
     {
         return (requestType == RequestType.GET);
     }
 
-    // Respond to HTTP requests from browsers.
+    @Override
     protected void doRequest( HttpServletRequest request, HttpServletResponse response, RequestType requestType )
             throws ServletException, IOException
     {
-        RegexHelper MATCH_URL_REGEX = new RegexHelper("servlets/proxy/+(.+)", "i");
+        RegexHelper MATCH_URL_REGEX = new RegexHelper("/+(.+)", "i");
         RegexHelper TEST_HOST_IN_URL_REGEX = new RegexHelper("^http\\:/{2}([^/]+)/", "i");
         RegexHelper SQUARE_BRACKETS_REGEX = new RegexHelper("\\[\\]", "g");
 
         logRequest(logger, request, requestType);
 
-        String url = MATCH_URL_REGEX.matchFirst(request.getRequestURL().toString());
+        String url = MATCH_URL_REGEX.matchFirst(request.getPathInfo());
         url = url.replaceFirst("http:/{1,2}", "http://");   // stupid hack as tomcat 6.0 removes second forward slash
         String queryString = request.getQueryString();
 
@@ -65,7 +87,6 @@ public class HttpProxyServlet extends ApplicationServlet
             }
             logger.debug("Will access [{}]", url);
 
-            HttpClient httpClient = new HttpClient();
             GetMethod getMethod = new GetMethod(url);
 
             if (null != queryString) {
@@ -83,9 +104,6 @@ public class HttpProxyServlet extends ApplicationServlet
             }
 
             try {
-                // establish a connection within 5 seconds
-                httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
-
                 httpClient.executeMethod(getMethod);
 
                 int statusCode = getMethod.getStatusCode();

@@ -126,9 +126,9 @@
 					&& !request.getParameter("keywords").equalsIgnoreCase("")) {
 		%>
 		<section class="grid_18 alpha">
-		<h2>
-			BioSamples results for <span class="searchterm"><%=request.getParameter("keywords")%></span>
-		</h2>
+			<h2>
+				BioSamples results for <span class="searchterm"><%=request.getParameter("keywords")%></span>
+			</h2>
 		</section>
 		<aside class="grid_6 omega shortcuts expander" id="search-extras">
 			<div id="ebi_search_results">
@@ -140,10 +140,10 @@
 			}
 		%>
 		<section class="grid_24 alpha omega">
-		<div id="bs_browse">
+			<div id="bs_browse">
 
-			<div id="contentspane" class="contentspane">
-				<%-- after I need to put here a filter
+				<div id="contentspane" class="contentspane">
+					<%-- after I need to put here a filter
 				<div id="bs-query">
 					<form id="bs_query_form" method="get" action="browse.html">
 						<table border="0" id="table-bs-query" width="100%">
@@ -180,14 +180,14 @@
 				</div>
  --%>
 
-				<!-- 	<div id="bs_results_area">
+					<!-- 	<div id="bs_results_area">
 			
 			
 					<div id="bs_results_stats">
 						<div id="bs_results_stats_fromto"></div>
 						<div id="bs_results_pager"></div>
 					</div> -->
-				<!-- 		 <table width="100%">
+					<!-- 		 <table width="100%">
 		 <tr>
             <td style="width:150px;border-spacing:10px" bgcolor="yellow" valign="top">
   			<font size="+1">Filter by Source</font></br>
@@ -198,58 +198,58 @@
  
             </td>
             <td> -->
-				<div class="persist-area">
-					<table class="persist-header">
-						<colgroup>
-							<col class="col_id">
-							<col class="col_title">
-							<col class="col_samples">
-						</colgroup>
-						<thead>
-							<tr>
-								<th colspan="3" class="col_pager">
-									<div class="bs-pager"></div>
-									<div class="bs-page-size"></div>
-									<div class="bs-stats"></div>
-								</th>
-							</tr>
-							<tr>
-								<th class="sortable bs_results_id col_id"
-									id="bs_results_header_id"><a
-									href="javascript:aeSort('id')"
-									title="Click to sort by accession"><div
-											class="table_header_inner">Accession</div></a> <!-- <img
+					<div class="persist-area">
+						<table class="persist-header">
+							<colgroup>
+								<col class="col_id">
+								<col class="col_title">
+								<col class="col_samples">
+							</colgroup>
+							<thead>
+								<tr>
+									<th colspan="3" class="col_pager">
+										<div class="bs-pager"></div>
+										<div class="bs-page-size"></div>
+										<div class="bs-stats"></div>
+									</th>
+								</tr>
+								<tr>
+									<th class="sortable bs_results_id col_id"
+										id="bs_results_header_id"><a
+										href="javascript:aeSort('id')"
+										title="Click to sort by accession"><div
+												class="table_header_inner">Accession</div></a> <!-- <img
 								src="/arrayexpress/assets/images/mini_arrow_up.gif" width="12"
 								height="16" alt="^"> --></th>
-								<th class="sortable col_title" id="bs_results_header_title"><a
-									href="javascript:aeSort('title')"
-									title="Click to sort by title"><div
-											class="table_header_inner">Title</div></a></th>
-								<th class="sortable col_samples" id="bs_results_header_samples"
-									align="center"><a href="javascript:aeSort('samples')"
-									title="Click to sort by number of samples"><div
-											class="table_header_inner">Samples</div></a></th>
-							</tr>
-						</thead>
-					</table>
-					<table id="table_samplegroups" border="0" cellpadding="0"
-						cellspacing="0">
-						<colgroup>
-							<col class="col_id">
-							<col class="col_title">
-							<col class="col_samples">
-						</colgroup>
-						<tbody id="bs_results_tbody"></tbody>
+									<th class="sortable col_title" id="bs_results_header_title"><a
+										href="javascript:aeSort('title')"
+										title="Click to sort by title"><div
+												class="table_header_inner">Title</div></a></th>
+									<th class="sortable col_samples" id="bs_results_header_samples"
+										align="center"><a href="javascript:aeSort('samples')"
+										title="Click to sort by number of samples"><div
+												class="table_header_inner">Samples</div></a></th>
+								</tr>
+							</thead>
+						</table>
+						<table id="table_samplegroups" border="0" cellpadding="0"
+							cellspacing="0">
+							<colgroup>
+								<col class="col_id">
+								<col class="col_title">
+								<col class="col_samples">
+							</colgroup>
+							<tbody id="bs_results_tbody"></tbody>
 
-					</table>
-				</div>
+						</table>
+					</div>
 
-				<!-- 		</td>
+					<!-- 		</td>
 			</tr>
 			</table> -->
 
+				</div>
 			</div>
-		</div>
 		</section>
 	</div>
 	<%@ include file="WEB-INF/server-assets/html/footer_ebi.html"%>
@@ -268,35 +268,34 @@
 
 
 	<!-- Your custom JavaScript file scan go here... change names accordingly -->
-	<script src="assets/scripts/jquery-1.8.2.min.js" type="text/javascript"></script>
-	<script src="assets/scripts/jsdeferred.jquery-0.3.1.js"
-		type="text/javascript"></script>
-	<script src="assets/scripts/jquery.cookie-1.0.js"
-		type="text/javascript"></script>
-	<script src="assets/scripts/jquery.query-2.1.7m-ebi.js"
-		type="text/javascript"></script>
 	<script type="text/javascript">
 		var contextPath = "${interface.application.base.path}";
 	</script>
-	<script src="assets/scripts/jquery.autocomplete-1.1.0m-ebi.js"
+	<script src="assets/scripts/jquery-1.8.2.min.js" type="text/javascript"></script>
+	<script src="assets/scripts/jquery.cookie-1.0.js"
 		type="text/javascript"></script>
 	<script src="assets/scripts/jquery.caret-range-1.0.js"
+		type="text/javascript"></script>
+	<script src="assets/scripts/jquery.autocomplete-1.1.0m-ebi.js"
 		type="text/javascript"></script>
 	<script src="assets/scripts/biosamples_common_10.js"
 		type="text/javascript"></script>
 	<script src="assets/scripts/biosamples_browse_10.js"
 		type="text/javascript"></script>
+
 	<script
 		src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search-run.js"
 		type="text/javascript"></script>
 	<script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search.js"
 		type="text/javascript"></script>
+	<script src="/biosamples/assets/scripts/jquery.query-2.1.7m-ebi.js"
+		type="text/javascript"></script>
 
 
 	<!--
   <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/plugins.js"></script>
-  <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/script.js"></script>
-  -->
+	<script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/script.js"></script>
+	-->
 	<script defer="defer"
 		src="//www.ebi.ac.uk/web_guidelines/js/cookiebanner.js"></script>
 	<script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/foot.js"></script>

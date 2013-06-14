@@ -364,6 +364,15 @@
                 , requestTreeUrl: contextPath + "/efotree.txt"
             }
         ).focus(autoCompleteFixSet).blur(autoCompleteFixUnset).removeAttr('autocomplete');
+        
+//        if ($("#noresults").length == 0) {
+//            try {
+//                /* The simplest implementation, used on your zero search results pages */
+//            	alert("fdfd");
+//                updateSummary({searchBaseURL: "http://www.ebi.ac.uk/ebisearch/"});
+//            } catch (except_1) {}
+//
+//        }
 
     });
 
@@ -378,3 +387,19 @@ aeClearField( sel )
     document.forms['bs_query_form'].submit();
 }
 
+
+//install a proxy to all jquery requests (I will need to change the URL when I'm calling the ebisearch in the internal environments
+$.ajaxSetup({
+	crossDomain: true,
+    beforeSend: function(xhr, opts){
+    	if(opts.url.indexOf("/ebisearch/")==0 && !((opts.url.indexOf("www.ebi.ac.uk") == 0) || (opts.url.indexOf("wwwdev.ebi.ac.uk") == 0))){
+    		opts.url="http://www.ebi.ac.uk" +opts.url;
+    	}
+   
+    	//alert(document.domain);
+        // show progress spinner
+    },
+    complete: function() {
+        // hide progress spinner
+    }
+});

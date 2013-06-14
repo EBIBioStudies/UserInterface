@@ -696,7 +696,7 @@ public abstract class AbstractIndexEnvironment {
 
 	// TODO RPE
 	public void indexReader() {
-		//IndexReader ir = null;
+		// IndexReader ir = null;
 		try {
 			logger.info("Reload the Lucene Index for [{}]", indexId);
 			ir = IndexReader.open(this.indexDirectory, true);
@@ -747,14 +747,14 @@ public abstract class AbstractIndexEnvironment {
 	// (the one that is configured)
 	public void indexFromXmlDB() throws Exception {
 
-		//String indexLocationDirectory = "";
+		// String indexLocationDirectory = "";
 		String dbHost = "";
 		String dbPassword = "";
 		String dbName = "";
 		int dbPort = 0;
 
 		// get the default location
-		//indexLocationDirectory = this.indexLocationDirectory;
+		// indexLocationDirectory = this.indexLocationDirectory;
 		HierarchicalConfiguration connsConf = (HierarchicalConfiguration) Application
 				.getInstance().getPreferences().getConfSubset("bs.xmldatabase");
 
@@ -786,7 +786,7 @@ public abstract class AbstractIndexEnvironment {
 
 			Directory indexTempDirectory = FSDirectory.open(new File(
 					indexLocationDirectory, indexId));
-			logger.debug("Index directory->"+indexLocationDirectory );
+			logger.debug("Index directory->" + indexLocationDirectory);
 			w = createIndex(indexTempDirectory, indexAnalyzer);
 
 			Directory taxDir = FSDirectory.open(new File(indexLocationDirectory
@@ -856,13 +856,13 @@ public abstract class AbstractIndexEnvironment {
 						.nextResource().getContent());
 			}
 			logger.debug("Number of results->" + numberResults);
-			long pageSizeDefault = 50000;
+			long pageSizeDefault = 1000;
 			// the samplegroup cannot be big otherwise I will obtain a memory
 			// error ... but the sample must b at least one million because the
 			// paging queries are really slow - we need to balance it
 			// (for samples 1million, for samplegroup 50000)
 			if (numberResults > 1000000) {
-				pageSizeDefault = 1000000;
+				pageSizeDefault = 5000;
 			}
 
 			long pageNumber = 1;
@@ -872,8 +872,6 @@ public abstract class AbstractIndexEnvironment {
 			Map<String, XPathExpression> cacheXpathAttValue = new HashMap<String, XPathExpression>();
 			while ((pageNumber * pageSizeDefault) <= (numberResults
 					+ pageSizeDefault - 1)) {
-				// while ((pageNumber<=1)) {
-				// calculate the last hit
 				long pageInit = (pageNumber - 1) * pageSizeDefault + 1;
 				long pageSize = (pageNumber * pageSizeDefault < numberResults) ? pageSizeDefault
 						: (numberResults - pageInit + 1);
@@ -887,8 +885,8 @@ public abstract class AbstractIndexEnvironment {
 				// /set =
 				// service.query("for $x in(/Biosamples/SampleGroup/Sample/@id) return string($x)");
 				set = service.query("for $x in(subsequence("
-						+ indexDocumentPath + "/@id," + pageInit + ","
-						+ pageSize + ")) return string($x)");
+						+ indexDocumentPath + "," + pageInit + "," + pageSize
+						+ ")) return $x");
 				// logger.debug("Number of results of page->" + set.getSize());
 				double ms = (System.nanoTime() - time) / 1000000d;
 				logger.info("Query XMLDB took ->[{}]", ms);
@@ -903,103 +901,87 @@ public abstract class AbstractIndexEnvironment {
 				while (iter.hasMoreResources()) {
 					count++;
 					logger.debug("its beeing processed the number ->" + count);
-					String idSample = (String) iter.nextResource().getContent();
-					logger.debug("idSample->" + idSample);
-					// I need to get the sample
-					ResourceSet setid = service.query(indexDocumentPath
-							+ "[@id='" + idSample + "']");
-
-					// System.out.println("/Biosamples/SampleGroup/Sample[@id='"
-					// + idSample + "']");
-					ResourceIterator iterid = setid.getIterator();
 					List<CategoryPath> sampleCategories = null;
-					while (iterid.hasMoreResources()) {
-						// System.out.println("££££££££££££££££££££££££££££");
-						// /xml=(String) iterid.nextResource().getContent();
+					StringBuilder xml = new StringBuilder();
+					xml.append((String) iter.nextResource().getContent());
 
-						// /xml=(String) iter.nextResource().getContent();
-						// logger.debug("xml->"+xml);
-						// /reader = new StringReader(xml);
-						StringBuilder xml = new StringBuilder();
-						xml.append((String) iterid.nextResource().getContent());
+					// logger.debug(xml.toString());
+					reader = new StringReader(xml.toString());
+					source = config.buildDocument(new StreamSource(reader));
 
-						// logger.debug(xml.toString());
-						reader = new StringReader(xml.toString());
-						source = config.buildDocument(new StreamSource(reader));
+					// logger.debug("XML DB->[{}]",
+					// PrintUtils.printNodeInfo((NodeInfo) source, config));
+					Document d = new Document();
 
-						// logger.debug("XML DB->[{}]",
-						// PrintUtils.printNodeInfo((NodeInfo) source, config));
-						Document d = new Document();
+					xp2 = new XPathEvaluator(source.getConfiguration());
 
-						xp2 = new XPathEvaluator(source.getConfiguration());
-
-						int position = indexDocumentPath.lastIndexOf("/");
-						;
-						String pathRoot = "";
-						if (position != -1) {
-							pathRoot = indexDocumentPath.substring(position);
-						} else {
-							pathRoot = indexDocumentPath;
-						}
-						// logger.debug("PathRoot->[{}]",pathRoot);
-						xpe2 = xp2.compile(pathRoot);
-						// TODO rpe
-						// xpe2 = xp2.compile("/Sample");
-						documentNodes = (List) xpe2.evaluate(source,
-								XPathConstants.NODESET);
-
-						for (Object node : documentNodes) {
-
-							try {
-								d = processEntryIndex(node, config, service,
-										cacheAtt, cacheXpathAtt,
-										cacheXpathAttValue, fieldXpe);
-							} catch (Exception x) {
-								String xmlError = PrintUtils.printNodeInfo(
-										(NodeInfo) node, config);
-								logger.error(
-										"XML that was being processed when the error occurred DB->[{}]",
-										xmlError);
-								// to avoid the next running to stop
-								// because its not able to delete the
-								// newSetup directory
-								w.close();
-								throw new Exception(
-										"Xml that is being processed:"
-												+ xmlError, x);
-							}
-						}
-
-						documentNodes = null;
-						source = null;
-						reader = null;
-						xml = null;
-						countNodes++;
-						// logger.debug("count->[{}]", countNodes);
-
-						// facet tests
-
-						docBuilder.setCategoryPaths(sampleCategories);
-						docBuilder.build(d);
-
-						addIndexDocument(w, d);
-
+					int position = indexDocumentPath.lastIndexOf("/");
+					;
+					String pathRoot = "";
+					if (position != -1) {
+						pathRoot = indexDocumentPath.substring(position);
+					} else {
+						pathRoot = indexDocumentPath;
 					}
+					// logger.debug("PathRoot->[{}]",pathRoot);
+					xpe2 = xp2.compile(pathRoot);
+					// TODO rpe
+					// xpe2 = xp2.compile("/Sample");
+					documentNodes = (List) xpe2.evaluate(source,
+							XPathConstants.NODESET);
+
+					for (Object node : documentNodes) {
+
+						try {
+							d = processEntryIndex(node, config, service,
+									cacheAtt, cacheXpathAtt,
+									cacheXpathAttValue, fieldXpe);
+						} catch (Exception x) {
+							String xmlError = PrintUtils.printNodeInfo(
+									(NodeInfo) node, config);
+							logger.error(
+									"XML that was being processed when the error occurred DB->[{}]",
+									xmlError);
+							// to avoid the next running to stop
+							// because its not able to delete the
+							// newSetup directory
+							w.close();
+							throw new Exception("Xml that is being processed:"
+									+ xmlError, x);
+						}
+					}
+
+					documentNodes = null;
+					source = null;
+					reader = null;
+					xml = null;
+					countNodes++;
+					// logger.debug("count->[{}]", countNodes);
+
+					// facet tests
+					docBuilder.setCategoryPaths(sampleCategories);
+					docBuilder.build(d);
+
+					addIndexDocument(w, d);
+
 				}
+			
 				logger.debug("until now it were processed->[{}]", pageNumber
 						* pageSizeDefault);
 				pageNumber++;
-				if (coll != null) {
-					try {
-						// coll.close();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				set = null;
-
+				
 			}
+			if (coll != null) {
+				try {
+					// coll.close();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			set = null;
+
+			// }
 
 			setCountDocuments(countNodes);
 			// add metadata to the lucene index
@@ -1111,11 +1093,12 @@ public abstract class AbstractIndexEnvironment {
 				numberResults = Integer.parseInt((String) set.getIterator()
 						.nextResource().getContent());
 			}
-			
-			//TODO:######################################Change this after - this is just a performance test
-//			float percentage=0.1F;
-//			numberResults=Math.round(numberResults * percentage);
-			
+
+			// TODO:######################################Change this after -
+			// this is just a performance test
+			// float percentage=0.1F;
+			// numberResults=Math.round(numberResults * percentage);
+
 			logger.debug("Number of results->" + numberResults);
 			long pageSizeDefault = 50000;
 			if (numberResults > 1000000) {
@@ -1199,12 +1182,15 @@ public abstract class AbstractIndexEnvironment {
 							// I need to see if it already exists
 							// I will also add this document if it is nor marked
 							// as "todelete"
-							Boolean toDelete = (Boolean) fieldXpe.get("delete").evaluate(node, XPathConstants.BOOLEAN);
-							
-							//TODO:######################################Change this after - this is just a performance test
-							int deletePercentage=10;
-							toDelete=(count % deletePercentage)==0?true:false;
-							
+							Boolean toDelete = (Boolean) fieldXpe.get("delete")
+									.evaluate(node, XPathConstants.BOOLEAN);
+
+							// TODO:######################################Change
+							// this after - this is just a performance test
+							int deletePercentage = 10;
+							toDelete = (count % deletePercentage) == 0 ? true
+									: false;
+
 							logger.debug(
 									"Incremental Update - The document [{}] is being processed and is marked to delete?[{}]",
 									new Object[] { idElement, toDelete });
@@ -1220,7 +1206,9 @@ public abstract class AbstractIndexEnvironment {
 								if (countToDelete > 1) {
 									Application
 											.getInstance()
-											.sendEmail(null,null,
+											.sendEmail(
+													null,
+													null,
 													"BIOSAMPLES ERROR - Incremental Update - Removing more than one document! id-> "
 															+ idElement,
 													" documents found:"
@@ -1250,7 +1238,9 @@ public abstract class AbstractIndexEnvironment {
 								if (toDelete) {
 									Application
 											.getInstance()
-											.sendEmail(null,null,
+											.sendEmail(
+													null,
+													null,
 													"BIOSAMPLES WARNING - Incremental Update - Id marked for deletion but the id doesn't exist on the GUI! id-> "
 															+ idElement, "");
 
@@ -1342,7 +1332,8 @@ public abstract class AbstractIndexEnvironment {
 		}
 	}
 
-	IndexWriter createIndex(Directory indexDirectory, Analyzer analyzer) throws Exception{
+	IndexWriter createIndex(Directory indexDirectory, Analyzer analyzer)
+			throws Exception {
 		IndexWriter iwriter = null;
 		try {
 			iwriter = new IndexWriter(indexDirectory, analyzer, true,

@@ -221,6 +221,8 @@
     </rule>
 
 
-	
+	<!-- httpProxy for Ebi search - internal environments -->
+	<!-- ${interface.application.ebi.search} -->
+	<!-- httpProxy for Ebi search - internal environments -->
 
 </urlrewrite>
