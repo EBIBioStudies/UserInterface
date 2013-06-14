@@ -389,11 +389,14 @@ aeClearField( sel )
 
 
 //install a proxy to all jquery requests (I will need to change the URL when I'm calling the ebisearch in the internal environments
+
 $.ajaxSetup({
-	crossDomain: true,
+	//crossDomain: true,
     beforeSend: function(xhr, opts){
+    	//alert("url:"+opts.url);
     	if(opts.url.indexOf("/ebisearch/")==0 && !((opts.url.indexOf("www.ebi.ac.uk") == 0) || (opts.url.indexOf("wwwdev.ebi.ac.uk") == 0))){
     		opts.url="http://www.ebi.ac.uk" +opts.url;
+    		opts.crossDomain=true;
     	}
    
     	//alert(document.domain);
