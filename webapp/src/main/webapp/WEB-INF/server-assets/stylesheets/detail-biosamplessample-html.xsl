@@ -196,49 +196,99 @@
 
 	<xsl:template name="process_uri">
 		<xsl:param name="vSample" />
-		<xsl:variable name="bdName"
-			select="lower-case($vSample/attribute/value[../@class='Database Name'])"></xsl:variable>
-
 
 		<table border="0" cellpadding="0" cellspacing="0"
 			id="table_inside_attr">
 			<tbody>
-				<tr>
-					<td id="td_nowrap">
-						<xsl:choose>
-							<xsl:when
-								test="$bdName =('arrayexpress','ena sra','dgva','pride') and not($vSample/attribute/value[../@class='Database URI']='')">
-									<a href="{$vSample/attribute/value[../@class='Database URI']}"
-										target="ext">
-										<img src="{$basepath}/assets/images/{$bdName}_logo.gif"
-											alt="{$vSample/attribute/value[../@class='Database Name']} Link"
-											border="0" title="{$bdName}" />
-									</a> &nbsp;
-									<a href="{$vSample/attribute/value[../@class='Database URI']}"
-										target="ext">
-										<xsl:value-of
-											select="$vSample//attribute/value[../@class='Database URI']"></xsl:value-of></a>
-							</xsl:when>
-							<xsl:when
-								test="not($vSample/attribute/value[../@class='Database URI']='')">
-									<a href="{$vSample/attribute/value[../@class='Database URI']}"
-										target="ext">
-										<img src="{$basepath}/assets/images/generic_logo.gif"
-											border="0" title="{$bdName}" />
-									</a> &nbsp;
-									<a href="{$vSample/attribute/value[../@class='Database URI']}"
-										target="ext">
-										<xsl:value-of
-											select="$vSample//attribute/value[../@class='Database URI']"></xsl:value-of>
-									</a>
-							</xsl:when>
-						</xsl:choose>
-						
-						</td>
-						<td width="100%">&nbsp;
-						</td>
+				<xsl:choose>
+					<!-- just one value inside database name -->
+					
+					<xsl:when
+						test="count($vSample/attribute/value[../@class='Database Name']/value)=1">
+						<xsl:variable name="bdName"
+						select="lower-case($vSample/attribute/value[../@class='Database Name'])"></xsl:variable>
+						<tr>
+							<td id="td_nowrap">
+								<xsl:choose>
+									<xsl:when
+										test="$bdName =('arrayexpress','ena sra','dgva','pride') and not($vSample/attribute/value[../@class='Database URI']='')">
+										<a href="{$vSample/attribute/value[../@class='Database URI']}"
+											target="ext">
+											<img src="{$basepath}/assets/images/{$bdName}_logo.gif"
+												alt="{$vSample/attribute/value[../@class='Database Name']} Link"
+												border="0" title="{$bdName}" />
+										</a> &nbsp;
+										<a href="{$vSample/attribute/value[../@class='Database URI']}"
+											target="ext">
+											<xsl:value-of
+												select="$vSample//attribute/value[../@class='Database URI']"></xsl:value-of>
+										</a>
+									</xsl:when>
+									<xsl:when
+										test="not($vSample/attribute/value[../@class='Database URI']='')">
+										<a href="{$vSample/attribute/value[../@class='Database URI']}"
+											target="ext">
+											<img src="{$basepath}/assets/images/generic_logo.gif"
+												border="0" title="{$bdName}" />
+										</a> &nbsp;
+										<a href="{$vSample/attribute/value[../@class='Database URI']}"
+											target="ext">
+											<xsl:value-of
+												select="$vSample//attribute/value[../@class='Database URI']"></xsl:value-of>
+										</a>
+									</xsl:when>
+								</xsl:choose>
 
-				</tr>
+							</td>
+							<td width="100%">&nbsp;
+							</td>
+						</tr>
+					</xsl:when>
+					<!-- more than one value -->
+					<xsl:otherwise>
+						<xsl:for-each
+							select="$vSample/attribute/value[../@class='Database Name']">
+							<xsl:variable name="bdName"
+								select="lower-case(.)"></xsl:variable>
+							<tr>
+								<td id="td_nowrap">
+									<xsl:choose>
+										<xsl:when
+											test="$bdName =('arrayexpress','ena sra','dgva','pride') and not($vSample/attribute/value[position()][../@class='Database URI']='')">
+											<a href="{$vSample/attribute/value[position()][../@class='Database URI']}"
+												target="ext">
+												<img src="{$basepath}/assets/images/{$bdName}_logo.gif"
+													alt="{bdName} Link"
+													border="0" title="{$bdName}" />
+											</a> &nbsp;
+											<a href="{$vSample/attribute/value[position()][../@class='Database URI']}"
+												target="ext">
+												<xsl:value-of
+													select="$vSample//attribute/value[position()][../@class='Database URI']"></xsl:value-of>
+											</a>
+										</xsl:when>
+										<xsl:when
+											test="not($vSample/attribute/value[position()][../@class='Database URI']='')">
+											<a href="{$vSample/attribute/value[position()][../@class='Database URI']}"
+												target="ext">
+												<img src="{$basepath}/assets/images/generic_logo.gif"
+													border="0" title="{$bdName}" />
+											</a> &nbsp;
+											<a href="{$vSample/attribute/value[position()][../@class='Database URI']}"
+												target="ext">
+												<xsl:value-of
+													select="$vSample//attribute/value[position()][../@class='Database URI']"></xsl:value-of>
+											</a>
+										</xsl:when>
+									</xsl:choose>
+								</td>
+								<td width="100%">&nbsp;
+								</td>
+							</tr>
+
+						</xsl:for-each>
+					</xsl:otherwise>
+				</xsl:choose>
 			</tbody>
 		</table>
 

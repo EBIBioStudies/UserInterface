@@ -642,7 +642,7 @@
 
 							<xsl:choose>
 								<xsl:when
-									test="count(.//attribute/value[../@class='Person Email'])>0">
+									test="count(.//attribute/value[../@class='Person Email'])>0 and (.//attribute/value[../@class='Person Email']!='')">
 									<xsl:variable name="vStringContacts"
 										select="concat(.//attribute/value[../@class='Person First Name'], ' ', .//attribute/value[../@class='Person Last Name'] , ' &lt;' ,.//attribute/value[../@class='Person Email'], '>')"></xsl:variable>
 
