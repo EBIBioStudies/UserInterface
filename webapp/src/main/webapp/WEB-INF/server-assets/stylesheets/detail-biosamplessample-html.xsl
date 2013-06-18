@@ -250,34 +250,36 @@
 							select="$vSample/attribute/value[../@class='Database Name']">
 							<xsl:variable name="bdName"
 								select="lower-case(.)"></xsl:variable>
+							<xsl:variable name="pos"
+								select="position()"></xsl:variable>
 							<tr>
 								<td id="td_nowrap">
 									<xsl:choose>
 										<xsl:when
-											test="$bdName =('arrayexpress','ena sra','dgva','pride') and not(($vSample/attribute/value[../@class='Database URI'])[position()]='')">
-											<a href="{($vSample/attribute/value[../@class='Database URI'])[position()]}"
+											test="$bdName =('arrayexpress','ena sra','dgva','pride') and not(($vSample/attribute/value[../@class='Database URI'])[$pos]='')">
+											<a href="{($vSample/attribute/value[../@class='Database URI'])[$pos]}"
 												target="ext">
 												<img src="{$basepath}/assets/images/{$bdName}_logo.gif"
 													alt="{bdName} Link"
 													border="0" title="{$bdName}" />
 											</a> &nbsp;
-											<a href="{($vSample/attribute/value[../@class='Database URI'])[position()]}"
+											<a href="{($vSample/attribute/value[../@class='Database URI'])[$pos]}"
 												target="ext">
 												<xsl:value-of
-													select="($vSample//attribute/value[../@class='Database URI'])[position()]"></xsl:value-of>
+													select="($vSample//attribute/value[../@class='Database URI'])[$pos]"></xsl:value-of>
 											</a>
 										</xsl:when>
 										<xsl:when
-											test="not(($vSample/attribute/value[../@class='Database URI'])[position()]='')">
-											<a href="{($vSample/attribute/value[../@class='Database URI'])[position()]}"
+											test="not(($vSample/attribute/value[../@class='Database URI'])[$pos]='')">
+											<a href="{($vSample/attribute/value[../@class='Database URI'])[$pos]}"
 												target="ext">
 												<img src="{$basepath}/assets/images/generic_logo.gif"
 													border="0" title="{$bdName}" />
 											</a> &nbsp;
-											<a href="{($vSample/attribute/value[../@class='Database URI'])[position()]}"
+											<a href="{($vSample/attribute/value[../@class='Database URI'])[$pos]}"
 												target="ext">
 												<xsl:value-of
-													select="($vSample//attribute/value[../@class='Database URI'])[position()]"></xsl:value-of>
+													select="($vSample//attribute/value[../@class='Database URI'])[$pos]"></xsl:value-of>
 											</a>
 										</xsl:when>
 									</xsl:choose>
