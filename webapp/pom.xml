@@ -209,7 +209,12 @@
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
 				<interface.application.log.default.priority>DEBUG</interface.application.log.default.priority>
 				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroupDev</interface.application.db.xml.connection.dbname> -->
+				<!-- point to the SSD disk and to the BASEX running there -->
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup_Dev2</interface.application.db.xml.connection.dbname>
+				<interface.application.db.xml.connection.port>1986</interface.application.db.xml.connection.port>
+				<interface.application.global.setup.directory>${sys:java.io.tmpdir}/deploy/GlobalSetup/Setup</interface.application.global.setup.directory>
+				<interface.application.global.backup.directory>${sys:java.io.tmpdir}/deploy/GlobalSetup/Backups</interface.application.global.backup.directory>
+				<!-- point to the SSD disk and to the BASEX running there -->
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
 				<!-- <interface.application.db.xml.update.url>/ebi/microarray/ma-exp/biosamples-ncbi/gui.xml</interface.application.db.xml.update.url> -->
