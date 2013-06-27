@@ -13,7 +13,6 @@
 		</reports>
 	</app>
 	<bs>
-	
 		<globalSetupDirectory>${interface.application.global.setup.directory}
 		</globalSetupDirectory>
 		<setupDirectory>${sys:java.io.tmpdir}/${interface.application.index.directory}
@@ -60,7 +59,6 @@
 		<password>${interface.application.db.xml.update.password}</password>
 		<cookie>${interface.application.db.xml.update.cookie}</cookie>	
 	</xmlupdate>
-
 	
 	
 		<!-- job -->
