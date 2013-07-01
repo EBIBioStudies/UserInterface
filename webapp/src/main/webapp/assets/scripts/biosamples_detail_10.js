@@ -139,12 +139,12 @@ $(function() {
 			.find(".ae_text_syn")
 			.attr(
 					"title",
-					"This is synonym matched from Experimental Factor Ontology e.g. neoplasia for cancer");
+					"This is synonym matched from Experimental Factor Ontology");
 	$("#bs_results_box")
 			.find(".ae_text_efo")
 			.attr(
 					"title",
-					"This is matched child term from Experimental Factor Ontology e.g. brain and subparts of brain");
+					"This is matched child term from Experimental Factor Ontology");
 	/* hint to the lucene highlight */
 	// if (-1 == url.indexOf("browse")) {
 	var keywordsFixed = $.query.get("keywords");
@@ -268,12 +268,12 @@ function updateSamplesList(urlPage) {
 								.find(".ae_text_syn")
 								.attr(
 										"title",
-										"This is synonym matched from Experimental Factor Ontology e.g. neoplasia for cancer");
+										"This is synonym matched from Experimental Factor Ontology");
 						$("#bs_results_tbody_left")
 								.find(".ae_text_efo")
 								.attr(
 										"title",
-										"This is matched child term from Experimental Factor Ontology e.g. brain and subparts of brain");
+										"This is matched child term from Experimental Factor Ontology");
 
 						$("#bs_results_tbody_middle")
 								.find(".ae_text_hit")
@@ -283,12 +283,12 @@ function updateSamplesList(urlPage) {
 								.find(".ae_text_syn")
 								.attr(
 										"title",
-										"This is synonym matched from Experimental Factor Ontology e.g. neoplasia for cancer");
+										"This is synonym matched from Experimental Factor Ontology");
 						$("#bs_results_tbody_middle")
 								.find(".ae_text_efo")
 								.attr(
 										"title",
-										"This is matched child term from Experimental Factor Ontology e.g. brain and subparts of brain");
+										"This is matched child term from Experimental Factor Ontology");
 						/* hint to the lucene highlight */
 
 						// $("#ae_results_status")

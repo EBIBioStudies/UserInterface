@@ -140,12 +140,12 @@ function QuerySampleGroup(url) {
 								.find(".ae_text_syn")
 								.attr(
 										"title",
-										"This is synonym matched from Experimental Factor Ontology e.g. neoplasia for cancer");
+										"This is synonym matched from Experimental Factor Ontology");
 						$("#bs_results_tbody")
 								.find(".ae_text_efo")
 								.attr(
 										"title",
-										"This is matched child term from Experimental Factor Ontology e.g. brain and subparts of brain");
+										"This is matched child term from Experimental Factor Ontology");
 
 						// get stats from the first row
 						var total = $("#bs_results_total").text();
