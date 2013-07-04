@@ -9,6 +9,9 @@
 	<packaging>war</packaging>
 	<url>http://www.ebi.ac.uk/biosamples</url>
 
+	<scm>
+		<developerConnection>scm:git:git@github.com:EBIBioSamples/ui.git</developerConnection>
+	</scm>
 	<!--
 	<scm>
 		<connection>scm:svn:svn://bar.ebi.ac.uk/trunk/BioSamples/webapp</connection>
