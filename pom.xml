@@ -7,6 +7,10 @@
 	<version>1.0</version>
 	<packaging>pom</packaging>
 	<url>http://www.ebi.ac.uk/biosamples</url>
+	
+	<scm>
+		<developerConnection>scm:git:git@github.com:EBIBioSamples/biosd_ui.git</developerConnection>
+	</scm>
 
 	<!--<scm>
 		<connection>scm:svn:svn://dukkha.ebi.ac.uk/trunk/BioSamples</connection>
