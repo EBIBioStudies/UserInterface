@@ -9,12 +9,13 @@
 	<packaging>war</packaging>
 	<url>http://www.ebi.ac.uk/biosamples</url>
 
-
+	<!--
 	<scm>
 		<connection>scm:svn:svn://bar.ebi.ac.uk/trunk/BioSamples/webapp</connection>
 		<developerConnection>scm:svn:svn://bar.ebi.ac.uk/trunk/BioSamples/webapp</developerConnection>
 		<url>svn://bar.ebi.ac.uk/trunk/BioSamples/webapp</url>
 	</scm>
+	-->
 	<!-- default values for repository related properties -->
 	<properties>
 		<interface.application.log.default.priority>INFO</interface.application.log.default.priority>
