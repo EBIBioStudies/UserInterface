@@ -8,11 +8,11 @@
 	<packaging>pom</packaging>
 	<url>http://www.ebi.ac.uk/biosamples</url>
 
-	<scm>
+	<!--<scm>
 		<connection>scm:svn:svn://dukkha.ebi.ac.uk/trunk/BioSamples</connection>
 		<developerConnection>scm:svn:svn://dukkha.ebi.ac.uk/trunk/BioSamples</developerConnection>
 		<url>svn://dukkha.ebi.ac.uk/trunk/BioSamples</url>
-	</scm>
+	</scm>-->
 
 	<developers>
 		<developer>
