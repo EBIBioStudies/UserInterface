@@ -10,7 +10,7 @@
 	<url>http://www.ebi.ac.uk/biosamples</url>
 
 	<scm>
-		<developerConnection>scm:git:git@github.com:EBIBioSamples/ui.git</developerConnection>
+		<developerConnection>scm:git:git@github.com:EBIBioSamples/biosd_ui.git</developerConnection>
 	</scm>
 	<!--
 	<scm>
