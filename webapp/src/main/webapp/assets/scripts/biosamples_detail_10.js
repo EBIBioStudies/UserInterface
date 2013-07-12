@@ -177,9 +177,6 @@ $(function() {
 	// }
 
 	// manage 2 scrolbars
-	var pos = $("#attr_table").width(); // 
-	jQuery("#div_top_scroll").css('width', pos);//define the sizes of fake top scrllbar bar div based on table size - has to be dynamcis
-
 	$("#wrapper_top_scroll").scroll(
 			function() {
 				// alert("wrapper_top_scroll SCROLL");
@@ -450,8 +447,18 @@ function updateSamplesList(urlPage) {
 											$(aux).innerHeight());
 
 								});
+						
+						//must be updated here, after all content has been loaded
+						var tableWidth = $("#attr_table").width(); // 
+						//alert("dynamic table width->" + tableWidth);
+						$("#div_top_scroll").css('width', tableWidth);
 
 					});
+	
+//	// manage 2 scrolbars
+//	var tableWidth = $("#attr_table").width(); // 
+//	alert("dynamic table width->" + tableWidth);
+//	jQuery("#div_top_scroll").css('width', tableWidth);//define the sizes of fake top scrllbar bar div based on table size - has to be dynamic
 
 }
 

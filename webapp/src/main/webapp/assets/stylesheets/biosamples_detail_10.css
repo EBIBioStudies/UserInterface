@@ -384,13 +384,13 @@ td#left_fixed, td#middle_scrollable, td#right_fixed{
 
 
 /*second scrollbar on top*/
-#wrapper_top_scroll{height: 5px; border: none 0px;
+#wrapper_top_scroll{height: 12px; border: none 0px;width:100%;
 overflow-x: scroll; overflow-y:hidden;}
 
-#div_top_scroll {width:100%; height: 5px; }
+#div_top_scroll {width:100%; height: 12px; }
 
-#wrapper_top_scroll_sides{height: 5px; border: none 0px;}
-#div_top_scroll_sides{height: 5px; }
+#wrapper_top_scroll_sides{height: 12px; border: none 0px;}
+#div_top_scroll_sides{height: 12px; }
 
 /*on MAC OSX Lion and always show the scrollbars on Webkit browsers (Chrome / Safari) */
 ::-webkit-scrollbar {
