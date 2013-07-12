@@ -117,6 +117,23 @@ $(function() {
 	});
 });
 
+// function responsible for managing the back history properly (this function
+// uses the values added during the sorting + paging + pagingSize)
+if (typeof (window.history.pushState) == 'function') {
+	$(window).bind('popstate', function(event) {
+		var state = event.originalEvent.state;
+		if (state != null) {
+			// alert("estado pro qual eu quero ir->" +state);
+			removeAllSortingIndications();
+			QuerySampleGroup(state.url);
+			sortBy = state.sortby;
+			sortOrder = state.sortorder;
+			// alert(state.sortby + state.sortorder + "###" + state.url);
+			addSortingIndication(sortBy, sortOrder);
+		}
+	});
+}
+
 function QuerySampleGroup(url) {
 	// alert("QuerySampleGroup2->" + url);
 	$
@@ -138,13 +155,11 @@ function QuerySampleGroup(url) {
 										"This is exact string matched for input query terms");
 						$("#bs_results_tbody")
 								.find(".ae_text_syn")
-								.attr(
-										"title",
+								.attr("title",
 										"This is synonym matched from Experimental Factor Ontology");
 						$("#bs_results_tbody")
 								.find(".ae_text_efo")
-								.attr(
-										"title",
+								.attr("title",
 										"This is matched child term from Experimental Factor Ontology");
 
 						// get stats from the first row
@@ -221,20 +236,6 @@ function QuerySampleGroup(url) {
 							$(".bs-page-size").html("&nbsp;");
 							$(".bs-pager").html("&nbsp;");
 						}
-
-						// //ellipsis
-						// alert("ellipsis");
-						// var the_obj = $('.ellipsis_class').ThreeDots({
-						// max_rows : 3,
-						// /* alt_text_t : true */
-						// });
-						// //ellipsis
-						// $('.ellipsis').dotdotdot();
-						// $('#ellipsis').tipsy();
-						// $('#ellipsis').tipsy({fallback: "Where's my tooltip
-						// yo'?" });
-						// alert(4);
-
 					});
 
 }
@@ -254,6 +255,17 @@ function goToPage(pPage) {
 			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
 			pageSize).toString();
 	var urlPage = "group/browse-table.html" + newQuery;
+	if (typeof (window.history.pushState) == 'function') {
+		// mantain the history on browser ans also change the URL for history
+		// favorites purpose
+		var urlState = "browse.html" + newQuery;
+		// I will use the urlPage to reload the data on poststate event
+		window.history.pushState({
+			url : urlPage,
+			sortby : sortBy,
+			sortorder : sortOrder
+		}, "", urlState);
+	}
 	QuerySampleGroup(urlPage);
 }
 
@@ -264,6 +276,18 @@ function goToPageSize(pPageSize) {
 			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
 			pageSize).toString();
 	var urlPage = "group/browse-table.html" + newQuery;
+
+	if (typeof (window.history.pushState) == 'function') {
+		// mantain the history on browser ans also change the URL for history
+		// favorites purpose
+		var urlState = "browse.html" + newQuery;
+		// I will use the urlPage to reload the data on poststate event
+		window.history.pushState({
+			url : urlPage,
+			sortby : sortBy,
+			sortorder : sortOrder
+		}, "", urlState);
+	}
 	QuerySampleGroup(urlPage);
 }
 
@@ -304,29 +328,7 @@ function aeSort(psortby) {
 	pageInit = $.query.get("page") || pageInit;
 	pageSize = $.query.get("pagesize") || pageSize;
 
-	// remove all the sort signs on the headers
-	// I'm using textContent because innerText doesnt work on FireFox
-	for (i = 0; i < ($("div.table_header_inner").length); i++) {
-		var hasInnerText = ($("div.table_header_inner")[i].innerText != undefined) ? true
-				: false;
-		if (hasInnerText) {
-			$("div.table_header_inner")[i].innerHTML = $("div.table_header_inner")[i].innerText; // +
-			// "&nbsp;";
-		} else {
-			// &nbsp is used to preserve the arrow space
-			$("div.table_header_inner")[i].innerHTML = $("div.table_header_inner")[i].textContent; // +
-			// "&nbsp;";
-		}
-	}
-
-	// for ( var key in sortDefault) {
-	// // do something with key and hmap[key]
-	// $("#bs_results_header_" + key).find("div.table_header_inner")
-	// .removeClass("table_header_sort_desc").removeClass(
-	// "table_header_sort_asc");
-	//
-	// }
-
+	removeAllSortingIndications();
 	var newQuery = $.query.set("keywords", keywords).set("sortby", sortBy).set(
 			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
 			pageSize).toString();
@@ -335,8 +337,26 @@ function aeSort(psortby) {
 	// /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
 	var urlPage = "group/browse-table.html" + newQuery;
 
-	QuerySampleGroup(urlPage);
+	if (typeof (window.history.pushState) == 'function') {
+		// mantain the history on browser ans also change the URL for history
+		// favorites purpose
+		var urlState = "browse.html" + newQuery;
+		// I will use the urlPage to reload the data on poststate event
+		window.history.pushState({
+			url : urlPage,
+			sortby : sortBy,
+			sortorder : sortOrder
+		}, "", urlState);
+	}
 
+	QuerySampleGroup(urlPage);
+	addSortingIndication(sortBy, sortOrder);
+
+	// window.location.href = urlPage;
+
+}
+
+function addSortingIndication(sortBy, sortOrder) {
 	// I just put the orientation after the query return the results (before I
 	// clean all the asc and desc of all the columns, after I make the query and
 	// at the end i Put the correct one)
@@ -370,8 +390,24 @@ function aeSort(psortby) {
 			}
 		}
 	}
+}
 
-	// window.location.href = urlPage;
+function removeAllSortingIndications() {
+	// remove all the sort signs on the headers
+	// I'm using textContent because innerText doesnt work on FireFox
+
+	for (i = 0; i < ($("div.table_header_inner").length); i++) {
+		var hasInnerText = ($("div.table_header_inner")[i].innerText != undefined) ? true
+				: false;
+		if (hasInnerText) {
+			$("div.table_header_inner")[i].innerHTML = $("div.table_header_inner")[i].innerText; // +
+			// "&nbsp;";
+		} else {
+			// &nbsp is used to preserve the arrow space
+			$("div.table_header_inner")[i].innerHTML = $("div.table_header_inner")[i].textContent; // +
+			// "&nbsp;";
+		}
+	}
 
 }
 

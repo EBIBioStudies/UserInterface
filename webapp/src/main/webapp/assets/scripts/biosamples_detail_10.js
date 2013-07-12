@@ -96,6 +96,13 @@ $(function() {
 
 	// I need to initialize the sorting on the defaultfield
 	// alert(sortBy);
+
+	pageInit = $.query.get("samplepage") || pageInit;
+	pageSize = $.query.get("samplepagesize") || pageSize;
+	sortBy = $.query.get("samplesortby") || sortBy;
+	// alert(sortBy);
+	sortOrder = $.query.get("samplesortorder") || sortDefault[sortBy];
+
 	var thElt = $("#bs_results_header_" + sortBy);
 	if (null != thElt) {
 		// alert("#bs_results_header_" + sortBy);
@@ -135,16 +142,10 @@ $(function() {
 	/* hint to the lucene highlight */
 	$("#bs_results_box").find(".ae_text_hit").attr("title",
 			"This is exact string matched for input query terms");
-	$("#bs_results_box")
-			.find(".ae_text_syn")
-			.attr(
-					"title",
-					"This is synonym matched from Experimental Factor Ontology");
-	$("#bs_results_box")
-			.find(".ae_text_efo")
-			.attr(
-					"title",
-					"This is matched child term from Experimental Factor Ontology");
+	$("#bs_results_box").find(".ae_text_syn").attr("title",
+			"This is synonym matched from Experimental Factor Ontology");
+	$("#bs_results_box").find(".ae_text_efo").attr("title",
+			"This is matched child term from Experimental Factor Ontology");
 	/* hint to the lucene highlight */
 	// if (-1 == url.indexOf("browse")) {
 	var keywordsFixed = $.query.get("keywords");
@@ -175,9 +176,51 @@ $(function() {
 	});
 	// }
 
+	// manage 2 scrolbars
+	var pos = $("#attr_table").width(); // 
+	jQuery("#div_top_scroll").css('width', pos);//define the sizes of fake top scrllbar bar div based on table size - has to be dynamcis
+
+	$("#wrapper_top_scroll").scroll(
+			function() {
+				// alert("wrapper_top_scroll SCROLL");
+				$(".attr_table_scroll").scrollLeft(
+						$("#wrapper_top_scroll").scrollLeft());
+			});
+	$(".attr_table_scroll").scroll(
+			function() {
+				// alert("attr_table_scroll SCROLL");
+				$("#wrapper_top_scroll").scrollLeft(
+						$(".attr_table_scroll").scrollLeft());
+			});
+
 });
 
 // var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
+
+// function responsible for managing the back history properly (this function
+// uses the values added during the sorting + paging + pagingSize)
+if (typeof (window.history.pushState) == 'function') {
+	$(window)
+			.bind(
+					'popstate',
+					function(event) {
+						var state = event.originalEvent.state;
+						if (state != null) {
+							// alert("estado pro qual eu quero ir->" +state);
+							removeAllSortingIndications();
+							updateSamplesList(state.url);
+							sortBy = state.sortby;
+							sortOrder = state.sortorder;
+							// alert(state.sortby + state.sortorder + "###" +
+							// state.url);
+							// put the keywords
+							if (state.keywords != null) {
+								document.forms['bs_query_form'].bs_keywords_field.value = state.keywords;
+							}
+							addSortingIndication(sortBy, sortOrder);
+						}
+					});
+}
 
 function updateSamplesList(urlPage) {
 	$
@@ -226,22 +269,19 @@ function updateSamplesList(urlPage) {
 						// I need to use /i because in IE the <bs_value_att> is
 						// transformed in <BS_VALUE_ATT>
 						samplesleftstring = samplesleftstring.replace(
-								/<bs_value_att>/gi,
-								"<td><div class='cell_height'>");
+								/<bs_value_att>/gi, "<td>");
 						samplesleftstring = samplesleftstring.replace(
-								/<\/bs_value_att>/gi, "<\/div><\/td>");
+								/<\/bs_value_att>/gi, "<\/td>");
 						// alert("left table->" + samplesleftstring);
 						samplesmiddlestring = samplesmiddlestring.replace(
-								/<bs_value_att>/gi,
-								"<td><div class='cell_height'>");
+								/<bs_value_att>/gi, "<td>");
 						samplesmiddlestring = samplesmiddlestring.replace(
-								/<\/bs_value_att>/gi, "<\/div><\/td>");
+								/<\/bs_value_att>/gi, "<\/td>");
 						// alert("middle table->" + samplesmiddlestring);
 						samplesrigthstring = samplesrigthstring.replace(
-								/<bs_value_att>/gi,
-								"<td align='middle'><div class='cell_height'>");
+								/<bs_value_att>/gi, "<td align='middle'>");
 						samplesrigthstring = samplesrigthstring.replace(
-								/<\/bs_value_att>/gi, "<\/div><\/td>");
+								/<\/bs_value_att>/gi, "<\/td>");
 						// alert("right table->" + samplesrigthstring);
 
 						$("#bs_results_tbody").html("");
@@ -266,13 +306,11 @@ function updateSamplesList(urlPage) {
 										"This is exact string matched for input query terms");
 						$("#bs_results_tbody_left")
 								.find(".ae_text_syn")
-								.attr(
-										"title",
+								.attr("title",
 										"This is synonym matched from Experimental Factor Ontology");
 						$("#bs_results_tbody_left")
 								.find(".ae_text_efo")
-								.attr(
-										"title",
+								.attr("title",
 										"This is matched child term from Experimental Factor Ontology");
 
 						$("#bs_results_tbody_middle")
@@ -281,13 +319,11 @@ function updateSamplesList(urlPage) {
 										"This is exact string matched for input query terms");
 						$("#bs_results_tbody_middle")
 								.find(".ae_text_syn")
-								.attr(
-										"title",
+								.attr("title",
 										"This is synonym matched from Experimental Factor Ontology");
 						$("#bs_results_tbody_middle")
 								.find(".ae_text_efo")
-								.attr(
-										"title",
+								.attr("title",
 										"This is matched child term from Experimental Factor Ontology");
 						/* hint to the lucene highlight */
 
@@ -370,6 +406,51 @@ function updateSamplesList(urlPage) {
 						}
 						// }
 
+						// I need to put all the tds (from sampleaccesion tablle
+						// and from the link table with the same size
+						$('#src_name_table tbody tr').each(
+								function(i, item) {
+									// alert(i);
+									var aux = "#attr_table tbody tr:eq(" + i
+											+ ") td:first";
+									// alert($(aux).innerHeight());
+									// alert("tamanho da src_name_table->"
+									// + $(this).find("td:first")
+									// .innerHeight()
+									// + "outer->"
+									// + $(this).find("td:first")
+									// .outerHeight()
+									// + "tamanho da attr_table->"
+									// + $(aux).innerHeight()
+									// + "outer->"
+									// + "tamanho da attr_table->"
+									// + $(aux).outerHeight());
+									$(this).find("td:first").innerHeight(
+											$(aux).innerHeight());
+									// alert("APOS #### tamanho da
+									// src_name_table->"
+									// + $(this).find("td:first")
+									// .innerHeight()
+									// + "outer->"
+									// + $(this).find("td:first")
+									// .outerHeight()
+									// + "tamanho da attr_table->"
+									// + $(aux).innerHeight()
+									// + "outer->"
+									// + "tamanho da attr_table->"
+									// + $(aux).outerHeight());
+								});
+
+						$('#links_table tbody tr').each(
+								function(i, item) {
+									var aux = "#attr_table tbody tr:eq(" + i
+											+ ") td:first";
+									// alert($(aux).innerHeight());
+									$(this).find("td:first").innerHeight(
+											$(aux).innerHeight());
+
+								});
+
 					});
 
 }
@@ -386,7 +467,7 @@ function searchSamples(pKeywords) {
 			pageSize).toString();
 	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
 	var urlPage = "../sample/browse/" + pageName + newQuery;
-	removeSortIndications();
+	removeAllSortingIndications();
 	aeSort(""); // I'm passing "" and to mean that it is a new search
 	// aeSort(sortBy);
 	// updateSamplesList(urlPage);
@@ -399,7 +480,27 @@ function goToPage(page) {
 			"sortby", sortBy).set("sortorder", sortOrder).set("page", pageInit)
 			.set("pagesize", pageSize).toString();
 	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
+
+	// I cannot use the same variable names otherwise the will be used on the
+	// sampleGroup query
+	var newQuerySampleGroup = $.query.set("keywords",
+			document.forms['bs_query_form'].bs_keywords_field.value).set(
+			"samplesortby", sortBy).set("samplesortorder", sortOrder).set(
+			"samplepage", pageInit).set("samplepagesize", pageSize).toString();
+
 	var urlPage = "../sample/browse/" + pageName + newQuery;
+	if (typeof (window.history.pushState) == 'function') {
+		// mantain the history on browser ans also change the URL for history
+		// favorites purpose
+		var urlState = "../group/" + pageName + newQuerySampleGroup;
+		// I will use the urlPage to reload the data on poststate event
+		window.history.pushState({
+			url : urlPage,
+			sortby : sortBy,
+			sortorder : sortOrder,
+			keywords : document.forms['bs_query_form'].bs_keywords_field.value
+		}, "", urlState);
+	}
 	updateSamplesList(urlPage);
 }
 
@@ -411,7 +512,27 @@ function goToPageSize(pPageSize) {
 			"sortby", sortBy).set("sortorder", sortOrder).set("page", pageInit)
 			.set("pagesize", pageSize).toString();
 	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
+
+	// I cannot use the same variable names otherwise the will be used on the
+	// sampleGroup query
+	var newQuerySampleGroup = $.query.set("keywords",
+			document.forms['bs_query_form'].bs_keywords_field.value).set(
+			"samplesortby", sortBy).set("samplesortorder", sortOrder).set(
+			"samplepage", pageInit).set("samplepagesize", pageSize).toString();
+
 	var urlPage = "../sample/browse/" + pageName + newQuery;
+	if (typeof (window.history.pushState) == 'function') {
+		// mantain the history on browser ans also change the URL for history
+		// favorites purpose
+		var urlState = "../group/" + pageName + newQuerySampleGroup;
+		// I will use the urlPage to reload the data on poststate event
+		window.history.pushState({
+			url : urlPage,
+			sortby : sortBy,
+			sortorder : sortOrder,
+			keywords : document.forms['bs_query_form'].bs_keywords_field.value
+		}, "", urlState);
+	}
 	updateSamplesList(urlPage);
 }
 
@@ -425,23 +546,14 @@ function aeSort(psortby) {
 			sortOrder = "ascending";
 		}
 	}
-	//else - it will use the defaults - it was done in the searchSamples function but i will also do it here
-	else{
+	// else - it will use the defaults - it was done in the searchSamples
+	// function but i will also do it here
+	else {
 		sortBy = sortByDefault;
 		sortOrder = sortOrderDefault;
 	}
 
-	// for ( var key in sortDefault) {
-	// // do something with key and hmap[key]
-	// $("#bs_results_header_" + key).find("div.table_header_inner")
-	// .removeClass("table_header_sort_desc").removeClass(
-	// "table_header_sort_asc");
-	//
-	// }
-
-	// remove all the sort signs on the headers
-	// I'm using textContent because innerText doesnt work on FireFox
-	removeSortIndications();
+	removeAllSortingIndications();
 
 	var newQuery = $.query.set("keywords",
 			document.forms['bs_query_form'].bs_keywords_field.value).set(
@@ -449,10 +561,36 @@ function aeSort(psortby) {
 			.set("pagesize", pageSize).toString();
 
 	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
+	// alert(pageName);
+
+	// I cannot use the same variable names otherwise the will be used on the
+	// sampleGroup query
+	var newQuerySampleGroup = $.query.set("keywords",
+			document.forms['bs_query_form'].bs_keywords_field.value).set(
+			"samplesortby", sortBy).set("samplesortorder", sortOrder).set(
+			"samplepage", pageInit).set("samplepagesize", pageSize).toString();
+
 	var urlPage = "../sample/browse/" + pageName + newQuery;
+
+	if (typeof (window.history.pushState) == 'function') {
+		// mantain the history on browser ans also change the URL for history
+		// favorites purpose
+		var urlState = "../group/" + pageName + newQuerySampleGroup;
+		// I will use the urlPage to reload the data on poststate event
+		window.history.pushState({
+			url : urlPage,
+			sortby : sortBy,
+			sortorder : sortOrder,
+			keywords : document.forms['bs_query_form'].bs_keywords_field.value
+		}, "", urlState);
+	}
 	// alert(urlPage);
 	updateSamplesList(urlPage);
+	addSortingIndication(sortBy, sortOrder);
 
+}
+
+function addSortingIndication() {
 	// I just put the orientation after the query return the results (before I
 	// clean all the asc and desc of all the columns, after I make the query and
 	// at the end i Put the correct one)
@@ -491,10 +629,9 @@ function aeSort(psortby) {
 			}
 		}
 	}
-
 }
 
-function removeSortIndications() {
+function removeAllSortingIndications() {
 
 	// remove all the sort signs on the headers
 	// I'm using textContent because innerText doesnt work on FireFox
@@ -505,11 +642,11 @@ function removeSortIndications() {
 				: false;
 		if (hasInnerText) {
 			$("div.table_header_inner")[i].innerHTML = $("div.table_header_inner")[i].innerText; // +
-																									// "&nbsp;";
+			// "&nbsp;";
 		} else {
 			// &nbsp is used to preserve the arrow space
 			$("div.table_header_inner")[i].innerHTML = $("div.table_header_inner")[i].textContent; // +
-																									// "&nbsp;";
+			// "&nbsp;";
 		}
 
 	}

@@ -188,7 +188,7 @@
 				<interface.application.log.default.priority>DEBUG</interface.application.log.default.priority>
 				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroupDev</interface.application.db.xml.connection.dbname> -->
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
-				<interface.application.db.xml.update.active>false</interface.application.db.xml.update.active>
+				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
 				<interface.application.db.xml.update.url>/ebi/microarray/ma-exp/biosamples-dev/gui.xml</interface.application.db.xml.update.url>
 				<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule>
@@ -316,12 +316,12 @@
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
 				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
-				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
-				<interface.application.db.xml.update.type>age</interface.application.db.xml.update.type>
+				<interface.application.db.xml.update.active>false</interface.application.db.xml.update.active>
+				<!-- <interface.application.db.xml.update.type>age</interface.application.db.xml.update.type>
 				<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp>
 				<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule>
 				<interface.application.pref.reload-all.update.interval />
-				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
+				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
 
 			</properties>
 		</profile>

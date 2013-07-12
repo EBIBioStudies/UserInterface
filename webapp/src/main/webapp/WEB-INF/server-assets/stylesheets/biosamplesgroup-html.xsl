@@ -58,11 +58,11 @@
 		select="if ($query-string) then fn:concat('?', $query-string) else ''" />
 
 
-<!-- <xsl:output omit-xml-declaration="no" method="html" indent="no" encoding="windows-1252" 
-		doctype-public="-//W3C//DTD XHTML 4.01 Transitional//EN" /> --> 
-    
+	<!-- <xsl:output omit-xml-declaration="no" method="html" indent="no" encoding="windows-1252" 
+		doctype-public="-//W3C//DTD XHTML 4.01 Transitional//EN" /> -->
+
 	<xsl:template match="/">
-		
+
 		<xsl:call-template name="ae-page">
 			<xsl:with-param name="pIsSearchVisible" select="fn:true()" />
 			<xsl:with-param name="pSearchInputValue"
@@ -173,7 +173,7 @@
 				<td class="col_title">
 					<b>Name:</b>
 				</td>
-				<td>
+				<td width="800">
 					<xsl:call-template name="highlight">
 						<xsl:with-param name="pText"
 							select="attribute/value[../@class='Name']" />
@@ -463,6 +463,11 @@
 											<tbody>
 												<tr>
 													<td id="left_fixed">
+													<!-- just to have the scroll height size to be aligned with the attributes table (middle area) -->
+													<div id="wrapper_top_scroll_sides">
+															<div id="div_top_scroll_sides">
+															</div>
+														</div>
 														<table id="src_name_table" border="0" cellpadding="0"
 															cellspacing="0" width="100%">
 															<thead>
@@ -472,9 +477,7 @@
 																		id="bs_results_header_sampleaccession">
 																		<a href="javascript:aeSort('sampleaccession')"
 																			title="Click to sort by Sample Accession">
-																			<div class="table_header_inner">
-																				Accession
-																			</div>
+																			<div class="table_header_inner">Accession</div>
 																		</a>
 																	</th>
 																</tr>
@@ -486,6 +489,10 @@
 
 													</td>
 													<td id="middle_scrollable">
+														<div id="wrapper_top_scroll">
+															<div id="div_top_scroll">
+															</div>
+														</div>
 														<div class="attr_table_shadow_container">
 															<div class="attr_table_scroll">
 																<table id="attr_table" border="0" cellpadding="0"
@@ -493,8 +500,7 @@
 																	<thead>
 																		<tr>
 
-																			<xsl:for-each
-																				select="SampleAttributes/attribute/@class">
+																			<xsl:for-each select="SampleAttributes/attribute/@class">
 																				<xsl:if test=".!='Sample Accession'">
 																					<th
 																						class="bs_results_accession sortable bs_results_{replace(.,' ' , '-')}"
@@ -508,24 +514,20 @@
 																					</th>
 																				</xsl:if>
 
-																				<!-- 
-																				xsl:for-each
-																				select="SampleAttributes/attribute/@class[.!='Sample Accession']">
-																				<xsl:choose> <xsl:when test="position()=1"> <th 
-																					class="bs_results_accession begin_scroll sortable bs_results_{replace(.,' 
-																					' , '-')}" id="bs_results_header_{position()}"> <a href="javascript:aeSort('{position()}');" 
-																					title="Click to sort by {.}"> <div class="table_header_inner"> <xsl:value-of 
-																					select="."></xsl:value-of>&nbsp; </div> </a> </th> </xsl:when> <xsl:when 
-																					test="position()=last()"> <th class="bs_results_accession end_scroll sortable 
-																					bs_results_{replace(.,' ' , '-')}" id="bs_results_header_{position()}"> <a 
-																					href="javascript:aeSort('{position()}');" title="Click to sort by {.}"> <div 
-																					class="table_header_inner"> <xsl:value-of select="."></xsl:value-of>&nbsp; 
+																				<!-- xsl:for-each select="SampleAttributes/attribute/@class[.!='Sample 
+																					Accession']"> <xsl:choose> <xsl:when test="position()=1"> <th class="bs_results_accession 
+																					begin_scroll sortable bs_results_{replace(.,' ' , '-')}" id="bs_results_header_{position()}"> 
+																					<a href="javascript:aeSort('{position()}');" title="Click to sort by {.}"> 
+																					<div class="table_header_inner"> <xsl:value-of select="."></xsl:value-of>&nbsp; 
+																					</div> </a> </th> </xsl:when> <xsl:when test="position()=last()"> <th class="bs_results_accession 
+																					end_scroll sortable bs_results_{replace(.,' ' , '-')}" id="bs_results_header_{position()}"> 
+																					<a href="javascript:aeSort('{position()}');" title="Click to sort by {.}"> 
+																					<div class="table_header_inner"> <xsl:value-of select="."></xsl:value-of>&nbsp; 
 																					</div> </a> </th> </xsl:when> <xsl:otherwise> <th class="bs_results_accession 
 																					sortable bs_results_{replace(.,' ' , '-')}" id="bs_results_header_{position()}"> 
 																					<a href="javascript:aeSort('{position()}');" title="Click to sort by {.}"> 
 																					<div class="table_header_inner"> <xsl:value-of select="."></xsl:value-of>&nbsp; 
-																					</div> </a> </th> </xsl:otherwise> </xsl:choose>
-																					</xsl:for-each> -->
+																					</div> </a> </th> </xsl:otherwise> </xsl:choose> </xsl:for-each> -->
 																			</xsl:for-each>
 																		</tr>
 																	</thead>
@@ -539,13 +541,20 @@
 														</div>
 													</td>
 													<td id="right_fixed">
+													<!-- just to have the scroll height size to be aligned with the attributes table (middle area) -->
+													<div id="wrapper_top_scroll_sides">
+															<div id="div_top_scroll_sides">
+															</div>
+														</div>
 														<table id="links_table" border="0" cellpadding="0"
 															cellspacing="0" width="100%">
 															<thead>
 																<tr>
 																	<!-- I will not allow to sort -->
 																	<th id="align-middle">
-																		<a href="javascript:void(0);">Link</a>
+																		<a href="javascript:void(0);">
+																			<div class="table_header_inner">Link</div>
+																		</a>
 																	</th>
 																</tr>
 															</thead>

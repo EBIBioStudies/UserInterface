@@ -108,10 +108,10 @@
 		<xsl:variable name="vSample" select="."></xsl:variable>
 		<div id="samplesleft{position()}">
 			<bs_value_att>
-				<a href="../sample/{@id}">
+				 <a href="../sample/{@id}">
 					<xsl:copy-of
 						select="$vSample/attribute/value[../@class='Sample Accession']" />
-				</a>
+				 </a> 
 			</bs_value_att>
 		</div>
 
@@ -119,8 +119,6 @@
 			<xsl:for-each select="$pAttributes/attribute/@class">
 				<xsl:if test=".!='Sample Accession'">
 					<bs_value_att>
-
-
 						<xsl:variable name="token" select="."></xsl:variable>
 						<xsl:variable name="value"
 							select="$vSample/attribute/value[../@class=$token]" />
@@ -169,8 +167,6 @@
 			<div>
 				<!-- <tr> <td> -->
 				<bs_value_att>
-
-
 					<xsl:choose>
 						<!-- firts I will see if the database is defined inside the Sample -->
 						<xsl:when

@@ -39,7 +39,7 @@
 
 
 .bs_results_tablesamplegroupdetail{
-width: auto;
+width: 100%;
 margin: 2;
 border: 0 none;
 }
@@ -64,14 +64,14 @@ padding: 0;
 
 
 #bs_samples_table td {
-white-space: nowrap;
+/* white-space: nowrap;*/
 /* vertical-align: middle; */
 /*font-size: 11px;*/
 /*padding: 3px 5px;*/
 /*border-bottom: 1px solid #BDD7D7;*/
 /*vertical-align: top;*/
 padding: 0px 0px;
-border:1px none;
+/* border:1px none; */
 }
 
 #attr_table th, #src_name_table th, #links_table th, #bs_samples_table th{
@@ -86,10 +86,10 @@ text-align: left;
 
 #attr_table td, #src_name_table td, #links_table td{
 spacing: 0px 0px;
-height: 30px;
+height: 38px;
 padding: 6px 7px;
 border-bottom: 1px solid #BDD7D7;
-
+vertical-align: top;
 }
 
 
@@ -101,6 +101,7 @@ align: left;
 background-color: white;
 margin: 9px auto;
 border: 0 none;
+border-spacing: 0px;
 }
 
 
@@ -110,6 +111,7 @@ align: left;
 background-color: white;
 margin: 9px auto;
 border: 0 none;
+border-spacing: 0px;
 }
 
 
@@ -147,6 +149,7 @@ overflow: hidden;
 width: 100%;
 overflow-x: scroll;
 overflow-y: hidden;
+/* overflow: scroll; */
 }
 
 
@@ -154,7 +157,7 @@ overflow-y: hidden;
 
 
 .cell_height{
-height: 30px;
+/* height: 30px; */
 vertical-align: middle;
 /*padding: 7px 7px;*/
 /*line-height: 30px;*/
@@ -172,8 +175,6 @@ vertical-align: middle;
     padding: 0;
     overflow: hidden;
 }
-
-
 
 
 
@@ -281,7 +282,7 @@ padding: 3px 5px;
  */
 
 
-#bs_browse td {
+#table-bs-query td {
  vertical-align: middle;
 /* font-size: 93%; */
 }
@@ -379,4 +380,27 @@ white-space: nowrap;
 td#left_fixed, td#middle_scrollable, td#right_fixed{
 	vertical-align: top;
 /* 	border-bottom: 1px solid #BDD7D7; */
-} 
+}
+
+
+/*second scrollbar on top*/
+#wrapper_top_scroll{height: 5px; border: none 0px;
+overflow-x: scroll; overflow-y:hidden;}
+
+#div_top_scroll {width:100%; height: 5px; }
+
+#wrapper_top_scroll_sides{height: 5px; border: none 0px;}
+#div_top_scroll_sides{height: 5px; }
+
+/*on MAC OSX Lion and always show the scrollbars on Webkit browsers (Chrome / Safari) */
+::-webkit-scrollbar {
+	-webkit-appearance: none;
+	width: 7px;
+}
+::-webkit-scrollbar-thumb {
+	border-radius: 4px;
+	background-color: rgba(0,0,0,.5);
+	-webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+/*second scrollbar on top*/
