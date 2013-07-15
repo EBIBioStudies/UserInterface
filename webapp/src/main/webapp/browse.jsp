@@ -139,6 +139,8 @@
 		<%
 			}
 		%>
+		
+			
 		<section class="grid_24 alpha omega">
 			<div id="bs_browse">
 

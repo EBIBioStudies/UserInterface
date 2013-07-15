@@ -125,6 +125,7 @@
 			<section>
 				<h3 class="icon icon-generic" data-icon="g">Data Content</h3>
 				<!-- <h5>Updated today at 06:00</h5> -->
+			
 				<ul>
 					<li><span id="totalSamples"></span> Samples</li>
 					<li><span id="totalGroups"></span> Groups</li>
@@ -141,7 +142,11 @@
 					<li>XXXX Samples</li>
 					<li>YYYYY groups</li> -->
 				</ul>
+			<span class="${interface.application.metadata.class}"><a
+			href="metadata?class=${interface.application.body.class}"
+			target="ext">Metadata</a></span>
 			</section>
+			
 		</div>
 
 
