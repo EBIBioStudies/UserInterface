@@ -125,9 +125,12 @@
 										<xsl:with-param name="vSample" select="$vSample"></xsl:with-param>
 									</xsl:call-template>
 								</xsl:when>
-
+								<!-- normal value -->
 								<xsl:when test="count(.//attribute[@class='Term Source REF'])=0">
-									<xsl:copy-of select="value"></xsl:copy-of>
+									<!-- <xsl:copy-of select="value"></xsl:copy-of> -->
+									<xsl:call-template name="process_multiple_values">
+										<xsl:with-param name="pValue" select="value"></xsl:with-param>
+									</xsl:call-template>
 								</xsl:when>
 
 
@@ -371,6 +374,26 @@
 			</tbody>
 		</table>
 	</xsl:template>
+
+
+  <xsl:template name="process_multiple_values">
+		<xsl:param name="pValue" />
+		<table border="0" cellpadding="0" cellspacing="0"
+			id="table_inside_attr">
+			<tbody>
+				<xsl:for-each select="$pValue">
+					<tr>
+						<td id="td_nowrap">
+							<xsl:copy-of select="./text()" />
+						</td>
+						<td width="100%">&nbsp;
+						</td>
+					</tr>
+				</xsl:for-each>
+			</tbody>
+		</table>
+	</xsl:template>
+
 
 
 </xsl:stylesheet>
