@@ -315,7 +315,7 @@
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
 				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
-				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
+				<interface.application.db.xml.connection.dbname>biosamplesAEGroup_static</interface.application.db.xml.connection.dbname>
 				<interface.application.db.xml.update.active>false</interface.application.db.xml.update.active>
 				<!-- <interface.application.db.xml.update.type>age</interface.application.db.xml.update.type>
 				<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp>
