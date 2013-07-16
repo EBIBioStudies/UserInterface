@@ -98,12 +98,11 @@
 
 		<div class="grid_24 alpha">
 			<section>
-				<h2>BioSamples</h2>
 				<p class="intro justify">The BioSamples database aggregates
 					sample information for reference samples e.g. Coriell Cell lines
 					and samples for which data exist in one of the EBI's assay
 					databases such as ArrayExpress, the European Nucleotide archive, or
-					Pride. It provides links to assays for specific samples, and
+					PRIDE. It provides links to assays for specific samples, and
 					accepts direct submissions of samples.</p>
 			</section>
 		</div>
@@ -152,36 +151,24 @@
 
 		<div class="grid_24 alpha">
 			<section>
-				<div class="grid_8 alpha">
-					<h3 class="icon icon-generic" data-icon="L">Links</h3>
+				<div class="grid_12 alpha">
+					<h3 class="icon icon-generic" data-icon="L">Info</h3>
 					<p>
-						Information about how to search BioSamples, understand search
-						results, how to submit data and FAQ can be found in our <a
-							href="/biosamples/help/index.html">Help section</a>.
+						<a href="/biosamples/help/index.html">Help pages</a> about how to search BioSamples, how to submit data, and FAQ.
 					</p>
 					<p>
-						Find out more about the <a href="/about/people/alvis-brazma">Functional
-							Genomics group</a>.
-					</p>
-				</div>
-				<div class="grid_8">
-					<h3 class="icon icon-functional" data-icon="t">Tools and
-						Access</h3>
-					<p>
-						<a href="/biosamples/help/api.html">Programmatic access</a>: query
+						<a href="/biosamples/help/api.html">Programmatic access</a> to query
 						and download data using web services.
 					</p>
 				</div>
-				<div class="grid_8 omega">
-					<h3 class="icon icon-generic" data-icon="L">Related Projects</h3>
-					<p>
-						Discover up and down regulated genes in numerous experimental
-						conditions in the <a href="/gxa/">Expression Atlas</a>.
-					</p>
-					<p>
-						Explore the <a href="/efo">Experimental Factor Ontology</a> used
-						to support queries and annotation of ArrayExpress data.
-					</p>
+				<div class="grid_12 omega">
+					<h3 class="icon icon-generic" data-icon="L">External links</h3>
+					<ul>
+                        <li><a href="http://www.ebi.ac.uk/efo/">Experimental Factor Ontology</a></li>
+                        <li><a href="http://www.hipsci.org">Human Induced Pluripotent Stem Cells Initiative</a></li>
+                        <li><a href="http://www.1000genomes.org/">1000 Genomes</a></li>
+                        <li><a href="https://www.genome.gov/26524238">Encyclopedia of DNA Elements (ENCODE)</a></li>
+                    </ul>
 				</div>
 			</section>
 		</div>
