@@ -98,8 +98,8 @@
 
         <div class="grid_24 alpha">
             <section>
-                <h2>BioSamples - database of sample metadata</h2>
-                <p class="intro justify">The BioSamples database aggregates sample information for reference samples e.g. Coriell Cell lines and samples for which data exist in one of the EBI&#39;s assay databases such as <a href="//www.ebi.ac.uk/arrayexpress">ArrayExpress</a>, the <a href="//www.ebi.ac.uk/ena">European Nucleotide Archive</a> or <a href="//www.ebi.ac.uk/pride">PRoteomics Identificates DatabasE</a>. It provides links to assays for specific samples, and accepts direct submissions of samples.</p>
+                <h2>BioSamples - database of sample descriptions</h2>
+                <p class="intro justify">The BioSamples database aggregates sample information for reference samples (e.g. Coriell Cell lines) and samples for which data exist in one of the EBI&#39;s assay databases such as <a href="//www.ebi.ac.uk/arrayexpress">ArrayExpress</a>, the <a href="//www.ebi.ac.uk/ena">European Nucleotide Archive</a> or <a href="//www.ebi.ac.uk/pride">PRoteomics Identificates DatabasE</a>. It provides links to assays an specific samples, and accepts direct submissions of sample information.</p>
             </section>
         </div>
 
