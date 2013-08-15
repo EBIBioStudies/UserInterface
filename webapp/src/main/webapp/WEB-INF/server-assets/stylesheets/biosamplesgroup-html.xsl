@@ -72,6 +72,10 @@
 				<link rel="stylesheet"
 					href="{$context-path}/assets/stylesheets/biosamples_detail_10.css"
 					type="text/css" />
+					<!-- need this to have the scrollbars on Chrome/firefox/safari - overwrite the ebi css definition [PT:53620963] -->
+					<style type="text/css">
+					html {overflow-y:auto;}
+					</style>
 			</xsl:with-param>
 			<xsl:with-param name="pBreadcrumbTrail">
 				<a href="{$context-path}/browse.html">Samples</a>
