@@ -116,9 +116,10 @@
             <h3 class="icon icon-generic" data-icon="L">External links</h3>
             <ul>
                 <li><a href="//www.ebi.ac.uk/efo/">Experimental Factor Ontology</a></li>
-                <li><a href="//www.hipsci.org">Human Induced Pluripotent Stem Cells Initiative</a></li>
+                <li><a href="//www.hipsci.org">Human Induced Pluripotent Stem Cells Initiative (HipSci)</a></li>
                 <li><a href="//www.1000genomes.org/">1000 Genomes</a></li>
                 <li><a href="//www.genome.gov/26524238">Encyclopedia of DNA Elements (ENCODE)</a></li>
+                <li><a href="//cancer.sanger.ac.uk/cancergenome/projects/cosmic/">Catalogue Of Somatic Mutations In Cancer (COSMIC)</a></li>
             </ul>
         </div>
         <div class="grid_8 omega">
