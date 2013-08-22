@@ -70,9 +70,9 @@
 							<input type="submit" name="submit" value="Search" class="submit">
 							<!-- If your search is more complex than just a keyword search, you can link to an Advanced Search,
                  with whatever features you want available -->
-							<span class="adv"><a
+							<%-- <span class="adv"><a
 								href="${interface.application.base.path}/browse.html"
-								id="adv-search" title="Advanced">Advanced</a></span>
+								id="adv-search" title="Advanced">Advanced</a></span> --%>
 						</div>
 
 					</fieldset>
@@ -122,7 +122,7 @@
 		</div>
 	</header>
 
-	<div class="contents" id="contents">
+	<div id="content" role="main" class="grid_24 clearfix">
 		<%
 			//need thi parameter to fulfill the forms parameters
 			String host = request.getScheme() + "://"
@@ -230,4 +230,4 @@
 					class="submit" type="submit" value="Send">
 			</form>
 		</section>
-	</div>
+<!-- 	</div> -->

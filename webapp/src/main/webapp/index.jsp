@@ -79,7 +79,7 @@
 
 </head>
 
-<body class="level2" onload="updateBiosamplesStats()">
+<body class="level2 ${interface.application.body.class}" onload="updateBiosamplesStats()">
     <!-- add any of your classes or IDs -->
     <div id="skip-to">
         <ul>
@@ -147,11 +147,10 @@
                 target="ext">Metadata</a></span>
             </section>
         </div>
-
-
-        <%@ include file="WEB-INF/server-assets/html/footer_ebi.html"%>
-
     </div>
+    
+    <%@ include file="WEB-INF/server-assets/html/footer_ebi.html"%>
+    
     <!--! end of #wrapper -->
 
 

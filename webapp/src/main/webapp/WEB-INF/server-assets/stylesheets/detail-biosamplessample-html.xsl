@@ -108,8 +108,8 @@
 				Sample Accession
 				<xsl:copy-of select="attribute/value[../@class='Sample Accession']" />
 			</h4>
-			<table id="bs_results_tablesamplegroupdetail">
-				<xsl:for-each select="attribute[@class!='Sample Accession']">
+			<table id="bs_results_tablesamplegroupdetail">			
+				<xsl:for-each select="attribute[@class!='Sample Accession']">									
 					<tr>
 						<td class="col_title">
 							<b>
@@ -383,7 +383,7 @@
 			<tbody>
 				<xsl:for-each select="$pValue">
 					<tr>
-						<td id="td_nowrap">
+						<td width="100%">
 							<xsl:copy-of select="./text()" />
 						</td>
 						<td width="100%">&nbsp;

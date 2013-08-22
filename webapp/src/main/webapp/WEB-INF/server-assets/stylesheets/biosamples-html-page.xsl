@@ -135,7 +135,7 @@
 
 		<body>   <!-- add any of your classes or IDs -->
 			<xsl:attribute name="class">
-                <xsl:text>level2</xsl:text>
+                <xsl:text>level2 ${interface.application.body.class}</xsl:text>
             </xsl:attribute>
 
 			<div id="skip-to">
@@ -235,10 +235,10 @@
 										<input type="submit" name="submit" value="Search" class="submit" />
 										<!-- If your search is more complex than just a keyword search, 
 											you can link to an Advanced Search, with whatever features you want available -->
-										<span class="adv">
+										<!-- <span class="adv">
 											<a href="${interface.application.base.path}/browse.html"
 												id="adv-search" title="Advanced">Advanced</a>
-										</span>
+										</span> -->
 									</div>
 
 								</fieldset>
@@ -305,7 +305,7 @@
 						<!-- /local-nav -->
 					</div>
 				</header>
-				<div class="contents" id="contents">
+				<div id="content" role="main" class="grid_24 clearfix">
 					<section id="ae-login" style="display: none">
 						<h3>
 							BioSamples login
@@ -383,8 +383,7 @@
   							<input class="submit" type="submit" value="Send" />
 						</form>
 					</section>
-				</div>
-				<div id="content" role="main" class="grid_24 clearfix">
+
 					<!-- If you require a breadcrumb trail, its root should be your service. 
 						You don't need a breadcrumb trail on the homepage of your service... -->
 					<xsl:if test="fn:boolean($pBreadcrumbTrail)">

@@ -89,7 +89,7 @@ body.bs_curator_daily {
 }
 
 body.bs_dev_preview {
-background: white url(../images/bs_dev_bg.gif) repeat fixed top;
+background: #70BDBD url(../images/bs_dev_bg.gif) repeat fixed top;
 }
 
 /*
@@ -321,8 +321,6 @@ box-sizing: border-box;
 
 
 
-
-
 #ae-login > h3, #ae-feedback > h3 {
 font-size: 123.1%;
 color: black;
@@ -340,7 +338,7 @@ border-top-right-radius: 5px;
 
 #ae-login, #ae-feedback {
 position: absolute;
-top: 150px;
+top: 2px;
 right: 5px;
 background-color: #EEE;
 color: #000;
@@ -354,16 +352,16 @@ padding: 0;
 z-index: 40001;
 }
 
-#ae-feedback {
+/* #ae-feedback {
 width: 650px;
 }
 
 #ae-login {
 width: 583px;
-}
+} */
 
 #ae-feedback {
-left: 51%;
+left: 50%;
 background-color: #FFE0B1;
 }
 
@@ -385,7 +383,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#5E8CC0', EndC
 
 
 #ae-login {
-left: 54%;
+left: 50%;
 }
 
 #ae-login > h3 a, #ae-feedback > h3 a {
@@ -401,6 +399,8 @@ padding: 0;
 font-size: 100%;
 height: 10em;
 }
+
+
 
 #ae-feedback fieldset input {
 width: 100%;
