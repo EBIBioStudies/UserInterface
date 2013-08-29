@@ -110,7 +110,7 @@
 			<bs_value_att>
 				 <a href="../sample/{@id}">
 					<xsl:copy-of
-						select="$vSample/attribute/value[../@class='Sample Accession']" />
+						select="string(@id)" />
 				 </a> 
 			</bs_value_att>
 		</div>

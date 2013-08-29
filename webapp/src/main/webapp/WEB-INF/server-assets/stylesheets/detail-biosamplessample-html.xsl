@@ -106,7 +106,7 @@
 		<div class="detail_table">
 			<h4>
 				Sample Accession
-				<xsl:copy-of select="attribute/value[../@class='Sample Accession']" />
+				<xsl:copy-of select="string(@id)" />
 			</h4>
 			<table id="bs_results_tablesamplegroupdetail">
 				<xsl:for-each select="attribute[@class!='Sample Accession']">

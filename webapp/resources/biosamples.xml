@@ -101,10 +101,10 @@
 		
 		
 		
-		
+	
 		
 			<!--  <document path="/Biosamples/SampleGroup[@id='SAMEG82627']" defaultField="keywords"> -->
-	<document path="/Biosamples/SampleGroup" defaultField="keywords">
+	<document path="/Biosamples/SampleGroup[@id!='test1.sg1' and @id!='test1.sg2']" defaultField="keywords">
 				<!-- I also want to search in the attributes name, so I will add it to the keywords -->
 				<field name="keywords" type="string" path="concat(string-join(.//Sample/attribute/@class, ' '),string-join(.//text(), ' '))"
 					analyze="true"
@@ -178,13 +178,12 @@
 			</document>
 		</index>
 
-
 		<index id="biosamplessample"
 			location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes"
 			defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
 
 <!--  <document path="/Biosamples/SampleGroup/Sample[@groupId='SAMEG82627']" 	 -->
-	  <document path="/Biosamples/SampleGroup/Sample"  				 
+	  <document path="/Biosamples/SampleGroup[@id!='test1.sg1' and @id!='test1.sg2']/Sample"  				 
 				 defaultField="keywords">
 				
 				<!-- I also want to search in the attributes name, so I will add it to the keywords -->
