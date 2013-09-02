@@ -52,6 +52,8 @@
 
 <link rel="stylesheet"
     href="assets/stylesheets/biosamples_common_10.css" type="text/css" />
+<link rel="stylesheet"
+    href="assets/stylesheets/biosamples_metadata_10.css" type="text/css" />
 
 <!-- for production the above can be replaced with -->
 <!--
