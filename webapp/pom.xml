@@ -243,6 +243,7 @@
 			<properties>
 				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
 				<interface.application.body.class>bs_dev_preview</interface.application.body.class>
+				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
 				<interface.application.pref.feedback.recipients>biosamples&#64;ebi.ac.uk</interface.application.pref.feedback.recipients>
 				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
 				<interface.application.base.path>/biosamples</interface.application.base.path>
