@@ -41,17 +41,40 @@
 			<!-- local-search -->
 			<!-- NB: if you do not have a local-search, delete the following div, and drop the class="grid_12 alpha" class from local-title above -->
 
-			<div class="grid_12 omega">
-				<form id="local-search" name="local-search"
-					action="${interface.application.base.path}/browse.html"
-					method="get">
-					<%
+
+<%
 						String query = "";
 						if (request.getParameter("keywords") != null
 								&& !request.getParameter("keywords").equalsIgnoreCase("")) {
 							query = request.getParameter("keywords");
 						}
+					
+					
+						String reqURI = request.getParameter("original-request-uri");
+						//String x="{$interface.application.base.path}";
+						String relativeReqURI = "";
+						relativeReqURI = reqURI.substring(
+								reqURI.indexOf("/biosamples") + 11, reqURI.length());
+						String homeActive = relativeReqURI.equalsIgnoreCase("/") ? "active"
+								: "";
+						String groupsActive = relativeReqURI.startsWith("/browse.html")
+								|| relativeReqURI.startsWith("/group") ? "active" : "";
+						String samplesActive = relativeReqURI
+								.startsWith("/browse_samples.html")
+								|| relativeReqURI.startsWith("/sample") ? "active" : "";
+						String helpActive = relativeReqURI.startsWith("/help/") ? "active"
+								: "";
+						String aboutActive = relativeReqURI.startsWith("/about.html") ? "active"
+								: "";
+						
+						String browserPage=(samplesActive.equalsIgnoreCase("active")?"browse_samples.html":"browse.html");
+						
 					%>
+			<div class="grid_12 omega">
+				<form id="local-search" name="local-search"
+					action="${interface.application.base.path}/<%=browserPage%>"
+					method="get">
+					
 					<fieldset>
 
 						<div class="left">
@@ -59,20 +82,23 @@
 								id="local-searchbox" value='<%=query%>'>
 							</label>
 							<!-- Include some example searchterms - keep them short and few! -->
-							<span class="examples">Examples: <a
-								href="${interface.application.base.path}/browse.html?keywords=leukemia">leukemia</a>,
+							<span class="examples">Search by: <select id="biosamples_index"
+								name="biosamples_index" onchange="changeSearch($('#local-search'),$('#biosamples_index option:selected').val())">
+									<option value="browse.html">Groups</option>
+									<option value="browse_samples.html" <%=samplesActive.equalsIgnoreCase("active")?"selected":""%>>Samples</option>
+							</select> &nbsp;&nbsp;Examples: <a
+								href="javascript:submitFormForExamples($('#local-search'),$('#biosamples_index option:selected').val(),'leukemia')">leukemia</a>,
 								<a
-								href='${interface.application.base.path}/browse.html?keywords=ArrayExpress+AND+"Mus+musculus"'>ArrayExpress
-									AND "Mus musculus"</a></span>
+								href="javascript:submitFormForExamples($('#local-search'),$('#biosamples_index option:selected').val(),'ArrayExpress')">ArrayExpress</a></span>
 						</div>
 
 						<div class="right">
-							<input type="submit" name="submit" value="Search" class="submit">
+							<input type="submit" name="submitb" value="Search" class="submit">
 							<!-- If your search is more complex than just a keyword search, you can link to an Advanced Search,
                  with whatever features you want available -->
-							<span class="adv"><a
+							<%-- <span class="adv"><a
 								href="${interface.application.base.path}/browse.html"
-								id="adv-search" title="Advanced">Advanced</a></span>
+								id="adv-search" title="Advanced">Advanced</a></span> --%>
 						</div>
 
 					</fieldset>
@@ -85,27 +111,13 @@
 			<!-- local-nav -->
 
 			<nav>
-				<%
-					String reqURI = request.getParameter("original-request-uri");
-					//String x="{$interface.application.base.path}";
-					String relativeReqURI = "";
-					relativeReqURI = reqURI.substring(
-							reqURI.indexOf("/biosamples") + 11, reqURI.length());
-					String homeActive = relativeReqURI.equalsIgnoreCase("/") ? "active"
-							: "";
-					String samplesActive = relativeReqURI.startsWith("/browse.html")
-							|| relativeReqURI.startsWith("/group")
-							|| relativeReqURI.startsWith("/sample") ? "active" : "";
-					String helpActive = relativeReqURI.startsWith("/help/") ? "active"
-							: "";
-					String aboutActive = relativeReqURI.startsWith("/about.html") ? "active"
-							: "";
-				%>
 				<ul class="grid_24" id="local-nav">
 					<li class="first <%=homeActive%>"><a href="/biosamples/"
 						title="Biosamples">Home</a></li>
+					<li class="<%=groupsActive%>"><a
+						href="/biosamples/browse.html" title="Groups">Sample Groups</a></li>
 					<li class="<%=samplesActive%>"><a
-						href="/biosamples/browse.html" title="Samples">Samples</a></li>
+						href="/biosamples/browse_samples.html" title="Samples">Samples</a></li>
 					<li class="<%=helpActive%>"><a
 						href="/biosamples/help/index.html" title="Help">Help</a></li>
 					<li class="last <%=aboutActive%>"><a
@@ -128,7 +140,8 @@
 			String host = request.getScheme() + "://"
 					+ request.getHeader("host");
 			String contextPath = request.getContextPath();
-			String originalRequestUri = request.getParameter("original-request-uri");
+			String originalRequestUri = request
+					.getParameter("original-request-uri");
 			String requestUri = request.getRequestURI();
 			String pathInfo = request.getPathInfo();
 			String queryString = request.getQueryString();
@@ -137,30 +150,27 @@
 			if (null != referer && referer.startsWith(host)) {
 				referer = referer.replace(host, "");
 			}
-			
-			String relativeUri="";
+
+			String relativeUri = "";
 			Pattern p = Pattern.compile("(.*?)" + contextPath + "(.*)");
 			Matcher m = p.matcher(originalRequestUri);
 			if (m.matches()) {
-			    //firstSubString = m.group(1); // may be empty
-			    relativeUri = m.group(2); // may be empty
-			} 
-			
-			String relativeReferer="";
-			if(referer!=null && referer.startsWith("/")){
+				//firstSubString = m.group(1); // may be empty
+				relativeUri = m.group(2); // may be empty
+			}
+
+			String relativeReferer = "";
+			if (referer != null && referer.startsWith("/")) {
 				Matcher m2 = p.matcher(referer);
 				if (m2.matches()) {
 					relativeReferer = m2.group(2); // may be empty
-				} 
+				}
 			}
-			 
-			String secureHost="";
-			if(host.matches("^http[:]//www(dev)?[.]ebi[.]ac[.]uk$")){
-				secureHost=host.replaceAll("^http[:]//", "https://");
+
+			String secureHost = "";
+			if (host.matches("^http[:]//www(dev)?[.]ebi[.]ac[.]uk$")) {
+				secureHost = host.replaceAll("^http[:]//", "https://");
 			}
-		
-			
-	
 		%>
 		<section id="ae-login" style="display: none">
 			<h3>
@@ -226,7 +236,8 @@
 				</fieldset>
 				<input type="hidden" name="p"
 					value="<%=host%><%=contextPath%><%=relativeUri%>?<%=queryString%>"><input
-					type="hidden" name="r" value="<%=host%><%=contextPath%><%=relativeReferer%>"><input
+					type="hidden" name="r"
+					value="<%=host%><%=contextPath%><%=relativeReferer%>"><input
 					class="submit" type="submit" value="Send">
 			</form>
 		</section>

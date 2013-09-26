@@ -121,7 +121,7 @@
 					<bs_value_att>
 						<xsl:variable name="token" select="."></xsl:variable>
 						<xsl:variable name="value"
-							select="$vSample/attribute/value[../@class=$token]" />
+							select="$vSample/attribute/simpleValue/value[../../@class=$token]" />
 						<xsl:choose>
 
 
@@ -138,7 +138,7 @@
 								<xsl:call-template name="highlight">
 									<xsl:with-param name="pText" select="string-join($value, ', ')" />
 									<!-- <xsl:with-param name="pFieldName" select="'$token'" /> -->
-									<xsl:with-param name="pFieldName" select="string(position())" />
+									<xsl:with-param name="pFieldName" select="lower-case(replace($token,' ','_'))" />
 								</xsl:call-template>
 							</xsl:when>
 
@@ -170,11 +170,11 @@
 					<xsl:choose>
 						<!-- firts I will see if the database is defined inside the Sample -->
 						<xsl:when
-							test="count($vSample/attribute/value[../@class='Database Name'])=1">
+							test="count($vSample/attribute/simpleValue/value[../../@class='Database Name'])=1">
 							<xsl:variable name="bdNameSample"
-								select="lower-case($vSample/attribute/value[../@class='Database Name'])"></xsl:variable>
+								select="lower-case($vSample/attribute/simpleValue/value[../../@class='Database Name'])"></xsl:variable>
 							<xsl:variable name="bdUriSample"
-								select="$vSample/attribute/value[../@class='Database URI']"></xsl:variable>
+								select="$vSample/attribute/simpleValue/value[../../@class='Database URI']"></xsl:variable>
 							<xsl:choose>
 								<!-- firts I will see if the database is defined inside the Sample -->
 								<xsl:when
@@ -199,9 +199,9 @@
 						<xsl:otherwise>
 							<xsl:for-each select="../DatabaseGroup//object">
 								<xsl:variable name="bdNameGroup"
-									select="lower-case(.//attribute/value[../@class='Database Name'])"></xsl:variable>
+									select="lower-case(.//attribute/simpleValue/value[../../@class='Database Name'])"></xsl:variable>
 								<xsl:variable name="bdUriGroup"
-									select=".//attribute/value[../@class='Database URI']"></xsl:variable>
+									select=".//attribute/simpleValue/value[../../@class='Database URI']"></xsl:variable>
 								<xsl:choose>
 									<xsl:when
 										test="$bdNameGroup =('arrayexpress','ena sra','dgva','pride') and not($bdUriGroup='')">

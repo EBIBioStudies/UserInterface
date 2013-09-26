@@ -143,7 +143,7 @@ public class BioSamplesGroup extends ApplicationComponent implements
 			this.search.getController().getEnvironment(INDEX_ID).setup();
 			
 //			TODO review the autocompletion because of time it takes (maybe the problem is the xml field)
-			this.autocompletion.rebuild();
+			this.autocompletion.rebuildBioSamplesGroup();
 		} catch (Exception x) {
 			this.logger.error("Caught an exception:", x);
 		}
@@ -156,7 +156,7 @@ public class BioSamplesGroup extends ApplicationComponent implements
 		try {
 			//String indexLocationDirectory= this.search.getController().getEnvironment(INDEX_ID).indexLocationDirectory + "_" + System.currentTimeMillis();
 			this.search.getController().indexFromXmlDB(INDEX_ID, Indexer.RebuildCategories.NOTREBUILD);		
-			this.autocompletion.rebuild();
+			this.autocompletion.rebuildBioSamplesGroup();
 		} catch (Exception x) {
 			this.logger.error("Caught an exception:", x);
 		}

@@ -104,16 +104,16 @@
 
 		<nav id="breadcrumb">
 			<p>
-				<a href="${interface.application.base.path}">BioSamples</a> &gt;
+				<a href="${interface.application.base.path}">BioSamples</a> &gt; 
 				<%
 					if (request.getParameter("keywords") != null
 							&& !request.getParameter("keywords").equalsIgnoreCase("")) {
 				%>
-				<a href="${interface.application.base.path}/browse.html">Sample Groups</a> &gt; Search results for "<%=request.getParameter("keywords")%>"
+				<a href="${interface.application.base.path}/browse_samples.html">Samples</a> &gt; Search results for "<%=request.getParameter("keywords")%>"
 				<%
 					} else {
 				%>
-				Sample Groups
+				Samples
 				<%
 					}
 				%>
@@ -204,12 +204,13 @@
 						<table class="persist-header">
 							<colgroup>
 								<col class="col_id">
-								<col class="col_title">
-								<col class="col_samples">
+								<col class="col_description">
+								<col class="col_organisms">
+								<col class="col_groups">
 							</colgroup>
 							<thead>
 								<tr>
-									<th colspan="3" class="col_pager">
+									<th colspan="4" class="col_pager">
 										<div class="bs-pager"></div>
 										<div class="bs-page-size"></div>
 										<div class="bs-stats"></div>
@@ -223,14 +224,18 @@
 												class="table_header_inner">Accession</div></a> <!-- <img
 								src="/arrayexpress/assets/images/mini_arrow_up.gif" width="12"
 								height="16" alt="^"> --></th>
-									<th class="sortable col_title" id="bs_results_header_title"><a
-										href="javascript:aeSort('title')"
-										title="Click to sort by title"><div
-												class="table_header_inner">Title</div></a></th>
-									<th class="sortable col_samples" id="bs_results_header_samples"
-										align="center"><a href="javascript:aeSort('samples')"
-										title="Click to sort by number of samples"><div
-												class="table_header_inner">Samples</div></a></th>
+									<th class="sortable col_description" id="bs_results_header_description"><a
+										href="javascript:aeSort('description')"
+										title="Click to sort by description"><div
+												class="table_header_inner">Description</div></a></th>
+									<th class="sortable col_organisms" id="bs_results_header_org"
+										align="center"><a href="javascript:aeSort('org')"
+										title="Click to sort by Organism"><div
+												class="table_header_inner">Organism</div></a></th>
+									<th class="sortable col_groups" id="bs_results_header_groups"
+										align="center"><a href="javascript:aeSort('groups')"
+										title="Click to sort by Groups"><div
+												class="table_header_inner">Groups</div></a></th>
 								</tr>
 							</thead>
 						</table>
@@ -239,7 +244,8 @@
 							<colgroup>
 								<col class="col_id">
 								<col class="col_title">
-								<col class="col_samples">
+								<col class="col_organisms">
+								<col class="col_groups">
 							</colgroup>
 							<tbody id="bs_results_tbody"></tbody>
 
@@ -282,7 +288,7 @@
 		type="text/javascript"></script>
 	<script src="assets/scripts/biosamples_common_10.js"
 		type="text/javascript"></script>
-	<script src="assets/scripts/biosamples_browse_10.js"
+	<script src="assets/scripts/biosamples_browse_samples_10.js"
 		type="text/javascript"></script>
 
 	<script

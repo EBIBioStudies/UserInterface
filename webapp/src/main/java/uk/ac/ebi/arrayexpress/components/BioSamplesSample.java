@@ -82,6 +82,7 @@ public class BioSamplesSample extends ApplicationComponent implements
 		
 		this.saxon = (SaxonEngine) getComponent("SaxonEngine");
 		this.search = (SearchEngine) getComponent("SearchEngine");
+		this.autocompletion = (Autocompletion) getComponent("Autocompletion");
 		
 		//TODO: change this (I will never restart the server with an incremental update, even though I shoul change it) 
 		if(buildIndexes){
@@ -135,8 +136,7 @@ public class BioSamplesSample extends ApplicationComponent implements
 			this.search.getController().indexFromXmlDB(INDEX_ID, rebuild);	
 			//I need to do this because when I initialize the server with the interface.application.lucene.indexes.build=true I need to restart the indexreader;
 			this.search.getController().getEnvironment(INDEX_ID).setup();
-			//is only donr on BioSampleGroup
-			//this.autocompletion.rebuild();
+			this.autocompletion.rebuildBioSamplesSample();
 		} catch (Exception x) {
 			this.logger.error("Caught an exception:", x);
 		}
@@ -147,7 +147,7 @@ public class BioSamplesSample extends ApplicationComponent implements
 		try {
 			//String indexLocationDirectory= this.search.getController().getEnvironment(INDEX_ID).indexLocationDirectory + "_" + System.currentTimeMillis();
 			this.search.getController().indexFromXmlDB(INDEX_ID, Indexer.RebuildCategories.NOTREBUILD);		
-			
+			this.autocompletion.rebuildBioSamplesSample();
 		} catch (Exception x) {
 			this.logger.error("Caught an exception:", x);
 		}

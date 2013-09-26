@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.xml.xpath.XPath;
@@ -95,6 +96,28 @@ public class Querier {
 		return termsList;
 	}
 
+	
+	//I need this because in the sample I have dynamic fields, do the are not build based on the biosamples.xml configuration file.
+	public Collection<String> getFields()
+			throws IOException {
+		IndexReader ir = null;
+		Collection<String> fieldsList=null;
+		
+		try {
+			ir = IndexReader.open(this.env.indexDirectory, true);
+			fieldsList=ir.getFieldNames(IndexReader.FieldOption.INDEXED);
+			
+		} catch (Exception x) {
+			logger.error("Caught an exception:", x);
+		} finally {
+			if (null != ir) {
+				ir.close();
+			}
+		}
+		return fieldsList;
+	}
+
+	
 	public void dumpTerms(String fieldName) {
 		try {
 			IndexReader ir = IndexReader.open(this.env.indexDirectory, true);

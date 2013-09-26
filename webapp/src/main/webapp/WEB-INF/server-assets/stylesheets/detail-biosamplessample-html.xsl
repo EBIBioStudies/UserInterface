@@ -66,7 +66,7 @@
 					type="text/css" />
 			</xsl:with-param>
 			<xsl:with-param name="pBreadcrumbTrail">
-				<a href="{$context-path}/browse.html">Samples</a>
+				<a href="{$context-path}/browse_samples.html">Samples</a>
 				>
 				<xsl:value-of select="$accession" />
 			</xsl:with-param>
@@ -129,7 +129,9 @@
 								<xsl:when test="count(.//attribute[@class='Term Source REF'])=0">
 									<!-- <xsl:copy-of select="value"></xsl:copy-of> -->
 									<xsl:call-template name="process_multiple_values">
-										<xsl:with-param name="pValue" select="value"></xsl:with-param>
+										<xsl:with-param name="pField"
+											select="lower-case(replace(@class,' ' , '-'))"></xsl:with-param>
+										<xsl:with-param name="pValue" select="simpleValue/value"></xsl:with-param>
 									</xsl:call-template>
 								</xsl:when>
 
@@ -147,52 +149,42 @@
 						</td>
 					</tr>
 
-
-
 				</xsl:for-each>
+				<tr>
+					<td class="col_title">
+						<b>Groups:
+						</b>
+					</td>
+					<td>
+						<xsl:for-each select="GroupIds/Id">
+							<a href="../group/{.}">
+								<xsl:apply-templates select="." mode="highlight">
+									<xsl:with-param name="pFieldName" select="'groups'" />
+								</xsl:apply-templates>
+							</a>
+							<xsl:if test="position()!=last()">
+								<xsl:copy-of select="', '" />
+							</xsl:if>
+						</xsl:for-each>
+					</td>
+				</tr>
+
 			</table>
 		</div>
 	</xsl:template>
 
 
-
-
-	<xsl:template name="detail-row">
-		<xsl:param name="pName" />
-		<xsl:param name="pFieldName" />
-		<xsl:param name="pValue" />
-		<xsl:if test="$pValue/node()">
-			<xsl:call-template name="detail-section">
-				<xsl:with-param name="pName" select="$pName" />
-				<xsl:with-param name="pContent">
-					<xsl:for-each select="$pValue">
-						<div>
-							<xsl:apply-templates select="." mode="highlight">
-								<xsl:with-param name="pFieldName" select="$pFieldName" />
-							</xsl:apply-templates>
-						</div>
-					</xsl:for-each>
-				</xsl:with-param>
-			</xsl:call-template>
-		</xsl:if>
-	</xsl:template>
-
-	<xsl:template name="detail-section">
-		<xsl:param name="pName" />
-		<xsl:param name="pContent" />
-		<tr>
-			<td class="detail_name">
-				<div class="outer">
-					<xsl:value-of select="$pName" />
-				</div>
-			</td>
-			<td class="detail_value">
-				<div class="outer">
-					<xsl:copy-of select="$pContent" />
-				</div>
-			</td>
-		</tr>
-	</xsl:template>
+	<!-- <xsl:template name="detail-row"> <xsl:param name="pName" /> <xsl:param 
+		name="pFieldName" /> <xsl:param name="pValue" /> <xsl:if test="$pValue/node()"> 
+		<xsl:call-template name="detail-section"> <xsl:with-param name="pName" select="$pName" 
+		/> <xsl:with-param name="pContent"> <xsl:for-each select="$pValue"> <div> 
+		<xsl:apply-templates select="." mode="highlight"> <xsl:with-param name="pFieldName" 
+		select="$pFieldName" /> </xsl:apply-templates> </div> </xsl:for-each> </xsl:with-param> 
+		</xsl:call-template> </xsl:if> </xsl:template> <xsl:template name="detail-section"> 
+		<xsl:param name="pName" /> <xsl:param name="pContent" /> <tr> <td class="detail_name"> 
+		<div class="outer"> <xsl:value-of select="$pName" /> </div> </td> <td class="detail_value"> 
+		<div class="outer"> <xsl:copy-of select="$pContent" /> </div> </td> </tr> 
+		</xsl:template> -->
 
 
 
@@ -205,31 +197,31 @@
 			<tbody>
 				<xsl:choose>
 					<!-- just one value inside database name -->
-					
+
 					<xsl:when
-						test="count($vSample/attribute/value[../@class='Database Name']/value)=1">
+						test="count($vSample/attribute/simpleValue/value[../../@class='Database Name']/value)=1">
 						<xsl:variable name="bdName"
-						select="lower-case($vSample/attribute/value[../@class='Database Name'])"></xsl:variable>
+							select="lower-case($vSample/attribute/simpleValue/value[../../@class='Database Name'])"></xsl:variable>
 						<tr>
 							<td id="td_nowrap">
 								<xsl:choose>
 									<xsl:when
-										test="$bdName =('arrayexpress','ena sra','dgva','pride') and not($vSample/attribute/value[../@class='Database URI']='')">
-										<a href="{$vSample/attribute/value[../@class='Database URI']}"
+										test="$bdName =('arrayexpress','ena sra','dgva','pride') and not($vSample/attribute/simpleValue/value[../../@class='Database URI']='')">
+										<a href="{$vSample/attribute/simpleValue/value[../../@class='Database URI']}"
 											target="ext">
 											<img src="{$basepath}/assets/images/{$bdName}_logo.gif"
-												alt="{$vSample/attribute/value[../@class='Database Name']} Link"
+												alt="{$vSample/attribute/simpleValue/value[../../@class='Database Name']} Link"
 												border="0" title="{$bdName}" />
 										</a> &nbsp;
-										<a href="{$vSample/attribute/value[../@class='Database URI']}"
+										<a href="{$vSample/attribute/simpleValue/value[../../@class='Database URI']}"
 											target="ext">
 											<xsl:value-of
-												select="$vSample//attribute/value[../@class='Database URI']"></xsl:value-of>
+												select="$vSample//attribute/simpleValue/value[../../@class='Database URI']"></xsl:value-of>
 										</a>
 									</xsl:when>
 									<xsl:when
-										test="not($vSample/attribute/value[../@class='Database URI']='')">
-										<a href="{$vSample/attribute/value[../@class='Database URI']}"
+										test="not($vSample/attribute/simpleValue/value[../../@class='Database URI']='')">
+										<a href="{$vSample/attribute/simpleValue/value[../../@class='Database URI']}"
 											target="ext">
 											<img src="{$basepath}/assets/images/generic_logo.gif"
 												border="0" title="{$bdName}" />
@@ -237,7 +229,7 @@
 										<a href="{$vSample/attribute/value[../@class='Database URI']}"
 											target="ext">
 											<xsl:value-of
-												select="$vSample//attribute/value[../@class='Database URI']"></xsl:value-of>
+												select="$vSample//attribute/simpleValue/value[../../@class='Database URI']"></xsl:value-of>
 										</a>
 									</xsl:when>
 								</xsl:choose>
@@ -250,39 +242,40 @@
 					<!-- more than one value -->
 					<xsl:otherwise>
 						<xsl:for-each
-							select="$vSample/attribute/value[../@class='Database Name']">
-							<xsl:variable name="bdName"
-								select="lower-case(.)"></xsl:variable>
-							<xsl:variable name="pos"
-								select="position()"></xsl:variable>
+							select="$vSample/attribute/simpleValue/value[../../@class='Database Name']">
+							<xsl:variable name="bdName" select="lower-case(.)"></xsl:variable>
+							<xsl:variable name="pos" select="position()"></xsl:variable>
 							<tr>
 								<td id="td_nowrap">
 									<xsl:choose>
 										<xsl:when
-											test="$bdName =('arrayexpress','ena sra','dgva','pride') and not(($vSample/attribute/value[../@class='Database URI'])[$pos]='')">
-											<a href="{($vSample/attribute/value[../@class='Database URI'])[$pos]}"
+											test="$bdName =('arrayexpress','ena sra','dgva','pride') and not(($vSample/attribute/simpleValue/value[../../@class='Database URI'])[$pos]='')">
+											<a
+												href="{($vSample/attribute/simpleValue/value[../../@class='Database URI'])[$pos]}"
 												target="ext">
 												<img src="{$basepath}/assets/images/{$bdName}_logo.gif"
-													alt="{bdName} Link"
-													border="0" title="{$bdName}" />
+													alt="{bdName} Link" border="0" title="{$bdName}" />
 											</a> &nbsp;
-											<a href="{($vSample/attribute/value[../@class='Database URI'])[$pos]}"
+											<a
+												href="{($vSample/attribute/simpleValue/value[../../@class='Database URI'])[$pos]}"
 												target="ext">
 												<xsl:value-of
-													select="($vSample//attribute/value[../@class='Database URI'])[$pos]"></xsl:value-of>
+													select="($vSample//attribute/simpleValue/value[../../@class='Database URI'])[$pos]"></xsl:value-of>
 											</a>
 										</xsl:when>
 										<xsl:when
-											test="not(($vSample/attribute/value[../@class='Database URI'])[$pos]='')">
-											<a href="{($vSample/attribute/value[../@class='Database URI'])[$pos]}"
+											test="not(($vSample/attribute/simpleValue/value[../../@class='Database URI'])[$pos]='')">
+											<a
+												href="{($vSample/attribute/simpleValue/value[../../@class='Database URI'])[$pos]}"
 												target="ext">
 												<img src="{$basepath}/assets/images/generic_logo.gif"
 													border="0" title="{$bdName}" />
 											</a> &nbsp;
-											<a href="{($vSample/attribute/value[../@class='Database URI'])[$pos]}"
+											<a
+												href="{($vSample/attribute/simpleValue/value[../../@class='Database URI'])[$pos]}"
 												target="ext">
 												<xsl:value-of
-													select="($vSample//attribute/value[../@class='Database URI'])[$pos]"></xsl:value-of>
+													select="($vSample//attribute/simpleValue/value[../../@class='Database URI'])[$pos]"></xsl:value-of>
 											</a>
 										</xsl:when>
 									</xsl:choose>
@@ -316,22 +309,22 @@
 							<xsl:choose>
 								<xsl:when test="count(.//object[@id='NCBI Taxonomy'])=0">
 
-									<a href="{.//attribute/value[../@class='Term Source URI']}"
+									<a href="{.//attribute/simpleValue/value[../../@class='Term Source URI']}"
 										target="ext">
 										<xsl:value-of
-											select=".//attribute/value[../@class='Term Source URI']"></xsl:value-of>
+											select=".//attribute/simpleValue/value[../../@class='Term Source URI']"></xsl:value-of>
 									</a>
 
 								</xsl:when>
 
 								<xsl:otherwise>
 									<a
-										href="{.//attribute/value[../@class='Term Source URI']}?term={.//attribute/value[../@class='Term Source ID']}"
+										href="{.//attribute/simpleValue/value[../../@class='Term Source URI']}?term={.//attribute/simpleValue/value[../../@class='Term Source ID']}"
 										target="ext">
 										<xsl:value-of
-											select=".//attribute/value[../@class='Term Source URI']"></xsl:value-of>
+											select=".//attribute/simpleValue/value[../../@class='Term Source URI']"></xsl:value-of>
 										?term=
-										<xsl:value-of select=".//attribute/value[../@class='Term Source ID']"></xsl:value-of>
+										<xsl:value-of select=".//attribute/simpleValue/value[../../@class='Term Source ID']"></xsl:value-of>
 									</a>
 
 								</xsl:otherwise>
@@ -357,14 +350,14 @@
 						<td id="td_nowrap">
 							<xsl:call-template name="highlight">
 								<xsl:with-param name="pText"
-									select=".//attribute/value[../@class='Term Source Name']" />
+									select=".//attribute/simpleValue/value[../../@class='Term Source Name']" />
 								<xsl:with-param name="pFieldName" select="'termsources'" />
 							</xsl:call-template>
 						</td>
 						<td id="td_nowrap">
 							<a href="{.//attribute/value[../@class='Term Source URI']}"
 								target="ext">
-								<xsl:value-of select=".//attribute/value[../@class='Term Source URI']"></xsl:value-of>
+								<xsl:value-of select=".//attribute/simpleValue/value[../../@class='Term Source URI']"></xsl:value-of>
 							</a>
 						</td>
 						<td width="100%">&nbsp;
@@ -376,17 +369,21 @@
 	</xsl:template>
 
 
-  <xsl:template name="process_multiple_values">
+	<xsl:template name="process_multiple_values">
 		<xsl:param name="pValue" />
+		<xsl:param name="pField" />
 		<table border="0" cellpadding="0" cellspacing="0"
 			id="table_inside_attr">
 			<tbody>
 				<xsl:for-each select="$pValue">
 					<tr>
-						<td id="td_nowrap">
-							<xsl:copy-of select="./text()" />
+						<td width="900">
+							<xsl:call-template name="highlight">
+								<xsl:with-param name="pText" select="." />
+								<xsl:with-param name="pFieldName" select="$pField" />
+							</xsl:call-template>
 						</td>
-						<td width="100%">&nbsp;
+						<td>&nbsp;
 						</td>
 					</tr>
 				</xsl:for-each>

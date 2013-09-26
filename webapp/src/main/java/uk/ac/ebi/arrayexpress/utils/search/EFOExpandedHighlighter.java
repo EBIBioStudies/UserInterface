@@ -61,7 +61,8 @@ public class EFOExpandedHighlighter implements IQueryHighlighter {
 		String result = "";
 		try {
 			EFOExpandableQueryInfo queryInfo = null;
-
+			//logger.debug("text->", text);
+			//logger.debug("fieldName->", fieldName);
 			if (info instanceof EFOExpandableQueryInfo) {
 				queryInfo = (EFOExpandableQueryInfo) info;
 			}
@@ -88,7 +89,7 @@ public class EFOExpandedHighlighter implements IQueryHighlighter {
 		} catch (Exception x) {
 			logger.error("Caught an exception:", x);
 		}
-
+		//logger.debug("result->"+result);
 		return result;
 	}
 

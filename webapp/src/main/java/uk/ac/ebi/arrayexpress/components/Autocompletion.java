@@ -7,7 +7,10 @@ import uk.ac.ebi.arrayexpress.utils.efo.EFONode;
 import uk.ac.ebi.arrayexpress.utils.efo.IEFO;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /*
@@ -27,131 +30,201 @@ import java.util.Set;
  *
  */
 
-public class Autocompletion extends ApplicationComponent
-{
-    private AutocompleteStore autocompleteStore;
+public class Autocompletion extends ApplicationComponent {
+	private Map<String, AutocompleteStore> autocompleteStore;
 
-    private BioSamplesGroup bioSamplesGroup;
-    private SearchEngine search;
-    private IEFO efo;
+	private BioSamplesGroup bioSamplesGroup;
+	private BioSamplesSample bioSamplesSample;
+	private SearchEngine search;
+	private IEFO efo;
 
-    public Autocompletion()
-    {
-    }
+	public Autocompletion() {
+	}
 
-    public void initialize() throws Exception
-    {
-        this.autocompleteStore = new AutocompleteStore();
+	public void initialize() throws Exception {
 
-        this.bioSamplesGroup = (BioSamplesGroup) getComponent("BioSamplesGroup");
-        this.search = (SearchEngine) getComponent("SearchEngine");
-    }
+		// TODO:The EFO is repeated in each index (I dont know if it will works
+		// so, for now, I will do it in a easiest way)
+		this.autocompleteStore = new HashMap<String, AutocompleteStore>();
 
-    public void terminate() throws Exception
-    {
-    }
+		this.bioSamplesGroup = (BioSamplesGroup) getComponent("BioSamplesGroup");
+		this.bioSamplesSample = (BioSamplesSample) getComponent("BioSamplesSample");
+		this.search = (SearchEngine) getComponent("SearchEngine");
 
-    private IEFO getEfo()
-    {
-        return this.efo;
-    }
+		this.autocompleteStore.put(bioSamplesGroup.INDEX_ID,
+				new AutocompleteStore());
+		this.autocompleteStore.put(bioSamplesSample.INDEX_ID,
+				new AutocompleteStore());
 
-    public void setEfo( IEFO efo )
-    {
-        this.efo = efo;
-    }
+	}
 
-    public String getKeywords( String prefix, String field, Integer limit )
-    {
-        StringBuilder sb = new StringBuilder("");
-        List<AutocompleteData> matches = getStore().findCompletions(prefix, field, limit);
-        for (AutocompleteData match : matches) {
-            sb.append(match.getText()).append('|').append(match.getDataType()).append('|').append(match.getData()).append('\n');
-        }
-        return sb.toString();
-    }
+	public void terminate() throws Exception {
+	}
 
-    public String getEfoChildren( String efoId )
-    {
-        StringBuilder sb = new StringBuilder();
+	private IEFO getEfo() {
+		return this.efo;
+	}
 
-        if (null != getEfo()) {
-            EFONode node = getEfo().getMap().get(efoId);
-            if (null != node) {
-                Set<EFONode> children = node.getChildren();
-                if (null != children) {
-                    for (EFONode child : children) {
-                        sb.append(child.getTerm()).append("|o|");
-                        if (child.hasChildren()) {
-                            sb.append(child.getId());
-                        }
-                        sb.append("\n");
-                    }
-                }
-            }
-        }
-        return sb.toString();
-    }
+	public void setEfo(IEFO efo) {
+		this.efo = efo;
+	}
 
-    public void rebuild() throws IOException
-    {
-        getStore().clear();
+	public String getKeywords(String IndexId, String prefix, String field,
+			Integer limit) {
+		StringBuilder sb = new StringBuilder("");
+		List<AutocompleteData> matches = getStore(IndexId).findCompletions(
+				prefix, field, limit);
+		for (AutocompleteData match : matches) {
+			sb.append(match.getText()).append('|').append(match.getDataType())
+					.append('|').append(match.getData()).append('\n');
+		}
+		return sb.toString();
+	}
 
-        // adding field terms (for all non-numerical fields) and names (if there is a description)
-        Set<String> fields = search.getController().getFieldNames(bioSamplesGroup.INDEX_ID);
-        for (String field : fields) {
-            String fieldTitle = search.getController().getFieldTitle(bioSamplesGroup.INDEX_ID, field);
-            if (null != fieldTitle && fieldTitle.length() > 0) {
-                getStore().addData(
-                        new AutocompleteData(
-                                field
-                                , AutocompleteData.DATA_FIELD
-                                , fieldTitle
-                        )
-                );
-            }
-            String fieldType = search.getController().getFieldType(bioSamplesGroup.INDEX_ID, field);
-            if (null != fieldType && !"integer".equals(fieldType) && search.getController().isFieldAutoCompletion(bioSamplesGroup.INDEX_ID, field)) {
-                for (String term : search.getController().getTerms(bioSamplesGroup.INDEX_ID, field, "keywords".equals(field) ? 10 : 1)) {
-                    getStore().addData(
-                            new AutocompleteData(
-                                    term
-                                    , AutocompleteData.DATA_TEXT
-                                    , field
-                            )
-                    );
-                }
-            }
-        }
+	public String getEfoChildren(String efoId) {
+		StringBuilder sb = new StringBuilder();
 
-        if (null != getEfo()) {
-            addEfoNodeWithDescendants(IEFO.ROOT_ID);
-        }
-    }
+		if (null != getEfo()) {
+			EFONode node = getEfo().getMap().get(efoId);
+			if (null != node) {
+				Set<EFONode> children = node.getChildren();
+				if (null != children) {
+					for (EFONode child : children) {
+						sb.append(child.getTerm()).append("|o|");
+						if (child.hasChildren()) {
+							sb.append(child.getId());
+						}
+						sb.append("\n");
+					}
+				}
+			}
+		}
+		return sb.toString();
+	}
 
-    private void addEfoNodeWithDescendants( String nodeId )
-    {
-        EFONode node = getEfo().getMap().get(nodeId);
-        // make node expandable only if it has children and not organizational class
-        if (null != node) {
-            getStore().addData(
-                    new AutocompleteData(
-                            node.getTerm()
-                            , AutocompleteData.DATA_EFO_NODE
-                            , node.hasChildren() && !node.isOrganizationalClass() ? node.getId() : ""
-                    )
-            );
+	// TODO: this in being called associated to BioSampleGroup, but now is
+	// relates also to BioSamplesSample - I need to change this
+	public void rebuild() throws IOException {
+		rebuildBioSamplesGroup();
+		rebuildBioSamplesSample();
+	}
 
-            if (node.hasChildren()) {
-                for (EFONode child : node.getChildren()) {
-                    addEfoNodeWithDescendants(child.getId());
-                }
-            }
-        }
-    }
+	public void rebuildBioSamplesGroup() throws IOException {
+		if (getStore(bioSamplesGroup.INDEX_ID) != null) {
+			getStore(bioSamplesGroup.INDEX_ID).clear();
+		}
 
-    private AutocompleteStore getStore()
-    {
-        return this.autocompleteStore;
-    }
+		Set<String> fields = search.getController().getFieldNames(
+				bioSamplesGroup.INDEX_ID);
+		for (String field : fields) {
+			String fieldTitle = search.getController().getFieldTitle(
+					bioSamplesGroup.INDEX_ID, field);
+			if (null != fieldTitle && fieldTitle.length() > 0) {
+				getStore(bioSamplesGroup.INDEX_ID).addData(
+						new AutocompleteData(field,
+								AutocompleteData.DATA_FIELD, fieldTitle));
+			}
+			String fieldType = search.getController().getFieldType(
+					bioSamplesGroup.INDEX_ID, field);
+			if (null != fieldType
+					&& !"integer".equals(fieldType)
+					&& search.getController().isFieldAutoCompletion(
+							bioSamplesGroup.INDEX_ID, field)) {
+				for (String term : search.getController().getTerms(
+						bioSamplesGroup.INDEX_ID, field,
+						"keywords".equals(field) ? 10 : 1)) {
+					getStore(bioSamplesGroup.INDEX_ID).addData(
+							new AutocompleteData(term,
+									AutocompleteData.DATA_TEXT, field));
+				}
+			}
+		}
+		// TODO:The EFO is repeated in each index
+		if (null != getEfo()) {
+			addEfoNodeWithDescendants(bioSamplesGroup.INDEX_ID, IEFO.ROOT_ID);
+		}
+	}
+
+	public void rebuildBioSamplesSample() throws IOException {
+		if (getStore(bioSamplesSample.INDEX_ID) != null) {
+			getStore(bioSamplesSample.INDEX_ID).clear();
+		}
+		Set<String> fields = search.getController().getFieldNames(
+				bioSamplesSample.INDEX_ID);
+		for (String field : fields) {
+			String fieldTitle = search.getController().getFieldTitle(
+					bioSamplesSample.INDEX_ID, field);
+			if (null != fieldTitle && fieldTitle.length() > 0) {
+				getStore(bioSamplesSample.INDEX_ID).addData(
+						new AutocompleteData(field,
+								AutocompleteData.DATA_FIELD, fieldTitle));
+			}
+			String fieldType = search.getController().getFieldType(
+					bioSamplesSample.INDEX_ID, field);
+			if (null != fieldType
+					&& !"integer".equals(fieldType)
+					&& search.getController().isFieldAutoCompletion(
+							bioSamplesSample.INDEX_ID, field)) {
+				for (String term : search.getController().getTerms(
+						bioSamplesSample.INDEX_ID, field,
+						"keywords".equals(field) ? 10 : 1)) {
+					getStore(bioSamplesSample.INDEX_ID).addData(
+							new AutocompleteData(term,
+									AutocompleteData.DATA_TEXT, field));
+					//System.out.println("add->" +field+"-->" + term );
+				}
+			}
+		}
+
+		// System.out.println("autocompletion rebuild");
+		Iterator<String> itr = search.getController()
+				.getFields(bioSamplesSample.INDEX_ID).iterator();
+		while (itr.hasNext()) {
+			String field = itr.next();
+			//If exists on the configuration I Will igone it (it was added previously)
+			if (!field.endsWith("sort") && !search.getController().doesFieldExist(bioSamplesSample.INDEX_ID, field)) {
+				getStore(bioSamplesSample.INDEX_ID).addData(
+						new AutocompleteData(field,
+								AutocompleteData.DATA_FIELD, ""));
+				
+				for (String term : search.getController().getTerms(
+						bioSamplesSample.INDEX_ID, field,
+						"keywords".equals(field) ? 10 : 1)) {
+					getStore(bioSamplesSample.INDEX_ID).addData(
+							new AutocompleteData(term,
+									AutocompleteData.DATA_TEXT, field));
+					//System.out.println("add->" +field+"-->" + term );
+				}
+				//System.out.println("fieldName->" + field);
+			}
+		}
+
+		// TODO:The EFO is repeated in each index
+		if (null != getEfo()) {
+			addEfoNodeWithDescendants(bioSamplesSample.INDEX_ID, IEFO.ROOT_ID);
+		}
+	}
+
+	private void addEfoNodeWithDescendants(String indexId, String nodeId) {
+		EFONode node = getEfo().getMap().get(nodeId);
+		// make node expandable only if it has children and not organizational
+		// class
+		if (null != node) {
+			getStore(indexId).addData(
+					new AutocompleteData(node.getTerm(),
+							AutocompleteData.DATA_EFO_NODE, node.hasChildren()
+									&& !node.isOrganizationalClass() ? node
+									.getId() : ""));
+
+			if (node.hasChildren()) {
+				for (EFONode child : node.getChildren()) {
+					addEfoNodeWithDescendants(indexId, child.getId());
+				}
+			}
+		}
+	}
+
+	private AutocompleteStore getStore(String indexId) {
+		return this.autocompleteStore.get(indexId);
+	}
 }

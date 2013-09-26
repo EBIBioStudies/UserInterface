@@ -22,14 +22,16 @@ var anchor = decodeURI(window.location.hash);
 var sortDefault = {
 	relevance : "descending",
 	accession : "ascending",
-	title : "ascending",
-	samples : "descending"
+	description : "ascending",
+	org : "ascending",
+	groups : "ascending"
 };
 
 var sortTitle = {
 	accession : "accession",
-	title : "title",
-	samples : "number of samples"
+	description : "description",
+	org : "organism",
+	groups : "groups"
 };
 
 // var sortBy = "id";
@@ -94,7 +96,7 @@ $(function() {
 			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
 			pageSize).toString();
 
-	var urlPage = "group/browse-table.html" + newQuery;
+	var urlPage = "sample/browse-table.html" + newQuery;
 	// alert(urlPage);
 
 	// initialize the keywords input with the search string from the homepage
@@ -103,16 +105,16 @@ $(function() {
 	// initialize the sortby
 	$("#sortby").removeAttr("disabled").val(getQueryStringParam("sortby", ""));
 
-	QuerySampleGroup(urlPage);
+	QuerySample(urlPage);
 	// added autocompletion
 	var basePath = decodeURI(window.location.pathname).replace(/\/\w+\.\w+$/,
 			"/");
 	// alert(basePath);
-	$("#bs_keywords_field").autocomplete(basePath + "keywords.txt", {
+	$("#bs_keywords_field").autocomplete(basePath + "keywords.txt?domain=biosamplessample", {
 		matchContains : false,
 		selectFirst : false,
 		scroll : true,
-		max : 50,
+		max : 250,
 		requestTreeUrl : basePath + "efotree.txt"
 	});
 });
@@ -125,7 +127,7 @@ if (typeof (window.history.pushState) == 'function') {
 		if (state != null) {
 			// alert("estado pro qual eu quero ir->" +state);
 			removeAllSortingIndications();
-			QuerySampleGroup(state.url);
+			QuerySample(state.url);
 			sortBy = state.sortby;
 			sortOrder = state.sortorder;
 			// alert(state.sortby + state.sortorder + "###" + state.url);
@@ -134,7 +136,7 @@ if (typeof (window.history.pushState) == 'function') {
 	});
 }
 
-function QuerySampleGroup(url) {
+function QuerySample(url) {
 	// alert("QuerySampleGroup2->" + url);
 	$
 			.get(
@@ -176,7 +178,7 @@ function QuerySampleGroup(url) {
 							$(".bs-stats").html(
 									" Showing <span>" + from + " - " + to
 											+ "</span> of <span>" + total
-											+ "</span> SampleGroups");
+											+ "</span> Samples");
 
 							if (totalPages > 1) {
 								var pagerHtml = "Page ";
@@ -232,7 +234,7 @@ function QuerySampleGroup(url) {
 
 						} else {
 							// Clean the paging information
-							$(".bs-stats").html("No SampleGroups found.");
+							$(".bs-stats").html("No Samples found.");
 							$(".bs-page-size").html("&nbsp;");
 							$(".bs-pager").html("&nbsp;");
 						}
@@ -254,7 +256,7 @@ function goToPage(pPage) {
 	var newQuery = $.query.set("keywords", keywords).set("sortby", sortBy).set(
 			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
 			pageSize).toString();
-	var urlPage = "group/browse-table.html" + newQuery;
+	var urlPage = "sample/browse-table.html" + newQuery;
 	if (typeof (window.history.pushState) == 'function') {
 		// mantain the history on browser ans also change the URL for history
 		// favorites purpose
@@ -266,7 +268,7 @@ function goToPage(pPage) {
 			sortorder : sortOrder
 		}, "", urlState);
 	}
-	QuerySampleGroup(urlPage);
+	QuerySample(urlPage);
 }
 
 function goToPageSize(pPageSize) {
@@ -275,12 +277,12 @@ function goToPageSize(pPageSize) {
 	var newQuery = $.query.set("keywords", keywords).set("sortby", sortBy).set(
 			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
 			pageSize).toString();
-	var urlPage = "group/browse-table.html" + newQuery;
+	var urlPage = "sample/browse-table.html" + newQuery;
 
 	if (typeof (window.history.pushState) == 'function') {
 		// mantain the history on browser ans also change the URL for history
 		// favorites purpose
-		var urlState = "browse.html" + newQuery;
+		var urlState = "browse_samples.html" + newQuery;
 		// I will use the urlPage to reload the data on poststate event
 		window.history.pushState({
 			url : urlPage,
@@ -288,7 +290,7 @@ function goToPageSize(pPageSize) {
 			sortorder : sortOrder
 		}, "", urlState);
 	}
-	QuerySampleGroup(urlPage);
+	QuerySample(urlPage);
 }
 
 function getQueryStringParam(paramName, defaultValue) {
@@ -335,12 +337,12 @@ function aeSort(psortby) {
 
 	// var pageName =
 	// /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
-	var urlPage = "group/browse-table.html" + newQuery;
+	var urlPage = "sample/browse-table.html" + newQuery;
 
 	if (typeof (window.history.pushState) == 'function') {
 		// mantain the history on browser ans also change the URL for history
 		// favorites purpose
-		var urlState = "browse.html" + newQuery;
+		var urlState = "browse_samples.html" + newQuery;
 		// I will use the urlPage to reload the data on poststate event
 		window.history.pushState({
 			url : urlPage,
@@ -349,7 +351,7 @@ function aeSort(psortby) {
 		}, "", urlState);
 	}
 
-	QuerySampleGroup(urlPage);
+	QuerySample(urlPage);
 	addSortingIndication(sortBy, sortOrder);
 
 	// window.location.href = urlPage;

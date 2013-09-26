@@ -83,14 +83,14 @@ public class IndexEnvironmentBiosamplesGroup extends AbstractIndexEnvironment {
 		// Collection coll=null;
 		// getInfoDB();
 		// search
-		if (!map.containsKey("id")) {
+		if (!map.containsKey("accession")) {
 			totalRes.append("<biosamples><all>");
 			for (int i = initialExp; i < finalExp; i++) {
 
 				int docId = hits[i].doc;
 				Document doc = isearcher.doc(docId);
 				totalRes.append("<SampleGroup>");
-				totalRes.append("<id>" + doc.get("id") + "</id>");
+				totalRes.append("<id>" + doc.get("accession") + "</id>");
 				totalRes.append("<description>"
 						+ StringEscapeUtils.escapeXml(doc.get("title"))
 						//+ doc.get("title")
@@ -119,7 +119,7 @@ public class IndexEnvironmentBiosamplesGroup extends AbstractIndexEnvironment {
 
 					int docId = hits[i].doc;
 					Document doc = isearcher.doc(docId);
-					totalRes.append("'" + doc.get("id") + "'");
+					totalRes.append("'" + doc.get("accession") + "'");
 					// totalRes.append("'" + doc.get("id") + "'");
 					if (i != (finalExp - 1)) {
 						totalRes.append(",");
@@ -137,8 +137,8 @@ public class IndexEnvironmentBiosamplesGroup extends AbstractIndexEnvironment {
 				set = service
 						.query("<biosamples><all>{for $x in "
 								+ totalRes.toString()
-								+ " let $group:=/Biosamples/SampleGroup[@id=($x)]"
-								+ " return <SampleGroup samplecount=\"{count($group/Sample)}\"> {$group/(@*, * except Sample)} <Samples>{distinct-values($group/Sample/@id)}</Samples></SampleGroup> "
+								+ " let $group:=//SampleGroup[@id=($x)]"
+								+ " return $group "
 								+ " }</all></biosamples>");
 				// +
 				// " return <SampleGroup samplecount=\"{count($group/Sample)}\"> {$group/(@*, * except Sample)} <attributes>{distinct-values($group/Sample/attribute[@dataType!='INTEGER']/replace(@class, ' ' , '-'))} </attributes> <attributesinteger>{distinct-values($group/Sample/attribute[@dataType='INTEGER']/replace(@class, ' ' , '-'))} </attributesinteger></SampleGroup> "

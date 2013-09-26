@@ -112,7 +112,7 @@
 					<a href="{$basepath}/group/{id}?keywords={$vkeywords}">
 						<xsl:call-template name="highlight">
 							<xsl:with-param name="pText" select="id" />
-							<xsl:with-param name="pFieldName" select="'id'" />
+							<xsl:with-param name="pFieldName" select="'accession'" />
 						</xsl:call-template>
 					</a>
 				</div>

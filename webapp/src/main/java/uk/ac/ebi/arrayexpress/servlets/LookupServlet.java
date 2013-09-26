@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.ebi.arrayexpress.app.ApplicationServlet;
 import uk.ac.ebi.arrayexpress.components.Autocompletion;
+import uk.ac.ebi.arrayexpress.components.BioSamplesGroup;
 import uk.ac.ebi.arrayexpress.utils.RegexHelper;
 
 public class LookupServlet extends ApplicationServlet {
@@ -88,9 +89,14 @@ public class LookupServlet extends ApplicationServlet {
 		try {
 			Autocompletion autocompletion = (Autocompletion) getComponent("Autocompletion");
 			if (type.equals("keywords")) {
+				BioSamplesGroup bioSamplesGroup = (BioSamplesGroup) getComponent("BioSamplesGroup");
+				//by defaul the domain is the BioSamplesGroup.INDEX_ID
+				String domain = (null != request.getParameter("domain") ? request
+						.getParameter("domain") : bioSamplesGroup.INDEX_ID);
+				logger.debug("DOMAINS->"+domain);
 				String field = (null != request.getParameter("field") ? request
 						.getParameter("field") : "");
-				out.print(autocompletion.getKeywords(query, field, limit));
+				out.print(autocompletion.getKeywords(domain, query, field, limit));
 			} else if (type.equals("efotree")) {
 				out.print(autocompletion.getEfoChildren(efoId));
 			}

@@ -100,22 +100,22 @@
 			defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">		
 		
 		
-
+		
 	
 		
 			<!--  <document path="/Biosamples/SampleGroup[@id='SAMEG82627']" defaultField="keywords"> -->
-	<document path="/Biosamples/SampleGroup[@id!='test1.sg1' and @id!='test1.sg2']" defaultField="keywords">
+	<document path="/Biosamples/SampleGroups/SampleGroup[starts-with(@id,'SAM')]" defaultField="keywords">
 				<!-- I also want to search in the attributes name, so I will add it to the keywords -->
-				<field name="keywords" type="string" path="concat(string-join(.//Sample/attribute/@class, ' '),string-join(.//text(), ' '))"
+				<field name="keywords" type="string" path="concat(string-join(.//Sample/attribute/@class, ' '),string-join(.//text(), ' '),@id)"
 					analyze="true"
 					analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer"
 					autocompletion="true" store="false" escape="false" />
-				<field name="id" title="by Id" type="string" path="@id"
+				<field name="accession" title="by Accession" type="string" path="@id"
 					analyze="true" store="true" autocompletion="true" escape="false"
-					sortfields="idsort" />
+					sortfields="accessionsort" />
 				<!-- The sortfields must have this pproperties analyze="false" store="false" 
 					escape="false" -->
-				<field name="idsort" title="by Id" type="integer" path="substring(@id,6) cast as xs:integer"
+				<field name="accessionsort" title="by Accession" type="integer" path="substring(@id,6) cast as xs:integer"
 					analyze="false" store="false" escape="false" />
 					
 				<!-- Security - authorization-->
@@ -125,56 +125,56 @@
 							
 				<!-- this field is only used for incremental updates -->
 				<field name="delete" type="boolean" path="@delete = 'true'"/>	
-					
+				<field name="releasedate" title="by Release Date" type="string"
+					path="attribute/simpleValue/value[../../@class='Submission Release Date']" analyze="true"
+					store="true" escape="false" autocompletion="true" sortfields="releasedate" />
+				<field name="updatedate" title="by Update Date" type="string"
+					path="attribute/simpleValue/value[../../@class='Submission Update Date']" analyze="true"
+					store="true" escape="false" autocompletion="true" sortfields="updatedate" />			
 				<field name="description" title="by Description" type="string"
-					path="attribute/value[../@class='Submission Description']" analyze="true"
+					path="attribute/simpleValue/value[../../@class='Submission Description']" analyze="true"
 					store="true" escape="false" autocompletion="true" sortfields="description" />
 				<field name="name" title="by Name" type="string"
-					path="attribute/value[../@class='Name']" analyze="true" store="false"
+					path="attribute/simpleValue/value[../../@class='Name']" analyze="true" store="false"
 					escape="false" autocompletion="true" sortfields="description" />
 				<field name="title" title="by Title" type="string"
-					path="attribute/value[../@class='Submission Title']" analyze="true"
+					path="attribute/simpleValue/value[../../@class='Submission Title']" analyze="true"
 					store="true" escape="false" autocompletion="true" sortfields="title"/>
 				<field name="identifier" title="by Identifier" type="string"
-					path="attribute/value[../@class='Submission Identifier']" analyze="true"
+					path="attribute/simpleValue/value[../../@class='Submission Identifier']" analyze="true"
 					store="false" escape="false" />
 					<!-- version is not visible on the GUI - [PT:39779087] -->
 				<!-- <field name="version" title="by Version" type="string"
 					path="attribute/value[../@class='Submission Version']" analyze="true"
 					store="false" escape="false" /> -->
-				<field name="modificationdate" title="by Modification date" type="string"
-					path="attribute/value[../@class='Submission Update Date']"
-					analyze="true" store="false" escape="false" />
-				<field name="releasedate" title="by Release Date" type="string"
-					path="attribute/value[../@class='Submission Release Date']"
-					analyze="true" store="false" escape="false" />
 				<field name="databases" title="by Databases" type="string"
-					path="attribute/value[../@class='Databases']//value" analyze="true"
+					path="attribute/objectValue[../@class='Databases']//value" analyze="true"
 					store="false" escape="false" />
 				<field name="organizations" title="by Organizations" type="string"
-					path="attribute/value[../@class='Organizations']//value" analyze="true"
+					path="attribute/objectValue[../@class='Organizations']//value" analyze="true"
 					store="false" escape="false" />
 				<field name="publications" title="by Publications" type="string"
-					path="attribute/value[../@class='Publications']//value" analyze="true"
+					path="attribute/objectValue[../@class='Publications']//value" analyze="true"
 					store="false" escape="false" />
 				<!-- change to people -->
 				<field name="persons" title="by Persons" type="string"
-					path="attribute/value[../@class='Persons']//value" analyze="true"
+					path="attribute/objectValue[../@class='Persons']//value" analyze="true"
 					store="false" escape="false" />
 				<field name="termsources" title="by Term Sources" type="string"
-					path="attribute/value[../@class='Term Sources']//value" analyze="true"
+					path="attribute/objectValue[../@class='Term Sources']//value" analyze="true"
 					store="false" escape="false" />
 					
 				
 				<!-- used to order the search using the number os samples --> <!-- never forget the cast as xs:integer -->
 				<field name="samples" title="by Number of Samples" type="integer" 
-					path="(count(Sample)) cast as xs:integer" sortfields="samples" />
-		
+					path="(count(SampleIds/Id)) cast as xs:integer" sortfields="samples" />
+				<field name="sampleaccession" title="by Sample Accession" type="string" path="SampleIds/Id"
+					analyze="true" store="true" escape="false" />
 				<!-- Reference -->
 				<!-- used to order the search using the numer os samples -->
 	<!-- 			<attribute class="Submission Reference Layer" classDefined="true" dataType="BOOLEAN">
     <value>true</value> -->
-				<field name="reference" type="boolean" path="attribute/value[../@class='Submission Reference Layer']//value = 'true'"/>
+				<field name="reference" type="boolean" path="attribute/simpleValue/value[../../@class='Submission Reference Layer']//value = 'true'"/>
 			</document>
 		</index>
 
@@ -183,11 +183,11 @@
 			defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
 
 <!--  <document path="/Biosamples/SampleGroup/Sample[@groupId='SAMEG82627']" 	 -->
-	  <document path="/Biosamples/SampleGroup[@id!='test1.sg1' and @id!='test1.sg2']/Sample"  				 
+	  <document path="/Biosamples/Samples/Sample[starts-with(@id,'SAM')]"  				 
 				 defaultField="keywords">
 				
 				<!-- I also want to search in the attributes name, so I will add it to the keywords -->
-				<field name="keywords" type="string" path="concat(string-join(.//attribute/@class, ' '),string-join(.//text(), ' '))"
+				<field name="keywords" type="string" path="concat(string-join(.//attribute/@class, ' '),string-join(.//text(), ' '), @id)"
 					analyze="true"
 					analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer"
 					autocompletion="true" store="false" escape="false" />
@@ -195,40 +195,55 @@
 			
 				
 			<!-- 	<field name="allele" type="string" path="attribute/value[../@class='Allele Name']"
-					analyze="true" store="false" escape="false" sortfields="allele" /> -->
-				
+					analyze="true" store="false" escape="false" sortfields="allele" /> -->				
 				<!-- Security - authorization-->
 				<field name="userid" type="string" path="user/@id" analyze="false" store="false" escape="false"/>
 				<!-- Security - authorization-->				
-				
-				<field name="name" type="string" path="attribute/value[../@class='Name']"
+			
+				<field name="name" type="string" path="attribute/simpleValue/value[../@class='Name']"
 					analyze="true" store="false" escape="false" sortfields="name" />
 				<!-- combine BioSamples and NCBI Samples -->
-				<field name="accession" type="string" path="@id" analyze="true" 
+				<field name="accession" type="string" path="@id" title="by Accession" analyze="true" 
 					store="true" escape="false" sortfields="accessionsort" /> 
 				<field name="accessionsort" 
-					title="by Accession" type="integer" path="if(starts-with(@id,'SAMN')) then substring-after(@id,'SAMN') cast as xs:integer else substring(@id,6) cast as xs:integer" 
+					 type="integer" path="if(starts-with(@id,'SAMN')) then substring-after(@id,'SAMN') cast as xs:integer else substring(@id,6) cast as xs:integer" 
 					analyze="false" store="false" escape="false" /> 
-				<field name="sampleaccession" type="string"
-					path="attribute/value[../@class='Sample Accession']" analyze="true"
-					store="true" escape="false" sortfields="accession" />
-				<field name="samplegroup" type="string" path="@groupId"
-					analyze="true" store="false" escape="false" />
-				<!-- I always have this field in samples list -->
-				<field name="0" type="string"
-					path="attribute/value[../@class='Sample Accession']" analyze="true"
-					store="false" escape="false" sortfields="0" />
-	
+				<!-- those are used to browse sample page - I dont want to query the DB -->
+				<field name="org" type="string"
+					path="attribute/simpleValue/value[../../@class='Organism']" analyze="true"
+					store="true" escape="false"/>				
+				<field name="description" type="string"
+					path="string(attribute/simpleValue/value[../../@class='Sample Name'])" analyze="true"
+					store="true" escape="false"/>
+				<!-- those are used to browse sample page - I dont want to query the DB -->
+					
+				<!-- those are used to browse sample page - I dont want to query the DB -->		
+				<!-- <field name="samplegroup" type="string" path="@groupId"
+					analyze="true" store="false" escape="false" /> -->
+				<field name="groupaccession" title="by SampleGroup Accession" type="string" path="GroupIds/Id"
+					analyze="true" store="true" escape="false" />
+				<!-- used to order the search using the number of groups --> <!-- never forget the cast as xs:integer -->
+				<field name="groups" title="by Number of SampleGroups" type="integer" 
+					path="(count(GroupIds/Id)) cast as xs:integer" sortfields="groups" />
+			
+			
 					<!-- this field is only used for incremental updates -->
 				<field name="delete" type="boolean" path="@delete = 'true'"/>	
-	
 			
 				<!-- dynamic sort -->				
 				<field name="attributes" type="string" path="attribute"
-					process="true" analyze="true" store="false" escape="false" />
-					
+					process="true" analyze="true" store="false" escape="false"/>
+				<!-- I will use those expression during the processing of attributes  - they are not used during the searches-->	
+				<field name="attributeName" type="string" path="@class"
+					process="true" analyze="true" store="false" escape="false"/>
+				<field name="attributeType" type="string" path="@dataType"
+					process="true" analyze="true" store="false" escape="false"/>
+				<field name="attributeValue" type="string" path="simpleValue/value/text()[last()]"
+					process="true" analyze="true" store="false" escape="false"/>
+				<!-- I will use those expression during the processing of attributes  - they are not used during the searches-->		
+									
 				<!-- //this is just for sorting -->	
-				<field name="1" type="string" process="true" path="''"
+		<!-- 		<field name="1" type="string" process="true" path="''"
 					analyze="true" store="false" escape="false" sortfields="1" />
 				<field name="2" type="string" process="true" path="''"
 					analyze="true" store="false" escape="false" sortfields="2" />
@@ -308,7 +323,7 @@
 					analyze="true" store="false" escape="false" sortfields="39" />
 				<field name="40" type="string" process="true" path="''"
 					analyze="true" store="false" escape="false" sortfields="40" />
-
+ -->
 				<!-- dynamic sort -->				
 		
 			</document>

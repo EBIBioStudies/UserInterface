@@ -25,7 +25,7 @@ var anchor = decodeURI(window.location.hash);
 // If you need to change it here, be careful and change it also in the
 // biosamplesgroup-html.xsl
 var sortDefault = {
-	"sampleaccession" : "ascending",
+	"accession" : "ascending",
 	"1" : "ascending",
 	"2" : "ascending",
 	"3" : "ascending",
@@ -77,13 +77,13 @@ var sortTitle = {
 };
 
 // these are used when i make a new query in samples
-var sortByDefault = "sampleaccession";
+var sortByDefault = "accession";
 var sortOrderDefault = sortDefault[sortByDefault];
 var pageInitDefault = "1";
 
 // these are used to mantain the current srt and order (they are reset when I
 // make a new search)
-var sortBy = "sampleaccession";
+var sortBy = "accession";
 var sortOrder = sortDefault[sortBy];
 
 var pageInit = pageInitDefault;
@@ -149,7 +149,7 @@ $(function() {
 	/* hint to the lucene highlight */
 	// if (-1 == url.indexOf("browse")) {
 	var keywordsFixed = $.query.get("keywords");
-	// If I was filtering the seach for some field I will not apply a search to
+	// If I was filtering the search for some field I will not apply a search to
 	// the samples
 	var aux = keywordsFixed.match(/\s*\w\s*:\s*\w/g);
 	if (aux != null) {
@@ -167,11 +167,12 @@ $(function() {
 	var basePath = decodeURI(window.location.pathname).replace(/\/\w+\.\w+$/,
 			"/");
 	// alert(basePath);
-	$("#bs_keywords_field").autocomplete("../" + "keywords.txt", {
+	$("#bs_keywords_field").autocomplete("../" + "keywords.txt?domain=biosamplessample", {
 		matchContains : false,
 		selectFirst : false,
 		scroll : true,
-		max : 50,
+		max : 250,
+		fields: getFields(),
 		requestTreeUrl : "../" + "efotree.txt"
 	});
 	// }
@@ -191,6 +192,35 @@ $(function() {
 			});
 
 });
+
+//function used to filter the fields on the autocomplete
+function getFields(){
+	var arrayFields=[];
+	var field="";
+	// I'm using textContent because innerText doesnt work on FireFox
+	for (i = 0; i < ($("div.table_header_inner").length); i++) {
+		var hasInnerText = ($("div.table_header_inner")[i].innerText != undefined) ? true
+				: false;
+		if (hasInnerText) {
+			field= $("div.table_header_inner")[i].innerText; 
+		} else {
+			field= $("div.table_header_inner")[i].textContent; // +
+		}
+		arrayFields[i]=field.trim().toLowerCase();
+
+	}
+	//alert("arrayFields->"+arrayFields);
+	return arrayFields;
+}
+
+
+
+//this function is called by juqery.autocomplete-ebi.js 
+function isElementOnArray(arr, obj) {
+    for(var i=0; i<arr.length; i++) {
+        if (arr[i] == obj) return true;
+    }
+}
 
 // var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
 
@@ -447,18 +477,20 @@ function updateSamplesList(urlPage) {
 											$(aux).innerHeight());
 
 								});
-						
-						//must be updated here, after all content has been loaded
+
+						// must be updated here, after all content has been
+						// loaded
 						var tableWidth = $("#attr_table").width(); // 
-						//alert("dynamic table width->" + tableWidth);
+						// alert("dynamic table width->" + tableWidth);
 						$("#div_top_scroll").css('width', tableWidth);
 
 					});
-	
-//	// manage 2 scrolbars
-//	var tableWidth = $("#attr_table").width(); // 
-//	alert("dynamic table width->" + tableWidth);
-//	jQuery("#div_top_scroll").css('width', tableWidth);//define the sizes of fake top scrllbar bar div based on table size - has to be dynamic
+
+	// // manage 2 scrolbars
+	// var tableWidth = $("#attr_table").width(); //
+	// alert("dynamic table width->" + tableWidth);
+	// jQuery("#div_top_scroll").css('width', tableWidth);//define the sizes of
+	// fake top scrllbar bar div based on table size - has to be dynamic
 
 }
 
@@ -562,10 +594,12 @@ function aeSort(psortby) {
 
 	removeAllSortingIndications();
 
+	var sortbyText = convertSortNumberInText(sortBy);
+
 	var newQuery = $.query.set("keywords",
 			document.forms['bs_query_form'].bs_keywords_field.value).set(
-			"sortby", sortBy).set("sortorder", sortOrder).set("page", pageInit)
-			.set("pagesize", pageSize).toString();
+			"sortby", sortbyText).set("sortorder", sortOrder).set("page",
+			pageInit).set("pagesize", pageSize).toString();
 
 	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
 	// alert(pageName);
@@ -597,10 +631,38 @@ function aeSort(psortby) {
 
 }
 
+function convertSortNumberInText(sortBy) {
+
+	var thElt = $("#bs_results_header_" + sortBy);
+	var ret = "";
+
+	if (null != thElt) {
+		var divElt = thElt.find("div.table_header_inner");
+		if (null != divElt) {
+			// I'm using textContent because innerText doesnt work on
+			// FireFox
+			var hasInnerText = ($("div.table_header_inner")[0].innerText != undefined) ? true
+					: false;
+			if (hasInnerText) {
+				ret = divElt[0].innerText;
+			} else {
+				ret = divElt[0].textContent;
+
+			}
+
+		}
+		ret=ret.trim().toLowerCase();;
+		//I cannot send fiels with spaces
+	}
+	//alert("retconvert->"+ ret);
+	return ret;
+}
+
 function addSortingIndication() {
 	// I just put the orientation after the query return the results (before I
 	// clean all the asc and desc of all the columns, after I make the query and
 	// at the end i Put the correct one)
+	// var sortByValidString=sortBy.replace(/\[/,"\\[").replace(/\]/,"\\]");
 	var thElt = $("#bs_results_header_" + sortBy);
 
 	if (null != thElt) {
@@ -608,7 +670,7 @@ function addSortingIndication() {
 		if ("" != sortOrder) {
 			var divElt = thElt.find("div.table_header_inner");
 			if (null != divElt) {
-				// alert("div.table_header_inner not null");
+				//alert("div.table_header_inner not null");
 				// alert(divElt[0]);
 				// I'm using textContent because innerText doesnt work on
 				// FireFox
@@ -616,10 +678,11 @@ function addSortingIndication() {
 						: false;
 				if (hasInnerText) {
 					if ("descending" == sortOrder) {
-						// alert(divElt[0].innerText);
+						//alert(divElt[0].innerText);
 						divElt[0].innerHTML = divElt[0].innerText
 								+ "<i class='aw-icon-angle-down'></i>";
 					} else {
+						//alert($("div.table_header_inner")[0].innerText);
 						divElt[0].innerHTML = divElt[0].innerText
 								+ "<i class='aw-icon-angle-up'></i>";
 					}

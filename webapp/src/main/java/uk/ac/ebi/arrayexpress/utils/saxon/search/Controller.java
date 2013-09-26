@@ -46,7 +46,7 @@ public class Controller {
 	private IQueryExpander queryExpander;
 	private IQueryHighlighter queryHighlighter;
 	private SaxonEngine saxon;
-	
+
 	private Map<String, AbstractIndexEnvironment> environment = new HashMap<String, AbstractIndexEnvironment>();
 
 	public Controller(URL configFile) {
@@ -106,9 +106,10 @@ public class Controller {
 			new Indexer(getEnvironment(indexId)).indexReader();
 
 		} else {
-			this.logger.info("This option is not available anymore [{}]", indexId);
-//			this.logger.info("Started indexing for index id [{}]", indexId);
-//			new Indexer(getEnvironment(indexId)).index(document);
+			this.logger.info("This option is not available anymore [{}]",
+					indexId);
+			// this.logger.info("Started indexing for index id [{}]", indexId);
+			// new Indexer(getEnvironment(indexId)).index(document);
 		}
 
 	}
@@ -154,7 +155,8 @@ public class Controller {
 					indexLocationDirectory);
 			this.logger.info("connectionString-> [{}] [{}] [{}] [{}]",
 					new Object[] { dbHost, dbPort, dbPassword, dbName });
-			 new Indexer(getEnvironment(indexId)).indexIncrementalFromXmlDB(indexLocationDirectory, dbHost, dbPort, dbPassword, dbName);
+			new Indexer(getEnvironment(indexId)).indexIncrementalFromXmlDB(
+					indexLocationDirectory, dbHost, dbPort, dbPassword, dbName);
 			break;
 		}
 		}
@@ -183,7 +185,7 @@ public class Controller {
 			this.logger
 					.info("Started Incremental indexing Reading data from an Xml Database for index id [{}] from XMLDATABASE",
 							indexId);
-			 new Indexer(getEnvironment(indexId)).indexIncrementalFromXmlDB();
+			new Indexer(getEnvironment(indexId)).indexIncrementalFromXmlDB();
 			break;
 		}
 
@@ -193,13 +195,19 @@ public class Controller {
 	public List<String> getTerms(String indexId, String fieldName, int minFreq)
 			throws IOException {
 		AbstractIndexEnvironment env = getEnvironment(indexId);
-		if (!env.doesFieldExist(fieldName)) {
-			this.logger
-					.error("Field [{}] for index id [{}] does not exist, returning empty list");
-			return new ArrayList<String>();
-		} else {
+		//I have dynamic fields so I will not make this validation
+//		if (!env.doesFieldExist(fieldName)) {
+//			this.logger
+//					.error("Field [{}] for index id [{}] does not exist, returning empty list");
+//			return new ArrayList<String>();
+//		} else {
 			return new Querier(env).getTerms(fieldName, minFreq);
-		}
+//		}
+	}
+
+	public Collection<String> getFields(String indexId) throws IOException {
+		AbstractIndexEnvironment env = getEnvironment(indexId);
+		return new Querier(env).getFields();
 	}
 
 	public Integer getDocCount(String indexId, Map<String, String[]> queryParams)
@@ -211,11 +219,10 @@ public class Controller {
 
 	}
 
-	 public void setXPathEngine( SaxonEngine saxon )
-	    {
-	        this.saxon = saxon;
-	    }
-	 
+	public void setXPathEngine(SaxonEngine saxon) {
+		this.saxon = saxon;
+	}
+
 	public void dumpTerms(String indexId, String fieldName) {
 		AbstractIndexEnvironment env = getEnvironment(indexId);
 		if (env.doesFieldExist(fieldName)) {
@@ -246,6 +253,11 @@ public class Controller {
 				.get(fieldName).shouldAutoCompletion : false);
 	}
 
+	public boolean doesFieldExist(String indexId,String fieldName) {
+		AbstractIndexEnvironment env = getEnvironment(indexId);
+		return env.doesFieldExist(fieldName);
+	}
+	
 	public Integer addQuery(String indexId, Map<String, String[]> queryParams,
 			String queryString) throws ParseException, IOException {
 		if (null == this.queryConstructor) {

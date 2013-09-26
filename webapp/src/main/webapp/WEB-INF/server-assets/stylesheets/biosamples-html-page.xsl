@@ -8,6 +8,7 @@
 	OR CONDITIONS OF ANY KIND, either express or implied. * See the License for 
 	the specific language governing permissions and * limitations under the License. 
 	* -->
+	<!DOCTYPE xsl:stylesheet [ <!ENTITY nbsp "&#160;"> ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:ae="http://www.ebi.ac.uk/arrayexpress/XSLT/Extension" xmlns:html="http://www.w3.org/1999/xhtml"
@@ -23,29 +24,30 @@
 	<xsl:param name="username" />
 
 
-<!--###### DO NOT CHANGE THE OUTPUT METHOD FROM XHTML to HTML  ######-->
-<!--############-->	
-<!--############-->	
+	<!--###### DO NOT CHANGE THE OUTPUT METHOD FROM XHTML to HTML ###### -->
+	<!--############ -->
+	<!--############ -->
 
-<!-- we need that to allow hexadecimal characters  - look at sampleGroup:SAMEG30886 
- <attribute class="Person First Name" classDefined="true" dataType="STRING">
-          <value>TomaÃ&#x85;Â¾</value>
- -->
+	<!-- we need that to allow hexadecimal characters - look at sampleGroup:SAMEG30886 
+		<attribute class="Person First Name" classDefined="true" dataType="STRING"> 
+		<value>TomaÃ&#x85;Â¾</value> -->
 
-<!-- <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="windows-1252"/> -->
-<xsl:output omit-xml-declaration="yes" method="xhtml"
-		indent="no" encoding="windows-1252" doctype-public="-//W3C//DTD XHTML 1.1//EN" />		
-<!--###### DO NOT CHANGE THE OUTPUT METHOD FROM XHTML to HTML  ######-->
-<!--############-->	
-<!--############-->		
-	
-		
+	<!-- <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="windows-1252"/> -->
+	<xsl:output omit-xml-declaration="yes" method="xhtml"
+		indent="no" encoding="windows-1252" doctype-public="-//W3C//DTD XHTML 1.1//EN" />
+	<!--###### DO NOT CHANGE THE OUTPUT METHOD FROM XHTML to HTML ###### -->
+	<!--############ -->
+	<!--############ -->
+
+
 
 	<xsl:variable name="relative-uri"
 		select="fn:substring-after($original-request-uri, $context-path)" />
-	
-    <xsl:variable name="relative-referer" select="if (fn:starts-with($referer, '/')) then fn:substring-after($referer, $context-path) else ''"/>
-    <xsl:variable name="secure-host" select="if (fn:matches($host, '^http[:]//www(dev)?[.]ebi[.]ac[.]uk$')) then fn:replace($host, '^http[:]//', 'https://') else ''"/>
+
+	<xsl:variable name="relative-referer"
+		select="if (fn:starts-with($referer, '/')) then fn:substring-after($referer, $context-path) else ''" />
+	<xsl:variable name="secure-host"
+		select="if (fn:matches($host, '^http[:]//www(dev)?[.]ebi[.]ac[.]uk$')) then fn:replace($host, '^http[:]//', 'https://') else ''" />
 
 	<xsl:template name="ae-page">
 		<xsl:param name="pIsSearchVisible" as="xs:boolean" />
@@ -54,13 +56,24 @@
 		<xsl:param name="pBreadcrumbTrail" />
 		<xsl:param name="pExtraCSS" />
 		<xsl:param name="pExtraJS" />
-		 <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
-        <!-- http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
-        <xsl:comment>[if lt IE 7]>&lt;html class="no-js ie6 oldie" lang="en">&lt;![endif]</xsl:comment>
-        <xsl:comment>[if IE 7]>&lt;html class="no-js ie7 oldie" lang="en">&lt;![endif]</xsl:comment>
-        <xsl:comment>[if IE 8]>&lt;html class="no-js ie8 oldie" lang="en">&lt;![endif]</xsl:comment>
-        <xsl:comment>[if gt IE 8]>&lt;!</xsl:comment>
-        <html class="no-js" lang="en"><xsl:comment>&lt;![endif]</xsl:comment>
+		<xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
+		<!-- http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+		<xsl:comment>[if
+			lt IE 7]>&lt;html class="no-js ie6 oldie" lang="en">&lt;![endif]
+		</xsl:comment>
+		<xsl:comment>[if
+			IE 7]>&lt;html class="no-js ie7 oldie" lang="en">&lt;![endif]
+		</xsl:comment>
+		<xsl:comment>[if
+			IE 8]>&lt;html class="no-js ie8 oldie" lang="en">&lt;![endif]
+		</xsl:comment>
+		<xsl:comment>[if
+			gt IE 8]>&lt;!
+		</xsl:comment>
+		<html class="no-js" lang="en">
+			<xsl:comment>
+				&lt;![endif]
+			</xsl:comment>
 			<xsl:call-template name="ae-page-head">
 				<xsl:with-param name="pTitleTrail" select="$pTitleTrail" />
 				<xsl:with-param name="pExtraCode" select="$pExtraCSS" />
@@ -79,7 +92,7 @@
 		<xsl:param name="pTitleTrail" />
 		<xsl:param name="pExtraCode" />
 		<head>
-			 <meta charset="windows-1252" /> 
+			<meta charset="windows-1252" />
 
 			<title>
 				<xsl:if test="$pTitleTrail">
@@ -221,24 +234,34 @@
 										</label>
 										<!-- Include some example searchterms - keep them short and few! -->
 										<span class="examples">
-											Examples:
+											Search by:
+											<select id="biosamples_index" name="biosamples_index"
+												onchange="changeSearch($('#local-search'),$('#biosamples_index option:selected').val())">
+												<option value="browse.html">Groups</option>
+												<xsl:choose>
+												<xsl:when
+													test="fn:starts-with($relative-uri, '/browse_samples.html')  or fn:starts-with($relative-uri, '/sample')">
+													<option value="browse_samples.html" selected="true">Samples</option>
+												</xsl:when>
+												<xsl:otherwise>
+													<option value="browse_samples.html">Samples</option>
+												</xsl:otherwise>
+												</xsl:choose>
+											</select> &nbsp;&nbsp;Examples:
 											<a
-												href="${interface.application.base.path}/browse.html?keywords=leukemia">leukemia</a>
+												href="javascript:submitFormForExamples($('#local-search'),$('#biosamples_index option:selected').val(),'leukemia')">leukemia</a>
 											,
 											<a
-												href='${interface.application.base.path}/browse.html?keywords=ArrayExpress+AND+"Mus+musculus"'>ArrayExpress
-												AND "Mus musculus"</a>
+												href="javascript:submitFormForExamples($('#local-search'),$('#biosamples_index option:selected').val(),'ArrayExpress')">ArrayExpress</a>
 										</span>
 									</div>
 
 									<div class="right">
-										<input type="submit" name="submit" value="Search" class="submit" />
+										<input type="submit" name="submitb" value="Search" class="submit" />
 										<!-- If your search is more complex than just a keyword search, 
 											you can link to an Advanced Search, with whatever features you want available -->
-										<span class="adv">
-											<a href="${interface.application.base.path}/browse.html"
-												id="adv-search" title="Advanced">Advanced</a>
-										</span>
+										<!-- <span class="adv"> <a href="${interface.application.base.path}/browse.html" 
+											id="adv-search" title="Advanced">Advanced</a> </span> -->
 									</div>
 
 								</fieldset>
@@ -258,10 +281,17 @@
 								</li>
 								<li>
 									<xsl:if
-										test="fn:starts-with($relative-uri, '/browse.html') or fn:starts-with($relative-uri, '/group') or fn:starts-with($relative-uri, '/sample')">
+										test="fn:starts-with($relative-uri, '/browse.html') or fn:starts-with($relative-uri, '/group')">
 										<xsl:attribute name="class">active</xsl:attribute>
 									</xsl:if>
-									<a href="{$context-path}/browse.html" title="Samples">Samples</a>
+									<a href="{$context-path}/browse.html" title="Groups">Sample Groups</a>
+								</li>
+								<li>
+									<xsl:if
+										test="fn:starts-with($relative-uri, '/browse_samples.html')  or fn:starts-with($relative-uri, '/sample')">
+										<xsl:attribute name="class">active</xsl:attribute>
+									</xsl:if>
+									<a href="{$context-path}/browse_samples.html" title="Samples">Samples</a>
 								</li>
 								<li>
 									<xsl:if test="fn:starts-with($relative-uri, '/help/')">
@@ -279,24 +309,11 @@
 									links in your local menu, add them here, and give them a class of "functional". 
 									Remember: you'll need a class of "last" for whichever one will show up last... 
 									For example: -->
-								<!-- <li class="functional last login">
-									<a href="#" class="icon icon-functional" data-icon="l">
-										<xsl:choose>
-											<xsl:when test="$userid 
-								= '1'">
-												Login
-											</xsl:when>
-											<xsl:when test="fn:exists($username)">
-												Logout [
-												<xsl:value-of select="$username" />
-												]
-											</xsl:when>
-											<xsl:otherwise>
-												Logout
-											</xsl:otherwise>
-										</xsl:choose>
-									</a>
-								</li> -->
+								<!-- <li class="functional last login"> <a href="#" class="icon icon-functional" 
+									data-icon="l"> <xsl:choose> <xsl:when test="$userid = '1'"> Login </xsl:when> 
+									<xsl:when test="fn:exists($username)"> Logout [ <xsl:value-of select="$username" 
+									/> ] </xsl:when> <xsl:otherwise> Logout </xsl:otherwise> </xsl:choose> </a> 
+									</li> -->
 								<li class="functional feedback">
 									<a href="#" class="icon icon-static" data-icon="\">Feedback</a>
 								</li>
@@ -365,22 +382,26 @@
 						<form method="post" action="#" onsubmit="return false">
 							<fieldset>
 								<label for="ae-feedback-message">We value your feedback.
-									Please leave your comment below.</label>
+									Please leave your
+									comment below.</label>
 								<textarea id="ae-feedback-message" name="m"></textarea>
 							</fieldset>
 							<fieldset>
 								<label for="ae-email-field">
 									Optionally please enter your
-									email address if you wish to get a response.
+									email address if you wish to get a
+									response.
 									<br />
 									We will never
 									share this address with anyone else.
 								</label>
 								<input id="ae-email-field" name="e" maxlength="50" />
 							</fieldset>
-                         	 <input type="hidden" name="p" value="{$host}{$context-path}{$relative-uri}{if ($query-string) then fn:concat('?', $query-string) else ''}"/>
-                            <input type="hidden" name="r" value="{$host}{$context-path}{$relative-referer}"/>
-  							<input class="submit" type="submit" value="Send" />
+							<input type="hidden" name="p"
+								value="{$host}{$context-path}{$relative-uri}{if ($query-string) then fn:concat('?', $query-string) else ''}" />
+							<input type="hidden" name="r"
+								value="{$host}{$context-path}{$relative-referer}" />
+							<input class="submit" type="submit" value="Send" />
 						</form>
 					</section>
 				</div>

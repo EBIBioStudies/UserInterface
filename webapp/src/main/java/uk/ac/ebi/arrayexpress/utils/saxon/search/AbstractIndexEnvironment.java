@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -334,7 +335,6 @@ public abstract class AbstractIndexEnvironment {
 			// TopDocs hits;
 			ScoreDoc[] hits = null;
 			Sort sort = null;
-			// logger.debug("test");
 			if (doesFieldExist(sortBy)) {
 				FieldInfo sortField = fields.get(sortBy);
 				if (sortField == null) {
@@ -382,10 +382,20 @@ public abstract class AbstractIndexEnvironment {
 				}
 
 				sort = new Sort(sortFieldArray);
-			} else {
-				logger.info(
-						"Sort query field [{}] doenst exist or the SortBy parameter was not specified",
-						sortBy);
+			}
+			// The fiels doenst exist but it can be one of the dynamic, so I
+			// have to add it
+			else {
+				SortField[] sortFieldArray = new SortField[1];
+				sortBy+= "sort";
+				sortFieldArray[0] = new SortField(sortBy, SortField.STRING_VAL,
+						descending);
+				logger.debug("Query sorted by a dynamic sample attribute: ->[{}] descending: ->[{}]",
+						sortBy, descending);
+				sort = new Sort(sortFieldArray);
+				// logger.info(
+				// "Sort query field [{}] doenst exist or the SortBy parameter was not specified",
+				// sortBy);
 			}
 
 			int pageSize = defaultPageSize;
@@ -690,7 +700,7 @@ public abstract class AbstractIndexEnvironment {
 
 	// TODO RPE
 	public void indexReader() {
-		//IndexReader ir = null;
+		// IndexReader ir = null;
 		try {
 			logger.info("Reload the Lucene Index for [{}]", indexId);
 			ir = IndexReader.open(this.indexDirectory, true);
@@ -741,14 +751,14 @@ public abstract class AbstractIndexEnvironment {
 	// (the one that is configured)
 	public void indexFromXmlDB() throws Exception {
 
-		//String indexLocationDirectory = "";
+		// String indexLocationDirectory = "";
 		String dbHost = "";
 		String dbPassword = "";
 		String dbName = "";
 		int dbPort = 0;
 
 		// get the default location
-		//indexLocationDirectory = this.indexLocationDirectory;
+		// indexLocationDirectory = this.indexLocationDirectory;
 		HierarchicalConfiguration connsConf = (HierarchicalConfiguration) Application
 				.getInstance().getPreferences().getConfSubset("bs.xmldatabase");
 
@@ -780,7 +790,7 @@ public abstract class AbstractIndexEnvironment {
 
 			Directory indexTempDirectory = FSDirectory.open(new File(
 					indexLocationDirectory, indexId));
-			logger.debug("Index directory->"+indexLocationDirectory );
+			logger.debug("Index directory->" + indexLocationDirectory);
 			w = createIndex(indexTempDirectory, indexAnalyzer);
 
 			Directory taxDir = FSDirectory.open(new File(indexLocationDirectory
@@ -861,9 +871,12 @@ public abstract class AbstractIndexEnvironment {
 
 			long pageNumber = 1;
 			int count = 0;
-			Map<String, AttsInfo[]> cacheAtt = new HashMap<String, AttsInfo[]>();
-			Map<String, XPathExpression> cacheXpathAtt = new HashMap<String, XPathExpression>();
-			Map<String, XPathExpression> cacheXpathAttValue = new HashMap<String, XPathExpression>();
+			// Map<String, AttsInfo[]> cacheAtt = new HashMap<String,
+			// AttsInfo[]>();
+			// Map<String, XPathExpression> cacheXpathAtt = new HashMap<String,
+			// XPathExpression>();
+			// Map<String, XPathExpression> cacheXpathAttValue = new
+			// HashMap<String, XPathExpression>();
 			while ((pageNumber * pageSizeDefault) <= (numberResults
 					+ pageSizeDefault - 1)) {
 				// while ((pageNumber<=1)) {
@@ -880,12 +893,13 @@ public abstract class AbstractIndexEnvironment {
 
 				// /set =
 				// service.query("for $x in(/Biosamples/SampleGroup/Sample/@id) return string($x)");
-				//I'm getting everything based on nodeId, because i have the sample sample in different samplegroups
-				//TODO: change this (just works with baseX)
+				// I'm getting everything based on nodeId, because i have the
+				// sample sample in different samplegroups
+				// TODO: change this (just works with baseX)
 				set = service.query("for $x in(subsequence("
-						+ indexDocumentPath + "," + pageInit + ","
-						+ pageSize + ")) return db:node-id($x)");
-				
+						+ indexDocumentPath + "," + pageInit + "," + pageSize
+						+ ")) return db:node-id($x)");
+
 				// logger.debug("Number of results of page->" + set.getSize());
 				double ms = (System.nanoTime() - time) / 1000000d;
 				logger.info("Query XMLDB took ->[{}]", ms);
@@ -901,11 +915,12 @@ public abstract class AbstractIndexEnvironment {
 					count++;
 					logger.debug("its beeing processed the number ->" + count);
 					String idNode = (String) iter.nextResource().getContent();
-					logger.debug("Id node->" + idNode);
+					//logger.debug("Id node->" + idNode);
 					// I need to get the sample
-//					ResourceSet setid = service.query(indexDocumentPath
-//							+ "[@id='" + idSample + "']");
-					ResourceSet setid = service.query("db:open-id('" + dbName + "'," + idNode +")");
+					// ResourceSet setid = service.query(indexDocumentPath
+					// + "[@id='" + idSample + "']");
+					ResourceSet setid = service.query("db:open-id('" + dbName
+							+ "'," + idNode + ")");
 					ResourceIterator iterid = setid.getIterator();
 					List<CategoryPath> sampleCategories = null;
 					while (iterid.hasMoreResources()) {
@@ -913,11 +928,11 @@ public abstract class AbstractIndexEnvironment {
 						// /xml=(String) iterid.nextResource().getContent();
 
 						// /xml=(String) iter.nextResource().getContent();
-						
+
 						// /reader = new StringReader(xml);
 						StringBuilder xml = new StringBuilder();
 						xml.append((String) iterid.nextResource().getContent());
-						//logger.debug("xml->"+xml);
+						// logger.debug("xml->"+xml);
 						// logger.debug(xml.toString());
 						reader = new StringReader(xml.toString());
 						source = config.buildDocument(new StreamSource(reader));
@@ -947,8 +962,7 @@ public abstract class AbstractIndexEnvironment {
 
 							try {
 								d = processEntryIndex(node, config, service,
-										cacheAtt, cacheXpathAtt,
-										cacheXpathAttValue, fieldXpe);
+										fieldXpe);
 							} catch (Exception x) {
 								String xmlError = PrintUtils.printNodeInfo(
 										(NodeInfo) node, config);
@@ -981,6 +995,7 @@ public abstract class AbstractIndexEnvironment {
 
 					}
 				}
+ 
 				logger.debug("until now it were processed->[{}]", pageNumber
 						* pageSizeDefault);
 				pageNumber++;
@@ -1106,11 +1121,12 @@ public abstract class AbstractIndexEnvironment {
 				numberResults = Integer.parseInt((String) set.getIterator()
 						.nextResource().getContent());
 			}
-			
-			//TODO:######################################Change this after - this is just a performance test
-//			float percentage=0.1F;
-//			numberResults=Math.round(numberResults * percentage);
-			
+
+			// TODO:######################################Change this after -
+			// this is just a performance test
+			// float percentage=0.1F;
+			// numberResults=Math.round(numberResults * percentage);
+
 			logger.debug("Number of results->" + numberResults);
 			long pageSizeDefault = 50000;
 			if (numberResults > 1000000) {
@@ -1194,12 +1210,15 @@ public abstract class AbstractIndexEnvironment {
 							// I need to see if it already exists
 							// I will also add this document if it is nor marked
 							// as "todelete"
-							Boolean toDelete = (Boolean) fieldXpe.get("delete").evaluate(node, XPathConstants.BOOLEAN);
-							
-							//TODO:######################################Change this after - this is just a performance test
-							int deletePercentage=10;
-							toDelete=(count % deletePercentage)==0?true:false;
-							
+							Boolean toDelete = (Boolean) fieldXpe.get("delete")
+									.evaluate(node, XPathConstants.BOOLEAN);
+
+							// TODO:######################################Change
+							// this after - this is just a performance test
+							int deletePercentage = 10;
+							toDelete = (count % deletePercentage) == 0 ? true
+									: false;
+
 							logger.debug(
 									"Incremental Update - The document [{}] is being processed and is marked to delete?[{}]",
 									new Object[] { idElement, toDelete });
@@ -1215,7 +1234,9 @@ public abstract class AbstractIndexEnvironment {
 								if (countToDelete > 1) {
 									Application
 											.getInstance()
-											.sendEmail(null,null,
+											.sendEmail(
+													null,
+													null,
 													"BIOSAMPLES ERROR - Incremental Update - Removing more than one document! id-> "
 															+ idElement,
 													" documents found:"
@@ -1245,7 +1266,9 @@ public abstract class AbstractIndexEnvironment {
 								if (toDelete) {
 									Application
 											.getInstance()
-											.sendEmail(null,null,
+											.sendEmail(
+													null,
+													null,
 													"BIOSAMPLES WARNING - Incremental Update - Id marked for deletion but the id doesn't exist on the GUI! id-> "
 															+ idElement, "");
 
@@ -1262,8 +1285,7 @@ public abstract class AbstractIndexEnvironment {
 							if (!toDelete) {
 								try {
 									d = processEntryIndex(node, config,
-											service, cacheAtt, cacheXpathAtt,
-											cacheXpathAttValue, fieldXpe);
+											service, fieldXpe);
 
 								} catch (Exception x) {
 									String xmlError = PrintUtils.printNodeInfo(
@@ -1337,7 +1359,8 @@ public abstract class AbstractIndexEnvironment {
 		}
 	}
 
-	IndexWriter createIndex(Directory indexDirectory, Analyzer analyzer) throws Exception{
+	IndexWriter createIndex(Directory indexDirectory, Analyzer analyzer)
+			throws Exception {
 		IndexWriter iwriter = null;
 		try {
 			iwriter = new IndexWriter(indexDirectory, analyzer, true,
@@ -1492,10 +1515,8 @@ public abstract class AbstractIndexEnvironment {
 	// process each document (this has all the logic related with dynamic
 	// attributes)
 	public Document processEntryIndex(Object node, Configuration config,
-			XPathQueryService service, Map<String, AttsInfo[]> cacheAtt,
-			Map<String, XPathExpression> cacheXpathAtt,
-			Map<String, XPathExpression> cacheXpathAttValue,
-			Map<String, XPathExpression> fieldXpe) throws Exception {
+			XPathQueryService service, Map<String, XPathExpression> fieldXpe)
+			throws Exception {
 		Document luceneDoc = new Document();
 		XPath xp = new XPathEvaluator(config);
 		for (FieldInfo field : fields.values()) {
@@ -1537,111 +1558,50 @@ public abstract class AbstractIndexEnvironment {
 						// + field.name);
 						List values = (List) fieldXpe.get(field.name).evaluate(
 								node, XPathConstants.NODESET);
-						String groupId = (String) fieldXpe.get("samplegroup")
-								.evaluate(node, XPathConstants.STRING);
-						String id = (String) fieldXpe.get("accession")
-								.evaluate(node, XPathConstants.STRING);
 
-						AttsInfo[] attsInfo = null;
-						if (cacheAtt.containsKey(groupId)) {
-							attsInfo = cacheAtt.get(groupId);
-						} else {
-							logger.debug("No exists cache for samplegroup->"
-									+ groupId);
-							ResourceSet setAtt = service
-									.query("data(/Biosamples/SampleGroup[@id='"
-											+ groupId
-											+ "']/SampleAttributes/attribute/@class)");
-							ResourceIterator resAtt = setAtt.getIterator();
-							int i = 0;
-							attsInfo = new AttsInfo[(int) setAtt.getSize()];
-							while (resAtt.hasMoreResources()) {
-								String classValue = (String) resAtt
-										.nextResource().getContent();
-								String classValueWithoutQuotes = classValue
-										.replaceAll("\"", "\"\"");
-								// logger.debug("Class value->"
-								// + classValue);
-								XPathExpression xpathAtt = null;
-								XPathExpression xpathAttValue = null;
-								if (cacheXpathAtt.containsKey(classValue)) {
-									xpathAtt = cacheXpathAtt.get(classValue);
-									xpathAttValue = cacheXpathAttValue
-											.get(classValue);
-								} else {
+						for (Iterator iterator = values.iterator(); iterator
+								.hasNext();) {
+							Object object = (Object) iterator.next();
+							// logger.debug("attributes->" + object);
+							String valClass = (String) fieldXpe.get(
+									"attributeName").evaluate(object,
+									XPathConstants.STRING);
+							//TODO: document this on trac and on website documentations help
+							valClass=valClass.replace(" ", "_").toLowerCase();
+							//valClass=valClass.toLowerCase();
+							String valType = (String) fieldXpe.get(
+									"attributeType").evaluate(object,
+									XPathConstants.STRING);
+							String valValue = (String) fieldXpe.get(
+									"attributeValue").evaluate(object,
+									XPathConstants.STRING);
 
-									xpathAtt = xp
-											.compile("./attribute[@class=\""
-													+ classValueWithoutQuotes
-													+ "\"]/@dataType");
-
-									xpathAttValue = xp
-											.compile("attribute[@class=\""
-													+ classValueWithoutQuotes
-													+ "\"]/value/text()[last()]");
-
-									cacheXpathAtt.put(classValue, xpathAtt);
-									cacheXpathAttValue.put(classValue,
-											xpathAttValue);
-								}
-								ResourceSet setAttType = service
-										.query("data(/Biosamples/SampleGroup[@id='"
-												+ groupId
-												+ "']/SampleAttributes/attribute[@class=\""
-												+ classValueWithoutQuotes
-												+ "\"]/@dataType)");
-								String dataValue = (String) setAttType
-										.getIterator().nextResource()
-										.getContent();
-								AttsInfo attsI = new AttsInfo(classValue,
-										dataValue);
-								attsInfo[i] = attsI;
-								i++;
-							}
-							cacheAtt.put(groupId, attsInfo);
-						}
-						int len = attsInfo.length;
-						for (int i = 0; i < len; i++) {
-							if (!attsInfo[i].type.equalsIgnoreCase("integer")
-									&& !attsInfo[i].type
-											.equalsIgnoreCase("real")) {
-
-								XPathExpression valPath = cacheXpathAttValue
-										.get(attsInfo[i].name);
-								String val = (String) valPath.evaluate(node,
-										XPathConstants.STRING);
-								addIndexField(luceneDoc, (i + 1) + "", val,
+							if (!valType.equalsIgnoreCase("integer")
+									&& !valType.equalsIgnoreCase("real")) {
+								//TODO: change this value
+								valValue=valValue.substring(0, Math.min(valValue.length(), 25));
+								addIndexField(luceneDoc, valClass, valValue,
 										true, false, true);
 							} else {
-								XPathExpression valPath = cacheXpathAttValue
-										.get(attsInfo[i].name);
-								String valS = (String) valPath.evaluate(node,
-										XPathConstants.STRING);
-								valS = valS.trim();
-								// logger.debug("Integer->"
-								// + valS);
+
+								valValue = valValue.trim();
 								int val = 0;
-								if (valS == null || valS.equalsIgnoreCase("")
-										|| valS.equalsIgnoreCase("NaN")) {
-									valS = "0";
+								if (valValue == null
+										|| valValue.equalsIgnoreCase("")
+										|| valValue.equalsIgnoreCase("NaN")) {
+									valValue = "0";
 								}
-								BigDecimal num = new BigDecimal(valS);
+								BigDecimal num = new BigDecimal(valValue);
 								num = num.multiply(new BigDecimal(100));
 								int taux = num.toBigInteger().intValue();
-								valS = String.format("%07d", taux);
-								// logger.debug("Integer->"
-								// + valS + "position->"
-								// +(i+1)+"integer");
-								addIndexField(luceneDoc, (i + 1) + "", valS,
+								valValue = String.format("%07d", taux);
+								addIndexField(luceneDoc, valClass, valValue,
 										true, false, true);
-								// addIntIndexField(d,
-								// (i+1)+"integer", new
-								// BigInteger(valS),false,
-								// true);
-								//
 							}
+//							logger.debug("@class->" + valClass);
+//							logger.debug("@type->" + valType);
+//							logger.debug("text->" + valValue);
 						}
-
 					} else {
 						// logger.debug("There is NO special treatment for this field->"
 						// + field.name);

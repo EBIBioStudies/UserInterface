@@ -20,6 +20,7 @@ import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.xpath.XPathEvaluator;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
@@ -43,7 +44,6 @@ import uk.ac.ebi.arrayexpress.components.SearchEngine;
 import uk.ac.ebi.arrayexpress.components.XmlDbConnectionPool;
 import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
 import uk.ac.ebi.arrayexpress.utils.saxon.PrintUtils;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.AbstractIndexEnvironment.AttsInfo;
 
 /**
  * @author rpslpereira
@@ -97,96 +97,130 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 		// Collection instance
 		String ret = "";
 		StringBuilder totalRes = new StringBuilder();
+		if (map.get("accession") == null && map.get("groupaccession") == null) {
 
-		// Collection coll=null;
-		try {
-
-			// coll = DatabaseManager.getCollection(connectionString);
-			Collection coll = xmlDBConnectionPool.getCollection();
-			XPathQueryService service = (XPathQueryService) coll.getService(
-					"XPathQueryService", "1.0");
-			totalRes.append("(");
-
+			// StringBuilder totalResXml = new StringBuilder();
+			totalRes.append("<biosamples><all>");
 			for (int i = initialExp; i < finalExp; i++) {
 
 				int docId = hits[i].doc;
 				Document doc = isearcher.doc(docId);
-				totalRes.append("'" + doc.get("accession") + "'");
-				// totalRes.append("'" + doc.get("id") + "'");
-				if (i != (finalExp - 1)) {
-					totalRes.append(",");
+				StringBuilder org = new StringBuilder();
+				for (String x : doc.getValues("org")) {
+						org.append("<organism>" + x +  "</organism>");
 				}
+				StringBuilder groups =new StringBuilder();
+				for (String x : doc.getValues("groupaccession")) {
+					groups.append("<id>" + x +  "</id>");
+				}
+
+				totalRes.append("<Sample>");
+				totalRes.append("<id>" + doc.get("accession") + "</id>");
+				totalRes.append("<description>"
+						+ doc.get("description")
+						// + doc.get("title")
+						+ "</description>");
+				totalRes.append("<organisms>" + org /*
+													 * doc.get("org")!=null &&
+													 * doc
+													 * .get("org").length()>0?
+													 * doc.get("org"):""
+													 */
+						+ "</organisms>");
+				totalRes.append("<groupaccession>" + groups
+						+ "</groupaccession>");
+				totalRes.append("</Sample>");
+
 			}
+			totalRes.append("</all></biosamples>");
+			// System.out.println("totalRes->" + totalRes.toString());
+			ret = totalRes.toString();
 
-			totalRes.append(")");
-			if (logger.isDebugEnabled()) {
-				logger.debug("QueryString->" + totalRes);
+		} else {
+			try {
+
+				// coll = DatabaseManager.getCollection(connectionString);
+				Collection coll = xmlDBConnectionPool.getCollection();
+				XPathQueryService service = (XPathQueryService) coll
+						.getService("XPathQueryService", "1.0");
+				totalRes.append("(");
+
+				for (int i = initialExp; i < finalExp; i++) {
+
+					int docId = hits[i].doc;
+					Document doc = isearcher.doc(docId);
+					totalRes.append("'" + doc.get("accession") + "'");
+					// totalRes.append("'" + doc.get("id") + "'");
+					if (i != (finalExp - 1)) {
+						totalRes.append(",");
+					}
+				}
+
+				totalRes.append(")");
+				if (logger.isDebugEnabled()) {
+					logger.debug("QueryString->" + totalRes);
+				}
+				long time = System.nanoTime();
+
+				ResourceSet set = null;
+				// search in all samples
+				// I'm showing the datail of a sample inside a sample Group
+				// browsing
+				if (map.get("accession") != null) {
+					set = service
+							.query("<biosamples><all>{for $x in  distinct-values("
+									+ totalRes.toString()
+									+ ")  let $y:=//Sample[@id=($x)]"
+									+ " return ($y) " + " }</all></biosamples>");
+				} else {
+					// I'm browsing a samplegroup
+					// if(map.get("groupaccession")!=null){
+					String queryStr = "<biosamples><all><Samples>{for $x in "
+							+ totalRes.toString()
+							+ "  let $y:=//Sample[@id=($x)]"
+							+ "  return $y } "
+							+ " { let $att:= //SampleGroup[@id='"
+							+ map.get("groupaccession")[0]
+							+ "']"
+							+ " return <SampleAttributes>{$att/SampleAttributes/*} </SampleAttributes>}"
+							+ " { let $att:= //SampleGroup[@id='"
+							+ map.get("groupaccession")[0]
+							+ "']"
+							// +
+							// " return <DatabaseGroup name=\"{$att/attribute/value[../@class='Databases']//attribute/value[../@class='Database Name']}\"  uri=\"{$att/attribute/value[../@class='Databases']//attribute/value[../@class='Database URI']}\"/>}"
+							+ " return <DatabaseGroup>{$att/attribute[@class='Databases']} </DatabaseGroup>}"
+							+ "</Samples></all></biosamples>";
+					// logger.debug(queryStr);
+					set = service.query(queryStr);
+				}
+
+				double ms = (System.nanoTime() - time) / 1000000d;
+
+				if (logger.isDebugEnabled()) {
+					logger.debug("Xml db query took: " + ms + " ms");
+				}
+
+				time = System.nanoTime();
+				ResourceIterator iter = set.getIterator();
+
+				// Loop through all result items
+				while (iter.hasMoreResources()) {
+
+					ret += iter.nextResource().getContent();
+				}
+				ms = (System.nanoTime() - time) / 1000000d;
+				if (logger.isDebugEnabled()) {
+					logger.debug("Retrieve data from Xml db took: " + ms
+							+ " ms");
+				}
+
+			} catch (final XMLDBException ex) {
+				// Handle exceptions
+				logger.error("Exception:->[{}]", ex.getMessage());
+				ex.printStackTrace();
+			} finally {
+
 			}
-			long time = System.nanoTime();
-
-			ResourceSet set = null;
-			// search
-
-			// I'm showing the datail of a sample inside a sample Group browsing
-			if (map.get("accession") != null) {
-				// TODO: rpe (this is not correct - i need to return all one
-				// Sample (usei o distinct values e o $y[1])
-				set = service
-						.query("<biosamples><all>{for $x in  distinct-values("
-								+ totalRes.toString()
-								+ ")  let $y:=//Sample[@id=($x)]"
-								+ " return ($y[1]) " + " }</all></biosamples>");
-				// set = service.query("<biosamples><all>{for $x in  "
-				// + totalRes.toString() + "  let $y:=//Sample[@id=($x)]"
-				// + " return ($y) " + " }</all></biosamples>");
-			}
-			// I'm browsing a sample group
-			else {
-				String queryStr="<biosamples><all><Samples>{for $x in "
-						+ totalRes.toString()
-						+ "  let $y:=//Sample[@id=($x)]"
-						+ "  return $y[../@id='"
-						+ map.get("samplegroup")[0]
-						+ "'] } "
-						+ " { let $att:= /Biosamples/SampleGroup[@id='"
-						+ map.get("samplegroup")[0]
-						+ "']"
-						+ " return <SampleAttributes>{$att/SampleAttributes/*} </SampleAttributes>}"
-						+ " { let $att:= /Biosamples/SampleGroup[@id='"
-						+ map.get("samplegroup")[0]
-						+ "']"
-						//+ " return <DatabaseGroup name=\"{$att/attribute/value[../@class='Databases']//attribute/value[../@class='Database Name']}\"  uri=\"{$att/attribute/value[../@class='Databases']//attribute/value[../@class='Database URI']}\"/>}"
-						+ " return <DatabaseGroup>{$att/attribute[@class='Databases']} </DatabaseGroup>}"
-						+ "</Samples></all></biosamples>";
-				//logger.debug(queryStr);
-				set = service
-						.query(queryStr);
-			}
-
-			double ms = (System.nanoTime() - time) / 1000000d;
-
-			if (logger.isDebugEnabled()) {
-				logger.debug("Xml db query took: " + ms + " ms");
-			}
-
-			time = System.nanoTime();
-			ResourceIterator iter = set.getIterator();
-
-			// Loop through all result items
-			while (iter.hasMoreResources()) {
-
-				ret += iter.nextResource().getContent();
-			}
-			ms = (System.nanoTime() - time) / 1000000d;
-			if (logger.isDebugEnabled()) {
-				logger.debug("Retrieve data from Xml db took: " + ms + " ms");
-			}
-
-		} catch (final XMLDBException ex) {
-			// Handle exceptions
-			logger.error("Exception:->[{}]", ex.getMessage());
-			ex.printStackTrace();
-		} finally {
 
 		}
 
@@ -238,7 +272,7 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 			set = service.query("<biosamples><all>{for $x in  "
 					+ totalRes.toString() + "  let $y:=//Sample[@id=($x)]"
 					+ "  return <Samples>{$y[../@id='"
-					+ map.get("samplegroup")[0] + "']}</Samples>} "
+					+ map.get("groupaccession")[0] + "']}</Samples>} "
 					+ " </all></biosamples>");
 
 			double ms = (System.nanoTime() - time) / 1000000d;
@@ -402,7 +436,7 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 					logger.debug("@id that is being processed(to delete->"
 							+ idToProcess);
 
-					Term idTerm = new Term("samplegroup",
+					Term idTerm = new Term("groupaccession",
 							idToProcess.toLowerCase());
 					int countToDelete = getIndexReader().docFreq(idTerm);
 					if (countToDelete > 0) {
@@ -413,13 +447,14 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 						// need to remove one from the number of
 						// documents count
 						countNodes -= countToDelete;
-					}
-					else{
-					Application
-							.getInstance()
-							.sendEmail(null,null,
-									"BIOSAMPLES WARNING - Incremental Update - SampleGroup Id marked for deletion but the id doesn't exist samples on the GUI! id-> "
-											+ idToProcess, "");
+					} else {
+						Application
+								.getInstance()
+								.sendEmail(
+										null,
+										null,
+										"BIOSAMPLES WARNING - Incremental Update - SampleGroup Id marked for deletion but the id doesn't exist samples on the GUI! id-> "
+												+ idToProcess, "");
 					}
 				}
 
@@ -436,15 +471,16 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 			// // I will collect all the results
 			// ResourceSet set = service.query(this.env.indexDocumentPath);
 			numberResults = 0;
-			
+
 			set = service.query("count(" + indexDocumentPath + ")");
 			if (set.getIterator().hasMoreResources()) {
 				numberResults = Integer.parseInt((String) set.getIterator()
 						.nextResource().getContent());
 			}
-			//TODO:######################################Change this after - this is just a performance test
-//			float percentage=0.1F;
-//			numberResults=Math.round(numberResults * percentage);
+			// TODO:######################################Change this after -
+			// this is just a performance test
+			// float percentage=0.1F;
+			// numberResults=Math.round(numberResults * percentage);
 			logger.debug("Number of results->" + numberResults);
 			pageSizeDefault = 50000;
 			if (numberResults > 1000000) {
@@ -533,8 +569,7 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 							// as "todelete"
 							Boolean toDelete = (Boolean) fieldXpe.get("delete")
 									.evaluate(node, XPathConstants.BOOLEAN);
-							
-							
+
 							logger.debug(
 									"Incremental Update - The document [{}] is being processed and is marked to delete?[{}]",
 									new Object[] { idElement, toDelete });
@@ -550,7 +585,9 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 								if (countToDelete > 1) {
 									Application
 											.getInstance()
-											.sendEmail(null,null,
+											.sendEmail(
+													null,
+													null,
 													"BIOSAMPLES ERROR - Incremental Update - Removing more than one document! id-> "
 															+ idElement,
 													" documents found:"
@@ -580,7 +617,9 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 								if (toDelete) {
 									Application
 											.getInstance()
-											.sendEmail(null,null,
+											.sendEmail(
+													null,
+													null,
 													"BIOSAMPLES WARNING - Incremental Update - Id marked for deletion but the id doesn't exist on the GUI! id-> "
 															+ idElement, "");
 
@@ -589,8 +628,7 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 
 							try {
 								d = processEntryIndex(node, config, service,
-										cacheAtt, cacheXpathAtt,
-										cacheXpathAttValue, fieldXpe);
+										fieldXpe);
 
 							} catch (Exception x) {
 								String xmlError = PrintUtils.printNodeInfo(
