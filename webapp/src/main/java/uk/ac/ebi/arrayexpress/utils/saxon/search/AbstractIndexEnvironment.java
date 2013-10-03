@@ -77,6 +77,7 @@ import uk.ac.ebi.arrayexpress.components.XmlDbConnectionPool;
 import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
 import uk.ac.ebi.arrayexpress.utils.StringTools;
 import uk.ac.ebi.arrayexpress.utils.saxon.PrintUtils;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.AbstractIndexEnvironment.AttsInfo;
 
 public abstract class AbstractIndexEnvironment {
 
@@ -1512,6 +1513,7 @@ public abstract class AbstractIndexEnvironment {
 		}
 	}
 
+	
 	// process each document (this has all the logic related with dynamic
 	// attributes)
 	public Document processEntryIndex(Object node, Configuration config,
@@ -1580,7 +1582,7 @@ public abstract class AbstractIndexEnvironment {
 									&& !valType.equalsIgnoreCase("real")) {
 								//TODO: change this value
 								valValue=valValue.substring(0, Math.min(valValue.length(), 25));
-								addIndexField(luceneDoc, valClass, valValue,
+								addIndexField(luceneDoc,"attributes" , valClass + "=" + valValue,
 										true, false, true);
 							} else {
 
@@ -1595,7 +1597,7 @@ public abstract class AbstractIndexEnvironment {
 								num = num.multiply(new BigDecimal(100));
 								int taux = num.toBigInteger().intValue();
 								valValue = String.format("%07d", taux);
-								addIndexField(luceneDoc, valClass, valValue,
+								addIndexField(luceneDoc, "attributes" , valClass + "=" + valValue,
 										true, false, true);
 							}
 //							logger.debug("@class->" + valClass);
