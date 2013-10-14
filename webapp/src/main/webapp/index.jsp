@@ -111,6 +111,8 @@
                 <li><a href="/biosamples/help/index.html">Help pages</a> about how to search BioSamples, how to submit data, and FAQ.</li>
                 <li><a href="/biosamples/help/api.html">Programmatic access</a> to query and download data using web services.</li>
                 <li><a href="/biosamples/help/news.html">Latest news</a> about BioSamples database.</li>
+                <li>The BioSamples database now offers access to <a href="http://www.ebi.ac.uk/rdf/services/biosamples/">RDF</a>, and a supporting <a href="http://www.ebi.ac.uk/rdf/services/biosamples/sparql">SPARQL endpoint</a> 
+                as part of the <a href="http://www.ebi.ac.uk/rdf">EBI's RDF platform</a>.</li>
                 <li>Contact us by emailing <a href="mailto:biosamples@ebi.ac.uk">biosamples@ebi.ac.uk</a></li>
             </ul>
         </div>
