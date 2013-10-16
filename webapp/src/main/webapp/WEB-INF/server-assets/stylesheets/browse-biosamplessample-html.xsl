@@ -134,21 +134,26 @@
 					</a>
 				</div>
 			</td>
-
 			<td>
+				<xsl:call-template name="process_organisms">
+					<xsl:with-param name="pValue" select="./organisms" />
+				</xsl:call-template>
+			</td>
+
+			<td class="col_name">
+				<xsl:call-template name="highlight">
+					<xsl:with-param name="pText" select="name" />
+					<xsl:with-param name="pFieldName" select="'name'" />
+				</xsl:call-template>
+			</td>
+
+			<td class="col_description">
 				<xsl:call-template name="highlight">
 					<xsl:with-param name="pText" select="description" />
 					<xsl:with-param name="pFieldName" select="'description'" />
 				</xsl:call-template>
 			</td>
 
-			<td>
-
-				<xsl:call-template name="process_organisms">
-					<xsl:with-param name="pValue" select="./organisms" />
-				</xsl:call-template>
-
-			</td>
 
 			<td class="col_group">
 				<xsl:call-template name="process_groups">
@@ -165,7 +170,7 @@
 		<xsl:for-each select="$pValue/organism">
 			<xsl:call-template name="highlight">
 				<xsl:with-param name="pText" select="." />
-				<xsl:with-param name="pFieldName" select="'org'" />
+				<xsl:with-param name="pFieldName" select="'organism'" />
 			</xsl:call-template>
 			<xsl:if test="position()!=last()">
 				<xsl:copy-of select="', '" />

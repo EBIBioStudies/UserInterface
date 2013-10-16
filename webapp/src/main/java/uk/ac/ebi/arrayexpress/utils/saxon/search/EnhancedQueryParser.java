@@ -73,6 +73,21 @@ public class EnhancedQueryParser extends QueryParser
         return rewriteNumericBooleanFieldQuery(super.getFieldQuery(field, queryText), field, queryText);
     }
 
+    //for now I wiil not change anything
+    protected  Query newTermQuery(Term term)
+    {
+//    	System.out.println("term.field->"+ term.field());
+//    	System.out.println("term.text->"+ term.text());
+//    	if (term.field() == "attributes:material")
+//        {
+//            //Do your username -> userid mapping
+//            return new TermQuery(new Term("user",term.text()));
+//        }
+        return super.newTermQuery(term);
+    }
+    
+    
+    
     private Query rewriteNumericBooleanFieldQuery( Query query, String field, String queryText ) throws ParseException
     {
         if (env.fields.containsKey(field) && "integer".equals(env.fields.get(field).type)) {

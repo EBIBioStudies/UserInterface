@@ -1582,7 +1582,7 @@ public abstract class AbstractIndexEnvironment {
 									&& !valType.equalsIgnoreCase("real")) {
 								//TODO: change this value
 								valValue=valValue.substring(0, Math.min(valValue.length(), 25));
-								addIndexField(luceneDoc,"attributes" , valClass + "=" + valValue,
+								addIndexField(luceneDoc,"attributes" , "="+valClass + "= " + valValue,
 										true, false, true);
 							} else {
 
@@ -1597,7 +1597,8 @@ public abstract class AbstractIndexEnvironment {
 								num = num.multiply(new BigDecimal(100));
 								int taux = num.toBigInteger().intValue();
 								valValue = String.format("%07d", taux);
-								addIndexField(luceneDoc, "attributes" , valClass + "=" + valValue,
+								//I need to mantain the spaces for lucene consider different words
+								addIndexField(luceneDoc, "attributes" , "="+valClass + "= " + valValue,
 										true, false, true);
 							}
 //							logger.debug("@class->" + valClass);

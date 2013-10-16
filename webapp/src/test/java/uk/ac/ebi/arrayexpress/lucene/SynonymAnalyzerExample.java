@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 
 import junit.framework.TestCase;
-import net.xqj.basex.bin.A;
-import net.xqj.basex.bin.at;
-import net.xqj.basex.bin.s;
+//import net.xqj.basex.bin.A;
+//import net.xqj.basex.bin.at;
+//import net.xqj.basex.bin.s;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;

@@ -224,7 +224,7 @@
 
 						<div class="grid_12 omega">
 							<form id="local-search" name="local-search"
-								action="${interface.application.base.path}/browse.html" method="get">
+								action="browse.html" method="get">
 
 								<fieldset>
 
@@ -237,15 +237,15 @@
 											Search by:
 											<select id="biosamples_index" name="biosamples_index"
 												onchange="changeSearch($('#local-search'),$('#biosamples_index option:selected').val())">
-												<option value="browse.html">Groups</option>
+												<option value="${interface.application.base.path}/browse_samples.html">Samples</option>
 												<xsl:choose>
-												<xsl:when
-													test="fn:starts-with($relative-uri, '/browse_samples.html')  or fn:starts-with($relative-uri, '/sample')">
-													<option value="browse_samples.html" selected="true">Samples</option>
-												</xsl:when>
-												<xsl:otherwise>
-													<option value="browse_samples.html">Samples</option>
-												</xsl:otherwise>
+													<xsl:when
+														test="fn:starts-with($relative-uri, '/browse.html')  or fn:starts-with($relative-uri, '/group')">
+														<option value="${interface.application.base.path}/browse.html" selected="true">Groups</option>
+													</xsl:when>
+													<xsl:otherwise>
+														<option value="${interface.application.base.path}/browse.html">Samples</option>
+													</xsl:otherwise>
 												</xsl:choose>
 											</select> &nbsp;&nbsp;Examples:
 											<a
@@ -257,7 +257,8 @@
 									</div>
 
 									<div class="right">
-										<input type="submit" name="submitb" value="Search" class="submit" />
+										<input type="submit" name="submitb" value="Search"
+											class="submit" />
 										<!-- If your search is more complex than just a keyword search, 
 											you can link to an Advanced Search, with whatever features you want available -->
 										<!-- <span class="adv"> <a href="${interface.application.base.path}/browse.html" 
@@ -281,17 +282,17 @@
 								</li>
 								<li>
 									<xsl:if
-										test="fn:starts-with($relative-uri, '/browse.html') or fn:starts-with($relative-uri, '/group')">
-										<xsl:attribute name="class">active</xsl:attribute>
-									</xsl:if>
-									<a href="{$context-path}/browse.html" title="Groups">Sample Groups</a>
-								</li>
-								<li>
-									<xsl:if
 										test="fn:starts-with($relative-uri, '/browse_samples.html')  or fn:starts-with($relative-uri, '/sample')">
 										<xsl:attribute name="class">active</xsl:attribute>
 									</xsl:if>
 									<a href="{$context-path}/browse_samples.html" title="Samples">Samples</a>
+								</li>
+								<li>
+									<xsl:if
+										test="fn:starts-with($relative-uri, '/browse.html') or fn:starts-with($relative-uri, '/group')">
+										<xsl:attribute name="class">active</xsl:attribute>
+									</xsl:if>
+									<a href="{$context-path}/browse.html" title="Groups">Sample Groups</a>
 								</li>
 								<li>
 									<xsl:if test="fn:starts-with($relative-uri, '/help/')">

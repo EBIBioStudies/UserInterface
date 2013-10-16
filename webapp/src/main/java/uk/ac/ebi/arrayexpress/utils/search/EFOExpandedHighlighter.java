@@ -59,14 +59,24 @@ public class EFOExpandedHighlighter implements IQueryHighlighter {
 
 	public String highlightQuery(QueryInfo info, String fieldName, String text) {
 		String result = "";
+//		String fieldNameOriginal=fieldName;
+//		String textOriginal=text;
+//		String attributeName="";
 		try {
 			EFOExpandableQueryInfo queryInfo = null;
-			//logger.debug("text->", text);
-			//logger.debug("fieldName->", fieldName);
+//			logger.debug("text->{}", text);
+//			logger.debug("fieldName->{}", fieldName);
 			if (info instanceof EFOExpandableQueryInfo) {
 				queryInfo = (EFOExpandableQueryInfo) info;
 			}
 
+//			if(fieldName.startsWith("attributes:")){
+//				fieldName="attributes";
+//				attributeName=fieldNameOriginal.replace("attributes:", "");
+//				text=attributeName+"="+text;
+//				
+//			}
+				
 			if (null == queryInfo) {
 				result = doHighlightQuery(info.getQuery(), fieldName, text,
 						HIT_OPEN_MARK, HIT_CLOSE_MARK);

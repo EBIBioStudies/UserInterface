@@ -12,6 +12,7 @@
 			</smtp>
 		</reports>
 	</app>
+
 	<bs>
 		<globalSetupDirectory>${interface.application.global.setup.directory}
 		</globalSetupDirectory>
@@ -48,7 +49,6 @@
 			<!-- <dbname>${interface.application.db.xml.connection.dbname}</dbname> -->
 		</xmldatabase>
 	
-	
 	<!-- define all the variables that we need to update the biosamples Database -->
 	<xmlupdate>
 		<active>${interface.application.db.xml.update.active}</active>
@@ -60,7 +60,8 @@
 		<cookie>${interface.application.db.xml.update.cookie}</cookie>	
 	</xmlupdate>
 	
-	
+
+
 		<!-- job -->
 		<reload-all>
 		<update>
@@ -101,7 +102,7 @@
 		
 		
 		
-	
+
 		
 			<!--  <document path="/Biosamples/SampleGroup[@id='SAMEG82627']" defaultField="keywords"> -->
 	<document path="/Biosamples/SampleGroups/SampleGroup[starts-with(@id,'SAM')]" defaultField="keywords">
@@ -111,17 +112,18 @@
 					analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer"
 					autocompletion="true" store="false" escape="false" />
 				<field name="accession" title="by Accession" type="string" path="@id"
-					analyze="true" store="true" autocompletion="true" escape="false"
-					sortfields="accessionsort" />
+					analyze="true" store="true"  escape="false"
+					sortfields="accessionsort" autocompletion="true"/>
 				<!-- The sortfields must have this pproperties analyze="false" store="false" 
 					escape="false" -->
 				<field name="accessionsort" title="by Accession" type="integer" path="substring(@id,6) cast as xs:integer"
-					analyze="false" store="false" escape="false" />
+					analyze="false" store="false" escape="false" autocompletion="false"/>
 					
 				<!-- Security - authorization-->
 				<field name="userid" type="string" path="user/@id" analyze="false" store="false" escape="false"/>
 				<!-- Security - authorization-->
 		
+	
 							
 				<!-- this field is only used for incremental updates -->
 				<field name="delete" type="boolean" path="@delete = 'true'"/>	
@@ -162,8 +164,7 @@
 					store="false" escape="false" />
 				<field name="termsources" title="by Term Sources" type="string"
 					path="attribute/objectValue[../@class='Term Sources']//value" analyze="true"
-					store="false" escape="false" />
-					
+					store="false" escape="false" />				
 				
 				<!-- used to order the search using the number os samples --> <!-- never forget the cast as xs:integer -->
 				<field name="samples" title="by Number of Samples" type="integer" 
@@ -177,6 +178,7 @@
 				<field name="reference" type="boolean" path="attribute/simpleValue/value[../../@class='Submission Reference Layer']//value = 'true'"/>
 			</document>
 		</index>
+
 
 		<index id="biosamplessample"
 			location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes"
@@ -200,21 +202,22 @@
 				<field name="userid" type="string" path="user/@id" analyze="false" store="false" escape="false"/>
 				<!-- Security - authorization-->				
 			
-				<field name="name" type="string" path="attribute/simpleValue/value[../@class='Name']"
-					analyze="true" store="false" escape="false" sortfields="name" />
 				<!-- combine BioSamples and NCBI Samples -->
 				<field name="accession" type="string" path="@id" title="by Accession" analyze="true" 
-					store="true" escape="false" sortfields="accessionsort" /> 
+					store="true" escape="false"  sortfields="accessionsort" autocompletion="true"/> 
 				<field name="accessionsort" 
 					 type="integer" path="if(starts-with(@id,'SAMN')) then substring-after(@id,'SAMN') cast as xs:integer else substring(@id,6) cast as xs:integer" 
-					analyze="false" store="false" escape="false" /> 
+					analyze="false" store="false" escape="false" autocompletion="false"/> 
 				<!-- those are used to browse sample page - I dont want to query the DB -->
-				<field name="org" type="string"
+				<field name="organism" type="string"
 					path="attribute/simpleValue/value[../../@class='Organism']" analyze="true"
-					store="true" escape="false"/>				
+					store="true" escape="false"  sortfields="organism" autocompletion="true" title="by Organism"/>				
+				<field name="name" type="string"
+					path="attribute/simpleValue/value[../../@class='Sample Name']" analyze="true"
+					store="true" escape="false"  sortfields="name" autocompletion="true" title="by Name"/>				
 				<field name="description" type="string"
-					path="string(attribute/simpleValue/value[../../@class='Sample Name'])" analyze="true"
-					store="true" escape="false"/>
+					path="string(attribute/simpleValue/value[../../@class='Sample Description'])" analyze="true"
+					store="true" escape="false" sortfields="description" autocompletion="true" title="by Description"/>
 				<!-- those are used to browse sample page - I dont want to query the DB -->
 					
 				<!-- those are used to browse sample page - I dont want to query the DB -->		
@@ -226,10 +229,14 @@
 				<field name="groups" title="by Number of SampleGroups" type="integer" 
 					path="(count(GroupIds/Id)) cast as xs:integer" sortfields="groups" />
 			
-			
+		
 					<!-- this field is only used for incremental updates -->
 				<field name="delete" type="boolean" path="@delete = 'true'"/>	
 			
+				<!-- attributes names - i need this to the autocomplete -->
+				<field name="attributeNames" type="string" path="attribute/replace(@class,' ','_')"
+				 analyze="true" store="true" escape="false"/>
+				<!-- attributes names - i need this to the autocomplete -->
 				<!-- dynamic sort -->				
 				<field name="attributes" type="string" path="attribute"
 					process="true" analyze="true" store="false" escape="false"/>

@@ -119,7 +119,7 @@ public class Autocompletion extends ApplicationComponent {
 		for (String field : fields) {
 			String fieldTitle = search.getController().getFieldTitle(
 					bioSamplesGroup.INDEX_ID, field);
-			if (null != fieldTitle && fieldTitle.length() > 0) {
+			if (!field.endsWith("sort") && null != fieldTitle && fieldTitle.length() > 0) {
 				getStore(bioSamplesGroup.INDEX_ID).addData(
 						new AutocompleteData(field,
 								AutocompleteData.DATA_FIELD, fieldTitle));
@@ -154,10 +154,11 @@ public class Autocompletion extends ApplicationComponent {
 		for (String field : fields) {
 			String fieldTitle = search.getController().getFieldTitle(
 					bioSamplesSample.INDEX_ID, field);
-			if (null != fieldTitle && fieldTitle.length() > 0) {
+			if (!field.endsWith("sort") && null != fieldTitle && fieldTitle.length() > 0 ) {
 				getStore(bioSamplesSample.INDEX_ID).addData(
 						new AutocompleteData(field,
 								AutocompleteData.DATA_FIELD, fieldTitle));
+				//System.out.println("fiels->" +field+"-->fieldTitle" + fieldTitle );
 			}
 			String fieldType = search.getController().getFieldType(
 					bioSamplesSample.INDEX_ID, field);
@@ -175,29 +176,41 @@ public class Autocompletion extends ApplicationComponent {
 				}
 			}
 		}
+		//I need to get all the different attributeNames
 
-		// System.out.println("autocompletion rebuild");
-		Iterator<String> itr = search.getController()
-				.getFields(bioSamplesSample.INDEX_ID).iterator();
-		while (itr.hasNext()) {
-			String field = itr.next();
-			//If exists on the configuration I Will igone it (it was added previously)
-			if (!field.endsWith("sort") && !search.getController().doesFieldExist(bioSamplesSample.INDEX_ID, field)) {
-				getStore(bioSamplesSample.INDEX_ID).addData(
-						new AutocompleteData(field,
-								AutocompleteData.DATA_FIELD, ""));
-				
-				for (String term : search.getController().getTerms(
-						bioSamplesSample.INDEX_ID, field,
-						"keywords".equals(field) ? 10 : 1)) {
-					getStore(bioSamplesSample.INDEX_ID).addData(
-							new AutocompleteData(term,
-									AutocompleteData.DATA_TEXT, field));
-					//System.out.println("add->" +field+"-->" + term );
-				}
-				//System.out.println("fieldName->" + field);
-			}
-		}
+//		for (String term : search.getController().getTerms(
+//				bioSamplesSample.INDEX_ID, "attributeNames",1)){
+//			String newField="attribute<"+term+">";
+//			getStore(bioSamplesSample.INDEX_ID).addData(
+//					new AutocompleteData(newField,
+//							AutocompleteData.DATA_FIELD, ""));
+//			System.out.println("nem att:->" + newField);
+//			
+//		}
+		
+		
+//		// System.out.println("autocompletion rebuild");
+//		Iterator<String> itr = search.getController()
+//				.getFields(bioSamplesSample.INDEX_ID).iterator();
+//		while (itr.hasNext()) {
+//			String field = itr.next();
+//			//If exists on the configuration I Will igone it (it was added previously)
+//			if (!field.endsWith("sort") && !search.getController().doesFieldExist(bioSamplesSample.INDEX_ID, field)) {
+//				getStore(bioSamplesSample.INDEX_ID).addData(
+//						new AutocompleteData(field,
+//								AutocompleteData.DATA_FIELD, ""));
+//				
+//				for (String term : search.getController().getTerms(
+//						bioSamplesSample.INDEX_ID, field,
+//						"keywords".equals(field) ? 10 : 1)) {
+//					getStore(bioSamplesSample.INDEX_ID).addData(
+//							new AutocompleteData(term,
+//									AutocompleteData.DATA_TEXT, field));
+//					//System.out.println("add->" +field+"-->" + term );
+//				}
+//				//System.out.println("fieldName->" + field);
+//			}
+//		}
 
 		// TODO:The EFO is repeated in each index
 		if (null != getEfo()) {

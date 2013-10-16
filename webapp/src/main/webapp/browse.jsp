@@ -219,18 +219,18 @@
 									<th class="sortable bs_results_id col_accession"
 										id="bs_results_header_accession"><a
 										href="javascript:aeSort('accession')"
-										title="Click to sort by accession"><div
-												class="table_header_inner">Accession</div></a> <!-- <img
+										title="Click to sort by accession"><span
+												class="table_header_inner">Accession</span></a> <!-- <img
 								src="/arrayexpress/assets/images/mini_arrow_up.gif" width="12"
 								height="16" alt="^"> --></th>
 									<th class="sortable col_title" id="bs_results_header_title"><a
 										href="javascript:aeSort('title')"
-										title="Click to sort by title"><div
-												class="table_header_inner">Title</div></a></th>
+										title="Click to sort by title"><span
+												class="table_header_inner">Title</span></a></th>
 									<th class="sortable col_samples" id="bs_results_header_samples"
 										align="center"><a href="javascript:aeSort('samples')"
-										title="Click to sort by number of samples"><div
-												class="table_header_inner">Samples</div></a></th>
+										title="Click to sort by number of samples"><span
+												class="table_header_inner">Samples</span></a></th>
 								</tr>
 							</thead>
 						</table>

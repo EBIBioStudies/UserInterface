@@ -356,14 +356,15 @@
 			close : "#ae-feedback-close"
 		});
 
-		var pageName = "";
-		//alert(contextPath);
-		//alert(window.location.pathname);
-		if(/\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))!=null){
-			pageName =/\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];		
-		}
-		
-		changeAutocomplete(pageName);
+//		var pageName = "";
+//		if(/\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))!=null){
+//			pageName =/\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];		
+//		}
+
+		changeSearch($('#local-search'),$('#biosamples_index option:selected').val());
+		//changeAutocomplete(pageName);
+
+
 		// $("#local-searchbox").autocomplete(
 		// contextPath + "/keywords.txt"
 		// , { matchContains: false
@@ -443,7 +444,8 @@ function changeAutocomplete(url) {
 	var autoCompleteFixUnset = function() {
 		$(this).removeAttr('autocomplete');
 	};
-	if (url.match(/sample/i)) {
+	if (url.match(/browse_samples/i)) {
+		//alert("match c sample");
 		$("#local-searchbox").autocomplete(
 				contextPath + "/keywords.txt?domain=biosamplessample" /*
 																		 * search

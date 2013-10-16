@@ -61,7 +61,7 @@ $(function() {
 	if (null != thElt) {
 		// alert("#bs_results_header_" + sortBy);
 		if ("" != sortOrder) {
-			var divElt = thElt.find("div.table_header_inner");
+			var divElt = thElt.find("span.table_header_inner");
 			// alert(divElt[0]);
 			// I'm using textContent because innerText doesnt work on FireFox
 			if (divElt[0] != null) {
@@ -108,13 +108,7 @@ $(function() {
 	var basePath = decodeURI(window.location.pathname).replace(/\/\w+\.\w+$/,
 			"/");
 	// alert(basePath);
-	$("#bs_keywords_field").autocomplete(basePath + "keywords.txt", {
-		matchContains : false,
-		selectFirst : false,
-		scroll : true,
-		max : 50,
-		requestTreeUrl : basePath + "efotree.txt"
-	});
+
 });
 
 // function responsible for managing the back history properly (this function
@@ -365,9 +359,9 @@ function addSortingIndication(sortBy, sortOrder) {
 	if (null != thElt) {
 		// alert("#bs_results_header_" + sortBy);
 		if ("" != sortOrder) {
-			var divElt = thElt.find("div.table_header_inner");
+			var divElt = thElt.find("span.table_header_inner");
 			if (null != divElt) {
-				var hasInnerText = ($("div.table_header_inner")[0].innerText != undefined) ? true
+				var hasInnerText = ($("span.table_header_inner")[0].innerText != undefined) ? true
 						: false;
 				if (hasInnerText) {
 					if ("descending" == sortOrder) {
@@ -396,15 +390,15 @@ function removeAllSortingIndications() {
 	// remove all the sort signs on the headers
 	// I'm using textContent because innerText doesnt work on FireFox
 
-	for (i = 0; i < ($("div.table_header_inner").length); i++) {
-		var hasInnerText = ($("div.table_header_inner")[i].innerText != undefined) ? true
+	for (i = 0; i < ($("span.table_header_inner").length); i++) {
+		var hasInnerText = ($("span.table_header_inner")[i].innerText != undefined) ? true
 				: false;
 		if (hasInnerText) {
-			$("div.table_header_inner")[i].innerHTML = $("div.table_header_inner")[i].innerText; // +
+			$("span.table_header_inner")[i].innerHTML = $("span.table_header_inner")[i].innerText; // +
 			// "&nbsp;";
 		} else {
 			// &nbsp is used to preserve the arrow space
-			$("div.table_header_inner")[i].innerHTML = $("div.table_header_inner")[i].textContent; // +
+			$("span.table_header_inner")[i].innerHTML = $("span.table_header_inner")[i].textContent; // +
 			// "&nbsp;";
 		}
 	}

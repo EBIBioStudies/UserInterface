@@ -108,7 +108,7 @@ $(function() {
 		// alert("#bs_results_header_" + sortBy);
 		if ("" != sortOrder) {
 
-			var divElt = thElt.find("div.table_header_inner");
+			var divElt = thElt.find("span.table_header_inner");
 			if (null != divElt) {
 				// alert("not null");
 				// I'm using textContent because innerText doesnt work on
@@ -171,7 +171,7 @@ $(function() {
 		matchContains : false,
 		selectFirst : false,
 		scroll : true,
-		max : 250,
+		max : 2500,
 		fields: getFields(),
 		requestTreeUrl : "../" + "efotree.txt"
 	});
@@ -196,20 +196,22 @@ $(function() {
 //function used to filter the fields on the autocomplete
 function getFields(){
 	var arrayFields=[];
+/*
 	var field="";
 	// I'm using textContent because innerText doesnt work on FireFox
-	for (i = 0; i < ($("div.table_header_inner").length); i++) {
-		var hasInnerText = ($("div.table_header_inner")[i].innerText != undefined) ? true
+	for (i = 0; i < ($("span.table_header_inner").length); i++) {
+		var hasInnerText = ($("span.table_header_inner")[i].innerText != undefined) ? true
 				: false;
 		if (hasInnerText) {
-			field= $("div.table_header_inner")[i].innerText; 
+			field= $("span.table_header_inner")[i].innerText; 
 		} else {
-			field= $("div.table_header_inner")[i].textContent; // +
+			field= $("span.table_header_inner")[i].textContent; // +
 		}
-		arrayFields[i]=field.trim().toLowerCase();
+		arrayFields[i]="attribute<" +field.trim().toLowerCase() + ">";
 
 	}
 	//alert("arrayFields->"+arrayFields);
+*/
 	return arrayFields;
 }
 
@@ -218,7 +220,7 @@ function getFields(){
 //this function is called by juqery.autocomplete-ebi.js 
 function isElementOnArray(arr, obj) {
     for(var i=0; i<arr.length; i++) {
-        if (arr[i] == obj) return true;
+        if (arr[i].toLowerCase() == obj.toLowerCase()) return true;
     }
 }
 
@@ -637,11 +639,11 @@ function convertSortNumberInText(sortBy) {
 	var ret = "";
 
 	if (null != thElt) {
-		var divElt = thElt.find("div.table_header_inner");
+		var divElt = thElt.find("span.table_header_inner");
 		if (null != divElt) {
 			// I'm using textContent because innerText doesnt work on
 			// FireFox
-			var hasInnerText = ($("div.table_header_inner")[0].innerText != undefined) ? true
+			var hasInnerText = ($("span.table_header_inner")[0].innerText != undefined) ? true
 					: false;
 			if (hasInnerText) {
 				ret = divElt[0].innerText;
@@ -668,13 +670,13 @@ function addSortingIndication() {
 	if (null != thElt) {
 		// alert("#bs_results_header_" + sortBy);
 		if ("" != sortOrder) {
-			var divElt = thElt.find("div.table_header_inner");
+			var divElt = thElt.find("span.table_header_inner");
 			if (null != divElt) {
 				//alert("div.table_header_inner not null");
 				// alert(divElt[0]);
 				// I'm using textContent because innerText doesnt work on
 				// FireFox
-				var hasInnerText = ($("div.table_header_inner")[0].innerText != undefined) ? true
+				var hasInnerText = ($("span.table_header_inner")[0].innerText != undefined) ? true
 						: false;
 				if (hasInnerText) {
 					if ("descending" == sortOrder) {
@@ -705,17 +707,17 @@ function removeAllSortingIndications() {
 
 	// remove all the sort signs on the headers
 	// I'm using textContent because innerText doesnt work on FireFox
-	for (i = 0; i < ($("div.table_header_inner").length); i++) {
+	for (i = 0; i < ($("span.table_header_inner").length); i++) {
 		// alert($("div.table_header_inner")[i].textContent);
 		// browser implementation differences :(
-		var hasInnerText = ($("div.table_header_inner")[i].innerText != undefined) ? true
+		var hasInnerText = ($("span.table_header_inner")[i].innerText != undefined) ? true
 				: false;
 		if (hasInnerText) {
-			$("div.table_header_inner")[i].innerHTML = $("div.table_header_inner")[i].innerText; // +
+			$("span.table_header_inner")[i].innerHTML = $("span.table_header_inner")[i].innerText; // +
 			// "&nbsp;";
 		} else {
 			// &nbsp is used to preserve the arrow space
-			$("div.table_header_inner")[i].innerHTML = $("div.table_header_inner")[i].textContent; // +
+			$("span.table_header_inner")[i].innerHTML = $("span.table_header_inner")[i].textContent; // +
 			// "&nbsp;";
 		}
 

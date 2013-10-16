@@ -106,7 +106,7 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 				int docId = hits[i].doc;
 				Document doc = isearcher.doc(docId);
 				StringBuilder org = new StringBuilder();
-				for (String x : doc.getValues("org")) {
+				for (String x : doc.getValues("organism")) {
 						org.append("<organism>" + x +  "</organism>");
 				}
 				StringBuilder groups =new StringBuilder();
@@ -120,6 +120,10 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 						+ doc.get("description")
 						// + doc.get("title")
 						+ "</description>");
+				totalRes.append("<name>"
+						+ doc.get("name")
+						// + doc.get("title")
+						+ "</name>");
 				totalRes.append("<organisms>" + org /*
 													 * doc.get("org")!=null &&
 													 * doc

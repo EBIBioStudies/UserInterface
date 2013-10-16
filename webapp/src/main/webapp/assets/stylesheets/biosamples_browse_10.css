@@ -440,8 +440,22 @@ vertical-align: top;
 
 
 /*colummns browse samples*/
+.col_name{
+	width:180px;
+	text-align: left;
+}
+
+/*
+.col_description{
+	width:200px;
+	text-align: left;
+}
+*/
+
 .col_groups, .col_organisms{
 	width:250px;
 	text-align: left;
 }
+
+
 /*colummns browse samplegroups*/

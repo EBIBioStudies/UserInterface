@@ -84,8 +84,8 @@
 							<!-- Include some example searchterms - keep them short and few! -->
 							<span class="examples">Search by: <select id="biosamples_index"
 								name="biosamples_index" onchange="changeSearch($('#local-search'),$('#biosamples_index option:selected').val())">
-									<option value="browse.html">Groups</option>
-									<option value="browse_samples.html" <%=samplesActive.equalsIgnoreCase("active")?"selected":""%>>Samples</option>
+									<option value="${interface.application.base.path}/browse_samples.html">Samples</option>
+									<option value="${interface.application.base.path}/browse.html"  <%=groupsActive.equalsIgnoreCase("active")?"selected":""%>>Groups</option>
 							</select> &nbsp;&nbsp;Examples: <a
 								href="javascript:submitFormForExamples($('#local-search'),$('#biosamples_index option:selected').val(),'leukemia')">leukemia</a>,
 								<a
@@ -114,10 +114,10 @@
 				<ul class="grid_24" id="local-nav">
 					<li class="first <%=homeActive%>"><a href="/biosamples/"
 						title="Biosamples">Home</a></li>
-					<li class="<%=groupsActive%>"><a
-						href="/biosamples/browse.html" title="Groups">Sample Groups</a></li>
 					<li class="<%=samplesActive%>"><a
 						href="/biosamples/browse_samples.html" title="Samples">Samples</a></li>
+					<li class="<%=groupsActive%>"><a
+						href="/biosamples/browse.html" title="Groups">Sample Groups</a></li>
 					<li class="<%=helpActive%>"><a
 						href="/biosamples/help/index.html" title="Help">Help</a></li>
 					<li class="last <%=aboutActive%>"><a

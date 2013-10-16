@@ -72,10 +72,11 @@
 				<link rel="stylesheet"
 					href="{$context-path}/assets/stylesheets/biosamples_detail_10.css"
 					type="text/css" />
-					<!-- need this to have the scrollbars on Chrome/firefox/safari - overwrite the ebi css definition [PT:53620963] -->
-					<style type="text/css">
+				<!-- need this to have the scrollbars on Chrome/firefox/safari - overwrite 
+					the ebi css definition [PT:53620963] -->
+				<style type="text/css">
 					html {overflow-y:auto;}
-					</style>
+				</style>
 			</xsl:with-param>
 			<xsl:with-param name="pBreadcrumbTrail">
 				<a href="{$context-path}/browse.html">Sample Groups</a>
@@ -160,8 +161,7 @@
 				<xsl:when
 					test="string-length($vkeywords)>0 and contains($vkeywords,'accession:')">
 					<xsl:call-template name="highlight">
-						<xsl:with-param name="pText"
-							select="@id" />
+						<xsl:with-param name="pText" select="@id" />
 						<xsl:with-param name="pFieldName" select="'accession'" />
 					</xsl:call-template>
 				</xsl:when>
@@ -388,200 +388,224 @@
 				</td>
 			</tr>
 
-			<tr>
-				<td colspan="2">
-					<br />
-					<div id="bs_results_tbody" style=" display: none;visible:false"></div>
-					<div id="bs_browse">
-						<table width="100%" border="0" cellpadding="0"
-							id="table_browse_samples" cellspacing="0">
+			<xsl:if test="count(SampleIds/Id)>0">
+				<tr>
+					<td colspan="2">
+						<br />
+						<div id="bs_results_tbody" style=" display: none;visible:false"></div>
+						<div id="bs_browse">
+							<table width="100%" border="0" cellpadding="0"
+								id="table_browse_samples" cellspacing="0">
 
-							<tr>
-								<td>
-									<div id="bs_query_box">
-										<form id="bs_query_form" method="get"
-											action="javascript:searchSamples(document.forms['bs_query_form'].bs_keywords_field.value);">
-											<table border="0" id="table-bs-query" width="100%">
+								<tr>
+									<td>
+										<div id="bs_query_box">
+											<form id="bs_query_form" method="get"
+												action="javascript:searchSamples(document.forms['bs_query_form'].bs_keywords_field.value);">
+												<table border="0" id="table-bs-query" width="100%">
+													<tbody>
+														<tr>
+															<td colspan="3" id="td_no_padding">
+																Search inside the
+																<xsl:value-of select="@samplecount"></xsl:value-of>
+																<xsl:text> sample</xsl:text>
+																<xsl:if test="$vTotal != 1">
+																	<xsl:text>s</xsl:text>
+																</xsl:if>
+																of SampleGroup [
+																<a href="javascript:aeClearField('#bs_keywords_field')">clear</a>
+																]
+															</td>
+														</tr>
+														<tr>
+															<td valign="top" id="td_no_padding">
+																<fieldset id="bs_keywords_fset">
+																	<xsl:variable name="vKeywordsAux"
+																		select="if (fn:matches($vkeywords,'\s*\w\s*:\s*\w')) then ''  else $vkeywords" />
+																	<input id="bs_keywords_field" type="text" name="keywords"
+																		value="{$vKeywordsAux}" maxlength="255" size="60"
+																		autocomplete="off" />
+																</fieldset>
+															</td>
+															<td valign="bottom" align="right" id="td_no_padding">
+																<input type="submit" value="Search" class="submit" />
+															</td>
+															<td width='100%'>&nbsp;
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</form>
+										</div>
+
+									</td>
+								</tr>
+
+
+								<tr>
+									<td>
+										<div id="bs_results_listsamples">
+											<table class="persist-header" id="bs_samples_table"
+												border="0" cellpadding="0" width="100%" cellspacing="0"
+												style="visibility: visible;">
+												<colgroup>
+													<col class="col_left_fixed" style="width:120px;" />
+													<col class="col_middle_scrollable" style="width:100%" />
+													<col class="col_right_fixed" style="width: 100px;" />
+												</colgroup>
+												<thead>
+													<tr>
+														<th colspan="3" class="col_pager">
+															<div class="bs-pager">
+															</div>
+															<div class="bs-page-size">
+															</div>
+															<div class="bs-stats">
+															</div>
+														</th>
+													</tr>
+												</thead>
 												<tbody>
 													<tr>
-														<td colspan="3" id="td_no_padding">
-															Search inside the
-															<xsl:value-of select="@samplecount"></xsl:value-of>
-															<xsl:text> sample</xsl:text>
-															<xsl:if test="$vTotal != 1">
-																<xsl:text>s</xsl:text>
-															</xsl:if>
-															of SampleGroup [
-															<a href="javascript:aeClearField('#bs_keywords_field')">clear</a>
-															]
+														<td id="left_fixed">
+															<!-- just to have the scroll height size to be aligned with 
+																the attributes table (middle area) -->
+															<div id="wrapper_top_scroll_sides">
+																<div id="div_top_scroll_sides">
+																</div>
+															</div>
+															<table id="src_name_table" border="0" cellpadding="0"
+																cellspacing="0" width="100%">
+																<thead>
+																	<tr>
+																		<th
+																			class="bs_results_accession sortable bs_results_Accession"
+																			id="bs_results_header_accession">
+																			<a href="javascript:aeSort('accession')" title="Click to sort by Accession">
+																				<span class="table_header_inner">Accession</span>
+																			</a>
+																		</th>
+																	</tr>
+																</thead>
+																<tbody id="bs_results_tbody_left">
+																	<!-- Left content -->
+																</tbody>
+															</table>
+
+														</td>
+														<td id="middle_scrollable">
+															<div id="wrapper_top_scroll">
+																<div id="div_top_scroll">
+																</div>
+															</div>
+															<div class="attr_table_shadow_container">
+																<div class="attr_table_scroll">
+																	<table id="attr_table" border="0" cellpadding="0"
+																		cellspacing="0" width="100%">
+																		<thead>
+																			<tr>
+																				<th
+																					class="bs_results_organism sortable bs_resultsorganism"
+																					id="bs_results_header_organism">
+																					<a href="javascript:aeSort('organism')" title="Click to sort by Organism">
+																						<span class="table_header_inner">Organism</span>
+																					</a>
+																				</th>
+																				<th
+																					class="bs_results_description sortable bs_results_name"
+																					id="bs_results_header_name">
+																					<a href="javascript:aeSort('name')" title="Click to sort by Name">
+																						<span class="table_header_inner">Name</span>
+																					</a>
+																				</th>
+																				<th
+																					class="bs_results_description sortable bs_results_description"
+																					id="bs_results_header_description">
+																					<a href="javascript:aeSort('description')" title="Click to sort by Description">
+																						<span class="table_header_inner">Description</span>
+																					</a>
+																				</th>
+																				
+
+																				<xsl:for-each select="SampleAttributes/attribute/@class">
+																					<xsl:if
+																						test=".!='Sample Accession' and .!='Organism' and .!='Sample Name' and .!='Sample Description'">
+																						<th>
+																						<span class="table_header_inner_att">
+																							<xsl:value-of select="replace(.,' ' , '_')"></xsl:value-of>&nbsp;
+																						</span>
+																						</th>
+
+																						<!-- <th class="bs_results_accession sortable bs_results_{position()}" 
+																							id="bs_results_header_{position()}"> <a href="javascript:aeSort('{position()}');" 
+																							title="Click to sort by {.}"> <div class="table_header_inner"> <xsl:value-of 
+																							select="."></xsl:value-of>&nbsp; </div> </a> </th> -->
+																					</xsl:if>
+
+																					<!-- xsl:for-each select="SampleAttributes/attribute/@class[.!='Sample 
+																						Accession']"> <xsl:choose> <xsl:when test="position()=1"> <th class="bs_results_accession 
+																						begin_scroll sortable bs_results_{replace(.,' ' , '-')}" id="bs_results_header_{position()}"> 
+																						<a href="javascript:aeSort('{position()}');" title="Click to sort by {.}"> 
+																						<div class="table_header_inner"> <xsl:value-of select="."></xsl:value-of>&nbsp; 
+																						</div> </a> </th> </xsl:when> <xsl:when test="position()=last()"> <th class="bs_results_accession 
+																						end_scroll sortable bs_results_{replace(.,' ' , '-')}" id="bs_results_header_{position()}"> 
+																						<a href="javascript:aeSort('{position()}');" title="Click to sort by {.}"> 
+																						<div class="table_header_inner"> <xsl:value-of select="."></xsl:value-of>&nbsp; 
+																						</div> </a> </th> </xsl:when> <xsl:otherwise> <th class="bs_results_accession 
+																						sortable bs_results_{replace(.,' ' , '-')}" id="bs_results_header_{position()}"> 
+																						<a href="javascript:aeSort('{position()}');" title="Click to sort by {.}"> 
+																						<div class="table_header_inner"> <xsl:value-of select="."></xsl:value-of>&nbsp; 
+																						</div> </a> </th> </xsl:otherwise> </xsl:choose> </xsl:for-each> -->
+																				</xsl:for-each>
+																			</tr>
+																		</thead>
+																		<tbody id="bs_results_tbody_middle">
+																			<!-- Middle content -->
+																		</tbody>
+																	</table>
+																</div>
+																<div class="left_shadow" style="display: none;"></div>
+																<div class="right_shadow" style="display: none;"></div>
+															</div>
+														</td>
+														<td id="right_fixed">
+															<!-- just to have the scroll height size to be aligned with 
+																the attributes table (middle area) -->
+															<div id="wrapper_top_scroll_sides">
+																<div id="div_top_scroll_sides">
+																</div>
+															</div>
+															<table id="links_table" border="0" cellpadding="0"
+																cellspacing="0" width="100%">
+																<thead>
+																	<tr>
+																		<!-- I will not allow to sort -->
+																		<th id="align-middle">
+																			<!-- <a href="javascript:void(0);"> -->
+																				<span class="table_header_inner">Link</span>
+																			<!-- </a> -->
+																		</th>
+																	</tr>
+																</thead>
+																<tbody id="bs_results_tbody_right">
+																	<!-- Right content -->
+																</tbody>
+															</table>
 														</td>
 													</tr>
-													<tr>
-														<td valign="top" id="td_no_padding">
-															<fieldset id="bs_keywords_fset">
-																<xsl:variable name="vKeywordsAux"
-																	select="if (fn:matches($vkeywords,'\s*\w\s*:\s*\w')) then ''  else $vkeywords" />
-																<input id="bs_keywords_field" type="text" name="keywords"
-																	value="{$vKeywordsAux}" maxlength="255" size="60"
-																	autocomplete="off" />
-															</fieldset>
-														</td>
-														<td valign="bottom" align="right" id="td_no_padding">
-															<input type="submit" value="Search" class="submit" />
-														</td>
-														<td width='100%'>&nbsp;
-														</td>
-													</tr>
+													<!-- <tr> <td class="bottom_filler" style="height: 0px;"></td> 
+														<td class="bottom_filler"></td> </tr> <tr> <td colspan="3" class="col_footer">&nbsp; 
+														</td> </tr> -->
 												</tbody>
 											</table>
-										</form>
-									</div>
-
-								</td>
-							</tr>
-
-
-							<tr>
-								<td>
-									<div id="bs_results_listsamples">
-										<table class="persist-header" id="bs_samples_table"
-											border="0" cellpadding="0" width="100%" cellspacing="0"
-											style="visibility: visible;">
-											<colgroup>
-												<col class="col_left_fixed" style="width:120px;" />
-												<col class="col_middle_scrollable" style="width:100%" />
-												<col class="col_right_fixed" style="width: 100px;" />
-											</colgroup>
-											<thead>
-												<tr>
-													<th colspan="3" class="col_pager">
-														<div class="bs-pager">
-														</div>
-														<div class="bs-page-size">
-														</div>
-														<div class="bs-stats">
-														</div>
-													</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td id="left_fixed">
-													<!-- just to have the scroll height size to be aligned with the attributes table (middle area) -->
-													<div id="wrapper_top_scroll_sides">
-															<div id="div_top_scroll_sides">
-															</div>
-														</div>
-														<table id="src_name_table" border="0" cellpadding="0"
-															cellspacing="0" width="100%">
-															<thead>
-																<tr>
-																	<th
-																		class="bs_results_accession sortable bs_results_Accession"
-																		id="bs_results_header_accession">
-																		<a href="javascript:aeSort('accession')"
-																			title="Click to sort by Accession">
-																			<div class="table_header_inner">Accession</div>
-																		</a>
-																	</th>
-																</tr>
-															</thead>
-															<tbody id="bs_results_tbody_left">
-																<!-- Left content -->
-															</tbody>
-														</table>
-
-													</td>
-													<td id="middle_scrollable">
-														<div id="wrapper_top_scroll">
-															<div id="div_top_scroll">
-															</div>
-														</div>
-														<div class="attr_table_shadow_container">
-															<div class="attr_table_scroll">
-																<table id="attr_table" border="0" cellpadding="0"
-																	cellspacing="0" width="100%">
-																	<thead>
-																		<tr>
-
-																			<xsl:for-each select="SampleAttributes/attribute/@class">
-																				<xsl:if test=".!='Sample Accession'">
-																				<!-- class="bs_results_accession sortable bs_results_{replace(.,' ' , '-')}"
-																						id="bs_results_header_{replace(replace(.,'\[' , '\\['),'\]','\\]')}"> -->
-																					<th
-																						class="bs_results_accession sortable bs_results_{position()}"
-																						id="bs_results_header_{position()}">
-																						<a href="javascript:aeSort('{position()}');"
-																							title="Click to sort by {.}">
-																							<div class="table_header_inner">
-																								<xsl:value-of select="replace(.,' ' , '_')"></xsl:value-of>&nbsp;
-																							</div>
-																						</a>
-																					</th>
-																				</xsl:if>
-
-																				<!-- xsl:for-each select="SampleAttributes/attribute/@class[.!='Sample 
-																					Accession']"> <xsl:choose> <xsl:when test="position()=1"> <th class="bs_results_accession 
-																					begin_scroll sortable bs_results_{replace(.,' ' , '-')}" id="bs_results_header_{position()}"> 
-																					<a href="javascript:aeSort('{position()}');" title="Click to sort by {.}"> 
-																					<div class="table_header_inner"> <xsl:value-of select="."></xsl:value-of>&nbsp; 
-																					</div> </a> </th> </xsl:when> <xsl:when test="position()=last()"> <th class="bs_results_accession 
-																					end_scroll sortable bs_results_{replace(.,' ' , '-')}" id="bs_results_header_{position()}"> 
-																					<a href="javascript:aeSort('{position()}');" title="Click to sort by {.}"> 
-																					<div class="table_header_inner"> <xsl:value-of select="."></xsl:value-of>&nbsp; 
-																					</div> </a> </th> </xsl:when> <xsl:otherwise> <th class="bs_results_accession 
-																					sortable bs_results_{replace(.,' ' , '-')}" id="bs_results_header_{position()}"> 
-																					<a href="javascript:aeSort('{position()}');" title="Click to sort by {.}"> 
-																					<div class="table_header_inner"> <xsl:value-of select="."></xsl:value-of>&nbsp; 
-																					</div> </a> </th> </xsl:otherwise> </xsl:choose> </xsl:for-each> -->
-																			</xsl:for-each>
-																		</tr>
-																	</thead>
-																	<tbody id="bs_results_tbody_middle">
-																		<!-- Middle content -->
-																	</tbody>
-																</table>
-															</div>
-															<div class="left_shadow" style="display: none;"></div>
-															<div class="right_shadow" style="display: none;"></div>
-														</div>
-													</td>
-													<td id="right_fixed">
-													<!-- just to have the scroll height size to be aligned with the attributes table (middle area) -->
-													<div id="wrapper_top_scroll_sides">
-															<div id="div_top_scroll_sides">
-															</div>
-														</div>
-														<table id="links_table" border="0" cellpadding="0"
-															cellspacing="0" width="100%">
-															<thead>
-																<tr>
-																	<!-- I will not allow to sort -->
-																	<th id="align-middle">
-																		<a href="javascript:void(0);">
-																			<div class="table_header_inner">Link</div>
-																		</a>
-																	</th>
-																</tr>
-															</thead>
-															<tbody id="bs_results_tbody_right">
-																<!-- Right content -->
-															</tbody>
-														</table>
-													</td>
-												</tr>
-												<!-- <tr> <td class="bottom_filler" style="height: 0px;"></td> 
-													<td class="bottom_filler"></td> </tr> <tr> <td colspan="3" class="col_footer">&nbsp; 
-													</td> </tr> -->
-											</tbody>
-										</table>
-									</div>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</td>
-			</tr>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</td>
+				</tr>
+			</xsl:if>
 		</table>
 	</xsl:template>
 
@@ -660,7 +684,8 @@
 									<xsl:variable name="vStringContacts"
 										select="concat(.//attribute/simpleValue/value[../../@class='Person First Name'], ' ', .//attribute/simpleValue/value[../../@class='Person Last Name'] , ' &lt;' ,.//attribute/simpleValue/value[../../@class='Person Email'], '>')"></xsl:variable>
 
-									<a href="mailto:{.//attribute/simpleValue/value[../../@class='Person Email']}"
+									<a
+										href="mailto:{.//attribute/simpleValue/value[../../@class='Person Email']}"
 										class="icon icon-generic" data-icon="E">
 										<xsl:call-template name="highlight">
 											<xsl:with-param name="pText" select="$vStringContacts" />
@@ -706,15 +731,18 @@
 							<xsl:choose>
 								<xsl:when
 									test="$bdName =('arrayexpress','ena sra','dgva','pride') and not(.//attribute/simpleValue/value[../../@class='Database URI']='')">
-									<a href="{.//attribute/simpleValue/value[../../@class='Database URI']}"
+									<a
+										href="{.//attribute/simpleValue/value[../../@class='Database URI']}"
 										target="ext">
 										<img src="{$basepath}/assets/images/{$bdName}_logo.gif"
 											alt="{.//attribute/simpleValue/value[../../@class='Database Name']} Link"
 											border="0" title="{$bdName}" />
 									</a>
 								</xsl:when>
-								<xsl:when test="not(.//attribute/simpleValue/value[../../@class='Database URI']='')">
-									<a href="{.//attribute/simpleValue/value[../../@class='Database URI']}"
+								<xsl:when
+									test="not(.//attribute/simpleValue/value[../../@class='Database URI']='')">
+									<a
+										href="{.//attribute/simpleValue/value[../../@class='Database URI']}"
 										target="ext">
 										<font class="icon icon-generic" data-icon="L" />
 									</a>
@@ -800,7 +828,8 @@
 							; URI:
 							<a href="{.//attribute/value[../@class='Organization URI']}"
 								target="ext">
-								<xsl:value-of select=".//attribute/simpleValue/value[../../@class='Organization URI']"></xsl:value-of>
+								<xsl:value-of
+									select=".//attribute/simpleValue/value[../../@class='Organization URI']"></xsl:value-of>
 							</a>
 						</td>
 						<!-- <td width="100%">&nbsp; </td> -->
@@ -830,7 +859,8 @@
 						<td>
 							<a href="{.//attribute/value[../@class='Term Source URI']}"
 								target="ext">
-								<xsl:value-of select=".//attribute/simpleValue/value[../../@class='Term Source URI']"></xsl:value-of>
+								<xsl:value-of
+									select=".//attribute/simpleValue/value[../../@class='Term Source URI']"></xsl:value-of>
 							</a>
 						</td>
 						<td width="100%">&nbsp;

@@ -585,11 +585,12 @@
 						if ("f" == row[1]) {
 
 							if (isElementOnArray(fieldsNames, row[0])) {
-								// alert('server row->' + row[0]);
+								alert('server row->' + row[0]);
+								var rowHtml=row[0].replace(/</g,"&lt;")
+								rowHtml=rowHtml.replace(/>/g,"&gt;");
 								parsed[parsed.length] = {
 									data : row,
-									value : "f" == row[1] ? row[0] + ":"
-											: row[0],
+									value :  rowHtml + ":",
 									result : row[0],
 									type : row[1],
 									fieldName : "f" == row[1] ? row[2] : null,
@@ -629,7 +630,8 @@
 			return parsed;
 		},
 		formatItem : function(data, pos, max, value, term) {
-			// alert("extraParams->" + options.fields);
+			//alert("formatItem->" + value);
+			//I need to replace value because of <> on attributes filter
 			var result = value;
 			// alert("extraParams->" + fieldsNames);
 			if ("f" == data.data[1]) {

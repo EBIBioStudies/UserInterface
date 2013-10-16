@@ -204,13 +204,14 @@
 						<table class="persist-header">
 							<colgroup>
 								<col class="col_id">
-								<col class="col_description">
 								<col class="col_organisms">
+								<col class="col_name">
+								<col class="col_description">
 								<col class="col_groups">
 							</colgroup>
 							<thead>
 								<tr>
-									<th colspan="4" class="col_pager">
+									<th colspan="5" class="col_pager">
 										<div class="bs-pager"></div>
 										<div class="bs-page-size"></div>
 										<div class="bs-stats"></div>
@@ -220,22 +221,26 @@
 									<th class="sortable bs_results_id col_accession"
 										id="bs_results_header_accession"><a
 										href="javascript:aeSort('accession')"
-										title="Click to sort by accession"><div
-												class="table_header_inner">Accession</div></a> <!-- <img
+										title="Click to sort by accession"><span
+												class="table_header_inner">Accession</span></a> <!-- <img
 								src="/arrayexpress/assets/images/mini_arrow_up.gif" width="12"
 								height="16" alt="^"> --></th>
+									<th class="sortable col_organisms" id="bs_results_header_org"
+										align="center"><a href="javascript:aeSort('organism')"
+										title="Click to sort by Organism"><span
+												class="table_header_inner">Organism</span></a></th>
+									<th class="sortable col_name" id="bs_results_header_name"><a
+										href="javascript:aeSort('name')"
+										title="Click to sort by Name"><span
+												class="table_header_inner">Name</span></a></th>
 									<th class="sortable col_description" id="bs_results_header_description"><a
 										href="javascript:aeSort('description')"
-										title="Click to sort by description"><div
-												class="table_header_inner">Description</div></a></th>
-									<th class="sortable col_organisms" id="bs_results_header_org"
-										align="center"><a href="javascript:aeSort('org')"
-										title="Click to sort by Organism"><div
-												class="table_header_inner">Organism</div></a></th>
+										title="Click to sort by description"><span
+												class="table_header_inner">Description</span></a></th>
 									<th class="sortable col_groups" id="bs_results_header_groups"
 										align="center"><a href="javascript:aeSort('groups')"
-										title="Click to sort by Groups"><div
-												class="table_header_inner">Groups</div></a></th>
+										title="Click to sort by Groups"><span
+												class="table_header_inner">Groups</span></a></th>
 								</tr>
 							</thead>
 						</table>
@@ -243,8 +248,9 @@
 							cellspacing="0">
 							<colgroup>
 								<col class="col_id">
-								<col class="col_title">
 								<col class="col_organisms">
+								<col class="col_name">
+								<col class="col_description">
 								<col class="col_groups">
 							</colgroup>
 							<tbody id="bs_results_tbody"></tbody>

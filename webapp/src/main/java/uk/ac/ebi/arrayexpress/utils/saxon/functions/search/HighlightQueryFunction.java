@@ -98,9 +98,12 @@ public class HighlightQueryFunction extends ExtensionFunctionDefinition
             } catch (NumberFormatException x) {
                 throw new XPathException("queryId [" + queryId + "] must be integer");
             }
+ 
             String fieldName = null != fieldNameValue ? fieldNameValue.getStringValue() : "";
             String text = null != textValue ? textValue.getStringValue() : "";
 
+    
+            
             String result = searchController.highlightQuery(intQueryId, fieldName, text);
 
             return Value.asIterator(StringValue.makeStringValue(result));

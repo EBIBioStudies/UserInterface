@@ -336,6 +336,7 @@ public class Controller {
 		}
 		QueryInfo queryInfo = this.queryPool.getQueryInfo(queryId);
 		try {
+
 			return queryHighlighter.setEnvironment(
 					getEnvironment(queryInfo.getIndexId())).highlightQuery(
 					queryInfo, fieldName, text);
