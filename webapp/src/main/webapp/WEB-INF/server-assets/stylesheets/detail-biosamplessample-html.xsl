@@ -109,7 +109,54 @@
 				<xsl:copy-of select="string(@id)" />
 			</h4>
 			<table id="bs_results_tablesamplegroupdetail">
-				<xsl:for-each select="attribute[@class!='Sample Accession']">
+
+				<tr>
+					<td class="col_title">
+						<b>
+							Organism
+							:
+						</b>
+					</td>
+					<td>
+						<xsl:call-template name="process_efo">
+							<xsl:with-param name="pAttribute"
+								select="$vSample/attribute[@class='Organism']"></xsl:with-param>
+							<xsl:with-param name="pField" select="'organism'"></xsl:with-param>
+						</xsl:call-template>
+					</td>
+				</tr>
+				<tr>
+					<td class="col_title">
+						<b>
+							Sample Name
+							:
+						</b>
+					</td>
+					<td>
+						<xsl:call-template name="process_efo">
+							<xsl:with-param name="pAttribute"
+								select="$vSample/attribute[@class='Sample Name']"></xsl:with-param>
+							<xsl:with-param name="pField" select="'name'"></xsl:with-param>
+						</xsl:call-template>
+					</td>
+				</tr>
+				<tr>
+					<td class="col_title">
+						<b>
+							Sample Description
+							:
+						</b>
+					</td>
+					<td>
+						<xsl:call-template name="process_efo">
+							<xsl:with-param name="pAttribute"
+								select="$vSample/attribute[@class='Sample Description']"></xsl:with-param>
+							<xsl:with-param name="pField" select="'description'"></xsl:with-param>
+						</xsl:call-template>
+					</td>
+				</tr>
+				<xsl:for-each
+					select="attribute[@class!='Sample Accession' and @class!='Organism' and @class!='Sample Name' and @class!='Sample Description']">
 					<xsl:variable name="attribute" select="."></xsl:variable>
 					<xsl:variable name="attributeClass" select="./@class"></xsl:variable>
 					<tr>
@@ -146,6 +193,8 @@
 								<xsl:otherwise>
 									<xsl:call-template name="process_efo">
 										<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
+										<xsl:with-param name="pField"
+											select="lower-case(replace($attributeClass,' ' , '-'))"></xsl:with-param>
 									</xsl:call-template>
 								</xsl:otherwise>
 
@@ -163,7 +212,7 @@
 						<xsl:for-each select="GroupIds/Id">
 							<a href="../group/{.}">
 								<xsl:apply-templates select="." mode="highlight">
-									<xsl:with-param name="pFieldName" select="'groups'" />
+									<xsl:with-param name="pFieldName" select="'groupaccession'" />
 								</xsl:apply-templates>
 							</a>
 							<xsl:if test="position()!=last()">
@@ -178,8 +227,9 @@
 	</xsl:template>
 
 
-<!-- I need to receive the entire sample, because I'm lookin to several attributes at once -->
-<xsl:template name="process_uri">
+	<!-- I need to receive the entire sample, because I'm lookin to several 
+		attributes at once -->
+	<xsl:template name="process_uri">
 		<xsl:param name="vSample" />
 
 		<table border="0" cellpadding="0" cellspacing="0"
@@ -197,13 +247,15 @@
 								<xsl:choose>
 									<xsl:when
 										test="$bdName =('arrayexpress','ena sra','dgva','pride') and not($vSample/attribute/simpleValue/value[../../@class='Database URI']='')">
-										<a href="{$vSample/attribute/simpleValue/value[../../@class='Database URI']}"
+										<a
+											href="{$vSample/attribute/simpleValue/value[../../@class='Database URI']}"
 											target="ext">
 											<img src="{$basepath}/assets/images/{$bdName}_logo.gif"
 												alt="{$vSample/attribute/simpleValue/value[../../@class='Database Name']} Link"
 												border="0" title="{$bdName}" />
 										</a> &nbsp;
-										<a href="{$vSample/attribute/simpleValue/value[../../@class='Database URI']}"
+										<a
+											href="{$vSample/attribute/simpleValue/value[../../@class='Database URI']}"
 											target="ext">
 											<xsl:value-of
 												select="$vSample//attribute/simpleValue/value[../../@class='Database URI']"></xsl:value-of>
@@ -211,7 +263,8 @@
 									</xsl:when>
 									<xsl:when
 										test="not($vSample/attribute/simpleValue/value[../../@class='Database URI']='')">
-										<a href="{$vSample/attribute/simpleValue/value[../../@class='Database URI']}"
+										<a
+											href="{$vSample/attribute/simpleValue/value[../../@class='Database URI']}"
 											target="ext">
 											<img src="{$basepath}/assets/images/generic_logo.gif"
 												border="0" title="{$bdName}" />
@@ -289,7 +342,11 @@
 		<xsl:param name="pAttribute" />
 		<xsl:for-each select="$pAttribute//simpleValue/value">
 			<a href="{$basepath}/sample/{.}">
-				<xsl:copy-of select="."></xsl:copy-of>
+				<xsl:call-template name="highlight">
+					<xsl:with-param name="pText" select="." />
+					<xsl:with-param name="pFieldName" select="''" />
+				</xsl:call-template>
+				<!-- <xsl:copy-of select="."></xsl:copy-of> -->
 			</a>
 		</xsl:for-each>
 
@@ -297,6 +354,7 @@
 
 	<xsl:template name="process_efo">
 		<xsl:param name="pAttribute" />
+		<xsl:param name="pField" />
 		<table border="0" cellpadding="0" cellspacing="0"
 			id="table_inside_attr">
 			<tbody>
@@ -305,12 +363,18 @@
 						<xsl:choose>
 							<xsl:when
 								test="count($pAttribute//attribute/simpleValue/value[../../@class='Term Source URI'])=0">
-								<xsl:copy-of select="simpleValue/value"></xsl:copy-of>
+								<xsl:call-template name="highlight">
+									<xsl:with-param name="pText"
+										select="$pAttribute/simpleValue/value" />
+									<xsl:with-param name="pFieldName" select="$pField" />
+								</xsl:call-template>
+								<!-- <xsl:copy-of select="simpleValue/value"></xsl:copy-of> -->
 							</xsl:when>
 							<xsl:otherwise>
 
 								<xsl:call-template name="process_efo_url">
 									<xsl:with-param name="pAttribute" select="$pAttribute" />
+									<xsl:with-param name="pField" select="$pField" />
 								</xsl:call-template>
 								<!-- <a href="{.//attribute/simpleValue/value[../../@class='Term 
 									Source URI']}" target="ext"> <xsl:value-of select="simpleValue/value"></xsl:value-of> 
@@ -326,6 +390,7 @@
 
 	<xsl:template name="process_efo_url">
 		<xsl:param name="pAttribute" />
+		<xsl:param name="pField" />
 
 		<xsl:choose>
 			<xsl:when
@@ -333,14 +398,25 @@
 				<a
 					href="http://www.ncbi.nlm.nih.gov/taxonomy/?term={$pAttribute//attribute/simpleValue/value[../../@class='Term Source ID']}"
 					target="ext">
-					<xsl:value-of select="simpleValue/value"></xsl:value-of>
+					<!-- <xsl:value-of select="simpleValue/value"></xsl:value-of> -->
+					<xsl:call-template name="highlight">
+						<xsl:with-param name="pText"
+							select="$pAttribute/simpleValue/value" />
+						<xsl:with-param name="pFieldName" select="$pField" />
+					</xsl:call-template>
+
 				</a>
 			</xsl:when>
 			<xsl:otherwise>
 				<a
 					href="{$pAttribute//attribute/simpleValue/value[../../@class='Term Source URI']}"
 					target="ext">
-					<xsl:value-of select="simpleValue/value"></xsl:value-of>
+					<!-- <xsl:value-of select="simpleValue/value"></xsl:value-of> -->
+					<xsl:call-template name="highlight">
+						<xsl:with-param name="pText"
+							select="$pAttribute/simpleValue/value" />
+						<xsl:with-param name="pFieldName" select="$pField" />
+					</xsl:call-template>
 				</a>
 				;
 				<br />
@@ -402,8 +478,7 @@
 						<td width="900">
 							<xsl:call-template name="highlight">
 								<xsl:with-param name="pText" select="$pValue" />
-								<xsl:with-param name="pFieldName"
-									select="concat('attributes:',$pField)" />
+								<xsl:with-param name="pFieldName" select="$pField" />
 							</xsl:call-template>
 						</td>
 						<td>&nbsp;

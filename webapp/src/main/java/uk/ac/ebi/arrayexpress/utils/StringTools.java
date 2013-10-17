@@ -286,4 +286,16 @@ public class StringTools
         }
     }
 
+    public static String limit(String value, int length)
+    {
+      StringBuilder buf = new StringBuilder(value);
+      if (buf.length() > length)
+      {
+        buf.setLength(length);
+        buf.append("...");
+      }
+
+      return buf.toString();
+    }
+    
 }

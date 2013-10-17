@@ -43,6 +43,7 @@ import uk.ac.ebi.arrayexpress.components.SaxonEngine;
 import uk.ac.ebi.arrayexpress.components.SearchEngine;
 import uk.ac.ebi.arrayexpress.components.XmlDbConnectionPool;
 import uk.ac.ebi.arrayexpress.utils.HttpServletRequestParameterMap;
+import uk.ac.ebi.arrayexpress.utils.StringTools;
 import uk.ac.ebi.arrayexpress.utils.saxon.PrintUtils;
 
 /**
@@ -117,7 +118,7 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 				totalRes.append("<Sample>");
 				totalRes.append("<id>" + doc.get("accession") + "</id>");
 				totalRes.append("<description>"
-						+ StringEscapeUtils.escapeXml(doc.get("description"))
+						+ StringTools.limit(StringEscapeUtils.escapeXml(doc.get("description")),300)
 						// + doc.get("title")
 						+ "</description>");
 				totalRes.append("<name>"
