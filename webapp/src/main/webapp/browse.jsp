@@ -86,7 +86,7 @@
 
 </head>
 
-<body class="level2">
+<body class="level2 ${interface.application.body.class}">
 	<!-- add any of your classes or IDs -->
 	<div id="skip-to">
 		<ul>

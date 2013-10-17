@@ -89,7 +89,7 @@ body.bs_curator_daily {
 }
 
 body.bs_dev_preview {
-background: white url(../images/bs_dev_bg.gif) repeat fixed top;
+	background: #70BDBD url(../images/bs_dev_bg.gif) repeat fixed top;
 }
 
 /*

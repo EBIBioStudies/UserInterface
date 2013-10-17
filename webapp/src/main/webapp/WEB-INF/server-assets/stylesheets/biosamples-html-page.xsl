@@ -148,8 +148,8 @@
 
 		<body>   <!-- add any of your classes or IDs -->
 			<xsl:attribute name="class">
-                <xsl:text>level2</xsl:text>
-            </xsl:attribute>
+                <xsl:text>level2 ${interface.application.body.class}</xsl:text>
+             </xsl:attribute>
 
 			<div id="skip-to">
 				<ul>
