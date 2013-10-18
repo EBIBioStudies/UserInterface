@@ -33,7 +33,7 @@
 				<a href="${interface.application.base.path}"
 					title="Back to ${interface.application.base.service.name} homepage"><img
 					src="${interface.application.base.service.logo}"
-					alt="{interface.application.base.service.name} logo" width="64"
+					alt="${interface.application.base.service.name} logo" width="64"
 					height="64"></a> <span style="padding-top: 5px"><h1>${interface.application.base.service.name}</h1></span>
 			</div>
 			<!-- /local-title -->

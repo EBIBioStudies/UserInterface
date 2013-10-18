@@ -209,7 +209,7 @@
 						<div id="local-title" class="grid_12 alpha logo-title">
 							<a href="${interface.application.base.path}"
 								title="Back to ${interface.application.base.service.name} homepage">
-								<img src="${interface.application.base.service.logo}" alt="{interface.application.base.service.name} logo"
+								<img src="${interface.application.base.service.logo}" alt="${interface.application.base.service.name} logo"
 									width="64" height="64" />
 							</a>
 							<span style="padding-top: 5px">
