@@ -279,9 +279,9 @@
 								select="string-join(attribute/value[../@class='Databases']//value, ', ')" 
 								/> <xsl:with-param name="pFieldName" select="'databases'" /> </xsl:call-template> -->
 
-							<xsl:call-template name="process_database">
+							<xsl:call-template name="process_databases">
 								<xsl:with-param name="pValue"
-									select="attribute/objectValue[../@class='Databases']"></xsl:with-param>
+									select="attribute[@class='Databases']"></xsl:with-param>
 							</xsl:call-template>
 
 						</td>
@@ -529,7 +529,7 @@
 
 																				<xsl:for-each select="SampleAttributes/attribute/@class">
 																					<xsl:if
-																						test=".!='Sample Accession' and .!='Organism' and .!='Sample Name' and .!='Sample Description'">
+																						test=".!='Sample Accession' and .!='Organism' and .!='Sample Name' and .!='Sample Description' and .!='Databases'">
 																						<th>
 																						<span class="table_header_inner_att">
 																							<xsl:value-of select="replace(.,' ' , '_')"></xsl:value-of>&nbsp;
@@ -580,10 +580,11 @@
 																<thead>
 																	<tr>
 																		<!-- I will not allow to sort -->
-																		<th id="align-middle">
-																			<!-- <a href="javascript:void(0);"> -->
-																				<span class="table_header_inner">Link</span>
-																			<!-- </a> -->
+																		<th class="bs_results_database sortable bs_results_database"
+																					id="bs_results_header_database">
+																			<a href="javascript:aeSort('database')" title="Click to sort by Database">
+																				<span class="table_header_inner">Database</span>
+																			</a> 
 																		</th>
 																	</tr>
 																</thead>
@@ -718,67 +719,48 @@
 
 
 
-	<xsl:template name="process_database">
+		<xsl:template name="process_databases">
 		<xsl:param name="pValue" />
-		<table border="0" cellpadding="0" cellspacing="0"
-			id="table_inside_attr">
-			<tbody>
-				<xsl:for-each select="$pValue/object">
-					<xsl:variable name="bdName"
-						select="lower-case(.//attribute/simpleValue/value[../../@class='Database Name'])"></xsl:variable>
-					<tr>
-						<td id="td_nowrap">
-							<xsl:choose>
-								<xsl:when
-									test="$bdName =('arrayexpress','ena sra','dgva','pride') and not(.//attribute/simpleValue/value[../../@class='Database URI']='')">
-									<a
-										href="{.//attribute/simpleValue/value[../../@class='Database URI']}"
-										target="ext">
-										<img src="{$basepath}/assets/images/{$bdName}_logo.gif"
-											alt="{.//attribute/simpleValue/value[../../@class='Database Name']} Link"
-											border="0" title="{$bdName}" />
-									</a>
-								</xsl:when>
-								<xsl:when
-									test="not(.//attribute/simpleValue/value[../../@class='Database URI']='')">
-									<a
-										href="{.//attribute/simpleValue/value[../../@class='Database URI']}"
-										target="ext">
-										<font class="icon icon-generic" data-icon="L" />
-									</a>
-								</xsl:when>
-							</xsl:choose>
-						</td>
-						<td id="td_nowrap">
-							<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select="concat('Name: ',.//attribute/simpleValue/value[../../@class='Database Name'])" />
-								<xsl:with-param name="pFieldName" select="'databases'" />
-							</xsl:call-template>
-						</td>
-						<td id="td_nowrap">
-							<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select="concat('Id: ',.//attribute/simpleValue/value[../../@class='Database ID'])" />
-								<xsl:with-param name="pFieldName" select="'databases'" />
-							</xsl:call-template>
-						</td>
-						<td width="100%">&nbsp;
-						</td>
-						<!-- <td> <xsl:call-template name="highlight"> <xsl:with-param name="pText" 
-							select="concat('Name: ', .//attribute/value[../@class='Database Name'], '; 
-							ID: ', .//attribute/value[../@class='Database ID'])" /> <xsl:with-param name="pFieldName" 
-							select="'databases'" /> </xsl:call-template> ; URI: <a href="{.//attribute/value[../@class='Database 
-							URI']}" target="ext"> <xsl:value-of select=".//attribute/value[../@class='Database 
-							URI']"></xsl:value-of> </a> </td> -->
-						<!-- <xsl:choose> <xsl:when test="position()&lt;last()"> <br /> </xsl:when> 
-							</xsl:choose> -->
-					</tr>
-				</xsl:for-each>
-			</tbody>
-		</table>
+		<xsl:for-each select="$pValue/objectValue">
+			<xsl:call-template name="process_database">
+				<xsl:with-param name="pName" select=".//attribute[@class='Database Name']/simpleValue/value" />
+				<xsl:with-param name="pUrl" select=".//attribute[@class='Database URI']/simpleValue/value" />
+				<xsl:with-param name="pId" select=".//attribute[@class='Database ID']/simpleValue/value" />
+			</xsl:call-template>
+		</xsl:for-each>
 	</xsl:template>
 
+	<xsl:template name="process_database">
+		<xsl:param name="pName" />
+		<xsl:param name="pUrl" />
+		<xsl:param name="pId" />
+
+		<xsl:variable name="bdName" select="lower-case($pName)"></xsl:variable>
+		<xsl:choose>
+			<xsl:when
+				test="$bdName=('arrayexpress','ena sra','dgva','pride') and not($pUrl='')">
+				<a href="{$pUrl}" target="ext">
+					<img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{$pName} Link"
+						border="0" title="{$pName}" />
+				</a>
+			</xsl:when>
+			<xsl:when test="not($pUrl='')">
+				<a href="{$pUrl}" target="ext" title="{$pName}">
+					 <font class="icon icon-generic" data-icon="L" title="{$pName}" /> <xsl:copy-of select="$pName"></xsl:copy-of>
+				</a>
+			</xsl:when>
+		</xsl:choose>
+		<br/>
+		URI:
+		<a href="{$pUrl}" target="ext">
+			<xsl:copy-of select="$pUrl"></xsl:copy-of>
+		</a>;
+		<br/>
+		ID:
+		<xsl:copy-of select="$pId"></xsl:copy-of>;
+
+	</xsl:template>
+	
 	<!-- <td vertical-align="middle">&nbsp;Name: <xsl:copy-of select=".//attribute/value[../@class='Database 
 		Name']"/>; ID: <xsl:copy-of select=".//attribute/value[../@class='Database 
 		ID']"/>; URI: <a href="{.//attribute/value[../@class='Database URI']}" target="ext"> 

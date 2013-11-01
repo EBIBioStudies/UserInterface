@@ -95,6 +95,18 @@ public class IndexEnvironmentBiosamplesGroup extends AbstractIndexEnvironment {
 						+ StringEscapeUtils.escapeXml(doc.get("title"))
 						//+ doc.get("title")
 						+ "</description>");
+				StringBuilder dbs =new StringBuilder();
+				for (String x : doc.getValues("databaseinfo")) {
+					String[] arr =x.split("###");
+					//System.out.println("Valor->" + x);
+					dbs.append("<database>");
+					dbs.append("<name>" + arr[0].trim() +  "</name>");
+					dbs.append("<url>" + StringEscapeUtils.escapeXml(arr[1].trim()) +  "</url>");
+					dbs.append("<id>" +  StringEscapeUtils.escapeXml(arr[2].trim()) +  "</id>");
+					dbs.append("</database>");
+				}
+				totalRes.append("<databases>" + dbs
+						+ "</databases>");
 				totalRes.append("<samples>" + doc.get("samples") + "</samples>");
 				totalRes.append("</SampleGroup>");
 

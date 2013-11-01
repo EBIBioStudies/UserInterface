@@ -114,6 +114,17 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 				for (String x : doc.getValues("groupaccession")) {
 					groups.append("<id>" + x +  "</id>");
 				}
+				StringBuilder dbs =new StringBuilder();
+
+				for (String x : doc.getValues("databaseinfo")) {
+					String[] arr =x.split("###");
+					//System.out.println("Valor->" + x);
+					dbs.append("<database>");
+					dbs.append("<name>" + arr[0].trim() +  "</name>");
+					dbs.append("<url>" + StringEscapeUtils.escapeXml(arr[1].trim()) +  "</url>");
+					dbs.append("<id>" +  StringEscapeUtils.escapeXml(arr[2].trim()) +  "</id>");
+					dbs.append("</database>");
+				}
 
 				totalRes.append("<Sample>");
 				totalRes.append("<id>" + doc.get("accession") + "</id>");
@@ -134,6 +145,9 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 						+ "</organisms>");
 				totalRes.append("<groupaccession>" + groups
 						+ "</groupaccession>");
+				
+				totalRes.append("<databases>" + dbs
+						+ "</databases>");
 				totalRes.append("</Sample>");
 
 			}

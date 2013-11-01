@@ -83,17 +83,19 @@
 
 	</xs:complexType>
 
+	<xs:complexType name="qualifiedValueType">
+		<xs:sequence>
+			<xs:element name="Value" type="tns:stringValueType" minOccurs="1" maxOccurs="1"/>				
+			<xs:element name="TermSourceREF" type="tns:termSourceREFType" minOccurs="0"
+				maxOccurs="1"/>		
+			<xs:element name="Unit" type="tns:stringValueType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
 
 	<xs:complexType name="propertyType">
 
 		<xs:sequence>
-
-			<xs:element name="Value" type="tns:stringValueType" minOccurs="1" maxOccurs="1"/>
-
-			<xs:element name="Unit" type="tns:stringValueType" minOccurs="0" maxOccurs="1"/>
-
-			<xs:element name="TermSourceREF" type="tns:termSourceREFType" minOccurs="0"
-				maxOccurs="1"/>
+			<xs:element name="QualifiedValue" type="tns:qualifiedValueType" minOccurs="0" maxOccurs="unbounded"/>
 
 		</xs:sequence>
 
@@ -107,6 +109,22 @@
 
 	</xs:complexType>
 
+	<xs:complexType name="GroupIdsType">
+			<xs:sequence>
+				<xs:element name="Id" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="SampleIdsType">
+		<xs:sequence>
+			<xs:element name="Id" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!--<xs:element name="idType" type="xs:string"/>-->
+
+
+	
 	<xs:complexType name="bioSampleGroupType">
 		<xs:sequence>
 			<xs:element name="Annotation" type="tns:annotationType" minOccurs="0"
@@ -120,6 +138,8 @@
 			<xs:element name="Database" type="tns:databaseType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="Publication" type="tns:publicationType" minOccurs="0"
 				maxOccurs="unbounded"/>
+			<xs:element name="SampleIds" type="tns:SampleIdsType" minOccurs="0"
+				maxOccurs="1"/>
 			<xs:element name="BioSample" type="tns:bioSampleType" minOccurs="0"
 				maxOccurs="unbounded"/>
 		</xs:sequence>
@@ -134,10 +154,12 @@
 			<xs:element name="Property" type="tns:propertyType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="derivedFrom" type="tns:stringValueType" minOccurs="0"
 				maxOccurs="unbounded"/>
+			<xs:element name="Database" type="tns:databaseType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="GroupIds" type="tns:GroupIdsType" minOccurs="0"
+				maxOccurs="1"/>
 		</xs:sequence>
 
 		<xs:attribute name="id" type="xs:string" use="required"/>
-		<xs:attribute name="groupId" type="xs:string" use="optional"/>
 	</xs:complexType>
 
 	<xs:element name="BioSampleGroup" type="tns:bioSampleGroupType"/>

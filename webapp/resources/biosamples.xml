@@ -105,7 +105,8 @@
 
 		
 			<!--  <document path="/Biosamples/SampleGroup[@id='SAMEG82627']" defaultField="keywords"> -->
-	<document path="/Biosamples/SampleGroups/SampleGroup[starts-with(@id,'SAM')]" defaultField="keywords">
+	<!-- <document path="/Biosamples/SampleGroups/SampleGroup[starts-with(@id,'SAM')]" defaultField="keywords"> -->
+	<document path="/Biosamples/SampleGroups/SampleGroup" defaultField="keywords">
 				<!-- I also want to search in the attributes name, so I will add it to the keywords -->
 				<field name="keywords" type="string" path="concat(string-join(.//Sample/attribute/@class, ' '),string-join(.//text(), ' '),@id)"
 					analyze="true"
@@ -149,9 +150,15 @@
 				<!-- <field name="version" title="by Version" type="string"
 					path="attribute/value[../@class='Submission Version']" analyze="true"
 					store="false" escape="false" /> -->
-				<field name="databases" title="by Databases" type="string"
-					path="attribute/objectValue[../@class='Databases']//value" analyze="true"
-					store="false" escape="false" />
+		
+				<field name="database" type="string"
+					path="string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name'])" analyze="true"
+					store="true" escape="false" sortfields="database" autocompletion="true" title="by Database"/>	
+				<!-- this one is used to keep the information that I need to use browse page to shoul the database column information  - I need to have the space character on ' ### '-->	
+				<field name="databaseinfo" type="string"
+					path="concat(string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database URI']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database ID']))" analyze="false"
+					store="true" escape="false"/>	
+					
 				<field name="organizations" title="by Organizations" type="string"
 					path="attribute/objectValue[../@class='Organizations']//value" analyze="true"
 					store="false" escape="false" />
@@ -179,22 +186,22 @@
 			</document>
 		</index>
 
-
 		<index id="biosamplessample"
 			location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes"
 			defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
 
 <!--  <document path="/Biosamples/SampleGroup/Sample[@groupId='SAMEG82627']" 	 -->
-	  <document path="/Biosamples/Samples/Sample[starts-with(@id,'SAM')]"  				 
-				 defaultField="keywords">
-				
+	 <!--  <document path="/Biosamples/Samples/Sample[starts-with(@id,'SAM')]"  				 
+				 defaultField="keywords"> -->
+	 <document path="/Biosamples/Samples/Sample"  				 
+				 defaultField="keywords">			
 				<!-- I also want to search in the attributes name, so I will add it to the keywords -->
 				<field name="keywords" type="string" path="concat(string-join(.//attribute/@class, ' '),string-join(.//text(), ' '), @id)"
 					analyze="true"
 					analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer"
 					autocompletion="true" store="false" escape="false" />
 				
-			
+		
 				
 			<!-- 	<field name="allele" type="string" path="attribute/value[../@class='Allele Name']"
 					analyze="true" store="false" escape="false" sortfields="allele" /> -->				
@@ -218,6 +225,16 @@
 				<field name="description" type="string"
 					path="string(attribute/simpleValue/value[../../@class='Sample Description'])" analyze="true"
 					store="true" escape="false" sortfields="description" autocompletion="true" title="by Description"/>
+					
+				<field name="database" type="string"
+					path="string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name'])" analyze="true"
+					store="true" escape="false" sortfields="database" autocompletion="true" title="by Database"/>	
+				<!-- this one is used to keep the information that I need to use browse page to shoul the database column information  - I need to have the space character on ' ### '-->	
+				<field name="databaseinfo" type="string"
+					path="concat(string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database URI']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database ID']))" analyze="false"
+					store="true" escape="false"/>	
+		
+					
 				<!-- those are used to browse sample page - I dont want to query the DB -->
 					
 				<!-- those are used to browse sample page - I dont want to query the DB -->		
@@ -228,7 +245,6 @@
 				<!-- used to order the search using the number of groups --> <!-- never forget the cast as xs:integer -->
 				<field name="groups" title="by Number of SampleGroups" type="integer" 
 					path="(count(GroupIds/Id)) cast as xs:integer" sortfields="groups" />
-			
 		
 					<!-- this field is only used for incremental updates -->
 				<field name="delete" type="boolean" path="@delete = 'true'"/>	

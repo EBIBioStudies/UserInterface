@@ -109,14 +109,15 @@
 					if (request.getParameter("keywords") != null
 							&& !request.getParameter("keywords").equalsIgnoreCase("")) {
 				%>
-				<a href="${interface.application.base.path}/browse.html">Sample Groups</a> &gt; Search results for "<%=request.getParameter("keywords")%>"
+				<a href="${interface.application.base.path}/browse.html">Sample
+					Groups</a> &gt; Search results for "<%=request.getParameter("keywords")%>"
 				<%
-					} else {
-				%>
+ 	} else {
+ %>
 				Sample Groups
 				<%
-					}
-				%>
+ 	}
+ %>
 
 			</p>
 		</nav>
@@ -139,8 +140,8 @@
 		<%
 			}
 		%>
-		
-			
+
+
 		<section class="grid_24 alpha omega">
 			<div id="bs_browse">
 
@@ -206,10 +207,11 @@
 								<col class="col_id">
 								<col class="col_title">
 								<col class="col_samples">
+								<col class="col_database">
 							</colgroup>
 							<thead>
 								<tr>
-									<th colspan="3" class="col_pager">
+									<th colspan="4" class="col_pager">
 										<div class="bs-pager"></div>
 										<div class="bs-page-size"></div>
 										<div class="bs-stats"></div>
@@ -220,17 +222,21 @@
 										id="bs_results_header_accession"><a
 										href="javascript:aeSort('accession')"
 										title="Click to sort by accession"><span
-												class="table_header_inner">Accession</span></a> <!-- <img
+											class="table_header_inner">Accession</span></a> <!-- <img
 								src="/arrayexpress/assets/images/mini_arrow_up.gif" width="12"
 								height="16" alt="^"> --></th>
 									<th class="sortable col_title" id="bs_results_header_title"><a
 										href="javascript:aeSort('title')"
 										title="Click to sort by title"><span
-												class="table_header_inner">Title</span></a></th>
+											class="table_header_inner">Title</span></a></th>
 									<th class="sortable col_samples" id="bs_results_header_samples"
 										align="center"><a href="javascript:aeSort('samples')"
 										title="Click to sort by number of samples"><span
-												class="table_header_inner">Samples</span></a></th>
+											class="table_header_inner">Samples</span></a></th>
+									<th class="sortable col_database" id="bs_results_header_database"
+										align="center"><a href="javascript:aeSort('database')"
+										title="Click to sort by Database"><span
+											class="table_header_inner">Database</span></a></th>
 								</tr>
 							</thead>
 						</table>
@@ -240,6 +246,7 @@
 								<col class="col_id">
 								<col class="col_title">
 								<col class="col_samples">
+								<col class="col_database">
 							</colgroup>
 							<tbody id="bs_results_tbody"></tbody>
 

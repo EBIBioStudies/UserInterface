@@ -457,5 +457,9 @@ vertical-align: top;
 	text-align: left;
 }
 
+.col_database{
+	width:100px;
+	text-align: left;
+}
 
 /*colummns browse samplegroups*/

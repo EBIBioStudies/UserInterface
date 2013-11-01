@@ -3,7 +3,7 @@
 
 <!DOCTYPE xsl:stylesheet [ <!ENTITY nbsp "&#160;"> ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema"   xmlns:aejava="http://www.ebi.ac.uk/arrayexpress/XSLT/SearchExtension"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:aejava="http://www.ebi.ac.uk/arrayexpress/XSLT/SearchExtension"
 	xmlns:html="http://www.w3.org/1999/xhtml" extension-element-prefixes="xs aejava html"
 	exclude-result-prefixes="xs aejava html" version="2.0">
 
@@ -48,11 +48,10 @@
 
 	<xsl:variable name="vkeywords" select="$keywords" />
 
-<!-- 	<xsl:output omit-xml-declaration="yes" method="html" indent="no" 
-		encoding="ISO-8859-1" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
- -->		
-	<!-- <xsl:output omit-xml-declaration="yes" method="html" indent="no" 
-		encoding="windows-1252" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />  -->
+	<!-- <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="ISO-8859-1" 
+		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" /> -->
+	<!-- <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="windows-1252" 
+		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" /> -->
 
 
 
@@ -60,45 +59,63 @@
 	<xsl:include href="biosamples-highlight.xsl" />
 
 	<xsl:template match="/">
-	  <xsl:variable name="vFrom" as="xs:integer">
-            <xsl:choose>
-                <xsl:when test="$vPage > 0"><xsl:value-of select="1 + ( $vPage - 1 ) * $vPageSize"/></xsl:when>
-                <xsl:when test="$vTotal = 0">0</xsl:when>
-                <xsl:otherwise>1</xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        
-        <xsl:variable name="vTo" as="xs:integer">
-            <xsl:choose>
-                <xsl:when test="( $vFrom + $vPageSize - 1 ) > $vTotal"><xsl:value-of select="$vTotal"/></xsl:when>
-                <xsl:otherwise><xsl:value-of select="$vFrom + $vPageSize - 1"/></xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
+		<xsl:variable name="vFrom" as="xs:integer">
+			<xsl:choose>
+				<xsl:when test="$vPage > 0">
+					<xsl:value-of select="1 + ( $vPage - 1 ) * $vPageSize" />
+				</xsl:when>
+				<xsl:when test="$vTotal = 0">
+					0
+				</xsl:when>
+				<xsl:otherwise>
+					1
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
-        <tr id="bs_results_summary_info">
-            <td colspan="3">
-                <div id="bs_results_total"><xsl:value-of select="$vTotal"/></div>
-                <div id="bs_results_from"><xsl:value-of select="$vFrom"/></div>
-                <div id="bs_results_to"><xsl:value-of select="$vTo"/></div>
-                <div id="bs_results_page"><xsl:value-of select="$vPage"/></div>
-                <div id="bs_results_pagesize"><xsl:value-of select="$vPageSize"/></div>
-            </td>
-        </tr>
-        
-         <xsl:choose>
-            <xsl:when test="$vTotal > 0">
-            <xsl:apply-templates select="//all/SampleGroup"></xsl:apply-templates>
-            </xsl:when>
-            <xsl:otherwise>
-            <!--     <tr class="ae_results_tr_error">
-                    <td colspan="3">
-                            <div>There are no Samples matching your search criteria found in BioSample Database.</div>
-                            <div>More information on query syntax available in <a href="${interface.application.link.query_help}">ArrayExpress Query Help</a>.</div>
-                    </td>
-                </tr> -->
-            </xsl:otherwise>
-        </xsl:choose>
-        
+		<xsl:variable name="vTo" as="xs:integer">
+			<xsl:choose>
+				<xsl:when test="( $vFrom + $vPageSize - 1 ) > $vTotal">
+					<xsl:value-of select="$vTotal" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$vFrom + $vPageSize - 1" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
+		<tr id="bs_results_summary_info">
+			<td colspan="3">
+				<div id="bs_results_total">
+					<xsl:value-of select="$vTotal" />
+				</div>
+				<div id="bs_results_from">
+					<xsl:value-of select="$vFrom" />
+				</div>
+				<div id="bs_results_to">
+					<xsl:value-of select="$vTo" />
+				</div>
+				<div id="bs_results_page">
+					<xsl:value-of select="$vPage" />
+				</div>
+				<div id="bs_results_pagesize">
+					<xsl:value-of select="$vPageSize" />
+				</div>
+			</td>
+		</tr>
+
+		<xsl:choose>
+			<xsl:when test="$vTotal > 0">
+				<xsl:apply-templates select="//all/SampleGroup"></xsl:apply-templates>
+			</xsl:when>
+			<xsl:otherwise>
+				<!-- <tr class="ae_results_tr_error"> <td colspan="3"> <div>There are 
+					no Samples matching your search criteria found in BioSample Database.</div> 
+					<div>More information on query syntax available in <a href="${interface.application.link.query_help}">ArrayExpress 
+					Query Help</a>.</div> </td> </tr> -->
+			</xsl:otherwise>
+		</xsl:choose>
+
 	</xsl:template>
 
 
@@ -119,30 +136,73 @@
 			</td>
 
 			<td>
-				<!-- <div class="ellipsis_class">
-				<span id="ellipsis" class='ellipsis_text'> -->
-					<xsl:call-template name="highlight">
-						<xsl:with-param name="pText" select="description" />
-						<xsl:with-param name="pFieldName" select="'title'" />
-					</xsl:call-template>
-				<!-- </span>
-				</div> -->
+				<!-- <div class="ellipsis_class"> <span id="ellipsis" class='ellipsis_text'> -->
+				<xsl:call-template name="highlight">
+					<xsl:with-param name="pText" select="description" />
+					<xsl:with-param name="pFieldName" select="'title'" />
+				</xsl:call-template>
+				<!-- </span> </div> -->
 			</td>
 
 			<td class="col_samples">
 				<!-- <div> -->
-					<!-- <xsl:value-of select="samples"></xsl:value-of> -->
-					<xsl:call-template name="highlight">
-						<xsl:with-param name="pText" select="string(samples)" />
-						<xsl:with-param name="pFieldName" select="'samples'" />
-					</xsl:call-template>
-					<!-- <xsl:call-template name="highlight"> <xsl:with-param name="pText" 
-						select="count(Sample)"/> <xsl:with-param name="pFieldName"/> </xsl:call-template> -->
-				<!-- </div>-->
+				<!-- <xsl:value-of select="samples"></xsl:value-of> -->
+				<xsl:call-template name="highlight">
+					<xsl:with-param name="pText" select="string(samples)" />
+					<xsl:with-param name="pFieldName" select="'samples'" />
+				</xsl:call-template>
+				<!-- <xsl:call-template name="highlight"> <xsl:with-param name="pText" 
+					select="count(Sample)"/> <xsl:with-param name="pFieldName"/> </xsl:call-template> -->
+				<!-- </div> -->
+			</td>
+
+			<td class="col_database">
+				<xsl:call-template name="process_databases">
+					<xsl:with-param name="pValue" select="./databases" />
+				</xsl:call-template>
 			</td>
 
 
 		</tr>
+	</xsl:template>
+
+
+	<xsl:template name="process_databases">
+		<xsl:param name="pValue" />
+		<xsl:for-each select="$pValue/database">
+			<xsl:call-template name="process_database">
+				<xsl:with-param name="pName" select="name" />
+				<xsl:with-param name="pUrl" select="url" />
+				<xsl:with-param name="pId" select="id" />
+			</xsl:call-template>
+		</xsl:for-each>
+	</xsl:template>
+
+	<xsl:template name="process_database">
+		<xsl:param name="pName" />
+		<xsl:param name="pUrl" />
+		<xsl:param name="pId" />
+
+		<xsl:variable name="bdName" select="lower-case($pName)"></xsl:variable>
+		<xsl:choose>
+			<xsl:when
+				test="$bdName=('arrayexpress','ena sra','dgva','pride') and not($pUrl='')">
+				<a href="{$pUrl}" target="ext">
+					<img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{$pName} Link"
+						border="0" title="{$pName}" />
+				</a>
+			</xsl:when>
+			<xsl:when test="not($pUrl='')">
+				<a href="{$pUrl}" target="ext" title="{$pName}">
+					<font class="icon icon-generic" data-icon="L" title="{$pName}" />
+				</a>
+			</xsl:when>
+
+			<xsl:otherwise>
+				<xsl:copy-of select="$pName"></xsl:copy-of>
+			</xsl:otherwise>
+
+		</xsl:choose>
 	</xsl:template>
 
 

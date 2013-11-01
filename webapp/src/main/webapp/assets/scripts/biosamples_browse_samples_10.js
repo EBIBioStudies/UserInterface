@@ -25,7 +25,8 @@ var sortDefault = {
 	name : "ascending",
 	description : "ascending",
 	organism : "ascending",
-	groups : "ascending"
+	groups : "ascending",
+	database : "ascending"
 };
 
 var sortTitle = {
@@ -33,7 +34,8 @@ var sortTitle = {
 	name : "ascending",
 	description : "description",
 	organism : "organism",
-	groups : "groups"
+	groups : "groups",
+	database : "database"
 };
 
 // var sortBy = "id";

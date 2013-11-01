@@ -23,13 +23,15 @@ var sortDefault = {
 	relevance : "descending",
 	accession : "ascending",
 	title : "ascending",
-	samples : "descending"
+	samples : "descending",
+	database : "ascending"
 };
 
 var sortTitle = {
 	accession : "accession",
 	title : "title",
-	samples : "number of samples"
+	samples : "number of samples",
+	database : "database"
 };
 
 // var sortBy = "id";

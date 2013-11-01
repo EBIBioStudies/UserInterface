@@ -161,6 +161,12 @@
 				</xsl:call-template>
 			</td>
 
+			<td class="col_database">
+				<xsl:call-template name="process_databases">
+					<xsl:with-param name="pValue" select="./databases" />
+				</xsl:call-template>
+			</td>
+
 
 		</tr>
 	</xsl:template>
@@ -177,6 +183,45 @@
 			</xsl:if>
 
 		</xsl:for-each>
+	</xsl:template>
+
+	<xsl:template name="process_databases">
+		<xsl:param name="pValue" />
+		<xsl:for-each select="$pValue/database">
+			<xsl:call-template name="process_database">
+				<xsl:with-param name="pName" select="name" />
+				<xsl:with-param name="pUrl" select="url" />
+				<xsl:with-param name="pId" select="id" />
+			</xsl:call-template>
+		</xsl:for-each>
+	</xsl:template>
+
+	<xsl:template name="process_database">
+		<xsl:param name="pName" />
+		<xsl:param name="pUrl" />
+		<xsl:param name="pId" />
+
+		<xsl:variable name="bdName" select="lower-case($pName)"></xsl:variable>
+		<xsl:choose>
+			<xsl:when
+				test="$bdName=('arrayexpress','ena sra','dgva','pride') and not($pUrl='')">
+				<a href="{$pUrl}" target="ext">
+					<img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{$pName} Link"
+						border="0" title="{$pName}" />
+				</a>
+			</xsl:when>
+			<xsl:when test="not($pUrl='')">
+				<a href="{$pUrl}" target="ext" title="{$pName}">
+					<font class="icon icon-generic" data-icon="L" title="{$pName}" />
+				</a>
+			</xsl:when>
+
+			<xsl:otherwise>
+				<xsl:copy-of select="$pName"></xsl:copy-of>
+			</xsl:otherwise>
+
+		</xsl:choose>
+
 	</xsl:template>
 
 

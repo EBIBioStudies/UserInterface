@@ -208,10 +208,11 @@
 								<col class="col_name">
 								<col class="col_description">
 								<col class="col_groups">
+								<col class="col_database">
 							</colgroup>
 							<thead>
 								<tr>
-									<th colspan="5" class="col_pager">
+									<th colspan="6" class="col_pager">
 										<div class="bs-pager"></div>
 										<div class="bs-page-size"></div>
 										<div class="bs-stats"></div>
@@ -241,6 +242,10 @@
 										align="center"><a href="javascript:aeSort('groups')"
 										title="Click to sort by Groups"><span
 												class="table_header_inner">Groups</span></a></th>
+									<th class="sortable col_database" id="bs_results_header_database"
+										align="center"><a href="javascript:aeSort('database')"
+										title="Click to sort by Database"><span
+												class="table_header_inner">Database</span></a></th>			
 								</tr>
 							</thead>
 						</table>
@@ -252,6 +257,7 @@
 								<col class="col_name">
 								<col class="col_description">
 								<col class="col_groups">
+								<col class="col_database">
 							</colgroup>
 							<tbody id="bs_results_tbody"></tbody>
 
