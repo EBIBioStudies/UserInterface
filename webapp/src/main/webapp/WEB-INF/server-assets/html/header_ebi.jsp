@@ -134,7 +134,7 @@
 		</div>
 	</header>
 
-	<div class="contents" id="contents">
+	<div id="content" role="main" class="grid_24 clearfix">
 		<%
 			//need thi parameter to fulfill the forms parameters
 			String host = request.getScheme() + "://"
@@ -241,4 +241,4 @@
 					class="submit" type="submit" value="Send">
 			</form>
 		</section>
-	</div>
+<!-- 	</div> -->
