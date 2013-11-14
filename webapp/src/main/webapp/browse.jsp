@@ -261,9 +261,8 @@
 			</div>
 		</section>
 	</div>
-	<%@ include file="WEB-INF/server-assets/html/footer_ebi.html"%>
-
 	</div>
+	<%@ include file="WEB-INF/server-assets/html/footer_ebi.html"%>
 	<!--! end of #wrapper -->
 
 

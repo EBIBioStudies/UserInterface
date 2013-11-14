@@ -272,9 +272,9 @@
 			</div>
 		</section>
 	</div>
+	</div>
 	<%@ include file="WEB-INF/server-assets/html/footer_ebi.html"%>
 
-	</div>
 	<!--! end of #wrapper -->
 
 

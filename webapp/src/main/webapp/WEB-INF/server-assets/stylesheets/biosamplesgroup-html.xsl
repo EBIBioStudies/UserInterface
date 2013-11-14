@@ -33,6 +33,7 @@
 	<xsl:include href="biosamples-html-page.xsl" />
 	<!-- <xsl:include href="ae-sort-arrays.xsl"/> -->
 	<xsl:include href="biosamples-highlight.xsl" />
+	<xsl:include href="biosamples-process-attributes.xsl" />
 
 
 	<xsl:variable name="vPage"
@@ -379,6 +380,22 @@
 				</xsl:when>
 			</xsl:choose>
 
+
+			<!-- Other common attributes - sometimes they are used to have common 
+				information about all sample attributes - data protection -->
+		<!-- 	<xsl:if test="count(SampleAttributes//simpleValue)>0">
+				<tr>
+					<td class="col_title">
+						<b>Common attributes:</b>
+					</td>
+					<td>
+						<xsl:call-template name="process_other_attributes">
+							<xsl:with-param name="pAttributes" select="SampleAttributes"></xsl:with-param>
+						</xsl:call-template>
+					</td>
+				</tr>
+			</xsl:if> -->
+
 			<tr>
 				<td class="col_title">
 					<b>Samples in group:</b>
@@ -525,15 +542,15 @@
 																						<span class="table_header_inner">Description</span>
 																					</a>
 																				</th>
-																				
+
 
 																				<xsl:for-each select="SampleAttributes/attribute/@class">
 																					<xsl:if
 																						test=".!='Sample Accession' and .!='Organism' and .!='Sample Name' and .!='Sample Description' and .!='Databases'">
 																						<th>
-																						<span class="table_header_inner_att">
-																							<xsl:value-of select="replace(.,' ' , '_')"></xsl:value-of>&nbsp;
-																						</span>
+																							<span class="table_header_inner_att">
+																								<xsl:value-of select="replace(.,' ' , '_')"></xsl:value-of>&nbsp;
+																							</span>
 																						</th>
 
 																						<!-- <th class="bs_results_accession sortable bs_results_{position()}" 
@@ -581,10 +598,10 @@
 																	<tr>
 																		<!-- I will not allow to sort -->
 																		<th class="bs_results_database sortable bs_results_database"
-																					id="bs_results_header_database">
+																			id="bs_results_header_database">
 																			<a href="javascript:aeSort('database')" title="Click to sort by Database">
 																				<span class="table_header_inner">Database</span>
-																			</a> 
+																			</a>
 																		</th>
 																	</tr>
 																</thead>
@@ -719,13 +736,16 @@
 
 
 
-		<xsl:template name="process_databases">
+	<xsl:template name="process_databases">
 		<xsl:param name="pValue" />
 		<xsl:for-each select="$pValue/objectValue">
 			<xsl:call-template name="process_database">
-				<xsl:with-param name="pName" select=".//attribute[@class='Database Name']/simpleValue/value" />
-				<xsl:with-param name="pUrl" select=".//attribute[@class='Database URI']/simpleValue/value" />
-				<xsl:with-param name="pId" select=".//attribute[@class='Database ID']/simpleValue/value" />
+				<xsl:with-param name="pName"
+					select=".//attribute[@class='Database Name']/simpleValue/value" />
+				<xsl:with-param name="pUrl"
+					select=".//attribute[@class='Database URI']/simpleValue/value" />
+				<xsl:with-param name="pId"
+					select=".//attribute[@class='Database ID']/simpleValue/value" />
 			</xsl:call-template>
 		</xsl:for-each>
 	</xsl:template>
@@ -746,21 +766,24 @@
 			</xsl:when>
 			<xsl:when test="not($pUrl='')">
 				<a href="{$pUrl}" target="ext" title="{$pName}">
-					 <font class="icon icon-generic" data-icon="L" title="{$pName}" /> <xsl:copy-of select="$pName"></xsl:copy-of>
+					<font class="icon icon-generic" data-icon="L" title="{$pName}" />
+					<xsl:copy-of select="$pName"></xsl:copy-of>
 				</a>
 			</xsl:when>
 		</xsl:choose>
-		<br/>
+		<br />
 		URI:
 		<a href="{$pUrl}" target="ext">
 			<xsl:copy-of select="$pUrl"></xsl:copy-of>
-		</a>;
-		<br/>
+		</a>
+		;
+		<br />
 		ID:
-		<xsl:copy-of select="$pId"></xsl:copy-of>;
+		<xsl:copy-of select="$pId"></xsl:copy-of>
+		;
 
 	</xsl:template>
-	
+
 	<!-- <td vertical-align="middle">&nbsp;Name: <xsl:copy-of select=".//attribute/value[../@class='Database 
 		Name']"/>; ID: <xsl:copy-of select=".//attribute/value[../@class='Database 
 		ID']"/>; URI: <a href="{.//attribute/value[../@class='Database URI']}" target="ext"> 
@@ -854,6 +877,75 @@
 			</tbody>
 		</table>
 	</xsl:template>
+
+
+
+	<xsl:template name="process_other_attributes">
+		<xsl:param name="pAttributes" />
+		<table border="0" cellpadding="0" cellspacing="0"
+			id="table_inside_attr">
+			<!-- <thead> <th>Name </th> <th>URI</th> <th>&nbsp;</th> </thead> -->
+			<thead>
+			<tr>
+				<xsl:for-each select="$pAttributes/attribute[count(.//simpleValue)>0]">
+					<th>
+						<xsl:copy-of select="string(./@class)"></xsl:copy-of>
+					</th>
+				</xsl:for-each>
+			</tr>
+			</thead>
+			<tbody>
+			<tr>
+				<xsl:for-each select="$pAttributes/attribute[count(.//simpleValue)>0]">
+					<td>
+					<xsl:variable name="attributeClass" select="@class"></xsl:variable>
+					<xsl:variable name="attribute"
+					select="."></xsl:variable>
+					<xsl:choose>
+							<xsl:when test="$attributeClass='Derived From'">
+								<xsl:call-template name="process_derived_from">
+									<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
+								</xsl:call-template>
+							</xsl:when>
+							<!-- <xsl:when test="$attributeClass='Databases'"> <a href="{simpleValue/value}" 
+								target="ext"> <xsl:copy-of select="$attribute"></xsl:copy-of> </a> </xsl:when> -->
+							<!-- normal value -->
+							<xsl:when
+								test="count($attribute//attribute[@class='Term Source REF'])=0 and count($attribute//attribute[@class='Unit'])=0 ">
+
+								<xsl:call-template name="process_multiple_values">
+									<xsl:with-param name="pField"
+										select="lower-case(replace(@attributeClass,' ' , '-'))"></xsl:with-param>
+									<xsl:with-param name="pValue" select="$attribute"></xsl:with-param>
+								</xsl:call-template>
+							</xsl:when>
+
+							<xsl:when test="count($attribute//attribute[@class='Unit'])>0">
+								<xsl:call-template name="process_unit">
+									<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
+									<xsl:with-param name="pField"
+										select="lower-case(replace($attributeClass,' ' , '-'))"></xsl:with-param>
+								</xsl:call-template>
+							</xsl:when>
+
+							<xsl:otherwise>
+								<xsl:call-template name="process_efo">
+									<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
+									<xsl:with-param name="pField"
+										select="lower-case(replace(@attributeClass,' ' , '-'))"></xsl:with-param>
+								</xsl:call-template>
+							</xsl:otherwise>
+
+						</xsl:choose>
+					</td>
+				</xsl:for-each>
+			</tr>
+			</tbody>
+			
+		</table>
+	</xsl:template>
+
+
 
 
 </xsl:stylesheet>

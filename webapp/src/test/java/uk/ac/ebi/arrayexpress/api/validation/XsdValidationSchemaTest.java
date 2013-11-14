@@ -34,7 +34,7 @@ public class XsdValidationSchemaTest {
 
 	
 
-	@Test
+	//@Test
 	public void validateSampleSearchSchema() throws Exception {
 
 		URL schemaFile = new URL(
