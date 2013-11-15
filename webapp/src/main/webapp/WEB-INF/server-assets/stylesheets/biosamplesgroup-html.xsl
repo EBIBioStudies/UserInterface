@@ -798,12 +798,19 @@
 				<xsl:for-each select="$pValue/object">
 
 					<tr>
-						<td>
+						<td>Publication DOI: 
 							<xsl:call-template name="highlight">
 								<xsl:with-param name="pText"
-									select="concat('Publication DOI: ', .//attribute/simpleValue/value[../../@class='Publication DOI'], ';  Publication PubMed ID: ', .//attribute/simpleValue/value[../../@class='Publication PubMed ID'])" />
+									select=".//attribute/simpleValue/value[../../@class='Publication DOI']"/>
 								<xsl:with-param name="pFieldName" select="'publications'" />
 							</xsl:call-template>
+							 Publication PubMed ID: <a href="http://europepmc.org/abstract/MED/{.//attribute/simpleValue/value[../../@class='Publication PubMed ID']}"  target="ext">
+							<xsl:call-template name="highlight">
+								<xsl:with-param name="pText"
+									select=".//attribute/simpleValue/value[../../@class='Publication PubMed ID']" />
+								<xsl:with-param name="pFieldName" select="'publications'" />
+							</xsl:call-template>
+							</a>
 							<xsl:choose>
 								<xsl:when test="position()&lt;last()">
 									<br />

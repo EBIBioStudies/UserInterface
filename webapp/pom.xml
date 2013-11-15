@@ -236,8 +236,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
-				<!-- JUST REMOVED IT FOR FRONTIERIFICATION PROCESS - need to use it again -->
+
 				<interface.application.body.class>bs_dev_preview</interface.application.body.class>
 				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
 				<interface.application.base.path>/biosamples</interface.application.base.path>
