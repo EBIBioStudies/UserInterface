@@ -2,12 +2,13 @@
 <!-- cannto change the enconding to ISO-8859-1 or UTF-8 -->
 
 <!DOCTYPE xsl:stylesheet [ <!ENTITY nbsp "&#160;"> ]>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:aejava="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
 	xmlns:escape="org.apache.commons.lang.StringEscapeUtils" xmlns:html="http://www.w3.org/1999/xhtml"
 	extension-element-prefixes="xs aejava html escape"
 	exclude-result-prefixes="xs aejava html escape" version="2.0">
 
+	
 
 	<xsl:param name="page" />
 	<xsl:param name="pagesize" />
@@ -32,11 +33,12 @@
 
 
 	<xsl:template match="/">
+	 
 	
 	<xsl:variable name="vFrom" as="xs:integer">
             <xsl:choose>
                 <xsl:when test="$vPage > 0"><xsl:value-of select="1 + ( $vPage - 1 ) * $vPageSize"/></xsl:when>
-                <xsl:when test="$vTotal = 0">0</xsl:when>
+                <xsl:when test="$vTotal eq 0">0</xsl:when>
                 <xsl:otherwise>1</xsl:otherwise>
             </xsl:choose>
         </xsl:variable>

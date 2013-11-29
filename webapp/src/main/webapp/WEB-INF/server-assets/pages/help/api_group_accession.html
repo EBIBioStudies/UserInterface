@@ -8,7 +8,7 @@
     <div id="content" role="main" class="grid_24 clearfix">
         <section id="ae-help" class="grid_18 alpha">
             <h2 id="GroupAccession">
-                Group Accession <font color="red">(beta version)</font>
+                Group Accession
             </h2>
             <p></p>
             <ul>
@@ -28,8 +28,8 @@
                 <br> <br>
             </p>
             <h4 id="Arguments">Arguments</h4>
-            <p>groupAccession (required) sampleslist (optional -
-                default=false)</p>
+            <p>groupAccession (required) 
+            <br/>sampleslist (optional - default=false)</p>
             <p>
                 <br> <br>
             </p>
@@ -40,103 +40,62 @@
                 <br> <br>
             </p>
             <h4 id="ExampleResponse">Example Response</h4>
-            <pre class="wiki">&lt;BioSampleGroup xmlns="http://www.ebi.ac.uk/biosamples/SampleGroupExport"
-    id="SAMEG82620"&gt;
-    &lt;Property class="Submission Update Date" characteristic="false"
-        comment="false" type="STRING"&gt;
-        &lt;Value&gt;2012/08/13&lt;/Value&gt;
-    &lt;/Property&gt;
-    &lt;Property class="Name" characteristic="false" comment="false"
-        type="STRING"&gt;
-        &lt;Value&gt;Other Group&lt;/Value&gt;
-    &lt;/Property&gt;
-    &lt;Property class="Submission Reference Layer" characteristic="false"
-        comment="false" type="BOOLEAN"&gt;
-        &lt;Value&gt;true&lt;/Value&gt;
-    &lt;/Property&gt;
-    &lt;Property class="Submission Description" characteristic="false"
-        comment="false" type="STRING"&gt;
-        &lt;Value&gt;
-            The IMSR is a searchable online database of mouse strains and stocks
-            available worldwide, including inbred, mutant, and genetically
-            engineered mice. The goal of the IMSR is to assist the international
-            scientific community in locating and obtaining mouse resources for
-            research. These samples are held by European Mouse Mutant Archive
-        &lt;/Value&gt;
-    &lt;/Property&gt;
-    &lt;Property class="Database URI" characteristic="false" comment="false"
-        type="URI"&gt;
-        &lt;Value&gt;
-            http://www.findmice.org/summary?query=&amp;repositories=CMMREM
-        &lt;/Value&gt;
-    &lt;/Property&gt;
-    &lt;Property class="Database ID" characteristic="false" comment="false"
-        type="STRING"&gt;
-        &lt;Value&gt;EM&lt;/Value&gt;
-    &lt;/Property&gt;
-    &lt;Property class="Database Name" characteristic="false"
-        comment="false" type="STRING"&gt;
-        &lt;Value&gt;IMSR EM&lt;/Value&gt;
-    &lt;/Property&gt;
-    &lt;Property class="Submission Version" characteristic="false"
-        comment="false" type="STRING"&gt;
-        &lt;Value&gt;1.2&lt;/Value&gt;
-    &lt;/Property&gt;
-    &lt;Property class="Submission Release Date" characteristic="false"
-        comment="false" type="STRING"&gt;
-        &lt;Value&gt;2011/11/10&lt;/Value&gt;
-    &lt;/Property&gt;
-    &lt;Property class="Submission Title" characteristic="false"
-        comment="false" type="STRING"&gt;
-        &lt;Value&gt;
-            International Mouse Strain Resource - European Mouse Mutant Archive
-        &lt;/Value&gt;
-    &lt;/Property&gt;
-    &lt;Property class="Submission Identifier" characteristic="false"
-        comment="false" type="STRING"&gt;
-        &lt;Value&gt;GMS-EM&lt;/Value&gt;
-    &lt;/Property&gt;
-    &lt;Property class="Organization Name" characteristic="false"
-        comment="false" type="STRING"&gt;
-        &lt;Value&gt;International Mouse Strain Resource&lt;/Value&gt;
-    &lt;/Property&gt;
-    &lt;Property class="Organization URI" characteristic="false"
-        comment="false" type="URI"&gt;
-        &lt;Value&gt;http://www.findmice.org/&lt;/Value&gt;
-    &lt;/Property&gt;
-    &lt;Property class="Organization Name" characteristic="false"
-        comment="false" type="STRING"&gt;
-        &lt;Value&gt;European Mouse Mutant Archive&lt;/Value&gt;
-    &lt;/Property&gt;
-    &lt;Property class="Organization Role" characteristic="false"
-        comment="false" type="STRING"&gt;
-        &lt;Value&gt;Biomaterial Provider&lt;/Value&gt;
-    &lt;/Property&gt;
-    &lt;Property class="Group Accession" characteristic="false"
-        comment="false" type="STRING"&gt;
-        &lt;Value&gt;SAMEG82620&lt;/Value&gt;
-    &lt;/Property&gt;
-    &lt;Organization&gt;
-        &lt;Name&gt;International Mouse Strain Resource&lt;/Name&gt;
-        &lt;Address /&gt;
-        &lt;URI&gt;http://www.findmice.org/&lt;/URI&gt;
-        &lt;Email /&gt;
-        &lt;Role /&gt;
-    &lt;/Organization&gt;
-    &lt;Organization&gt;
-        &lt;Name&gt;European Mouse Mutant Archive&lt;/Name&gt;
-        &lt;Address /&gt;
-        &lt;URI /&gt;
-        &lt;Email /&gt;
-        &lt;Role&gt;Biomaterial Provider&lt;/Role&gt;
-    &lt;/Organization&gt;
-    &lt;Database&gt;
-        &lt;Name&gt;IMSR EM&lt;/Name&gt;
-        &lt;ID&gt;EM&lt;/ID&gt;
-        &lt;URI&gt;
-            http://www.findmice.org/summary?query=&amp;repositories=CMMREM
-        &lt;/URI&gt;
-    &lt;/Database&gt;
+            <pre class="wiki">&lt;BioSampleGroup xmlns="http://www.ebi.ac.uk/biosamples/SampleGroupExport" id="SAMEG82620"&gt;
+&lt;Property class="Submission Release Date" characteristic="false" comment="false" type="DATETIME"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;2011-11-10T00:00:00+00:00&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;/Property&gt;
+&lt;Property class="Submission Update Date" characteristic="false" comment="false" type="DATETIME"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;2013-11-20T10:55:58+00:00&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;/Property&gt;
+&lt;Property class="Submission Identifier" characteristic="false" comment="false" type="STRING"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;GMS-EM&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;/Property&gt;
+&lt;Property class="Submission Title" characteristic="false" comment="false" type="STRING"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;
+International Mouse Strain Resource - European Mouse Mutant Archive
+&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;/Property&gt;
+&lt;Property class="Submission Description" characteristic="false" comment="false" type="STRING"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;
+The IMSR is a searchable online database of mouse strains and stocks available worldwide, including inbred, mutant, and genetically engineered mice. The goal of the IMSR is to assist the international scientific community in locating and obtaining mouse resources for research. These samples are held by European Mouse Mutant Archive
+&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;/Property&gt;
+&lt;Property class="Group Name" characteristic="true" comment="false" type="STRING"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;Other Group&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;/Property&gt;
+&lt;Organization&gt;
+&lt;Name&gt;International Mouse Strain Resource&lt;/Name&gt;
+&lt;Address/&gt;
+&lt;URI&gt;http://www.findmice.org/&lt;/URI&gt;
+&lt;Email/&gt;
+&lt;Role/&gt;
+&lt;/Organization&gt;
+&lt;Organization&gt;
+&lt;Name&gt;European Mouse Mutant Archive&lt;/Name&gt;
+&lt;Address/&gt;
+&lt;URI&gt;http://www.findmice.org/&lt;/URI&gt;
+&lt;Email/&gt;
+&lt;Role&gt;Biomaterial Provider&lt;/Role&gt;
+&lt;/Organization&gt;
+&lt;Database&gt;
+&lt;Name&gt;IMSR EM&lt;/Name&gt;
+&lt;ID&gt;EM&lt;/ID&gt;
+&lt;URI&gt;
+http://www.findmice.org/summary?query=&amp;repositories=EM
+&lt;/URI&gt;
+&lt;/Database&gt;
 &lt;/BioSampleGroup&gt;
 </pre>
             <p>
@@ -150,11 +109,11 @@
             <h4 id="XSD-XmlSchemaDefinition">XSD - Xml Schema Definition</h4>
             <ul>
                 <li><a class="ext-link"
-                    href="/biosamples/assets/xsd/BioSDSchema.xsd"><span
-                        class="icon">&nbsp;</span>/biosamples/assets/xsd/BioSDSchema.xsd</a></li>
+                    href="/biosamples/assets/xsd/BioSDSchema_v${interface.application.api.version}.xsd"><span
+                        class="icon">&nbsp;</span>/biosamples/assets/xsd/BioSDSchema_v${interface.application.api.version}.xsd</a></li>
             </ul>
             <p>
-                <img src="../api/BioSDSchemaV2_BioSampleGroupExpanded.png"
+                <img src="../api/BioSDSchema_BioSampleGroup_v${interface.application.api.version}.png"
                     alt="BioSamplesGroup Expanded XSD"
                     title="BioSamplesGroup Expanded XSD">
             </p>

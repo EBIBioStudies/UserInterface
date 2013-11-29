@@ -13,6 +13,7 @@
 		</reports>
 	</app>
 
+
 	<bs>
 		<globalSetupDirectory>${interface.application.global.setup.directory}
 		</globalSetupDirectory>
@@ -59,7 +60,6 @@
 		<password>${interface.application.db.xml.update.password}</password>
 		<cookie>${interface.application.db.xml.update.cookie}</cookie>	
 	</xmlupdate>
-	
 
 
 		<!-- job -->
@@ -128,12 +128,16 @@
 							
 				<!-- this field is only used for incremental updates -->
 				<field name="delete" type="boolean" path="@delete = 'true'"/>	
+				<!-- this field is only used for incremental updates -->
+				
 				<field name="releasedate" title="by Release Date" type="string"
-					path="attribute/simpleValue/value[../../@class='Submission Release Date']" analyze="true"
-					store="true" escape="false" autocompletion="true" sortfields="releasedate" />
+					path="replace(substring(attribute/simpleValue/value[../../@class='Submission Release Date'],0,11),'-','-')" analyze="true"
+					store="true" escape="false" autocompletion="false" sortfields="releasedate" />
 				<field name="updatedate" title="by Update Date" type="string"
-					path="attribute/simpleValue/value[../../@class='Submission Update Date']" analyze="true"
-					store="true" escape="false" autocompletion="true" sortfields="updatedate" />			
+					path="replace(substring(attribute/simpleValue/value[../../@class='Submission Update Date'],0,11),'-','-')" analyze="true"
+					store="true" escape="false" autocompletion="false" sortfields="updatedate" />			
+				
+				
 				<field name="description" title="by Description" type="string"
 					path="attribute/simpleValue/value[../../@class='Submission Description']" analyze="true"
 					store="true" escape="false" autocompletion="true" sortfields="description" />
@@ -182,7 +186,8 @@
 				<!-- used to order the search using the numer os samples -->
 	<!-- 			<attribute class="Submission Reference Layer" classDefined="true" dataType="BOOLEAN">
     <value>true</value> -->
-				<field name="reference" type="boolean" path="attribute/simpleValue/value[../../@class='Submission Reference Layer']//value = 'true'"/>
+				<field name="reference" type="boolean" path="attribute/simpleValue/value[../../@class='Submission Reference Layer']//value = 'true'" analyze="true"
+					store="true" escape="false" sortfields="reference" autocompletion="true" title="by Reference"/>
 			</document>
 		</index>
 

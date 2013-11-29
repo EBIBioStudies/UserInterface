@@ -173,7 +173,7 @@
 			</xsl:choose>
 		</h4>
 
-		<table class="bs_results_tablesamplegroupdetail">
+		<table id="bs_results_tablesamplegroupdetail">
 			<tr>
 				<td class="col_title">
 					<b>Name:</b>
@@ -238,7 +238,7 @@
 				<td>
 					<xsl:call-template name="highlight">
 						<xsl:with-param name="pText"
-							select="attribute/simpleValue/value[../../@class='Submission Release Date']" />
+							select="substring(attribute/simpleValue/value[../../@class='Submission Release Date'],0,11)" />
 						<xsl:with-param name="pFieldName" select="'releasedate'" />
 					</xsl:call-template>
 				</td>
@@ -250,7 +250,7 @@
 				<td>
 					<xsl:call-template name="highlight">
 						<xsl:with-param name="pText"
-							select="attribute/simpleValue/value[../../@class='Submission Update Date']" />
+							select="substring(attribute/simpleValue/value[../../@class='Submission Update Date'],0,11)" />
 						<xsl:with-param name="pFieldName" select="'modificationdate'" />
 					</xsl:call-template>
 				</td>
@@ -380,22 +380,6 @@
 				</xsl:when>
 			</xsl:choose>
 
-
-			<!-- Other common attributes - sometimes they are used to have common 
-				information about all sample attributes - data protection -->
-		<!-- 	<xsl:if test="count(SampleAttributes//simpleValue)>0">
-				<tr>
-					<td class="col_title">
-						<b>Common attributes:</b>
-					</td>
-					<td>
-						<xsl:call-template name="process_other_attributes">
-							<xsl:with-param name="pAttributes" select="SampleAttributes"></xsl:with-param>
-						</xsl:call-template>
-					</td>
-				</tr>
-			</xsl:if> -->
-
 			<tr>
 				<td class="col_title">
 					<b>Samples in group:</b>
@@ -404,6 +388,26 @@
 					<xsl:value-of select="count(SampleIds/Id)"></xsl:value-of>
 				</td>
 			</tr>
+			<!-- Other common attributes - sometimes they are used to have common 
+				information about all sample attributes - data protection -->
+			<!-- I will not show common attributes when I have only one sample -->
+			<xsl:if test="count(SampleAttributes//simpleValue)>0 and not(count(SampleIds/Id)=1)">
+				<tr>
+					<td class="col_title">
+						<b>Common attributes:</b>
+					</td>
+
+					<td>
+						<!-- <div id="wrapper_top_scroll"> <div id="div_top_scroll"></div> 
+							</div> -->
+						<xsl:call-template name="process_other_attributes">
+							<xsl:with-param name="pAttributes" select="SampleAttributes"></xsl:with-param>
+						</xsl:call-template>
+					</td>
+				</tr>
+			</xsl:if>
+
+
 
 			<xsl:if test="count(SampleIds/Id)>0">
 				<tr>
@@ -798,18 +802,22 @@
 				<xsl:for-each select="$pValue/object">
 
 					<tr>
-						<td>Publication DOI: 
+						<td>
+							Publication DOI:
 							<xsl:call-template name="highlight">
 								<xsl:with-param name="pText"
-									select=".//attribute/simpleValue/value[../../@class='Publication DOI']"/>
+									select=".//attribute/simpleValue/value[../../@class='Publication DOI']" />
 								<xsl:with-param name="pFieldName" select="'publications'" />
 							</xsl:call-template>
-							 Publication PubMed ID: <a href="http://europepmc.org/abstract/MED/{.//attribute/simpleValue/value[../../@class='Publication PubMed ID']}"  target="ext">
-							<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select=".//attribute/simpleValue/value[../../@class='Publication PubMed ID']" />
-								<xsl:with-param name="pFieldName" select="'publications'" />
-							</xsl:call-template>
+							Publication PubMed ID:
+							<a
+								href="http://europepmc.org/abstract/MED/{.//attribute/simpleValue/value[../../@class='Publication PubMed ID']}"
+								target="ext">
+								<xsl:call-template name="highlight">
+									<xsl:with-param name="pText"
+										select=".//attribute/simpleValue/value[../../@class='Publication PubMed ID']" />
+									<xsl:with-param name="pFieldName" select="'publications'" />
+								</xsl:call-template>
 							</a>
 							<xsl:choose>
 								<xsl:when test="position()&lt;last()">
@@ -889,67 +897,86 @@
 
 	<xsl:template name="process_other_attributes">
 		<xsl:param name="pAttributes" />
-		<table border="0" cellpadding="0" cellspacing="0"
-			id="table_inside_attr">
-			<!-- <thead> <th>Name </th> <th>URI</th> <th>&nbsp;</th> </thead> -->
-			<thead>
-			<tr>
-				<xsl:for-each select="$pAttributes/attribute[count(.//simpleValue)>0]">
-					<th>
-						<xsl:copy-of select="string(./@class)"></xsl:copy-of>
-					</th>
-				</xsl:for-each>
-			</tr>
-			</thead>
-			<tbody>
-			<tr>
-				<xsl:for-each select="$pAttributes/attribute[count(.//simpleValue)>0]">
-					<td>
-					<xsl:variable name="attributeClass" select="@class"></xsl:variable>
-					<xsl:variable name="attribute"
-					select="."></xsl:variable>
-					<xsl:choose>
-							<xsl:when test="$attributeClass='Derived From'">
-								<xsl:call-template name="process_derived_from">
-									<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
-								</xsl:call-template>
-							</xsl:when>
-							<!-- <xsl:when test="$attributeClass='Databases'"> <a href="{simpleValue/value}" 
-								target="ext"> <xsl:copy-of select="$attribute"></xsl:copy-of> </a> </xsl:when> -->
-							<!-- normal value -->
-							<xsl:when
-								test="count($attribute//attribute[@class='Term Source REF'])=0 and count($attribute//attribute[@class='Unit'])=0 ">
 
-								<xsl:call-template name="process_multiple_values">
-									<xsl:with-param name="pField"
-										select="lower-case(replace(@attributeClass,' ' , '-'))"></xsl:with-param>
-									<xsl:with-param name="pValue" select="$attribute"></xsl:with-param>
-								</xsl:call-template>
-							</xsl:when>
 
-							<xsl:when test="count($attribute//attribute[@class='Unit'])>0">
-								<xsl:call-template name="process_unit">
-									<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
-									<xsl:with-param name="pField"
-										select="lower-case(replace($attributeClass,' ' , '-'))"></xsl:with-param>
-								</xsl:call-template>
-							</xsl:when>
+		<!-- £££££££ -->
+		<!-- <div id="wrapper_top_scroll"> <div id="div_top_scroll"> </div> </div> -->
+		<div class="attr_table_shadow_container">
+			<div class="attr_table_sample_group_scroll">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed;border:0px;margin:0px;">
+					<tr>
+						<td>
+							<table id="attr_common_table" border="0" cellpadding="0"
+								cellspacing="0" width="100%">
+								<thead>
+									<tr>
+										<xsl:for-each
+											select="$pAttributes/attribute[count(.//simpleValue)>0]">
+											<th>
+												<xsl:copy-of select="string(./@class)"></xsl:copy-of>
+											</th>
+										</xsl:for-each>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<xsl:for-each
+											select="$pAttributes/attribute[count(.//simpleValue)>0]">
+											<td>
+												<xsl:variable name="attributeClass" select="@class"></xsl:variable>
+												<xsl:variable name="attribute" select="."></xsl:variable>
+												<xsl:choose>
+													<xsl:when test="$attributeClass='Derived From'">
+														<xsl:call-template name="process_derived_from">
+															<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
+														</xsl:call-template>
+													</xsl:when>
+													<!-- <xsl:when test="$attributeClass='Databases'"> <a href="{simpleValue/value}" 
+														target="ext"> <xsl:copy-of select="$attribute"></xsl:copy-of> </a> </xsl:when> -->
+													<!-- normal value -->
+													<xsl:when
+														test="count($attribute//attribute[@class='Term Source REF'])=0 and count($attribute//attribute[@class='Unit'])=0 ">
 
-							<xsl:otherwise>
-								<xsl:call-template name="process_efo">
-									<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
-									<xsl:with-param name="pField"
-										select="lower-case(replace(@attributeClass,' ' , '-'))"></xsl:with-param>
-								</xsl:call-template>
-							</xsl:otherwise>
+														<xsl:call-template name="process_multiple_values">
+															<xsl:with-param name="pField"
+																select="lower-case(replace(@attributeClass,' ' , '-'))"></xsl:with-param>
+															<xsl:with-param name="pValue" select="$attribute"></xsl:with-param>
+														</xsl:call-template>
+													</xsl:when>
 
-						</xsl:choose>
-					</td>
-				</xsl:for-each>
-			</tr>
-			</tbody>
-			
-		</table>
+													<xsl:when test="count($attribute//attribute[@class='Unit'])>0">
+														<xsl:call-template name="process_unit">
+															<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
+															<xsl:with-param name="pField"
+																select="lower-case(replace($attributeClass,' ' , '-'))"></xsl:with-param>
+														</xsl:call-template>
+													</xsl:when>
+
+													<xsl:otherwise>
+														<xsl:call-template name="process_efo">
+															<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
+															<xsl:with-param name="pField"
+																select="lower-case(replace(@attributeClass,' ' , '-'))"></xsl:with-param>
+														</xsl:call-template>
+													</xsl:otherwise>
+
+												</xsl:choose>
+											</td>
+										</xsl:for-each>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+				</table>
+
+
+
+			</div>
+			<div class="left_shadow" style="display: none;"></div>
+			<div class="right_shadow" style="display: none;"></div>
+		</div>
+
 	</xsl:template>
 
 

@@ -38,7 +38,10 @@
 		<interface.application.link.browse_help>${interface.application.base.path}/help/index.html</interface.application.link.browse_help>
 		<!-- <interface.application.link.aer_old.base.url>/microarray-as/aer</interface.application.link.aer_old.base.url> -->
 
-
+		<!-- API VERSION -->
+		<interface.application.api.version>1.0</interface.application.api.version>
+		<!-- API VERSION -->
+		
 		<interface.application.pref.reports.recipients>rpereira&#64;ebi.ac.uk</interface.application.pref.reports.recipients>
 		<interface.application.pref.reports.hidden-recipients>rpereira&#64;ebi.ac.uk</interface.application.pref.reports.hidden-recipients>
 		<interface.application.pref.feedback.recipients>rpereira&#64;ebi.ac.uk</interface.application.pref.feedback.recipients>
@@ -65,7 +68,6 @@
 		<!-- file: you just provide a file system path point to the xml content 
 			<interface.application.db.xml.update.url>/ebi/microarrays/biosamples.xml</interface.application.db.xml.update.url> -->
 		<!-- file: you just provide a url that returns the xml content <interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?server=h2&samples=EMBED&schema=AGE1&showAttributes=true</interface.application.db.xml.update.url> -->
-		<interface.application.db.xml.update.type>age</interface.application.db.xml.update.type>
 
 		<interface.application.google.analytics />
 		<interface.application.body.class />
@@ -505,6 +507,7 @@
 								<include>WEB-INF/server-assets/stylesheets/*.xsl</include>
 								<include>WEB-INF/server-assets/templates/*.txt</include>
 								<include>WEB-INF/server-assets/html/*.html</include>
+								<include>WEB-INF/server-assets/pages/**/*.html</include>
 								<include>META-INF/context.xml</include>
 								<include>**/*.jsp</include>
 							</includes>

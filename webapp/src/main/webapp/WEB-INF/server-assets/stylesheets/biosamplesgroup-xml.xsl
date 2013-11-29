@@ -3,7 +3,7 @@
 
 <!DOCTYPE xsl:stylesheet [ <!ENTITY nbsp "&#160;"> ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns="http://www.ebi.ac.uk/biosamples/SampleGroupExport" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:aejava="java:uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions"
 	xmlns:escape="org.apache.commons.lang.StringEscapeUtils" xmlns:html="http://www.w3.org/1999/xhtml"
 	extension-element-prefixes="xs aejava html escape"
