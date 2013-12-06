@@ -19,7 +19,7 @@
 
 
 
-	<xsl:include href="biosamples-html-page_v1.0.xsl" />
+	<xsl:include href="biosamples-html-page.xsl" />
 	<!-- <xsl:include href="ae-sort-arrays.xsl"/> -->
 	<xsl:include href="biosamples-highlight.xsl" />
 
