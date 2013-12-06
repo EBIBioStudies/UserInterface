@@ -130,12 +130,12 @@
 					<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type> 
 					<interface.application.db.xml.update.url>/Users/rpslpereira/Downloads/exportAge.xml</interface.application.db.xml.update.url> -->
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
- 	 		<!-- 	<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
- 	 			<interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/autoexport.xml</interface.application.db.xml.update.url> -->
+	 		 	<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
+ 	 			<interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/autoexport.xml</interface.application.db.xml.update.url>
 				<!-- <interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/biosamples_09102013.xml</interface.application.db.xml.update.url> -->
- 		 		<interface.application.db.xml.update.type>url</interface.application.db.xml.update.type> 
+<!-- 		 		<interface.application.db.xml.update.type>url</interface.application.db.xml.update.type> 
 				<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?limit=100&amp;amp;server=tst&amp;amp;samples=EMBED&amp;amp;schema=AGE2GS&amp;amp;hideNS=true&amp;amp;showAttributes=true</interface.application.db.xml.update.url> 
-			<!-- <interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/IncrementalUpdates/biosamplesIncrementalUpdate_FileUsedOnServer.xml</interface.application.db.xml.update.url>-->
+ -->			<!-- <interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/IncrementalUpdates/biosamplesIncrementalUpdate_FileUsedOnServer.xml</interface.application.db.xml.update.url>-->
 				<!-- <interface.application.db.xml.update.active>true</interface.application.db.xml.update.active> 
 					<interface.application.db.xml.update.type>age</interface.application.db.xml.update.type> 
 					<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp> 
@@ -248,7 +248,7 @@
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
-				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexport.xml</interface.application.db.xml.update.url> 			
+				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportProd.xml</interface.application.db.xml.update.url> 			
 				<!-- <interface.application.db.xml.update.url>/ebi/microarray/home/biosamples/production/data/gui.xml</interface.application.db.xml.update.url> -->
 				<interface.application.pref.reload-all.update.schedule>0 0 4 * * ?</interface.application.pref.reload-all.update.schedule>
 				<interface.application.pref.reload-all.update.interval />

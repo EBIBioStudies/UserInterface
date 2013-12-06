@@ -251,7 +251,7 @@
 					<xsl:call-template name="highlight">
 						<xsl:with-param name="pText"
 							select="substring(attribute/simpleValue/value[../../@class='Submission Update Date'],0,11)" />
-						<xsl:with-param name="pFieldName" select="'modificationdate'" />
+						<xsl:with-param name="pFieldName" select="'updatedate'" />
 					</xsl:call-template>
 				</td>
 			</tr>
@@ -442,7 +442,7 @@
 															<td valign="top" id="td_no_padding">
 																<fieldset id="bs_keywords_fset">
 																	<xsl:variable name="vKeywordsAux"
-																		select="if (fn:matches($vkeywords,'\s*\w\s*:\s*\w')) then ''  else $vkeywords" />
+																		select="if (fn:matches($vkeywords,'\s*\w\s*:')) then ''  else $vkeywords" />
 																	<input id="bs_keywords_field" type="text" name="keywords"
 																		value="{$vKeywordsAux}" maxlength="255" size="60"
 																		autocomplete="off" />
@@ -553,7 +553,8 @@
 																						test=".!='Sample Accession' and .!='Organism' and .!='Sample Name' and .!='Sample Description' and .!='Databases'">
 																						<th>
 																							<span class="table_header_inner_att">
-																								<xsl:value-of select="replace(.,' ' , '_')"></xsl:value-of>&nbsp;
+																								<!-- <xsl:value-of select="replace(.,' ' , '_')"></xsl:value-of>&nbsp; -->
+																								<xsl:value-of select="."></xsl:value-of>&nbsp;
 																							</span>
 																						</th>
 

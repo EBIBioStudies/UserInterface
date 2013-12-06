@@ -137,7 +137,7 @@
 					path="replace(substring(attribute/simpleValue/value[../../@class='Submission Update Date'],0,11),'-','-')" analyze="true"
 					store="true" escape="false" autocompletion="false" sortfields="updatedate" />			
 				
-				
+			
 				<field name="description" title="by Description" type="string"
 					path="attribute/simpleValue/value[../../@class='Submission Description']" analyze="true"
 					store="true" escape="false" autocompletion="true" sortfields="description" />
@@ -155,13 +155,32 @@
 					path="attribute/value[../@class='Submission Version']" analyze="true"
 					store="false" escape="false" /> -->
 		
+	
+			
+			<!-- if(starts-with(@id,'SAMN')) then substring-after(@id,'SAMN') cast as xs:integer else substring(@id,6) cast as xs:integer -->
+		
+				<!-- jira/browse/BSD-52 - If the froup doenst have DB associated and has only one sample, I will show the sample DB associated to the SampleGroup -->
 				<field name="database" type="string"
-					path="string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name'])" analyze="true"
+					path="if(count(attribute[@class='Databases'])>0) then string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']) 
+					else if(count(SampleIds/Id)=1) then string(SampleAttributes/attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']) else null" analyze="true"
 					store="true" escape="false" sortfields="database" autocompletion="true" title="by Database"/>	
 				<!-- this one is used to keep the information that I need to use browse page to shoul the database column information  - I need to have the space character on ' ### '-->	
 				<field name="databaseinfo" type="string"
-					path="concat(string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database URI']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database ID']))" analyze="false"
+					path="if(count(attribute[@class='Databases'])>0) then 
+					concat(string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database URI']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database ID'])) 
+					 else if(count(SampleIds/Id)=1) then 
+					 concat(string(SampleAttributes/attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']),' ### ', string(SampleAttributes/attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database URI']),' ### ', string(SampleAttributes/attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database ID'])) else null" analyze="false"
 					store="true" escape="false"/>	
+		
+			
+		<!-- 	<field name="database" type="string"
+					path="string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name'])" analyze="true"
+					store="true" escape="false" sortfields="database" autocompletion="true" title="by Database"/>	 
+					-->
+				<!-- this one is used to keep the information that I need to use browse page to shoul the database column information  - I need to have the space character on ' ### '-->	
+		<!--  	<field name="databaseinfo" type="string"
+					path="concat(string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database URI']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database ID']))" analyze="false"
+					store="true" escape="false"/>	-->
 					
 				<field name="organizations" title="by Organizations" type="string"
 					path="attribute/objectValue[../@class='Organizations']//value" analyze="true"
@@ -231,14 +250,15 @@
 					path="string(attribute/simpleValue/value[../../@class='Sample Description'])" analyze="true"
 					store="true" escape="false" sortfields="description" autocompletion="true" title="by Description"/>
 					
+		
 				<field name="database" type="string"
 					path="string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name'])" analyze="true"
 					store="true" escape="false" sortfields="database" autocompletion="true" title="by Database"/>	
 				<!-- this one is used to keep the information that I need to use browse page to shoul the database column information  - I need to have the space character on ' ### '-->	
-				<field name="databaseinfo" type="string"
+			<field name="databaseinfo" type="string"
 					path="concat(string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database URI']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database ID']))" analyze="false"
 					store="true" escape="false"/>	
-		
+	
 					
 				<!-- those are used to browse sample page - I dont want to query the DB -->
 					

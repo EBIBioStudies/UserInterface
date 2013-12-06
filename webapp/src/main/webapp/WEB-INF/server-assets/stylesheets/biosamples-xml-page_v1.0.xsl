@@ -9,7 +9,7 @@
 	the specific language governing permissions and * limitations under the License. 
 	* -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns="http://www.ebi.ac.uk/biosamples/SampleGroupExport" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.ebi.ac.uk/biosamples/SampleGroupExport" xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:ae="http://www.ebi.ac.uk/arrayexpress/XSLT/Extension"
 	xmlns:html="http://www.w3.org/1999/xhtml" extension-element-prefixes="html xs fn ae"
 	exclude-result-prefixes="html xs fn ae" version="2.0">

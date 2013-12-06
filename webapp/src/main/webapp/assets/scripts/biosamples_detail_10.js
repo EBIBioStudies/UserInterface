@@ -151,7 +151,7 @@ $(function() {
 	var keywordsFixed = $.query.get("keywords");
 	// If I was filtering the search for some field I will not apply a search to
 	// the samples
-	var aux = keywordsFixed.match(/\s*\w\s*:\s*\w/g);
+	var aux = keywordsFixed.match(/\s*\w\s*:/g);
 	if (aux != null) {
 		keywordsFixed = "";
 	}

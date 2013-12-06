@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="windows-1252"?>
-<!-- cannot change the enconding to ISO-8859-1 or UTF-8 -->
+<!-- cannto change the enconding to ISO-8859-1 or UTF-8 -->
 
 <!DOCTYPE xsl:stylesheet [ <!ENTITY nbsp "&#160;"> ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -65,17 +65,16 @@
 					<xsl:value-of select="$vPageSize" />
 				</PageSize>
 			</SummaryInfo>
-			<xsl:apply-templates select="//Sample"></xsl:apply-templates>
+			<xsl:apply-templates select="*"></xsl:apply-templates>
 		</ResultQuery>
 	</xsl:template>
 
-	<xsl:template match="//Sample">
-		<BioSample>
-		<!-- I dont want to copy the groupId attribute  -->
-		<xsl:copy-of select="@id" />
+	<xsl:template match="//SampleGroup">
+		<BioSampleGroup id="{./id}">
+			<xsl:copy-of select="@*" />
 			<!-- I'm only returning a list of Ids -->
 			<!-- <xsl:copy-of select="*" /> -->
-		</BioSample>
+		</BioSampleGroup>
 	</xsl:template>
 
 

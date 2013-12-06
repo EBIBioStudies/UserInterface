@@ -246,7 +246,7 @@
 															selected="true">Groups</option>
 													</xsl:when>
 													<xsl:otherwise>
-														<option value="${interface.application.base.path}/browse.html">Samples</option>
+														<option value="${interface.application.base.path}/browse.html">Groups</option>
 													</xsl:otherwise>
 												</xsl:choose>
 											</select> &nbsp;&nbsp;Examples:
