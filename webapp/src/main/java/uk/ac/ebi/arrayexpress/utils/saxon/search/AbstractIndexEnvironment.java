@@ -1613,6 +1613,7 @@ public abstract class AbstractIndexEnvironment {
 			} catch (XPathExpressionException x) {
 				String xmlError = PrintUtils.printNodeInfo((NodeInfo) node,
 						config);
+				logger.error("Field being processed->[{}]", field.name);
 				logger.error("XPathExpressionException->[{}]", x.getMessage());
 				logger.error("Caught an exception while indexing expression ["
 						+ field.path + "] for document ["
