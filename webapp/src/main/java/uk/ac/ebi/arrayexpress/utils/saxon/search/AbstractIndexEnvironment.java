@@ -1320,14 +1320,14 @@ public abstract class AbstractIndexEnvironment {
 				logger.debug("until now it were processed->[{}]", pageNumber
 						* pageSizeDefault);
 				pageNumber++;
-				if (coll != null) {
-					try {
-						// coll.close();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+//				if (coll != null) {
+//					try {
+//						// coll.close();
+//					} catch (Exception e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
 				set = null;
 
 			}

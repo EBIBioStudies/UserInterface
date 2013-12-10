@@ -15,7 +15,7 @@
 	exclude-result-prefixes="html xs fn ae" version="2.0">
 
 
-	<xsl:output omit-xml-declaration="yes" />
+	<!-- <xsl:output omit-xml-declaration="yes" /> -->
 
 	<xsl:template name="process_organizations">
 		<xsl:param name="pAttribute" />
