@@ -786,6 +786,7 @@ public abstract class AbstractIndexEnvironment {
 		String connectionString = "";
 		Collection coll;
 		IndexWriter w = null;
+		DirectoryTaxonomyWriter taxoWriter ;
 		Map<String, XPathExpression> fieldXpe = new HashMap<String, XPathExpression>();
 		try {
 
@@ -797,7 +798,7 @@ public abstract class AbstractIndexEnvironment {
 			Directory taxDir = FSDirectory.open(new File(indexLocationDirectory
 					+ "Facets", indexId));
 
-			DirectoryTaxonomyWriter taxoWriter = new DirectoryTaxonomyWriter(
+			taxoWriter = new DirectoryTaxonomyWriter(
 					taxDir);
 			CategoryDocumentBuilder docBuilder = new CategoryDocumentBuilder(
 					taxoWriter);
@@ -1033,6 +1034,7 @@ public abstract class AbstractIndexEnvironment {
 
 		} catch (Exception x) {
 			logger.error("Caught an exception:", x);
+			taxoWriter.close();
 			w.close();
 			throw x;
 		}
