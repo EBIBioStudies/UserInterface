@@ -786,7 +786,7 @@ public abstract class AbstractIndexEnvironment {
 		String connectionString = "";
 		Collection coll;
 		IndexWriter w = null;
-		DirectoryTaxonomyWriter taxoWriter ;
+		DirectoryTaxonomyWriter taxoWriter=null;
 		Map<String, XPathExpression> fieldXpe = new HashMap<String, XPathExpression>();
 		try {
 
