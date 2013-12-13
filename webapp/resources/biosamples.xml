@@ -248,7 +248,7 @@
 					store="true" escape="false"  sortfields="name" autocompletion="true" title="by Name"/>				
 				<!-- I need to review this -->
 				<field name="description" type="string"
-					path="string(attribute/simpleValue/value[../../@class='Sample Description'][1])" analyze="true"
+					path="(attribute/simpleValue/value[../../@class='Sample Description'])[1]" analyze="true"
 					store="true" escape="false" sortfields="description" autocompletion="true" title="by Description"/>
 					
 		
