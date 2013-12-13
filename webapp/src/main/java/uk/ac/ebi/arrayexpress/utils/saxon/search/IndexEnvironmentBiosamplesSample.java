@@ -128,8 +128,9 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 
 				totalRes.append("<Sample>");
 				totalRes.append("<id>" + doc.get("accession") + "</id>");
+				String aux=doc.get("description")!=null?doc.get("description"):"";
 				totalRes.append("<description>"
-						+ StringTools.limit(StringEscapeUtils.escapeXml(doc.get("description")),150)
+						+ StringTools.limit(StringEscapeUtils.escapeXml(aux),150)
 						// + doc.get("title")
 						+ "</description>");
 				totalRes.append("<name>"
