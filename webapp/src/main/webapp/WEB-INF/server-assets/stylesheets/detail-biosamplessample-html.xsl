@@ -256,6 +256,9 @@
 		<xsl:param name="pId" />
 
 		<xsl:variable name="bdName" select="lower-case($pName)"></xsl:variable>
+		<!-- PRIDE changed the user interface: this is temporary -->
+				<xsl:variable name="pUrl"
+					select="replace($pUrl,'http://www.ebi.ac.uk/pride/showExperiment.do\?experimentAccessionNumber','http://www.ebi.ac.uk/pride/archive/simpleSearch?q')"></xsl:variable>
 		<xsl:choose>
 			<xsl:when
 				test="$bdName=('arrayexpress','ena sra','dgva','pride') and not($pUrl='')">
