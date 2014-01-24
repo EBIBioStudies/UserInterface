@@ -64,6 +64,11 @@
 				<link rel="stylesheet"
 					href="{$context-path}/assets/stylesheets/biosamples_detail_10.css"
 					type="text/css" />
+					<!-- need this to have the scrollbars on Chrome/firefox/safari - overwrite 
+					the ebi css definition [PT:53620963] -->
+				<style type="text/css">
+					html {overflow-y:auto;}
+				</style>
 			</xsl:with-param>
 			<xsl:with-param name="pBreadcrumbTrail">
 				<a href="{$context-path}/browse_samples.html">Samples</a>
@@ -256,9 +261,15 @@
 		<xsl:param name="pId" />
 
 		<xsl:variable name="bdName" select="lower-case($pName)"></xsl:variable>
+		<!-- PRIDE changed the user interface: this is temporary -->
+		<xsl:variable name="pUrl"
+			select="replace($pUrl,'http://www.ebi.ac.uk/pride/showExperiment.do\?experimentAccessionNumber','http://www.ebi.ac.uk/pride/archive/simpleSearch?q')"></xsl:variable>
+
+
 		<xsl:choose>
 			<xsl:when
 				test="$bdName=('arrayexpress','ena sra','dgva','pride') and not($pUrl='')">
+
 				<a href="{$pUrl}" target="ext">
 					<img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{$pName} Link"
 						border="0" title="{$pName}" />

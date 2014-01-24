@@ -58,6 +58,10 @@ html {
 }
 */
 
+/* TO ASSURE that there is not a column overlaping in the headers table*/
+.container_24 {
+min-width: 984px;
+}
 
 /* Sorting characters*/
 a [class^="aw-icon-"], a [class*=" aw-icon-"] {

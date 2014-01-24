@@ -20,6 +20,7 @@
 
 	<xsl:param name="queryid" />
 	<xsl:param name="keywords" />
+	<xsl:param name="sampleskeywords" />
 
 
 	<xsl:param name="accession" />
@@ -52,6 +53,8 @@
 	<xsl:variable name="vBrowseMode" select="not($accession)" />
 
 	<xsl:variable name="vkeywords" select="$keywords" />
+	
+	<xsl:variable name="vsampleskeywords" select="$sampleskeywords" />
 
 	<xsl:variable name="vSearchMode"
 		select="fn:ends-with($relative-uri, 'search.html')" />
@@ -155,6 +158,14 @@
 	<xsl:template name="detail-table">
 		<xsl:param name="id" />
 		<xsl:param name="sampleGroup" />
+
+		<xsl:variable name="numberOfSamples" select="count(SampleIds/Id)" />
+		<xsl:variable name="commonAttributes"
+			select="$sampleGroup/SampleAttributes/attribute[count(.//simpleValue)>0 and not($numberOfSamples=1)]"></xsl:variable>
+
+		<!-- <xsl:for-each select="$commonAttributes"> rr <xsl:copy-of select="string(./@class)"></xsl:copy-of> 
+			</xsl:for-each> -->
+
 		<h4>
 			Group Accession
 			<xsl:choose>
@@ -380,18 +391,83 @@
 				</xsl:when>
 			</xsl:choose>
 
+			<!-- Display attributes on the group object JIRA:BSD-66 -->
+			<!-- <xsl:for-each select="attribute[@classDefined='false']"> -->
+			<!-- all other attributes. I'm doing that to maintain the order. I should 
+				have an internal list to be easier to manage -->
+
+			<xsl:for-each
+				select="attribute[string(@class)!='Publications' and string(@class)!='Persons' and string(@class)!='Term Sources' and string(@class)!='Organizations' and string(@class)!='Databases' and string(@class)!='Submission Reference Layer' 
+	and string(@class)!='Submission Update Date' and string(@class)!='Submission Release Date' and string(@class)!='Submission Description' and string(@class)!='Submission Identifier' 
+	and string(@class)!='Submission Title' and string(@class)!='Name']">
+				<!-- @@<xsl:copy-of select="string(@class)"></xsl:copy-of>@@ -->
+				<tr>
+					<td class="col_title">
+						<b>
+							<xsl:copy-of select="string(@class)"></xsl:copy-of>
+							:
+						</b>
+					</td>
+					<td>
+						<xsl:variable name="attributeClass" select="string(@class)"></xsl:variable>
+						<xsl:variable name="attribute" select="."></xsl:variable>
+						<xsl:choose>
+							<xsl:when test="$attributeClass='Derived From'">
+								<xsl:call-template name="process_derived_from">
+									<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
+								</xsl:call-template>
+							</xsl:when>
+							<xsl:when test="$attributeClass='Databases'">
+								<xsl:call-template name="process_databases">
+									<xsl:with-param name="pValue" select="$attribute"></xsl:with-param>
+								</xsl:call-template>
+							</xsl:when>
+							<!-- normal value -->
+							<xsl:when
+								test="count($attribute//attribute[@class='Term Source REF'])=0 and count($attribute//attribute[@class='Unit'])=0">
+								<!-- <xsl:copy-of select="value"></xsl:copy-of> -->
+								<xsl:call-template name="process_multiple_values">
+									<xsl:with-param name="pField"
+										select="lower-case(replace(@class,' ' , '-'))"></xsl:with-param>
+									<xsl:with-param name="pValue" select="$attribute"></xsl:with-param>
+								</xsl:call-template>
+							</xsl:when>
+
+							<xsl:when test="count($attribute//attribute[@class='Unit'])>0">
+								<xsl:call-template name="process_unit">
+									<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
+									<xsl:with-param name="pField"
+										select="lower-case(replace($attributeClass,' ' , '-'))"></xsl:with-param>
+								</xsl:call-template>
+
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:call-template name="process_efo">
+									<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
+									<xsl:with-param name="pField"
+										select="lower-case(replace($attributeClass,' ' , '-'))"></xsl:with-param>
+								</xsl:call-template>
+							</xsl:otherwise>
+
+						</xsl:choose>
+					</td>
+				</tr>
+
+			</xsl:for-each>
+
 			<tr>
 				<td class="col_title">
 					<b>Samples in group:</b>
 				</td>
 				<td>
-					<xsl:value-of select="count(SampleIds/Id)"></xsl:value-of>
+					<xsl:value-of select="$numberOfSamples"></xsl:value-of>
 				</td>
 			</tr>
 			<!-- Other common attributes - sometimes they are used to have common 
 				information about all sample attributes - data protection -->
 			<!-- I will not show common attributes when I have only one sample -->
-			<xsl:if test="count(SampleAttributes//simpleValue)>0 and not(count(SampleIds/Id)=1)">
+			<xsl:if test="count($commonAttributes)>0">
+				<!-- test="count(SampleAttributes//simpleValue)>0 and not(count(SampleIds/Id)=1)"> -->
 				<tr>
 					<td class="col_title">
 						<b>Common attributes:</b>
@@ -400,7 +476,7 @@
 					<td>
 						<!-- <div id="wrapper_top_scroll"> <div id="div_top_scroll"></div> 
 							</div> -->
-						<xsl:call-template name="process_other_attributes">
+						<xsl:call-template name="process_common_attributes">
 							<xsl:with-param name="pAttributes" select="SampleAttributes"></xsl:with-param>
 						</xsl:call-template>
 					</td>
@@ -409,7 +485,7 @@
 
 
 
-			<xsl:if test="count(SampleIds/Id)>0">
+			<xsl:if test="$numberOfSamples>0">
 				<tr>
 					<td colspan="2">
 						<br />
@@ -441,10 +517,10 @@
 														<tr>
 															<td valign="top" id="td_no_padding">
 																<fieldset id="bs_keywords_fset">
-																	<xsl:variable name="vKeywordsAux"
-																		select="if (fn:matches($vkeywords,'\s*\w\s*:')) then ''  else $vkeywords" />
-																	<input id="bs_keywords_field" type="text" name="keywords"
-																		value="{$vKeywordsAux}" maxlength="255" size="60"
+																	<xsl:variable name="vSamplesKeywordsAux"
+																		select="if (fn:matches($vsampleskeywords,'\s*\w\s*:')) then ''  else $vsampleskeywords" />
+																	<input id="bs_keywords_field" type="text" name="sampleskeywords"
+																		value="{$vSamplesKeywordsAux}" maxlength="255" size="60"
 																		autocomplete="off" />
 																</fieldset>
 															</td>
@@ -525,38 +601,51 @@
 																		cellspacing="0" width="100%">
 																		<thead>
 																			<tr>
-																				<th
-																					class="bs_results_organism sortable bs_resultsorganism"
-																					id="bs_results_header_organism">
-																					<a href="javascript:aeSort('organism')" title="Click to sort by Organism">
-																						<span class="table_header_inner">Organism</span>
-																					</a>
-																				</th>
-																				<th
-																					class="bs_results_description sortable bs_results_name"
-																					id="bs_results_header_name">
-																					<a href="javascript:aeSort('name')" title="Click to sort by Name">
-																						<span class="table_header_inner">Name</span>
-																					</a>
-																				</th>
-																				<th
-																					class="bs_results_description sortable bs_results_description"
-																					id="bs_results_header_description">
-																					<a href="javascript:aeSort('description')" title="Click to sort by Description">
-																						<span class="table_header_inner">Description</span>
-																					</a>
-																				</th>
-
+																				<xsl:if
+																					test="not (exists($commonAttributes/@class[. = 'Organism']))">
+																					<th
+																						class="bs_results_organism sortable bs_resultsorganism"
+																						id="bs_results_header_organism">
+																						<a href="javascript:aeSort('organism')" title="Click to sort by Organism">
+																							<span class="table_header_inner">Organism</span>
+																						</a>
+																					</th>
+																				</xsl:if>
+																				<xsl:if
+																					test="not (exists($commonAttributes/@class[. = 'Name']))">
+																					<th
+																						class="bs_results_description sortable bs_results_name"
+																						id="bs_results_header_name">
+																						<a href="javascript:aeSort('name')" title="Click to sort by Name">
+																							<span class="table_header_inner">Name</span>
+																						</a>
+																					</th>
+																				</xsl:if>
+																				<xsl:if
+																					test="not (exists($commonAttributes/@class[. = 'Sample Description']))">
+																					<th
+																						class="bs_results_description sortable bs_results_description"
+																						id="bs_results_header_description">
+																						<a href="javascript:aeSort('description')"
+																							title="Click to sort by Description">
+																							<span class="table_header_inner">Description</span>
+																						</a>
+																					</th>
+																				</xsl:if>
 
 																				<xsl:for-each select="SampleAttributes/attribute/@class">
 																					<xsl:if
 																						test=".!='Sample Accession' and .!='Organism' and .!='Sample Name' and .!='Sample Description' and .!='Databases'">
-																						<th>
-																							<span class="table_header_inner_att">
-																								<!-- <xsl:value-of select="replace(.,' ' , '_')"></xsl:value-of>&nbsp; -->
-																								<xsl:value-of select="."></xsl:value-of>&nbsp;
-																							</span>
-																						</th>
+																						<xsl:variable name="classVar" select="."></xsl:variable>
+																						<xsl:if
+																							test="not (exists($commonAttributes/@class[. = $classVar]))">
+																							<th>
+																								<span class="table_header_inner_att">
+																									<!-- <xsl:value-of select="replace(.,' ' , '_')"></xsl:value-of>&nbsp; -->
+																									<xsl:value-of select="."></xsl:value-of>&nbsp;
+																								</span>
+																							</th>
+																						</xsl:if>
 
 																						<!-- <th class="bs_results_accession sortable bs_results_{position()}" 
 																							id="bs_results_header_{position()}"> <a href="javascript:aeSort('{position()}');" 
@@ -764,6 +853,10 @@
 		<xsl:choose>
 			<xsl:when
 				test="$bdName=('arrayexpress','ena sra','dgva','pride') and not($pUrl='')">
+				<!-- PRIDE changed the user interface: this is temporary -->
+				<xsl:variable name="pUrl"
+					select="replace($pUrl,'http://www.ebi.ac.uk/pride/showExperiment.do\?experimentAccessionNumber','http://www.ebi.ac.uk/pride/archive/simpleSearch?q')"></xsl:variable>
+
 				<a href="{$pUrl}" target="ext">
 					<img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{$pName} Link"
 						border="0" title="{$pName}" />
@@ -896,7 +989,7 @@
 
 
 
-	<xsl:template name="process_other_attributes">
+	<xsl:template name="process_common_attributes">
 		<xsl:param name="pAttributes" />
 
 
@@ -904,7 +997,8 @@
 		<!-- <div id="wrapper_top_scroll"> <div id="div_top_scroll"> </div> </div> -->
 		<div class="attr_table_shadow_container">
 			<div class="attr_table_sample_group_scroll">
-				<table width="100%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed;border:0px;margin:0px;">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0"
+					style="table-layout:fixed;border:0px;margin:0px;">
 					<tr>
 						<td>
 							<table id="attr_common_table" border="0" cellpadding="0"
@@ -919,8 +1013,8 @@
 										</xsl:for-each>
 									</tr>
 								</thead>
-								<tbody>
-									<tr>
+								<tbody id="bs_results_tbody_common">
+									<!-- <tr>
 										<xsl:for-each
 											select="$pAttributes/attribute[count(.//simpleValue)>0]">
 											<td>
@@ -932,9 +1026,6 @@
 															<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
 														</xsl:call-template>
 													</xsl:when>
-													<!-- <xsl:when test="$attributeClass='Databases'"> <a href="{simpleValue/value}" 
-														target="ext"> <xsl:copy-of select="$attribute"></xsl:copy-of> </a> </xsl:when> -->
-													<!-- normal value -->
 													<xsl:when
 														test="count($attribute//attribute[@class='Term Source REF'])=0 and count($attribute//attribute[@class='Unit'])=0 ">
 
@@ -964,7 +1055,7 @@
 												</xsl:choose>
 											</td>
 										</xsl:for-each>
-									</tr>
+									</tr> -->
 								</tbody>
 							</table>
 						</td>

@@ -88,6 +88,8 @@ var sortOrder = sortDefault[sortBy];
 
 var pageInit = pageInitDefault;
 var pageSize = "25";
+var sampleskeywords = $.query.get("sampleskeywords") ? $.query
+		.get("sampleskeywords") : "";
 var keywords = $.query.get("keywords") ? $.query.get("keywords") : "";
 
 // if I;m showing the detail I will get all the samples using paging
@@ -148,7 +150,7 @@ $(function() {
 			"This is matched child term from Experimental Factor Ontology");
 	/* hint to the lucene highlight */
 	// if (-1 == url.indexOf("browse")) {
-	var keywordsFixed = $.query.get("keywords");
+	var keywordsFixed = $.query.get("sampleskeywords").toString();
 	// If I was filtering the search for some field I will not apply a search to
 	// the samples
 	var aux = keywordsFixed.match(/\s*\w\s*:/g);
@@ -167,14 +169,15 @@ $(function() {
 	var basePath = decodeURI(window.location.pathname).replace(/\/\w+\.\w+$/,
 			"/");
 	// alert(basePath);
-	$("#bs_keywords_field").autocomplete("../" + "keywords.txt?domain=biosamplessample", {
-		matchContains : false,
-		selectFirst : false,
-		scroll : true,
-		max : 2500,
-		fields: getFields(),
-		requestTreeUrl : "../" + "efotree.txt"
-	});
+	$("#bs_keywords_field").autocomplete(
+			"../" + "keywords.txt?domain=biosamplessample", {
+				matchContains : false,
+				selectFirst : false,
+				scroll : true,
+				max : 2500,
+				fields : getFields(),
+				requestTreeUrl : "../" + "efotree.txt"
+			});
 	// }
 
 	// manage 2 scrolbars
@@ -193,35 +196,28 @@ $(function() {
 
 });
 
-//function used to filter the fields on the autocomplete
-function getFields(){
-	var arrayFields=[];
-/*
-	var field="";
-	// I'm using textContent because innerText doesnt work on FireFox
-	for (i = 0; i < ($("span.table_header_inner").length); i++) {
-		var hasInnerText = ($("span.table_header_inner")[i].innerText != undefined) ? true
-				: false;
-		if (hasInnerText) {
-			field= $("span.table_header_inner")[i].innerText; 
-		} else {
-			field= $("span.table_header_inner")[i].textContent; // +
-		}
-		arrayFields[i]="attribute<" +field.trim().toLowerCase() + ">";
-
-	}
-	//alert("arrayFields->"+arrayFields);
-*/
+// function used to filter the fields on the autocomplete
+function getFields() {
+	var arrayFields = [];
+	/*
+	 * var field=""; // I'm using textContent because innerText doesnt work on
+	 * FireFox for (i = 0; i < ($("span.table_header_inner").length); i++) { var
+	 * hasInnerText = ($("span.table_header_inner")[i].innerText != undefined) ?
+	 * true : false; if (hasInnerText) { field=
+	 * $("span.table_header_inner")[i].innerText; } else { field=
+	 * $("span.table_header_inner")[i].textContent; // + }
+	 * arrayFields[i]="attribute<" +field.trim().toLowerCase() + ">";
+	 *  } //alert("arrayFields->"+arrayFields);
+	 */
 	return arrayFields;
 }
 
-
-
-//this function is called by juqery.autocomplete-ebi.js 
+// this function is called by juqery.autocomplete-ebi.js
 function isElementOnArray(arr, obj) {
-    for(var i=0; i<arr.length; i++) {
-        if (arr[i].toLowerCase() == obj.toLowerCase()) return true;
-    }
+	for ( var i = 0; i < arr.length; i++) {
+		if (arr[i].toLowerCase() == obj.toLowerCase())
+			return true;
+	}
 }
 
 // var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
@@ -279,6 +275,12 @@ function updateSamplesList(urlPage) {
 						samplesleftstring = "";
 						samplesmiddlestring = "";
 						samplesrigthstring = "";
+						commonsamplesstring = ""
+							
+						// for common attributes I just need to do the replace once (only one row)
+							commonsamplesstring += "<tr>"
+								+ $("#samplescommon").html() + "</tr>";
+
 						for (i = 1; i <= (count + 1); i++) {
 							// alert("Found bs_results_total element2: " +
 							// pars3[i].innerHTML);
@@ -297,6 +299,10 @@ function updateSamplesList(urlPage) {
 						}
 						// I need to use /i because in IE the <bs_value_att> is
 						// transformed in <BS_VALUE_ATT>
+						commonsamplesstring = commonsamplesstring.replace(
+								/<bs_value_att>/gi, "<td>");
+						commonsamplesstring = commonsamplesstring.replace(
+								/<\/bs_value_att>/gi, "<\/td>");
 						samplesleftstring = samplesleftstring.replace(
 								/<bs_value_att>/gi, "<td>");
 						samplesleftstring = samplesleftstring.replace(
@@ -314,6 +320,7 @@ function updateSamplesList(urlPage) {
 						// alert("right table->" + samplesrigthstring);
 
 						$("#bs_results_tbody").html("");
+						$("#bs_results_tbody_common").html(commonsamplesstring);
 						$("#bs_results_tbody_left").html(samplesleftstring);
 						$("#bs_results_tbody_middle").html(samplesmiddlestring);
 						$("#bs_results_tbody_right").html(samplesrigthstring);
@@ -329,6 +336,18 @@ function updateSamplesList(urlPage) {
 						 * hint to the lucene highlight - the right side is the
 						 * link, so I dont need
 						 */
+						$("#bs_results_tbody_common")
+								.find(".ae_text_hit")
+								.attr("title",
+										"This is exact string matched for input query terms");
+						$("#bs_results_tbody_common")
+								.find(".ae_text_syn")
+								.attr("title",
+										"This is synonym matched from Experimental Factor Ontology");
+						$("#bs_results_tbody_common")
+								.find(".ae_text_efo")
+								.attr("title",
+										"This is matched child term from Experimental Factor Ontology");
 						$("#bs_results_tbody_left")
 								.find(".ae_text_hit")
 								.attr("title",
@@ -498,14 +517,14 @@ function updateSamplesList(urlPage) {
 
 function searchSamples(pKeywords) {
 	// alert("par->" + pKeywords);
-	keywords = pKeywords;
+	sampleskeywords = pKeywords;
 	// reset of status variables
 	sortBy = sortByDefault;
 	sortOrder = sortOrderDefault;
 	pageInit = pageInitDefault;
-	var newQuery = $.query.set("keywords", keywords).set("sortby", sortBy).set(
-			"sortorder", sortOrder).set("page", pageInit).set("pagesize",
-			pageSize).toString();
+	var newQuery = $.query.set("keywords", sampleskeywords).set("sortby",
+			sortBy).set("sortorder", sortOrder).set("page", pageInit).set(
+			"pagesize", pageSize).toString();
 	var pageName = /\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];
 	var urlPage = "../sample/browse/" + pageName + newQuery;
 	removeAllSortingIndications();
@@ -535,12 +554,15 @@ function goToPage(page) {
 		// favorites purpose
 		var urlState = "../group/" + pageName + newQuerySampleGroup;
 		// I will use the urlPage to reload the data on poststate event
-		window.history.pushState({
-			url : urlPage,
-			sortby : sortBy,
-			sortorder : sortOrder,
-			keywords : document.forms['bs_query_form'].bs_keywords_field.value
-		}, "", urlState);
+		window.history
+				.pushState(
+						{
+							url : urlPage,
+							sortby : sortBy,
+							sortorder : sortOrder,
+							keywords : keywords,
+							sampleskeywords : document.forms['bs_query_form'].bs_keywords_field.value
+						}, "", urlState);
 	}
 	updateSamplesList(urlPage);
 }
@@ -548,7 +570,7 @@ function goToPage(page) {
 function goToPageSize(pPageSize) {
 	pageSize = pPageSize;
 	pageInit = 1;
-	var newQuery = $.query.set("keywords",
+	var newQuery = $.query.set("sampleskeywords",
 			document.forms['bs_query_form'].bs_keywords_field.value).set(
 			"sortby", sortBy).set("sortorder", sortOrder).set("page", pageInit)
 			.set("pagesize", pageSize).toString();
@@ -556,10 +578,11 @@ function goToPageSize(pPageSize) {
 
 	// I cannot use the same variable names otherwise the will be used on the
 	// sampleGroup query
-	var newQuerySampleGroup = $.query.set("keywords",
+	var newQuerySampleGroup = $.query.set("sampleskeywords",
 			document.forms['bs_query_form'].bs_keywords_field.value).set(
-			"samplesortby", sortBy).set("samplesortorder", sortOrder).set(
-			"samplepage", pageInit).set("samplepagesize", pageSize).toString();
+			"keywords", keywords).set("samplesortby", sortBy).set(
+			"samplesortorder", sortOrder).set("samplepage", pageInit).set(
+			"samplepagesize", pageSize).toString();
 
 	var urlPage = "../sample/browse/" + pageName + newQuery;
 	if (typeof (window.history.pushState) == 'function') {
@@ -567,12 +590,15 @@ function goToPageSize(pPageSize) {
 		// favorites purpose
 		var urlState = "../group/" + pageName + newQuerySampleGroup;
 		// I will use the urlPage to reload the data on poststate event
-		window.history.pushState({
-			url : urlPage,
-			sortby : sortBy,
-			sortorder : sortOrder,
-			keywords : document.forms['bs_query_form'].bs_keywords_field.value
-		}, "", urlState);
+		window.history
+				.pushState(
+						{
+							url : urlPage,
+							sortby : sortBy,
+							sortorder : sortOrder,
+							keywords : keywords,
+							sampleskeywords : document.forms['bs_query_form'].bs_keywords_field.value
+						}, "", urlState);
 	}
 	updateSamplesList(urlPage);
 }
@@ -608,10 +634,11 @@ function aeSort(psortby) {
 
 	// I cannot use the same variable names otherwise the will be used on the
 	// sampleGroup query
-	var newQuerySampleGroup = $.query.set("keywords",
+	var newQuerySampleGroup = $.query.set("sampleskeywords",
 			document.forms['bs_query_form'].bs_keywords_field.value).set(
-			"samplesortby", sortBy).set("samplesortorder", sortOrder).set(
-			"samplepage", pageInit).set("samplepagesize", pageSize).toString();
+			"keywords", keywords).set("samplesortby", sortBy).set(
+			"samplesortorder", sortOrder).set("samplepage", pageInit).set(
+			"samplepagesize", pageSize).toString();
 
 	var urlPage = "../sample/browse/" + pageName + newQuery;
 
@@ -620,12 +647,15 @@ function aeSort(psortby) {
 		// favorites purpose
 		var urlState = "../group/" + pageName + newQuerySampleGroup;
 		// I will use the urlPage to reload the data on poststate event
-		window.history.pushState({
-			url : urlPage,
-			sortby : sortBy,
-			sortorder : sortOrder,
-			keywords : document.forms['bs_query_form'].bs_keywords_field.value
-		}, "", urlState);
+		window.history
+				.pushState(
+						{
+							url : urlPage,
+							sortby : sortBy,
+							sortorder : sortOrder,
+							keywords : keywords,
+							sampleskeywords : document.forms['bs_query_form'].bs_keywords_field.value
+						}, "", urlState);
 	}
 	// alert(urlPage);
 	updateSamplesList(urlPage);
@@ -653,10 +683,11 @@ function convertSortNumberInText(sortBy) {
 			}
 
 		}
-		ret=ret.trim().toLowerCase();;
-		//I cannot send fiels with spaces
+		ret = ret.trim().toLowerCase();
+		;
+		// I cannot send fiels with spaces
 	}
-	//alert("retconvert->"+ ret);
+	// alert("retconvert->"+ ret);
 	return ret;
 }
 
@@ -672,7 +703,7 @@ function addSortingIndication() {
 		if ("" != sortOrder) {
 			var divElt = thElt.find("span.table_header_inner");
 			if (null != divElt) {
-				//alert("div.table_header_inner not null");
+				// alert("div.table_header_inner not null");
 				// alert(divElt[0]);
 				// I'm using textContent because innerText doesnt work on
 				// FireFox
@@ -680,11 +711,11 @@ function addSortingIndication() {
 						: false;
 				if (hasInnerText) {
 					if ("descending" == sortOrder) {
-						//alert(divElt[0].innerText);
+						// alert(divElt[0].innerText);
 						divElt[0].innerHTML = divElt[0].innerText
 								+ "<i class='aw-icon-angle-down'></i>";
 					} else {
-						//alert($("div.table_header_inner")[0].innerText);
+						// alert($("div.table_header_inner")[0].innerText);
 						divElt[0].innerHTML = divElt[0].innerText
 								+ "<i class='aw-icon-angle-up'></i>";
 					}

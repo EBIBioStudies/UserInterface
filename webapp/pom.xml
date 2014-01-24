@@ -12,13 +12,9 @@
 	<scm>
 		<developerConnection>scm:git:git@github.com:EBIBioSamples/biosd_ui.git</developerConnection>
 	</scm>
-	<!--
-	<scm>
-		<connection>scm:svn:svn://bar.ebi.ac.uk/trunk/BioSamples/webapp</connection>
-		<developerConnection>scm:svn:svn://bar.ebi.ac.uk/trunk/BioSamples/webapp</developerConnection>
-		<url>svn://bar.ebi.ac.uk/trunk/BioSamples/webapp</url>
-	</scm>
-	-->
+	<!-- <scm> <connection>scm:svn:svn://bar.ebi.ac.uk/trunk/BioSamples/webapp</connection> 
+		<developerConnection>scm:svn:svn://bar.ebi.ac.uk/trunk/BioSamples/webapp</developerConnection> 
+		<url>svn://bar.ebi.ac.uk/trunk/BioSamples/webapp</url> </scm> -->
 
 	<!-- default values for repository related properties -->
 	<properties>
@@ -38,10 +34,11 @@
 		<interface.application.link.browse_help>${interface.application.base.path}/help/index.html</interface.application.link.browse_help>
 		<!-- <interface.application.link.aer_old.base.url>/microarray-as/aer</interface.application.link.aer_old.base.url> -->
 
+
 		<!-- API VERSION -->
 		<interface.application.api.version>1.0</interface.application.api.version>
 		<!-- API VERSION -->
-		
+
 		<interface.application.pref.reports.recipients>rpereira&#64;ebi.ac.uk</interface.application.pref.reports.recipients>
 		<interface.application.pref.reports.hidden-recipients>rpereira&#64;ebi.ac.uk</interface.application.pref.reports.hidden-recipients>
 		<interface.application.pref.feedback.recipients>rpereira&#64;ebi.ac.uk</interface.application.pref.feedback.recipients>
@@ -125,17 +122,16 @@
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
-				<!-- <interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>  -->
+				<!-- <interface.application.db.xml.update.active>true</interface.application.db.xml.update.active> -->
 				<!-- <interface.application.db.xml.update.active>true</interface.application.db.xml.update.active> 
 					<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type> 
 					<interface.application.db.xml.update.url>/Users/rpslpereira/Downloads/exportAge.xml</interface.application.db.xml.update.url> -->
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
-	 		 	<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
- 	 			<interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/autoexport.xml</interface.application.db.xml.update.url>
+				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
+				<interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/autoexport.xml</interface.application.db.xml.update.url>
 				<!-- <interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/biosamples_09102013.xml</interface.application.db.xml.update.url> -->
-<!-- 		 		<interface.application.db.xml.update.type>url</interface.application.db.xml.update.type> 
-				<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?limit=100&amp;amp;server=tst&amp;amp;samples=EMBED&amp;amp;schema=AGE2GS&amp;amp;hideNS=true&amp;amp;showAttributes=true</interface.application.db.xml.update.url> 
- -->			<!-- <interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/IncrementalUpdates/biosamplesIncrementalUpdate_FileUsedOnServer.xml</interface.application.db.xml.update.url>-->
+				<!-- <interface.application.db.xml.update.type>url</interface.application.db.xml.update.type> 
+					<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?limit=100&amp;amp;server=tst&amp;amp;samples=EMBED&amp;amp;schema=AGE2GS&amp;amp;hideNS=true&amp;amp;showAttributes=true</interface.application.db.xml.update.url> -->			<!-- <interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/IncrementalUpdates/biosamplesIncrementalUpdate_FileUsedOnServer.xml</interface.application.db.xml.update.url> -->
 				<!-- <interface.application.db.xml.update.active>true</interface.application.db.xml.update.active> 
 					<interface.application.db.xml.update.type>age</interface.application.db.xml.update.type> 
 					<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp> 
@@ -159,15 +155,9 @@
 				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.dbname> -->
 				<interface.application.pref.reports.recipients>rpereira@ebi.ac.uk</interface.application.pref.reports.recipients>
 
-				<!-- <interface.application.ebi.search>
-                    <![CDATA[				
-
-    <rule>
-        <from>^/search</from>
-        <to type="forward" last="true">/servlets/proxy/http://orange.ebi.ac.uk:8180/microarray-as/ae/json/v2/efotree</to>
-    </rule>
-]]>
-				</interface.application.ebi.search> -->
+				<!-- <interface.application.ebi.search> <![CDATA[ <rule> <from>^/search</from> 
+					<to type="forward" last="true">/servlets/proxy/http://orange.ebi.ac.uk:8180/microarray-as/ae/json/v2/efotree</to> 
+					</rule> ]]> </interface.application.ebi.search> -->
 			</properties>
 		</profile>
 
@@ -221,10 +211,10 @@
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
 				<!-- <interface.application.db.xml.update.url>/ebi/microarray/ma-exp/biosamples-ncbi/gui.xml</interface.application.db.xml.update.url> -->
-				<interface.application.db.xml.update.url>/scratch/Biosamples/gui.xml</interface.application.db.xml.update.url>
-				<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule>
+				<interface.application.db.xml.update.url>scratch/Biosamples/testData/dev5x.xml</interface.application.db.xml.update.url>
+				<!-- <interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule>
 				<interface.application.pref.reload-all.update.interval />
-				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
+				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
 
 				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.dbname> 
 					<interface.application.db.xml.connection.port>1984</interface.application.db.xml.connection.port> -->
@@ -248,7 +238,7 @@
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
-				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportProd.xml</interface.application.db.xml.update.url> 			
+				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportProd.xml</interface.application.db.xml.update.url>
 				<!-- <interface.application.db.xml.update.url>/ebi/microarray/home/biosamples/production/data/gui.xml</interface.application.db.xml.update.url> -->
 				<interface.application.pref.reload-all.update.schedule>0 0 4 * * ?</interface.application.pref.reload-all.update.schedule>
 				<interface.application.pref.reload-all.update.interval />
@@ -281,6 +271,7 @@
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
 				<interface.application.log.default.priority>INFO</interface.application.log.default.priority>
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
+				<interface.application.pref.feedback.recipients>biosamples&#64;ebi.ac.uk</interface.application.pref.feedback.recipients>
 				<interface.application.google.analytics>
                     <![CDATA[				
 				<script type="text/javascript">
@@ -321,11 +312,10 @@
 				<interface.application.pref.reload-all.update.schedule>0 0 4 * * ?</interface.application.pref.reload-all.update.schedule>
 				<interface.application.pref.reload-all.update.interval />
 				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
-				<!-- <interface.application.db.xml.update.type>age</interface.application.db.xml.update.type>
-				<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp>
-				<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule>
-				<interface.application.pref.reload-all.update.interval />
-				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
+				<!-- <interface.application.db.xml.update.type>age</interface.application.db.xml.update.type> 
+					<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp> 
+					<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule> 
+					<interface.application.pref.reload-all.update.interval /> <interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
 
 			</properties>
 		</profile>
@@ -516,23 +506,10 @@
 					</webResources>
 				</configuration>
 			</plugin>
-		<!--	<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>buildnumber-maven-plugin</artifactId>
-				<version>1.0-beta-3</version>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>create</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<doCheck>false</doCheck>
-					<doUpdate>false</doUpdate>
-				</configuration>
-			</plugin> -->
+			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>buildnumber-maven-plugin</artifactId> 
+				<version>1.0-beta-3</version> <executions> <execution> <phase>validate</phase> 
+				<goals> <goal>create</goal> </goals> </execution> </executions> <configuration> 
+				<doCheck>false</doCheck> <doUpdate>false</doUpdate> </configuration> </plugin> -->
 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -577,29 +554,29 @@
 			</dependency> <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-api</artifactId> 
 			</dependency> <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-log4j12</artifactId> 
 			<scope>runtime</scope> </dependency> -->
-	
-	  <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>1.5.10</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>jul-to-slf4j</artifactId>
-                <version>1.5.10</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>1.5.10</version>
-            </dependency>
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>1.2.16</version>
-	
-			</dependency>
-			<dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.5.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>1.5.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.5.10</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+
+		</dependency>
+		<dependency>
 			<groupId>org.tuckey</groupId>
 			<artifactId>urlrewritefilter</artifactId>
 			<version>4.0.3</version>
@@ -632,7 +609,19 @@
 			<version>1.3.2</version>
 			<type>jar</type>
 		</dependency>
-	
+
+		<dependency>
+        <groupId>commons-configuration</groupId>
+        <artifactId>commons-configuration</artifactId>
+        <version>1.6</version>
+        <type>jar</type>
+      </dependency>
+	<!-- 	<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.6</version>
+		</dependency> -->
+
 		<dependency>
 			<groupId>net.sf.saxon</groupId>
 			<artifactId>Saxon-HE</artifactId>
@@ -722,25 +711,16 @@
 			<artifactId>basex-api</artifactId>
 			<version>7.3</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>xmldb</groupId>
 			<artifactId>xmldb-api</artifactId>
 			<version>1.0</version>
 		</dependency>
 
-<!-- 
-		<dependency>
-			<groupId>xmldb</groupId>
-			<artifactId>xmldb-api</artifactId>
-			<version>1.0</version>
-					<exclusions>
-				<exclusion>
-					<artifactId>xstream</artifactId>
-					<groupId>com.thoughtworks.xstream</groupId>
-				</exclusion>
-			</exclusions>
-</dependency> -->
+		<!-- <dependency> <groupId>xmldb</groupId> <artifactId>xmldb-api</artifactId> 
+			<version>1.0</version> <exclusions> <exclusion> <artifactId>xstream</artifactId> 
+			<groupId>com.thoughtworks.xstream</groupId> </exclusion> </exclusions> </dependency> -->
 
 
 

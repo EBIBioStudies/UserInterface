@@ -280,15 +280,15 @@
 				 analyze="true" store="true" escape="false"/>
 				<!-- attributes names - i need this to the autocomplete -->
 				<!-- dynamic sort -->				
-				<field name="attributes" type="string" path="attribute"
-					process="true" analyze="true" store="false" escape="false"/>
+				<!-- <field name="attributes" type="string" path="attribute"
+					process="true" analyze="true" store="false" escape="false"/> -->
 				<!-- I will use those expression during the processing of attributes  - they are not used during the searches-->	
-				<field name="attributeName" type="string" path="@class"
+				<!-- <field name="attributeName" type="string" path="@class"
 					process="true" analyze="true" store="false" escape="false"/>
 				<field name="attributeType" type="string" path="@dataType"
 					process="true" analyze="true" store="false" escape="false"/>
 				<field name="attributeValue" type="string" path="simpleValue/value/text()[last()]"
-					process="true" analyze="true" store="false" escape="false"/>
+					process="true" analyze="true" store="false" escape="false"/> -->
 				<!-- I will use those expression during the processing of attributes  - they are not used during the searches-->		
 									
 				<!-- //this is just for sorting -->	

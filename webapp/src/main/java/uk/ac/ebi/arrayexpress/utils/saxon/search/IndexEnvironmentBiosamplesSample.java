@@ -195,7 +195,8 @@ public class IndexEnvironmentBiosamplesSample extends AbstractIndexEnvironment {
 				} else {
 					// I'm browsing a samplegroup
 					// if(map.get("groupaccession")!=null){
-					String queryStr = "<biosamples><all><Samples>{for $x in "
+					//I need to know the group number of samples (I need to remove the common attributes columns on the browser samples inside a groups (only if it has more than 1 sample)
+					String queryStr = "<biosamples><all><Samples groupNumberOfSamples='{count(//SampleGroup[@id='" + map.get("groupaccession")[0] + "']/SampleIds/Id)}'>{for $x in "
 							+ totalRes.toString()
 							+ "  let $y:=//Sample[@id=($x)]"
 							+ "  return $y } "
