@@ -117,7 +117,10 @@
 					sortfields="accessionsort" autocompletion="true"/>
 				<!-- The sortfields must have this pproperties analyze="false" store="false" 
 					escape="false" -->
-				<field name="accessionsort" title="by Accession" type="integer" path="substring(@id,6) cast as xs:integer"
+	<!-- 			<field name="accessionsort" title="by Accession" type="integer" path="substring(@id,6) cast as xs:integer"
+					analyze="false" store="false" escape="false" autocompletion="false"/>
+	 -->
+					<field name="accessionsort" title="by Accession" type="integer" path="substring(substring-before(@id,'-'),6) cast as xs:integer"
 					analyze="false" store="false" escape="false" autocompletion="false"/>
 					
 				<!-- Security - authorization-->
@@ -236,8 +239,11 @@
 				<!-- combine BioSamples and NCBI Samples -->
 				<field name="accession" type="string" path="@id" title="by Accession" analyze="true" 
 					store="true" escape="false"  sortfields="accessionsort" autocompletion="true"/> 
-				<field name="accessionsort" 
+				<!-- <field name="accessionsort" 
 					 type="integer" path="if(starts-with(@id,'SAMN')) then substring-after(@id,'SAMN') cast as xs:integer else substring(@id,6) cast as xs:integer" 
+					analyze="false" store="false" escape="false" autocompletion="false"/>  -->
+					<field name="accessionsort" 
+					 type="integer" path="if(starts-with(@id,'SAMN')) then substring-after(@id,'SAMN') cast as xs:integer else substring(substring-before(@id,'-'),6) cast as xs:integer" 
 					analyze="false" store="false" escape="false" autocompletion="false"/> 
 				<!-- those are used to browse sample page - I dont want to query the DB -->
 				<field name="organism" type="string"
