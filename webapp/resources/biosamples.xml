@@ -112,16 +112,16 @@
 					analyze="true"
 					analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer"
 					autocompletion="true" store="false" escape="false" />
-				<field name="accession" title="by Accession" type="string" path="@id"
+				<!-- <field name="accession" title="by Accession" type="string" path="@id"
 					analyze="true" store="true"  escape="false"
-					sortfields="accessionsort" autocompletion="true"/>
+					sortfields="accessionsort" autocompletion="true"/> -->
 				<!-- The sortfields must have this pproperties analyze="false" store="false" 
 					escape="false" -->
-	 		<!-- 	<field name="accessionsort" title="by Accession" type="integer" path="substring(@id,6) cast as xs:integer"
-					analyze="false" store="false" escape="false" autocompletion="false"/> -->
-
-			 		<field name="accessionsort" title="by Accession" type="integer" path="substring(substring-before(@id,'-'),6) cast as xs:integer"
+	 		 	<field name="accessionsort" title="by Accession" type="integer" path="substring(@id,6) cast as xs:integer"
 					analyze="false" store="false" escape="false" autocompletion="false"/> 
+
+			 		<!-- <field name="accessionsort" title="by Accession" type="integer" path="substring(substring-before(@id,'-'),6) cast as xs:integer"
+					analyze="false" store="false" escape="false" autocompletion="false"/>  -->
 					
 				<!-- Security - authorization-->
 				<field name="userid" type="string" path="user/@id" analyze="false" store="false" escape="false"/>
@@ -238,33 +238,33 @@
 			
 				<!-- combine BioSamples and NCBI Samples -->
 				<field name="accession" type="string" path="@id" title="by Accession" analyze="true" 
-					store="true" escape="false"  sortfields="accessionsort" autocompletion="true"/> 
-				<!-- <field name="accessionsort" 
+					store="true" escape="false"  sortfields="accessionsort" autocompletion="false"/> 
+				 <field name="accessionsort" 
 					 type="integer" path="if(starts-with(@id,'SAMN')) then substring-after(@id,'SAMN') cast as xs:integer else substring(@id,6) cast as xs:integer" 
-					analyze="false" store="false" escape="false" autocompletion="false"/>  -->
-					<field name="accessionsort" 
+					analyze="false" store="false" escape="false" autocompletion="false"/>  
+					<!-- <field name="accessionsort" 
 					 type="integer" path="if(starts-with(@id,'SAMN')) then substring-after(substring-before(@id,'-'),'SAMN') cast as xs:integer else substring(substring-before(@id,'-'),6) cast as xs:integer" 
-					analyze="false" store="false" escape="false" autocompletion="false"/> 
+					analyze="false" store="false" escape="false" autocompletion="false"/>  -->
 				<!-- those are used to browse sample page - I dont want to query the DB -->
 				<field name="organism" type="string"
 					path="attribute/simpleValue/value[../../@class='Organism']" analyze="true"
 					store="true" escape="false"  sortfields="organism" autocompletion="true" title="by Organism"/>				
 				<field name="name" type="string"
 					path="attribute/simpleValue/value[../../@class='Sample Name']" analyze="true"
-					store="true" escape="false"  sortfields="name" autocompletion="true" title="by Name"/>				
+					store="true" escape="false"  sortfields="name" autocompletion="false" title="by Name"/>				
 				<!-- I need to review this -->
 				<field name="description" type="string"
 					path="(attribute/simpleValue/value[../../@class='Sample Description'])[1]" analyze="true"
-					store="true" escape="false" sortfields="description" autocompletion="true" title="by Description"/>
+					store="true" escape="false" sortfields="description" autocompletion="false" title="by Description"/>
 					
 		
 				<field name="database" type="string"
 					path="string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name'])" analyze="true"
-					store="true" escape="false" sortfields="database" autocompletion="true" title="by Database"/>	
+					store="true" escape="false" sortfields="database" autocompletion="false" title="by Database"/>	
 				<!-- this one is used to keep the information that I need to use browse page to shoul the database column information  - I need to have the space character on ' ### '-->	
 			<field name="databaseinfo" type="string"
 					path="concat(string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database URI']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database ID']))" analyze="false"
-					store="true" escape="false"/>	
+					store="true" escape="false" autocompletion="false"/>	
 	
 					
 				<!-- those are used to browse sample page - I dont want to query the DB -->
@@ -273,7 +273,7 @@
 				<!-- <field name="samplegroup" type="string" path="@groupId"
 					analyze="true" store="false" escape="false" /> -->
 				<field name="groupaccession" title="by SampleGroup Accession" type="string" path="GroupIds/Id"
-					analyze="true" store="true" escape="false" />
+					analyze="true" store="true" escape="false" autocompletion="false"/>
 				<!-- used to order the search using the number of groups --> <!-- never forget the cast as xs:integer -->
 				<field name="groups" title="by Number of SampleGroups" type="integer" 
 					path="(count(GroupIds/Id)) cast as xs:integer" sortfields="groups" />
@@ -283,7 +283,7 @@
 			
 				<!-- attributes names - i need this to the autocomplete -->
 				<field name="attributeNames" type="string" path="attribute/replace(@class,' ','_')"
-				 analyze="true" store="true" escape="false"/>
+				 analyze="true" store="true" escape="false" autocompletion="false"/>
 				<!-- attributes names - i need this to the autocomplete -->
 				<!-- dynamic sort -->				
 				<!-- <field name="attributes" type="string" path="attribute"
