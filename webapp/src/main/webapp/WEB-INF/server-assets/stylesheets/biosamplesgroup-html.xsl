@@ -971,7 +971,7 @@
 							</xsl:call-template>
 						</td>
 						<td>
-							<a href="{.//attribute/value[../@class='Term Source URI']}"
+							<a href="{.//attribute/simpleValue/value[../../@class='Term Source URI']}"
 								target="ext">
 								<xsl:value-of
 									select=".//attribute/simpleValue/value[../../@class='Term Source URI']"></xsl:value-of>
