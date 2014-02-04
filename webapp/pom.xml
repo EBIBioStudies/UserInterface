@@ -4,7 +4,7 @@
 	<groupId>uk.ac.ebi.microarray</groupId>
 	<artifactId>bs-interface-webapp</artifactId>
 	<name>BioSamples Interface Web Application</name>
-	<version>2.0.2-SNAPSHOT</version>
+	<version>2.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<url>http://www.ebi.ac.uk/biosamples</url>
 
@@ -29,7 +29,6 @@
 		<interface.application.link.adv_query_help>${interface.application.base.path}/help/index.html</interface.application.link.adv_query_help>
 		<interface.application.link.browse_help>${interface.application.base.path}/help/index.html</interface.application.link.browse_help>
 		<!-- <interface.application.link.aer_old.base.url>/microarray-as/aer</interface.application.link.aer_old.base.url> -->
-
 
 		<!-- API VERSION -->
 		<interface.application.api.version>1.0</interface.application.api.version>
