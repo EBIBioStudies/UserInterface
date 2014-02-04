@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.ebi.microarray</groupId>
 	<artifactId>bs-interface-webapp</artifactId>
 	<name>BioSamples Interface Web Application</name>
-	<version>2.0.1-SNAPSHOT</version>
+	<version>2.0.1</version>
 	<packaging>war</packaging>
 	<url>http://www.ebi.ac.uk/biosamples</url>
 
@@ -39,17 +38,17 @@
 		<interface.application.api.version>1.0</interface.application.api.version>
 		<!-- API VERSION -->
 
-		<interface.application.pref.reports.recipients>rpereira&#64;ebi.ac.uk</interface.application.pref.reports.recipients>
-		<interface.application.pref.reports.hidden-recipients>rpereira&#64;ebi.ac.uk</interface.application.pref.reports.hidden-recipients>
-		<interface.application.pref.feedback.recipients>rpereira&#64;ebi.ac.uk</interface.application.pref.feedback.recipients>
-		<interface.application.pref.remind.recipients>rpereira&#64;ebi.ac.uk</interface.application.pref.remind.recipients>
+		<interface.application.pref.reports.recipients>rpereira@ebi.ac.uk</interface.application.pref.reports.recipients>
+		<interface.application.pref.reports.hidden-recipients>rpereira@ebi.ac.uk</interface.application.pref.reports.hidden-recipients>
+		<interface.application.pref.feedback.recipients>rpereira@ebi.ac.uk</interface.application.pref.feedback.recipients>
+		<interface.application.pref.remind.recipients>rpereira@ebi.ac.uk</interface.application.pref.remind.recipients>
 
 		<interface.application.pref.files.prefix>bs</interface.application.pref.files.prefix>
 		<interface.application.index.directory>Setup</interface.application.index.directory>
 		<interface.application.global.setup.directory>${sys:catalina.base}/deploy/GlobalSetup/Setup</interface.application.global.setup.directory>
 		<interface.application.global.backup.directory>${sys:catalina.base}/deploy/GlobalSetup/Backups</interface.application.global.backup.directory>
 		<interface.application.pref.reload-all.update.schedule />
-		<interface.application.pref.reload-all.update.interval></interface.application.pref.reload-all.update.interval>
+		<interface.application.pref.reload-all.update.interval />
 		<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
 
 
@@ -271,7 +270,7 @@
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
 				<interface.application.log.default.priority>INFO</interface.application.log.default.priority>
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
-				<interface.application.pref.feedback.recipients>biosamples&#64;ebi.ac.uk</interface.application.pref.feedback.recipients>
+				<interface.application.pref.feedback.recipients>biosamples@ebi.ac.uk</interface.application.pref.feedback.recipients>
 				<interface.application.google.analytics>
                     <![CDATA[				
 				<script type="text/javascript">
