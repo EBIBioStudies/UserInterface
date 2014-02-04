@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.ebi.microarray</groupId>
 	<artifactId>bs-interface-webapp</artifactId>
 	<name>BioSamples Interface Web Application</name>
-	<version>2.0.1</version>
+	<version>2.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<url>http://www.ebi.ac.uk/biosamples</url>
 
@@ -13,6 +14,10 @@
 		<url>svn://bar.ebi.ac.uk/trunk/BioSamples/webapp</url> </scm> -->
 
 	<!-- default values for repository related properties -->
+	<scm>
+		<developerConnection>scm:git:git@github.com:EBIBioSamples/biosd_ui.git</developerConnection>
+	</scm>
+	
 	<properties>
 		<interface.application.log.default.priority>INFO</interface.application.log.default.priority>
 		<interface.application.log.appender.ref>ROLLINGFILE</interface.application.log.appender.ref>
@@ -207,9 +212,9 @@
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
 				<!-- <interface.application.db.xml.update.url>/ebi/microarray/ma-exp/biosamples-ncbi/gui.xml</interface.application.db.xml.update.url> -->
 				<interface.application.db.xml.update.url>/scratch/Biosamples/testData/dev5x.xml</interface.application.db.xml.update.url>
-				<!-- <interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule>
-				<interface.application.pref.reload-all.update.interval />
-				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
+				<!-- <interface.application.pref.reload-all.update.schedule>0 0 0 * * 
+					?</interface.application.pref.reload-all.update.schedule> <interface.application.pref.reload-all.update.interval 
+					/> <interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
 
 				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.dbname> 
 					<interface.application.db.xml.connection.port>1984</interface.application.db.xml.connection.port> -->
@@ -520,7 +525,7 @@
 	</build>
 
 	<dependencies>
-	  <dependency>
+		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>bs-interface-auth</artifactId>
 			<version>${project.version}</version>
@@ -606,16 +611,13 @@
 		</dependency>
 
 		<dependency>
-        <groupId>commons-configuration</groupId>
-        <artifactId>commons-configuration</artifactId>
-        <version>1.6</version>
-        <type>jar</type>
-      </dependency>
-	<!-- 	<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
 			<version>1.6</version>
-		</dependency> -->
+			<type>jar</type>
+		</dependency>
+		<!-- <dependency> <groupId>commons-configuration</groupId> <artifactId>commons-configuration</artifactId> 
+			<version>1.6</version> </dependency> -->
 
 		<dependency>
 			<groupId>net.sf.saxon</groupId>
