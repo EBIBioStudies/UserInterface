@@ -8,7 +8,7 @@
     </parent>
    <groupId>uk.ac.ebi.microarray</groupId>
     <artifactId>bs-interface-auth</artifactId>
-    <name>ArrayExpress Interface Authentication Helper</name>
+    <name>BioSamples Interface Authentication Helper</name>
     <version>2.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
   <!-- <parent>
