@@ -8,7 +8,7 @@
     <div id="content" role="main" class="grid_24 clearfix">
         <section id="ae-help" class="grid_18 alpha">
             <h2 id="SampleAccession">
-                Sample Accession <font color="red">(beta version)</font>
+                Sample Accession
             </h2>
             <p></p>
             <ul>
@@ -26,8 +26,8 @@
                 <br> <br>
             </p>
             <h4 id="Arguments">Arguments</h4>
-            <p>groupAccession (required)</p>
-            <p>
+            <p>sampleAccession (required) 
+            <br/>groupslist (optional - default=false)
                 <br> <br>
             </p>
             <h4 id="ExampleRequest">Example Request</h4>
@@ -37,33 +37,116 @@
                 <br> <br>
             </p>
             <h4 id="ExampleResponse">Example Response</h4>
-            <pre class="wiki">&lt;BioSample xmlns="http://www.ebi.ac.uk/biosamples/SampleGroupExport" id="SAME546131"&gt;
-&lt;Property class="Synonym" characteristic="false" comment="false" type="STRING"&gt;
-&lt;Value&gt;ApoE/PLGN, 129(B6)-Apoe&lt;tm1Bres&gt;Plg&lt;tm1Jld&gt;/CljH&lt;/Value&gt;
+<pre class="wiki">&lt;BioSample xmlns="http://www.ebi.ac.uk/biosamples/SampleGroupExport" id="SAME315173"&gt;
+&lt;Property class="Sample Name" characteristic="true" comment="false" type="STRING"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;STOCK Dbp&lt;tm1Schb&gt; Hlf&lt;tm1Schb&gt; Tef&lt;tm1Schb&gt;/Cnrm&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
 &lt;/Property&gt;
-&lt;Property class="Allele Name" characteristic="false" comment="false" type="STRING"&gt;
+&lt;Property class="comment[Synonym]" characteristic="true" comment="false" type="STRING"&gt;
+&lt;QualifiedValue&gt;
 &lt;Value&gt;
-targeted mutation 1, Jan L Breslowtargeted mutation 1, Jay L Degen
+HLF-KO/DBP-KO/TEF-heterozygous, STOCK Dbp&lt;tm1Schb&gt; Hlf&lt;tm1Schb&gt; Tef&lt;tm1Schb&gt;/Ibmc
 &lt;/Value&gt;
+&lt;/QualifiedValue&gt;
 &lt;/Property&gt;
-&lt;Property class="Material" characteristic="false" comment="false" type="STRING"&gt;
-&lt;Value&gt;sperm&lt;/Value&gt;
+&lt;Property class="comment[Nomenclature]" characteristic="true" comment="false" type="STRING"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;+&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
 &lt;/Property&gt;
-&lt;Property class="Name" characteristic="false" comment="false" type="STRING"&gt;
-&lt;Value&gt;129(B6)-Apoe&lt;tm1Bres&gt; Plg&lt;tm1Jld&gt;/CljH[cc]&lt;/Value&gt;
+&lt;Property class="comment[Strain ID]" characteristic="true" comment="false" type="STRING"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;EM:02489&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
 &lt;/Property&gt;
-&lt;Property class="Allele Symbol" characteristic="false" comment="false" type="STRING"&gt;
-&lt;Value&gt;Apoe&lt;tm1Bres&gt;Plg&lt;tm1Jld&gt;&lt;/Value&gt;
+&lt;Property class="Material" characteristic="true" comment="false" type="STRING"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;embryo&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
 &lt;/Property&gt;
-&lt;Property class="Sample Accession" characteristic="false" comment="false" type="STRING"&gt;
-&lt;Value&gt;SAME546131&lt;/Value&gt;
+&lt;Property class="Organism" characteristic="true" comment="false" type="STRING"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;Mus musculus&lt;/Value&gt;
+&lt;TermSourceREF&gt;
+&lt;Name/&gt;
+&lt;Description/&gt;
+&lt;URI&gt;http://www.ncbi.nlm.nih.gov/taxonomy/&lt;/URI&gt;
+&lt;Version/&gt;
+&lt;TermSourceID&gt;10090&lt;/TermSourceID&gt;
+&lt;/TermSourceREF&gt;
+&lt;/QualifiedValue&gt;
 &lt;/Property&gt;
-&lt;Property class="Gene Name" characteristic="false" comment="false" type="STRING"&gt;
-&lt;Value&gt;apolipoprotein Eplasminogen&lt;/Value&gt;
+&lt;Property class="characteristic[Allele ID]" characteristic="true" comment="false" type="STRING"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;MGI:2183196&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;MGI:3045494&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;MGI:3045480&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
 &lt;/Property&gt;
+&lt;Property class="characteristic[Allele Symbol]" characteristic="true" comment="false" type="STRING"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;Dbp&lt;tm1Schb&gt;&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;Tef&lt;tm1Schb&gt;&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;Hlf&lt;tm1Schb&gt;&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;/Property&gt;
+&lt;Property class="characteristic[Allele Name]" characteristic="true" comment="false" type="STRING"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;targeted mutation 1, Ueli Schibler&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;/Property&gt;
+&lt;Property class="characteristic[Gene ID]" characteristic="true" comment="false" type="STRING"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;MGI:94866&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;MGI:98663&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;MGI:96108&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;/Property&gt;
+&lt;Property class="characteristic[Gene Symbol]" characteristic="true" comment="false" type="STRING"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;Dbp&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;Tef&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;Hlf&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;/Property&gt;
+&lt;Property class="characteristic[Gene Name]" characteristic="true" comment="false" type="STRING"&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;D site albumin promoter binding protein&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;thyrotroph embryonic factor&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;QualifiedValue&gt;
+&lt;Value&gt;hepatic leukemia factor&lt;/Value&gt;
+&lt;/QualifiedValue&gt;
+&lt;/Property&gt;
+&lt;Database&gt;
+&lt;Name&gt;EM&lt;/Name&gt;
+&lt;ID&gt;STOCK Dbp&lt;tm1Schb&gt; Hlf&lt;tm1Schb&gt; Tef&lt;tm1Schb&gt;/Cnrm&lt;/ID&gt;
+&lt;URI&gt;
+http://www.findmice.org/summary?query=STOCK+Dbp%3Ctm1Schb%3E+Hlf%3Ctm1Schb%3E+Tef%3Ctm1Schb%3E%2FCnrm&amp;repositories=EM
+&lt;/URI&gt;
+&lt;/Database&gt;
 &lt;/BioSample&gt;
-  
 </pre>
+
             <p>
                 <br> <br>
             </p>
@@ -79,7 +162,7 @@ targeted mutation 1, Jan L Breslowtargeted mutation 1, Jay L Degen
                         class="icon">&nbsp;</span>/biosamples/assets/xsd/BioSDSchema.xsd</a></li>
             </ul>
             <p>
-                <img src="../api/BioSDSchemaV2_BioSample.png"
+                <img src="../api/BioSDSchema_BioSample.png"
                     alt="BioSamplesSample XSD" title="BioSamplesSample XSD">
             </p>
 

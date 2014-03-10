@@ -786,6 +786,7 @@ public abstract class AbstractIndexEnvironment {
 		String connectionString = "";
 		Collection coll;
 		IndexWriter w = null;
+		DirectoryTaxonomyWriter taxoWriter=null;
 		Map<String, XPathExpression> fieldXpe = new HashMap<String, XPathExpression>();
 		try {
 
@@ -797,7 +798,7 @@ public abstract class AbstractIndexEnvironment {
 			Directory taxDir = FSDirectory.open(new File(indexLocationDirectory
 					+ "Facets", indexId));
 
-			DirectoryTaxonomyWriter taxoWriter = new DirectoryTaxonomyWriter(
+			taxoWriter = new DirectoryTaxonomyWriter(
 					taxDir);
 			CategoryDocumentBuilder docBuilder = new CategoryDocumentBuilder(
 					taxoWriter);
@@ -1033,6 +1034,7 @@ public abstract class AbstractIndexEnvironment {
 
 		} catch (Exception x) {
 			logger.error("Caught an exception:", x);
+			taxoWriter.close();
 			w.close();
 			throw x;
 		}
@@ -1320,14 +1322,14 @@ public abstract class AbstractIndexEnvironment {
 				logger.debug("until now it were processed->[{}]", pageNumber
 						* pageSizeDefault);
 				pageNumber++;
-				if (coll != null) {
-					try {
-						// coll.close();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+//				if (coll != null) {
+//					try {
+//						// coll.close();
+//					} catch (Exception e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
 				set = null;
 
 			}
@@ -1613,6 +1615,7 @@ public abstract class AbstractIndexEnvironment {
 			} catch (XPathExpressionException x) {
 				String xmlError = PrintUtils.printNodeInfo((NodeInfo) node,
 						config);
+				logger.error("Field being processed->[{}]", field.name);
 				logger.error("XPathExpressionException->[{}]", x.getMessage());
 				logger.error("Caught an exception while indexing expression ["
 						+ field.path + "] for document ["

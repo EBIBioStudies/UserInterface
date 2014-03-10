@@ -13,6 +13,7 @@
 		</reports>
 	</app>
 
+
 	<bs>
 		<globalSetupDirectory>${interface.application.global.setup.directory}
 		</globalSetupDirectory>
@@ -59,7 +60,6 @@
 		<password>${interface.application.db.xml.update.password}</password>
 		<cookie>${interface.application.db.xml.update.cookie}</cookie>	
 	</xmlupdate>
-	
 
 
 		<!-- job -->
@@ -117,8 +117,13 @@
 					sortfields="accessionsort" autocompletion="true"/>
 				<!-- The sortfields must have this pproperties analyze="false" store="false" 
 					escape="false" -->
-				<field name="accessionsort" title="by Accession" type="integer" path="substring(@id,6) cast as xs:integer"
-					analyze="false" store="false" escape="false" autocompletion="false"/>
+					<field name="accessionsort" title="by Accession" type="integer" path="translate(@id, translate(@id, '0123456789', ''), '') cast as xs:integer"
+					analyze="false" store="false" escape="false" autocompletion="false"/> 
+	 		 	<!-- <field name="accessionsort" title="by Accession" type="integer" path="substring(@id,6) cast as xs:integer"
+					analyze="false" store="false" escape="false" autocompletion="false"/>  -->
+
+			 		<!-- <field name="accessionsort" title="by Accession" type="integer" path="substring(substring-before(@id,'-'),6) cast as xs:integer"
+					analyze="false" store="false" escape="false" autocompletion="false"/>  -->
 					
 				<!-- Security - authorization-->
 				<field name="userid" type="string" path="user/@id" analyze="false" store="false" escape="false"/>
@@ -128,12 +133,16 @@
 							
 				<!-- this field is only used for incremental updates -->
 				<field name="delete" type="boolean" path="@delete = 'true'"/>	
+				<!-- this field is only used for incremental updates -->
+				
 				<field name="releasedate" title="by Release Date" type="string"
-					path="attribute/simpleValue/value[../../@class='Submission Release Date']" analyze="true"
-					store="true" escape="false" autocompletion="true" sortfields="releasedate" />
+					path="replace(substring(attribute/simpleValue/value[../../@class='Submission Release Date'],0,11),'-','-')" analyze="true"
+					store="true" escape="false" autocompletion="false" sortfields="releasedate" />
 				<field name="updatedate" title="by Update Date" type="string"
-					path="attribute/simpleValue/value[../../@class='Submission Update Date']" analyze="true"
-					store="true" escape="false" autocompletion="true" sortfields="updatedate" />			
+					path="replace(substring(attribute/simpleValue/value[../../@class='Submission Update Date'],0,11),'-','-')" analyze="true"
+					store="true" escape="false" autocompletion="false" sortfields="updatedate" />			
+				
+			
 				<field name="description" title="by Description" type="string"
 					path="attribute/simpleValue/value[../../@class='Submission Description']" analyze="true"
 					store="true" escape="false" autocompletion="true" sortfields="description" />
@@ -151,13 +160,32 @@
 					path="attribute/value[../@class='Submission Version']" analyze="true"
 					store="false" escape="false" /> -->
 		
+	
+			
+			<!-- if(starts-with(@id,'SAMN')) then substring-after(@id,'SAMN') cast as xs:integer else substring(@id,6) cast as xs:integer -->
+		
+				<!-- jira/browse/BSD-52 - If the froup doenst have DB associated and has only one sample, I will show the sample DB associated to the SampleGroup -->
 				<field name="database" type="string"
-					path="string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name'])" analyze="true"
+					path="if(count(attribute[@class='Databases'])>0) then string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']) 
+					else if(count(SampleIds/Id)=1) then string(SampleAttributes/attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']) else null" analyze="true"
 					store="true" escape="false" sortfields="database" autocompletion="true" title="by Database"/>	
 				<!-- this one is used to keep the information that I need to use browse page to shoul the database column information  - I need to have the space character on ' ### '-->	
 				<field name="databaseinfo" type="string"
-					path="concat(string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database URI']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database ID']))" analyze="false"
+					path="if(count(attribute[@class='Databases'])>0) then 
+					concat(string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database URI']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database ID'])) 
+					 else if(count(SampleIds/Id)=1) then 
+					 concat(string(SampleAttributes/attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']),' ### ', string(SampleAttributes/attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database URI']),' ### ', string(SampleAttributes/attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database ID'])) else null" analyze="false"
 					store="true" escape="false"/>	
+		
+			
+		<!-- 	<field name="database" type="string"
+					path="string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name'])" analyze="true"
+					store="true" escape="false" sortfields="database" autocompletion="true" title="by Database"/>	 
+					-->
+				<!-- this one is used to keep the information that I need to use browse page to shoul the database column information  - I need to have the space character on ' ### '-->	
+		<!--  	<field name="databaseinfo" type="string"
+					path="concat(string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database URI']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database ID']))" analyze="false"
+					store="true" escape="false"/>	-->
 					
 				<field name="organizations" title="by Organizations" type="string"
 					path="attribute/objectValue[../@class='Organizations']//value" analyze="true"
@@ -182,7 +210,8 @@
 				<!-- used to order the search using the numer os samples -->
 	<!-- 			<attribute class="Submission Reference Layer" classDefined="true" dataType="BOOLEAN">
     <value>true</value> -->
-				<field name="reference" type="boolean" path="attribute/simpleValue/value[../../@class='Submission Reference Layer']//value = 'true'"/>
+				<field name="reference" type="boolean" path="attribute/simpleValue/value[../../@class='Submission Reference Layer']//value = 'true'" analyze="true"
+					store="true" escape="false" sortfields="reference" autocompletion="true" title="by Reference"/>
 			</document>
 		</index>
 
@@ -211,29 +240,39 @@
 			
 				<!-- combine BioSamples and NCBI Samples -->
 				<field name="accession" type="string" path="@id" title="by Accession" analyze="true" 
-					store="true" escape="false"  sortfields="accessionsort" autocompletion="true"/> 
-				<field name="accessionsort" 
+					store="true" escape="false"  sortfields="accessionsort" autocompletion="false"/> 
+				 
+				 <field name="accessionsort" 
+					 type="integer" path="translate(@id, translate(@id, '0123456789', ''), '') cast as xs:integer" 
+					analyze="false" store="false" escape="false" autocompletion="false"/>  
+				
+				 <!-- <field name="accessionsort" 
 					 type="integer" path="if(starts-with(@id,'SAMN')) then substring-after(@id,'SAMN') cast as xs:integer else substring(@id,6) cast as xs:integer" 
-					analyze="false" store="false" escape="false" autocompletion="false"/> 
+					analyze="false" store="false" escape="false" autocompletion="false"/>   -->
+					<!-- <field name="accessionsort" 
+					 type="integer" path="if(starts-with(@id,'SAMN')) then substring-after(substring-before(@id,'-'),'SAMN') cast as xs:integer else substring(substring-before(@id,'-'),6) cast as xs:integer" 
+					analyze="false" store="false" escape="false" autocompletion="false"/>  -->
 				<!-- those are used to browse sample page - I dont want to query the DB -->
 				<field name="organism" type="string"
 					path="attribute/simpleValue/value[../../@class='Organism']" analyze="true"
 					store="true" escape="false"  sortfields="organism" autocompletion="true" title="by Organism"/>				
 				<field name="name" type="string"
 					path="attribute/simpleValue/value[../../@class='Sample Name']" analyze="true"
-					store="true" escape="false"  sortfields="name" autocompletion="true" title="by Name"/>				
+					store="true" escape="false"  sortfields="name" autocompletion="false" title="by Name"/>				
+				<!-- I need to review this -->
 				<field name="description" type="string"
-					path="string(attribute/simpleValue/value[../../@class='Sample Description'])" analyze="true"
-					store="true" escape="false" sortfields="description" autocompletion="true" title="by Description"/>
+					path="(attribute/simpleValue/value[../../@class='Sample Description'])[1]" analyze="true"
+					store="true" escape="false" sortfields="description" autocompletion="false" title="by Description"/>
 					
+		
 				<field name="database" type="string"
 					path="string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name'])" analyze="true"
-					store="true" escape="false" sortfields="database" autocompletion="true" title="by Database"/>	
+					store="true" escape="false" sortfields="database" autocompletion="false" title="by Database"/>	
 				<!-- this one is used to keep the information that I need to use browse page to shoul the database column information  - I need to have the space character on ' ### '-->	
-				<field name="databaseinfo" type="string"
+			<field name="databaseinfo" type="string"
 					path="concat(string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database Name']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database URI']),' ### ', string(attribute[@class='Databases']//attribute/simpleValue/value[../../@class='Database ID']))" analyze="false"
-					store="true" escape="false"/>	
-		
+					store="true" escape="false" autocompletion="false"/>	
+	
 					
 				<!-- those are used to browse sample page - I dont want to query the DB -->
 					
@@ -241,7 +280,7 @@
 				<!-- <field name="samplegroup" type="string" path="@groupId"
 					analyze="true" store="false" escape="false" /> -->
 				<field name="groupaccession" title="by SampleGroup Accession" type="string" path="GroupIds/Id"
-					analyze="true" store="true" escape="false" />
+					analyze="true" store="true" escape="false" autocompletion="false"/>
 				<!-- used to order the search using the number of groups --> <!-- never forget the cast as xs:integer -->
 				<field name="groups" title="by Number of SampleGroups" type="integer" 
 					path="(count(GroupIds/Id)) cast as xs:integer" sortfields="groups" />
@@ -251,18 +290,18 @@
 			
 				<!-- attributes names - i need this to the autocomplete -->
 				<field name="attributeNames" type="string" path="attribute/replace(@class,' ','_')"
-				 analyze="true" store="true" escape="false"/>
+				 analyze="true" store="true" escape="false" autocompletion="false"/>
 				<!-- attributes names - i need this to the autocomplete -->
 				<!-- dynamic sort -->				
-				<field name="attributes" type="string" path="attribute"
-					process="true" analyze="true" store="false" escape="false"/>
+				<!-- <field name="attributes" type="string" path="attribute"
+					process="true" analyze="true" store="false" escape="false"/> -->
 				<!-- I will use those expression during the processing of attributes  - they are not used during the searches-->	
-				<field name="attributeName" type="string" path="@class"
+				<!-- <field name="attributeName" type="string" path="@class"
 					process="true" analyze="true" store="false" escape="false"/>
 				<field name="attributeType" type="string" path="@dataType"
 					process="true" analyze="true" store="false" escape="false"/>
 				<field name="attributeValue" type="string" path="simpleValue/value/text()[last()]"
-					process="true" analyze="true" store="false" escape="false"/>
+					process="true" analyze="true" store="false" escape="false"/> -->
 				<!-- I will use those expression during the processing of attributes  - they are not used during the searches-->		
 									
 				<!-- //this is just for sorting -->	

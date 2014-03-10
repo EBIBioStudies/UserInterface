@@ -424,7 +424,7 @@ vertical-align: top;
 
 /*colummns browse samplegroups*/
 .col_id{
-	width:150px;
+	width:130px;
 	text-align: left;
 }
 
@@ -453,12 +453,12 @@ vertical-align: top;
 */
 
 .col_groups, .col_organisms{
-	width:250px;
+	width:225px;
 	text-align: left;
 }
 
 .col_database{
-	width:100px;
+	width:80px;
 	text-align: left;
 }
 

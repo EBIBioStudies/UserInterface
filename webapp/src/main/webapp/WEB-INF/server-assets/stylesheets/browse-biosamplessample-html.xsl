@@ -205,6 +205,10 @@
 		<xsl:choose>
 			<xsl:when
 				test="$bdName=('arrayexpress','ena sra','dgva','pride') and not($pUrl='')">
+				<!-- PRIDE changed the user interface: this is temporary -->
+				<xsl:variable name="pUrl"
+					select="replace($pUrl,'http://www.ebi.ac.uk/pride/showExperiment.do\?experimentAccessionNumber','http://www.ebi.ac.uk/pride/archive/simpleSearch?q')"></xsl:variable>
+
 				<a href="{$pUrl}" target="ext">
 					<img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{$pName} Link"
 						border="0" title="{$pName}" />
@@ -228,7 +232,7 @@
 	<xsl:template name="process_groups">
 		<xsl:param name="pValue" />
 		<xsl:for-each select="$pValue/id">
-			<a href="group/{.}">
+			<a href="group/{.}?sampleskeywords={$keywords}">
 				<xsl:call-template name="highlight">
 					<xsl:with-param name="pText" select="." />
 					<xsl:with-param name="pFieldName" select="'groupaccession'" />

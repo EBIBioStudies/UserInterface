@@ -126,7 +126,7 @@
 		<tr>
 			<td class="col_id">
 				<div>
-					<a href="{$basepath}/group/{id}?keywords={$vkeywords}">
+					<a href="{$basepath}/group/{id}?keywords={$vkeywords}&amp;sampleskeywords={$vkeywords}">
 						<xsl:call-template name="highlight">
 							<xsl:with-param name="pText" select="id" />
 							<xsl:with-param name="pFieldName" select="'accession'" />
@@ -187,6 +187,10 @@
 		<xsl:choose>
 			<xsl:when
 				test="$bdName=('arrayexpress','ena sra','dgva','pride') and not($pUrl='')">
+				<!-- PRIDE changed the user interface: this is temporary -->
+				<xsl:variable name="pUrl"
+					select="replace($pUrl,'http://www.ebi.ac.uk/pride/showExperiment.do\?experimentAccessionNumber','http://www.ebi.ac.uk/pride/archive/simpleSearch?q')"></xsl:variable>
+
 				<a href="{$pUrl}" target="ext">
 					<img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{$pName} Link"
 						border="0" title="{$pName}" />

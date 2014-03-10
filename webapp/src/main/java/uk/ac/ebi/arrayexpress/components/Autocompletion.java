@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /*
  * Copyright 2009-2011 European Molecular Biology Laboratory
  *
@@ -37,7 +40,8 @@ public class Autocompletion extends ApplicationComponent {
 	private BioSamplesSample bioSamplesSample;
 	private SearchEngine search;
 	private IEFO efo;
-
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+	
 	public Autocompletion() {
 	}
 
@@ -146,6 +150,7 @@ public class Autocompletion extends ApplicationComponent {
 	}
 
 	public void rebuildBioSamplesSample() throws IOException {
+		logger.debug("Autocompletion-> BioSamplesSample()");
 		if (getStore(bioSamplesSample.INDEX_ID) != null) {
 			getStore(bioSamplesSample.INDEX_ID).clear();
 		}

@@ -62,7 +62,10 @@
 						String samplesActive = relativeReqURI
 								.startsWith("/browse_samples.html")
 								|| relativeReqURI.startsWith("/sample") ? "active" : "";
-						String helpActive = relativeReqURI.startsWith("/help/") ? "active"
+						
+						String submitActive = relativeReqURI.startsWith("/help/submit") ? "active"
+								: "";
+						String helpActive = (relativeReqURI.startsWith("/help/") && !relativeReqURI.startsWith("/help/submit")) ? "active"
 								: "";
 						String aboutActive = relativeReqURI.startsWith("/about.html") ? "active"
 								: "";
@@ -112,16 +115,18 @@
 
 			<nav>
 				<ul class="grid_24" id="local-nav">
-					<li class="first <%=homeActive%>"><a href="/biosamples/"
+					<li class="first <%=homeActive%>"><a href="${interface.application.base.path}/"
 						title="Biosamples">Home</a></li>
 					<li class="<%=samplesActive%>"><a
-						href="/biosamples/browse_samples.html" title="Samples">Samples</a></li>
+						href="${interface.application.base.path}/browse_samples.html" title="Samples">Samples</a></li>
 					<li class="<%=groupsActive%>"><a
-						href="/biosamples/browse.html" title="Groups">Sample Groups</a></li>
+						href="${interface.application.base.path}/browse.html" title="Groups">Sample Groups</a></li>
+					<li class="<%=submitActive%>"><a
+						href="${interface.application.base.path}/help/submit.html" title="Submit">Submit</a></li>
 					<li class="<%=helpActive%>"><a
-						href="/biosamples/help/index.html" title="Help">Help</a></li>
+						href="${interface.application.base.path}/help/index.html" title="Help">Help</a></li>
 					<li class="last <%=aboutActive%>"><a
-						href="/biosamples/about.html">About BioSamples</a></li>
+						href="${interface.application.base.path}/about.html">About BioSamples</a></li>
 					<!-- <li class="functional last login"><a href="#"
 						class="icon icon-functional" data-icon="l">Login</a></li> -->
 					<li class="functional feedback first"><a href="#"
@@ -241,4 +246,4 @@
 					class="submit" type="submit" value="Send">
 			</form>
 		</section>
-<!-- 	</div> -->
+	<!-- </div> -->

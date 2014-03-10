@@ -32,7 +32,7 @@
 
 
 	<xsl:template match="/">
-	
+	<xsl:comment> BioSamples XML API - version 1.0</xsl:comment>
 	<xsl:variable name="vFrom" as="xs:integer">
             <xsl:choose>
                 <xsl:when test="$vPage > 0"><xsl:value-of select="1 + ( $vPage - 1 ) * $vPageSize"/></xsl:when>
@@ -65,7 +65,7 @@
 					<xsl:value-of select="$vPageSize" />
 				</PageSize>
 			</SummaryInfo>
-			<xsl:apply-templates select="*"></xsl:apply-templates>
+			<xsl:apply-templates select="//Sample"></xsl:apply-templates>
 		</ResultQuery>
 	</xsl:template>
 

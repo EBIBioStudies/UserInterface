@@ -34,11 +34,11 @@ public class XsdValidationSchemaTest {
 
 	
 
-	@Test
-	public void validateSampleSearchSchema() throws Exception {
+	//@Test
+	public void validateSampleSearchInsideGroupSchema() throws Exception {
 
 		URL schemaFile = new URL(
-				"http://ruis-imac.windows.ebi.ac.uk:8080/biosamples/assets/xsd/ResultQuerySample.xsd");
+				"http://ruis-imac.windows.ebi.ac.uk:8080/biosamples/assets/xsd/ResultQuerySampleSchema.xsd");
 		Source xmlFile = new StreamSource(
 				"http://ruis-imac.windows.ebi.ac.uk:8080/biosamples/xml/groupsamples/SAMEG23004/query=cancer");
 		SchemaFactory schemaFactory = SchemaFactory
@@ -60,7 +60,7 @@ public class XsdValidationSchemaTest {
 	//@Test
 	public void validateGroupSearchSchema() throws Exception {
 		URL schemaFile = new URL(
-				"http://ruis-imac.windows.ebi.ac.uk:8080/biosamples/assets/xsd/ResultQuerySampleGroup.xsd");
+				"http://ruis-imac.windows.ebi.ac.uk:8080/biosamples/assets/xsd/ResultQuerySampleGroupSchema.xsd");
 		Source xmlFile = new StreamSource(
 				"http://ruis-imac.windows.ebi.ac.uk:8080/biosamples/xml/group/query=cancer");
 		SchemaFactory schemaFactory = SchemaFactory
@@ -79,6 +79,31 @@ public class XsdValidationSchemaTest {
 
 	}
 
+	
+	
+	//@Test
+	public void validateSampleSearchSchema() throws Exception {
+		URL schemaFile = new URL(
+				"http://ruis-imac.windows.ebi.ac.uk:8080/biosamples/assets/xsd/ResultQuerySampleSchema.xsd");
+		Source xmlFile = new StreamSource(
+				"http://ruis-imac.windows.ebi.ac.uk:8080/biosamples/xml/sample/query=cancer");
+		SchemaFactory schemaFactory = SchemaFactory
+				.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		Schema schema = schemaFactory.newSchema(schemaFile);
+		Validator validator = schema.newValidator();
+		try {
+			validator.validate(xmlFile);
+			System.out.println(xmlFile.getSystemId() + " is valid");
+			assertTrue(true);
+		} catch (SAXException e) {
+			assertFalse(true);
+			System.out.println(xmlFile.getSystemId() + " is NOT valid");
+			System.out.println("Reason: " + e.getLocalizedMessage());
+		}
+
+	}
+
+	
 	public void validateGroupSchema(String group) throws Exception {
 		URL schemaFile = new URL(
 				"http://ruis-imac.windows.ebi.ac.uk:8080/biosamples/assets/xsd/BioSDSchema.xsd");

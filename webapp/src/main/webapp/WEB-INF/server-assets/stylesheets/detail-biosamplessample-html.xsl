@@ -64,6 +64,11 @@
 				<link rel="stylesheet"
 					href="{$context-path}/assets/stylesheets/biosamples_detail_10.css"
 					type="text/css" />
+					<!-- need this to have the scrollbars on Chrome/firefox/safari - overwrite 
+					the ebi css definition [PT:53620963] -->
+				<style type="text/css">
+					html {overflow-y:auto;}
+				</style>
 			</xsl:with-param>
 			<xsl:with-param name="pBreadcrumbTrail">
 				<a href="{$context-path}/browse_samples.html">Samples</a>
@@ -118,13 +123,12 @@
 						</b>
 					</td>
 					<td>
-					<xsl:for-each select="$vSample/attribute[@class='Organism']">
-						<xsl:call-template name="process_efo">
-							<xsl:with-param name="pAttribute"
-								select="."></xsl:with-param>
-							<xsl:with-param name="pField" select="'organism'"></xsl:with-param>
-						</xsl:call-template>
-					</xsl:for-each>
+						<xsl:for-each select="$vSample/attribute[@class='Organism']">
+							<xsl:call-template name="process_efo">
+								<xsl:with-param name="pAttribute" select="."></xsl:with-param>
+								<xsl:with-param name="pField" select="'organism'"></xsl:with-param>
+							</xsl:call-template>
+						</xsl:for-each>
 					</td>
 				</tr>
 				<tr>
@@ -182,16 +186,23 @@
 								</xsl:when>
 								<!-- normal value -->
 								<xsl:when
-									test="count($attribute//attribute[@class='Term Source REF'])=0">
+									test="count($attribute//attribute[@class='Term Source REF'])=0 and count($attribute//attribute[@class='Unit'])=0">
 									<!-- <xsl:copy-of select="value"></xsl:copy-of> -->
 									<xsl:call-template name="process_multiple_values">
 										<xsl:with-param name="pField"
 											select="lower-case(replace(@class,' ' , '-'))"></xsl:with-param>
-										<xsl:with-param name="pValue"
-											select="$attribute"></xsl:with-param>
+										<xsl:with-param name="pValue" select="$attribute"></xsl:with-param>
 									</xsl:call-template>
 								</xsl:when>
 
+								<xsl:when test="count($attribute//attribute[@class='Unit'])>0">
+									<xsl:call-template name="process_unit">
+										<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
+										<xsl:with-param name="pField"
+											select="lower-case(replace($attributeClass,' ' , '-'))"></xsl:with-param>
+									</xsl:call-template>
+
+								</xsl:when>
 								<xsl:otherwise>
 									<xsl:call-template name="process_efo">
 										<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
@@ -234,9 +245,12 @@
 		<xsl:param name="pValue" />
 		<xsl:for-each select="$pValue/objectValue">
 			<xsl:call-template name="process_database">
-				<xsl:with-param name="pName" select=".//attribute[@class='Database Name']/simpleValue/value" />
-				<xsl:with-param name="pUrl" select=".//attribute[@class='Database URI']/simpleValue/value" />
-				<xsl:with-param name="pId" select=".//attribute[@class='Database ID']/simpleValue/value" />
+				<xsl:with-param name="pName"
+					select=".//attribute[@class='Database Name']/simpleValue/value" />
+				<xsl:with-param name="pUrl"
+					select=".//attribute[@class='Database URI']/simpleValue/value" />
+				<xsl:with-param name="pId"
+					select=".//attribute[@class='Database ID']/simpleValue/value" />
 			</xsl:call-template>
 		</xsl:for-each>
 	</xsl:template>
@@ -247,9 +261,15 @@
 		<xsl:param name="pId" />
 
 		<xsl:variable name="bdName" select="lower-case($pName)"></xsl:variable>
+		<!-- PRIDE changed the user interface: this is temporary -->
+		<xsl:variable name="pUrl"
+			select="replace($pUrl,'http://www.ebi.ac.uk/pride/showExperiment.do\?experimentAccessionNumber','http://www.ebi.ac.uk/pride/archive/simpleSearch?q')"></xsl:variable>
+
+
 		<xsl:choose>
 			<xsl:when
 				test="$bdName=('arrayexpress','ena sra','dgva','pride') and not($pUrl='')">
+
 				<a href="{$pUrl}" target="ext">
 					<img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{$pName} Link"
 						border="0" title="{$pName}" />
@@ -257,7 +277,8 @@
 			</xsl:when>
 			<xsl:when test="not($pUrl='')">
 				<a href="{$pUrl}" target="ext" title="{$pName}">
-					 <font class="icon icon-generic" data-icon="L" title="{$pName}" /> <xsl:copy-of select="$pName"></xsl:copy-of>
+					<font class="icon icon-generic" data-icon="L" title="{$pName}" />
+					<xsl:copy-of select="$pName"></xsl:copy-of>
 				</a>
 			</xsl:when>
 		</xsl:choose>
@@ -265,10 +286,12 @@
 		URI:
 		<a href="{$pUrl}" target="ext">
 			<xsl:copy-of select="$pUrl"></xsl:copy-of>
-		</a>;
+		</a>
+		;
 		<br />
 		ID:
-		<xsl:copy-of select="$pId"></xsl:copy-of>;
+		<xsl:copy-of select="$pId"></xsl:copy-of>
+		;
 
 	</xsl:template>
 
@@ -293,33 +316,55 @@
 		<table border="0" cellpadding="0" cellspacing="0"
 			id="table_inside_attr">
 			<tbody>
-			<xsl:for-each select="$pAttribute/simpleValue">
-				<tr>
-					<td>
-						<xsl:choose>
-							<xsl:when
-								test="count(.//attribute/simpleValue/value[../../@class='Term Source URI'])=0">
-								<xsl:call-template name="highlight">
-									<xsl:with-param name="pText"
-										select="./value" />
-									<xsl:with-param name="pFieldName" select="$pField" />
-								</xsl:call-template>
-								<!-- <xsl:copy-of select="simpleValue/value"></xsl:copy-of> -->
-							</xsl:when>
-							<xsl:otherwise>
+				<xsl:for-each select="$pAttribute/simpleValue">
+					<tr>
+						<td>
+							<xsl:choose>
+								<xsl:when
+									test="count(.//attribute/simpleValue/value[../../@class='Term Source URI'])=0">
+									<xsl:call-template name="highlight">
+										<xsl:with-param name="pText" select="./value" />
+										<xsl:with-param name="pFieldName" select="$pField" />
+									</xsl:call-template>
+									<!-- <xsl:copy-of select="simpleValue/value"></xsl:copy-of> -->
+								</xsl:when>
+								<xsl:otherwise>
 
-								<xsl:call-template name="process_efo_url">
-									<xsl:with-param name="pAttribute" select="." />
-									<xsl:with-param name="pField" select="$pField" />
-								</xsl:call-template>
-								<!-- <a href="{.//attribute/simpleValue/value[../../@class='Term 
-									Source URI']}" target="ext"> <xsl:value-of select="simpleValue/value"></xsl:value-of> 
-									</a> -->
-							</xsl:otherwise>
-						</xsl:choose>
-					</td>
-				</tr>
-			</xsl:for-each>
+									<xsl:call-template name="process_efo_url">
+										<xsl:with-param name="pAttribute" select="." />
+										<xsl:with-param name="pField" select="$pField" />
+									</xsl:call-template>
+									<!-- <a href="{.//attribute/simpleValue/value[../../@class='Term 
+										Source URI']}" target="ext"> <xsl:value-of select="simpleValue/value"></xsl:value-of> 
+										</a> -->
+								</xsl:otherwise>
+							</xsl:choose>
+						</td>
+					</tr>
+				</xsl:for-each>
+			</tbody>
+		</table>
+	</xsl:template>
+
+
+
+	<xsl:template name="process_unit">
+		<xsl:param name="pAttribute" />
+		<xsl:param name="pField" />
+		<table border="0" cellpadding="0" cellspacing="0"
+			id="table_inside_attr">
+			<tbody>
+				<xsl:for-each select="$pAttribute/simpleValue">
+					<tr>
+						<td>
+							<xsl:call-template name="highlight">
+								<xsl:with-param name="pText"
+									select="concat(./value, ' (',.//attribute/simpleValue/value[../../@class='Unit'] , ')')" />
+								<xsl:with-param name="pFieldName" select="$pField" />
+							</xsl:call-template>
+						</td>
+					</tr>
+				</xsl:for-each>
 			</tbody>
 		</table>
 	</xsl:template>
@@ -337,8 +382,7 @@
 					target="ext">
 					<!-- <xsl:value-of select="simpleValue/value"></xsl:value-of> -->
 					<xsl:call-template name="highlight">
-						<xsl:with-param name="pText"
-							select="$pAttribute/value" />
+						<xsl:with-param name="pText" select="$pAttribute/value" />
 						<xsl:with-param name="pFieldName" select="$pField" />
 					</xsl:call-template>
 
@@ -350,8 +394,7 @@
 					target="ext">
 					<!-- <xsl:value-of select="simpleValue/value"></xsl:value-of> -->
 					<xsl:call-template name="highlight">
-						<xsl:with-param name="pText"
-							select="$pAttribute/value" />
+						<xsl:with-param name="pText" select="$pAttribute/value" />
 						<xsl:with-param name="pFieldName" select="$pField" />
 					</xsl:call-template>
 				</a>

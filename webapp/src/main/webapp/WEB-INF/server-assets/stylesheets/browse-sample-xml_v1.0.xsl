@@ -32,7 +32,7 @@
 
 
 	<xsl:template match="/">
-	
+	<xsl:comment> BioSamples XML API - version 1.0</xsl:comment>
 	<xsl:variable name="vFrom" as="xs:integer">
             <xsl:choose>
                 <xsl:when test="$vPage > 0"><xsl:value-of select="1 + ( $vPage - 1 ) * $vPageSize"/></xsl:when>
@@ -70,9 +70,8 @@
 	</xsl:template>
 
 	<xsl:template match="//Sample">
-		<BioSample>
+		<BioSample id="{./id}">
 		<!-- I dont want to copy the groupId attribute  -->
-		<xsl:copy-of select="@id" />
 			<!-- I'm only returning a list of Ids -->
 			<!-- <xsl:copy-of select="*" /> -->
 		</BioSample>
