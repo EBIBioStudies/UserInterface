@@ -209,10 +209,10 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				search.getController().getEnvironment("biosamplessample")
 						.closeIndexReader();
 
-				// remove the old setupdirectory
+				// remove the old setupdirectory /tmp/Setup is deleted
 				deleteDirectory(setupDirectory);
 
-				// Rename file (or directory)
+				// Rename file (or directory) /tmp/newSetup->  /tmp/Setup
 				logger.info("Before file renamed!!!");
 				boolean success2 = newSetupDir.renameTo(setupDirectory);
 				// FileUtilities.

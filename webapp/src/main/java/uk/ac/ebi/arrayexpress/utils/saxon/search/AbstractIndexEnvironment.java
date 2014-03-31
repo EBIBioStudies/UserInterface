@@ -971,6 +971,7 @@ public abstract class AbstractIndexEnvironment {
 								logger.error(
 										"XML that was being processed when the error occurred DB->[{}]",
 										xmlError);
+	
 								// to avoid the next running to stop
 								// because its not able to delete the
 								// newSetup directory
@@ -1616,6 +1617,7 @@ public abstract class AbstractIndexEnvironment {
 				String xmlError = PrintUtils.printNodeInfo((NodeInfo) node,
 						config);
 				logger.error("Field being processed->[{}]", field.name);
+				xmlError="##FIELD BEING PROCESSED##->"+field.name +"\n" + xmlError;
 				logger.error("XPathExpressionException->[{}]", x.getMessage());
 				logger.error("Caught an exception while indexing expression ["
 						+ field.path + "] for document ["

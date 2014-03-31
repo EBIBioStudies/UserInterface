@@ -77,7 +77,7 @@
 						</a> -->
 				</xsl:otherwise>
 			</xsl:choose>
-		<!-- 	<br /> -->
+			<br/> 
 		</xsl:for-each>
 	</xsl:template>
 
