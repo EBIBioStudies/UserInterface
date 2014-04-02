@@ -841,6 +841,7 @@
 				<xsl:with-param name="pId"
 					select=".//attribute[@class='Database ID']/simpleValue/value" />
 			</xsl:call-template>
+			<br/>
 		</xsl:for-each>
 	</xsl:template>
 
