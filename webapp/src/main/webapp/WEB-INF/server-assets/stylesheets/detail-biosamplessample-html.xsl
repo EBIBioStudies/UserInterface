@@ -268,7 +268,7 @@
 
 		<xsl:choose>
 			<xsl:when
-				test="$bdName=('arrayexpress','ena sra','dgva','pride') and not($pUrl='')">
+				test="$bdName=('arrayexpress','ena','ena sra','dgva','pride') and not($pUrl='')">
 
 				<a href="{$pUrl}" target="ext">
 					<img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{$pName} Link"
