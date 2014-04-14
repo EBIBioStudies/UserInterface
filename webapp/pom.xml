@@ -19,7 +19,6 @@
 
 	<!-- default values for repository related properties -->
 
-	
 	<properties>
 		<interface.application.log.default.priority>INFO</interface.application.log.default.priority>
 		<interface.application.log.appender.ref>ROLLINGFILE</interface.application.log.appender.ref>
@@ -49,10 +48,19 @@
 		<interface.application.pref.files.prefix>bs</interface.application.pref.files.prefix>
 		<interface.application.index.directory>Setup</interface.application.index.directory>
 		<interface.application.global.setup.directory>${sys:catalina.base}/deploy/GlobalSetup/Setup</interface.application.global.setup.directory>
+		<interface.application.global.setupdb.directory>${sys:catalina.base}/deploy/GlobalSetup/SetupDB</interface.application.global.setupdb.directory>
 		<interface.application.global.backup.directory>${sys:catalina.base}/deploy/GlobalSetup/Backups</interface.application.global.backup.directory>
 		<interface.application.pref.reload-all.update.schedule />
 		<interface.application.pref.reload-all.update.interval />
 		<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
+		<interface.application.pref.reload-all-disk.update.schedule />
+		<interface.application.pref.reload-all-disk.update.interval />
+		<interface.application.pref.reload-all-disk.update.atstart>false</interface.application.pref.reload-all-disk.update.atstart>
+		<interface.application.pref.update-global-setup-disk.update.schedule />
+		<interface.application.pref.update-global-setup-disk.update.interval />
+		<interface.application.pref.update-global-setup-disk.update.atstart>false</interface.application.pref.update-global-setup-disk.update.atstart>
+		<interface.application.pref.update-global-setup-disk.fileSetup/>
+		<interface.application.pref.update-global-setup-disk.fileSetupDB/>
 
 
 		<interface.application.pref.efo.update.schedule>0 0 1 ? * SUN</interface.application.pref.efo.update.schedule>
@@ -80,6 +88,7 @@
 		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/biosamples_sampleAtt</interface.application.db.xml.connection.string> -->
 		<!-- <interface.application.db.xml.connection.string>xmldb:basex://host:1984/biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.string> -->
 		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/biosamplesAEGroup</interface.application.db.xml.connection.string> -->
+		<interface.application.db.xml.path>${user.home}/BaseXData/</interface.application.db.xml.path>
 		<interface.application.db.xml.connection.base>xmldb:basex</interface.application.db.xml.connection.base>
 		<interface.application.db.xml.connection.host>localhost</interface.application.db.xml.connection.host>
 		<interface.application.db.xml.connection.port>1984</interface.application.db.xml.connection.port>
@@ -131,6 +140,11 @@
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
 				<interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/biosampleserror.xml</interface.application.db.xml.update.url>
+				<interface.application.pref.update-global-setup-disk.fileSetup>/Users/rpslpereira/EclipseWorkspaces/BioSamples_Trunk_Git/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/deploy/GlobalSetup/db1/Setup</interface.application.pref.update-global-setup-disk.fileSetup>
+				<interface.application.pref.update-global-setup-disk.fileSetupDB>/Users/rpslpereira/EclipseWorkspaces/BioSamples_Trunk_Git/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/deploy/GlobalSetup/db1/SetupDB</interface.application.pref.update-global-setup-disk.fileSetupDB>
+				<!-- <interface.application.pref.reload-all-disk.update.schedule>0 0 7 * * ?</interface.application.pref.reload-all-disk.update.schedule>
+				<interface.application.pref.reload-all-disk.update.interval />
+				<interface.application.pref.reload-all-disk.update.atstart>false</interface.application.pref.reload-all-disk.update.atstart> -->
 				<!-- <interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/biosamples_09102013.xml</interface.application.db.xml.update.url> -->
 				<!-- <interface.application.db.xml.update.type>url</interface.application.db.xml.update.type> 
 					<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?limit=100&amp;amp;server=tst&amp;amp;samples=EMBED&amp;amp;schema=AGE2GS&amp;amp;hideNS=true&amp;amp;showAttributes=true</interface.application.db.xml.update.url> -->			<!-- <interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/IncrementalUpdates/biosamplesIncrementalUpdate_FileUsedOnServer.xml</interface.application.db.xml.update.url> -->
@@ -309,10 +323,13 @@
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup_static</interface.application.db.xml.connection.dbname>
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
-				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportDev.xml</interface.application.db.xml.update.url>
+				<interface.application.pref.update-global-setup-disk.fileSetup>/ebi/microarray/home/tomcats/BEANS.BIOSD_NEWGUI_DEV/deploy/GlobalSetup/Setup</interface.application.pref.update-global-setup-disk.fileSetup>
+				<interface.application.pref.update-global-setup-disk.fileSetupDB>/ebi/microarray/home/tomcats/BEANS.BIOSD_NEWGUI_DEV/deploy/GlobalSetup/SetupDB</interface.application.pref.update-global-setup-disk.fileSetupDB>
+				
+				<!-- <interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportDev.xml</interface.application.db.xml.update.url>
 				<interface.application.pref.reload-all.update.schedule>0 0 4 * * ?</interface.application.pref.reload-all.update.schedule>
 				<interface.application.pref.reload-all.update.interval />
-				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
+				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
 				<!-- <interface.application.db.xml.update.type>age</interface.application.db.xml.update.type> 
 					<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp> 
 					<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule> 

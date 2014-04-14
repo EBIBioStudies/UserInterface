@@ -132,6 +132,14 @@
 		<to type="forward">/servlets/control/update-efo</to>
 	</rule>
 
+<!-- Jobs-rule -->
+	<rule>
+		<from>^/update-global-setup-disk</from>
+		<to type="forward">/servlets/control/update-global-setup-disk</to>
+	</rule>
+
+
+
 	<!-- Metadata Information-rule -->
 	<rule>
 		<from>^/metadata</from>

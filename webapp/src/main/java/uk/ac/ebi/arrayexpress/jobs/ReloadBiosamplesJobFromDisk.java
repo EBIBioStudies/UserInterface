@@ -7,14 +7,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Random;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.basex.BaseXServer;
 import org.basex.core.cmd.CreateDB;
 import org.basex.server.ClientSession;
@@ -54,31 +58,30 @@ import uk.ac.ebi.arrayexpress.utils.saxon.search.Indexer;
  *
  */
 
-
-public class ReloadBiosamplesJob extends ApplicationJob {
+//reloads the biosamples based on a news directory that contain the Lucene indexes and the Xml database
+public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 	// logging machinery
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	public void doExecute(JobExecutionContext jec) throws Exception {
-		logger.info("Reloading all Biosamples data into the Application Server");
+		logger.info("Reloading all Biosamples form disk data into the Application Server");
 		File setupDirectory = null;
-		File backDir = null;
+		File globalSetupDirectory = null;
 		File globalSetupDBDirectory = null;
+		File backDir = null;
 		File setupTempDirectory = null;
 		try {
-
 			// Thread.currentThread().sleep(30000);//sleep for 1000 ms
-
 			boolean updateActive = Application.getInstance().getPreferences()
 					.getBoolean("bs.xmlupdate.active");
 			logger.debug("Is Reloading Active?->" + updateActive);
 
 			if (!updateActive) {
-				logger.error("ReloadBiosamplesJob is trying to execute and the configuration does not allow that");
+				logger.error("ReloadBiosamplesJobFromDisk is trying to execute and the configuration does not allow that");
 				this.getApplication()
 						.sendEmail(null,null,
 								"BIOSAMPLES: WARNING",
-								"ReloadBiosamplesJob is trying to execute and the configuration does not allow that!");
+								"ReloadBiosamplesJobFromDisk is trying to execute and the configuration does not allow that!");
 				// throw new
 				// Exception("ReloadBiosamplesJob is trying to execute and the configuration does not allow that!");
 				return;
@@ -100,24 +103,36 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 			String globalSetupDir = Application.getInstance().getPreferences()
 					.getString("bs.globalSetupDirectory");
 			logger.debug("globalSetupDirectory->" + globalSetupDir);
-
+			globalSetupDirectory=new File(globalSetupDir);
+			
 			String globalSetupDBDir = Application.getInstance().getPreferences()
 					.getString("bs.globalSetupDBDirectory");
 			logger.debug("globalSetupDBDirectory->" + globalSetupDBDir);
 			globalSetupDBDirectory=new File(globalSetupDBDir);
-			
+					
 			String dbname = Application.getInstance().getPreferences()
 					.getString("bs.xmldatabase.dbname");
 			String dbPathDirectory = Application.getInstance().getPreferences()
 					.getString("bs.xmldatabase.path");
 			File dbDirectory = new File(dbPathDirectory + "/" + dbname);
 			logger.debug("dbPathDirectory->" + dbDirectory);
-			
+
 			// this variable will be used in the creation of the bakup
 			// directory anda in the creation od the database backup
 			Long tempDir = System.nanoTime();
-
-			String newDir = "backup_" + tempDir;
+			//I need the hostneme because I have 2 different production servers
+			String hostname="";
+			try {
+			    hostname = InetAddress.getLocalHost().getHostName();
+			    if (StringUtils.isEmpty( hostname)){	
+			    	Random gerador = new Random();
+			    	int number = gerador.nextInt();
+			    	hostname=number+"";
+			    }
+			} catch (UnknownHostException e) {
+			    // failed;  try alternate means.
+			}
+			String newDir = "backup_" + hostname +"_"+ tempDir;
 			backDir = new File(backupDirectory + "/" + newDir);
 			if (backDir.mkdir()) {
 				logger.info("Backup directory was created in [{}]",
@@ -131,32 +146,10 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 						+ backDir.getAbsolutePath());
 			}
 
-			// DownloadBiosamplesXmlFileFromAGE dxml = new
-			// DownloadBiosamplesXmlFileFromAGE();
-			// I need to know which type of biosample updting process am I using
-			String typeBioSampleUpdate = Application.getInstance()
-					.getPreferences().getString("bs.xmlupdate.type");
-			logger.debug("Type of Biosamples updating process->"
-					+ typeBioSampleUpdate);
-			IDownloadBiosamplesXmlFile dxml = DownloadBiosamplesXmlFileFactory
-					.createDownloadBiosamplesXmlFile(typeBioSampleUpdate);
-			File xmlDir = new File(backDir.getAbsolutePath() + "/XmlDownload");
-			if (xmlDir.mkdir()) {
-				logger.info("XmlDownload  directory was created in [{}]",
-						xmlDir.getAbsolutePath());
-			} else {
-				logger.error("XmlDownload directory was NOT created in [{}]",
-						xmlDir.getAbsolutePath());
-				throw new Exception(
-						"XmlDownload  directory was NOT created in "
-								+ xmlDir.getAbsolutePath());
-			}
-			String downloadDirectory = xmlDir.getAbsolutePath();
-			boolean downloadOk = dxml.downloadXml(downloadDirectory);
-
-			if (downloadOk) {
-
-				File oldSetupDir = new File(backDir.getAbsolutePath()
+		
+			
+			//I will make a backup from what we have now on the /tmp/Setup and also b
+			File oldSetupDir = new File(backDir.getAbsolutePath()
 						+ "/OldSetup");
 				if (oldSetupDir.mkdir()) {
 					logger.info(
@@ -172,9 +165,23 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 									+ oldSetupDir.getAbsolutePath());
 				}
 
-				// update of the xmlDatabase
-				logger.info("DatabaseXml Creation");
-
+				File oldSetupDBDir = new File(backDir.getAbsolutePath()
+						+ "/OldSetupDB");
+				if (oldSetupDBDir.mkdir()) {
+					logger.info(
+							"oldSetupDBDir Backup directory was created in [{}]",
+							oldSetupDBDir.getAbsolutePath());
+					copyDirectory(dbDirectory, oldSetupDBDir);
+				} else {
+					logger.error(
+							"oldSetupDBDir Backup directory was NOT created in [{}]",
+							oldSetupDBDir.getAbsolutePath());
+					throw new Exception(
+							"oldSetupDBDir Backup directory was NOT created in "
+									+ oldSetupDBDir.getAbsolutePath());
+				}
+	
+		
 				// File newSetupDir= new File(backDir.getAbsolutePath() +
 				// "/newSetup" );
 				// I need to change this because it's not possible to move
@@ -192,10 +199,13 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 					// it renames nesSetup to Setup), the next time the process
 					// will always fail because the newSetup already exists
 					FileUtils.forceDelete(newSetupDir);
+					
 				}
 				if (newSetupDir.mkdir()) {
 					logger.info("newSetupDir  directory was created in [{}]",
 							newSetupDir.getAbsolutePath());
+					//copy there the globalSetup
+					copyDirectory(globalSetupDirectory, newSetupDir);
 				} else {
 					logger.error(
 							"newSetupDir directory was NOT created in [{}]",
@@ -205,10 +215,34 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 									+ newSetupDir.getAbsolutePath());
 				}
 
-				// update in a temporary database
-				// index it in the newSetupDir
-				updateXMLDatabase(xmlDir, newSetupDir, tempDir);
-				logger.info("End of DatabaseXml Creation");
+				
+				//new DB temp directory
+				File newSetupDBDir = new File(dbDirectory.getParentFile()
+						.getAbsolutePath() + "/new" + dbname );
+
+				if (newSetupDBDir.exists()) {
+					// I will force the delete of the NewSetupDir (I need this
+					// because if for any reason the process fails once (before
+					// it renames nesSetup to Setup), the next time the process
+					// will always fail because the newSetup already exists
+					FileUtils.forceDelete(newSetupDBDir);
+					
+				}
+				if (newSetupDBDir.mkdir()) {
+					logger.info("newSetupDBDir  directory was created in [{}]",
+							newSetupDBDir.getAbsolutePath());
+					//copy there the globalSetup
+					copyDirectory(globalSetupDBDirectory, newSetupDBDir);
+				} else {
+					logger.error(
+							"newSetupDBDir directory was NOT created in [{}]",
+							newSetupDBDir.getAbsolutePath());
+					throw new Exception(
+							"newSetupDBDir  directory was NOT created in "
+									+ newSetupDBDir.getAbsolutePath());
+				}
+				
+				
 				// only after update the database I update the Lucenes Indexes
 				logger.info("Deleting Setup Directory and renaming - from now on the application is not answering");
 
@@ -224,7 +258,6 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 
 				// remove the old setupdirectory /tmp/Setup is deleted
 				deleteDirectory(setupDirectory);
-
 				// Rename file (or directory) /tmp/newSetup->  /tmp/Setup
 				logger.info("Before file renamed!!!");
 				boolean success2 = newSetupDir.renameTo(setupDirectory);
@@ -232,33 +265,6 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				if (success2) {
 					logger.info("newSetupDir was successfully renamed to [{}]!!!",
 							setupDirectory.getAbsolutePath());
-					// need to remove the globalSetupDirectory e copy the new
-					// one to there
-					File globalSetupDirectory = new File(globalSetupDir);
-					if (globalSetupDirectory.exists()) {
-						FileUtils.forceDelete(globalSetupDirectory);
-					} else {
-						logger.info(
-								"globalSetupDirectory doesnt exist!! [{}]!!!",
-								globalSetupDirectory.getAbsolutePath());
-					}
-					FileUtils.copyDirectory(setupDirectory,
-							globalSetupDirectory);
-					//I will also copy there the XML DB					
-					File newSetupDBDir = new File(dbDirectory.getParentFile()
-							.getAbsolutePath()  + "/" + dbname );
-					if (newSetupDBDir.exists()) {
-						FileUtils.copyDirectory(newSetupDBDir,
-								globalSetupDBDirectory);
-						logger.info(
-								"XML DB was copied to globalSetupDBDirectory !! [{}]!!!",
-								globalSetupDBDirectory.getAbsolutePath());
-					}
-					else{
-					logger.error(
-							"New Xml DB doesnt exist!! [{}]!!!",
-							newSetupDBDir.getAbsolutePath());
-					}
 					
 				} else {
 					logger.error("newSetupDir was not successfully renamed to [{}]!!!",
@@ -267,6 +273,27 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 							setupDirectory.getAbsolutePath());
 				}
 				logger.info("Deleting Setup Directory and renaming - End");
+				
+				
+				logger.info("Before file DBrenamed!!!");
+				logger.info("newSetupDBDir is  in [{}]!!!",
+						newSetupDBDir.getAbsolutePath());
+				logger.info("dbDirectory is  in [{}]!!!",
+						dbDirectory.getAbsolutePath());
+				deleteDirectory(dbDirectory);
+				boolean successDB2 = newSetupDBDir.renameTo(dbDirectory);
+				// FileUtilities.
+				if (successDB2) {
+					logger.info("newSetupDBDir was successfully renamed to [{}]!!!",
+							dbDirectory.getAbsolutePath());
+					
+				} else {
+					logger.error("newSetupDBDir was not successfully renamed to [{}]!!!",
+							dbDirectory.getAbsolutePath());
+					throw new Exception("newSetupDBDir was not successfully renamed to [{}]!!!" +
+							dbDirectory.getAbsolutePath());
+				}
+				logger.info("Deleting SetupDB Directory and renaming - End");
 
 				// I do this to know the number of elements
 				((BioSamplesGroup) getComponent("BioSamplesGroup"))
@@ -294,10 +321,6 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				// / .getEnvironment("biosamplessample")).setup();
 				// TODO: RPE Update the EFO!!??
 
-			} else {
-				logger.debug("Something went wrong on Xml download");
-			}
-
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		} finally {
@@ -309,77 +332,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 		// (/Users/rpslpereira/Apps/apache-tomcat-6.0.33/temp/StagingArea/4)
 	}
 
-	public void updateXMLDatabase(File xmlDirectory, File newSetupDirectory,
-			long tempDir) throws Exception {
-
-		// Create a client session with host name, port, user name and password
-
-		logger.debug("* Create a client session int the Xml Database.");
-
-		String dbHost = Application.getInstance().getPreferences()
-				.getString("bs.xmldatabase.host");
-		int dbPort = Integer.parseInt(Application.getInstance()
-				.getPreferences().getString("bs.xmldatabase.port"));
-		String dbPassword = Application.getInstance().getPreferences()
-				.getString("bs.xmldatabase.adminpassword");
-
-		String originalDbName = Application.getInstance().getPreferences()
-				.getString("bs.xmldatabase.dbname");
-
-		Session session = new ClientSession(dbHost, dbPort, "admin", dbPassword);
-
-		// ------------------------------------------------------------------------
-		// Create a database
-		logger.debug("* Create a database.");
-
-		String tempDbName = originalDbName + "_" + tempDir;
-		String logs = session.execute(new CreateDB(tempDbName, xmlDirectory
-				.getAbsolutePath()));
-		// .getAbsolutePath() + "/XmlFiles"));
-		logger.debug("CreateDB('" + tempDbName + "' ...->" + logs);
-
-		logs = session.execute("CLOSE");
-		logger.debug("CLOSE ...->" + logs);
-
-		logger.debug("Start Indexing ...");
-		// I will create now the Lucene Indexes ...
-		SearchEngine search = ((SearchEngine) getComponent("SearchEngine"));
-		// TODO: rpe change all this static values
-		search.getController().indexFromXmlDB("biosamplesgroup", Indexer.RebuildCategories.REBUILD,
-				newSetupDirectory.getAbsolutePath() + "/LuceneIndexes", dbHost,
-				dbPort, dbPassword, tempDbName);
-
-		// / ((IndexEnvironmentBiosamplesGroup) search.getController()
-		// / .getEnvironment("biosamplesgroup")).setup();
-		// TODO: rpe this db path shoul not be static
-		search.getController().indexFromXmlDB("biosamplessample", Indexer.RebuildCategories.REBUILD,
-				newSetupDirectory.getAbsolutePath() + "/LuceneIndexes", dbHost,
-				dbPort, dbPassword, tempDbName);
-		// / ((IndexEnvironmentBiosamplesSample) search.getController()
-		// / .getEnvironment("biosamplessample")).setup();
-		logger.debug("End Indexing ...");
-		//
-
-		// index
-		logger.info("DatabaseXml Rename - From now on the database is not answering anymore!");
-		logs = session.execute("ALTER DATABASE " + originalDbName + " "
-				+ tempDbName + "_backup");
-		logger.debug("ALTER DATABASE " + originalDbName + " " + tempDbName
-				+ "_backup" + "->" + logs);
-		logs = session.execute("ALTER DATABASE " + tempDbName + " "
-				+ originalDbName);
-
-		logger.info("DatabaseXml Rename - End!");
-
-		logger.debug("* Close the client session.");
-		session.close();
-
-		// I neeed to reinitialize the XmldbConnectionPool otherwise I wiil be
-		// looking to old data!
-		search.getComponent("XmlDbConnectionPool").terminate();
-		search.getComponent("XmlDbConnectionPool").initialize();
-
-	}
+	
 
 	void deleteDirectory(File f) throws IOException {
 		FileUtils.deleteDirectory(f);

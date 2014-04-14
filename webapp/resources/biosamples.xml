@@ -19,6 +19,7 @@
 	<bs>
 		<globalSetupDirectory>${interface.application.global.setup.directory}
 		</globalSetupDirectory>
+		<globalSetupDBDirectory>${interface.application.global.setupdb.directory}</globalSetupDBDirectory>
 		<setupDirectory>${sys:java.io.tmpdir}/${interface.application.index.directory}
 		</setupDirectory>
 		<backupDirectory>${interface.application.global.backup.directory}
@@ -46,6 +47,7 @@
 		</password-remind>
 
 		<xmldatabase>
+			<path>${interface.application.db.xml.path}</path>
 			<driver>${interface.application.db.xml.driver}</driver>
 			<base>${interface.application.db.xml.connection.base}</base>
 			<host>${interface.application.db.xml.connection.host}</host>
@@ -70,7 +72,6 @@
 			<cookie>${interface.application.db.xml.update.cookie}</cookie>
 		</xmlupdate>
 
-
 		<!-- job -->
 		<reload-all>
 			<update>
@@ -82,6 +83,34 @@
 				</atstart>
 			</update>
 		</reload-all>
+		
+		<reload-all-disk>
+			<update>
+				<schedule>${interface.application.pref.reload-all-disk.update.schedule}
+				</schedule>
+				<interval>${interface.application.pref.reload-all-disk.update.interval}
+				</interval>
+				<atstart>${interface.application.pref.reload-all-disk.update.atstart}
+				</atstart>
+			</update>
+		</reload-all-disk>
+		
+		<update-global-setup-disk>
+			<update>
+				<schedule>${interface.application.pref.reload-all-disk.update.schedule}
+				</schedule>
+				<interval>${interface.application.pref.reload-all-disk.update.interval}
+				</interval>
+				<atstart>${interface.application.pref.reload-all-disk.update.atstart}
+				</atstart>
+			</update>
+			<fileSetup>${interface.application.pref.update-global-setup-disk.fileSetup}</fileSetup>
+			<fileSetupDB>${interface.application.pref.update-global-setup-disk.fileSetupDB}</fileSetupDB>
+		</update-global-setup-disk>
+		
+		
+	
+		
 		<efo>
 			<location>${sys:java.io.tmpdir}/efo.owl</location>
 			<source>/WEB-INF/classes/efo.owl</source>
