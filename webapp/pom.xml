@@ -47,9 +47,10 @@
 
 		<interface.application.pref.files.prefix>bs</interface.application.pref.files.prefix>
 		<interface.application.index.directory>Setup</interface.application.index.directory>
-		<interface.application.global.setup.directory>${sys:catalina.base}/deploy/GlobalSetup/Setup</interface.application.global.setup.directory>
-		<interface.application.global.setupdb.directory>${sys:catalina.base}/deploy/GlobalSetup/SetupDB</interface.application.global.setupdb.directory>
-		<interface.application.global.backup.directory>${sys:catalina.base}/deploy/GlobalSetup/Backups</interface.application.global.backup.directory>
+		<interface.application.global.setup.directory>${sys:catalina.base}/deploy/GlobalSetup</interface.application.global.setup.directory>
+		<interface.application.global.setup.lucene.directory>Setup</interface.application.global.setup.lucene.directory>
+		<interface.application.global.setup.db.directory>SetupDB</interface.application.global.setup.db.directory>
+		<interface.application.global.backup.directory>${sys:catalina.base}/deploy/GlobalSetup_Backups</interface.application.global.backup.directory>
 		<interface.application.pref.reload-all.update.schedule />
 		<interface.application.pref.reload-all.update.interval />
 		<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
@@ -139,7 +140,7 @@
 					<interface.application.db.xml.update.url>/Users/rpslpereira/Downloads/exportAge.xml</interface.application.db.xml.update.url> -->
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
-				<interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/biosampleserror.xml</interface.application.db.xml.update.url>
+				<interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/biosampleserror2.xml</interface.application.db.xml.update.url>
 				<interface.application.pref.update-global-setup-disk.fileSetup>/Users/rpslpereira/EclipseWorkspaces/BioSamples_Trunk_Git/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/deploy/GlobalSetup/db1/Setup</interface.application.pref.update-global-setup-disk.fileSetup>
 				<interface.application.pref.update-global-setup-disk.fileSetupDB>/Users/rpslpereira/EclipseWorkspaces/BioSamples_Trunk_Git/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/deploy/GlobalSetup/db1/SetupDB</interface.application.pref.update-global-setup-disk.fileSetupDB>
 				<!-- <interface.application.pref.reload-all-disk.update.schedule>0 0 7 * * ?</interface.application.pref.reload-all-disk.update.schedule>
@@ -222,7 +223,7 @@
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup_Dev2</interface.application.db.xml.connection.dbname>
 				<interface.application.db.xml.connection.port>1986</interface.application.db.xml.connection.port>
 				<interface.application.global.setup.directory>${sys:java.io.tmpdir}/deploy/GlobalSetup/Setup</interface.application.global.setup.directory>
-				<interface.application.global.backup.directory>${sys:java.io.tmpdir}/deploy/GlobalSetup/Backups</interface.application.global.backup.directory>
+				<interface.application.global.backup.directory>${sys:java.io.tmpdir}/deploy/GlobalSetup_Backups</interface.application.global.backup.directory>
 				<!-- point to the SSD disk and to the BASEX running there -->
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>

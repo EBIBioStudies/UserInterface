@@ -15,11 +15,11 @@
 		</reports>
 	</app>
 
-
 	<bs>
 		<globalSetupDirectory>${interface.application.global.setup.directory}
 		</globalSetupDirectory>
-		<globalSetupDBDirectory>${interface.application.global.setupdb.directory}</globalSetupDBDirectory>
+		<globalSetupLuceneDirectory>${interface.application.global.setup.lucene.directory}</globalSetupLuceneDirectory>
+		<globalSetupDBDirectory>${interface.application.global.setup.db.directory}</globalSetupDBDirectory>
 		<setupDirectory>${sys:java.io.tmpdir}/${interface.application.index.directory}
 		</setupDirectory>
 		<backupDirectory>${interface.application.global.backup.directory}

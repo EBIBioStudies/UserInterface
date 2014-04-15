@@ -66,8 +66,6 @@ public class UpdateGlobalSetupBiosamplesJobFromDisk extends ApplicationJob {
 	public void doExecute(JobExecutionContext jec) throws Exception {
 		logger.info("Update GlobalSetup directory on  Biosamples thought disk data into the Application Server");
 		File setupDirectory = null;
-		File globalSetupDirectory = null;
-		File globalSetupDBDirectory = null;
 		File backDir = null;
 		File setupTempDirectory = null;
 		try {
@@ -77,9 +75,12 @@ public class UpdateGlobalSetupBiosamplesJobFromDisk extends ApplicationJob {
 			String baseUpdateGlobalSetupDir = Application.getInstance().getPreferences()
 					.getString("bs.update-global-setup-disk.fileSetup");		
 			File baseUpdateGlobalSetupDirectory = new File(baseUpdateGlobalSetupDir);
+			logger.debug("baseUpdateGlobalSetupDir->" + baseUpdateGlobalSetupDir);
+			
 			String baseUpdateGlobalSetupDBDir = Application.getInstance().getPreferences()
 					.getString("bs.update-global-setup-disk.fileSetupDB");		
 			File baseUpdateGlobalSetupDBDirectory = new File(baseUpdateGlobalSetupDBDir);
+			logger.debug("baseUpdateGlobalSetupDBDir->" + baseUpdateGlobalSetupDBDir);
 			
 			String setupDir = Application.getInstance().getPreferences()
 					.getString("bs.setupDirectory");
@@ -93,18 +94,23 @@ public class UpdateGlobalSetupBiosamplesJobFromDisk extends ApplicationJob {
 			String globalSetupDir = Application.getInstance().getPreferences()
 					.getString("bs.globalSetupDirectory");
 			logger.debug("globalSetupDirectory->" + globalSetupDir);
-			globalSetupDirectory=new File(globalSetupDir);
-			
+			File globalSetupDirectory = new File(globalSetupDir);
+
 			String globalSetupDBDir = Application.getInstance().getPreferences()
 					.getString("bs.globalSetupDBDirectory");
 			logger.debug("globalSetupDBDirectory->" + globalSetupDBDir);
-			globalSetupDBDirectory=new File(globalSetupDBDir);
+			File globalSetupDBDirectory = new File(globalSetupDir + File.separator + globalSetupDBDir);
+			
+			String globalSetupLuceneDir = Application.getInstance().getPreferences()
+					.getString("bs.globalSetupLuceneDirectory");
+			logger.debug("globalSetupLuceneDir->" + globalSetupLuceneDir);
+			File globalSetupLuceneDirectory = new File(globalSetupDir + File.separator + globalSetupLuceneDir);
 					
 			String dbname = Application.getInstance().getPreferences()
 					.getString("bs.xmldatabase.dbname");
 			String dbPathDirectory = Application.getInstance().getPreferences()
 					.getString("bs.xmldatabase.path");
-			File dbDirectory = new File(dbPathDirectory + "/" + dbname);
+			File dbDirectory = new File(dbPathDirectory + File.separator + dbname);
 			logger.debug("dbPathDirectory->" + dbDirectory);
 
 			// this variable will be used in the creation of the bakup
@@ -122,8 +128,8 @@ public class UpdateGlobalSetupBiosamplesJobFromDisk extends ApplicationJob {
 			} catch (UnknownHostException e) {
 			    // failed;  try alternate means.
 			}
-			String newDir = "backup_globlasetup" + hostname +"_"+ tempDir;
-			backDir = new File(backupDirectory + "/" + newDir);
+			String newDir = "backup_globalSetup_" + hostname +"_"+ tempDir;
+			backDir = new File(backupDirectory + File.separator + newDir);
 			if (backDir.mkdir()) {
 				logger.info("Backup directory was created in [{}]",
 						backDir.getAbsolutePath());
@@ -140,22 +146,18 @@ public class UpdateGlobalSetupBiosamplesJobFromDisk extends ApplicationJob {
 			
 			//I will make a backup from what we have now on the /GlobalSetup and also the db if it exists
 			File oldGlobalSetupDir = new File(backDir.getAbsolutePath()
-						+ "/OldGlobalSetup");
+						+ File.separator +"OldGlobalSetup");
 				if (oldGlobalSetupDir.mkdir()) {
 					logger.info(
 							"oldGlobalSetupDir Backup directory was created in [{}]",
 							oldGlobalSetupDir.getAbsolutePath());
-					copyDirectory(globalSetupDirectory, oldGlobalSetupDir);
-					//if the globalSetupDirectory eists I also backup it
-					if(globalSetupDBDirectory.exists()){
-						copyDirectory(globalSetupDBDirectory, oldGlobalSetupDir);
-					}
+					copyDirectory(globalSetupDirectory, oldGlobalSetupDir);					
 				} else {
 					logger.error(
 							"oldGlobalSetupDir Backup directory was NOT created in [{}]",
 							oldGlobalSetupDir.getAbsolutePath());
 					throw new Exception(
-							"oldGlobalSetupDir Backup directory was NOT created in "
+							"oldGlobalSetupDir Backup directory was NOT created in ->"
 									+ oldGlobalSetupDir.getAbsolutePath());
 				}
 
@@ -169,7 +171,7 @@ public class UpdateGlobalSetupBiosamplesJobFromDisk extends ApplicationJob {
 				// getParentFile() to create at the same level of Setup
 				// directory
 				File newGlobalSetupDir = new File(globalSetupDirectory.getParentFile()
-						.getAbsolutePath() + "/newSetup");
+						.getAbsolutePath() + File.separator + "new" + globalSetupLuceneDir);
 
 				if (newGlobalSetupDir.exists()) {
 					FileUtils.forceDelete(newGlobalSetupDir);
@@ -194,7 +196,7 @@ public class UpdateGlobalSetupBiosamplesJobFromDisk extends ApplicationJob {
 				
 				//new SetupDB global directory
 				File newGlobalSetupDBDir = new File(globalSetupDBDirectory.getParentFile()
-						.getAbsolutePath() + "/newSetupDB");
+						.getAbsolutePath() + File.separator + "new" + globalSetupDBDir);
 
 				if (newGlobalSetupDBDir.exists()) {
 					FileUtils.forceDelete(newGlobalSetupDBDir);					
@@ -215,12 +217,12 @@ public class UpdateGlobalSetupBiosamplesJobFromDisk extends ApplicationJob {
 				
 				
 				// only after update the database I update the Lucenes Indexes
-				logger.info("Deleting GlobalSetup Directory and renaming for the newOne -  application stills answering");
+				logger.info("Deleting GlobalSetup Directories and renaming for the newOne -  application stills answering");
 
-				deleteDirectory(globalSetupDirectory);
+				deleteDirectory(globalSetupLuceneDirectory);
 				// Rename file (or directory) /tmp/newSetup->  /tmp/Setup
 				logger.info("Before file renamed!!!");
-				boolean success2 = newGlobalSetupDir.renameTo(globalSetupDirectory);
+				boolean success2 = newGlobalSetupDir.renameTo(globalSetupLuceneDirectory);
 				// FileUtilities.
 				if (success2) {
 					logger.info("newGlobalSetupDir was successfully renamed to [{}]!!!",
@@ -229,7 +231,7 @@ public class UpdateGlobalSetupBiosamplesJobFromDisk extends ApplicationJob {
 				} else {
 					logger.error("newGlobalSetupDir was not successfully renamed to [{}]!!!",
 							newGlobalSetupDir.getAbsolutePath());
-					throw new Exception("newGlobalSetupDir was not successfully renamed to [{}]!!!" +
+					throw new Exception("newGlobalSetupDir was not successfully renamed to ->" +
 							newGlobalSetupDir.getAbsolutePath());
 				}
 				logger.info("Deleting GlobalSetup Directory and renaming - End");

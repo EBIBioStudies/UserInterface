@@ -66,8 +66,6 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 	public void doExecute(JobExecutionContext jec) throws Exception {
 		logger.info("Reloading all Biosamples form disk data into the Application Server");
 		File setupDirectory = null;
-		File globalSetupDirectory = null;
-		File globalSetupDBDirectory = null;
 		File backDir = null;
 		File setupTempDirectory = null;
 		try {
@@ -103,18 +101,24 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 			String globalSetupDir = Application.getInstance().getPreferences()
 					.getString("bs.globalSetupDirectory");
 			logger.debug("globalSetupDirectory->" + globalSetupDir);
-			globalSetupDirectory=new File(globalSetupDir);
-			
+			//File globalSetupDirectory = new File(globalSetupDir);
+
 			String globalSetupDBDir = Application.getInstance().getPreferences()
 					.getString("bs.globalSetupDBDirectory");
 			logger.debug("globalSetupDBDirectory->" + globalSetupDBDir);
-			globalSetupDBDirectory=new File(globalSetupDBDir);
+			File globalSetupDBDirectory = new File(globalSetupDir + File.separator + globalSetupDBDir);
+			
+			String globalSetupLuceneDir = Application.getInstance().getPreferences()
+					.getString("bs.globalSetupLuceneDirectory");
+			logger.debug("globalSetupLuceneDir->" + globalSetupLuceneDir);
+			File globalSetupLuceneDirectory = new File(globalSetupDir + File.separator + globalSetupLuceneDir);
+			
 					
 			String dbname = Application.getInstance().getPreferences()
 					.getString("bs.xmldatabase.dbname");
 			String dbPathDirectory = Application.getInstance().getPreferences()
 					.getString("bs.xmldatabase.path");
-			File dbDirectory = new File(dbPathDirectory + "/" + dbname);
+			File dbDirectory = new File(dbPathDirectory + File.separator + dbname);
 			logger.debug("dbPathDirectory->" + dbDirectory);
 
 			// this variable will be used in the creation of the bakup
@@ -133,7 +137,7 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 			    // failed;  try alternate means.
 			}
 			String newDir = "backup_" + hostname +"_"+ tempDir;
-			backDir = new File(backupDirectory + "/" + newDir);
+			backDir = new File(backupDirectory + File.separator + newDir);
 			if (backDir.mkdir()) {
 				logger.info("Backup directory was created in [{}]",
 						backDir.getAbsolutePath());
@@ -148,9 +152,9 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 
 		
 			
-			//I will make a backup from what we have now on the /tmp/Setup and also b
+			//I will make a backup from what we have now on the /tmp/Setup and also the database (in this case I do not use the globalSetup because the GlobalSetup has the new data that I want to upload
 			File oldSetupDir = new File(backDir.getAbsolutePath()
-						+ "/OldSetup");
+						+ "/Old" + globalSetupLuceneDir);
 				if (oldSetupDir.mkdir()) {
 					logger.info(
 							"OldSetup Backup directory was created in [{}]",
@@ -166,7 +170,7 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 				}
 
 				File oldSetupDBDir = new File(backDir.getAbsolutePath()
-						+ "/OldSetupDB");
+						+ "/Old" +globalSetupDBDir);
 				if (oldSetupDBDir.mkdir()) {
 					logger.info(
 							"oldSetupDBDir Backup directory was created in [{}]",
@@ -191,7 +195,7 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 				// getParentFile() to create at the same level of Setup
 				// directory
 				File newSetupDir = new File(setupDirectory.getParentFile()
-						.getAbsolutePath() + "/newSetup");
+						.getAbsolutePath() + File.separator + "new" + globalSetupLuceneDir);
 
 				if (newSetupDir.exists()) {
 					// I will force the delete of the NewSetupDir (I need this
@@ -205,20 +209,20 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 					logger.info("newSetupDir  directory was created in [{}]",
 							newSetupDir.getAbsolutePath());
 					//copy there the globalSetup
-					copyDirectory(globalSetupDirectory, newSetupDir);
+					copyDirectory(globalSetupLuceneDirectory, newSetupDir);
 				} else {
 					logger.error(
 							"newSetupDir directory was NOT created in [{}]",
 							newSetupDir.getAbsolutePath());
 					throw new Exception(
-							"newSetupDir  directory was NOT created in "
+							"newSetupDir  directory was NOT created in ->"
 									+ newSetupDir.getAbsolutePath());
 				}
 
 				
 				//new DB temp directory
 				File newSetupDBDir = new File(dbDirectory.getParentFile()
-						.getAbsolutePath() + "/new" + dbname );
+						.getAbsolutePath() + File.separator +"new" + dbname );
 
 				if (newSetupDBDir.exists()) {
 					// I will force the delete of the NewSetupDir (I need this
