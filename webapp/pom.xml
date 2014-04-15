@@ -88,7 +88,7 @@
 		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/biosamples_sampleAtt</interface.application.db.xml.connection.string> -->
 		<!-- <interface.application.db.xml.connection.string>xmldb:basex://host:1984/biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.string> -->
 		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/biosamplesAEGroup</interface.application.db.xml.connection.string> -->
-		<interface.application.db.xml.path>${user.home}/BaseXData/</interface.application.db.xml.path>
+		<interface.application.db.xml.path>${sys:user.home}/BaseXData/</interface.application.db.xml.path>
 		<interface.application.db.xml.connection.base>xmldb:basex</interface.application.db.xml.connection.base>
 		<interface.application.db.xml.connection.host>localhost</interface.application.db.xml.connection.host>
 		<interface.application.db.xml.connection.port>1984</interface.application.db.xml.connection.port>

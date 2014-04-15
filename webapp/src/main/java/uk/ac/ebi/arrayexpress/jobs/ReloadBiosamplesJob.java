@@ -258,6 +258,8 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 					logger.error(
 							"New Xml DB doesnt exist!! [{}]!!!",
 							newSetupDBDir.getAbsolutePath());
+					throw new Exception("New Xml DB doesnt exist!! [{}]!!!" +
+							newSetupDBDir.getAbsolutePath());
 					}
 					
 				} else {
