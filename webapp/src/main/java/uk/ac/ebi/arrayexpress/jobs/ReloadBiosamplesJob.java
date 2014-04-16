@@ -163,22 +163,40 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 
 			if (downloadOk) {
 
-				File oldGlobalSetupDir = new File(backDir.getAbsolutePath()
-						+ "/OldGlobalSetup");
-				if (oldGlobalSetupDir.mkdir()) {
-					logger.info(
-							"OldSetup Backup directory was created in [{}]",
-							oldGlobalSetupDir.getAbsolutePath());
-					copyDirectory(globalSetupDirectory, oldGlobalSetupDir);
-				} else {
-					logger.error(
-							"OldGlobalSetup Backup directory was NOT created in [{}]",
-							oldGlobalSetupDir.getAbsolutePath());
-					throw new Exception(
-							"oldSetupDir Backup directory was NOT created in "
-									+ oldGlobalSetupDir.getAbsolutePath());
-				}
+//				File oldGlobalSetupDir = new File(backDir.getAbsolutePath()
+//						+ "/OldGlobalSetup");
+//				if (oldGlobalSetupDir.mkdir()) {
+//					logger.info(
+//							"OldSetup Backup directory was created in [{}]",
+//							oldGlobalSetupDir.getAbsolutePath());
+//					copyDirectory(globalSetupDirectory, oldGlobalSetupDir);
+//				} else {
+//					logger.error(
+//							"OldGlobalSetup Backup directory was NOT created in [{}]",
+//							oldGlobalSetupDir.getAbsolutePath());
+//					throw new Exception(
+//							"oldSetupDir Backup directory was NOT created in "
+//									+ oldGlobalSetupDir.getAbsolutePath());
+//				}
 
+				
+
+					File oldSetupDir = new File(backDir.getAbsolutePath()
+							+ "/OldSetup");
+					if (oldSetupDir.mkdir()) {
+						logger.info(
+								"OldSetup Backup directory was created in [{}]",
+								oldSetupDir.getAbsolutePath());
+						copyDirectory(setupDirectory, oldSetupDir);
+					} else {
+						logger.error(
+								"OldSetup Backup directory was NOT created in [{}]",
+								oldSetupDir.getAbsolutePath());
+						throw new Exception(
+								"oldSetupDir Backup directory was NOT created in "
+										+ oldSetupDir.getAbsolutePath());
+					}
+				
 				// update of the xmlDatabase
 				logger.info("DatabaseXml Creation");
 
