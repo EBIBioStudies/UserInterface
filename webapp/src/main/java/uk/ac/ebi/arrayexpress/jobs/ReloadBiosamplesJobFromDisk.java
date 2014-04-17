@@ -198,6 +198,7 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 				// is th Setup Directory)
 				// getParentFile() to create at the same level of Setup
 				// directory
+/*			
 				File newSetupDir = new File(setupDirectory.getParentFile()
 						.getAbsolutePath() + File.separator + "new" + globalSetupLuceneDir);
 
@@ -250,7 +251,7 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 									+ newSetupDBDir.getAbsolutePath());
 				}
 				
-				
+*/				
 				// only after update the database I update the Lucenes Indexes
 				logger.info("Deleting Setup Directory and renaming - from now on the application is not answering");
 
@@ -268,7 +269,11 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 				deleteDirectory(setupDirectory);
 				// Rename file (or directory) /tmp/newSetup->  /tmp/Setup
 				logger.info("Before file renamed!!!");
-				boolean success2 = newSetupDir.renameTo(setupDirectory);
+				
+				
+				///boolean success2 = newSetupDir.renameTo(setupDirectory);
+				boolean success2 =true;
+				
 				// FileUtilities.
 				if (success2) {
 					logger.info("newSetupDir was successfully renamed to [{}]!!!",
@@ -289,7 +294,11 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 //				logger.info("dbDirectory is  in [{}]!!!",
 //						dbDirectory.getAbsolutePath());
 				deleteDirectory(dbDirectory);
-				boolean successDB2 = newSetupDBDir.renameTo(dbDirectory);
+				
+				
+				///boolean successDB2 = newSetupDBDir.renameTo(dbDirectory);
+				boolean successDB2 =true;
+				
 				// FileUtilities.
 				if (successDB2) {
 					logger.info("newSetupDBDir was successfully renamed to [{}]!!!",
