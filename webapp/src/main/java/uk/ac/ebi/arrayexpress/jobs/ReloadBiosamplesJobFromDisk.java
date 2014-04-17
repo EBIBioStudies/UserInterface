@@ -283,11 +283,11 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 				logger.info("Deleting Setup Directory and renaming - End");
 				
 				
-				logger.info("Before file DBrenamed!!!");
-				logger.info("newSetupDBDir is  in [{}]!!!",
-						newSetupDBDir.getAbsolutePath());
-				logger.info("dbDirectory is  in [{}]!!!",
-						dbDirectory.getAbsolutePath());
+//				logger.info("Before file DBrenamed!!!");
+//				logger.info("newSetupDBDir is  in [{}]!!!",
+//						newSetupDBDir.getAbsolutePath());
+//				logger.info("dbDirectory is  in [{}]!!!",
+//						dbDirectory.getAbsolutePath());
 				deleteDirectory(dbDirectory);
 				boolean successDB2 = newSetupDBDir.renameTo(dbDirectory);
 				// FileUtilities.
