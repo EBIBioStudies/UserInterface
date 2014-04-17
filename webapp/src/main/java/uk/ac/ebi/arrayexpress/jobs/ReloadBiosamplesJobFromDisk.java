@@ -125,6 +125,7 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 			// directory anda in the creation od the database backup
 			Long tempDir = System.nanoTime();
 			//I need the hostneme because I have 2 different production servers
+		
 			String hostname="";
 			try {
 			    hostname = InetAddress.getLocalHost().getHostName();
@@ -151,7 +152,7 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 			}
 
 		
-			
+/*			
 			//I will make a backup from what we have now on the /tmp/Setup and also the database (in this case I do not use the globalSetup because the GlobalSetup has the new data that I want to upload
 			File oldSetupDir = new File(backDir.getAbsolutePath()
 						+ "/Old" + globalSetupLuceneDir);
@@ -185,7 +186,10 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 									+ oldSetupDBDir.getAbsolutePath());
 				}
 	
-		
+*/		
+				
+
+				
 				// File newSetupDir= new File(backDir.getAbsolutePath() +
 				// "/newSetup" );
 				// I need to change this because it's not possible to move
