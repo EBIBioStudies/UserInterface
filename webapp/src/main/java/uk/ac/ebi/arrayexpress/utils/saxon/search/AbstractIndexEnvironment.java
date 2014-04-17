@@ -172,6 +172,7 @@ public abstract class AbstractIndexEnvironment {
 				ir.close();
 				ir = null;
 			} catch (Exception e) {
+				logger.error("ERROR closeIndexReader!!!");
 				e.printStackTrace();
 			}
 		}
