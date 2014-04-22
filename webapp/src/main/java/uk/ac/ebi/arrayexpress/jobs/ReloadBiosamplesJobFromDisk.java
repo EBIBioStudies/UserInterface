@@ -42,7 +42,7 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 		File setupTempDirectory = null;
 		try {
 			// Thread.currentThread().sleep(30000);//sleep for 1000 ms
-			ApplicationPreferences appPref=Application.getInstance().getPreferences();
+			ApplicationPreferences appPref=this.getPreferences();
 			boolean updateActive = appPref
 					.getBoolean("bs.xmlupdate.active");
 			logger.debug("Is Reloading Active?->" + updateActive);
@@ -74,7 +74,7 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 					.getString("bs.backupDirectory");
 			logger.debug("backupDirectory->" + backupDirectory);
 			
-			appPref=null;
+			//appPref=null;
 			//backupDirectory=null;
 
 			/*
