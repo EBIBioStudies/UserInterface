@@ -121,10 +121,11 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 			// I need to close the IndexReader otherwise it would not be
 			// possible dor me to delete the Setup directory (this problem
 			// only occurs on NFS);
+			search.getController().getEnvironment("biosamplessample")
+			.closeIndexReader();
 			search.getController().getEnvironment("biosamplesgroup")
 					.closeIndexReader();
-			search.getController().getEnvironment("biosamplessample")
-					.closeIndexReader();
+		
 
 			// remove the old setupdirectory /tmp/Setup is deleted
 			//FileUtils.foforceDelete(setupDirectory);
