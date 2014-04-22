@@ -1,45 +1,17 @@
 package uk.ac.ebi.arrayexpress.jobs;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Random;
 
-import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
-import org.basex.BaseXServer;
-import org.basex.core.cmd.CreateDB;
-import org.basex.server.ClientSession;
-import org.basex.server.Session;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationJob;
-import uk.ac.ebi.arrayexpress.components.BioSamplesGroup;
-import uk.ac.ebi.arrayexpress.components.BioSamplesSample;
+import uk.ac.ebi.arrayexpress.app.ApplicationPreferences;
 import uk.ac.ebi.arrayexpress.components.SearchEngine;
-import uk.ac.ebi.arrayexpress.utils.file.FileUtilities;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentArrayDesigns;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesGroup;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesSample;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentExperiments;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentFiles;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentProtocols;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.Indexer;
 
 /*
  * Copyright 2009-2011 European Molecular Biology Laboratory
@@ -89,16 +61,18 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 			// Setup directory, where I will put the new biosamples.xml and
 			// where I will creste a new SetupDirectory based on the new
 			// biosamples.xml
-			String setupDir = Application.getInstance().getPreferences()
+			ApplicationPreferences appPref=Application.getInstance().getPreferences();
+			
+			String setupDir = appPref
 					.getString("bs.setupDirectory");
 			logger.debug("setupDir->" + setupDir);
 			setupDirectory = new File(setupDir);
 
 			
-			String backupDirectory = Application.getInstance().getPreferences()
+			String backupDirectory = appPref
 					.getString("bs.backupDirectory");
 			logger.debug("backupDirectory->" + backupDirectory);
-			backupDirectory=null;
+			//backupDirectory=null;
 
 			/*
 			String globalSetupDir = Application.getInstance().getPreferences()
