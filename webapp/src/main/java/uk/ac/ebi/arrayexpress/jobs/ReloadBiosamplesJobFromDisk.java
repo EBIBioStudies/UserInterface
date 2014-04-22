@@ -70,9 +70,9 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 			setupDirectory = new File(setupDir);
 
 			
-			String backupDirectory = appPref
-					.getString("bs.backupDirectory");
-			logger.debug("backupDirectory->" + backupDirectory);
+//			String backupDirectory = appPref
+//					.getString("bs.backupDirectory");
+//			logger.debug("backupDirectory->" + backupDirectory);
 			
 			//appPref=null;
 			//backupDirectory=null;
