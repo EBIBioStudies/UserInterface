@@ -94,6 +94,40 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 			logger.debug("setupDir->" + setupDir);
 			setupDirectory = new File(setupDir);
 	
+			String backupDirectory = Application.getInstance().getPreferences()
+					.getString("bs.backupDirectory");
+			logger.debug("backupDirectory->" + backupDirectory);
+
+			String globalSetupDir = Application.getInstance().getPreferences()
+					.getString("bs.globalSetupDirectory");
+			logger.debug("globalSetupDirectory->" + globalSetupDir);
+			//File globalSetupDirectory = new File(globalSetupDir);
+
+			String globalSetupDBDir = Application.getInstance().getPreferences()
+					.getString("bs.globalSetupDBDirectory");
+			logger.debug("globalSetupDBDirectory->" + globalSetupDBDir);
+			File globalSetupDBDirectory = new File(globalSetupDir + File.separator + globalSetupDBDir);
+			
+			String globalSetupLuceneDir = Application.getInstance().getPreferences()
+					.getString("bs.globalSetupLuceneDirectory");
+			logger.debug("globalSetupLuceneDir->" + globalSetupLuceneDir);
+			File globalSetupLuceneDirectory = new File(globalSetupDir + File.separator + globalSetupLuceneDir);
+			
+					
+			String dbname = Application.getInstance().getPreferences()
+					.getString("bs.xmldatabase.dbname");
+			String dbPathDirectory = Application.getInstance().getPreferences()
+					.getString("bs.xmldatabase.path");
+			File dbDirectory = new File(dbPathDirectory + File.separator + dbname);
+			logger.debug("dbPathDirectory->" + dbDirectory);
+
+			// this variable will be used in the creation of the bakup
+			// directory anda in the creation od the database backup
+			Long tempDir = System.nanoTime();
+			//I need the hostneme because I have 2 different production servers
+		
+			String hostname="";
+			
 				// only after update the database I update the Lucenes Indexes
 				logger.info("Deleting Setup Directory and renaming - from now on the application is not answering");
 
