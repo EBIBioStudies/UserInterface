@@ -103,6 +103,8 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 			logger.debug("globalSetupDirectory->" + globalSetupDir);
 			//File globalSetupDirectory = new File(globalSetupDir);
 
+			
+/*
 			String globalSetupDBDir = Application.getInstance().getPreferences()
 					.getString("bs.globalSetupDBDirectory");
 			logger.debug("globalSetupDBDirectory->" + globalSetupDBDir);
@@ -124,8 +126,8 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 			// this variable will be used in the creation of the bakup
 			// directory anda in the creation od the database backup
 			Long tempDir = System.nanoTime();
-			//I need the hostneme because I have 2 different production servers
-		
+			//I need the hostname because I have 2 different production servers
+*/		
 			String hostname="";
 			
 				// only after update the database I update the Lucenes Indexes
