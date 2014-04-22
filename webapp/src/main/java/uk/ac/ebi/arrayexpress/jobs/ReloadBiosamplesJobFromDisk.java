@@ -296,6 +296,7 @@ public void doExecute(JobExecutionContext jec) throws Exception {
 			logger.info("Deleting SetupDB Directory and renaming - End");
 
 			// I do this to know the number of elements
+			xmlDb.initialize();
 			((BioSamplesGroup) getComponent("BioSamplesGroup"))
 					.reloadIndex();
 			// TODO: rpe nowaday I need to do this to clean the xmldatabase
