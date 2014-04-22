@@ -42,7 +42,6 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 		File setupTempDirectory = null;
 		try {
 			// Thread.currentThread().sleep(30000);//sleep for 1000 ms
-			//ApplicationPreferences appPref=this.getPreferences();
 			boolean updateActive = Application.getInstance().getPreferences()
 					.getBoolean("bs.xmlupdate.active");
 			logger.debug("Is Reloading Active?->" + updateActive);
@@ -50,7 +49,9 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 			if (!updateActive) {
 				logger.error("ReloadBiosamplesJobFromDisk is trying to execute and the configuration does not allow that");
 				this.getApplication()
-						.sendEmail(null,null,
+						.sendEmail(
+								null,
+								null,
 								"BIOSAMPLES: WARNING",
 								"ReloadBiosamplesJobFromDisk is trying to execute and the configuration does not allow that!");
 				// throw new
@@ -62,95 +63,97 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 			// Setup directory, where I will put the new biosamples.xml and
 			// where I will creste a new SetupDirectory based on the new
 			// biosamples.xml
-	
-			
 			String setupDir = Application.getInstance().getPreferences()
 					.getString("bs.setupDirectory");
 			logger.debug("setupDir->" + setupDir);
 			setupDirectory = new File(setupDir);
 
-			
-//			String backupDirectory = appPref
-//					.getString("bs.backupDirectory");
-//			logger.debug("backupDirectory->" + backupDirectory);
-			
-			//appPref=null;
-			//backupDirectory=null;
+			// String backupDirectory = appPref
+			// .getString("bs.backupDirectory");
+			// logger.debug("backupDirectory->" + backupDirectory);
+
+			// appPref=null;
+			// backupDirectory=null;
 
 			/*
-			String globalSetupDir = Application.getInstance().getPreferences()
-					.getString("bs.globalSetupDirectory");
-			logger.debug("globalSetupDirectory->" + globalSetupDir);
-			//File globalSetupDirectory = new File(globalSetupDir);
-*/
-			
-/*
-			String globalSetupDBDir = Application.getInstance().getPreferences()
-					.getString("bs.globalSetupDBDirectory");
-			logger.debug("globalSetupDBDirectory->" + globalSetupDBDir);
-			File globalSetupDBDirectory = new File(globalSetupDir + File.separator + globalSetupDBDir);
-			
-			String globalSetupLuceneDir = Application.getInstance().getPreferences()
-					.getString("bs.globalSetupLuceneDirectory");
-			logger.debug("globalSetupLuceneDir->" + globalSetupLuceneDir);
-			File globalSetupLuceneDirectory = new File(globalSetupDir + File.separator + globalSetupLuceneDir);
-			
-					
-			String dbname = Application.getInstance().getPreferences()
-					.getString("bs.xmldatabase.dbname");
-			String dbPathDirectory = Application.getInstance().getPreferences()
-					.getString("bs.xmldatabase.path");
-			File dbDirectory = new File(dbPathDirectory + File.separator + dbname);
-			logger.debug("dbPathDirectory->" + dbDirectory);
+			 * String globalSetupDir =
+			 * Application.getInstance().getPreferences()
+			 * .getString("bs.globalSetupDirectory");
+			 * logger.debug("globalSetupDirectory->" + globalSetupDir); //File
+			 * globalSetupDirectory = new File(globalSetupDir);
+			 */
 
-			// this variable will be used in the creation of the bakup
-			// directory anda in the creation od the database backup
-			Long tempDir = System.nanoTime();
-			//I need the hostname because I have 2 different production servers
-*/		
-			String hostname="";
-			
-				// only after update the database I update the Lucenes Indexes
-				logger.info("Deleting Setup Directory and renaming - from now on the application is not answering");
+			/*
+			 * String globalSetupDBDir =
+			 * Application.getInstance().getPreferences()
+			 * .getString("bs.globalSetupDBDirectory");
+			 * logger.debug("globalSetupDBDirectory->" + globalSetupDBDir); File
+			 * globalSetupDBDirectory = new File(globalSetupDir + File.separator
+			 * + globalSetupDBDir);
+			 * 
+			 * String globalSetupLuceneDir =
+			 * Application.getInstance().getPreferences()
+			 * .getString("bs.globalSetupLuceneDirectory");
+			 * logger.debug("globalSetupLuceneDir->" + globalSetupLuceneDir);
+			 * File globalSetupLuceneDirectory = new File(globalSetupDir +
+			 * File.separator + globalSetupLuceneDir);
+			 * 
+			 * 
+			 * String dbname = Application.getInstance().getPreferences()
+			 * .getString("bs.xmldatabase.dbname"); String dbPathDirectory =
+			 * Application.getInstance().getPreferences()
+			 * .getString("bs.xmldatabase.path"); File dbDirectory = new
+			 * File(dbPathDirectory + File.separator + dbname);
+			 * logger.debug("dbPathDirectory->" + dbDirectory);
+			 * 
+			 * // this variable will be used in the creation of the bakup //
+			 * directory anda in the creation od the database backup Long
+			 * tempDir = System.nanoTime(); //I need the hostname because I have
+			 * 2 different production servers
+			 */
+			String hostname = "";
 
-				SearchEngine search = ((SearchEngine) getComponent("SearchEngine"));
+			// only after update the database I update the Lucenes Indexes
+			logger.info("Deleting Setup Directory and renaming - from now on the application is not answering");
 
-				// I need to close the IndexReader otherwise it would not be
-				// possible dor me to delete the Setup directory (this problem
-				// only occurs on NFS);
-				search.getController().getEnvironment("biosamplesgroup")
-						.closeIndexReader();
-				search.getController().getEnvironment("biosamplessample")
-						.closeIndexReader();
+			SearchEngine search = ((SearchEngine) getComponent("SearchEngine"));
 
-				// remove the old setupdirectory /tmp/Setup is deleted
-				deleteDirectory(setupDirectory);
-				// Rename file (or directory) /tmp/newSetup->  /tmp/Setup
-				logger.info("Before file renamed!!!");
-				
-				
-				///boolean success2 = newSetupDir.renameTo(setupDirectory);
-				boolean success2 =true;
-				
-				// FileUtilities.
-				if (success2) {
-					logger.info("newSetupDir was successfully renamed to [{}]!!!",
-							setupDirectory.getAbsolutePath());
-					
-				} else {
-					logger.error("newSetupDir was not successfully renamed to [{}]!!!",
-							setupDirectory.getAbsolutePath());
-					throw new Exception("newSetupDir was not successfully renamed to [{}]!!!" +
-							setupDirectory.getAbsolutePath());
-				}
-				logger.info("Deleting Setup Directory and renaming - End");
-				
-				
-//				logger.info("Before file DBrenamed!!!");
-//				logger.info("newSetupDBDir is  in [{}]!!!",
-//						newSetupDBDir.getAbsolutePath());
-//				logger.info("dbDirectory is  in [{}]!!!",
-//						dbDirectory.getAbsolutePath());
+			// I need to close the IndexReader otherwise it would not be
+			// possible dor me to delete the Setup directory (this problem
+			// only occurs on NFS);
+			search.getController().getEnvironment("biosamplesgroup")
+					.closeIndexReader();
+			search.getController().getEnvironment("biosamplessample")
+					.closeIndexReader();
+
+			// remove the old setupdirectory /tmp/Setup is deleted
+			deleteDirectory(setupDirectory);
+			// Rename file (or directory) /tmp/newSetup-> /tmp/Setup
+			logger.info("Before file renamed!!!");
+
+			// /boolean success2 = newSetupDir.renameTo(setupDirectory);
+			boolean success2 = true;
+
+			// FileUtilities.
+			if (success2) {
+				logger.info("newSetupDir was successfully renamed to [{}]!!!",
+						setupDirectory.getAbsolutePath());
+
+			} else {
+				logger.error(
+						"newSetupDir was not successfully renamed to [{}]!!!",
+						setupDirectory.getAbsolutePath());
+				throw new Exception(
+						"newSetupDir was not successfully renamed to [{}]!!!"
+								+ setupDirectory.getAbsolutePath());
+			}
+			logger.info("Deleting Setup Directory and renaming - End");
+
+			// logger.info("Before file DBrenamed!!!");
+			// logger.info("newSetupDBDir is  in [{}]!!!",
+			// newSetupDBDir.getAbsolutePath());
+			// logger.info("dbDirectory is  in [{}]!!!",
+			// dbDirectory.getAbsolutePath());
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -162,8 +165,6 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 		// I want to start using the new version of the data
 		// (/Users/rpslpereira/Apps/apache-tomcat-6.0.33/temp/StagingArea/4)
 	}
-
-	
 
 	void deleteDirectory(File f) throws IOException {
 		FileUtils.deleteDirectory(f);
