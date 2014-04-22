@@ -72,6 +72,8 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 			String backupDirectory = appPref
 					.getString("bs.backupDirectory");
 			logger.debug("backupDirectory->" + backupDirectory);
+			
+			appPref=null;
 			//backupDirectory=null;
 
 			/*
