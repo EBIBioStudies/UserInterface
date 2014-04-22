@@ -131,11 +131,8 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 			//for(File file: setupDirectory.listFiles()) file.delete();
 			
 			
-			File newGlobalSetupDBDir = new File(setupDirectory.getParentFile()
-					.getAbsolutePath() + File.separator + "newzzz");
-			setupDirectory.renameTo(newGlobalSetupDBDir);
-			deleteDirectory(newGlobalSetupDBDir);
-			//deleteDirectory(setupDirectory);
+		
+			deleteDirectory(setupDirectory);
 			// Rename file (or directory) /tmp/newSetup-> /tmp/Setup
 			logger.info("Before file renamed!!!");
 
