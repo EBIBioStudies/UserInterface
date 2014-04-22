@@ -93,16 +93,18 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 					.getString("bs.setupDirectory");
 			logger.debug("setupDir->" + setupDir);
 			setupDirectory = new File(setupDir);
-	
+
+			
 			String backupDirectory = Application.getInstance().getPreferences()
 					.getString("bs.backupDirectory");
 			logger.debug("backupDirectory->" + backupDirectory);
 
+			/*
 			String globalSetupDir = Application.getInstance().getPreferences()
 					.getString("bs.globalSetupDirectory");
 			logger.debug("globalSetupDirectory->" + globalSetupDir);
 			//File globalSetupDirectory = new File(globalSetupDir);
-
+*/
 			
 /*
 			String globalSetupDBDir = Application.getInstance().getPreferences()
