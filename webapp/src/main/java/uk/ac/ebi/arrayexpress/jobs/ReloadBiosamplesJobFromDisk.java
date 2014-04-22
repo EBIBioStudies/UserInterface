@@ -18,6 +18,7 @@ import uk.ac.ebi.arrayexpress.app.ApplicationPreferences;
 import uk.ac.ebi.arrayexpress.components.BioSamplesGroup;
 import uk.ac.ebi.arrayexpress.components.BioSamplesSample;
 import uk.ac.ebi.arrayexpress.components.SearchEngine;
+import uk.ac.ebi.arrayexpress.components.XmlDbConnectionPool;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesGroup;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesSample;
 
@@ -272,6 +273,10 @@ public void doExecute(JobExecutionContext jec) throws Exception {
 					newSetupDBDir.getAbsolutePath());
 			logger.info("dbDirectory is  in [{}]!!!",
 					dbDirectory.getAbsolutePath());
+			
+			
+			XmlDbConnectionPool xmlDb = ((XmlDbConnectionPool) getComponent("XmlDbConnectionPool"));
+			xmlDb.terminate();
 			deleteDirectory(dbDirectory);
 			
 			
