@@ -127,6 +127,7 @@ public class ReloadBiosamplesJobFromDisk extends ApplicationJob {
 					.closeIndexReader();
 
 			// remove the old setupdirectory /tmp/Setup is deleted
+			FileUtils.cleanDirectory(setupDirectory);
 			deleteDirectory(setupDirectory);
 			// Rename file (or directory) /tmp/newSetup-> /tmp/Setup
 			logger.info("Before file renamed!!!");
