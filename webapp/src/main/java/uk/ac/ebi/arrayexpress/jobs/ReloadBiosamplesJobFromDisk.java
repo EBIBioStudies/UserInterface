@@ -121,7 +121,7 @@ public void doExecute(JobExecutionContext jec) throws Exception {
 		String newDir = "backup_" + hostname +"_"+ tempDir;
 		backDir = new File(backupDirectory + File.separator + newDir);
 		if (backDir.mkdir()) {
-			logger.info("Backup directory was created in [{}]",
+			logger.info("Backup directory was created  in ->[{}]",
 					backDir.getAbsolutePath());
 
 		} else {
@@ -132,7 +132,6 @@ public void doExecute(JobExecutionContext jec) throws Exception {
 					+ backDir.getAbsolutePath());
 		}
 
-	
 		
 		//I will make a backup from what we have now on the /tmp/Setup and also the database (in this case I do not use the globalSetup because the GlobalSetup has the new data that I want to upload
 //		File oldSetupDir = new File(backDir.getAbsolutePath()
