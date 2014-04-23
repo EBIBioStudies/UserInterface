@@ -141,7 +141,7 @@ public void doExecute(JobExecutionContext jec) throws Exception {
 				logger.info(
 						"OldSetup Backup directory was created in [{}]",
 						oldSetupDir.getAbsolutePath());
-				copyDirectory(setupDirectory, oldSetupDir);
+				///copyDirectory(setupDirectory, oldSetupDir);
 			} else {
 				logger.error(
 						"OldSetup Backup directory was NOT created in [{}]",
