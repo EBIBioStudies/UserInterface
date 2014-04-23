@@ -162,7 +162,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 			boolean downloadOk = dxml.downloadXml(downloadDirectory);
 
 			if (downloadOk) {
-
+//
 //				File oldGlobalSetupDir = new File(backDir.getAbsolutePath()
 //						+ File.separator +"OldGlobalSetup");
 //				if (oldGlobalSetupDir.mkdir()) {
@@ -210,7 +210,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				// directory
 				File newSetupDir = new File(setupDirectory.getParentFile()
 						.getAbsolutePath() + "/newSetup");
-
+				
 				if (newSetupDir.exists()) {
 					// I will force the delete of the NewSetupDir (I need this
 					// because if for any reason the process fails once (before
@@ -273,6 +273,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 					//I will also copy there the XML DB					
 					File newSetupDBDir = new File(dbDirectory.getParentFile()
 							.getAbsolutePath()  +  File.separator  + dbname );
+
 					
 					File globalSetupDBDirectory = new File(globalSetupDir +  File.separator  + globalSetupDBDir);
 					if (globalSetupDBDirectory.exists()) {
