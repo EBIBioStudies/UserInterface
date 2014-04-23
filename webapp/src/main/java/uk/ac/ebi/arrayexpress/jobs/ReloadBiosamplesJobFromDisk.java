@@ -150,22 +150,23 @@ public void doExecute(JobExecutionContext jec) throws Exception {
 //						"oldSetupDir Backup directory was NOT created in "
 //								+ oldSetupDir.getAbsolutePath());
 //			}
-
-			File oldSetupDBDir = new File(backDir.getAbsolutePath()
-					+ "/Old" +globalSetupDBDir);
-			if (oldSetupDBDir.mkdir()) {
-				logger.info(
-						"oldSetupDBDir Backup directory was created in [{}]",
-						oldSetupDBDir.getAbsolutePath());
-				copyDirectory(dbDirectory, oldSetupDBDir);
-			} else {
-				logger.error(
-						"oldSetupDBDir Backup directory was NOT created in [{}]",
-						oldSetupDBDir.getAbsolutePath());
-				throw new Exception(
-						"oldSetupDBDir Backup directory was NOT created in "
-								+ oldSetupDBDir.getAbsolutePath());
-			}
+//
+//			File oldSetupDBDir = new File(backDir.getAbsolutePath()
+//					+ "/Old" +globalSetupDBDir);
+//			if (oldSetupDBDir.mkdir()) {
+//				logger.info(
+//						"oldSetupDBDir Backup directory was created in [{}]",
+//						oldSetupDBDir.getAbsolutePath());
+//				copyDirectory(dbDirectory, oldSetupDBDir);
+//			} else {
+//				logger.error(
+//						"oldSetupDBDir Backup directory was NOT created in [{}]",
+//						oldSetupDBDir.getAbsolutePath());
+//				throw new Exception(
+//						"oldSetupDBDir Backup directory was NOT created in "
+//								+ oldSetupDBDir.getAbsolutePath());
+//			}
+//			
 		
 			
 
