@@ -134,38 +134,38 @@ public void doExecute(JobExecutionContext jec) throws Exception {
 
 		
 		//I will make a backup from what we have now on the /tmp/Setup and also the database (in this case I do not use the globalSetup because the GlobalSetup has the new data that I want to upload
-//		File oldSetupDir = new File(backDir.getAbsolutePath()
-//					+ "/Old" + globalSetupLuceneDir);
-//			if (oldSetupDir.mkdir()) {
-//				logger.info(
-//						"OldSetup Backup directory was created in [{}]",
-//						oldSetupDir.getAbsolutePath());
-//				///copyDirectory(setupDirectory, oldSetupDir);
-//			} else {
-//				logger.error(
-//						"OldSetup Backup directory was NOT created in [{}]",
-//						oldSetupDir.getAbsolutePath());
-//				throw new Exception(
-//						"oldSetupDir Backup directory was NOT created in "
-//								+ oldSetupDir.getAbsolutePath());
-//			}
-//
-//			File oldSetupDBDir = new File(backDir.getAbsolutePath()
-//					+ "/Old" +globalSetupDBDir);
-//			if (oldSetupDBDir.mkdir()) {
-//				logger.info(
-//						"oldSetupDBDir Backup directory was created in [{}]",
-//						oldSetupDBDir.getAbsolutePath());
-//				copyDirectory(dbDirectory, oldSetupDBDir);
-//			} else {
-//				logger.error(
-//						"oldSetupDBDir Backup directory was NOT created in [{}]",
-//						oldSetupDBDir.getAbsolutePath());
-//				throw new Exception(
-//						"oldSetupDBDir Backup directory was NOT created in "
-//								+ oldSetupDBDir.getAbsolutePath());
-//			}
-//			
+		File oldSetupDir = new File(backDir.getAbsolutePath()
+					+ "/Old" + globalSetupLuceneDir);
+			if (oldSetupDir.mkdir()) {
+				logger.info(
+						"OldSetup Backup directory was created in [{}]",
+						oldSetupDir.getAbsolutePath());
+				///copyDirectory(setupDirectory, oldSetupDir);
+			} else {
+				logger.error(
+						"OldSetup Backup directory was NOT created in [{}]",
+						oldSetupDir.getAbsolutePath());
+				throw new Exception(
+						"oldSetupDir Backup directory was NOT created in "
+								+ oldSetupDir.getAbsolutePath());
+			}
+
+			File oldSetupDBDir = new File(backDir.getAbsolutePath()
+					+ "/Old" +globalSetupDBDir);
+			if (oldSetupDBDir.mkdir()) {
+				logger.info(
+						"oldSetupDBDir Backup directory was created in [{}]",
+						oldSetupDBDir.getAbsolutePath());
+				copyDirectory(dbDirectory, oldSetupDBDir);
+			} else {
+				logger.error(
+						"oldSetupDBDir Backup directory was NOT created in [{}]",
+						oldSetupDBDir.getAbsolutePath());
+				throw new Exception(
+						"oldSetupDBDir Backup directory was NOT created in "
+								+ oldSetupDBDir.getAbsolutePath());
+			}
+			
 		
 			
 
