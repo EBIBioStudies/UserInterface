@@ -71,7 +71,7 @@ public class JobsController extends ApplicationComponent
         scheduleJob("update-efo", "bs.efo.update");
         scheduleJob("reload-all", "bs.reload-all.update");
         scheduleJob("reload-all-disk", "bs.reload-all-disk.update");
-        scheduleJob("reload-all-disk", "bs.update-global-setup-disk");
+        scheduleJob("update-global-setup-disk", "bs.update-global-setup-disk");
 
         startScheduler();
     }

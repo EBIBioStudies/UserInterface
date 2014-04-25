@@ -97,11 +97,11 @@
 		
 		<update-global-setup-disk>
 			<update>
-				<schedule>${interface.application.pref.reload-all-disk.update.schedule}
+				<schedule>${interface.application.pref.update-global-setup-disk.update.schedule}
 				</schedule>
-				<interval>${interface.application.pref.reload-all-disk.update.interval}
+				<interval>${interface.application.pref.update-global-setup-disk.update.interval}
 				</interval>
-				<atstart>${interface.application.pref.reload-all-disk.update.atstart}
+				<atstart>${interface.application.pref.update-global-setup-disk.update.atstart}
 				</atstart>
 			</update>
 			<fileSetup>${interface.application.pref.update-global-setup-disk.fileSetup}</fileSetup>
