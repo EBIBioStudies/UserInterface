@@ -159,7 +159,7 @@
 
 		<div id="samplesleft{position()}">
 			<bs_value_att>
-				<a href="../sample/{@id}">
+				<a href="../sample/{@id}?keywords={$vkeywords}">
 					<xsl:call-template name="highlight">
 						<xsl:with-param name="pText" select="string(@id)" />
 						<xsl:with-param name="pFieldName" select="'accession'" />
