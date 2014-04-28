@@ -326,7 +326,13 @@
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup_static</interface.application.db.xml.connection.dbname>
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
-
+				<interface.application.global.setup.directory>${sys:catalina.base}/deploy/GlobalSetup/${sys:tomcat.hostname}</interface.application.global.setup.directory>
+				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportDev.xml</interface.application.db.xml.update.url>
+				<interface.application.pref.reload-all.update.schedule>0 0 7 * * ?</interface.application.pref.reload-all.update.schedule>
+				<interface.application.pref.reload-all.update.interval />
+				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
+				
+				
 				<!-- <interface.application.pref.update-global-setup-disk.fileSetup>/ebi/microarray/home/tomcats/COCOA.BIOSD_NEWGUI_CURATOR/deploy/smallBiosamples/Setup</interface.application.pref.update-global-setup-disk.fileSetup> 
 					<interface.application.pref.update-global-setup-disk.fileSetupDB>/ebi/microarray/home/tomcats/COCOA.BIOSD_NEWGUI_CURATOR/deploy/smallBiosamples/SetupDB</interface.application.pref.update-global-setup-disk.fileSetupDB> -->
 				<interface.application.pref.update-global-setup-disk.fileSetup>/ebi/microarray/home/tomcats/BEANS.BIOSD_NEWGUI_DEV/deploy/GlobalSetup/Setup</interface.application.pref.update-global-setup-disk.fileSetup>
