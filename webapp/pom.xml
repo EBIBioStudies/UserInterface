@@ -331,11 +331,11 @@
 					<interface.application.pref.update-global-setup-disk.fileSetupDB>/ebi/microarray/home/tomcats/COCOA.BIOSD_NEWGUI_CURATOR/deploy/smallBiosamples/SetupDB</interface.application.pref.update-global-setup-disk.fileSetupDB> -->
 				<interface.application.pref.update-global-setup-disk.fileSetup>/ebi/microarray/home/tomcats/BEANS.BIOSD_NEWGUI_DEV/deploy/GlobalSetup/Setup</interface.application.pref.update-global-setup-disk.fileSetup>
 				<interface.application.pref.update-global-setup-disk.fileSetupDB>/ebi/microarray/home/tomcats/BEANS.BIOSD_NEWGUI_DEV/deploy/GlobalSetup/SetupDB</interface.application.pref.update-global-setup-disk.fileSetupDB>
-				<interface.application.pref.update-global-setup-disk.update.schedule>0 0 9 * * ?</interface.application.pref.update-global-setup-disk.update.schedule>
+				<interface.application.pref.update-global-setup-disk.update.schedule>0 0 11 * * ?</interface.application.pref.update-global-setup-disk.update.schedule>
 				<interface.application.pref.update-global-setup-disk.update.interval/>
 				<interface.application.pref.update-global-setup-disk.update.atstart>false</interface.application.pref.update-global-setup-disk.update.atstart>
 
-				<interface.application.pref.reload-all-disk.update.schedule>0 30 9 * * ?</interface.application.pref.reload-all-disk.update.schedule>
+				<interface.application.pref.reload-all-disk.update.schedule>0 30 11 * * ?</interface.application.pref.reload-all-disk.update.schedule>
 				<interface.application.pref.reload-all-disk.update.interval />
 				<interface.application.pref.reload-all-disk.update.atstart>false</interface.application.pref.reload-all-disk.update.atstart>
 

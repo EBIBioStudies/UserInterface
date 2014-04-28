@@ -108,8 +108,7 @@
 			<fileSetupDB>${interface.application.pref.update-global-setup-disk.fileSetupDB}</fileSetupDB>
 		</update-global-setup-disk>
 		
-		
-	
+
 		
 		<efo>
 			<location>${sys:java.io.tmpdir}/efo.owl</location>
