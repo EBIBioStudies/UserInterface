@@ -70,8 +70,8 @@ public class JobsController extends ApplicationComponent
 
         scheduleJob("update-efo", "bs.efo.update");
         scheduleJob("reload-all", "bs.reload-all.update");
-        scheduleJob("reload-all-disk", "bs.reload-all-disk.update");
-        scheduleJob("update-global-setup-disk", "bs.update-global-setup-disk.update");
+//        scheduleJob("reload-all-disk", "bs.reload-all-disk.update");
+//        scheduleJob("update-global-setup-disk", "bs.update-global-setup-disk.update");
         startScheduler();
     }
 
@@ -142,11 +142,11 @@ public class JobsController extends ApplicationComponent
         Integer interval = getPreferences().getInteger(preferencePrefix + ".interval");
         Boolean atStart = getPreferences().getBoolean(preferencePrefix + ".atstart");
         
-        System.out.println("preferencePrefix->" + preferencePrefix);
-        System.out.println("Nmame->" + name);
-       System.out.println("schedule->" + schedule);
-       System.out.println(interval);
-       System.out.println(atStart);
+//        System.out.println("preferencePrefix->" + preferencePrefix);
+//        System.out.println("Nmame->" + name);
+//       System.out.println("schedule->" + schedule);
+//       System.out.println(interval);
+//       System.out.println(atStart);
 
         if (null != schedule && 0 < schedule.length()) {
             CronExpression cexp = new CronExpression(schedule);
