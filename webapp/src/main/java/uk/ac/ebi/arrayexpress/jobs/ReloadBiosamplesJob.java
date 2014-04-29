@@ -7,14 +7,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Random;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.basex.BaseXServer;
 import org.basex.core.cmd.CreateDB;
 import org.basex.server.ClientSession;
@@ -65,6 +69,12 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 		File backDir = null;
 		//File globalSetupDBDirectory = null;
 		File setupTempDirectory = null;
+		String hostname="NA";
+		try {
+		    hostname = InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException e) {
+		    logger.error("Host not available-> " + e.getMessage());
+		}
 		try {
 
 			// Thread.currentThread().sleep(30000);//sleep for 1000 ms
@@ -76,7 +86,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 			if (!updateActive) {
 				logger.error("ReloadBiosamplesJob is trying to execute and the configuration does not allow that");
 				this.getApplication()
-						.sendEmail(null,null,
+						.sendEmail(null,null,hostname + "->"+
 								"BIOSAMPLES: WARNING",
 								"ReloadBiosamplesJob is trying to execute and the configuration does not allow that!");
 				// throw new
@@ -134,7 +144,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				// TODO: rpe stop the process
 				logger.error("Backup directory was NOT created in [{}]",
 						backDir.getAbsolutePath());
-				throw new Exception("Backup directory was NOT created in "
+				throw new Exception(hostname + "->"+"Backup directory was NOT created in "
 						+ backDir.getAbsolutePath());
 			}
 
@@ -154,7 +164,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 			} else {
 				logger.error("XmlDownload directory was NOT created in [{}]",
 						xmlDir.getAbsolutePath());
-				throw new Exception(
+				throw new Exception(hostname + "->"+
 						"XmlDownload  directory was NOT created in "
 								+ xmlDir.getAbsolutePath());
 			}
@@ -192,7 +202,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 						logger.error(
 								"OldSetup Backup directory was NOT created in [{}]",
 								oldSetupDir.getAbsolutePath());
-						throw new Exception(
+						throw new Exception(hostname + "->"+
 								"oldSetupDir Backup directory was NOT created in "
 										+ oldSetupDir.getAbsolutePath());
 					}
@@ -225,7 +235,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 					logger.error(
 							"newSetupDir directory was NOT created in [{}]",
 							newSetupDir.getAbsolutePath());
-					throw new Exception(
+					throw new Exception(hostname + "->"+
 							"newSetupDir  directory was NOT created in "
 									+ newSetupDir.getAbsolutePath());
 				}
@@ -282,7 +292,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 						logger.info(
 								"globalSetupDBDirectory doesnt exist!! [{}]!!!",
 								globalSetupDBDirectory.getAbsolutePath());
-						throw new Exception("globalSetupDBDirectory doesnt exist!! ->" +
+						throw new Exception(hostname + "->"+"globalSetupDBDirectory doesnt exist!! ->" +
 								globalSetupDBDirectory.getAbsolutePath());
 					}
 					
@@ -297,14 +307,14 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 					logger.error(
 							"New Xml DB doesnt exist!! [{}]!!!",
 							newSetupDBDir.getAbsolutePath());
-					throw new Exception("New Xml DB doesnt exist!!->" +
+					throw new Exception(hostname + "->"+"New Xml DB doesnt exist!!->" +
 							newSetupDBDir.getAbsolutePath());
 					}
 					
 				} else {
 					logger.error("newSetupDir was not successfully renamed to [{}]!!!",
 							setupDirectory.getAbsolutePath());
-					throw new Exception("newSetupDir was not successfully renamed to ->" +
+					throw new Exception(hostname + "->"+"newSetupDir was not successfully renamed to ->" +
 							setupDirectory.getAbsolutePath());
 				}
 				logger.info("Deleting Setup Directory and renaming - End");
@@ -334,9 +344,20 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				// / ((IndexEnvironmentBiosamplesSample) search.getController()
 				// / .getEnvironment("biosamplessample")).setup();
 				// TODO: RPE Update the EFO!!??
+				
+				//send an email saying that everything is ok (with some stats)
+				this.getApplication()
+				.sendEmail(null,null,hostname + "->"+
+						"BIOSAMPLES: RELOAD samplegroups-> + " + ((IndexEnvironmentBiosamplesGroup) search.getController()
+								.getEnvironment("biosamplesgroup")).getCountDocuments() + " samples->" +((IndexEnvironmentBiosamplesSample) search.getController()
+										.getEnvironment("biosamplessample")).getCountDocuments(),
+						"ReloadBiosamplesJob is finished!");
+				
 
 			} else {
 				logger.debug("Something went wrong on Xml download");
+				throw new Exception(hostname + "->"+" Something went wrong on Xml download");
+				
 			}
 
 		} catch (Exception e) {
