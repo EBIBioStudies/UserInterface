@@ -172,24 +172,6 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 			boolean downloadOk = dxml.downloadXml(downloadDirectory);
 
 			if (downloadOk) {
-//
-//				File oldGlobalSetupDir = new File(backDir.getAbsolutePath()
-//						+ File.separator +"OldGlobalSetup");
-//				if (oldGlobalSetupDir.mkdir()) {
-//					logger.info(
-//							"OldSetup Backup directory was created in [{}]",
-//							oldGlobalSetupDir.getAbsolutePath());
-//					copyDirectory(globalSetupDirectory, oldGlobalSetupDir);
-//				} else {
-//					logger.error(
-//							"OldGlobalSetup Backup directory was NOT created in [{}]",
-//							oldGlobalSetupDir.getAbsolutePath());
-//					throw new Exception(
-//							"oldSetupDir Backup directory was NOT created in "
-//									+ oldGlobalSetupDir.getAbsolutePath());
-//				}
-
-				
 
 					File oldSetupDir = new File(backDir.getAbsolutePath()
 							+ "/OldSetup");
@@ -263,13 +245,12 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				// Rename file (or directory) /tmp/newSetup->  /tmp/Setup
 				logger.info("Before file renamed!!!");
 				boolean success2 = newSetupDir.renameTo(setupDirectory);
-				// FileUtilities.
+				File globalSetupLuceneDirectory = new File(globalSetupDir + File.separator + globalSetupLuceneDir);
 				if (success2) {
 					logger.info("newSetupDir was successfully renamed to [{}]!!!",
 							setupDirectory.getAbsolutePath());
 					// need to remove the globalSetupDirectory e copy the new
 					// one to there
-					File globalSetupLuceneDirectory = new File(globalSetupDir + File.separator + globalSetupLuceneDir);
 					if (globalSetupLuceneDirectory.exists()) {
 						FileUtils.forceDelete(globalSetupLuceneDirectory);
 					} else {
@@ -277,39 +258,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 								"globalSetupLuceneDirectory doesnt exist!! [{}]!!!",
 								globalSetupLuceneDirectory.getAbsolutePath());
 					}
-					FileUtils.copyDirectory(setupDirectory,
-							globalSetupLuceneDirectory);
 					
-					//I will also copy there the XML DB					
-					File newSetupDBDir = new File(dbDirectory.getParentFile()
-							.getAbsolutePath()  +  File.separator  + dbname );
-
-					
-					File globalSetupDBDirectory = new File(globalSetupDir +  File.separator  + globalSetupDBDir);
-					if (globalSetupDBDirectory.exists()) {
-						FileUtils.forceDelete(globalSetupDBDirectory);
-					} else {
-						logger.info(
-								"globalSetupDBDirectory doesnt exist!! [{}]!!!",
-								globalSetupDBDirectory.getAbsolutePath());
-						throw new Exception(hostname + "->"+"globalSetupDBDirectory doesnt exist!! ->" +
-								globalSetupDBDirectory.getAbsolutePath());
-					}
-					
-					if (newSetupDBDir.exists()) {
-						FileUtils.copyDirectory(newSetupDBDir,
-								globalSetupDBDirectory);
-						logger.info(
-								"XML DB was copied to globalSetupDBDirectory !! [{}]!!!",
-								globalSetupDBDirectory.getAbsolutePath());
-					}
-					else{
-					logger.error(
-							"New Xml DB doesnt exist!! [{}]!!!",
-							newSetupDBDir.getAbsolutePath());
-					throw new Exception(hostname + "->"+"New Xml DB doesnt exist!!->" +
-							newSetupDBDir.getAbsolutePath());
-					}
 					
 				} else {
 					logger.error("newSetupDir was not successfully renamed to [{}]!!!",
@@ -334,16 +283,43 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				((IndexEnvironmentBiosamplesSample) search.getController()
 						.getEnvironment("biosamplessample")).setup();
 
-				// / search.getController().getEnvironment("biosamplesgroup")
-				// / .indexReader();
-				// / //I need to setupIt to point to the new Database
-				// / ((IndexEnvironmentBiosamplesGroup) search.getController()
-				// / .getEnvironment("biosamplesgroup")).setup();
-				// / search.getController().getEnvironment("biosamplessample").
-				// / indexReader();
-				// / ((IndexEnvironmentBiosamplesSample) search.getController()
-				// / .getEnvironment("biosamplessample")).setup();
-				// TODO: RPE Update the EFO!!??
+				
+				
+				//Copy the data to GlobalSETUP (doing this here to reduce the downtime				
+				FileUtils.copyDirectory(setupDirectory,
+						globalSetupLuceneDirectory);
+				logger.info(
+						"XML DB was copied to globalSetupLuceneDirectory !! [{}]!!!",
+						globalSetupLuceneDirectory.getAbsolutePath());			
+				//I will also copy there the XML DB					
+				File newSetupDBDir = new File(dbDirectory.getParentFile()
+						.getAbsolutePath()  +  File.separator  + dbname );
+				
+				File globalSetupDBDirectory = new File(globalSetupDir +  File.separator  + globalSetupDBDir);
+				if (globalSetupDBDirectory.exists()) {
+					FileUtils.forceDelete(globalSetupDBDirectory);
+				} else {
+					logger.info(
+							"globalSetupDBDirectory doesnt exist!! [{}]!!!",
+							globalSetupDBDirectory.getAbsolutePath());
+					throw new Exception(hostname + "->"+"globalSetupDBDirectory doesnt exist!! ->" +
+							globalSetupDBDirectory.getAbsolutePath());
+				}
+				
+				if (newSetupDBDir.exists()) {
+					FileUtils.copyDirectory(newSetupDBDir,
+							globalSetupDBDirectory);
+					logger.info(
+							"XML DB was copied to globalSetupDBDirectory !! [{}]!!!",
+							globalSetupDBDirectory.getAbsolutePath());
+				}
+				else{
+				logger.error(
+						"New Xml DB doesnt exist!! [{}]!!!",
+						newSetupDBDir.getAbsolutePath());
+				throw new Exception(hostname + "->"+"New Xml DB doesnt exist!!->" +
+						newSetupDBDir.getAbsolutePath());
+				}
 				
 				//send an email saying that everything is ok (with some stats)
 				this.getApplication()
