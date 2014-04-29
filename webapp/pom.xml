@@ -327,6 +327,7 @@
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
 				<interface.application.global.setup.directory>${sys:catalina.base}/deploy/GlobalSetup/${sys:tomcat.hostname}</interface.application.global.setup.directory>
+				<interface.application.global.backup.directory>${sys:catalina.base}/deploy/GlobalSetup_Backups/${sys:tomcat.hostname}</interface.application.global.backup.directory>
 				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportDev.xml</interface.application.db.xml.update.url>
 				<interface.application.pref.reload-all.update.schedule>0 0 7 * * ?</interface.application.pref.reload-all.update.schedule>
 				<interface.application.pref.reload-all.update.interval />
