@@ -53,7 +53,7 @@ public class SetupDirectoryCheck extends ApplicationComponent {
 
 		if (null != connsConf) {
 			setupDirectory = connsConf.getString("setupDirectory");
-			globalSetupLuceneDirectory = connsConf.getString("globalSetupDirectory");
+			globalSetupLuceneDirectory = connsConf.getString("globalSetupLuceneDirectory");
 			backupDirectory = connsConf.getString("backupDirectory");
 
 			logger.debug("setupDirectory->" + setupDirectory);
@@ -64,10 +64,10 @@ public class SetupDirectoryCheck extends ApplicationComponent {
 		}
 		try {
 			File fileSetup = new File(setupDirectory);
-			File fileGlobalSetup = new File(globalSetupLuceneDirectory);
+			File fileGlobalSetupLucene = new File(globalSetupLuceneDirectory);
 			logger.debug("fileGlobalSetup->"
-					+ fileGlobalSetup.getAbsolutePath());
-			if (!fileGlobalSetup.exists()) {
+					+ fileGlobalSetupLucene.getAbsolutePath());
+			if (!fileGlobalSetupLucene.exists()) {
 				this.getApplication()
 						.sendEmail(null,null,
 								"BIOSAMPLES: ##### INITIALIZATION WARNING #######",
@@ -88,13 +88,13 @@ public class SetupDirectoryCheck extends ApplicationComponent {
 				// send an email warning and copy it from a globalSetupDirectory
 				emailError = "The Setup directory does not exist ("
 						+ setupDirectory + ")\n";
-				if (fileGlobalSetup.exists()) {
+				if (fileGlobalSetupLucene.exists()) {
 					emailError += "The Setup directory is being populated with the data from globalSetupLuceneDirectory ("
 							+ globalSetupLuceneDirectory + ")\n";
 					// FileUtils.copyDirectoryToDirectory(fileGlobalSetup,
 					// fileSetupPreviousDirectory); (this also copies the own
 					// directores
-					FileUtilities.copyFolder(fileGlobalSetup, fileSetup);
+					FileUtilities.copyFolder(fileGlobalSetupLucene, fileSetup);
 
 				} else {
 					emailError += "The globalSetupLuceneDirectory ("
