@@ -58,11 +58,11 @@ public class JobsController extends ApplicationComponent
         
         
         //rpe: job that reload all the data from disk (the data is already processed - lucene indexes and xmlDB)
-        addJob("reload-all-disk", ReloadBiosamplesJobFromDisk.class);
+       // addJob("reload-all-disk", ReloadBiosamplesJobFromDisk.class);
         
         
         //update the GlobalSetup directory based on a new one (passed by configuration)
-        addJob("update-global-setup-disk", UpdateGlobalSetupBiosamplesJobFromDisk.class);
+        //addJob("update-global-setup-disk", UpdateGlobalSetupBiosamplesJobFromDisk.class);
         
         //rpe: job that reloads incremental data
        /// addJob("incremental-reload", IncrementalReloadBiosamplesJob.class);
