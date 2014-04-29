@@ -42,6 +42,7 @@ public class SetupDirectoryCheck extends ApplicationComponent {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private String setupDirectory;
+	private String globalSetupDirectory;
 	private String globalSetupLuceneDirectory;
 	private String backupDirectory;
 
@@ -53,6 +54,7 @@ public class SetupDirectoryCheck extends ApplicationComponent {
 
 		if (null != connsConf) {
 			setupDirectory = connsConf.getString("setupDirectory");
+			globalSetupDirectory = connsConf.getString("globalSetupDirectory");
 			globalSetupLuceneDirectory = connsConf.getString("globalSetupLuceneDirectory");
 			backupDirectory = connsConf.getString("backupDirectory");
 
@@ -64,7 +66,7 @@ public class SetupDirectoryCheck extends ApplicationComponent {
 		}
 		try {
 			File fileSetup = new File(setupDirectory);
-			File fileGlobalSetupLucene = new File(globalSetupLuceneDirectory);
+			File fileGlobalSetupLucene =new File(globalSetupDirectory + File.separator + globalSetupLuceneDirectory);
 			logger.debug("fileGlobalSetup->"
 					+ fileGlobalSetupLucene.getAbsolutePath());
 			if (!fileGlobalSetupLucene.exists()) {
