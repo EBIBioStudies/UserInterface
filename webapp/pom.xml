@@ -339,6 +339,7 @@
 				<interface.application.pref.reload-all.update.interval />
 				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
 				
+	
 				
 				<!-- <interface.application.pref.update-global-setup-disk.fileSetup>/ebi/microarray/home/tomcats/COCOA.BIOSD_NEWGUI_CURATOR/deploy/smallBiosamples/Setup</interface.application.pref.update-global-setup-disk.fileSetup> 
 					<interface.application.pref.update-global-setup-disk.fileSetupDB>/ebi/microarray/home/tomcats/COCOA.BIOSD_NEWGUI_CURATOR/deploy/smallBiosamples/SetupDB</interface.application.pref.update-global-setup-disk.fileSetupDB> -->
