@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>uk.ac.ebi.microarray</groupId>
 		<artifactId>bs-interface</artifactId>
-		<version>2.0.3-SNAPSHOT</version>
+		<version>2.0.3</version>
 	</parent>
 	<groupId>uk.ac.ebi.microarray</groupId>
 	<artifactId>bs-interface-webapp</artifactId>
 	<name>BioSamples Interface Web Application</name>
-	<version>2.0.3-SNAPSHOT</version>
+	<version>2.0.3</version>
 	<packaging>war</packaging>
 	<url>http://www.ebi.ac.uk/biosamples</url>
 
@@ -145,8 +144,7 @@
 				<interface.application.pref.update-global-setup-disk.fileSetup>/Users/rpslpereira/EclipseWorkspaces/BioSamples_Trunk_Git/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/deploy/GlobalSetup/db1/Setup</interface.application.pref.update-global-setup-disk.fileSetup>
 				<interface.application.pref.update-global-setup-disk.fileSetupDB>/Users/rpslpereira/EclipseWorkspaces/BioSamples_Trunk_Git/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/deploy/GlobalSetup/db1/SetupDB</interface.application.pref.update-global-setup-disk.fileSetupDB>
 				<!-- <interface.application.pref.reload-all-disk.update.schedule>0 0 
-					7 * * ?</interface.application.pref.reload-all-disk.update.schedule> <interface.application.pref.reload-all-disk.update.interval 
-					/> <interface.application.pref.reload-all-disk.update.atstart>false</interface.application.pref.reload-all-disk.update.atstart> -->
+					7 * * ?</interface.application.pref.reload-all-disk.update.schedule> <interface.application.pref.reload-all-disk.update.interval /> <interface.application.pref.reload-all-disk.update.atstart>false</interface.application.pref.reload-all-disk.update.atstart> -->
 				<!-- <interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/biosamples_09102013.xml</interface.application.db.xml.update.url> -->
 				<!-- <interface.application.db.xml.update.type>url</interface.application.db.xml.update.type> 
 					<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?limit=100&amp;amp;server=tst&amp;amp;samples=EMBED&amp;amp;schema=AGE2GS&amp;amp;hideNS=true&amp;amp;showAttributes=true</interface.application.db.xml.update.url> -->			<!-- <interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/IncrementalUpdates/biosamplesIncrementalUpdate_FileUsedOnServer.xml</interface.application.db.xml.update.url> -->
@@ -231,8 +229,7 @@
 				<!-- <interface.application.db.xml.update.url>/ebi/microarray/ma-exp/biosamples-ncbi/gui.xml</interface.application.db.xml.update.url> -->
 				<interface.application.db.xml.update.url>/scratch/Biosamples/testData/dev10x.xml</interface.application.db.xml.update.url>
 				<!-- <interface.application.pref.reload-all.update.schedule>0 0 0 * * 
-					?</interface.application.pref.reload-all.update.schedule> <interface.application.pref.reload-all.update.interval 
-					/> <interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
+					?</interface.application.pref.reload-all.update.schedule> <interface.application.pref.reload-all.update.interval /> <interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
 
 				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.dbname> 
 					<interface.application.db.xml.connection.port>1984</interface.application.db.xml.connection.port> -->
@@ -339,7 +336,7 @@
 				<interface.application.pref.update-global-setup-disk.fileSetup>/ebi/microarray/home/tomcats/BEANS.BIOSD_NEWGUI_DEV/deploy/GlobalSetup/Setup</interface.application.pref.update-global-setup-disk.fileSetup>
 				<interface.application.pref.update-global-setup-disk.fileSetupDB>/ebi/microarray/home/tomcats/BEANS.BIOSD_NEWGUI_DEV/deploy/GlobalSetup/SetupDB</interface.application.pref.update-global-setup-disk.fileSetupDB>
 				<interface.application.pref.update-global-setup-disk.update.schedule>0 0 9 * * ?</interface.application.pref.update-global-setup-disk.update.schedule>
-				<interface.application.pref.update-global-setup-disk.update.interval/>
+				<interface.application.pref.update-global-setup-disk.update.interval />
 				<interface.application.pref.update-global-setup-disk.update.atstart>false</interface.application.pref.update-global-setup-disk.update.atstart>
 
 				<interface.application.pref.reload-all-disk.update.schedule>0 30 9 * * ?</interface.application.pref.reload-all-disk.update.schedule>
