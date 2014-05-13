@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>uk.ac.ebi.microarray</groupId>
@@ -144,7 +145,8 @@
 				<interface.application.pref.update-global-setup-disk.fileSetup>/Users/rpslpereira/EclipseWorkspaces/BioSamples_Trunk_Git/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/deploy/GlobalSetup/db1/Setup</interface.application.pref.update-global-setup-disk.fileSetup>
 				<interface.application.pref.update-global-setup-disk.fileSetupDB>/Users/rpslpereira/EclipseWorkspaces/BioSamples_Trunk_Git/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/deploy/GlobalSetup/db1/SetupDB</interface.application.pref.update-global-setup-disk.fileSetupDB>
 				<!-- <interface.application.pref.reload-all-disk.update.schedule>0 0 
-					7 * * ?</interface.application.pref.reload-all-disk.update.schedule> <interface.application.pref.reload-all-disk.update.interval /> <interface.application.pref.reload-all-disk.update.atstart>false</interface.application.pref.reload-all-disk.update.atstart> -->
+					7 * * ?</interface.application.pref.reload-all-disk.update.schedule> <interface.application.pref.reload-all-disk.update.interval 
+					/> <interface.application.pref.reload-all-disk.update.atstart>false</interface.application.pref.reload-all-disk.update.atstart> -->
 				<!-- <interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/biosamples_09102013.xml</interface.application.db.xml.update.url> -->
 				<!-- <interface.application.db.xml.update.type>url</interface.application.db.xml.update.type> 
 					<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?limit=100&amp;amp;server=tst&amp;amp;samples=EMBED&amp;amp;schema=AGE2GS&amp;amp;hideNS=true&amp;amp;showAttributes=true</interface.application.db.xml.update.url> -->			<!-- <interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/IncrementalUpdates/biosamplesIncrementalUpdate_FileUsedOnServer.xml</interface.application.db.xml.update.url> -->
@@ -229,13 +231,67 @@
 				<!-- <interface.application.db.xml.update.url>/ebi/microarray/ma-exp/biosamples-ncbi/gui.xml</interface.application.db.xml.update.url> -->
 				<interface.application.db.xml.update.url>/scratch/Biosamples/testData/dev10x.xml</interface.application.db.xml.update.url>
 				<!-- <interface.application.pref.reload-all.update.schedule>0 0 0 * * 
-					?</interface.application.pref.reload-all.update.schedule> <interface.application.pref.reload-all.update.interval /> <interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
+					?</interface.application.pref.reload-all.update.schedule> <interface.application.pref.reload-all.update.interval 
+					/> <interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
 
 				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.dbname> 
 					<interface.application.db.xml.connection.port>1984</interface.application.db.xml.connection.port> -->
 			</properties>
 		</profile>
 
+
+	<profile>
+			<id>experimental1</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<interface.application.base.path>/biosamples</interface.application.base.path>
+				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
+				<!-- <interface.application.body.class>bs_dev_preview</interface.application.body.class> -->
+				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
+				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
+				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
+				<interface.application.log.default.priority>DEBUG</interface.application.log.default.priority>
+				<interface.application.db.xml.connection.dbname>biosamplesAEGroupExperimental1</interface.application.db.xml.connection.dbname>
+				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname> -->
+				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
+				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
+				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportDev.xml</interface.application.db.xml.update.url>
+				<interface.application.pref.reload-all.update.schedule>0 0 6 * * ?</interface.application.pref.reload-all.update.schedule>
+				<interface.application.pref.reload-all.update.interval />
+				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
+				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.dbname> 
+					<interface.application.db.xml.connection.port>1984</interface.application.db.xml.connection.port> -->
+			</properties>
+		</profile>
+		
+		
+		<profile>
+			<id>experimental2</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<interface.application.base.path>/biosamples</interface.application.base.path>
+				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
+				<!-- <interface.application.body.class>bs_dev_preview</interface.application.body.class> -->
+				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
+				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
+				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
+				<interface.application.log.default.priority>DEBUG</interface.application.log.default.priority>
+				<interface.application.db.xml.connection.dbname>biosamplesAEGroupExperimental2</interface.application.db.xml.connection.dbname>
+				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname> -->
+				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
+				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
+				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportDev.xml</interface.application.db.xml.update.url>
+				<interface.application.pref.reload-all.update.schedule>0 0 6 * * ?</interface.application.pref.reload-all.update.schedule>
+				<interface.application.pref.reload-all.update.interval />
+				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
+				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.dbname> 
+					<interface.application.db.xml.connection.port>1984</interface.application.db.xml.connection.port> -->
+			</properties>
+		</profile>
 
 		<profile>
 			<id>wwwdev</id>
@@ -272,6 +328,7 @@
 			</properties>
 		</profile>
 
+
 		<profile>
 			<id>production</id>
 			<activation>
@@ -279,15 +336,17 @@
 			</activation>
 			<properties>
 				<interface.application.log.appender.ref>ROLLINGFILE-LONDON</interface.application.log.appender.ref>
+				<interface.application.log.appender.jobs.ref>ROLLINGFILEJOBS-LONDON</interface.application.log.appender.jobs.ref>
+				<interface.application.log.appender.performance.ref>ROLLINGFILEPERFORMANCE-LONDON</interface.application.log.appender.performance.ref>
+				<interface.application.log.default.priority>INFO</interface.application.log.default.priority>
 				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
 				<interface.application.base.path>/biosamples</interface.application.base.path>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
-				<interface.application.log.default.priority>INFO</interface.application.log.default.priority>
 				<!-- need to have separate GlobalSetups and Backups per instance -->
 				<interface.application.global.setup.directory>${sys:catalina.base}/deploy/GlobalSetup/${sys:tomcat.hostname}</interface.application.global.setup.directory>
 				<interface.application.global.backup.directory>${sys:catalina.base}/deploy/GlobalSetup_Backups/${sys:tomcat.hostname}</interface.application.global.backup.directory>
-				<!-- need to have separate GlobalSetups and Backups per instance -->				
+				<!-- need to have separate GlobalSetups and Backups per instance -->
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
@@ -338,18 +397,20 @@
 				<interface.application.pref.reload-all.update.schedule>0 0 7 * * ?</interface.application.pref.reload-all.update.schedule>
 				<interface.application.pref.reload-all.update.interval />
 				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
-				
-	
-				
+
+
+
 				<!-- <interface.application.pref.update-global-setup-disk.fileSetup>/ebi/microarray/home/tomcats/COCOA.BIOSD_NEWGUI_CURATOR/deploy/smallBiosamples/Setup</interface.application.pref.update-global-setup-disk.fileSetup> 
 					<interface.application.pref.update-global-setup-disk.fileSetupDB>/ebi/microarray/home/tomcats/COCOA.BIOSD_NEWGUI_CURATOR/deploy/smallBiosamples/SetupDB</interface.application.pref.update-global-setup-disk.fileSetupDB> -->
 				<interface.application.pref.update-global-setup-disk.fileSetup>/ebi/microarray/home/tomcats/BEANS.BIOSD_NEWGUI_DEV/deploy/GlobalSetup/Setup</interface.application.pref.update-global-setup-disk.fileSetup>
 				<interface.application.pref.update-global-setup-disk.fileSetupDB>/ebi/microarray/home/tomcats/BEANS.BIOSD_NEWGUI_DEV/deploy/GlobalSetup/SetupDB</interface.application.pref.update-global-setup-disk.fileSetupDB>
-				<interface.application.pref.update-global-setup-disk.update.schedule>0 0 9 * * ?</interface.application.pref.update-global-setup-disk.update.schedule>
+				<interface.application.pref.update-global-setup-disk.update.schedule>0
+					0 9 * * ?</interface.application.pref.update-global-setup-disk.update.schedule>
 				<interface.application.pref.update-global-setup-disk.update.interval />
 				<interface.application.pref.update-global-setup-disk.update.atstart>false</interface.application.pref.update-global-setup-disk.update.atstart>
 
-				<interface.application.pref.reload-all-disk.update.schedule>0 30 9 * * ?</interface.application.pref.reload-all-disk.update.schedule>
+				<interface.application.pref.reload-all-disk.update.schedule>0 30 9 *
+					* ?</interface.application.pref.reload-all-disk.update.schedule>
 				<interface.application.pref.reload-all-disk.update.interval />
 				<interface.application.pref.reload-all-disk.update.atstart>false</interface.application.pref.reload-all-disk.update.atstart>
 
@@ -615,6 +676,7 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.5.10</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -661,6 +723,7 @@
 			<version>1.6</version>
 			<type>jar</type>
 		</dependency>
+		
 		<!-- <dependency> <groupId>commons-configuration</groupId> <artifactId>commons-configuration</artifactId> 
 			<version>1.6</version> </dependency> -->
 

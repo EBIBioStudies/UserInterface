@@ -88,6 +88,8 @@
 				<xsl:value-of select="$accession" />
 			</xsl:with-param>
 			<xsl:with-param name="pExtraJS">
+			<!-- <script src="{$context-path}/assets/scripts/jsdeferred.jquery-0.3.1.js"
+				type="text/javascript"></script> -->
 				<script src="{$context-path}/assets/scripts/biosamples_detail_10.js"
 					type="text/javascript"></script>
 			</xsl:with-param>

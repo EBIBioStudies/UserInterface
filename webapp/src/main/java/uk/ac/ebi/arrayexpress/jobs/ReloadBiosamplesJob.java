@@ -81,7 +81,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 
 			boolean updateActive = Application.getInstance().getPreferences()
 					.getBoolean("bs.xmlupdate.active");
-			logger.debug("Is Reloading Active?->" + updateActive);
+			logger.info("Is Reloading Active?->" + updateActive);
 
 			if (!updateActive) {
 				logger.error("ReloadBiosamplesJob is trying to execute and the configuration does not allow that");
@@ -100,25 +100,25 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 			// biosamples.xml
 			String setupDir = Application.getInstance().getPreferences()
 					.getString("bs.setupDirectory");
-			logger.debug("setupDir->" + setupDir);
+			logger.info("setupDir->" + setupDir);
 
 			setupDirectory = new File(setupDir);
 			String backupDirectory = Application.getInstance().getPreferences()
 					.getString("bs.backupDirectory");
-			logger.debug("backupDirectory->" + backupDirectory);
+			logger.info("backupDirectory->" + backupDirectory);
 
 			String globalSetupDir = Application.getInstance().getPreferences()
 					.getString("bs.globalSetupDirectory");
-			logger.debug("globalSetupDirectory->" + globalSetupDir);
+			logger.info("globalSetupDirectory->" + globalSetupDir);
 			File globalSetupDirectory = new File(globalSetupDir);
 
 			String globalSetupDBDir = Application.getInstance().getPreferences()
 					.getString("bs.globalSetupDBDirectory");
-			logger.debug("globalSetupDBDirectory->" + globalSetupDBDir);
+			logger.info("globalSetupDBDirectory->" + globalSetupDBDir);
 			
 			String globalSetupLuceneDir = Application.getInstance().getPreferences()
 					.getString("bs.globalSetupLuceneDirectory");
-			logger.debug("globalSetupLuceneDir->" + globalSetupLuceneDir);
+			logger.info("globalSetupLuceneDir->" + globalSetupLuceneDir);
 			
 			
 			//globalSetupDBDirectory=new File(globalSetupDBDir);
@@ -352,7 +352,7 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 
 		// Create a client session with host name, port, user name and password
 
-		logger.debug("* Create a client session int the Xml Database.");
+		logger.info("* Create a client session int the Xml Database.");
 
 		String dbHost = Application.getInstance().getPreferences()
 				.getString("bs.xmldatabase.host");
@@ -368,18 +368,18 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 
 		// ------------------------------------------------------------------------
 		// Create a database
-		logger.debug("* Create a database.");
+		logger.info("* Create a database.");
 
 		String tempDbName = originalDbName + "_" + tempDir;
 		String logs = session.execute(new CreateDB(tempDbName, xmlDirectory
 				.getAbsolutePath()));
 		// .getAbsolutePath() + "/XmlFiles"));
-		logger.debug("CreateDB('" + tempDbName + "' ...->" + logs);
+		logger.info("CreateDB('" + tempDbName + "' ...->" + logs);
 
 		logs = session.execute("CLOSE");
 		logger.debug("CLOSE ...->" + logs);
 
-		logger.debug("Start Indexing ...");
+		logger.info("Start Indexing ...");
 		// I will create now the Lucene Indexes ...
 		SearchEngine search = ((SearchEngine) getComponent("SearchEngine"));
 		// TODO: rpe change all this static values
@@ -395,21 +395,21 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				dbPort, dbPassword, tempDbName);
 		// / ((IndexEnvironmentBiosamplesSample) search.getController()
 		// / .getEnvironment("biosamplessample")).setup();
-		logger.debug("End Indexing ...");
+		logger.info("End Indexing ...");
 		//
 
 		// index
 		logger.info("DatabaseXml Rename - From now on the database is not answering anymore!");
 		logs = session.execute("ALTER DATABASE " + originalDbName + " "
 				+ tempDbName + "_backup");
-		logger.debug("ALTER DATABASE " + originalDbName + " " + tempDbName
+		logger.info("ALTER DATABASE " + originalDbName + " " + tempDbName
 				+ "_backup" + "->" + logs);
 		logs = session.execute("ALTER DATABASE " + tempDbName + " "
 				+ originalDbName);
 
 		logger.info("DatabaseXml Rename - End!");
 
-		logger.debug("* Close the client session.");
+		logger.info("* Close the client session.");
 		session.close();
 
 		// I neeed to reinitialize the XmldbConnectionPool otherwise I wiil be

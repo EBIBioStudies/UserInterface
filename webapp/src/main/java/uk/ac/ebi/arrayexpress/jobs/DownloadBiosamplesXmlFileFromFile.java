@@ -43,7 +43,7 @@ public class DownloadBiosamplesXmlFileFromFile implements IDownloadBiosamplesXml
 		
 		String url = Application.getInstance().getPreferences()
 				.getString("bs.xmlupdate.url");
-		logger.debug("Download file from ->"
+		logger.info("Download file from ->"
 				+ url);
 		boolean ok = false;
 		try {
