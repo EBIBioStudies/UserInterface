@@ -257,7 +257,7 @@
 				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname> -->
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
-				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportDev.xml</interface.application.db.xml.update.url>
+				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportNCBI.xml</interface.application.db.xml.update.url>
 				<interface.application.pref.reload-all.update.schedule>0 0 6 * * ?</interface.application.pref.reload-all.update.schedule>
 				<interface.application.pref.reload-all.update.interval />
 				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
@@ -284,7 +284,7 @@
 				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname> -->
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
-				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportDev.xml</interface.application.db.xml.update.url>
+				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportSpine.xml</interface.application.db.xml.update.url>
 				<interface.application.pref.reload-all.update.schedule>0 0 6 * * ?</interface.application.pref.reload-all.update.schedule>
 				<interface.application.pref.reload-all.update.interval />
 				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
