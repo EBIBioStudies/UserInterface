@@ -159,7 +159,7 @@
 
 		<div id="samplesleft{position()}">
 			<bs_value_att>
-				<a href="../sample/{@id}">
+				<a href="../sample/{@id}?keywords={$vkeywords}">
 					<xsl:call-template name="highlight">
 						<xsl:with-param name="pText" select="string(@id)" />
 						<xsl:with-param name="pFieldName" select="'accession'" />
@@ -314,7 +314,7 @@
 		<xsl:variable name="bdName" select="lower-case($pName)"></xsl:variable>
 		<xsl:choose>
 			<xsl:when
-				test="$bdName=('arrayexpress','ena sra','dgva','pride') and not($pUrl='')">
+				test="$bdName=('arrayexpress','ena','ena sra','dgva','pride') and not($pUrl='')">
 				<!-- PRIDE changed the user interface: this is temporary -->
 				<xsl:variable name="pUrl"
 					select="replace($pUrl,'http://www.ebi.ac.uk/pride/showExperiment.do\?experimentAccessionNumber','http://www.ebi.ac.uk/pride/archive/simpleSearch?q')"></xsl:variable>

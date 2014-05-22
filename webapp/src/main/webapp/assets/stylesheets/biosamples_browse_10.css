@@ -433,7 +433,7 @@ vertical-align: top;
 	text-align: left;
 }
 .col_samples{
-	width:130px;
+	width:100px;
 	text-align: center;
 }
 /*colummns browse samplegroups*/
@@ -458,7 +458,7 @@ vertical-align: top;
 }
 
 .col_database{
-	width:80px;
+	width:110px;
 	text-align: left;
 }
 

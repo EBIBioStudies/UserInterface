@@ -53,7 +53,7 @@
 	<xsl:variable name="vBrowseMode" select="not($accession)" />
 
 	<xsl:variable name="vkeywords" select="$keywords" />
-	
+
 	<xsl:variable name="vsampleskeywords" select="$sampleskeywords" />
 
 	<xsl:variable name="vSearchMode"
@@ -88,6 +88,8 @@
 				<xsl:value-of select="$accession" />
 			</xsl:with-param>
 			<xsl:with-param name="pExtraJS">
+			<!-- <script src="{$context-path}/assets/scripts/jsdeferred.jquery-0.3.1.js"
+				type="text/javascript"></script> -->
 				<script src="{$context-path}/assets/scripts/biosamples_detail_10.js"
 					type="text/javascript"></script>
 			</xsl:with-param>
@@ -422,6 +424,13 @@
 									<xsl:with-param name="pValue" select="$attribute"></xsl:with-param>
 								</xsl:call-template>
 							</xsl:when>
+							<!-- SampleTab FTP location -->
+							<xsl:when test="$attributeClass='SampleTab FTP location'">
+								<xsl:call-template name="process_ftplocation">
+									<xsl:with-param name="pValue" select="$attribute"></xsl:with-param>
+								</xsl:call-template>
+							</xsl:when>
+							<!-- SampleTab FTP location -->
 							<!-- normal value -->
 							<xsl:when
 								test="count($attribute//attribute[@class='Term Source REF'])=0 and count($attribute//attribute[@class='Unit'])=0">
@@ -519,9 +528,9 @@
 																<fieldset id="bs_keywords_fset">
 																	<xsl:variable name="vSamplesKeywordsAux"
 																		select="if (fn:matches($vsampleskeywords,'\s*\w\s*:')) then ''  else $vsampleskeywords" />
-																	<input id="bs_keywords_field" type="text" name="sampleskeywords"
-																		value="{$vSamplesKeywordsAux}" maxlength="255" size="60"
-																		autocomplete="off" />
+																	<input id="bs_keywords_field" type="text"
+																		name="sampleskeywords" value="{$vSamplesKeywordsAux}"
+																		maxlength="255" size="60" autocomplete="off" />
 																</fieldset>
 															</td>
 															<td valign="bottom" align="right" id="td_no_padding">
@@ -841,6 +850,7 @@
 				<xsl:with-param name="pId"
 					select=".//attribute[@class='Database ID']/simpleValue/value" />
 			</xsl:call-template>
+			<br />
 		</xsl:for-each>
 	</xsl:template>
 
@@ -852,7 +862,7 @@
 		<xsl:variable name="bdName" select="lower-case($pName)"></xsl:variable>
 		<xsl:choose>
 			<xsl:when
-				test="$bdName=('arrayexpress','ena sra','dgva','pride') and not($pUrl='')">
+				test="$bdName=('arrayexpress','ena','ena sra','dgva','pride') and not($pUrl='')">
 				<!-- PRIDE changed the user interface: this is temporary -->
 				<xsl:variable name="pUrl"
 					select="replace($pUrl,'http://www.ebi.ac.uk/pride/showExperiment.do\?experimentAccessionNumber','http://www.ebi.ac.uk/pride/archive/simpleSearch?q')"></xsl:variable>
@@ -887,6 +897,13 @@
 		ID']"/>; URI: <a href="{.//attribute/value[../@class='Database URI']}" target="ext"> 
 		<xsl:value-of select=".//attribute/value[../@class='Database URI']"></xsl:value-of> 
 		</a> -->
+
+	<xsl:template name="process_ftplocation">
+		<xsl:param name="pValue" />
+		<xsl:for-each select="$pValue/simpleValue">
+			<a href="{./value}" target="ext"><xsl:copy-of select="./value"></xsl:copy-of></a> &nbsp;
+		</xsl:for-each>
+	</xsl:template>
 
 	<xsl:template name="process_publications">
 		<xsl:param name="pValue" />
@@ -971,7 +988,8 @@
 							</xsl:call-template>
 						</td>
 						<td>
-							<a href="{.//attribute/simpleValue/value[../../@class='Term Source URI']}"
+							<a
+								href="{.//attribute/simpleValue/value[../../@class='Term Source URI']}"
 								target="ext">
 								<xsl:value-of
 									select=".//attribute/simpleValue/value[../../@class='Term Source URI']"></xsl:value-of>
@@ -1014,48 +1032,23 @@
 									</tr>
 								</thead>
 								<tbody id="bs_results_tbody_common">
-									<!-- <tr>
-										<xsl:for-each
-											select="$pAttributes/attribute[count(.//simpleValue)>0]">
-											<td>
-												<xsl:variable name="attributeClass" select="@class"></xsl:variable>
-												<xsl:variable name="attribute" select="."></xsl:variable>
-												<xsl:choose>
-													<xsl:when test="$attributeClass='Derived From'">
-														<xsl:call-template name="process_derived_from">
-															<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
-														</xsl:call-template>
-													</xsl:when>
-													<xsl:when
-														test="count($attribute//attribute[@class='Term Source REF'])=0 and count($attribute//attribute[@class='Unit'])=0 ">
-
-														<xsl:call-template name="process_multiple_values">
-															<xsl:with-param name="pField"
-																select="lower-case(replace(@attributeClass,' ' , '-'))"></xsl:with-param>
-															<xsl:with-param name="pValue" select="$attribute"></xsl:with-param>
-														</xsl:call-template>
-													</xsl:when>
-
-													<xsl:when test="count($attribute//attribute[@class='Unit'])>0">
-														<xsl:call-template name="process_unit">
-															<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
-															<xsl:with-param name="pField"
-																select="lower-case(replace($attributeClass,' ' , '-'))"></xsl:with-param>
-														</xsl:call-template>
-													</xsl:when>
-
-													<xsl:otherwise>
-														<xsl:call-template name="process_efo">
-															<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param>
-															<xsl:with-param name="pField"
-																select="lower-case(replace(@attributeClass,' ' , '-'))"></xsl:with-param>
-														</xsl:call-template>
-													</xsl:otherwise>
-
-												</xsl:choose>
-											</td>
-										</xsl:for-each>
-									</tr> -->
+									<!-- <tr> <xsl:for-each select="$pAttributes/attribute[count(.//simpleValue)>0]"> 
+										<td> <xsl:variable name="attributeClass" select="@class"></xsl:variable> 
+										<xsl:variable name="attribute" select="."></xsl:variable> <xsl:choose> <xsl:when 
+										test="$attributeClass='Derived From'"> <xsl:call-template name="process_derived_from"> 
+										<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param> </xsl:call-template> 
+										</xsl:when> <xsl:when test="count($attribute//attribute[@class='Term Source 
+										REF'])=0 and count($attribute//attribute[@class='Unit'])=0 "> <xsl:call-template 
+										name="process_multiple_values"> <xsl:with-param name="pField" select="lower-case(replace(@attributeClass,' 
+										' , '-'))"></xsl:with-param> <xsl:with-param name="pValue" select="$attribute"></xsl:with-param> 
+										</xsl:call-template> </xsl:when> <xsl:when test="count($attribute//attribute[@class='Unit'])>0"> 
+										<xsl:call-template name="process_unit"> <xsl:with-param name="pAttribute" 
+										select="$attribute"></xsl:with-param> <xsl:with-param name="pField" select="lower-case(replace($attributeClass,' 
+										' , '-'))"></xsl:with-param> </xsl:call-template> </xsl:when> <xsl:otherwise> 
+										<xsl:call-template name="process_efo"> <xsl:with-param name="pAttribute" 
+										select="$attribute"></xsl:with-param> <xsl:with-param name="pField" select="lower-case(replace(@attributeClass,' 
+										' , '-'))"></xsl:with-param> </xsl:call-template> </xsl:otherwise> </xsl:choose> 
+										</td> </xsl:for-each> </tr> -->
 								</tbody>
 							</table>
 						</td>
