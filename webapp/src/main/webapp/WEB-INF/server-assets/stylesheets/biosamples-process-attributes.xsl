@@ -103,6 +103,18 @@
 					<!-- <xsl:value-of select="$pAttribute/simpleValue/value"></xsl:value-of> -->
 				</a>
 			</xsl:when>
+			<!-- 	<xsl:when
+				test="starts-with(.//attribute/simpleValue/value[../../@class='Term Source URI'],'http://www.ebi.ac.uk/efo/')">
+				<a
+					href="http://www.ebi.ac.uk/efo/{.//attribute/simpleValue/value[../../@class='Term Source ID']}"
+					target="ext">
+					<xsl:call-template name="highlight">
+						<xsl:with-param name="pText" select="value" />
+						<xsl:with-param name="pFieldName" select="$pField" />
+					</xsl:call-template>
+					<xsl:value-of select="$pAttribute/simpleValue/value"></xsl:value-of>
+				</a>
+			</xsl:when> -->
 			<xsl:otherwise>
 				<a
 					href="{.//attribute/simpleValue/value[../../@class='Term Source URI']}"
