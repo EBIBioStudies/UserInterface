@@ -59,7 +59,7 @@ public class XsdValidationSchemaTest {
 	}
 	
 
-	@Test
+	//@Test
 	public void validateGroupSearchSchema() throws Exception {
 		URL schemaFile = new URL(
 				"http://ruis-imac.windows.ebi.ac.uk:8080/biosamples/assets/xsd/ResultQuerySampleGroupSchema.xsd");
@@ -83,7 +83,7 @@ public class XsdValidationSchemaTest {
 
 	
 	
-	@Test
+	//@Test
 	public void validateSampleSearchSchema() throws Exception {
 		URL schemaFile = new URL(
 				"http://ruis-imac.windows.ebi.ac.uk:8080/biosamples/assets/xsd/ResultQuerySampleSchema.xsd");
@@ -129,7 +129,7 @@ public class XsdValidationSchemaTest {
 
 	}
 
-	@Test
+	//@Test
 	public void validateGroupSchema() throws Exception {
 		validateGroupSchema("SAMEG11413");
 	}
@@ -160,7 +160,7 @@ public class XsdValidationSchemaTest {
 	}
 	
 	
-	@Test
+	//@Test
 	public void validateSampleSchema() throws Exception {
 		validateSampleSchema("SAMEA1523957");
 	}
@@ -168,7 +168,7 @@ public class XsdValidationSchemaTest {
 	
 	
 	
-	@Test
+	//@Test
 	public void validateAllGroupsSampleSchema() throws Exception {
 		Class<?> c = null;
 		Database db;
@@ -253,7 +253,7 @@ public class XsdValidationSchemaTest {
 	}
 	
 	
-	@Test
+	//@Test
 	public void validateAllSamplesSchema() throws Exception {
 		Class<?> c = null;
 		Database db;
