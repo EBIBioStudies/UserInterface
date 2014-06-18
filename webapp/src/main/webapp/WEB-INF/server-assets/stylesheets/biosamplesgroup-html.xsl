@@ -472,6 +472,23 @@
 					<xsl:value-of select="$numberOfSamples"></xsl:value-of>
 				</td>
 			</tr>
+			
+			
+			<!--  references from my equivalents -->
+				<tr>
+					<td class="col_title">
+						<b>References:</b>
+					</td>
+
+					<td>
+						<!-- <div id="wrapper_top_scroll"> <div id="div_top_scroll"></div> 
+							</div> -->
+						<xsl:call-template name="process_references">
+							<xsl:with-param name="pReferences" select="References"></xsl:with-param>
+						</xsl:call-template>
+					</td>
+				</tr>
+			
 			<!-- Other common attributes - sometimes they are used to have common 
 				information about all sample attributes - data protection -->
 			<!-- I will not show common attributes when I have only one sample -->

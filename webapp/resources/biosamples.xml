@@ -18,8 +18,10 @@
 	<bs>
 		<globalSetupDirectory>${interface.application.global.setup.directory}
 		</globalSetupDirectory>
-		<globalSetupLuceneDirectory>${interface.application.global.setup.lucene.directory}</globalSetupLuceneDirectory>
-		<globalSetupDBDirectory>${interface.application.global.setup.db.directory}</globalSetupDBDirectory>
+		<globalSetupLuceneDirectory>${interface.application.global.setup.lucene.directory}
+		</globalSetupLuceneDirectory>
+		<globalSetupDBDirectory>${interface.application.global.setup.db.directory}
+		</globalSetupDBDirectory>
 		<setupDirectory>${sys:java.io.tmpdir}/${interface.application.index.directory}
 		</setupDirectory>
 		<backupDirectory>${interface.application.global.backup.directory}
@@ -83,7 +85,7 @@
 				</atstart>
 			</update>
 		</reload-all>
-		
+
 		<reload-all-disk>
 			<update>
 				<schedule>${interface.application.pref.reload-all-disk.update.schedule}
@@ -94,7 +96,7 @@
 				</atstart>
 			</update>
 		</reload-all-disk>
-		
+
 		<update-global-setup-disk>
 			<update>
 				<schedule>${interface.application.pref.update-global-setup-disk.update.schedule}
@@ -104,12 +106,14 @@
 				<atstart>${interface.application.pref.update-global-setup-disk.update.atstart}
 				</atstart>
 			</update>
-			<fileSetup>${interface.application.pref.update-global-setup-disk.fileSetup}</fileSetup>
-			<fileSetupDB>${interface.application.pref.update-global-setup-disk.fileSetupDB}</fileSetupDB>
+			<fileSetup>${interface.application.pref.update-global-setup-disk.fileSetup}
+			</fileSetup>
+			<fileSetupDB>${interface.application.pref.update-global-setup-disk.fileSetupDB}
+			</fileSetupDB>
 		</update-global-setup-disk>
-		
 
-		
+
+
 		<efo>
 			<location>${sys:java.io.tmpdir}/efo.owl</location>
 			<source>/WEB-INF/classes/efo.owl</source>
@@ -276,6 +280,12 @@
 					path="attribute/simpleValue/value[../../@class='Submission Reference Layer']//value = 'true'"
 					analyze="true" store="true" escape="false" sortfields="reference"
 					autocompletion="true" title="by Reference" />
+
+				<!-- references calculated through the myEquivalents -->
+				<field name="references" title="by References" type="string"
+					path="Reference/ref/@id" analyze="true" store="false" escape="false" />
+
+
 			</document>
 		</index>
 
@@ -370,6 +380,11 @@
 				<field name="attributeNames" type="string"
 					path="attribute/replace(@class,' ','_')" analyze="true" store="true"
 					escape="false" autocompletion="false" />
+
+				<!-- references calculated through the myEquivalents -->
+				<field name="references" title="by References" type="string"
+					path="Reference/ref/@id" analyze="true" store="false" escape="false" />
+
 				<!-- attributes names - i need this to the autocomplete -->
 				<!-- dynamic sort -->
 				<!-- <field name="attributes" type="string" path="attribute" process="true" 

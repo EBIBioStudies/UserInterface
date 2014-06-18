@@ -18,7 +18,6 @@
 		<url>svn://bar.ebi.ac.uk/trunk/BioSamples/webapp</url> </scm> -->
 
 	<!-- default values for repository related properties -->
-
 	<properties>
 		<interface.application.log.default.priority>INFO</interface.application.log.default.priority>
 		<interface.application.log.appender.ref>ROLLINGFILE</interface.application.log.appender.ref>
