@@ -383,7 +383,7 @@
 
 				<!-- references calculated through the myEquivalents -->
 				<field name="references" title="by References" type="string"
-					path="Reference/ref/@id" analyze="true" store="false" escape="false" />
+					path="References/ref/@id" analyze="true" store="false" escape="false" />
 
 				<!-- attributes names - i need this to the autocomplete -->
 				<!-- dynamic sort -->

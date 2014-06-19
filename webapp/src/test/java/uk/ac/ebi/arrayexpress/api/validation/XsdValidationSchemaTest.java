@@ -35,7 +35,7 @@ public class XsdValidationSchemaTest {
 
 	
 
-	@Test
+	//@Test
 	public void validateSampleSearchInsideGroupSchema() throws Exception {
 
 		URL schemaFile = new URL(
