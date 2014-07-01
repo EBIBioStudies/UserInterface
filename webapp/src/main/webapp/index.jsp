@@ -202,8 +202,8 @@
         type="text/javascript"></script>  -->
 	<script src="assets/scripts/jquery.cookie-1.0.js"
 		type="text/javascript"></script>
-	<!-- <script src="assets/scripts/jquery.query-2.1.7m-ebi.js"
-        type="text/javascript"></script> -->
+	 <script src="assets/scripts/jquery.query-2.1.7m-ebi.js"
+        type="text/javascript"></script>
 	<script src="assets/scripts/jquery.autocomplete-1.1.0.130305.js"
 		type="text/javascript"></script>
 	<script src="assets/scripts/jquery.caret-range-1.0.js"
