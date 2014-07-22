@@ -1,4 +1,4 @@
-biosd_ui
+biostudies_ui
 ========
 
-BioSamples User Interface
+BioStudies User Interface
