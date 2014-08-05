@@ -14,13 +14,10 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationJob;
-import uk.ac.ebi.arrayexpress.app.ApplicationPreferences;
-import uk.ac.ebi.arrayexpress.components.BioSamplesGroup;
-import uk.ac.ebi.arrayexpress.components.BioSamplesSample;
+import uk.ac.ebi.arrayexpress.components.BioStudies;
 import uk.ac.ebi.arrayexpress.components.SearchEngine;
 import uk.ac.ebi.arrayexpress.components.XmlDbConnectionPool;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesGroup;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesSample;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBioStudies;
 
 /*
  * Copyright 2009-2011 European Molecular Biology Laboratory
@@ -296,20 +293,14 @@ public void doExecute(JobExecutionContext jec) throws Exception {
 
 			// I do this to know the number of elements
 			xmlDb.initialize();
-			((BioSamplesGroup) getComponent("BioSamplesGroup"))
+			((BioStudies) getComponent("BioStudies"))
 					.reloadIndex();
 			// TODO: rpe nowaday I need to do this to clean the xmldatabase
 			// connection nad to reload the new index
-			((IndexEnvironmentBiosamplesGroup) search.getController()
-					.getEnvironment("biosamplesgroup")).setup();
+			((IndexEnvironmentBioStudies) search.getController()
+					.getEnvironment("biostudies")).setup();
 
-			((BioSamplesSample) getComponent("BioSamplesSample"))
-					.reloadIndex();
-			// TODO: rpe nowadays I need to do this to clean the xmldatabase
-			// connection nad to reload the new index
-			((IndexEnvironmentBiosamplesSample) search.getController()
-					.getEnvironment("biosamplessample")).setup();
-
+		
 			// / search.getController().getEnvironment("biosamplesgroup")
 			// / .indexReader();
 			// / //I need to setupIt to point to the new Database

@@ -57,39 +57,21 @@
 		<to type="redirect">%{context-path}/index.html</to>
 	</rule>
  -->	<rule>
-		<from>^/group/browse\.html$</from>
-		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/html</to>
+		<from>^/biostudy/browse\.html$</from>
+		<to type="forward">/servlets/query/biostudies/biostudies/html</to>
+	</rule>
+	
+
+	<rule>
+		<from>^/biostudy/browse-table.html</from>
+		<to type="forward">/servlets/query/biostudies/browse-biostudies/html</to>
 	</rule>
 	
 	<rule>
-		<from>^/sample/browse\.html$</from>
-		<to type="forward">/servlets/query/biosamplesgmple/biosamplessample/html</to>
+		<from>^/biostudy/((.*))/?$</from>
+		<to type="forward">/servlets/query/biostudies/biostudies/html?accession=$1</to>
 	</rule>
-
-	<rule>
-		<from>^/group/browse-table.html</from>
-		<to type="forward">/servlets/query/biosamplesgroup/browse-biosamplesgroup/html</to>
-	</rule>
-	<rule>
-		<from>^/sample/browse-table.html</from>
-		<to type="forward">/servlets/query/biosamplessample/browse-biosamplessample/html</to>
-	</rule>
-	<rule>
-		<from>^/group/(SAM(.*))/?$</from>
-		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/html?accession=$1</to>
-	</rule>
-	<rule>
-		<from>^/sample/browse\.html$</from>
-		<to type="forward">/servlets/query/biosamplessample/biosamplessample/html</to>
-	</rule>
-	<rule>
-		<from>^/sample/browse/((SAM(.*))/?)$</from>
-		<to type="forward">/servlets/query/biosamplessample/biosamplessample/html?groupaccession=$1</to>
-	</rule>
-	<rule>
-		<from>^/sample/((SAM(.*))/?)$</from>
-		<to type="forward">/servlets/query/biosamplessample/detail-biosamplessample/html?accession=$2</to>
-	</rule>
+	
 
 	<rule>
 		<from>^/biosamples-stats.xml</from>
@@ -116,10 +98,7 @@
 		<from>^/reload-all</from>
 		<to type="forward">/servlets/control/reload-all</to>
 	</rule>
-	<rule>
-		<from>^/incremental-reload</from>
-		<to type="forward">/servlets/control/incremental-reload</to>
-	</rule>
+	
 
 	<!-- Jobs-rule -->
 	<rule>
@@ -132,11 +111,6 @@
 		<to type="forward">/servlets/control/update-efo</to>
 	</rule>
 
-<!-- Jobs-rule -->
-	<rule>
-		<from>^/update-global-setup-disk</from>
-		<to type="forward">/servlets/control/update-global-setup-disk</to>
-	</rule>
 
 
 
@@ -151,28 +125,15 @@
 
 	<!-- rest API for deprecated APIS-->
 	<rule>
-		<from>^/xml/v(.*)/group/(SAM(.*))/?$</from>
-		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/xml_v$1?accession=$2</to>
+		<from>^/xml/v(.*)/biostudy/((.*))/?$</from>
+		<to type="forward">/servlets/query/biostudies/biostudies/xml_v$1?accession=$2</to>
 	</rule>
 	<rule>
-		<from>^/xml/v(.*)/group/query=(.*)?$</from>
-		<to type="forward">/servlets/query/biosamplesgroup/browse-biosamplesgroup/xml_v$1?keywords=$2</to>
+		<from>^/xml/v(.*)/biostudy/query=(.*)?$</from>
+		<to type="forward">/servlets/query/biostudies/browse-biostudies/xml_v$1?keywords=$2</to>
 	</rule>
 
-	<!-- browse inside a sample group -->
-	<rule>
-		<from>^/xml/v(.*)/sample/(SAM(.*))/?$</from>
-		<to type="forward">/servlets/query/biosamplessample/biosamplessample/xml_v$1?accession=$2</to>
-	</rule>
 	
-	<rule>
-		<from>^/xml/v(.*)/sample/query=(.*)?$</from>
-		<to type="forward">/servlets/query/biosamplessample/browse-sample/xml_v$1?keywords=$2</to>
-	</rule>	
-	<rule>
-		<from>^/xml/v(.*)/groupsamples/(SAM(.*))/query=(.*)?$</from>
-		<to type="forward">/servlets/query/biosamplessample/browse-biosamplessample/xml_v$1?groupaccession=$2&amp;keywords=$4</to>
-	</rule>
 <!-- rest API for deprecated APIS-->
 
 	
@@ -193,28 +154,14 @@
 	<!-- rest API -->
 	
 	<rule>
-		<from>^/xml/group/(SAM(.*))/?$</from>
-		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/xml_v${interface.application.api.version}?accession=$1</to>
+		<from>^/xml/biostudy/((.*))/?$</from>
+		<to type="forward">/servlets/query/biostudies/biostudies/xml_v${interface.application.api.version}?accession=$1</to>
 	</rule>
 	<rule>
-		<from>^/xml/group/query=(.*)?$</from>
-		<to type="forward">/servlets/query/biosamplesgroup/browse-biosamplesgroup/xml_v${interface.application.api.version}?keywords=$1</to>
+		<from>^/xml/biostudy/query=(.*)?$</from>
+		<to type="forward">/servlets/query/biostudies/browse-biostudies/xml_v${interface.application.api.version}?keywords=$1</to>
 	</rule>
 
-	<rule>
-		<from>^/xml/sample/(SAM(.*))/?$</from>
-		<to type="forward">/servlets/query/biosamplessample/biosamplessample/xml_v${interface.application.api.version}?accession=$1</to>
-	</rule>
-	
-	<rule>
-		<from>^/xml/sample/query=(.*)?$</from>
-		<to type="forward">/servlets/query/biosamplessample/browse-sample/xml_v${interface.application.api.version}?keywords=$1</to>
-	</rule>	
-	
-	<rule>
-		<from>^/xml/groupsamples/(SAM(.*))/query=(.*)?$</from>
-		<to type="forward">/servlets/query/biosamplessample/browse-biosamplessample/xml_v${interface.application.api.version}?groupaccession=$1&amp;keywords=$3</to>
-	</rule>
 
 	<!-- rest API -->
 
@@ -227,14 +174,10 @@
 	
 	<rule>
         <from>^/browse[.]html?$</from>
-        <to type="forward" last="true">/servlets/query/biosamplesgroup/browse-biosamplesgroup/html</to>
+        <to type="forward" last="true">/servlets/query/biostudies/browse-biostudies/html</to>
     </rule>
     
-    <rule>
-        <from>^/browse_samples[.]html?$</from>
-        <to type="forward" last="true">/servlets/query/biosamplessample/browse-biosamplessample/html</to>
-    </rule>
-	
+   
 	<!-- 
 	<rule>
 		<from>browse.html</from>
@@ -255,24 +198,15 @@
 	<!-- return the original xml -->
 
 	<rule>
-		<from>^/original/group/(SAM(.*))/?$</from>
-		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/original?accession=$1</to>
+		<from>^/original/biostudy/(SAM(.*))/?$</from>
+		<to type="forward">/servlets/query/biosamplesgroup/biostudies/original?accession=$1</to>
 	</rule>
 	<rule>
-		<from>^/original/group/query=(.*)?$</from>
+		<from>^/original/biostudy/query=(.*)?$</from>
 		<!-- im using the biosamplesgroup-xml.xsl - I just want to make a copy -->
-		<to type="forward">/servlets/query/biosamplesgroup/biosamplesgroup/original?keywords=$1</to>
+		<to type="forward">/servlets/query/biostudy/biostudies/original?keywords=$1</to>
 	</rule>
 
-	<rule>
-		<from>^/original/sample/(SAM(.*))/?$</from>
-		<to type="forward">/servlets/query/biosamplessample/biosamplessample/original?accession=$1</to>
-	</rule>
-	<rule>
-		<from>^/original/groupsamples/(SAM(.*))/query=(.*)?$</from>
-		<!-- im using the biosamplessample-xml.xsl - I just want to make a copy -->
-		<to type="forward">/servlets/query/biosamplessample/biosamplessample/original?groupaccession=$1&amp;keywords=$3</to>
-	</rule>
 
 	<!-- return the original xml -->
 	

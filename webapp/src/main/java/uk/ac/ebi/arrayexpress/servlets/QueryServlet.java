@@ -209,7 +209,7 @@ public class QueryServlet extends AuthAwareApplicationServlet
     				StringReader reader = new StringReader(xml);
     				long xmlRead = System.currentTimeMillis();
     				
-//    				System.out.println("xml->" + xml);
+    				System.out.println("xml->" + xml);
     				
                     //System.out.println("xml2->" + saxonEngine.transformToString(source, stylesheetName, params));
 

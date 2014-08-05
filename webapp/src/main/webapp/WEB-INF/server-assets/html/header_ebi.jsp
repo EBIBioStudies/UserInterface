@@ -54,14 +54,11 @@
 						//String x="{$interface.application.base.path}";
 						String relativeReqURI = "";
 						relativeReqURI = reqURI.substring(
-								reqURI.indexOf("/biosamples") + 11, reqURI.length());
+								reqURI.indexOf("/biostudies") + 11, reqURI.length());
 						String homeActive = relativeReqURI.equalsIgnoreCase("/") ? "active"
 								: "";
-						String groupsActive = relativeReqURI.startsWith("/browse.html")
-								|| relativeReqURI.startsWith("/group") ? "active" : "";
-						String samplesActive = relativeReqURI
-								.startsWith("/browse_samples.html")
-								|| relativeReqURI.startsWith("/sample") ? "active" : "";
+						String biostudyActive = relativeReqURI.startsWith("/browse.html")
+								|| relativeReqURI.startsWith("/biostudy") ? "active" : "";
 						
 						String submitActive = relativeReqURI.startsWith("/help/submit") ? "active"
 								: "";
@@ -70,7 +67,7 @@
 						String aboutActive = relativeReqURI.startsWith("/about.html") ? "active"
 								: "";
 						
-						String browserPage=(groupsActive.equalsIgnoreCase("active")?"browse.html":"browse_samples.html");
+						String browserPage="browse.html";
 						
 					%>
 			<div class="grid_12 omega">
@@ -85,14 +82,11 @@
 								id="local-searchbox" value='<%=query%>'>
 							</label>
 							<!-- Include some example searchterms - keep them short and few! -->
-							<span class="examples">Search by: <select id="biosamples_index"
-								name="biosamples_index" onchange="changeSearch($('#local-search'),$('#biosamples_index option:selected').val())">
-									<option value="${interface.application.base.path}/browse_samples.html">Samples</option>
-									<option value="${interface.application.base.path}/browse.html"  <%=groupsActive.equalsIgnoreCase("active")?"selected":""%>>Groups</option>
-							</select> &nbsp;&nbsp;Examples: <a
-								href="javascript:submitFormForExamples($('#local-search'),$('#biosamples_index option:selected').val(),'leukemia')">leukemia</a>,
+							<span class="examples">
+							Examples: <a
+								href="${interface.application.base.path}/browse.html?keywords=leukemia">leukemia</a>,
 								<a
-								href="javascript:submitFormForExamples($('#local-search'),$('#biosamples_index option:selected').val(),'ArrayExpress')">ArrayExpress</a></span>
+								href="${interface.application.base.path}/browse.html?keywords=ArrayExpress">ArrayExpress</a></span>
 						</div>
 
 						<div class="right">
@@ -117,16 +111,14 @@
 				<ul class="grid_24" id="local-nav">
 					<li class="first <%=homeActive%>"><a href="${interface.application.base.path}/"
 						title="Biosamples">Home</a></li>
-					<li class="<%=samplesActive%>"><a
-						href="${interface.application.base.path}/browse_samples.html" title="Samples">Samples</a></li>
-					<li class="<%=groupsActive%>"><a
-						href="${interface.application.base.path}/browse.html" title="Groups">Sample Groups</a></li>
+					<li class="<%=biostudyActive%>"><a
+						href="${interface.application.base.path}/browse.html" title="Groups">BioStudies</a></li>
 					<li class="<%=submitActive%>"><a
 						href="${interface.application.base.path}/help/submit.html" title="Submit">Submit</a></li>
 					<li class="<%=helpActive%>"><a
 						href="${interface.application.base.path}/help/index.html" title="Help">Help</a></li>
 					<li class="last <%=aboutActive%>"><a
-						href="${interface.application.base.path}/about.html">About BioSamples</a></li>
+						href="${interface.application.base.path}/about.html">About BioStudies</a></li>
 					<!-- <li class="functional last login"><a href="#"
 						class="icon icon-functional" data-icon="l">Login</a></li> -->
 					<li class="functional feedback first"><a href="#"

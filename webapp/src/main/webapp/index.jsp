@@ -51,9 +51,9 @@
 	type="text/css" media="screen">
 
 <link rel="stylesheet"
-	href="assets/stylesheets/biosamples_common_10.css" type="text/css" />
+	href="assets/stylesheets/biostudies_common_10.css" type="text/css" />
 <link rel="stylesheet"
-	href="assets/stylesheets/biosamples_metadata_10.css" type="text/css" />
+	href="assets/stylesheets/biostudies_metadata_10.css" type="text/css" />
 
 <!-- for production the above can be replaced with -->
 <!--
@@ -82,7 +82,7 @@
 </head>
 
 <body class="level2 ${interface.application.body.class}"
-	onload="updateBiosamplesStats()">
+	onload="updateBioStudiesStats()">
 	<!-- add any of your classes or IDs -->
 	<div id="skip-to">
 		<ul>
@@ -101,7 +101,7 @@
 
 		<div class="grid_24 alpha">
 			<section>
-				<h2>BioSamples - database of sample descriptions</h2>
+				<h2>BioStudies - database of sample descriptions</h2>
 				<p class="intro justify">
 					The BioSamples database aggregates sample information for reference
 					samples (e.g. Coriell Cell lines) and samples for which data exist
@@ -156,8 +156,8 @@
 				<!-- <h5>Updated today at 06:00</h5> -->
 
 				<ul>
-					<li><span id="totalSamples"></span> Samples</li>
-					<li><span id="totalGroups"></span> Groups</li>
+					<li><span id="totalStudies"></span> Studies</li>
+					<!-- <li><span id="totalGroups"></span> Groups</li> -->
 					<!-- <li>XXXX Samples</li>
                     <li>YYYYY groups</li>
                     <li>XXXX Samples</li>
@@ -208,7 +208,7 @@
 		type="text/javascript"></script>
 	<script src="assets/scripts/jquery.caret-range-1.0.js"
 		type="text/javascript"></script>
-	<script src="assets/scripts/biosamples_common_10.js"
+	<script src="assets/scripts/biostudies_common_10.js"
 		type="text/javascript"></script>
 
 
@@ -225,7 +225,7 @@
 
     var contextPath = "<%=contextPath%>";
 
-        function updateBiosamplesStats() {
+        function updateBioStudiesStats() {
             // gets aer stats and updates the page
             $.get("biosamples-stats.xml").always(onBiosamplesStatsSuccess);
         }
@@ -241,12 +241,12 @@
         function onBiosamplesStatsSuccess(xml) {
 
             if (undefined != xml) {
-                var bs_repxml = $($(xml).find("biosamples")[0]);
-                var totalgroups = bs_repxml.attr("groups");
-                var totalsamples = bs_repxml.attr("samples");
+                var bs_repxml = $($(xml).find("biostudies")[0]);
+                var totalstudies = bs_repxml.attr("studies");
+               
 
-                document.getElementById("totalSamples").innerHTML = numberWithCommas(totalsamples);
-                document.getElementById("totalGroups").innerHTML = numberWithCommas(totalgroups);
+                document.getElementById("totalStudies").innerHTML = numberWithCommas(totalstudies);
+               
             }
 
         }

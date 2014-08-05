@@ -40,6 +40,12 @@ body {
 }
 */
 
+/* Define the basic colour your local masthead */
+div#local-masthead { background-color: #3D7A99; }
+
+
+
+
 * {
 text-align: inherit;
 font-weight: inherit;

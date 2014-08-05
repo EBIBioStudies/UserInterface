@@ -75,6 +75,7 @@ public class IndexEnvironmentExperiments extends AbstractIndexEnvironment {
 			// Class<?> c = Class.forName("org.exist.xmldb.DatabaseImpl");
 			db = (Database) c.newInstance();
 			DatabaseManager.registerDatabase(db);
+			logger.debug("connectionString->"+connectionString);
 			coll = DatabaseManager.getCollection(connectionString);
 			// CHANGE BETWEEN DATABASES (EXISTDB AND BASEX)
 			// setNumberOfExperiments(calculateNumberOfExperiments());

@@ -24,7 +24,10 @@ public class IndexEnvironmentFactory {
 				return new IndexEnvironmentBiosamplesGroup(indexConfig);
 			} else if (name.equalsIgnoreCase("biosamplessample")) {
 				return new IndexEnvironmentBiosamplesSample(indexConfig);
-			} else {
+			} 
+		 else if (name.equalsIgnoreCase("biostudies")) {
+			return new IndexEnvironmentBioStudies(indexConfig);
+		} else {
 				//TODO: rpe: consider the possibility of have a default implementation 
 				//return new IndexEnvironment(indexConfig);
 				return new IndexEnvironmentExperiments(indexConfig);

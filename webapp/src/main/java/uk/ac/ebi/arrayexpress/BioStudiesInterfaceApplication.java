@@ -31,16 +31,16 @@ import javax.servlet.ServletContextListener;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class AEInterfaceApplication extends Application implements ServletContextListener
+public class BioStudiesInterfaceApplication extends Application implements ServletContextListener
 {
     // logging machinery
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ServletContext servletContext;
 
-    public AEInterfaceApplication()
+    public BioStudiesInterfaceApplication()
     {
-        super("biosamples");
+        super("biostudies");
 
         //The first thing I should do is to check the Setup Directory
         addComponent(new SetupDirectoryCheck());
@@ -52,9 +52,11 @@ public class AEInterfaceApplication extends Application implements ServletContex
 
   
         addComponent(new XmlDbConnectionPool());
+        addComponent(new BioStudies());
+        
         addComponent(new Users());
-        addComponent(new BioSamplesGroup());
-        addComponent(new BioSamplesSample());
+        //addComponent(new BioSamplesGroup());
+        //addComponent(new BioSamplesSample());
  
         addComponent(new JobsController());
         addComponent(new Ontologies());

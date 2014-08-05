@@ -136,7 +136,7 @@ public class BioSamplesSample extends ApplicationComponent implements
 			this.search.getController().indexFromXmlDB(INDEX_ID, rebuild);	
 			//I need to do this because when I initialize the server with the interface.application.lucene.indexes.build=true I need to restart the indexreader;
 			this.search.getController().getEnvironment(INDEX_ID).setup();
-			this.autocompletion.rebuildBioSamplesSample();
+			//this.autocompletion.rebuildBioSamplesSample();
 		} catch (Exception x) {
 			this.logger.error("Caught an exception:", x);
 		}
@@ -147,7 +147,7 @@ public class BioSamplesSample extends ApplicationComponent implements
 		try {
 			//String indexLocationDirectory= this.search.getController().getEnvironment(INDEX_ID).indexLocationDirectory + "_" + System.currentTimeMillis();
 			this.search.getController().indexFromXmlDB(INDEX_ID, Indexer.RebuildCategories.NOTREBUILD);		
-			this.autocompletion.rebuildBioSamplesSample();
+			//this.autocompletion.rebuildBioSamplesSample();
 		} catch (Exception x) {
 			this.logger.error("Caught an exception:", x);
 		}

@@ -21,6 +21,7 @@ import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
+import uk.ac.ebi.arrayexpress.utils.saxon.functions.search.GetBioStudiesNumberFunction;
 import uk.ac.ebi.arrayexpress.utils.saxon.functions.search.GetBiosamplesgroupsNumberFunction;
 import uk.ac.ebi.arrayexpress.utils.saxon.functions.search.GetBiosamplessamplesNumberFunction;
 import uk.ac.ebi.arrayexpress.utils.saxon.functions.search.HighlightQueryFunction;
@@ -49,8 +50,9 @@ public class SearchEngine extends ApplicationComponent
         if (null != saxon) {
 //            saxon.registerExtensionFunction(new QueryIndexFunction(getController()));
             saxon.registerExtensionFunction(new HighlightQueryFunction(getController()));
-            saxon.registerExtensionFunction(new GetBiosamplessamplesNumberFunction(getController()));
-            saxon.registerExtensionFunction(new GetBiosamplesgroupsNumberFunction(getController()));
+            saxon.registerExtensionFunction(new GetBioStudiesNumberFunction(getController()));
+//            saxon.registerExtensionFunction(new GetBiosamplessamplesNumberFunction(getController()));
+//            saxon.registerExtensionFunction(new GetBiosamplesgroupsNumberFunction(getController()));
             
 //            saxon.registerExtensionFunction(new GetExperimentScoreFunction(getController()));
 //            saxon.registerExtensionFunction(new GetExtendedTextForEBEYEFunction(getController()));

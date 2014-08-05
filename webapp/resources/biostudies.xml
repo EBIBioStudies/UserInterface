@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<app>
+		<reports>
+			<originator>"Biosamples" &lt;biosamples@ebi.ac.uk&gt; </originator>
+			<recipients>${interface.application.pref.reports.recipients}
+			</recipients>
+			<hidden-recipients>${interface.application.pref.reports.hidden-recipients}
+			</hidden-recipients>
+			<subject>Runtime exception report</subject>
+			<smtp>
+				<host>smtp.ebi.ac.uk</host>
+				<port>25</port>
+			</smtp>
+		</reports>
+	</app>
+
+	<bs>
+		<globalSetupDirectory>${interface.application.global.setup.directory}
+		</globalSetupDirectory>
+		<globalSetupLuceneDirectory>${interface.application.global.setup.lucene.directory}
+		</globalSetupLuceneDirectory>
+		<globalSetupDBDirectory>${interface.application.global.setup.db.directory}
+		</globalSetupDBDirectory>
+		<setupDirectory>${sys:java.io.tmpdir}/${interface.application.index.directory}
+		</setupDirectory>
+		<backupDirectory>${interface.application.global.backup.directory}
+		</backupDirectory>
+		<!-- <backupDirectory>${sys:java.io.tmpdir}/Backups</backupDirectory> -->
+		<!-- <downloadDirectory>${sys:java.io.tmpdir}/DownloadXml</downloadDirectory> -->
+		<buildLuceneIndexes>${interface.application.lucene.indexes.build}
+		</buildLuceneIndexes>
+		<pageSizeLimit>${interface.application.pagesize.limit}</pageSizeLimit>
+		<!-- -1 means that the update is not possible; 0 means complete update; 
+			1 means last day update -->
+		<reloadBiosamplesDatabase>${interface.application.pref.biosamples.update.timestamp}
+		</reloadBiosamplesDatabase>
+
+		<feedback>
+			<recipients>${interface.application.pref.feedback.recipients}
+			</recipients>
+			<subject>BioSamples user feedback</subject>
+		</feedback>
+		<password-remind>
+			<originator>"Biosamples" &lt;biosamples@ebi.ac.uk&gt;</originator>
+			<recipients>${interface.application.pref.remind.recipients}
+			</recipients>
+			<subject>BioSamples account information</subject>
+		</password-remind>
+
+		<xmldatabase>
+			<path>${interface.application.db.xml.path}</path>
+			<driver>${interface.application.db.xml.driver}</driver>
+			<base>${interface.application.db.xml.connection.base}</base>
+			<host>${interface.application.db.xml.connection.host}</host>
+			<port>${interface.application.db.xml.connection.port}</port>
+			<dbname>${interface.application.db.xml.connection.dbname}</dbname>
+			<adminpassword>${interface.application.db.xml.admin.password}
+			</adminpassword>
+			<!-- <connectionstring>${interface.application.db.xml.connection.string} 
+				</connectionstring> -->
+			<!-- <dbname>${interface.application.db.xml.connection.dbname}</dbname> -->
+		</xmldatabase>
+
+		<!-- define all the variables that we need to update the biosamples Database -->
+		<xmlupdate>
+			<active>${interface.application.db.xml.update.active}</active>
+			<type>${interface.application.db.xml.update.type}</type>
+			<url>${interface.application.db.xml.update.url}</url>
+			<timestamp>${interface.application.db.xml.update.timestamp}
+			</timestamp>
+			<username>${interface.application.db.xml.update.username}</username>
+			<password>${interface.application.db.xml.update.password}</password>
+			<cookie>${interface.application.db.xml.update.cookie}</cookie>
+		</xmlupdate>
+
+		<!-- job -->
+		<reload-all>
+			<update>
+				<schedule>${interface.application.pref.reload-all.update.schedule}
+				</schedule>
+				<interval>${interface.application.pref.reload-all.update.interval}
+				</interval>
+				<atstart>${interface.application.pref.reload-all.update.atstart}
+				</atstart>
+			</update>
+		</reload-all>
+
+		<reload-all-disk>
+			<update>
+				<schedule>${interface.application.pref.reload-all-disk.update.schedule}
+				</schedule>
+				<interval>${interface.application.pref.reload-all-disk.update.interval}
+				</interval>
+				<atstart>${interface.application.pref.reload-all-disk.update.atstart}
+				</atstart>
+			</update>
+		</reload-all-disk>
+
+		<update-global-setup-disk>
+			<update>
+				<schedule>${interface.application.pref.update-global-setup-disk.update.schedule}
+				</schedule>
+				<interval>${interface.application.pref.update-global-setup-disk.update.interval}
+				</interval>
+				<atstart>${interface.application.pref.update-global-setup-disk.update.atstart}
+				</atstart>
+			</update>
+			<fileSetup>${interface.application.pref.update-global-setup-disk.fileSetup}
+			</fileSetup>
+			<fileSetupDB>${interface.application.pref.update-global-setup-disk.fileSetupDB}
+			</fileSetupDB>
+		</update-global-setup-disk>
+
+
+
+		<efo>
+			<location>${sys:java.io.tmpdir}/efo.owl</location>
+			<source>/WEB-INF/classes/efo.owl</source>
+			<update>
+				<source>http://efo.svn.sourceforge.net/svnroot/efo/trunk/src/efoinowl/efo.owl
+				</source>
+				<schedule>${interface.application.pref.efo.update.schedule}
+				</schedule>
+			</update>
+			<ignoreList>/WEB-INF/classes/efo-ignore.txt</ignoreList>
+			<synonyms>/WEB-INF/classes/synonyms.txt</synonyms>
+			<stopWords>a,able,about,across,after,all,almost,also,am,among,an,and,any,are,as,at,be,because,been,but,by,can,cannot,could,dear,did,do,does,either,else,ever,every,for,from,get,got,had,has,have,he,her,hers,him,his,how,however,i,if,in,into,is,it,its,just,least,let,like,likely,may,me,might,most,must,my,neither,no,nor,not,of,off,often,on,only,or,other,our,own,rather,said,say,says,she,should,since,so,some,than,that,the,their,them,then,there,these,they,this,tis,to,too,twas,us,wants,was,we,were,what,when,where,which,while,who,whom,why,will,with,would,yet,you,your
+			</stopWords>
+			<index>
+				<!-- <location>${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes/efo 
+					</location> -->
+				<!-- CANNOT PUT this index on the same directory because I remove this 
+					directory whean I'm upadating the biosamples and i dont want to generate 
+					the EFO index again -->
+				<location>${sys:java.io.tmpdir}/${interface.application.pref.files.prefix}-index/efo
+				</location>
+			</index>
+		</efo>
+
+
+
+
+		<!-- location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes" -->
+
+		<index id="biostudies"
+			location="${sys:java.io.tmpdir}/${interface.application.index.directory}/LuceneIndexes"
+			defaultAnalyzer="uk.ac.ebi.arrayexpress.utils.search.AttributeFieldAnalyzer">
+
+			<document path="/submission/section"
+				defaultField="keywords">
+				<!-- I also want to search in the attributes name, so I will add it to 
+					the keywords -->
+				<field name="keywords" type="string"
+					path="concat(string-join(.//Sample/attribute/@class, ' '),string-join(.//text(), ' '),@id)"
+					analyze="true"
+					analyzer="uk.ac.ebi.arrayexpress.utils.search.ExperimentTextAnalyzer"
+					autocompletion="true" store="false" escape="false" />
+				<field name="accession" title="by Accession" type="string"
+					path="@id" analyze="true" store="true" escape="false" 
+					autocompletion="true" />
+				<field name="access" title="by Access" type="string"
+					path="@access" analyze="true" store="true" escape="false" 
+					autocompletion="false" />
+				<field name="class" title="by class" type="string"
+					path="@class" analyze="true" store="true" escape="false" 
+					autocompletion="false" />
+					
+					<!-- attributes names - i need this to the autocomplete -->
+				<field name="attributeNames" type="string"
+					path="attributes/attribute/@name" analyze="true" store="true"
+					escape="false" autocompletion="false" />
+					
+				<!-- The sortfields must have this pproperties analyze="false" store="false" 
+					escape="false" -->
+				<!-- <field name="accessionsort" title="by Accession" type="integer"
+					path="translate(@id, translate(@id, '0123456789', ''), '') cast as xs:integer"
+					analyze="false" store="false" escape="false" autocompletion="false" /> -->
+					
+					<field name="attributes" type="string" path="attributes/attribute" process="true" 
+					analyze="true" store="false" escape="false"/>
+					<!-- I will use those expression during the processing of attributes 
+					- they are not used during the searches -->
+				   <field name="attributeName" type="string" path="@name" process="true" 
+					analyze="true" store="false" escape="false"/>
+				<field name="attributeValue" type="string" path="./text()" 
+					process="true" analyze="true" store="false" escape="false"/> -->
+				<!-- I will use those expression during the processing of attributes 
+					- they are not used during the searches -->
+					
+			</document>
+		</index>
+
+	</bs>
+</configuration>

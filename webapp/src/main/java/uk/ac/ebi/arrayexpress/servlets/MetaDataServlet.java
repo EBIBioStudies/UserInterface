@@ -17,19 +17,14 @@ package uk.ac.ebi.arrayexpress.servlets;
  *
  */
 
-import uk.ac.ebi.arrayexpress.app.ApplicationServlet;
-import uk.ac.ebi.arrayexpress.components.BioSamplesGroup;
-import uk.ac.ebi.arrayexpress.components.BioSamplesSample;
-import uk.ac.ebi.arrayexpress.components.JobsController;
-import uk.ac.ebi.arrayexpress.components.SearchEngine;
-import uk.ac.ebi.arrayexpress.components.XmlDbConnectionPool;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesGroup;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
+
+import uk.ac.ebi.arrayexpress.app.ApplicationServlet;
 
 public class MetaDataServlet extends ApplicationServlet {
 	private static final long serialVersionUID = 8929729058610937695L;
@@ -56,7 +51,7 @@ public class MetaDataServlet extends ApplicationServlet {
 		try {
 
 			String[] componentsArray = { "JobsController", "XmlDbConnectionPool",
-					"BioSamplesGroup", "BioSamplesSample" };
+					"BioStudies" };
 			out = response.getWriter();
 			out.println("<html><head>");
 			out.println("<link rel=\"stylesheet\" href=\"assets/stylesheets/biosamples_homepage_10.css\" type=\"text/css\">");

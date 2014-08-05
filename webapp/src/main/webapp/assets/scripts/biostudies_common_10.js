@@ -364,36 +364,22 @@
 			close : "#ae-feedback-close"
 		});
 
-//		var pageName = "";
-//		if(/\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))!=null){
-//			pageName =/\/?([^\/]+)$/.exec(decodeURI(window.location.pathname))[1];		
-//		}
-
-		changeSearch($('#local-search'),$('#biosamples_index option:selected').val());
-		//changeAutocomplete(pageName);
-
-
-		// $("#local-searchbox").autocomplete(
-		// contextPath + "/keywords.txt"
-		// , { matchContains: false
-		// , selectFirst: false
-		// , scroll: true
-		// , max: 50
-		// ,fields: []
-		// , requestTreeUrl: contextPath + "/efotree.txt"
-		// }
-		// ).focus(autoCompleteFixSet).blur(autoCompleteFixUnset).removeAttr('autocomplete');
-
-		// if ($("#noresults").length == 0) {
-		// try {
-		// /* The simplest implementation, used on your zero search results
-		// pages */
-		// alert("fdfd");
-		// updateSummary({searchBaseURL: "http://www.ebi.ac.uk/ebisearch/"});
-		// } catch (except_1) {}
-		//
-		// }
-
+		var autoCompleteFixSet = function() {
+			$(this).attr('autocomplete', 'off');
+		};
+		var autoCompleteFixUnset = function() {
+			$(this).removeAttr('autocomplete');
+		};
+		
+		$("#local-searchbox").autocomplete(contextPath + "/keywords.txt", {
+			matchContains : false,
+			selectFirst : false,
+			scroll : true,
+			max : 50,
+			fields : [],
+			requestTreeUrl : contextPath + "/efotree.txt"
+		}).focus(autoCompleteFixSet).blur(autoCompleteFixUnset).removeAttr(
+				'autocomplete');
 	});
 
 })(window.jQuery);

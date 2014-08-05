@@ -17,44 +17,25 @@ package uk.ac.ebi.arrayexpress.components;
  *
  */
 
+import java.io.File;
+
+import javax.xml.transform.stream.StreamSource;
+
 import net.sf.saxon.Configuration;
 import net.sf.saxon.om.DocumentInfo;
-import net.sf.saxon.om.ValueRepresentation;
-import net.sf.saxon.trans.XPathException;
-import net.sf.saxon.xpath.XPathEvaluator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xmldb.api.base.ResourceSet;
-import org.xmldb.api.modules.XPathQueryService;
 
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationComponent;
-import uk.ac.ebi.arrayexpress.components.Events.IEventInformation;
 import uk.ac.ebi.arrayexpress.utils.RegexHelper;
-import uk.ac.ebi.arrayexpress.utils.StringTools;
-import uk.ac.ebi.arrayexpress.utils.persistence.FilePersistence;
-import uk.ac.ebi.arrayexpress.utils.persistence.PersistableString;
-import uk.ac.ebi.arrayexpress.utils.persistence.PersistableStringList;
-import uk.ac.ebi.arrayexpress.utils.saxon.DocumentUpdater;
-import uk.ac.ebi.arrayexpress.utils.saxon.ExtFunctions;
 import uk.ac.ebi.arrayexpress.utils.saxon.IDocumentSource;
-import uk.ac.ebi.arrayexpress.utils.saxon.PersistableDocumentContainer;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBioStudies;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesGroup;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentExperiments;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.Indexer;
 
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import java.io.File;
-import java.net.URL;
-import java.util.*;
-
-import org.xmldb.api.base.Collection;
-
-public class BioSamplesGroup extends ApplicationComponent implements
+public class BioStudies extends ApplicationComponent implements
 		IDocumentSource {
 	// logging machinery
 	private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -71,12 +52,12 @@ public class BioSamplesGroup extends ApplicationComponent implements
 	private boolean buildIndexes;
 
 
-	public final String INDEX_ID = "biosamplesgroup";
+	public final String INDEX_ID = "biostudies";
 
 	
 
 
-	public BioSamplesGroup() {
+	public BioStudies() {
 		
 	}
 
@@ -143,7 +124,7 @@ public class BioSamplesGroup extends ApplicationComponent implements
 			this.search.getController().getEnvironment(INDEX_ID).setup();
 			
 //			TODO review the autocompletion because of time it takes (maybe the problem is the xml field)
-			this.autocompletion.rebuildBioSamplesGroup();
+			this.autocompletion.rebuildBioStudies();
 		} catch (Exception x) {
 			this.logger.error("Caught an exception:", x);
 		}
@@ -156,7 +137,7 @@ public class BioSamplesGroup extends ApplicationComponent implements
 		try {
 			//String indexLocationDirectory= this.search.getController().getEnvironment(INDEX_ID).indexLocationDirectory + "_" + System.currentTimeMillis();
 			this.search.getController().indexFromXmlDB(INDEX_ID, Indexer.RebuildCategories.NOTREBUILD);		
-			this.autocompletion.rebuildBioSamplesGroup();
+			this.autocompletion.rebuildBioStudies();
 		} catch (Exception x) {
 			this.logger.error("Caught an exception:", x);
 		}
@@ -178,7 +159,7 @@ public class BioSamplesGroup extends ApplicationComponent implements
 	@Override
 	public String getMetaDataInformation(){
 		
-		String info=((IndexEnvironmentBiosamplesGroup)this.search.getController().getEnvironment(INDEX_ID)).getMetadataInformation();
+		String info=((IndexEnvironmentBioStudies)this.search.getController().getEnvironment(INDEX_ID)).getMetadataInformation();
     	return info;
     }
 	

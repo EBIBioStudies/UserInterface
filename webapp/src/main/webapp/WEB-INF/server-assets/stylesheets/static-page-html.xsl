@@ -30,7 +30,7 @@
     <xsl:variable name="vSubFolder" select="if (fn:contains($filename, '/')) then fn:concat(fn:substring-before($filename, '/'), '/') else ''"/>
 
 		
-    <xsl:include href="biosamples-html-page.xsl"/>
+    <xsl:include href="biostudies-html-page.xsl"/>
 
 
     <xsl:template match="/">

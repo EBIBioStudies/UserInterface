@@ -1,25 +1,11 @@
 package uk.ac.ebi.arrayexpress.jobs;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Random;
 
-import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
-import org.basex.BaseXServer;
 import org.basex.core.cmd.CreateDB;
 import org.basex.server.ClientSession;
 import org.basex.server.Session;
@@ -29,16 +15,11 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.ebi.arrayexpress.app.Application;
 import uk.ac.ebi.arrayexpress.app.ApplicationJob;
-import uk.ac.ebi.arrayexpress.components.BioSamplesGroup;
-import uk.ac.ebi.arrayexpress.components.BioSamplesSample;
+import uk.ac.ebi.arrayexpress.components.BioStudies;
 import uk.ac.ebi.arrayexpress.components.SearchEngine;
-import uk.ac.ebi.arrayexpress.utils.file.FileUtilities;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentArrayDesigns;
+import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBioStudies;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesGroup;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentBiosamplesSample;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentExperiments;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentFiles;
-import uk.ac.ebi.arrayexpress.utils.saxon.search.IndexEnvironmentProtocols;
 import uk.ac.ebi.arrayexpress.utils.saxon.search.Indexer;
 
 /*
@@ -234,11 +215,9 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				// I need to close the IndexReader otherwise it would not be
 				// possible dor me to delete the Setup directory (this problem
 				// only occurs on NFS);
-				search.getController().getEnvironment("biosamplesgroup")
+				search.getController().getEnvironment("biostudies")
 						.closeIndexReader();
-				search.getController().getEnvironment("biosamplessample")
-						.closeIndexReader();
-
+				
 				// remove the old setupdirectory /tmp/Setup is deleted
 				deleteDirectory(setupDirectory);
 
@@ -269,22 +248,13 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				logger.info("Deleting Setup Directory and renaming - End");
 
 				// I do this to know the number of elements
-				((BioSamplesGroup) getComponent("BioSamplesGroup"))
+				((BioStudies) getComponent("BioStudies"))
 						.reloadIndex();
 				// TODO: rpe nowaday I need to do this to clean the xmldatabase
 				// connection nad to reload the new index
-				((IndexEnvironmentBiosamplesGroup) search.getController()
-						.getEnvironment("biosamplesgroup")).setup();
+				((IndexEnvironmentBioStudies) search.getController()
+						.getEnvironment("biostudies")).setup();
 
-				((BioSamplesSample) getComponent("BioSamplesSample"))
-						.reloadIndex();
-				// TODO: rpe nowadays I need to do this to clean the xmldatabase
-				// connection nad to reload the new index
-				((IndexEnvironmentBiosamplesSample) search.getController()
-						.getEnvironment("biosamplessample")).setup();
-
-				
-				
 				//Copy the data to GlobalSETUP (doing this here to reduce the downtime				
 				FileUtils.copyDirectory(setupDirectory,
 						globalSetupLuceneDirectory);
@@ -324,9 +294,8 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 				//send an email saying that everything is ok (with some stats)
 				this.getApplication()
 				.sendEmail(null,null,hostname + "->"+
-						"BIOSAMPLES: RELOAD samplegroups-> + " + ((IndexEnvironmentBiosamplesGroup) search.getController()
-								.getEnvironment("biosamplesgroup")).getCountDocuments() + " samples->" +((IndexEnvironmentBiosamplesSample) search.getController()
-										.getEnvironment("biosamplessample")).getCountDocuments(),
+						"BIOSTUDIES: RELOAD biostudies-> + " + ((IndexEnvironmentBioStudies) search.getController()
+								.getEnvironment("biostudies")).getCountDocuments(),
 						"ReloadBiosamplesJob is finished!");
 				
 
@@ -383,18 +352,11 @@ public class ReloadBiosamplesJob extends ApplicationJob {
 		// I will create now the Lucene Indexes ...
 		SearchEngine search = ((SearchEngine) getComponent("SearchEngine"));
 		// TODO: rpe change all this static values
-		search.getController().indexFromXmlDB("biosamplesgroup", Indexer.RebuildCategories.REBUILD,
+		search.getController().indexFromXmlDB("biostudies", Indexer.RebuildCategories.REBUILD,
 				newSetupDirectory.getAbsolutePath() + "/LuceneIndexes", dbHost,
 				dbPort, dbPassword, tempDbName);
 
-		// / ((IndexEnvironmentBiosamplesGroup) search.getController()
-		// / .getEnvironment("biosamplesgroup")).setup();
-		// TODO: rpe this db path shoul not be static
-		search.getController().indexFromXmlDB("biosamplessample", Indexer.RebuildCategories.REBUILD,
-				newSetupDirectory.getAbsolutePath() + "/LuceneIndexes", dbHost,
-				dbPort, dbPassword, tempDbName);
-		// / ((IndexEnvironmentBiosamplesSample) search.getController()
-		// / .getEnvironment("biosamplessample")).setup();
+	
 		logger.info("End Indexing ...");
 		//
 

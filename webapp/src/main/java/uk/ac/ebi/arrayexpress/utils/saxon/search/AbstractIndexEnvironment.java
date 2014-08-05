@@ -389,10 +389,11 @@ public abstract class AbstractIndexEnvironment {
 			// have to add it
 			else {
 				SortField[] sortFieldArray = new SortField[1];
-				sortBy+= "sort";
+				sortBy += "sort";
 				sortFieldArray[0] = new SortField(sortBy, SortField.STRING_VAL,
 						descending);
-				logger.debug("Query sorted by a dynamic sample attribute: ->[{}] descending: ->[{}]",
+				logger.debug(
+						"Query sorted by a dynamic sample attribute: ->[{}] descending: ->[{}]",
 						sortBy, descending);
 				sort = new Sort(sortFieldArray);
 				// logger.info(
@@ -787,7 +788,7 @@ public abstract class AbstractIndexEnvironment {
 		String connectionString = "";
 		Collection coll;
 		IndexWriter w = null;
-		DirectoryTaxonomyWriter taxoWriter=null;
+		DirectoryTaxonomyWriter taxoWriter = null;
 		Map<String, XPathExpression> fieldXpe = new HashMap<String, XPathExpression>();
 		try {
 
@@ -799,8 +800,7 @@ public abstract class AbstractIndexEnvironment {
 			Directory taxDir = FSDirectory.open(new File(indexLocationDirectory
 					+ "Facets", indexId));
 
-			taxoWriter = new DirectoryTaxonomyWriter(
-					taxDir);
+			taxoWriter = new DirectoryTaxonomyWriter(taxDir);
 			CategoryDocumentBuilder docBuilder = new CategoryDocumentBuilder(
 					taxoWriter);
 
@@ -918,7 +918,7 @@ public abstract class AbstractIndexEnvironment {
 					count++;
 					logger.debug("its beeing processed the number ->" + count);
 					String idNode = (String) iter.nextResource().getContent();
-					//logger.debug("Id node->" + idNode);
+					// logger.debug("Id node->" + idNode);
 					// I need to get the sample
 					// ResourceSet setid = service.query(indexDocumentPath
 					// + "[@id='" + idSample + "']");
@@ -972,7 +972,7 @@ public abstract class AbstractIndexEnvironment {
 								logger.error(
 										"XML that was being processed when the error occurred DB->[{}]",
 										xmlError);
-	
+
 								// to avoid the next running to stop
 								// because its not able to delete the
 								// newSetup directory
@@ -999,7 +999,7 @@ public abstract class AbstractIndexEnvironment {
 
 					}
 				}
- 
+
 				logger.debug("until now it were processed->[{}]", pageNumber
 						* pageSizeDefault);
 				pageNumber++;
@@ -1324,14 +1324,14 @@ public abstract class AbstractIndexEnvironment {
 				logger.debug("until now it were processed->[{}]", pageNumber
 						* pageSizeDefault);
 				pageNumber++;
-//				if (coll != null) {
-//					try {
-//						// coll.close();
-//					} catch (Exception e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
+				// if (coll != null) {
+				// try {
+				// // coll.close();
+				// } catch (Exception e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+				// }
+				// }
 				set = null;
 
 			}
@@ -1517,7 +1517,6 @@ public abstract class AbstractIndexEnvironment {
 		}
 	}
 
-	
 	// process each document (this has all the logic related with dynamic
 	// attributes)
 	public Document processEntryIndex(Object node, Configuration config,
@@ -1569,49 +1568,16 @@ public abstract class AbstractIndexEnvironment {
 								.hasNext();) {
 							Object object = (Object) iterator.next();
 							// logger.debug("attributes->" + object);
-							String valClass = (String) fieldXpe.get(
+							String attributeName = (String) fieldXpe.get(
 									"attributeName").evaluate(object,
 									XPathConstants.STRING);
-							//TODO: document this on trac and on website documentations help
-							valClass=valClass.replace(" ", "_").toLowerCase();
-							//valClass=valClass.toLowerCase();
-							String valType = (String) fieldXpe.get(
-									"attributeType").evaluate(object,
-									XPathConstants.STRING);
-							String valValue = (String) fieldXpe.get(
+							String attributeValue = (String) fieldXpe.get(
 									"attributeValue").evaluate(object,
 									XPathConstants.STRING);
 
-							if (!valType.equalsIgnoreCase("integer")
-									&& !valType.equalsIgnoreCase("real")) {
-								//TODO: change this value
-								valValue=valValue.substring(0, Math.min(valValue.length(), 25));
-								addIndexField(luceneDoc,"attributes" , "="+valClass + "= " + valValue,
+								addIndexField(luceneDoc,attributeName , attributeValue,
 										true, false, true);
-							} else {
-
-								valValue = valValue.trim();
-								int val = 0;
-								if (valValue == null
-										|| valValue.equalsIgnoreCase("")
-										|| valValue.equalsIgnoreCase("NaN")) {
-									valValue = "0";
-								}
-								BigDecimal num = new BigDecimal(valValue);
-								num = num.multiply(new BigDecimal(100));
-								int taux = num.toBigInteger().intValue();
-								valValue = String.format("%07d", taux);
-								//I need to mantain the spaces for lucene consider different words
-								addIndexField(luceneDoc, "attributes" , "="+valClass + "= " + valValue,
-										true, false, true);
-							}
-//							logger.debug("@class->" + valClass);
-//							logger.debug("@type->" + valType);
-//							logger.debug("text->" + valValue);
 						}
-					} else {
-						// logger.debug("There is NO special treatment for this field->"
-						// + field.name);
 					}
 				}
 			} catch (XPathExpressionException x) {

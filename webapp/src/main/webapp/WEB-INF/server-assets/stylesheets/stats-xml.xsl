@@ -16,8 +16,10 @@
     <xsl:template match="/">
         
          
-        <biosamples groups="{search:getBiosamplesgroupsNumber()}"
-                     samples="{search:getBiosamplessamplesNumber()}" />
+        <!-- <biosamples groups="{search:getBiosamplesgroupsNumber()}"
+                     samples="{search:getBiosamplessamplesNumber()}" /> -->
+                     
+               <biostudies studies="{search:getBioStudiesNumber()}" />    
     </xsl:template>
 
 </xsl:stylesheet>

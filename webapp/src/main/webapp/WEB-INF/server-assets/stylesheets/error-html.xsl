@@ -23,7 +23,7 @@
                 exclude-result-prefixes="fn html xs"
                 version="2.0">
 
-    <xsl:include href="biosamples-html-page.xsl"/>
+    <xsl:include href="biostudies-html-page.xsl"/>
  
 
     <xsl:param name="error-code"/>

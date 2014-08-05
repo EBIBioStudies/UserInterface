@@ -8,10 +8,10 @@
 	</parent>
 	<groupId>uk.ac.ebi.microarray</groupId>
 	<artifactId>bs-interface-webapp</artifactId>
-	<name>BioSamples Interface Web Application</name>
+	<name>BioStudies Interface Web Application</name>
 	<version>2.0.5-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<url>http://www.ebi.ac.uk/biosamples</url>
+	<url>http://www.ebi.ac.uk/biostudies</url>
 
 	<!-- <scm> <connection>scm:svn:svn://bar.ebi.ac.uk/trunk/BioSamples/webapp</connection> 
 		<developerConnection>scm:svn:svn://bar.ebi.ac.uk/trunk/BioSamples/webapp</developerConnection> 
@@ -24,9 +24,9 @@
 		<interface.application.log.appender.jobs.ref>ROLLINGFILEJOBS</interface.application.log.appender.jobs.ref>
 		<interface.application.log.appender.performance.ref>ROLLINGFILEPERFORMANCE</interface.application.log.appender.performance.ref>
 		<interface.application.pref.reports.recipients>rpereira@ebi.ac.uk</interface.application.pref.reports.recipients>
-		<interface.application.base.path>/biosamples</interface.application.base.path>
-		<interface.application.base.service.name>BioSamples</interface.application.base.service.name>
-		<interface.application.base.service.logo>/biosamples/assets/images/BioSamples_logo.png</interface.application.base.service.logo>
+		<interface.application.base.path>/biostudies</interface.application.base.path>
+		<interface.application.base.service.name>BioStudies</interface.application.base.service.name>
+		<interface.application.base.service.logo>/biostudies/assets/images/BioStudies_logo.png</interface.application.base.service.logo>
 		<interface.application.link.www_domain />
 		<interface.application.link.www_domain_hack />
 		<interface.application.link.www_domain.inc>${interface.application.link.www_domain}/inc</interface.application.link.www_domain.inc>
@@ -83,30 +83,17 @@
 			defaul the class hidden the link -->
 		<interface.application.metadata.class>metadata_hide</interface.application.metadata.class>
 		<!-- XML DataBase access -->
-		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/basexAE</interface.application.db.xml.connection.string> -->
-		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/biosamplesAEGroupX16</interface.application.db.xml.connection.string> -->
-		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/biosamples_sampleAtt</interface.application.db.xml.connection.string> -->
-		<!-- <interface.application.db.xml.connection.string>xmldb:basex://host:1984/biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.string> -->
-		<!-- <interface.application.db.xml.connection.string>xmldb:basex://localhost:1984/biosamplesAEGroup</interface.application.db.xml.connection.string> -->
 		<interface.application.db.xml.path>${sys:user.home}/BaseXData/</interface.application.db.xml.path>
 		<interface.application.db.xml.connection.base>xmldb:basex</interface.application.db.xml.connection.base>
 		<interface.application.db.xml.connection.host>localhost</interface.application.db.xml.connection.host>
 		<interface.application.db.xml.connection.port>1984</interface.application.db.xml.connection.port>
-		<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
+		<interface.application.db.xml.connection.dbname>biostudies</interface.application.db.xml.connection.dbname>
 		<interface.application.db.xml.admin.password>admin</interface.application.db.xml.admin.password>
 		<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname> -->
 		<interface.application.db.xml.driver>org.basex.api.xmldb.BXDatabase</interface.application.db.xml.driver>
 
 		<!-- Generate or not the Lucene Indexes at the startup -->
 		<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
-
-
-		<!-- define all the variables that we need to update the biosamples Database -->
-		<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8080/biosamples/</interface.application.db.xml.update.url>
-		<interface.application.db.xml.update.username>rui</interface.application.db.xml.update.username>
-		<interface.application.db.xml.update.password>ruipereire</interface.application.db.xml.update.password>
-		<interface.application.db.xml.update.cookie>AGESESS</interface.application.db.xml.update.cookie>
-
 
 
 		<!-- Define the maximum pageSize value allowed -->
@@ -128,51 +115,21 @@
 				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
 				<!--<interface.application.body.class>bs_curator_daily</interface.application.body.class> -->
 				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
-				<interface.application.base.path>/biosamples</interface.application.base.path>
+				<interface.application.base.path>/biostudies</interface.application.base.path>
 				<interface.application.log.appender.ref>CONSOLE</interface.application.log.appender.ref>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
-				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
+				<interface.application.db.xml.connection.dbname>biostudies</interface.application.db.xml.connection.dbname>
 				<!-- <interface.application.db.xml.update.active>true</interface.application.db.xml.update.active> -->
 				<!-- <interface.application.db.xml.update.active>true</interface.application.db.xml.update.active> 
 					<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type> 
 					<interface.application.db.xml.update.url>/Users/rpslpereira/Downloads/exportAge.xml</interface.application.db.xml.update.url> -->
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
-				<interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/biosampleserror2.xml</interface.application.db.xml.update.url>
-				<interface.application.pref.update-global-setup-disk.fileSetup>/Users/rpslpereira/EclipseWorkspaces/BioSamples_Trunk_Git/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/deploy/GlobalSetup/db1/Setup</interface.application.pref.update-global-setup-disk.fileSetup>
+				<interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/biostudies.xml</interface.application.db.xml.update.url>
+				<interface.application.pref.update-global-setup-disk.fileSetup>/Users/rpslpereira/EclipseWorkspaces/BioStudies_Trunk_Git/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/deploy/GlobalSetup/db1/Setup</interface.application.pref.update-global-setup-disk.fileSetup>
 				<interface.application.pref.update-global-setup-disk.fileSetupDB>/Users/rpslpereira/EclipseWorkspaces/BioSamples_Trunk_Git/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/deploy/GlobalSetup/db1/SetupDB</interface.application.pref.update-global-setup-disk.fileSetupDB>
-				<!-- <interface.application.pref.reload-all-disk.update.schedule>0 0 
-					7 * * ?</interface.application.pref.reload-all-disk.update.schedule> <interface.application.pref.reload-all-disk.update.interval /> <interface.application.pref.reload-all-disk.update.atstart>false</interface.application.pref.reload-all-disk.update.atstart> -->
-				<!-- <interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/biosamples_09102013.xml</interface.application.db.xml.update.url> -->
-				<!-- <interface.application.db.xml.update.type>url</interface.application.db.xml.update.type> 
-					<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?limit=100&amp;amp;server=tst&amp;amp;samples=EMBED&amp;amp;schema=AGE2GS&amp;amp;hideNS=true&amp;amp;showAttributes=true</interface.application.db.xml.update.url> -->			<!-- <interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/IncrementalUpdates/biosamplesIncrementalUpdate_FileUsedOnServer.xml</interface.application.db.xml.update.url> -->
-				<!-- <interface.application.db.xml.update.active>true</interface.application.db.xml.update.active> 
-					<interface.application.db.xml.update.type>age</interface.application.db.xml.update.type> 
-					<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp> 
-					<interface.application.db.xml.update.url>http://tomcat-15:21480/biosamples/</interface.application.db.xml.update.url> 
-					<interface.application.db.xml.update.username>rui</interface.application.db.xml.update.username> 
-					<interface.application.db.xml.update.password>ruipereire</interface.application.db.xml.update.password> 
-					<interface.application.db.xml.update.cookie>AGESESS</interface.application.db.xml.update.cookie> -->
-
-				<!-- <interface.application.db.xml.update.type>url</interface.application.db.xml.update.type> 
-					<interface.application.db.xml.update.url>http://cocoa.ebi.ac.uk:8580/X-S/export?server=tst&amp;amp;samples=EMBED&amp;amp;schema=AGE1&amp;amp;showAttributes=true&amp;amp;sources=true</interface.application.db.xml.update.url> -->
-				<!-- <interface.application.pref.biosamples.update.timestamp>0</interface.application.pref.biosamples.update.timestamp> 
-					<interface.application.pref.reload-all.update.schedule>0 0 12 * * ?</interface.application.pref.reload-all.update.schedule> 
-					<interface.application.pref.reload-all.update.interval /> <interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
-				<!-- <interface.application.db.xml.update.url>http://tomcat-15:21480/biosamples/</interface.application.db.xml.update.url> 
-					<interface.application.db.xml.update.username>rui</interface.application.db.xml.update.username> 
-					<interface.application.db.xml.update.password>ruipereire</interface.application.db.xml.update.password> 
-					<interface.application.db.xml.update.cookie>AGESESS</interface.application.db.xml.update.cookie> -->
-				<!-- <interface.application.pref.biosamples.update.timestamp>0</interface.application.pref.biosamples.update.timestamp> 
-					<interface.application.pref.reload-all.update.schedule /> <interface.application.pref.reload-all.update.interval>15</interface.application.pref.reload-all.update.interval> 
-					<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
-				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup_MikeListAtts_x16</interface.application.db.xml.connection.dbname> -->
 				<interface.application.pref.reports.recipients>rpereira@ebi.ac.uk</interface.application.pref.reports.recipients>
-
-				<!-- <interface.application.ebi.search> <![CDATA[ <rule> <from>^/search</from> 
-					<to type="forward" last="true">/servlets/proxy/http://orange.ebi.ac.uk:8180/microarray-as/ae/json/v2/efotree</to> 
-					</rule> ]]> </interface.application.ebi.search> -->
 			</properties>
 		</profile>
 
@@ -183,14 +140,14 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<interface.application.base.path>/biosamples</interface.application.base.path>
+				<interface.application.base.path>/biostudies</interface.application.base.path>
 				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
 				<!-- <interface.application.body.class>bs_dev_preview</interface.application.body.class> -->
 				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
 				<interface.application.log.default.priority>DEBUG</interface.application.log.default.priority>
-				<interface.application.db.xml.connection.dbname>biosamplesAEGroupDev</interface.application.db.xml.connection.dbname>
+				<interface.application.db.xml.connection.dbname>biostudies</interface.application.db.xml.connection.dbname>
 				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname> -->
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
@@ -210,7 +167,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<interface.application.base.path>/biosamples</interface.application.base.path>
+				<interface.application.base.path>/biostudies</interface.application.base.path>
 				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
 				<interface.application.body.class>bs_dev_preview</interface.application.body.class>
 				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
@@ -243,14 +200,14 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<interface.application.base.path>/biosamples</interface.application.base.path>
+				<interface.application.base.path>/biostudies</interface.application.base.path>
 				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
 				<!-- <interface.application.body.class>bs_dev_preview</interface.application.body.class> -->
 				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
 				<interface.application.log.default.priority>DEBUG</interface.application.log.default.priority>
-				<interface.application.db.xml.connection.dbname>biosamplesAEGroupExperimental1</interface.application.db.xml.connection.dbname>
+				<interface.application.db.xml.connection.dbname>biostudiesExperimental1</interface.application.db.xml.connection.dbname>
 				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname> -->
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
@@ -270,14 +227,14 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<interface.application.base.path>/biosamples</interface.application.base.path>
+				<interface.application.base.path>/biostudies</interface.application.base.path>
 				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
 				<!-- <interface.application.body.class>bs_dev_preview</interface.application.body.class> -->
 				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
 				<interface.application.log.default.priority>DEBUG</interface.application.log.default.priority>
-				<interface.application.db.xml.connection.dbname>biosamplesAEGroupExperimental2</interface.application.db.xml.connection.dbname>
+				<interface.application.db.xml.connection.dbname>biostudiesExperimental2</interface.application.db.xml.connection.dbname>
 				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname> -->
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
@@ -299,11 +256,11 @@
 
 				<interface.application.body.class>bs_dev_preview</interface.application.body.class>
 				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
-				<interface.application.base.path>/biosamples</interface.application.base.path>
+				<interface.application.base.path>/biostudies</interface.application.base.path>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
 				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
-				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
+				<interface.application.db.xml.connection.dbname>biostudies</interface.application.db.xml.connection.dbname>
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
 				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportProd.xml</interface.application.db.xml.update.url>
@@ -312,16 +269,6 @@
 				<interface.application.pref.reload-all.update.interval />
 				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
 
-
-				<!-- <interface.application.db.xml.update.active>true</interface.application.db.xml.update.active> 
-					<interface.application.db.xml.update.type>age</interface.application.db.xml.update.type> 
-					<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp> 
-					<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule> 
-					<interface.application.pref.reload-all.update.interval /> <interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> 
-					<interface.application.db.xml.update.url>http://tomcat-15:21480/biosamples/</interface.application.db.xml.update.url> 
-					<interface.application.db.xml.update.username>rui</interface.application.db.xml.update.username> 
-					<interface.application.db.xml.update.password>ruipereire</interface.application.db.xml.update.password> 
-					<interface.application.db.xml.update.cookie>AGESESS</interface.application.db.xml.update.cookie> -->
 			</properties>
 		</profile>
 
@@ -337,21 +284,21 @@
 				<interface.application.log.appender.performance.ref>ROLLINGFILEPERFORMANCE-LONDON</interface.application.log.appender.performance.ref>
 				<interface.application.log.default.priority>INFO</interface.application.log.default.priority>
 				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
-				<interface.application.base.path>/biosamples</interface.application.base.path>
+				<interface.application.base.path>/biostudies</interface.application.base.path>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
 				<!-- need to have separate GlobalSetups and Backups per instance -->
 				<interface.application.global.setup.directory>${sys:catalina.base}/deploy/GlobalSetup/${sys:tomcat.hostname}</interface.application.global.setup.directory>
 				<interface.application.global.backup.directory>${sys:catalina.base}/deploy/GlobalSetup_Backups/${sys:tomcat.hostname}</interface.application.global.backup.directory>
 				<!-- need to have separate GlobalSetups and Backups per instance -->
-				<interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname>
+				<interface.application.db.xml.connection.dbname>v</interface.application.db.xml.connection.dbname>
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
 				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportProd.xml</interface.application.db.xml.update.url>
 				<interface.application.pref.reload-all.update.schedule>0 0 6 * * ?</interface.application.pref.reload-all.update.schedule>
 				<interface.application.pref.reload-all.update.interval />
 				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
-				<interface.application.pref.feedback.recipients>biosamples@ebi.ac.uk</interface.application.pref.feedback.recipients>
+				<interface.application.pref.feedback.recipients>rpereira@ebi.ac.uk</interface.application.pref.feedback.recipients>
 				<interface.application.google.analytics>
                     <![CDATA[				
 				<script type="text/javascript">
@@ -372,80 +319,6 @@
 		</profile>
 
 
-		<profile>
-			<id>curator</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<properties>
-				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
-				<interface.application.body.class>bs_curator</interface.application.body.class>
-				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
-				<interface.application.base.path>/biosamples</interface.application.base.path>
-				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
-				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
-				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
-				<interface.application.db.xml.connection.dbname>biosamplesAEGroup_static</interface.application.db.xml.connection.dbname>
-				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
-				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
-				<interface.application.global.setup.directory>${sys:catalina.base}/deploy/GlobalSetup/${sys:tomcat.hostname}</interface.application.global.setup.directory>
-				<interface.application.global.backup.directory>${sys:catalina.base}/deploy/GlobalSetup_Backups/${sys:tomcat.hostname}</interface.application.global.backup.directory>
-				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportDev.xml</interface.application.db.xml.update.url>
-				<interface.application.pref.reload-all.update.schedule>0 0 7 * * ?</interface.application.pref.reload-all.update.schedule>
-				<interface.application.pref.reload-all.update.interval />
-				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
-
-
-
-				<!-- <interface.application.pref.update-global-setup-disk.fileSetup>/ebi/microarray/home/tomcats/COCOA.BIOSD_NEWGUI_CURATOR/deploy/smallBiosamples/Setup</interface.application.pref.update-global-setup-disk.fileSetup> 
-					<interface.application.pref.update-global-setup-disk.fileSetupDB>/ebi/microarray/home/tomcats/COCOA.BIOSD_NEWGUI_CURATOR/deploy/smallBiosamples/SetupDB</interface.application.pref.update-global-setup-disk.fileSetupDB> -->
-				<interface.application.pref.update-global-setup-disk.fileSetup>/ebi/microarray/home/tomcats/BEANS.BIOSD_NEWGUI_DEV/deploy/GlobalSetup/Setup</interface.application.pref.update-global-setup-disk.fileSetup>
-				<interface.application.pref.update-global-setup-disk.fileSetupDB>/ebi/microarray/home/tomcats/BEANS.BIOSD_NEWGUI_DEV/deploy/GlobalSetup/SetupDB</interface.application.pref.update-global-setup-disk.fileSetupDB>
-				<interface.application.pref.update-global-setup-disk.update.schedule>0
-					0 9 * * ?</interface.application.pref.update-global-setup-disk.update.schedule>
-				<interface.application.pref.update-global-setup-disk.update.interval />
-				<interface.application.pref.update-global-setup-disk.update.atstart>false</interface.application.pref.update-global-setup-disk.update.atstart>
-
-				<interface.application.pref.reload-all-disk.update.schedule>0 30 9 *
-					* ?</interface.application.pref.reload-all-disk.update.schedule>
-				<interface.application.pref.reload-all-disk.update.interval />
-				<interface.application.pref.reload-all-disk.update.atstart>false</interface.application.pref.reload-all-disk.update.atstart>
-
-
-				<!-- <interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportDev.xml</interface.application.db.xml.update.url> 
-					<interface.application.pref.reload-all.update.schedule>0 0 4 * * ?</interface.application.pref.reload-all.update.schedule> 
-					<interface.application.pref.reload-all.update.interval /> <interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
-				<!-- <interface.application.db.xml.update.type>age</interface.application.db.xml.update.type> 
-					<interface.application.db.xml.update.timestamp>0</interface.application.db.xml.update.timestamp> 
-					<interface.application.pref.reload-all.update.schedule>0 0 0 * * ?</interface.application.pref.reload-all.update.schedule> 
-					<interface.application.pref.reload-all.update.interval /> <interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart> -->
-
-			</properties>
-		</profile>
-
-		<profile>
-			<id>curator_daily</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<properties>
-				<interface.application.lucene.indexes.build>false</interface.application.lucene.indexes.build>
-				<interface.application.body.class>bs_curator_daily</interface.application.body.class>
-				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
-				<interface.application.base.path>/biosamples</interface.application.base.path>
-				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
-				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
-				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
-				<interface.application.db.xml.connection.dbname>biosamplesAEGroupDaily</interface.application.db.xml.connection.dbname>
-				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
-				<interface.application.db.xml.update.type>age</interface.application.db.xml.update.type>
-				<interface.application.db.xml.update.timestamp>1</interface.application.db.xml.update.timestamp>
-				<interface.application.pref.reload-all.update.schedule />
-				<interface.application.pref.reload-all.update.interval>15</interface.application.pref.reload-all.update.interval>
-				<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
-
-			</properties>
-		</profile>
 
 		<profile>
 			<id>test.ae2_perftest</id>
@@ -554,7 +427,7 @@
 			</resource>
 		</resources>
 		<!-- todo:rpe <finalName>${interface.application.pref.files.prefix}-interface</finalName> -->
-		<finalName>biosamples</finalName>
+		<finalName>biostudies</finalName>
 		<plugins>
 			<plugin> <!-- this enforces clean on package -->
 				<groupId>org.apache.maven.plugins</groupId>
@@ -620,7 +493,7 @@
 				<configuration>
 					<url>http://cocoa:8180/manager</url>
 					<server>cocoa_tomcat</server>
-					<path>/biosamples</path>
+					<path>/biostudies</path>
 				</configuration>
 			</plugin>
 

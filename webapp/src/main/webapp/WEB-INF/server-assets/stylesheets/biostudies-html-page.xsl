@@ -120,7 +120,7 @@
 			<link rel="stylesheet" href="{$context-path}/assets/stylesheets/font-awesome.css"
 				type="text/css" />
 			<link rel="stylesheet"
-				href="{$context-path}/assets/stylesheets/biosamples_common_10.css"
+				href="{$context-path}/assets/stylesheets/biostudies_common_10.css"
 				type="text/css" />
 
 			<xsl:copy-of select="$pExtraCode" />
@@ -234,27 +234,11 @@
 										</label>
 										<!-- Include some example searchterms - keep them short and few! -->
 										<span class="examples">
-											Search by:
-											<select id="biosamples_index" name="biosamples_index"
-												onchange="changeSearch($('#local-search'),$('#biosamples_index option:selected').val())">
-												<option
-													value="${interface.application.base.path}/browse_samples.html">Samples</option>
-												<xsl:choose>
-													<xsl:when
-														test="fn:starts-with($relative-uri, '/browse.html')  or fn:starts-with($relative-uri, '/group')">
-														<option value="${interface.application.base.path}/browse.html"
-															selected="true">Groups</option>
-													</xsl:when>
-													<xsl:otherwise>
-														<option value="${interface.application.base.path}/browse.html">Groups</option>
-													</xsl:otherwise>
-												</xsl:choose>
-											</select> &nbsp;&nbsp;Examples:
-											<a
-												href="javascript:submitFormForExamples($('#local-search'),$('#biosamples_index option:selected').val(),'leukemia')">leukemia</a>
+											Examples: <a
+												href="${interface.application.base.path}/browse.html?keywords=leukemia">leukemia</a>
 											,
 											<a
-												href="javascript:submitFormForExamples($('#local-search'),$('#biosamples_index option:selected').val(),'ArrayExpress')">ArrayExpress</a>
+												href="${interface.application.base.path}/browse.html?keywords=ArrayExpress">ArrayExpress</a>
 										</span>
 									</div>
 
@@ -280,21 +264,14 @@
 								<li>
 									<xsl:attribute name="class">first<xsl:if
 										test="$relative-uri = '/'"> active</xsl:if></xsl:attribute>
-									<a href="{$context-path}/" title="Biosamples ${project.version}.r${buildNumber}">Home</a>
+									<a href="{$context-path}/" title="BioStudies ${project.version}.r${buildNumber}">Home</a>
 								</li>
 								<li>
 									<xsl:if
-										test="fn:starts-with($relative-uri, '/browse_samples.html')  or fn:starts-with($relative-uri, '/sample')">
+										test="fn:starts-with($relative-uri, '/browse.html') or fn:starts-with($relative-uri, '/biostudy')">
 										<xsl:attribute name="class">active</xsl:attribute>
 									</xsl:if>
-									<a href="{$context-path}/browse_samples.html" title="Samples">Samples</a>
-								</li>
-								<li>
-									<xsl:if
-										test="fn:starts-with($relative-uri, '/browse.html') or fn:starts-with($relative-uri, '/group')">
-										<xsl:attribute name="class">active</xsl:attribute>
-									</xsl:if>
-									<a href="{$context-path}/browse.html" title="Groups">Sample Groups</a>
+									<a href="{$context-path}/browse.html" title="Groups">BioStudies</a>
 								</li>
 								<li>
 									<xsl:if test="fn:starts-with($relative-uri, '/help/submit')">
@@ -314,7 +291,7 @@
 										<xsl:attribute name="class">active</xsl:attribute>
 									</xsl:if>
 									<a href="{$context-path}/about.html">About
-										BioSamples</a>
+										BioStudies</a>
 								</li> <!-- If you need to include functional (as opposed to purely navigational) 
 									links in your local menu, add them here, and give them a class of "functional". 
 									Remember: you'll need a class of "last" for whichever one will show up last... 
@@ -420,7 +397,7 @@
 					<xsl:if test="fn:boolean($pBreadcrumbTrail)">
 						<nav id="breadcrumb">
 							<p>
-								<a href="{$context-path}/">BioSamples</a>
+								<a href="{$context-path}/">BioStudies</a>
 								&gt;
 								<xsl:copy-of select="$pBreadcrumbTrail" />
 							</p>
@@ -515,7 +492,7 @@
 				type="text/javascript"></script>
 			<!-- <script src="{$context-path}/assets/scripts/jsdeferred.jquery-0.3.1.js" 
 				type="text/javascript"></script> -->
-			<script src="{$context-path}/assets/scripts/biosamples_common_10.js"
+			<script src="{$context-path}/assets/scripts/biostudies_common_10.js"
 				type="text/javascript"></script>
 
 			<xsl:copy-of select="$pExtraCode" />
