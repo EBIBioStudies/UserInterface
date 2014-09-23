@@ -17,7 +17,7 @@
 <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->
 <!-- Not yet implemented -->
 
-<title>BioSamples &lt; EMBL-EBI</title>
+<title>BioStudies &lt; EMBL-EBI</title>
 <meta name="description" content="EMBL-EBI">
 <!-- Describe what this page is about -->
 <meta name="keywords" content="bioinformatics, europe, institute">
@@ -156,7 +156,7 @@
 				<!-- <h5>Updated today at 06:00</h5> -->
 
 				<ul>
-					<li><span id="totalStudies"></span> Studies</li>
+					<li><span id="totalStudies"></span></li>
 					<!-- <li><span id="totalGroups"></span> Groups</li> -->
 					<!-- <li>XXXX Samples</li>
                     <li>YYYYY groups</li>
@@ -202,8 +202,8 @@
         type="text/javascript"></script>  -->
 	<script src="assets/scripts/jquery.cookie-1.0.js"
 		type="text/javascript"></script>
-	 <script src="assets/scripts/jquery.query-2.1.7m-ebi.js"
-        type="text/javascript"></script>
+	<script src="assets/scripts/jquery.query-2.1.7m-ebi.js"
+		type="text/javascript"></script>
 	<script src="assets/scripts/jquery.autocomplete-1.1.0.130305.js"
 		type="text/javascript"></script>
 	<script src="assets/scripts/jquery.caret-range-1.0.js"
@@ -225,32 +225,36 @@
 
     var contextPath = "<%=contextPath%>";
 
-        function updateBioStudiesStats() {
-            // gets aer stats and updates the page
-            $.get("biosamples-stats.xml").always(onBiosamplesStatsSuccess);
-        }
+		function updateBioStudiesStats() {
+			// gets aer stats and updates the page
+			$.get("biosamples-stats.xml").always(onBiosamplesStatsSuccess);
+		}
 
-        function onBiosamplesStatsError() {
+		function onBiosamplesStatsError() {
 
-        }
+		}
 
-        function numberWithCommas(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
+		function numberWithCommas(x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
 
-        function onBiosamplesStatsSuccess(xml) {
+		function onBiosamplesStatsSuccess(xml) {
 
-            if (undefined != xml) {
-                var bs_repxml = $($(xml).find("biostudies")[0]);
-                var totalstudies = bs_repxml.attr("studies");
-               
+			if (undefined != xml) {
+				var bs_repxml = $($(xml).find("biostudies")[0]);
+				var totalstudies = bs_repxml.attr("studies");
 
-                document.getElementById("totalStudies").innerHTML = numberWithCommas(totalstudies);
-               
-            }
+				var type = "BioStudies";
+				if (totalstudies == 1) {
+					type = "BioStudy";
+				}
 
-        }
-    </script>
+				document.getElementById("totalStudies").innerHTML = numberWithCommas(totalstudies) + " " + type;
+
+			}
+
+		}
+	</script>
 	<!-- end scripts-->
 
 	<!-- Google Analytics details... -->

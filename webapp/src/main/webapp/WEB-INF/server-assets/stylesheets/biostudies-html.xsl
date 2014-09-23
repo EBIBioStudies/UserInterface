@@ -7,8 +7,8 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:search="http://www.ebi.ac.uk/arrayexpress/XSLT/SearchExtension"
 	xmlns:escape="org.apache.commons.lang.StringEscapeUtils" xmlns:html="http://www.w3.org/1999/xhtml"
-	extension-element-prefixes="html xs fn  escape"
-	exclude-result-prefixes="html xs fn escape" version="2.0">
+	extension-element-prefixes="html xs fn  escape search"
+	exclude-result-prefixes="html xs fn escape search" version="2.0">
 
 
 
@@ -74,7 +74,10 @@
 			<xsl:with-param name="pTitleTrail" select="$accession" />
 			<xsl:with-param name="pExtraCSS">
 				<link rel="stylesheet"
-					href="{$context-path}/assets/stylesheets/biosamples_detail_10.css"
+					href="{$context-path}/assets/stylesheets/biostudies_detail_10.css"
+					type="text/css" />
+				<link rel="stylesheet"
+					href="{$context-path}/assets/stylesheets/biostudies_browse_dyntable_10.css"
 					type="text/css" />
 				<!-- need this to have the scrollbars on Chrome/firefox/safari - overwrite 
 					the ebi css definition [PT:53620963] -->
@@ -90,8 +93,8 @@
 			<xsl:with-param name="pExtraJS">
 				<!-- <script src="{$context-path}/assets/scripts/jsdeferred.jquery-0.3.1.js" 
 					type="text/javascript"></script> -->
-				<!-- <script src="{$context-path}/assets/scripts/biosamples_detail_10.js"
-					type="text/javascript"></script> -->
+				<script src="{$context-path}/assets/scripts/biostudies_detail_10.js"
+					type="text/javascript"></script>
 			</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
@@ -146,7 +149,7 @@
 	<xsl:template match="section">
 		<tr>
 			<td>
-				<div class="detail_table">
+				<div id="bs_detail" class="detail_table">
 					<xsl:call-template name="detail-table">
 						<xsl:with-param name="id" select="$accession" />
 						<xsl:with-param name="section" select="." />
@@ -160,66 +163,259 @@
 	<xsl:template name="detail-table">
 		<xsl:param name="id" />
 		<xsl:param name="section" />
-		<h4>
-			Accession
-			<xsl:choose>
-				<!-- test="string-length($vkeywords)>0"> -->
-				<xsl:when
-					test="string-length($vkeywords)>0 and contains($vkeywords,'accession:')">
-					<xsl:call-template name="highlight">
-						<xsl:with-param name="pText" select="@id" />
-						<xsl:with-param name="pFieldName" select="'accession'" />
-					</xsl:call-template>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="@id"></xsl:value-of>
-				</xsl:otherwise>
-			</xsl:choose>
-		</h4>
-		<!-- <table id="bs_results_tablesamplegroupdetail"> -->
-		<xsl:call-template name="process_attributes">
-			<xsl:with-param name="pAttributes" select="$section/attributes"></xsl:with-param>
-		</xsl:call-template>
-
-		<xsl:call-template name="process_files">
-			<xsl:with-param name="pAttributes" select="$section/files"></xsl:with-param>
-		</xsl:call-template>
-
-		<xsl:call-template name="process_links">
-			<xsl:with-param name="pAttributes" select="$section/links"></xsl:with-param>
-		</xsl:call-template>
-		
-		<xsl:if test="count($section/subsections/section) &gt; 0">
-		<table>
+		<table id="bs_results_tabledetail">
 			<tr>
-			<td>
-		<b>Subsections</b>
-			<xsl:for-each select="$section/subsections/section">
-			<xsl:call-template name="detail-table">
-						<xsl:with-param name="id" select="@id" />
-						<xsl:with-param name="section" select="." />
-			</xsl:call-template>
-			</xsl:for-each>
-		
-			</td>
-			</tr>
-			</table>
-		</xsl:if>
+				<td>
+					<h4>
+						Accession
+						<xsl:choose>
+							<!-- test="string-length($vkeywords)>0"> -->
+							<xsl:when
+								test="string-length($vkeywords)>0 and contains($vkeywords,'accession:')">
+								<xsl:call-template name="highlight">
+									<xsl:with-param name="pText" select="$id" />
+									<xsl:with-param name="pFieldName" select="'accession'" />
+								</xsl:call-template>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="@id"></xsl:value-of>
+							</xsl:otherwise>
+						</xsl:choose>
+					</h4>
+					<!-- <table id="bs_results_tablesamplegroupdetail"> -->
+					<xsl:call-template name="process_attributes">
+						<xsl:with-param name="pAttributes" select="$section/attributes"></xsl:with-param>
+					</xsl:call-template>
 
+					<xsl:call-template name="process_files">
+						<xsl:with-param name="pAttributes" select="$section/files"></xsl:with-param>
+					</xsl:call-template>
+
+					<xsl:call-template name="process_links">
+						<xsl:with-param name="pAttributes" select="$section/links"></xsl:with-param>
+					</xsl:call-template>
+
+					<xsl:if test="count($section/subsections/section) &gt; 0">
+						<div style="margin-left:40px">
+
+							<table id="bs_results_tabledetail_dyna">
+								<tr>
+									<td>
+										<b>Subsections biosamples</b>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<xsl:call-template name="process_subsections_biosamples">
+											<xsl:with-param name="pSubsections"
+												select="$section/subsections/section[@biosample]" />
+										</xsl:call-template>
+									</td>
+								</tr>
+							</table>
+							<table id="bs_results_tabledetail">
+								<tr>
+									<td>
+										<b>Subsections</b>
+										<xsl:for-each select="$section/subsections/section[not(@biosample)]">
+											<xsl:call-template name="detail-table">
+												<xsl:with-param name="id" select="@id" />
+												<xsl:with-param name="section" select="." />
+											</xsl:call-template>
+										</xsl:for-each>
+
+									</td>
+								</tr>
+							</table>
+						</div>
+					</xsl:if>
+				</td>
+			</tr>
+		</table>
 	</xsl:template>
 
 
 
+	<xsl:template name="process_subsections_biosamples">
+		<xsl:param name="pSubsections" />
+
+		<div id="bs_results_listsamples">
+			<table class="persist-header" id="bs_samples_table" border="0"
+				cellpadding="0" width="100%" cellspacing="0" style="visibility: visible;">
+				<colgroup>
+					<col class="col_left_fixed" style="width:120px;" />
+					<col class="col_middle_scrollable" style="width:100%" />
+					<col class="col_right_fixed" style="width: 150px;" />
+				</colgroup>
+				<tbody>
+					<tr>
+						<td id="left_fixed">
+							<!-- just to have the scroll height size to be aligned with the attributes 
+								table (middle area) -->
+							<div id="wrapper_top_scroll_sides">
+								<div id="div_top_scroll_sides">
+								</div>
+							</div>
+							<table id="src_name_table" border="0" cellpadding="0"
+								cellspacing="0" width="100%">
+								<thead>
+									<tr>
+										<th class="bs_results_accession sortable bs_results_Accession"
+											id="bs_results_header_accession">
+											Accession
+										</th>
+									</tr>
+								</thead>
+								<tbody id="bs_results_tbody_left">
+									<xsl:for-each select="$pSubsections">
+										<tr>
+											<td>
+												<xsl:copy-of select="string(./@id)" />
+											</td>
+										</tr>
+									</xsl:for-each>
+
+								</tbody>
+							</table>
+
+						</td>
+
+
+
+						<td id="middle_scrollable">
+							<div id="wrapper_top_scroll">
+								<div id="div_top_scroll">
+								</div>
+							</div>
+							<div class="attr_table_shadow_container">
+								<div class="attr_table_scroll">
+									<table id="attr_table" border="0" cellpadding="0"
+										cellspacing="0" width="100%">
+										<thead>
+											<tr>
+
+												<xsl:for-each
+													select="distinct-values($pSubsections/attributes/attribute/@name[not(../../@biosample)])">
+													<th>
+														<span class="table_header_inner_att">
+															<!-- <xsl:value-of select="replace(.,' ' , '_')"></xsl:value-of>&nbsp; -->
+															<xsl:copy-of select="." />
+														</span>
+													</th>
+												</xsl:for-each>
+											</tr>
+										</thead>
+										<tbody id="bs_results_tbody_middle">
+											<xsl:for-each select="$pSubsections[@biosample]">
+												<xsl:variable name="vSection" select="."></xsl:variable>
+												<tr>
+													<xsl:for-each
+														select="distinct-values($pSubsections/attributes/attribute/@name[not(../../@biosample)])">
+														<xsl:variable name="vAtt" select="."></xsl:variable>
+														<td>
+															<xsl:copy-of
+																select="$vSection/attributes/attribute[@name=$vAtt]"></xsl:copy-of>
+														</td>
+													</xsl:for-each>
+
+												</tr>
+											</xsl:for-each>
+
+										</tbody>
+									</table>
+								</div>
+								<div class="left_shadow" style="display: none;"></div>
+								<div class="right_shadow" style="display: none;"></div>
+							</div>
+						</td>
+
+
+						<td id="right_fixed">
+							<!-- just to have the scroll height size to be aligned with the attributes 
+								table (middle area) -->
+							<div id="wrapper_top_scroll_sides">
+								<div id="div_top_scroll_sides">
+								</div>
+							</div>
+							<table id="links_table" border="0" cellpadding="0"
+								cellspacing="0" width="100%">
+								<thead>
+									<tr>
+										<!-- I will not allow to sort -->
+										<th class="bs_results_database sortable bs_results_files"
+											id="bs_results_header_files">
+											Files
+										</th>
+										<th class="bs_results_database sortable bs_results_links"
+											id="bs_results_header_links">
+											Links
+										</th>
+									</tr>
+								</thead>
+								<tbody id="bs_results_tbody_right">
+									<xsl:for-each select="$pSubsections[@biosample]">
+										<tr>
+											<td>
+												<xsl:copy-of select="'file'" />
+											</td>
+											<td>
+												<xsl:copy-of select="'link'" />
+											</td>
+										</tr>
+									</xsl:for-each>
+
+								</tbody>
+							</table>
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+		</div>
+
+	</xsl:template>
+
+	<xsl:template name="process_subsections_biosamples_old">
+		<xsl:param name="pSubsections" />
+
+		<table>
+			<thead>
+				<tr>
+					<xsl:for-each
+						select="distinct-values($pSubsections/attributes/attribute/@name[not(../../@biosample)])">
+						<th>
+							<xsl:copy-of select="."></xsl:copy-of>
+						</th>
+					</xsl:for-each>
+				</tr>
+			</thead>
+
+			<tbody>
+
+				<xsl:for-each select="$pSubsections[@biosample]">
+					<xsl:variable name="vSection" select="."></xsl:variable>
+					<tr>
+						<xsl:for-each
+							select="distinct-values($pSubsections/attributes/attribute/@name[not(../../@biosample)])">
+							<xsl:variable name="vAtt" select="."></xsl:variable>
+							<td>
+								<xsl:copy-of select="$vSection/attributes/attribute[@name=$vAtt]"></xsl:copy-of>
+							</td>
+						</xsl:for-each>
+
+					</tr>
+				</xsl:for-each>
+
+			</tbody>
+
+		</table>
+
+	</xsl:template>
+
 	<xsl:template name="process_attributes">
 		<xsl:param name="pAttributes" />
-		<table>
-			<tr>
-				<td colspan="2">
-					<b>
-						<u>Attributes</u>
-					</b>
-				</td>
-			</tr>
+		<table id="bs_results_tabledetail">
+			<!-- <tr> <td colspan="2"> <b> <u>Attributes</u> </b> </td> </tr> -->
 			<xsl:for-each select="$pAttributes/attribute">
 				<xsl:call-template name="process_attribute">
 					<xsl:with-param name="pAttribute" select="." />
@@ -236,10 +432,15 @@
 			<td class="col_title">
 				<b>
 					<xsl:value-of select="@name"></xsl:value-of>
+					:
 				</b>
 			</td>
 			<td>
-				<xsl:value-of select="."></xsl:value-of>
+				<xsl:call-template name="highlight">
+					<xsl:with-param name="pText" select="." />
+					<xsl:with-param name="pFieldName" select="@name" />
+				</xsl:call-template>
+
 			</td>
 		</tr>
 	</xsl:template>
@@ -248,130 +449,144 @@
 
 	<xsl:template name="process_files">
 		<xsl:param name="pAttributes" />
-		<table>
+		<table id="bs_results_tabledetail">
 			<tr>
-				<td colspan="2" align="left">
+				<td align="left">
 					<b>
-						<u>Files</u>
+						<a href="javascript:ShwHid('FileHiddenDiv{generate-id($pAttributes)}')">Files:</a>
 					</b>
 				</td>
 			</tr>
-			<tr>
-				<td colspan="2" align="left">
-					<xsl:for-each select="$pAttributes/file">
-						<xsl:call-template name="process_file">
-							<xsl:with-param name="pAttribute" select="." />
-						</xsl:call-template>
-					</xsl:for-each>
-				</td>
-			</tr>
 		</table>
+		<div class="mid" id="FileHiddenDiv{generate-id($pAttributes)}"
+			style="display: none">
+			<table id="bs_results_tabledetail">
+				<tr>
+					<td colspan="2" align="left">
+						<xsl:for-each select="$pAttributes/file">
+							<xsl:call-template name="process_file">
+								<xsl:with-param name="pAttribute" select="." />
+							</xsl:call-template>
+						</xsl:for-each>
+					</td>
+				</tr>
+			</table>
+		</div>
 	</xsl:template>
 
 
 
 	<xsl:template name="process_file">
 		<xsl:param name="pAttribute" />
-		<table>
-		<tr>
-			<td>
-				<b>
-					<xsl:value-of select="@id"></xsl:value-of>
-				</b>
-			</td>
-		</tr>
-		<tr><td>
-		<table>
-		<xsl:for-each select="$pAttribute/attributes/attribute">
-			<xsl:call-template name="process_attribute_files">
-				<xsl:with-param name="pAttribute" select="." />
-			</xsl:call-template>
-		</xsl:for-each>
-		</table>
-		</td></tr>
+		<table id="bs_results_tabledetail">
+			<tr>
+				<td>
+					<b>
+						<xsl:value-of select="@id"></xsl:value-of>
+					</b>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table id="bs_results_tabledetail">
+						<xsl:for-each select="$pAttribute/attributes/attribute">
+							<xsl:call-template name="process_attribute_files">
+								<xsl:with-param name="pAttribute" select="." />
+							</xsl:call-template>
+						</xsl:for-each>
+					</table>
+				</td>
+			</tr>
 		</table>
 	</xsl:template>
 
 
 	<xsl:template name="process_attribute_files">
 		<xsl:param name="pAttribute" />
-		
-			<tr>
-				<td class="col_title">
-					<b>
-						<xsl:value-of select="@name"></xsl:value-of>
-					</b>
-				</td>
-				<td>
-					<xsl:value-of select="."></xsl:value-of>
-				</td>
-			</tr>
-	
+
+		<tr>
+			<td class="col_title">
+				<b>
+					<xsl:value-of select="@name"></xsl:value-of>
+				</b>
+			</td>
+			<td>
+				<xsl:value-of select="."></xsl:value-of>
+			</td>
+		</tr>
+
 	</xsl:template>
 
 
 
 	<xsl:template name="process_links">
 		<xsl:param name="pAttributes" />
-		<table>
+		<table id="bs_results_tabledetail">
 			<tr>
-				<td colspan="2" align="left">
+				<td align="left">
 					<b>
-						<u>Links</u>
+						<a href="javascript:ShwHid('LinkHiddenDiv{generate-id($pAttributes)}')">Links:</a>
 					</b>
 				</td>
 			</tr>
-			<tr>
-				<td colspan="2" align="left">
-					<xsl:for-each select="$pAttributes/link">
-						<xsl:call-template name="process_link">
-							<xsl:with-param name="pAttribute" select="." />
-						</xsl:call-template>
-					</xsl:for-each>
-				</td>
-			</tr>
 		</table>
+		<div class="mid" id="LinkHiddenDiv{generate-id($pAttributes)}"
+			style="display: none">
+			<table id="bs_results_tabledetail">
+				<tr>
+					<td colspan="2" align="left">
+						<xsl:for-each select="$pAttributes/link">
+							<xsl:call-template name="process_link">
+								<xsl:with-param name="pAttribute" select="." />
+							</xsl:call-template>
+						</xsl:for-each>
+					</td>
+				</tr>
+			</table>
+		</div>
 	</xsl:template>
 
 
 
 	<xsl:template name="process_link">
 		<xsl:param name="pAttribute" />
-		<table>
-		<tr>
-			<td>
-				<b>
-					<xsl:value-of select="@url"></xsl:value-of>
-				</b>
-			</td>
-		</tr>
-		<tr><td>
-		<table>
-		<xsl:for-each select="$pAttribute/attributes/attribute">
-			<xsl:call-template name="process_attribute_links">
-				<xsl:with-param name="pAttribute" select="." />
-			</xsl:call-template>
-		</xsl:for-each>
-		</table>
-		</td></tr>
+		<table id="bs_results_tabledetail">
+			<tr>
+				<td>
+					<b>
+						<xsl:value-of select="@url"></xsl:value-of>
+					</b>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table id="bs_results_tabledetail">
+						<xsl:for-each select="$pAttribute/attributes/attribute">
+							<xsl:call-template name="process_attribute_links">
+								<xsl:with-param name="pAttribute" select="." />
+							</xsl:call-template>
+						</xsl:for-each>
+					</table>
+				</td>
+			</tr>
 		</table>
 	</xsl:template>
 
 
 	<xsl:template name="process_attribute_links">
 		<xsl:param name="pAttribute" />
-		
-			<tr>
-				<td class="col_title">
-					<b>
-						<xsl:value-of select="@name"></xsl:value-of>
-					</b>
-				</td>
-				<td>
-					<xsl:value-of select="."></xsl:value-of>
-				</td>
-			</tr>
-	
+
+		<tr>
+			<td class="col_title">
+				<b>
+					<xsl:value-of select="@name"></xsl:value-of>
+				</b>
+			</td>
+			<td>
+				<xsl:value-of select="."></xsl:value-of>
+			</td>
+		</tr>
+
 	</xsl:template>
 
 

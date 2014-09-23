@@ -110,7 +110,7 @@
 			<nav>
 				<ul class="grid_24" id="local-nav">
 					<li class="first <%=homeActive%>"><a href="${interface.application.base.path}/"
-						title="Biosamples">Home</a></li>
+						title="BioStudies">Home</a></li>
 					<li class="<%=biostudyActive%>"><a
 						href="${interface.application.base.path}/browse.html" title="Groups">BioStudies</a></li>
 					<li class="<%=submitActive%>"><a
@@ -171,7 +171,7 @@
 		%>
 		<section id="ae-login" style="display: none">
 			<h3>
-				BioSamples login<a id="ae-login-close" href="#"
+				BioStudies login<a id="ae-login-close" href="#"
 					class="icon icon-functional" data-icon="x"></a>
 			</h3>
 			<form id="ae-login-form" method="post"

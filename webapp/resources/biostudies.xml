@@ -165,7 +165,25 @@
 				<field name="class" title="by class" type="string"
 					path="@class" analyze="true" store="true" escape="false" 
 					autocompletion="false" />
-					
+	
+					<field name="files" title="by files" type="string"
+					path="string-join(files//text(), ' ')" analyze="true" store="true" escape="false" 
+					autocompletion="false" />
+	
+					<field name="filescount" title="by filescount" type="string"
+					path="(count(files/file)) cast as xs:integer" analyze="true" store="true" escape="false" 
+					autocompletion="false" sortfields="filescount"/>
+	
+			
+					<field name="links" title="by links" type="string"
+					path="string-join(links//text(), ' ')" analyze="true" store="true" escape="false" 
+					autocompletion="false" />
+	
+					<field name="linkscount" title="by linkscount" type="string"
+					path="(count(links/link)) cast as xs:integer" analyze="true" store="true" escape="false" 
+					autocompletion="false" sortfields="linkscount"/>
+			
+								
 					<!-- attributes names - i need this to the autocomplete -->
 				<field name="attributeNames" type="string"
 					path="attributes/attribute/@name" analyze="true" store="true"

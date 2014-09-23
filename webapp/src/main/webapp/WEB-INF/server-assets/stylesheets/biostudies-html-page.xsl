@@ -99,7 +99,7 @@
 					<xsl:value-of select="$pTitleTrail" />
 					&lt;
 				</xsl:if>
-				<xsl:text>BioSamples &lt; EMBL-EBI</xsl:text>
+				<xsl:text>BioStudies &lt; EMBL-EBI</xsl:text>
 			</title>
 			<meta name="description" content="EMBL-EBI" />   <!-- Describe what this page is about -->
 			<meta name="keywords" content="bioinformatics, europe, institute" /> <!-- A few keywords that relate to the content of THIS PAGE (not the whol 
@@ -223,7 +223,7 @@
 							and drop the class="grid_12 alpha" class from local-title above -->
 
 						<div class="grid_12 omega">
-							<form id="local-search" name="local-search" action="browse.html"
+							<form id="local-search" name="local-search" action="${interface.application.base.path}/browse.html"
 								method="get">
 
 								<fieldset>
@@ -751,7 +751,7 @@
 					<xsl:choose>
 						<xsl:when test="$pTotal=0">
 							No
-							<xsl:copy-of select="concat($pName,'s')"></xsl:copy-of>
+							<xsl:copy-of select="$pName"></xsl:copy-of>
 							found.
 						</xsl:when>
 						<xsl:otherwise>

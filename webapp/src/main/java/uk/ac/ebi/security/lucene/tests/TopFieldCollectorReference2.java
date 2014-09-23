@@ -2,17 +2,13 @@ package uk.ac.ebi.security.lucene.tests;
 
 import java.io.IOException;
 
+
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.Collector;
 import org.apache.lucene.search.FieldCache;
-import org.apache.lucene.search.FieldValueHitQueue;
-import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Scorer;
-import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.TopDocsCollector;
 import org.apache.lucene.search.TopFieldCollector;
-import org.apache.lucene.util.PriorityQueue;
 
 ///public class TopFieldCollectorReference2 extends TopDocsCollector<ScoreDoc> {
 

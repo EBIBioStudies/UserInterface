@@ -1576,7 +1576,7 @@ public abstract class AbstractIndexEnvironment {
 									XPathConstants.STRING);
 
 								addIndexField(luceneDoc,attributeName , attributeValue,
-										true, false, true);
+										true, true, true);
 						}
 					}
 				}

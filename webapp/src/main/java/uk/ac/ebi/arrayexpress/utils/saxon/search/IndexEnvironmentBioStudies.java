@@ -84,30 +84,78 @@ public class IndexEnvironmentBioStudies extends AbstractIndexEnvironment {
 		// getInfoDB();
 		// search
 		if (!map.containsKey("accession")) {
+		
+			ArrayList<String> list = new ArrayList<String>();
+			list.add("aaaaa");
+			list.add("bbbbb");
+			list.add("ccccc");
+			list.add("ddddd");
+			list.add("eeeee");
+			list.add("fffff");
+			list.add("ggggg");
+			list.add("hhhhh");
+			list.add("iiiii");
+//			list.add("aaa");
+//			list.add("bbb");
+//			list.add("ccc");
+//			list.add("ddd");
+//			list.add("eee");
+//			list.add("fff");
+//			list.add("ggg");
+//			list.add("hhh");
+//			list.add("iii");
+//			list.add("aaa");
+//			list.add("bbb");
+//			list.add("ccc");
+//			list.add("ddd");
+//			list.add("eee");
+//			list.add("fff");
+//			list.add("ggg");
+//			list.add("hhh");
+//			list.add("iii");
+			
 			totalRes.append("<content><all>");
+			totalRes.append("<attributes>");
+			for (String att : list) {
+				totalRes.append("<attribute>" + att + "</attribute>");			
+			}
+			totalRes.append("</attributes>");
+
+
+			
+			
 			for (int i = initialExp; i < finalExp; i++) {
 
 				int docId = hits[i].doc;
 				Document doc = isearcher.doc(docId);
 				totalRes.append("<entity>");
 				totalRes.append("<id>" + doc.get("accession") + "</id>");
-				totalRes.append("<description>"
-						+ StringEscapeUtils.escapeXml(doc.get("title"))
-						//+ doc.get("title")
-						+ "</description>");
-				StringBuilder dbs =new StringBuilder();
-				for (String x : doc.getValues("databaseinfo")) {
-					String[] arr =x.split("###");
-					//System.out.println("Valor->" + x);
-					dbs.append("<database>");
-					dbs.append("<name>" + arr[0].trim() +  "</name>");
-					dbs.append("<url>" + StringEscapeUtils.escapeXml(arr[1].trim()) +  "</url>");
-					dbs.append("<id>" +  StringEscapeUtils.escapeXml(arr[2].trim()) +  "</id>");
-					dbs.append("</database>");
+//				totalRes.append("<description>"
+//						+ StringEscapeUtils.escapeXml(doc.get("title"))
+//						+ "</description>");
+
+//				StringBuilder dbs =new StringBuilder();
+//				for (String x : doc.getValues("databaseinfo")) {
+//					String[] arr =x.split("###");
+//					//System.out.println("Valor->" + x);
+//					dbs.append("<database>");
+//					dbs.append("<name>" + arr[0].trim() +  "</name>");
+//					dbs.append("<url>" + StringEscapeUtils.escapeXml(arr[1].trim()) +  "</url>");
+//					dbs.append("<id>" +  StringEscapeUtils.escapeXml(arr[2].trim()) +  "</id>");
+//					
+//					dbs.append("</database>");
+//				}
+//				totalRes.append("<databases>" + dbs
+//						+ "</databases>");
+//				totalRes.append("<samples>" + doc.get("samples") + "</samples>");
+				
+				totalRes.append("<linkscount>" + doc.get("linkscount") + "</linkscount>");
+				totalRes.append("<filescount>" + doc.get("filescount") + "</filescount>");
+				totalRes.append("<attributes>");
+				for (String att : list) {
+					totalRes.append("<attribute name='"+ att+"'>" + doc.get(att) + "</attribute>");			
 				}
-				totalRes.append("<databases>" + dbs
-						+ "</databases>");
-				totalRes.append("<samples>" + doc.get("samples") + "</samples>");
+				totalRes.append("</attributes>");
 				totalRes.append("</entity>");
 
 			}
