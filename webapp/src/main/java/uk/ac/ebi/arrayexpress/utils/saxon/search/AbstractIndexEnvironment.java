@@ -1522,6 +1522,7 @@ public abstract class AbstractIndexEnvironment {
 	public Document processEntryIndex(Object node, Configuration config,
 			XPathQueryService service, Map<String, XPathExpression> fieldXpe)
 			throws Exception {
+		//logger.info("new doc");
 		Document luceneDoc = new Document();
 		XPath xp = new XPathEvaluator(config);
 		for (FieldInfo field : fields.values()) {
@@ -1574,8 +1575,8 @@ public abstract class AbstractIndexEnvironment {
 							String attributeValue = (String) fieldXpe.get(
 									"attributeValue").evaluate(object,
 									XPathConstants.STRING);
-
-								addIndexField(luceneDoc,attributeName , attributeValue,
+								//logger.info(attributeName+"->" + attributeValue);
+								addIndexField(luceneDoc,attributeName.toLowerCase() , attributeValue,
 										true, true, true);
 						}
 					}

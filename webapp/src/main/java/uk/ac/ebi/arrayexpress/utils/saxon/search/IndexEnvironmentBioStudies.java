@@ -66,9 +66,8 @@ public class IndexEnvironmentBioStudies extends AbstractIndexEnvironment {
 		// I'm calling this to clean the reference to the IndexReader->
 		// closeIndexReader();getIndexReader();
 		super.setup();
-		this.xmlDBConnectionPool = (XmlDbConnectionPool) Application.getAppComponent("XmlDbConnectionPool");
-
-
+		this.xmlDBConnectionPool = (XmlDbConnectionPool) Application
+				.getAppComponent("XmlDbConnectionPool");
 
 	}
 
@@ -84,76 +83,68 @@ public class IndexEnvironmentBioStudies extends AbstractIndexEnvironment {
 		// getInfoDB();
 		// search
 		if (!map.containsKey("accession")) {
-		
+
 			ArrayList<String> list = new ArrayList<String>();
-			list.add("aaaaa");
-			list.add("bbbbb");
-			list.add("ccccc");
-			list.add("ddddd");
-			list.add("eeeee");
-			list.add("fffff");
-			list.add("ggggg");
-			list.add("hhhhh");
-			list.add("iiiii");
-//			list.add("aaa");
-//			list.add("bbb");
-//			list.add("ccc");
-//			list.add("ddd");
-//			list.add("eee");
-//			list.add("fff");
-//			list.add("ggg");
-//			list.add("hhh");
-//			list.add("iii");
-//			list.add("aaa");
-//			list.add("bbb");
-//			list.add("ccc");
-//			list.add("ddd");
-//			list.add("eee");
-//			list.add("fff");
-//			list.add("ggg");
-//			list.add("hhh");
-//			list.add("iii");
-			
+			list.add("title");
+			list.add("description");
+			// list.add("aaaaa");
+			// list.add("bbbbb");
+			// list.add("ccccc");
+			// list.add("ddddd");
+			// list.add("eeeee");
+			// list.add("fffff");
+			// list.add("ggggg");
+			// list.add("hhhhh");
+			// list.add("iiiii");
+			// list.add("aaa");
+			// list.add("bbb");
+			// list.add("ccc");
+			// list.add("ddd");
+			// list.add("eee");
+			// list.add("fff");
+			// list.add("ggg");
+			// list.add("hhh");
+			// list.add("iii");
+			// list.add("aaa");
+			// list.add("bbb");
+			// list.add("ccc");
+			// list.add("ddd");
+			// list.add("eee");
+			// list.add("fff");
+			// list.add("ggg");
+			// list.add("hhh");
+			// list.add("iii");
+
 			totalRes.append("<content><all>");
 			totalRes.append("<attributes>");
 			for (String att : list) {
-				totalRes.append("<attribute>" + att + "</attribute>");			
+				totalRes.append("<attribute>" + att + "</attribute>");
 			}
 			totalRes.append("</attributes>");
 
-
-			
-			
+			//I will not limit the chars for now
+			int maxChars = 200000;
 			for (int i = initialExp; i < finalExp; i++) {
 
 				int docId = hits[i].doc;
 				Document doc = isearcher.doc(docId);
 				totalRes.append("<entity>");
 				totalRes.append("<id>" + doc.get("accession") + "</id>");
-//				totalRes.append("<description>"
-//						+ StringEscapeUtils.escapeXml(doc.get("title"))
-//						+ "</description>");
-
-//				StringBuilder dbs =new StringBuilder();
-//				for (String x : doc.getValues("databaseinfo")) {
-//					String[] arr =x.split("###");
-//					//System.out.println("Valor->" + x);
-//					dbs.append("<database>");
-//					dbs.append("<name>" + arr[0].trim() +  "</name>");
-//					dbs.append("<url>" + StringEscapeUtils.escapeXml(arr[1].trim()) +  "</url>");
-//					dbs.append("<id>" +  StringEscapeUtils.escapeXml(arr[2].trim()) +  "</id>");
-//					
-//					dbs.append("</database>");
-//				}
-//				totalRes.append("<databases>" + dbs
-//						+ "</databases>");
-//				totalRes.append("<samples>" + doc.get("samples") + "</samples>");
-				
-				totalRes.append("<linkscount>" + doc.get("linkscount") + "</linkscount>");
-				totalRes.append("<filescount>" + doc.get("filescount") + "</filescount>");
+				totalRes.append("<linkscount>" + doc.get("linkscount")
+						+ "</linkscount>");
+				totalRes.append("<filescount>" + doc.get("filescount")
+						+ "</filescount>");
 				totalRes.append("<attributes>");
 				for (String att : list) {
-					totalRes.append("<attribute name='"+ att+"'>" + doc.get(att) + "</attribute>");			
+					String value=doc.get(att)!=null?doc.get(att):"";
+					if (value.length() > maxChars) {
+						totalRes.append("<attribute name='" + att + "'>"
+								+ value.substring(0, maxChars)
+								+ " ...</attribute>");
+					} else {
+						totalRes.append("<attribute name='" + att + "'>"
+								+ value + "</attribute>");
+					}
 				}
 				totalRes.append("</attributes>");
 				totalRes.append("</entity>");
@@ -170,7 +161,7 @@ public class IndexEnvironmentBioStudies extends AbstractIndexEnvironment {
 			try {
 
 				// coll = DatabaseManager.getCollection(connectionString);
-				Collection coll=xmlDBConnectionPool.getCollection();
+				Collection coll = xmlDBConnectionPool.getCollection();
 				XPathQueryService service = (XPathQueryService) coll
 						.getService("XPathQueryService", "1.0");
 				totalRes.append("(");
@@ -194,12 +185,10 @@ public class IndexEnvironmentBioStudies extends AbstractIndexEnvironment {
 
 				ResourceSet set = null;
 
-				set = service
-						.query("<content><all>{for $x in "
-								+ totalRes.toString()
-								+ " let $group:=//section[@id=($x)]"
-								+ " return $group "
-								+ " }</all></content>");
+				set = service.query("<content><all>{for $x in "
+						+ totalRes.toString()
+						+ " let $group:=//section[@id=($x)]"
+						+ " return $group " + " }</all></content>");
 				// +
 				// " return <SampleGroup samplecount=\"{count($group/Sample)}\"> {$group/(@*, * except Sample)} <attributes>{distinct-values($group/Sample/attribute[@dataType!='INTEGER']/replace(@class, ' ' , '-'))} </attributes> <attributesinteger>{distinct-values($group/Sample/attribute[@dataType='INTEGER']/replace(@class, ' ' , '-'))} </attributesinteger></SampleGroup> "
 
@@ -241,7 +230,5 @@ public class IndexEnvironmentBioStudies extends AbstractIndexEnvironment {
 		}
 		return ret;
 	}
-
-	
 
 }

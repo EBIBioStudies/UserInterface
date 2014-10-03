@@ -45,14 +45,18 @@ border-spacing: 0;
 #bs_results_tabledetail tr td{
 padding: 8px 5px 5px 5px;
 border: 0 none;
+font-size: 96%;
 }
 
 #bs_results_tabledetail_dyna tr td{
 padding: 0px 0px 0px 0px;
 border: 0 none;
+font-size: 96%;
 }
+
 .col_title {
 width: 100px;
 white-space: nowrap;
 text-align: right;
+font-weight: bold; 
 }

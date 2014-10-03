@@ -46,6 +46,9 @@ div#local-masthead { background-color: #3D7A99; }
 
 
 
+td.container > div { width: 100%; height: 48px; overflow:hidden;text-overflow:ellipsis; }
+td.container { height: 48px; }
+
 * {
 text-align: inherit;
 font-weight: inherit;

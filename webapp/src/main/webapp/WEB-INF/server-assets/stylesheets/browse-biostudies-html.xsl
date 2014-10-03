@@ -101,6 +101,20 @@
 					type="text/javascript"></script> -->
 			</xsl:with-param>
 		</xsl:call-template>
+
+		<!-- <a href='javascript:alinhar()'>Alinhar</a> <script type="text/javascript"> 
+			function alinhar(){ alert('rui'); var table_left =document.getElementById("src_name_table"); 
+			var table_middle =document.getElementById("attr_table"); var table_right 
+			=document.getElementById("links_table"); for (var i = 0, row; row = table_left.rows[i]; 
+			i++) { //iterate through rows //rows would be accessed using the "row" variable 
+			assigned in the for loop //alert(row.offsetHeight); //alert(table_middle.rows[i].offsetHeight); 
+			//alert(table_right.rows[i].offsetHeight); var max = Math.max(row.offsetHeight, 
+			table_middle.rows[i].offsetHeight, table_right.rows[i].offsetHeight); alert(i 
+			+ " max->" +max); //css('height', '0'); //row.offsetHeight=max; //table_middle.rows[i].offsetHeight=max; 
+			//table_right.rows[i].offsetHeight=max; alert(row.getElementsByTagName('td')[0].height); 
+			table_middle.rows[i].find('td:not(:empty):first').height(max); table_right.rows[i].find('td:not(:empty):first').height(max); 
+			alert(i + " righ->" +table_right.rows[i].offsetHeight); } } </script> -->
+
 	</xsl:template>
 
 
@@ -376,14 +390,17 @@
 		<xsl:param name="entities" />
 		<xsl:for-each select="$entities">
 			<tr>
-				<td>
-					<!-- <xsl:copy-of select="./id"></xsl:copy-of> -->
-					<a href="{$basepath}/biostudy/{id}?keywords={$vkeywords}">
-						<xsl:call-template name="highlight">
-							<xsl:with-param name="pText" select="id" />
-							<xsl:with-param name="pFieldName" select="'accession'" />
-						</xsl:call-template>
-					</a>
+				<td class="container">
+					<div>
+
+						<!-- <xsl:copy-of select="./id"></xsl:copy-of> -->
+						<a href="{$basepath}/biostudy/{id}?keywords={$vkeywords}">
+							<xsl:call-template name="highlight">
+								<xsl:with-param name="pText" select="id" />
+								<xsl:with-param name="pFieldName" select="'accession'" />
+							</xsl:call-template>
+						</a>
+					</div>
 				</td>
 			</tr>
 		</xsl:for-each>
@@ -396,11 +413,15 @@
 		<xsl:for-each select="$entities">
 			<tr>
 				<xsl:for-each select="./attributes/attribute">
-					<td>
-						<xsl:call-template name="highlight">
-							<xsl:with-param name="pText" select="." />
-							<xsl:with-param name="pFieldName" select="@name" />
-						</xsl:call-template>
+
+					<td class="container">
+						<div>
+							<xsl:call-template name="highlight">
+								<xsl:with-param name="pText" select="." />
+								<xsl:with-param name="pFieldName" select="@name" />
+							</xsl:call-template>
+
+						</div>
 					</td>
 				</xsl:for-each>
 			</tr>
@@ -412,17 +433,22 @@
 		<xsl:param name="entities" />
 		<xsl:for-each select="$entities">
 			<tr>
-				<td>
-					<xsl:call-template name="highlight">
-						<xsl:with-param name="pText" select="./filescount" />
-						<xsl:with-param name="pFieldName" select="'filescount'" />
-					</xsl:call-template>
+				<td class="container">
+					<div>
+						<xsl:call-template name="highlight">
+							<xsl:with-param name="pText" select="./filescount" />
+							<xsl:with-param name="pFieldName" select="'filescount'" />
+						</xsl:call-template>
+					</div>
 				</td>
-				<td>
-					<xsl:call-template name="highlight">
-						<xsl:with-param name="pText" select="./linkscount" />
-						<xsl:with-param name="pFieldName" select="'linkscount'" />
-					</xsl:call-template>
+				<td class="container">
+					<div>
+
+						<xsl:call-template name="highlight">
+							<xsl:with-param name="pText" select="./linkscount" />
+							<xsl:with-param name="pFieldName" select="'linkscount'" />
+						</xsl:call-template>
+					</div>
 				</td>
 			</tr>
 		</xsl:for-each>

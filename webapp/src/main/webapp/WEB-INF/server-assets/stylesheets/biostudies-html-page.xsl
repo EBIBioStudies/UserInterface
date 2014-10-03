@@ -769,9 +769,9 @@
 								<xsl:value-of select="$pTotal" />
 							</span>
 							<xsl:value-of select="fn:concat(' ', $pName)" />
-							<xsl:if test="$pTotal != 1">
+							<!-- <xsl:if test="$pTotal != 1">
 								<xsl:text>s</xsl:text>
-							</xsl:if>
+							</xsl:if> -->
 						</xsl:otherwise>
 					</xsl:choose>
 				</div>

@@ -183,83 +183,65 @@
 						</xsl:choose>
 					</h4>
 					<table id="bs_results_tablesamplegroupdetail">
-						<xsl:call-template name="process_attributes">
-							<xsl:with-param name="pAttributes" select="$section/attributes"></xsl:with-param>
-						</xsl:call-template>
+					<xsl:call-template name="process_attributes">
+						<xsl:with-param name="pAttributes" select="$section/attributes"></xsl:with-param>
+					</xsl:call-template>
 
-						<xsl:call-template name="process_files">
-							<xsl:with-param name="pAttributes" select="$section/files"></xsl:with-param>
-						</xsl:call-template>
+					<xsl:call-template name="process_files">
+						<xsl:with-param name="pAttributes" select="$section/files"></xsl:with-param>
+					</xsl:call-template>
 
-						<xsl:call-template name="process_links">
-							<xsl:with-param name="pAttributes" select="$section/links"></xsl:with-param>
-						</xsl:call-template>
+					<xsl:call-template name="process_links">
+						<xsl:with-param name="pAttributes" select="$section/links"></xsl:with-param>
+					</xsl:call-template>
 
+					<xsl:if test="count($section/subsections/section) &gt; 0">
+						<div style="margin-left:40px">
 
-						<xsl:call-template name="process_subsections">
-							<xsl:with-param name="pSubsections" select="$section/subsections"></xsl:with-param>
-						</xsl:call-template>
+							<!--  to show the biosamples subsections in a differente way - as a table -->
+							<xsl:if test="count($section/subsections/section[@biosample])">						
+							<table id="bs_results_tabledetail_dyna">
+								<tr>
+									<td>
+										<b>Subsections biosamples</b>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<xsl:call-template name="process_subsections_biosamples">
+											<xsl:with-param name="pSubsections"
+												select="$section/subsections/section[@biosample]" />
+										</xsl:call-template>
+									</td>
+								</tr>
+							</table>
+							</xsl:if>
+							
+							
+							<table id="bs_results_tabledetail">
+								<tr>
+									<td>
+										<b>Subsections</b>
+										<xsl:for-each select="$section/subsections/section[not(@biosample)]">
+											<xsl:call-template name="detail-table">
+												<xsl:with-param name="id" select="@id" />
+												<xsl:with-param name="section" select="." />
+											</xsl:call-template>
+										</xsl:for-each>
 
-					</table>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</xsl:if>
+				</table>
 				</td>
 			</tr>
 		</table>
-
+		
 	</xsl:template>
 
-	<xsl:template name="process_subsections">
-		<xsl:param name="pSubsections" />
-		<xsl:variable name="vSubsections" select="$pSubsections"></xsl:variable>
 
-
-<!-- 		<xsl:if test="count($vSubsections) &gt; 0">
- -->
- 			<tr>
- 			<td class="col_title">
-				<a href="javascript:ShwHid('SubsectionsHiddenDiv{generate-id($vSubsections)}')">
-					Subsections (<xsl:value-of select="count($vSubsections/*)"></xsl:value-of>):
-				</a>
-			</td>
-			<td>
-				<div class="mid" id="SubsectionsHiddenDiv{generate-id($vSubsections)}" style="display: none">
-			
-			<!-- to show the biosamples subsections in a differente way - as a table -->
-			<xsl:if test="count($vSubsections/section[@biosample])">
-				<table id="bs_results_tabledetail_dyna">
-					<tr>
-						<td>
-							<xsl:call-template name="process_subsections_biosamples">
-								<xsl:with-param name="pSubsections"
-									select="$vSubsections/section[@biosample]" />
-							</xsl:call-template>
-						</td>
-					</tr>
-				</table>
-			</xsl:if>
-
-
-			<table id="bs_results_tabledetail">
-				<tr>
-					<td>
-						<xsl:for-each select="$vSubsections/section[not(@biosample)]">
-							<xsl:call-template name="detail-table">
-								<xsl:with-param name="id" select="@id" />
-								<xsl:with-param name="section" select="." />
-							</xsl:call-template>
-						</xsl:for-each>
-
-					</td>
-				</tr>
-			</table>
-			
-			</div>
-			
-			</td>
-		</tr>
-		<!-- </xsl:if> -->
-
-
-	</xsl:template>
 
 	<xsl:template name="process_subsections_biosamples">
 		<xsl:param name="pSubsections" />
@@ -441,18 +423,18 @@
 		<xsl:param name="pAttributes" />
 		<xsl:variable name="vAtt" select="$pAttributes"></xsl:variable>
 		<!-- <table id="bs_results_tabledetail"> -->
-		<!-- <tr> <td colspan="2"> <b> <u>Attributes</u> </b> </td> </tr> -->
+			<!-- <tr> <td colspan="2"> <b> <u>Attributes</u> </b> </td> </tr> -->
 
 
-		<!-- I will process all the same attributes at same time -->
-		<xsl:for-each select="distinct-values($vAtt/attribute/@name)">
-			<xsl:variable name="vAttName" select="."></xsl:variable>
-			<xsl:call-template name="process_bulk_attribute">
-				<xsl:with-param name="pAttributes"
-					select="$vAtt/attribute[@name=$vAttName]" />
-				<xsl:with-param name="pAttributeName" select="$vAttName" />
-			</xsl:call-template>
-		</xsl:for-each>
+			<!-- I will process all the same attributes at same time -->
+			<xsl:for-each select="distinct-values($vAtt/attribute/@name)">
+				<xsl:variable name="vAttName" select="."></xsl:variable>
+				<xsl:call-template name="process_bulk_attribute">
+					<xsl:with-param name="pAttributes"
+						select="$vAtt/attribute[@name=$vAttName]" />
+					<xsl:with-param name="pAttributeName" select="$vAttName" />
+				</xsl:call-template>
+			</xsl:for-each>
 
 
 		<!-- </table> -->
@@ -502,34 +484,37 @@
 
 	<xsl:template name="process_files">
 		<xsl:param name="pAttributes" />
-		<tr>
-			<td class="col_title">
-				<a href="javascript:ShwHid('FileHiddenDiv{generate-id($pAttributes)}')">
-					Files (<xsl:value-of select="count($pAttributes//file)"></xsl:value-of>):
-				</a>
-			</td>
-			<td>
-				<div class="mid" id="FileHiddenDiv{generate-id($pAttributes)}"
-					style="display: none">
-					<table id="bs_results_tabledetail">
-						<tr>
-							<td colspan="2" align="left">
-								<xsl:for-each select="$pAttributes/table">
-									<xsl:call-template name="process_file_table">
-										<xsl:with-param name="pAttribute" select="." />
-									</xsl:call-template>
-								</xsl:for-each>
-								<xsl:for-each select="$pAttributes/file">
-									<xsl:call-template name="process_file">
-										<xsl:with-param name="pAttribute" select="." />
-									</xsl:call-template>
-								</xsl:for-each>
-							</td>
-						</tr>
-					</table>
-				</div>
-			</td>
-		</tr>
+
+		<table id="bs_results_tabledetail">
+			<tr>
+				<td align="left">
+					<b>
+						<a href="javascript:ShwHid('FileHiddenDiv{generate-id($pAttributes)}')">
+							Files(<xsl:value-of select="count($pAttributes//file)"></xsl:value-of>):
+						</a>
+					</b>
+				</td>
+			</tr>
+		</table>
+		<div class="mid" id="FileHiddenDiv{generate-id($pAttributes)}"
+			style="display: none">
+			<table id="bs_results_tabledetail">
+				<tr>
+					<td colspan="2" align="left">
+						<xsl:for-each select="$pAttributes/table">
+							<xsl:call-template name="process_file_table">
+								<xsl:with-param name="pAttribute" select="." />
+							</xsl:call-template>
+						</xsl:for-each>
+						<xsl:for-each select="$pAttributes/file">
+							<xsl:call-template name="process_file">
+								<xsl:with-param name="pAttribute" select="." />
+							</xsl:call-template>
+						</xsl:for-each>
+					</td>
+				</tr>
+			</table>
+		</div>
 	</xsl:template>
 
 
@@ -539,7 +524,7 @@
 		<table id="bs_results_tabledetail">
 			<tr>
 				<td>
-					<xsl:value-of select="@name"></xsl:value-of>
+					<xsl:value-of select="@id"></xsl:value-of>
 				</td>
 			</tr>
 			<xsl:if test="count($pAttribute/attributes/attribute)>0">
@@ -620,34 +605,36 @@
 
 	<xsl:template name="process_links">
 		<xsl:param name="pAttributes" />
-		<tr>
-			<td class="col_title">
-				<a href="javascript:ShwHid('LinkHiddenDiv{generate-id($pAttributes)}')">
-					Links (<xsl:value-of select="count($pAttributes//link)"></xsl:value-of>):
-				</a>
-			</td>
-			<td>
-				<div class="mid" id="LinkHiddenDiv{generate-id($pAttributes)}"
-					style="display: none">
-					<table id="bs_results_tabledetail">
-						<tr>
-							<td colspan="2" align="left">
-								<xsl:for-each select="$pAttributes/table">
-									<xsl:call-template name="process_link_table">
-										<xsl:with-param name="pAttribute" select="." />
-									</xsl:call-template>
-								</xsl:for-each>
-								<xsl:for-each select="$pAttributes/link">
-									<xsl:call-template name="process_link">
-										<xsl:with-param name="pAttribute" select="." />
-									</xsl:call-template>
-								</xsl:for-each>
-							</td>
-						</tr>
-					</table>
-				</div>
-			</td>
-		</tr>
+		<table id="bs_results_tabledetail">
+			<tr>
+				<td align="left">
+					<b>
+						<a href="javascript:ShwHid('LinkHiddenDiv{generate-id($pAttributes)}')">
+							Links(<xsl:value-of select="count($pAttributes//link)"></xsl:value-of>):
+						</a>
+					</b>
+				</td>
+			</tr>
+		</table>
+		<div class="mid" id="LinkHiddenDiv{generate-id($pAttributes)}"
+			style="display: none">
+			<table id="bs_results_tabledetail">
+				<tr>
+					<td colspan="2" align="left">
+						<xsl:for-each select="$pAttributes/table">
+							<xsl:call-template name="process_link_table">
+								<xsl:with-param name="pAttribute" select="." />
+							</xsl:call-template>
+						</xsl:for-each>
+						<xsl:for-each select="$pAttributes/link">
+							<xsl:call-template name="process_link">
+								<xsl:with-param name="pAttribute" select="." />
+							</xsl:call-template>
+						</xsl:for-each>
+					</td>
+				</tr>
+			</table>
+		</div>
 	</xsl:template>
 
 
@@ -672,9 +659,7 @@
 					<xsl:variable name="vAttLink" select="."></xsl:variable>
 					<tr>
 						<td>
-							<a href="{string($vAttLink/@url)}" target="ext">
-								<xsl:copy-of select="string($vAttLink/@url)"></xsl:copy-of>
-							</a>
+							<a href="{string($vAttLink/@url)}" target="ext"><xsl:copy-of select="string($vAttLink/@url)"></xsl:copy-of></a>
 						</td>
 						<xsl:for-each select="distinct-values($vAtt//attribute/@name)">
 							<xsl:variable name="vAttName" select="."></xsl:variable>
