@@ -491,10 +491,10 @@
 		<xsl:param name="pAttribute" />
 		<xsl:param name="pAttributeName" />
 		<xsl:variable name="vAtt" select="$pAttribute"></xsl:variable>
-		<!-- ##<xsl:copy-of select="$pAttribute"></xsl:copy-of>## -->
+		<!--  ##<xsl:copy-of select="$pAttributeName"></xsl:copy-of>## -->
 		<xsl:call-template name="highlight">
 			<xsl:with-param name="pText" select="$vAtt/value" />
-			<xsl:with-param name="pFieldName" select="$pAttributeName" />
+			<xsl:with-param name="pFieldName" select="lower-case($pAttributeName)" />
 		</xsl:call-template>
 	</xsl:template>
 
