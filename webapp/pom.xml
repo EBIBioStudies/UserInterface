@@ -149,7 +149,7 @@
 				<interface.application.log.default.priority>DEBUG</interface.application.log.default.priority>
 				<interface.application.db.xml.connection.dbname>biostudies</interface.application.db.xml.connection.dbname>
 				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname> -->
-				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
+				<interface.application.db.xml.update.active>false</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
 				<interface.application.db.xml.update.url>/nfs/ma/home/BioSD/test/autoexportTest.xml</interface.application.db.xml.update.url>
 				<!-- <interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportDev.xml</interface.application.db.xml.update.url> -->
