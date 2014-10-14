@@ -167,7 +167,6 @@
 			<tr>
 				<td>
 					<h4>
-						Accession
 						<xsl:choose>
 							<!-- test="string-length($vkeywords)>0"> -->
 							<xsl:when
@@ -187,18 +186,23 @@
 							<xsl:with-param name="pAttributes" select="$section/attributes"></xsl:with-param>
 						</xsl:call-template>
 
-						<xsl:call-template name="process_files">
-							<xsl:with-param name="pAttributes" select="$section/files"></xsl:with-param>
-						</xsl:call-template>
+						<xsl:if test="count($section/files//file)>0">
+							<xsl:call-template name="process_files">
+								<xsl:with-param name="pAttributes" select="$section/files"></xsl:with-param>
+							</xsl:call-template>
+						</xsl:if>
 
-						<xsl:call-template name="process_links">
-							<xsl:with-param name="pAttributes" select="$section/links"></xsl:with-param>
-						</xsl:call-template>
+						<xsl:if test="count($section/links//link)>0">
+							<xsl:call-template name="process_links">
+								<xsl:with-param name="pAttributes" select="$section/links"></xsl:with-param>
+							</xsl:call-template>
+						</xsl:if>
 
-
-						<xsl:call-template name="process_subsections">
-							<xsl:with-param name="pSubsections" select="$section/subsections"></xsl:with-param>
-						</xsl:call-template>
+						<xsl:if test="count($section/subsections/section)>0">
+							<xsl:call-template name="process_subsections">
+								<xsl:with-param name="pSubsections" select="$section/subsections"></xsl:with-param>
+							</xsl:call-template>
+						</xsl:if>
 
 					</table>
 				</td>
@@ -212,48 +216,51 @@
 		<xsl:variable name="vSubsections" select="$pSubsections"></xsl:variable>
 
 
-<!-- 		<xsl:if test="count($vSubsections) &gt; 0">
- -->
- 			<tr>
- 			<td class="col_title">
-				<a href="javascript:ShwHid('SubsectionsHiddenDiv{generate-id($vSubsections)}')">
-					Subsections (<xsl:value-of select="count($vSubsections/*)"></xsl:value-of>):
-				</a>
+		<!-- <xsl:if test="count($vSubsections) &gt; 0"> -->
+		<tr>
+			<td class="col_title">
+				<!-- <a href="javascript:ShwHid('SubsectionsHiddenDiv{generate-id($vSubsections)}')"> 
+					Subsections (<xsl:value-of select="count($vSubsections/*)"></xsl:value-of>): 
+					</a> -->
+				&nbsp;
 			</td>
 			<td>
-				<div class="mid" id="SubsectionsHiddenDiv{generate-id($vSubsections)}" style="display: none">
-			
-			<!-- to show the biosamples subsections in a differente way - as a table -->
-			<xsl:if test="count($vSubsections/section[@biosample])">
-				<table id="bs_results_tabledetail_dyna">
-					<tr>
-						<td>
-							<xsl:call-template name="process_subsections_biosamples">
-								<xsl:with-param name="pSubsections"
-									select="$vSubsections/section[@biosample]" />
-							</xsl:call-template>
-						</td>
-					</tr>
-				</table>
-			</xsl:if>
+				<!-- <div class="mid" id="SubsectionsHiddenDiv{generate-id($vSubsections)}" 
+					style="display: none"> -->
+				<div class="mid" id="SubsectionsHiddenDiv{generate-id($vSubsections)}"
+					style="">
+
+					<!-- to show the biosamples subsections in a differente way - as a table -->
+					<xsl:if test="count($vSubsections/section[@biosample])">
+						<table id="bs_results_tabledetail_dyna">
+							<tr>
+								<td>
+									<xsl:call-template name="process_subsections_biosamples">
+										<xsl:with-param name="pSubsections"
+											select="$vSubsections/section[@biosample]" />
+									</xsl:call-template>
+								</td>
+							</tr>
+						</table>
+					</xsl:if>
 
 
-			<table id="bs_results_tabledetail">
-				<tr>
-					<td>
-						<xsl:for-each select="$vSubsections/section[not(@biosample)]">
-							<xsl:call-template name="detail-table">
-								<xsl:with-param name="id" select="@id" />
-								<xsl:with-param name="section" select="." />
-							</xsl:call-template>
-						</xsl:for-each>
+					<table id="bs_results_tabledetail">
+						<tr>
+							<td>
+								<xsl:for-each select="$vSubsections/section[not(@biosample)]">
+									<xsl:call-template name="detail-table">
+										<xsl:with-param name="id" select="@id" />
+										<xsl:with-param name="section" select="." />
+									</xsl:call-template>
+								</xsl:for-each>
 
-					</td>
-				</tr>
-			</table>
-			
-			</div>
-			
+							</td>
+						</tr>
+					</table>
+
+				</div>
+
 			</td>
 		</tr>
 		<!-- </xsl:if> -->
@@ -464,34 +471,79 @@
 		<xsl:param name="pAttributes" />
 		<xsl:param name="pAttributeName" />
 		<xsl:variable name="vAtt" select="$pAttributes"></xsl:variable>
-		<tr>
-			<td class="col_title">
-				<b>
-					<xsl:value-of select="$pAttributeName"></xsl:value-of>
-					:
-				</b>
-			</td>
-			<td>
 
-				<xsl:for-each select="$vAtt">
-					<xsl:call-template name="process_attribute">
-						<xsl:with-param name="pAttribute" select="." />
-						<xsl:with-param name="pAttributeName" select="$pAttributeName" />
-					</xsl:call-template>
-					<xsl:if test="position()!=last()">
-						<br />
-					</xsl:if>
-				</xsl:for-each>
+		<xsl:choose>
+			<xsl:when test="$pAttributeName='Title'">
+				<tr>
+					<td colspan="2">
+						<b>
+							<xsl:value-of select="$vAtt/value"></xsl:value-of>
+						</b>
+					</td>
+				</tr>
+			</xsl:when>
+			<xsl:when test="$pAttributeName='Description'">
+				<tr>
+					<td colspan="2">
+							<xsl:value-of select="$vAtt/value"></xsl:value-of>
+							<br/>
+					</td>
+				</tr>
+			</xsl:when>
+			
+				<xsl:when test="$pAttributeName='Related identifer'">
+				<tr>
+					<td class="col_title">
+						<b>
+							<xsl:value-of select="$pAttributeName"></xsl:value-of>
+							:
+						</b>
+					</td>
+					<td>
+						<xsl:for-each select="$vAtt">
+						<xsl:call-template name="process_reference">
+								<xsl:with-param name="pName" select="./valqual[@name='type']" />
+								<xsl:with-param name="pUrl" select="''" />
+								<xsl:with-param name="pId" select="./value" />
+							</xsl:call-template>
+							<br/>
+						</xsl:for-each>
+					</td>
+				</tr>
+			</xsl:when>		
 
-			</td>
-		</tr>
+			<xsl:otherwise>
+				<tr>
+					<td class="col_title">
+						<b>
+							<xsl:value-of select="$pAttributeName"></xsl:value-of>
+							:
+						</b>
+					</td>
+					<td>
+
+						<xsl:for-each select="$vAtt">
+							<xsl:call-template name="process_attribute">
+								<xsl:with-param name="pAttribute" select="." />
+								<xsl:with-param name="pAttributeName" select="$pAttributeName" />
+							</xsl:call-template>
+							<xsl:if test="position()!=last()">
+								<br />
+							</xsl:if>
+						</xsl:for-each>
+
+					</td>
+				</tr>
+			</xsl:otherwise>
+
+		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template name="process_attribute">
 		<xsl:param name="pAttribute" />
 		<xsl:param name="pAttributeName" />
 		<xsl:variable name="vAtt" select="$pAttribute"></xsl:variable>
-		<!--  ##<xsl:copy-of select="$pAttributeName"></xsl:copy-of>## -->
+		<!-- ##<xsl:copy-of select="$pAttributeName"></xsl:copy-of>## -->
 		<xsl:call-template name="highlight">
 			<xsl:with-param name="pText" select="$vAtt/value" />
 			<xsl:with-param name="pFieldName" select="lower-case($pAttributeName)" />
@@ -534,12 +586,24 @@
 
 
 
+
+	<!-- show as a table -->
 	<xsl:template name="process_file">
+		<xsl:param name="pAttribute" />
+		<xsl:call-template name="process_file_table">
+			<xsl:with-param name="pAttribute" select="$pAttribute/.."></xsl:with-param>
+		</xsl:call-template>
+	</xsl:template>
+
+
+	<xsl:template name="process_file_old">
 		<xsl:param name="pAttribute" />
 		<table id="bs_results_tabledetail">
 			<tr>
 				<td>
-					<xsl:value-of select="@name"></xsl:value-of>
+					<a href="{@name}">
+						<xsl:value-of select="@name"></xsl:value-of>
+					</a>
 				</td>
 			</tr>
 			<xsl:if test="count($pAttribute/attributes/attribute)>0">
@@ -580,7 +644,9 @@
 					<xsl:variable name="vAttFile" select="."></xsl:variable>
 					<tr>
 						<td>
-							<xsl:copy-of select="string($vAttFile/@name)"></xsl:copy-of>
+							<a href="{string($vAttFile/@name)}">
+								<xsl:copy-of select="string($vAttFile/@name)"></xsl:copy-of>
+							</a>
 						</td>
 						<xsl:for-each select="distinct-values($vAtt//attribute/@name)">
 							<xsl:variable name="vAttName" select="."></xsl:variable>
@@ -737,338 +803,65 @@
 	</xsl:template>
 
 
-	<xsl:template name="detail-row">
-		<xsl:param name="pName" />
-		<xsl:param name="pFieldName" />
-		<xsl:param name="pValue" />
-		<xsl:if test="$pValue/node()">
-			<xsl:call-template name="detail-section">
-				<xsl:with-param name="pName" select="$pName" />
-				<xsl:with-param name="pContent">
-					<xsl:for-each select="$pValue">
-						<div>
-							<xsl:apply-templates select="." mode="highlight">
-								<xsl:with-param name="pFieldName" select="$pFieldName" />
-							</xsl:apply-templates>
-						</div>
-					</xsl:for-each>
-				</xsl:with-param>
-			</xsl:call-template>
-		</xsl:if>
-	</xsl:template>
 
-	<xsl:template name="detail-section">
-		<xsl:param name="pName" />
-		<xsl:param name="pContent" />
-		<tr>
-			<td class="detail_name">
-				<div class="outer">
-					<xsl:value-of select="$pName" />
-				</div>
-			</td>
-			<td class="detail_value">
-				<div class="outer">
-					<xsl:copy-of select="$pContent" />
-				</div>
-			</td>
-		</tr>
-	</xsl:template>
-
-	<xsl:template name="add-sort">
-		<xsl:param name="pKind" />
-		<xsl:if test="$pKind = $vSortBy">
-			<xsl:choose>
-				<xsl:when test="'ascending' = $vSortOrder">
-					<img src="{$basepath}/assets/images/mini_arrow_up.gif" width="12"
-						height="16" alt="^" />
-				</xsl:when>
-				<xsl:otherwise>
-					<img src="{$basepath}/assets/images/mini_arrow_down.gif" width="12"
-						height="16" alt="v" />
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:if>
-	</xsl:template>
-
-
-
-	<xsl:template name="process_person">
-		<xsl:param name="pValue" />
-
-		<table border="0" cellpadding="0" cellspacing="0"
-			id="table_inside_attr">
-			<tbody>
-				<tr>
-					<td>
-						<xsl:for-each select="$pValue/object">
-
-							<xsl:choose>
-								<xsl:when
-									test="count(.//attribute/simpleValue/value[../../@class='Person Email'])>0 and (.//attribute/simpleValue/value[../../@class='Person Email']!='')">
-									<xsl:variable name="vStringContacts"
-										select="concat(.//attribute/simpleValue/value[../../@class='Person First Name'], ' ', .//attribute/simpleValue/value[../../@class='Person Last Name'] , ' &lt;' ,.//attribute/simpleValue/value[../../@class='Person Email'], '>')"></xsl:variable>
-
-									<a
-										href="mailto:{.//attribute/simpleValue/value[../../@class='Person Email']}"
-										class="icon icon-generic" data-icon="E">
-										<xsl:call-template name="highlight">
-											<xsl:with-param name="pText" select="$vStringContacts" />
-											<xsl:with-param name="pFieldName" select="'persons'" />
-										</xsl:call-template>
-									</a>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:variable name="vStringContacts"
-										select="concat(.//attribute/simpleValue/value[../../@class='Person First Name'], ' ', .//attribute/simpleValue/value[../../@class='Person Last Name'])"></xsl:variable>
-									<xsl:call-template name="highlight">
-										<xsl:with-param name="pText" select="$vStringContacts" />
-										<xsl:with-param name="pFieldName" select="'persons'" />
-									</xsl:call-template>
-								</xsl:otherwise>
-
-							</xsl:choose>
-							<xsl:choose>
-								<xsl:when test="position()&lt;last()">
-									,
-								</xsl:when>
-							</xsl:choose>
-						</xsl:for-each>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-
-	</xsl:template>
-
-
-
-	<xsl:template name="process_databases">
-		<xsl:param name="pValue" />
-		<xsl:for-each select="$pValue/objectValue">
-			<xsl:call-template name="process_database">
-				<xsl:with-param name="pName"
-					select=".//attribute[@class='Database Name']/simpleValue/value" />
-				<xsl:with-param name="pUrl"
-					select=".//attribute[@class='Database URI']/simpleValue/value" />
-				<xsl:with-param name="pId"
-					select=".//attribute[@class='Database ID']/simpleValue/value" />
-			</xsl:call-template>
-			<br />
-		</xsl:for-each>
-	</xsl:template>
-
-	<xsl:template name="process_database">
+<xsl:template name="process_reference">
 		<xsl:param name="pName" />
 		<xsl:param name="pUrl" />
 		<xsl:param name="pId" />
 
-		<xsl:variable name="bdName" select="lower-case($pName)"></xsl:variable>
+		<!-- I will compare only with the first word - it works for the myequivalents service names -->
+		<!-- sometimes the dbname just have one string, so i need to add a space to assure that the substring-before works -->
+		<xsl:variable name="bdName" select="lower-case(substring-before(concat($pName,' '),' '))"></xsl:variable>
+		
+		<!-- ¢¢<xsl:copy-of select="$bdName"></xsl:copy-of>¢¢ -->
+
+		<xsl:variable name="bdBaseLink">
+		<xsl:choose>
+			<xsl:when test="$bdName='arrayexpress'">
+				<xsl:value-of select="'http://www.ebi.ac.uk/arrayexpress/experiments/'"/>
+			</xsl:when>
+			<xsl:when test="$bdName='europe'">
+				<xsl:value-of select="'http://europepmc.org/search?query='"/>
+			</xsl:when>
+			<xsl:when test="$bdName='pdb'">
+				<xsl:value-of select="'http://www.ebi.ac.uk/pdbe-srv/view/entry/'"/>
+			</xsl:when>
+			<xsl:when test="$bdName='ena'">
+				<xsl:value-of select="'http://www.ebi.ac.uk/ena/data/view/'"/>
+			</xsl:when>
+			<xsl:when test="$bdName='doi'">
+				<xsl:value-of select="'http://doi.org/'"/>
+			</xsl:when>
+			<xsl:when test="$bdName='refspn'">
+				<xsl:value-of select="'http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?rs='"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="''"/>
+			</xsl:otherwise>		
+		</xsl:choose>
+		</xsl:variable>
+		
+		
 		<xsl:choose>
 			<xsl:when
-				test="$bdName=('arrayexpress','ena','ena sra','dgva','pride') and not($pUrl='')">
-				<!-- PRIDE changed the user interface: this is temporary -->
-				<xsl:variable name="pUrl"
-					select="replace($pUrl,'http://www.ebi.ac.uk/pride/showExperiment.do\?experimentAccessionNumber','http://www.ebi.ac.uk/pride/archive/simpleSearch?q')"></xsl:variable>
+				test="$bdName=('arrayexpress','ena')">
 
-				<a href="{$pUrl}" target="ext">
-					<img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{$pName} Link"
+				<a href="{$bdBaseLink}{$pId}" target="ext" id="iconelink">
+					<img src="{$basepath}/assets/images/dblinkslogos/{$bdName}_logo.gif" alt="{$pName} Link"
 						border="0" title="{$pName}" />
 				</a>
 			</xsl:when>
-			<xsl:when test="not($pUrl='')">
-				<a href="{$pUrl}" target="ext" title="{$pName}">
+			<xsl:otherwise>
+				<a href="{$bdBaseLink}{$pId}" target="ext" title="{$pName}" id="iconelink">
 					<font class="icon icon-generic" data-icon="L" title="{$pName}" />
 					<xsl:copy-of select="$pName"></xsl:copy-of>
 				</a>
-			</xsl:when>
+			</xsl:otherwise>
 		</xsl:choose>
-		<br />
-		URI:
-		<a href="{$pUrl}" target="ext">
-			<xsl:copy-of select="$pUrl"></xsl:copy-of>
+		&nbsp;<a href="{$bdBaseLink}{$pId}" target="ext">
+			<xsl:copy-of select="$pId"></xsl:copy-of>
 		</a>
-		;
-		<br />
-		ID:
-		<xsl:copy-of select="$pId"></xsl:copy-of>
-		;
-
 	</xsl:template>
-
-	<!-- <td vertical-align="middle">&nbsp;Name: <xsl:copy-of select=".//attribute/value[../@class='Database 
-		Name']"/>; ID: <xsl:copy-of select=".//attribute/value[../@class='Database 
-		ID']"/>; URI: <a href="{.//attribute/value[../@class='Database URI']}" target="ext"> 
-		<xsl:value-of select=".//attribute/value[../@class='Database URI']"></xsl:value-of> 
-		</a> -->
-
-	<xsl:template name="process_ftplocation">
-		<xsl:param name="pValue" />
-		<xsl:for-each select="$pValue/simpleValue">
-			<a href="{./value}" target="ext">
-				<xsl:copy-of select="./value"></xsl:copy-of>
-			</a> &nbsp;
-		</xsl:for-each>
-	</xsl:template>
-
-	<xsl:template name="process_publications">
-		<xsl:param name="pValue" />
-		<table border="0" cellpadding="0" cellspacing="0"
-			id="table_inside_attr">
-			<tbody>
-				<xsl:for-each select="$pValue/object">
-
-					<tr>
-						<td>
-							Publication DOI:
-							<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select=".//attribute/simpleValue/value[../../@class='Publication DOI']" />
-								<xsl:with-param name="pFieldName" select="'publications'" />
-							</xsl:call-template>
-							Publication PubMed ID:
-							<a
-								href="http://europepmc.org/abstract/MED/{.//attribute/simpleValue/value[../../@class='Publication PubMed ID']}"
-								target="ext">
-								<xsl:call-template name="highlight">
-									<xsl:with-param name="pText"
-										select=".//attribute/simpleValue/value[../../@class='Publication PubMed ID']" />
-									<xsl:with-param name="pFieldName" select="'publications'" />
-								</xsl:call-template>
-							</a>
-							<xsl:choose>
-								<xsl:when test="position()&lt;last()">
-									<br />
-								</xsl:when>
-							</xsl:choose>
-						</td>
-					</tr>
-				</xsl:for-each>
-			</tbody>
-		</table>
-	</xsl:template>
-
-
-	<xsl:template name="process_organization">
-		<xsl:param name="pValue" />
-		<table border="0" cellpadding="0" cellspacing="0"
-			id="table_inside_attr">
-			<tbody>
-				<xsl:for-each select="$pValue/object">
-					<tr>
-						<td>
-							<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select="concat('Name: ', .//attribute/simpleValue/value[../../@class='Organization Name'],'; Address: ', .//attribute/simpleValue/value[../../@class='Organization Address'], '; Role: ', .//attribute/simpleValue/value[../../@class='Organization Role'], '; Email: ', .//attribute/simpleValue/value[../../@class='Organization Email'])" />
-								<xsl:with-param name="pFieldName" select="'organizations'" />
-							</xsl:call-template>
-							; URI:
-							<a href="{.//attribute/value[../@class='Organization URI']}"
-								target="ext">
-								<xsl:value-of
-									select=".//attribute/simpleValue/value[../../@class='Organization URI']"></xsl:value-of>
-							</a>
-						</td>
-						<!-- <td width="100%">&nbsp; </td> -->
-					</tr>
-				</xsl:for-each>
-			</tbody>
-		</table>
-	</xsl:template>
-
-
-
-	<xsl:template name="process_termsource">
-		<xsl:param name="pValue" />
-		<table border="0" cellpadding="0" cellspacing="0"
-			id="table_inside_attr">
-			<!-- <thead> <th>Name </th> <th>URI</th> <th>&nbsp;</th> </thead> -->
-			<tbody>
-				<xsl:for-each select="$pValue/object">
-					<tr>
-						<td id="td_nowrap">
-							<xsl:call-template name="highlight">
-								<xsl:with-param name="pText"
-									select=".//attribute/simpleValue/value[../../@class='Term Source Name']" />
-								<xsl:with-param name="pFieldName" select="'termsources'" />
-							</xsl:call-template>
-						</td>
-						<td>
-							<a
-								href="{.//attribute/simpleValue/value[../../@class='Term Source URI']}"
-								target="ext">
-								<xsl:value-of
-									select=".//attribute/simpleValue/value[../../@class='Term Source URI']"></xsl:value-of>
-							</a>
-						</td>
-						<td width="100%">&nbsp;
-						</td>
-					</tr>
-					<!-- <xsl:choose> <xsl:when test="position()&lt;last()"> <div>&nbsp;</div> 
-						</xsl:when> </xsl:choose> -->
-				</xsl:for-each>
-			</tbody>
-		</table>
-	</xsl:template>
-
-
-
-	<xsl:template name="process_common_attributes">
-		<xsl:param name="pAttributes" />
-
-
-		<!-- £££££££ -->
-		<!-- <div id="wrapper_top_scroll"> <div id="div_top_scroll"> </div> </div> -->
-		<div class="attr_table_shadow_container">
-			<div class="attr_table_sample_group_scroll">
-				<table width="100%" border="0" cellpadding="0" cellspacing="0"
-					style="table-layout:fixed;border:0px;margin:0px;">
-					<tr>
-						<td>
-							<table id="attr_common_table" border="0" cellpadding="0"
-								cellspacing="0" width="100%">
-								<thead>
-									<tr>
-										<xsl:for-each
-											select="$pAttributes/attribute[count(.//simpleValue)>0]">
-											<th>
-												<xsl:copy-of select="string(./@class)"></xsl:copy-of>
-											</th>
-										</xsl:for-each>
-									</tr>
-								</thead>
-								<tbody id="bs_results_tbody_common">
-									<!-- <tr> <xsl:for-each select="$pAttributes/attribute[count(.//simpleValue)>0]"> 
-										<td> <xsl:variable name="attributeClass" select="@class"></xsl:variable> 
-										<xsl:variable name="attribute" select="."></xsl:variable> <xsl:choose> <xsl:when 
-										test="$attributeClass='Derived From'"> <xsl:call-template name="process_derived_from"> 
-										<xsl:with-param name="pAttribute" select="$attribute"></xsl:with-param> </xsl:call-template> 
-										</xsl:when> <xsl:when test="count($attribute//attribute[@class='Term Source 
-										REF'])=0 and count($attribute//attribute[@class='Unit'])=0 "> <xsl:call-template 
-										name="process_multiple_values"> <xsl:with-param name="pField" select="lower-case(replace(@attributeClass,' 
-										' , '-'))"></xsl:with-param> <xsl:with-param name="pValue" select="$attribute"></xsl:with-param> 
-										</xsl:call-template> </xsl:when> <xsl:when test="count($attribute//attribute[@class='Unit'])>0"> 
-										<xsl:call-template name="process_unit"> <xsl:with-param name="pAttribute" 
-										select="$attribute"></xsl:with-param> <xsl:with-param name="pField" select="lower-case(replace($attributeClass,' 
-										' , '-'))"></xsl:with-param> </xsl:call-template> </xsl:when> <xsl:otherwise> 
-										<xsl:call-template name="process_efo"> <xsl:with-param name="pAttribute" 
-										select="$attribute"></xsl:with-param> <xsl:with-param name="pField" select="lower-case(replace(@attributeClass,' 
-										' , '-'))"></xsl:with-param> </xsl:call-template> </xsl:otherwise> </xsl:choose> 
-										</td> </xsl:for-each> </tr> -->
-								</tbody>
-							</table>
-						</td>
-					</tr>
-				</table>
-
-
-
-			</div>
-			<div class="left_shadow" style="display: none;"></div>
-			<div class="right_shadow" style="display: none;"></div>
-		</div>
-
-	</xsl:template>
-
 
 
 
