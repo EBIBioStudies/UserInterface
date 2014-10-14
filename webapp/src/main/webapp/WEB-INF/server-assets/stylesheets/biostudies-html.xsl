@@ -253,6 +253,9 @@
 										<xsl:with-param name="id" select="@id" />
 										<xsl:with-param name="section" select="." />
 									</xsl:call-template>
+									<xsl:if test="position()!=last()">
+									<hr style="height:1px;border-width:0;background-color:#3D7A99"/>
+									</xsl:if>
 								</xsl:for-each>
 
 							</td>
