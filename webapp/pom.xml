@@ -124,7 +124,7 @@
 				<!-- <interface.application.db.xml.update.active>true</interface.application.db.xml.update.active> 
 					<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type> 
 					<interface.application.db.xml.update.url>/Users/rpslpereira/Downloads/exportAge.xml</interface.application.db.xml.update.url> -->
-				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
+				<interface.application.db.xml.update.active>false</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
 				<interface.application.db.xml.update.url>/Users/rpslpereira/Desktop/biostudies.xml</interface.application.db.xml.update.url>
 				<interface.application.pref.update-global-setup-disk.fileSetup>/Users/rpslpereira/EclipseWorkspaces/BioStudies_Trunk_Git/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/deploy/GlobalSetup/db1/Setup</interface.application.pref.update-global-setup-disk.fileSetup>
@@ -149,7 +149,7 @@
 				<interface.application.log.default.priority>DEBUG</interface.application.log.default.priority>
 				<interface.application.db.xml.connection.dbname>biostudies</interface.application.db.xml.connection.dbname>
 				<!-- <interface.application.db.xml.connection.dbname>biosamplesAEGroup</interface.application.db.xml.connection.dbname> -->
-				<interface.application.db.xml.update.active>false</interface.application.db.xml.update.active>
+				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
 				<interface.application.db.xml.update.url>/nfs/ma/home/BioStudies/autoexportDev.xml</interface.application.db.xml.update.url>
 				<!-- <interface.application.db.xml.update.url>/nfs/ma/home/BioSD/autoexportDev.xml</interface.application.db.xml.update.url> -->
