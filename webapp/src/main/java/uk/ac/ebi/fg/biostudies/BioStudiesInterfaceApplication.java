@@ -1,5 +1,3 @@
-package uk.ac.ebi.fg.biostudies;
-
 /*
  * Copyright 2009-2015 European Molecular Biology Laboratory
  *
@@ -16,6 +14,8 @@ package uk.ac.ebi.fg.biostudies;
  * limitations under the License.
  *
  */
+
+package uk.ac.ebi.fg.biostudies;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

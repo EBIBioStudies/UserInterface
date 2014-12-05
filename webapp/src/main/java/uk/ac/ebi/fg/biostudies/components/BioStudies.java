@@ -1,5 +1,3 @@
-package uk.ac.ebi.fg.biostudies.components;
-
 /*
  * Copyright 2009-2015 European Molecular Biology Laboratory
  *
@@ -16,6 +14,8 @@ package uk.ac.ebi.fg.biostudies.components;
  * limitations under the License.
  *
  */
+
+package uk.ac.ebi.fg.biostudies.components;
 
 import net.sf.saxon.Configuration;
 import net.sf.saxon.om.DocumentInfo;

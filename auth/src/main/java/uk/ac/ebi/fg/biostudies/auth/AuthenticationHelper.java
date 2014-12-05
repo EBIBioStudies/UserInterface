@@ -1,5 +1,3 @@
-package uk.ac.ebi.fg.biostudies.auth;
-
 /*
  * Copyright 2009-2015 European Molecular Biology Laboratory
  *
@@ -16,6 +14,8 @@ package uk.ac.ebi.fg.biostudies.auth;
  * limitations under the License.
  *
  */
+
+package uk.ac.ebi.fg.biostudies.auth;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

@@ -1,5 +1,3 @@
-package uk.ac.ebi.fg.biostudies.servlets;
-
 /*
  * Copyright 2009-2015 European Molecular Biology Laboratory
  *
@@ -16,6 +14,8 @@ package uk.ac.ebi.fg.biostudies.servlets;
  * limitations under the License.
  *
  */
+
+package uk.ac.ebi.fg.biostudies.servlets;
 
 import uk.ac.ebi.fg.biostudies.app.ApplicationServlet;
 

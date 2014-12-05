@@ -31,10 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/*
- *  This servlet supports openId authentication to GenomeSpace
- *  and experiment upload functionality
- */
 public class AuthServlet extends ApplicationServlet
 {
     private static final long serialVersionUID = -4788567497622259711L;

@@ -1,16 +1,3 @@
-package uk.ac.ebi.fg.biostudies.jobs;
-
-import org.quartz.JobExecutionContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import uk.ac.ebi.fg.biostudies.app.ApplicationJob;
-import uk.ac.ebi.fg.biostudies.components.Ontologies;
-import uk.ac.ebi.fg.biostudies.utils.StringTools;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-
 /*
  * Copyright 2009-2015 European Molecular Biology Laboratory
  *
@@ -27,6 +14,19 @@ import java.io.InputStream;
  * limitations under the License.
  *
  */
+
+package uk.ac.ebi.fg.biostudies.jobs;
+
+import org.quartz.JobExecutionContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.ac.ebi.fg.biostudies.app.ApplicationJob;
+import uk.ac.ebi.fg.biostudies.components.Ontologies;
+import uk.ac.ebi.fg.biostudies.utils.StringTools;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 public class ReloadOntologyJob extends ApplicationJob
 {

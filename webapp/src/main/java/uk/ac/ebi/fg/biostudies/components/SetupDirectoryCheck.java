@@ -1,15 +1,3 @@
-package uk.ac.ebi.fg.biostudies.components;
-
-import org.apache.commons.configuration.HierarchicalConfiguration;
-import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import uk.ac.ebi.fg.biostudies.app.Application;
-import uk.ac.ebi.fg.biostudies.app.ApplicationComponent;
-import uk.ac.ebi.fg.biostudies.utils.file.FileUtilities;
-
-import java.io.File;
-
 /*
  * Copyright 2009-2015 European Molecular Biology Laboratory
  *
@@ -27,8 +15,21 @@ import java.io.File;
  *
  */
 
-// This classe is used to check if the Setup(and backup) Directory exists (this is necessary because aour application servers allways removed the temporary files when rebooted.
-// If something is wrong I will sent an email to warn about that
+package uk.ac.ebi.fg.biostudies.components;
+
+import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.ac.ebi.fg.biostudies.app.Application;
+import uk.ac.ebi.fg.biostudies.app.ApplicationComponent;
+import uk.ac.ebi.fg.biostudies.utils.file.FileUtilities;
+
+import java.io.File;
+
+// This class is used to check if the Setup(and backup) Directory exists
+// (this is necessary because our application servers always clean temporary files when rebooted.
+// If something is wrong I will send an email to warn about that
 public class SetupDirectoryCheck extends ApplicationComponent {
 	// logging machinery
 	private final Logger logger = LoggerFactory.getLogger(getClass());
