@@ -2,39 +2,30 @@
 <configuration>
 	<app>
 		<reports>
-			<originator>"BioStudies" &lt;biostudies@ebi.ac.uk&gt; </originator>
-			<recipients>${interface.application.pref.reports.recipients}
-			</recipients>
-			<hidden-recipients>${interface.application.pref.reports.hidden-recipients}
-			</hidden-recipients>
+			<originator>"BioStudies" &lt;biostudies@ebi.ac.uk&gt;</originator>
+			<recipients>${interface.application.pref.reports.recipients}</recipients>
+			<hidden-recipients>${interface.application.pref.reports.hidden-recipients}</hidden-recipients>
 			<subject>Runtime exception report</subject>
 			<smtp>
-				<host>localhost</host>
-				<port>25025</port>
+				<host>smtp.ebi.ac.uk</host>
+				<port>25</port>
 			</smtp>
 		</reports>
 	</app>
 
 	<bs>
-		<globalSetupDirectory>${interface.application.global.setup.directory}
-		</globalSetupDirectory>
-		<globalSetupLuceneDirectory>${interface.application.global.setup.lucene.directory}
-		</globalSetupLuceneDirectory>
-		<globalSetupDBDirectory>${interface.application.global.setup.db.directory}
-		</globalSetupDBDirectory>
-		<setupDirectory>${sys:java.io.tmpdir}/${interface.application.index.directory}
-		</setupDirectory>
-		<backupDirectory>${interface.application.global.backup.directory}
-		</backupDirectory>
+		<globalSetupDirectory>${interface.application.global.setup.directory}</globalSetupDirectory>
+		<globalSetupLuceneDirectory>${interface.application.global.setup.lucene.directory}</globalSetupLuceneDirectory>
+		<globalSetupDBDirectory>${interface.application.global.setup.db.directory}</globalSetupDBDirectory>
+		<setupDirectory>${sys:java.io.tmpdir}/${interface.application.index.directory}</setupDirectory>
+		<backupDirectory>${interface.application.global.backup.directory}</backupDirectory>
 		<!-- <backupDirectory>${sys:java.io.tmpdir}/Backups</backupDirectory> -->
 		<!-- <downloadDirectory>${sys:java.io.tmpdir}/DownloadXml</downloadDirectory> -->
-		<buildLuceneIndexes>${interface.application.lucene.indexes.build}
-		</buildLuceneIndexes>
+		<buildLuceneIndexes>${interface.application.lucene.indexes.build}</buildLuceneIndexes>
 		<pageSizeLimit>${interface.application.pagesize.limit}</pageSizeLimit>
 		<!-- -1 means that the update is not possible; 0 means complete update; 
 			1 means last day update -->
-		<reloadBiosamplesDatabase>${interface.application.pref.biosamples.update.timestamp}
-		</reloadBiosamplesDatabase>
+		<reloadBiosamplesDatabase>${interface.application.pref.biosamples.update.timestamp}</reloadBiosamplesDatabase>
 
 		<feedback>
 			<recipients>${interface.application.pref.feedback.recipients}
