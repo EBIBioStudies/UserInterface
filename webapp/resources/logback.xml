@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-~ Copyright 2009-2014 European Molecular Biology Laboratory
+~ Copyright 2009-2015 European Molecular Biology Laboratory
 ~
 ~ Licensed under the Apache License, Version 2.0 (the "License");
 ~ you may not use this file except in compliance with the License.
@@ -16,14 +16,24 @@
 -->
 <configuration debug="false" scan="true">
     <property scope="local" name="appender" value="${interface.application.log.appender.ref}"/>
+    <property scope="local" name="level" value="${interface.application.log.default.priority}"/>
+    <if condition="property(&quot;level&quot;).equalsIgnoreCase(&quot;info&quot;)">
+        <then>
+            <property scope="local" name="encoderPattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{30} - %msg%n"/>
+        </then>
+        <else>
+            <property scope="local" name="encoderPattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger [%file:%line] - %msg%n"/>
+        </else>
+    </if>
 
-    <if condition="property(&quot;appender&quot;).equals(&quot;console&quot;)">
+
+    <if condition="property(&quot;appender&quot;).equalsIgnoreCase(&quot;console&quot;)">
         <then>
             <appender name="${appender}" class="ch.qos.logback.core.ConsoleAppender">
                 <!-- encoders are assigned the type
                      ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
                 <encoder>
-                    <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+                    <pattern>${encoderPattern}</pattern>
                 </encoder>
             </appender>
         </then>
@@ -35,7 +45,7 @@
                             <fileNamePattern>${catalina.base}/logs/${tomcat.hostname}/biostudies-%d{yyyy-MM-dd}.log</fileNamePattern>
                         </rollingPolicy>
                         <encoder>
-                            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+                            <pattern>${encoderPattern}</pattern>
                         </encoder>
                     </appender>
                 </then>
@@ -45,7 +55,7 @@
                             <fileNamePattern>${catalina.base}/logs/biostudies-%d{yyyy-MM-dd}.log</fileNamePattern>
                         </rollingPolicy>
                         <encoder>
-                            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+                            <pattern>${encoderPattern}</pattern>
                         </encoder>
                     </appender>
                 </else>
@@ -54,7 +64,7 @@
     </if>
 
     <logger name="javax.activation" level="INFO"/>
-    <logger name="org.apache.tomcat" level="${interface.application.log.default.priority}"/>
+    <logger name="org.apache.tomcat" level="${level}"/>
     <logger name="org.apache" level="INFO"/>
     <logger name="javax.management" level="INFO"/>
     <logger name="sun.net.www.protocol.http" level="INFO"/>
@@ -64,8 +74,9 @@
     <logger name="org.mindswap.pellet" level="INFO"/>
     <logger name="Triple processor" level="INFO"/>
     <logger name="org.coode.owl.rdfxml.parser.OWLRDFConsumer" level="INFO"/>
+    <logger name="org.tuckey.web.filters.urlrewrite" level="INFO"/>
 
-    <root level="${interface.application.log.default.priority}">
+    <root level="${level}">
         <appender-ref ref="${appender}"/>
     </root>
 </configuration>

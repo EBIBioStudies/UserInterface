@@ -16,7 +16,7 @@
 
 	<filter>
 		<filter-name>performancemonitorfilter</filter-name>
-		<filter-class>uk.ac.ebi.arrayexpress.filters.PerformanceMonitorFilter</filter-class>
+		<filter-class>uk.ac.ebi.fg.biostudies.filters.PerformanceMonitorFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>performancemonitorfilter</filter-name>
@@ -34,17 +34,17 @@
 	<servlet>
 		<description>ArrayExpress Application Status Servlet</description>
 		<servlet-name>StatusServlet</servlet-name>
-		<servlet-class>uk.ac.ebi.arrayexpress.servlets.StatusServlet</servlet-class>
+		<servlet-class>uk.ac.ebi.fg.biostudies.servlets.StatusServlet</servlet-class>
 	</servlet>
 	  <servlet>
         <description>ArrayExpress Error Pages Servlet</description>
         <servlet-name>ErrorServlet</servlet-name>
-        <servlet-class>uk.ac.ebi.arrayexpress.servlets.ErrorServlet</servlet-class>
+        <servlet-class>uk.ac.ebi.fg.biostudies.servlets.ErrorServlet</servlet-class>
     </servlet>
 	<servlet>
 		<description>ArrayExpress Experiments Query Servlet</description>
 		<servlet-name>QueryServlet</servlet-name>
-		<servlet-class>uk.ac.ebi.arrayexpress.servlets.QueryServlet</servlet-class>
+		<servlet-class>uk.ac.ebi.fg.biostudies.servlets.QueryServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description>ArrayExpress Experiments Query Page Writer Servlet</description>
@@ -74,34 +74,34 @@
 	<servlet>
 		<description>ArrayExpress Data Control Servlet</description>
 		<servlet-name>ControlServlet</servlet-name>
-		<servlet-class>uk.ac.ebi.arrayexpress.servlets.ControlServlet</servlet-class>
+		<servlet-class>uk.ac.ebi.fg.biostudies.servlets.ControlServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description>ArrayExpress Feedback Reporter Servlet</description>
 		<servlet-name>FeedbackServlet</servlet-name>
-		<servlet-class>uk.ac.ebi.arrayexpress.servlets.FeedbackServlet</servlet-class>
+		<servlet-class>uk.ac.ebi.fg.biostudies.servlets.FeedbackServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description>ArrayExpress Authentication Servlet</description>
 		<servlet-name>AuthServlet</servlet-name>
-		<servlet-class>uk.ac.ebi.arrayexpress.servlets.AuthServlet</servlet-class>
+		<servlet-class>uk.ac.ebi.fg.biostudies.servlets.AuthServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description>ArrayExpress HTTP Proxy Servlet</description>
 		<servlet-name>HttpProxyServlet</servlet-name>
-		<servlet-class>uk.ac.ebi.arrayexpress.servlets.HttpProxyServlet</servlet-class>
+		<servlet-class>uk.ac.ebi.fg.biostudies.servlets.HttpProxyServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description>ArrayExpress Data Lookup Servlet</description>
 		<servlet-name>LookupServlet</servlet-name>
-		<servlet-class>uk.ac.ebi.arrayexpress.servlets.LookupServlet</servlet-class>
+		<servlet-class>uk.ac.ebi.fg.biostudies.servlets.LookupServlet</servlet-class>
 	</servlet>
 
 
 	<servlet>
 		<description>BioSamples MetaData Servlet</description>
 		<servlet-name>MetaDataServlet</servlet-name>
-		<servlet-class>uk.ac.ebi.arrayexpress.servlets.MetaDataServlet</servlet-class>
+		<servlet-class>uk.ac.ebi.fg.biostudies.servlets.MetaDataServlet</servlet-class>
 	</servlet>
 
 	<!-- Stripes -->
@@ -169,7 +169,7 @@
 	</servlet-mapping>
 	<filter>
 		<filter-name>AccessLoggingSuppressFilter</filter-name>
-		<filter-class>uk.ac.ebi.arrayexpress.servlets.AccessLoggingSuppressFilter</filter-class>
+		<filter-class>uk.ac.ebi.fg.biostudies.servlets.AccessLoggingSuppressFilter</filter-class>
 	</filter>
 	<filter>
 		<filter-name>UrlRewriteFilter</filter-name>
@@ -182,11 +182,9 @@
 			<param-name>confReloadCheckInterval</param-name>
 			<param-value>-1</param-value>
 		</init-param>
-		<!-- <init-param> <param-name>logLevel</param-name> <param-value>slf4j</param-value> 
-			</init-param> -->
 		<init-param>
 			<param-name>logLevel</param-name>
-			<param-value>log4j</param-value>
+			<param-value>slf4j</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
@@ -202,7 +200,7 @@
             "contextInitialized" and "contextDestroyed" messages indicating that the application
             is being de/initialized.
         </description>
-		<listener-class>uk.ac.ebi.arrayexpress.BioStudiesInterfaceApplication</listener-class>
+		<listener-class>uk.ac.ebi.fg.biostudies.BioStudiesInterfaceApplication</listener-class>
 	</listener>
 
 	<session-config>

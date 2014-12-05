@@ -5,7 +5,7 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2005/xpath-functions"
-	xmlns:search="http://www.ebi.ac.uk/arrayexpress/XSLT/SearchExtension"
+	xmlns:search="http://www.ebi.ac.uk/biostudies/XSLT/SearchExtension"
 	xmlns:escape="org.apache.commons.lang.StringEscapeUtils" xmlns:html="http://www.w3.org/1999/xhtml"
 	extension-element-prefixes="html xs fn  escape search"
 	exclude-result-prefixes="html xs fn escape search" version="2.0">
