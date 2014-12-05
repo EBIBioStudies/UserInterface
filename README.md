@@ -1,4 +1,5 @@
-biostudies_ui
+BioStudiesUI
 ========
 
-BioStudies User Interface
+BioStudies User Interface (http://www.ebi.ac.uk/biostudies/)
+

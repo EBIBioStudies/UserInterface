@@ -45,10 +45,10 @@
 
 		<interface.application.pref.files.prefix>bs</interface.application.pref.files.prefix>
 		<interface.application.index.directory>Setup</interface.application.index.directory>
-		<interface.application.global.setup.directory>${sys:catalina.base}/deploy/GlobalSetup</interface.application.global.setup.directory>
+		<interface.application.global.setup.directory>&#36;{sys:catalina.base}/deploy/GlobalSetup</interface.application.global.setup.directory>
 		<interface.application.global.setup.lucene.directory>Setup</interface.application.global.setup.lucene.directory>
 		<interface.application.global.setup.db.directory>SetupDB</interface.application.global.setup.db.directory>
-		<interface.application.global.backup.directory>${sys:catalina.base}/deploy/GlobalSetup_Backups</interface.application.global.backup.directory>
+		<interface.application.global.backup.directory>&#36;{sys:catalina.base}/deploy/GlobalSetup_Backups</interface.application.global.backup.directory>
 		<interface.application.pref.reload-all.update.schedule />
 		<interface.application.pref.reload-all.update.interval />
 		<interface.application.pref.reload-all.update.atstart>false</interface.application.pref.reload-all.update.atstart>
@@ -82,7 +82,7 @@
 			defaul the class hidden the link -->
 		<interface.application.metadata.class>metadata_hide</interface.application.metadata.class>
 		<!-- XML DataBase access -->
-		<interface.application.db.xml.path>${sys:user.home}/BaseXData/</interface.application.db.xml.path>
+		<interface.application.db.xml.path>&#36;{sys:user.home}/BaseXData/</interface.application.db.xml.path>
 		<interface.application.db.xml.connection.base>xmldb:basex</interface.application.db.xml.connection.base>
 		<interface.application.db.xml.connection.host>localhost</interface.application.db.xml.connection.host>
 		<interface.application.db.xml.connection.port>1984</interface.application.db.xml.connection.port>
@@ -177,8 +177,8 @@
 				<!-- point to the SSD disk and to the BASEX running there -->
 				<interface.application.db.xml.connection.dbname>biosamplesAEGroup_Dev2</interface.application.db.xml.connection.dbname>
 				<interface.application.db.xml.connection.port>1986</interface.application.db.xml.connection.port>
-				<interface.application.global.setup.directory>${sys:java.io.tmpdir}/deploy/GlobalSetup/Setup</interface.application.global.setup.directory>
-				<interface.application.global.backup.directory>${sys:java.io.tmpdir}/deploy/GlobalSetup_Backups</interface.application.global.backup.directory>
+				<interface.application.global.setup.directory>&#36;{sys:java.io.tmpdir}/deploy/GlobalSetup/Setup</interface.application.global.setup.directory>
+				<interface.application.global.backup.directory>&#36;{sys:java.io.tmpdir}/deploy/GlobalSetup_Backups</interface.application.global.backup.directory>
 				<!-- point to the SSD disk and to the BASEX running there -->
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
 				<interface.application.db.xml.update.type>file</interface.application.db.xml.update.type>
@@ -287,8 +287,8 @@
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
 				<!-- need to have separate GlobalSetups and Backups per instance -->
-				<interface.application.global.setup.directory>${sys:catalina.base}/deploy/GlobalSetup/${sys:tomcat.hostname}</interface.application.global.setup.directory>
-				<interface.application.global.backup.directory>${sys:catalina.base}/deploy/GlobalSetup_Backups/${sys:tomcat.hostname}</interface.application.global.backup.directory>
+				<interface.application.global.setup.directory>&#36;{sys:catalina.base}/deploy/GlobalSetup/&#36;{sys:tomcat.hostname}</interface.application.global.setup.directory>
+				<interface.application.global.backup.directory>&#36;{sys:catalina.base}/deploy/GlobalSetup_Backups/&#36;{sys:tomcat.hostname}</interface.application.global.backup.directory>
 				<!-- need to have separate GlobalSetups and Backups per instance -->
 				<interface.application.db.xml.connection.dbname>v</interface.application.db.xml.connection.dbname>
 				<interface.application.db.xml.update.active>true</interface.application.db.xml.update.active>
