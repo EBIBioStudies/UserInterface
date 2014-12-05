@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>biostudies-ui-webapp</artifactId>
 	<name>BioStudies Interface Web Application</name>
-	<version>${parent.version}</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<url>http://www.ebi.ac.uk/biostudies</url>
 
@@ -104,7 +104,7 @@
 		<profile>
 			<id>debug</id>
 			<properties>
-				<interface.application.log.default.priority>ALL</interface.application.log.default.priority>
+				<interface.application.log.default.priority>DEBUG</interface.application.log.default.priority>
 			</properties>
 		</profile>
 
@@ -115,7 +115,7 @@
 				<!--<interface.application.body.class>bs_curator_daily</interface.application.body.class> -->
 				<interface.application.metadata.class>metadata_show</interface.application.metadata.class>
 				<interface.application.base.path>/biostudies</interface.application.base.path>
-				<interface.application.log.appender.ref>CONSOLE</interface.application.log.appender.ref>
+				<interface.application.log.appender.ref>console</interface.application.log.appender.ref>
 				<interface.application.link.www_domain>http://www.ebi.ac.uk</interface.application.link.www_domain>
 				<interface.application.link.www_domain.inc>${interface.application.base.path}/www-inc</interface.application.link.www_domain.inc>
 				<interface.application.db.xml.connection.dbname>biostudies</interface.application.db.xml.connection.dbname>
@@ -433,14 +433,10 @@
 					</webResources>
 				</configuration>
 			</plugin>
-			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>buildnumber-maven-plugin</artifactId> 
-				<version>1.0-beta-3</version> <executions> <execution> <phase>validate</phase> 
-				<goals> <goal>create</goal> </goals> </execution> </executions> <configuration> 
-				<doCheck>false</doCheck> <doUpdate>false</doUpdate> </configuration> </plugin> -->
-
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
+				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat-maven-plugin</artifactId>
+				<version>2.2</version>
 				<configuration>
 					<url>http://cocoa:8180/manager</url>
 					<server>cocoa_tomcat</server>
@@ -479,24 +475,27 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.5.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jul-to-slf4j</artifactId>
-			<version>1.5.10</version>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.5.10</version>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<scope>runtime</scope>
 		</dependency>
-		
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.16</version>
-
+			<groupId>org.codehaus.janino</groupId>
+			<artifactId>janino</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.tuckey</groupId>
@@ -601,6 +600,12 @@
 			<groupId>org.basex</groupId>
 			<artifactId>basex-api</artifactId>
 			<version>7.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-nop</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
