@@ -1,4 +1,4 @@
-package uk.ac.ebi.microarray.arrayexpress.shared.auth;
+package uk.ac.ebi.fg.biostudies.auth;
 
 /*
  * Copyright 2009-2015 European Molecular Biology Laboratory

@@ -27,10 +27,10 @@ import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.modules.XPathQueryService;
 import uk.ac.ebi.fg.biostudies.app.Application;
 import uk.ac.ebi.fg.biostudies.app.ApplicationComponent;
+import uk.ac.ebi.fg.biostudies.auth.AuthenticationHelper;
 import uk.ac.ebi.fg.biostudies.utils.persistence.FilePersistence;
 import uk.ac.ebi.fg.biostudies.utils.saxon.IDocumentSource;
 import uk.ac.ebi.fg.biostudies.utils.saxon.PersistableDocumentContainer;
-import uk.ac.ebi.microarray.arrayexpress.shared.auth.AuthenticationHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
