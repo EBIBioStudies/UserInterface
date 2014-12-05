@@ -54,8 +54,16 @@
     </if>
 
     <logger name="javax.activation" level="INFO"/>
-    <logger name="org.apache.tomcat" level="${interface.application.log.default.priority}" />
-    <logger name="org.apache" level="INFO" />
+    <logger name="org.apache.tomcat" level="${interface.application.log.default.priority}"/>
+    <logger name="org.apache" level="INFO"/>
+    <logger name="javax.management" level="INFO"/>
+    <logger name="sun.net.www.protocol.http" level="INFO"/>
+    <logger name="org.quartz.simpl" level="INFO"/>
+    <logger name="org.quartz.core" level="INFO"/>
+    <logger name="httpclient.wire" level="INFO"/>
+    <logger name="org.mindswap.pellet" level="INFO"/>
+    <logger name="Triple processor" level="INFO"/>
+    <logger name="org.coode.owl.rdfxml.parser.OWLRDFConsumer" level="INFO"/>
 
     <root level="${interface.application.log.default.priority}">
         <appender-ref ref="${appender}"/>
