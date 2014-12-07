@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.fg.biostudies.app.Application;
 import uk.ac.ebi.fg.biostudies.app.ApplicationComponent;
-import uk.ac.ebi.fg.biostudies.utils.RegexHelper;
 import uk.ac.ebi.fg.biostudies.utils.saxon.IDocumentSource;
 import uk.ac.ebi.fg.biostudies.utils.saxon.search.IndexEnvironmentBioStudies;
 import uk.ac.ebi.fg.biostudies.utils.saxon.search.Indexer;
@@ -35,11 +34,6 @@ public class BioStudies extends ApplicationComponent implements
 		IDocumentSource {
 	// logging machinery
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-
-	private final RegexHelper ARRAY_ACCESSION_REGEX = new RegexHelper(
-			"^[aA]-\\w{4}-\\d+$", "");
-
-	// private FilePersistence<PersistableDocumentContainer> document;
 
 	private SaxonEngine saxon;
 	private SearchEngine search;
@@ -65,13 +59,12 @@ public class BioStudies extends ApplicationComponent implements
 		this.search = (SearchEngine) getComponent("SearchEngine");
 		this.autocompletion = (Autocompletion) getComponent("Autocompletion");
 
-		//TODO: change this (I will never restart the server with an incremental update, even though I shoul change it) 
-				if(buildIndexes){
-					updateIndex(Indexer.RebuildCategories.REBUILD);
-				}
-				else{
-					updateIndex(Indexer.RebuildCategories.NOTREBUILD);
-				}
+		//TODO: change this (I will never restart the server with an incremental update, even though I should change it)
+		if(buildIndexes) {
+			updateIndex(Indexer.RebuildCategories.REBUILD);
+		} else {
+			updateIndex(Indexer.RebuildCategories.NOTREBUILD);
+		}
 					
 			
 		
