@@ -34,16 +34,19 @@
 
     <repositories>
         <repository>
-            <id>artifactory-repo</id>
-            <url>http://bar.ebi.ac.uk:8081/artifactory/repo/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <id>basex</id>
+            <name>BaseX Maven Repository</name>
+            <url>http://files.basex.org/maven</url>
+        </repository>
+        <repository>
+            <id>xqj</id>
+            <name>XQJ Maven Repository</name>
+            <url>http://xqj.net/maven</url>
         </repository>
     </repositories>
 
 
-    <!--
+    <!-- TODO
     <distributionManagement>
         <repository>
             <id>ebi-repo-old</id>
@@ -58,17 +61,6 @@
         </snapshotRepository>
     </distributionManagement>
     -->
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>artifactory-repo</id>
-            <url>http://bar.ebi.ac.uk:8081/artifactory/repo/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
     <properties>
         <slf4j.version>1.7.7</slf4j.version>
         <logback.version>1.1.2</logback.version>

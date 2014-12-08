@@ -389,8 +389,8 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat-maven-plugin</artifactId>
-				<version>2.2</version>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.0</version>
 				<configuration>
 					<url>http://cocoa:8180/manager</url>
 					<server>cocoa_tomcat</server>
@@ -505,14 +505,14 @@
 			<version>3.5.0</version>
 		</dependency>
 		<dependency>
-			<groupId>owlapi</groupId>
-			<artifactId>owlapi</artifactId>
-			<version>3.2.4</version>
+			<groupId>net.sourceforge.owlapi</groupId>
+			<artifactId>owlapi-api</artifactId>
+			<version>3.5.1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.semanticweb</groupId>
-			<artifactId>HermiT</artifactId>
-			<version>1.3.8</version>
+			<groupId>com.hermit-reasoner</groupId>
+			<artifactId>org.semanticweb.hermit</artifactId>
+			<version>1.3.8.4</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.opencsv</groupId>
@@ -545,7 +545,7 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>xmldb</groupId>
+			<groupId>org.xmldb</groupId>
 			<artifactId>xmldb-api</artifactId>
 			<version>1.0</version>
 		</dependency>
