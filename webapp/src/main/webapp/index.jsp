@@ -122,7 +122,7 @@
 				<li><a href="/biostudies/help/news.html">Latest news</a> about
 					BioStudies database.</li>
 
-				<li>Contact us by emailing <a
+				<li>Contact us by emailing to <a
 					href="mailto:ugis@ebi.ac.uk">ugis@ebi.ac.uk</a></li>
 			</ul>
 		</div>
