@@ -217,16 +217,7 @@
 						<!-- local-title -->
 						<!-- NB: for additional title style patterns, see http://frontier.ebi.ac.uk/web/style/patterns -->
 
-						<div id="local-title" class="grid_12 alpha logo-title">
-							<a href="${interface.application.base.path}"
-								title="Back to ${interface.application.base.service.name} homepage">
-								<img src="${interface.application.base.service.logo}" alt="${interface.application.base.service.name} logo"
-									width="64" height="64" />
-							</a>
-							<span style="padding-top: 5px">
-								<h1>${interface.application.base.service.name}</h1>
-							</span>
-						</div>
+						<div class="grid_12 alpha" id="local-title"><h1><a href="/biostudies" title="Back to BioStudies homepage">BioStudies</a></h1></div>
 						<!-- /local-title -->
 
 						<!-- local-search -->
