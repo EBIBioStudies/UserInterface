@@ -28,7 +28,7 @@ body {
 */
 
 /* I'm redefining the EBI css because its the easy way to put the backgroud white*/
-/* 
+/*
 #browse_page_bgcolor {
     background: white;
     height: expression(document.body.clientHeight-147);
@@ -56,6 +56,10 @@ font-weight: inherit;
 
 div#footerdiv {
 background-color: white;
+}
+
+p.intro {
+    font-size: 108%;
 }
 /* I'm redefining the EBI css because its the easy way to put the backgroud white*/
 
@@ -106,7 +110,7 @@ body.bs_dev_preview {
 }
 
 /*
-a:hover, 
+a:hover,
 a:active {
     color: #e33e3e;
     text-decoration: underline;

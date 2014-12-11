@@ -1,5 +1,3 @@
-<%@ page import="java.net.*"%>
-
 <!doctype html>
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
@@ -51,9 +49,9 @@
 	type="text/css" media="screen">
 
 <link rel="stylesheet"
-	href="assets/stylesheets/biostudies_common_10.css" type="text/css" />
+	href="/biostudies/assets/stylesheets/biostudies_common_10.css" type="text/css" />
 <link rel="stylesheet"
-	href="assets/stylesheets/biostudies_metadata_10.css" type="text/css" />
+	href="/biostudies/assets/stylesheets/biostudies_metadata_10.css" type="text/css" />
 
 <!-- for production the above can be replaced with -->
 <!--
@@ -101,55 +99,34 @@
 
 		<div class="grid_24 alpha">
 			<section>
-				<h2>BioStudies - database of sample descriptions</h2>
+				<h2>BioStudies - database of biological studies</h2>
 				<p class="intro justify">
-					The BioSamples database aggregates sample information for reference
-					samples (e.g. Coriell Cell lines) and samples for which data exist
-					in one of the EBI&#39;s assay databases such as <a
-						href="//www.ebi.ac.uk/arrayexpress">ArrayExpress</a>, the <a
-						href="//www.ebi.ac.uk/ena">European Nucleotide Archive</a> or <a
-						href="//www.ebi.ac.uk/pride">PRoteomics Identificates DatabasE</a>.
-					It provides links to assays an specific samples, and accepts direct
-					submissions of sample information.
+					The goal of the BioStudies database is to provide light-weight means for capturing data from
+					biological studies, especially for the cases where due to the pace of high-throughput technology
+					development the generated data does not fit into any of the specialized EBI databases, or where
+					established technologies are used in combination. The database will be able to accept a wide range
+					of types of studies described via a simple format, and will not impose minimum requirements outside
+					the respective community agreements. It will also enable manuscript authors to submit supplementary
+					information and link to it from the publication.
 				</p>
 			</section>
 		</div>
 
-		<div class="grid_8 alpha">
+		<div class="grid_16 alpha">
 			<h3 class="icon icon-generic" data-icon="L">Info</h3>
 			<ul>
-				<li><a href="/biosamples/help/index.html">Help pages</a> about
-					how to search BioSamples, how to submit data, and FAQ.</li>
-				<li><a href="/biosamples/help/api.html">Programmatic access</a>
+				<li><a href="/biostudies/help/index.html">Help pages</a> about
+					how to search BioStudies, how to submit data, and FAQ.</li>
+				<li><a href="/biostudies/help/api.html">Programmatic access</a>
 					to query and download data using web services.</li>
-				<li><a href="/biosamples/help/news.html">Latest news</a> about
-					BioSamples database.</li>
-				<li>The BioSamples database now offers access to <a
-					href="http://www.ebi.ac.uk/rdf/services/biosamples/">RDF</a>, and a
-					supporting <a
-					href="http://www.ebi.ac.uk/rdf/services/biosamples/sparql">SPARQL
-						endpoint</a> as part of the <a href="http://www.ebi.ac.uk/rdf">EBI's
-						RDF platform</a>.
-				</li>
+				<li><a href="/biostudies/help/news.html">Latest news</a> about
+					BioStudies database.</li>
+
 				<li>Contact us by emailing <a
-					href="mailto:biosamples@ebi.ac.uk">biosamples@ebi.ac.uk</a></li>
+					href="mailto:ugis@ebi.ac.uk">ugis@ebi.ac.uk</a></li>
 			</ul>
 		</div>
-		<div class="grid_8">
-			<h3 class="icon icon-generic" data-icon="L">External links</h3>
-			<ul>
-				<li><a href="//www.ebi.ac.uk/efo/">Experimental Factor
-						Ontology</a></li>
-				<li><a href="//www.hipsci.org">Human Induced Pluripotent
-						Stem Cells Initiative (HipSci)</a></li>
-				<li><a href="//www.1000genomes.org/">1000 Genomes</a></li>
-				<li><a href="//www.genome.gov/26524238">Encyclopedia of DNA
-						Elements (ENCODE)</a></li>
-				<li><a
-					href="//cancer.sanger.ac.uk/cancergenome/projects/cosmic/">Catalogue
-						Of Somatic Mutations In Cancer (COSMIC)</a></li>
-			</ul>
-		</div>
+
 		<div class="grid_8 omega">
 			<section>
 				<h3 class="icon icon-generic" data-icon="g">Data Content</h3>
@@ -157,23 +134,12 @@
 
 				<ul>
 					<li><span id="totalStudies"></span></li>
-					<!-- <li><span id="totalGroups"></span> Groups</li> -->
-					<!-- <li>XXXX Samples</li>
-                    <li>YYYYY groups</li>
-                    <li>XXXX Samples</li>
-                    <li>YYYYY groups</li>
-                    <li>XXXX Samples</li>
-                    <li>YYYYY groups</li>
-                    <li>XXXX Samples</li>
-                    <li>YYYYY groups</li>
-                    <li>XXXX Samples</li>
-                    <li>YYYYY groups</li>
-                    <li>XXXX Samples</li>
-                    <li>YYYYY groups</li> -->
 				</ul>
+				<!--
 				<span class="${interface.application.metadata.class}"><a
 					href="metadata?class=${interface.application.body.class}"
 					target="ext">Metadata</a></span>
+				-->
 			</section>
 		</div>
 	</div>

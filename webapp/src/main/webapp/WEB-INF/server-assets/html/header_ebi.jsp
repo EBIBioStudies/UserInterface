@@ -1,5 +1,5 @@
-<%@ page import="java.net.*"%>
-<%@ page import="java.util.regex.*"%>
+<%@ page import="java.util.regex.Matcher"%>
+<%@ page import="java.util.regex.Pattern"%>
 
 <div id="wrapper" class="container_24">
 	<header>
@@ -112,7 +112,7 @@
 					<li class="first <%=homeActive%>"><a href="${interface.application.base.path}/"
 						title="BioStudies">Home</a></li>
 					<li class="<%=biostudyActive%>"><a
-						href="${interface.application.base.path}/browse.html" title="Groups">BioStudies</a></li>
+						href="${interface.application.base.path}/browse.html" title="Studies">Studies</a></li>
 					<li class="<%=submitActive%>"><a
 						href="${interface.application.base.path}/help/submit.html" title="Submit">Submit</a></li>
 					<li class="<%=helpActive%>"><a

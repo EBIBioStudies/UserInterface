@@ -282,7 +282,7 @@
 										test="fn:starts-with($relative-uri, '/browse.html') or fn:starts-with($relative-uri, '/biostudy')">
 										<xsl:attribute name="class">active</xsl:attribute>
 									</xsl:if>
-									<a href="{$context-path}/browse.html" title="Groups">BioStudies</a>
+									<a href="{$context-path}/browse.html" title="Studies">Studies</a>
 								</li>
 								<li>
 									<xsl:if test="fn:starts-with($relative-uri, '/help/submit')">

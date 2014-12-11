@@ -10,7 +10,7 @@
         <from>.*</from>
         <set type="parameter" name="original-request-uri">%{request-uri}</set>
     </rule>
-	<!-- biosamples -->
+	<!-- BioStudies -->
 	
 	
 	 <!-- search page -->
@@ -31,7 +31,6 @@
     </rule>
 	<!-- redirect the old rest api html documentation to the new one -->
 	
-	<!-- about biosamples page -->
     <rule>
         <from>^/about[.]html?$</from>
         <to type="forward" last="true">/servlets/query/-/static-page/html?filename=about.html</to>
@@ -43,7 +42,10 @@
     </rule>
     <rule>
         <from>^/help/(.+)[.]html?$</from>
-        <to type="forward" last="true">/servlets/query/-/static-page/html?filename=help/${lower:$1}.html</to>
+        <!--
+		<to type="forward" last="true">/servlets/query/-/static-page/html?filename=help/${lower:$1}.html</to>
+		-->x
+		<to type="forward" last="true">/coming-soon.jsp</to>
     </rule>
     
 	<!-- home page -->

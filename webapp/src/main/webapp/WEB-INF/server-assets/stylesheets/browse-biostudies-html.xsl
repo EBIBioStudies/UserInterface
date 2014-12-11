@@ -18,9 +18,12 @@
 
 <!DOCTYPE xsl:stylesheet [ <!ENTITY nbsp "&#160;"> ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:aejava="http://www.ebi.ac.uk/biostudies/XSLT/SearchExtension"
-	xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:html="http://www.w3.org/1999/xhtml"
-	extension-element-prefixes="xs fn aejava html" exclude-result-prefixes="xs fn aejava html"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:aejava="http://www.ebi.ac.uk/biostudies/XSLT/SearchExtension"
+	xmlns:fn="http://www.w3.org/2005/xpath-functions"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	extension-element-prefixes="xs fn aejava html"
+	exclude-result-prefixes="xs fn aejava html"
 	version="2.0">
 
 
@@ -40,7 +43,7 @@
 	<xsl:param name="total" />
 
 	<xsl:variable name="vTotal"
-		select="if ($total) then $total cast as xs:integer else -1" />
+				  select="if ($total) then $total cast as xs:integer else -1" />
 
 	<xsl:variable name="vBaseUrl">
 		http://
@@ -52,9 +55,9 @@
 
 	<xsl:variable name="vkeywords" select="$keywords" />
 
-	<!-- <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="ISO-8859-1" 
+	<!-- <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="ISO-8859-1"
 		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" /> -->
-	<!-- <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="windows-1252" 
+	<!-- <xsl:output omit-xml-declaration="yes" method="html" indent="no" encoding="windows-1252"
 		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" /> -->
 
 
@@ -68,16 +71,16 @@
 		<xsl:call-template name="ae-page">
 			<xsl:with-param name="pIsSearchVisible" select="fn:true()" />
 			<xsl:with-param name="pSearchInputValue"
-				select="if (fn:true()) then $keywords else ''" />
+							select="if (fn:true()) then $keywords else ''" />
 			<xsl:with-param name="pTitleTrail" select="''" />
 			<xsl:with-param name="pExtraCSS">
 				<link rel="stylesheet"
-					href="${interface.application.base.path}/assets/stylesheets/biostudies_browse_10.css"
-					type="text/css" />
+					  href="/biostudies/assets/stylesheets/biostudies_browse_10.css"
+					  type="text/css" />
 				<link rel="stylesheet"
-					href="{$context-path}/assets/stylesheets/biostudies_browse_dyntable_10.css"
-					type="text/css" />
-				<!-- need this to have the scrollbars on Chrome/firefox/safari - overwrite 
+					  href="{$context-path}/assets/stylesheets/biostudies_browse_dyntable_10.css"
+					  type="text/css" />
+				<!-- need this to have the scrollbars on Chrome/firefox/safari - overwrite
 					the ebi css definition [PT:53620963] -->
 				<style type="text/css">
 					html {overflow-y:auto;}
@@ -86,7 +89,7 @@
 			<xsl:with-param name="pBreadcrumbTrail">
 				<xsl:choose>
 					<xsl:when test="$vkeywords!=''">
-						<a href="${interface.application.base.path}/browse.html">BioStudies</a>
+						<a href="/biostudies/browse.html">BioStudies</a>
 						&gt; Search results for "
 						<xsl:copy-of select="$vkeywords" />
 						"
@@ -99,35 +102,35 @@
 			</xsl:with-param>
 			<xsl:with-param name="pExtraJS">
 				<script
-					src="${interface.application.base.path}/assets/scripts/biostudies_browse_dyntable_10.js"
-					type="text/javascript"></script>
+						src="/biostudies/assets/scripts/biostudies_browse_dyntable_10.js"
+						type="text/javascript"></script>
 				<script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search-run.js"
-					type="text/javascript"></script>
+						type="text/javascript"></script>
 				<script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search.js"
-					type="text/javascript"></script>
+						type="text/javascript"></script>
 
-				<!-- <script src="${interface.application.base.path}/assets/scripts/ebi-global-search-run.js" 
-					type="text/javascript"></script> <script src="${interface.application.base.path}/assets/scripts/ebi-global-search.js" 
+				<!-- <script src="/biostudies/assets/scripts/ebi-global-search-run.js"
+					type="text/javascript"></script> <script src="/biostudies/assets/scripts/ebi-global-search.js"
 					type="text/javascript"></script> -->
-				<!-- <script src="${interface.application.base.path}/assets/scripts/biosamples_browse_10.js" 
+				<!-- <script src="/biostudies/assets/scripts/biosamples_browse_10.js"
 					type="text/javascript"></script> -->
-				<!-- <script src="${interface.application.base.path}/assets/scripts/jquery.query-2.1.7m-ebi.js" 
-					type="text/javascript"></script> <script src="${interface.application.base.path}/assets/scripts/biosamples_common_10.js" 
+				<!-- <script src="/biostudies/assets/scripts/jquery.query-2.1.7m-ebi.js"
+					type="text/javascript"></script> <script src="/biostudies/assets/scripts/biosamples_common_10.js"
 					type="text/javascript"></script> -->
 			</xsl:with-param>
 		</xsl:call-template>
 
-		<!-- <a href='javascript:alinhar()'>Alinhar</a> <script type="text/javascript"> 
-			function alinhar(){ alert('rui'); var table_left =document.getElementById("src_name_table"); 
-			var table_middle =document.getElementById("attr_table"); var table_right 
-			=document.getElementById("links_table"); for (var i = 0, row; row = table_left.rows[i]; 
-			i++) { //iterate through rows //rows would be accessed using the "row" variable 
-			assigned in the for loop //alert(row.offsetHeight); //alert(table_middle.rows[i].offsetHeight); 
-			//alert(table_right.rows[i].offsetHeight); var max = Math.max(row.offsetHeight, 
-			table_middle.rows[i].offsetHeight, table_right.rows[i].offsetHeight); alert(i 
-			+ " max->" +max); //css('height', '0'); //row.offsetHeight=max; //table_middle.rows[i].offsetHeight=max; 
-			//table_right.rows[i].offsetHeight=max; alert(row.getElementsByTagName('td')[0].height); 
-			table_middle.rows[i].find('td:not(:empty):first').height(max); table_right.rows[i].find('td:not(:empty):first').height(max); 
+		<!-- <a href='javascript:alinhar()'>Alinhar</a> <script type="text/javascript">
+			function alinhar(){ alert('rui'); var table_left =document.getElementById("src_name_table");
+			var table_middle =document.getElementById("attr_table"); var table_right
+			=document.getElementById("links_table"); for (var i = 0, row; row = table_left.rows[i];
+			i++) { //iterate through rows //rows would be accessed using the "row" variable
+			assigned in the for loop //alert(row.offsetHeight); //alert(table_middle.rows[i].offsetHeight);
+			//alert(table_right.rows[i].offsetHeight); var max = Math.max(row.offsetHeight,
+			table_middle.rows[i].offsetHeight, table_right.rows[i].offsetHeight); alert(i
+			+ " max->" +max); //css('height', '0'); //row.offsetHeight=max; //table_middle.rows[i].offsetHeight=max;
+			//table_right.rows[i].offsetHeight=max; alert(row.getElementsByTagName('td')[0].height);
+			table_middle.rows[i].find('td:not(:empty):first').height(max); table_right.rows[i].find('td:not(:empty):first').height(max);
 			alert(i + " righ->" +table_right.rows[i].offsetHeight); } } </script> -->
 
 	</xsl:template>
@@ -138,12 +141,12 @@
 
 		<xsl:variable name="vSortBy" select="if ($sortby) then $sortby else ''" />
 		<xsl:variable name="vSortOrder"
-			select="if ($sortorder) then $sortorder else 'descending'" />
+					  select="if ($sortorder) then $sortorder else 'descending'" />
 
 		<xsl:variable name="vPage"
-			select="if ($page) then $page cast as xs:integer else 1" />
+					  select="if ($page) then $page cast as xs:integer else 1" />
 		<xsl:variable name="vPageSize"
-			select="if ($pagesize) then $pagesize cast as xs:integer else 50" />
+					  select="if ($pagesize) then $pagesize cast as xs:integer else 50" />
 
 		<xsl:variable name="vFrom" as="xs:integer">
 			<xsl:choose>
@@ -171,8 +174,8 @@
 
 		<!-- <div id="content" role="main" class="grid_24 clearfix"> -->
 
-		<!-- <nav id="breadcrumb"> <p> <a href="${interface.application.base.path}">BioSamples</a> 
-			&gt; <xsl:choose> <xsl:when test="$vkeywords!=''"> <a href="${interface.application.base.path}/browse.html">Sample 
+		<!-- <nav id="breadcrumb"> <p> <a href="/biostudies">BioSamples</a>
+			&gt; <xsl:choose> <xsl:when test="$vkeywords!=''"> <a href="/biostudies/browse.html">Sample
 			Groups</a> &gt; Search results for <xsl:copy-of select="$vkeywords"/> </xsl:when> 
 			<xsl:otherwise> Sample Groups </xsl:otherwise> </xsl:choose> </p> </nav> -->
 		<xsl:choose>
@@ -233,7 +236,7 @@
 
 				<div id="bs_results_listsamples">
 					<table class="persist-header" id="bs_samples_table" border="0"
-						cellpadding="0" width="100%" cellspacing="0" style="visibility: visible;">
+						   cellpadding="0" width="100%" cellspacing="0" style="visibility: visible;">
 						<colgroup>
 							<col class="col_left_fixed" style="width:120px;" />
 							<col class="col_middle_scrollable" style="width:100%" />
@@ -277,7 +280,7 @@
 										</div>
 									</div>
 									<table id="src_name_table" border="0" cellpadding="0"
-										cellspacing="0" width="100%">
+										   cellspacing="0" width="100%">
 										<thead>
 											<tr>
 												<th class="bs_results_accession sortable bs_results_Accession"
@@ -308,7 +311,7 @@
 									<div class="attr_table_shadow_container">
 										<div class="attr_table_scroll">
 											<table id="attr_table" border="0" cellpadding="0"
-												cellspacing="0" width="100%">
+												   cellspacing="0" width="100%">
 												<thead>
 													<tr>
 
@@ -319,10 +322,10 @@
 																	<xsl:call-template name="add-table-sort">
 																		<xsl:with-param name="pKind" select="." />
 																		<xsl:with-param name="pLinkText"
-																			select="." />
+																						select="." />
 																		<xsl:with-param name="pSortBy" select="$vSortBy" />
 																		<xsl:with-param name="pSortOrder"
-																			select="$vSortOrder" />
+																						select="$vSortOrder" />
 																	</xsl:call-template>&nbsp;
 																</span>
 															</th>
@@ -348,7 +351,7 @@
 										</div>
 									</div>
 									<table id="links_table" border="0" cellpadding="0"
-										cellspacing="0" width="100%">
+										   cellspacing="0" width="100%">
 										<thead>
 											<tr>
 												<!-- I will not allow to sort -->
@@ -534,14 +537,14 @@
 		<xsl:variable name="bdName" select="lower-case($pName)"></xsl:variable>
 		<xsl:choose>
 			<xsl:when
-				test="$bdName=('arrayexpress','ena','ena sra','dgva','pride') and not($pUrl='')">
+					test="$bdName=('arrayexpress','ena','ena sra','dgva','pride') and not($pUrl='')">
 				<!-- PRIDE changed the user interface: this is temporary -->
 				<xsl:variable name="pUrl"
-					select="replace($pUrl,'http://www.ebi.ac.uk/pride/showExperiment.do\?experimentAccessionNumber','http://www.ebi.ac.uk/pride/archive/simpleSearch?q')"></xsl:variable>
+							  select="replace($pUrl,'http://www.ebi.ac.uk/pride/showExperiment.do\?experimentAccessionNumber','http://www.ebi.ac.uk/pride/archive/simpleSearch?q')"></xsl:variable>
 
 				<a href="{$pUrl}" target="ext">
 					<img src="{$basepath}/assets/images/{$bdName}_logo.gif" alt="{$pName} Link"
-						border="0" title="{$pName}" />
+						 border="0" title="{$pName}" />
 				</a>
 			</xsl:when>
 			<xsl:when test="not($pUrl='')">
